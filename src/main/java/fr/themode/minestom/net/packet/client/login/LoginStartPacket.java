@@ -7,6 +7,7 @@ import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
+import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
@@ -28,7 +29,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = 32;
-        joinGamePacket.gameMode = GameMode.SURVIVAL;
+        joinGamePacket.gameMode = GameMode.CREATIVE;
         joinGamePacket.dimension = Dimension.OVERWORLD;
         joinGamePacket.maxPlayers = 0;
         joinGamePacket.levelType = "default";
@@ -41,6 +42,27 @@ public class LoginStartPacket implements ClientPreplayPacket {
         // TODO send server difficulty
 
         // TODO player abilities
+
+        for (int x = 0; x < 8; x++) {
+            for (int z = 0; z < 8; z++) {
+                ChunkDataPacket.ChunkSection chunkSection = new ChunkDataPacket.ChunkSection();
+                chunkSection.bitsPerBlock = 13;
+                chunkSection.data = new long[]{0x1001880C0060020L, 0x200D0068004C020L, 0L};
+
+                ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+                chunkDataPacket.columnX = x;
+                chunkDataPacket.columnZ = z;
+                chunkDataPacket.fullChunk = true;
+                chunkDataPacket.mask = 0xFFFF; // 16 bits
+                ChunkDataPacket.ChunkSection[] sections = new ChunkDataPacket.ChunkSection[16];
+                for (int i = 0; i < 16; i++) {
+                    sections[i] = chunkSection;
+                }
+                chunkDataPacket.chunkSections = sections;
+
+                connection.sendPacket(chunkDataPacket);
+            }
+        }
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
         spawnPositionPacket.x = 50;

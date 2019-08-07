@@ -75,6 +75,19 @@ public class Utils {
         return i;
     }
 
+    public static int lengthVarLong(long value) {
+        int i = 0;
+        do {
+            i++;
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+        } while (value != 0);
+        return i;
+    }
+
     public static void writeVarLong(Buffer buffer, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
