@@ -8,6 +8,7 @@ import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
+import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
@@ -47,7 +48,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
             for (int z = 0; z < 8; z++) {
                 ChunkDataPacket.ChunkSection chunkSection = new ChunkDataPacket.ChunkSection();
                 chunkSection.bitsPerBlock = 13;
-                chunkSection.data = new long[]{0x1001880C0060020L, 0x200D0068004C020L, 0L};
+                chunkSection.data = new long[]{0x1001880C0060020L, 0x200D0068004C020L, 1111L};
 
                 ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
                 chunkDataPacket.columnX = x;
@@ -66,11 +67,19 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
         spawnPositionPacket.x = 50;
-        spawnPositionPacket.y = 50;
+        spawnPositionPacket.y = 5;
         spawnPositionPacket.z = 50;
+        connection.sendPacket(spawnPositionPacket);
 
-        //  connection.sendPacket(spawnPositionPacket);
-
+        PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
+        playerPositionAndLookPacket.x = 50;
+        playerPositionAndLookPacket.y = 5;
+        playerPositionAndLookPacket.z = 50;
+        playerPositionAndLookPacket.yaw = 0;
+        playerPositionAndLookPacket.pitch = 0;
+        playerPositionAndLookPacket.flags = 0;
+        playerPositionAndLookPacket.teleportId = 42;
+        connection.sendPacket(playerPositionAndLookPacket);
     }
 
     @Override

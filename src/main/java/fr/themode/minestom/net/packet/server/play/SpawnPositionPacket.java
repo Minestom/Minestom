@@ -15,6 +15,6 @@ public class SpawnPositionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x49;
+        return 0x4D;
     }
 }

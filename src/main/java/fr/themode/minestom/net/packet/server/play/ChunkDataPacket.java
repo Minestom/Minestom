@@ -4,6 +4,8 @@ import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Utils;
 
+import java.io.UnsupportedEncodingException;
+
 public class ChunkDataPacket implements ServerPacket {
 
     public int columnX;
@@ -20,7 +22,28 @@ public class ChunkDataPacket implements ServerPacket {
         buffer.putInt(columnZ);
         buffer.putBoolean(fullChunk);
         Utils.writeVarInt(buffer, mask);
-        System.out.println("test: " + getDataSize());
+
+        // Nbt
+        buffer.putByte((byte) 10);
+        buffer.putShort((short) "MOTION_BLOCKING".length());
+        try {
+            buffer.putBytes("MOTION_BLOCKING".getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        buffer.putByte((byte) 12);
+        buffer.putShort((short) "MOTION_BLOCKING".length());
+        try {
+            buffer.putBytes("MOTION_BLOCKING".getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        buffer.putInt(256);
+        for (int i = 0; i < 256; i++) {
+            buffer.putLong(Long.MAX_VALUE);
+        }
+        buffer.putByte((byte) 0); // End nbt
+
         Utils.writeVarInt(buffer, getDataSize());
         writeData(buffer);
         Utils.writeVarInt(buffer, tileEntitesSize);
@@ -56,10 +79,9 @@ public class ChunkDataPacket implements ServerPacket {
         public int paletteLength; // Optional
         public int[] palette; // Optional
         public long[] data;
-        public byte[] blockLight;
-        public byte[] skyLight;
 
         public void write(Buffer buffer) {
+            buffer.putShort((short) 3);
             buffer.putByte(bitsPerBlock);
 
             if (bitsPerBlock < 9) {
@@ -73,12 +95,11 @@ public class ChunkDataPacket implements ServerPacket {
             for (long d : data) {
                 buffer.putLong(d);
             }
-            //buffer.putBytes(blockLight);
-            //buffer.putBytes(skyLight);
         }
 
         public int getSize() {
             int size = 0;
+            size += Short.BYTES;
             size++; //bitsPerBlock
             if (bitsPerBlock < 9) {
                 size += Utils.lengthVarInt(paletteLength);
@@ -89,8 +110,6 @@ public class ChunkDataPacket implements ServerPacket {
 
             size += Utils.lengthVarInt(data.length);
             size += Long.BYTES * data.length;
-            //size += blockLight.length;
-            //size += skyLight.length;
             return size;
         }
 
