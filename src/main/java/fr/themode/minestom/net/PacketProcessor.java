@@ -77,4 +77,12 @@ public class PacketProcessor {
                 break;
         }
     }
+
+    public PlayerConnection getPlayerConnection(Connection connection) {
+        return connectionPlayerConnectionMap.get(connection);
+    }
+
+    public boolean hasPlayerConnection(Connection connection) {
+        return connectionPlayerConnectionMap.containsKey(connection);
+    }
 }

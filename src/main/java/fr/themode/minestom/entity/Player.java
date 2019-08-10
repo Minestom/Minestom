@@ -7,8 +7,13 @@ public class Player {
     private double x, y, z;
     private float yaw, pitch;
     private boolean onGround;
+    private long lastKeepAlive;
 
     private PlayerConnection playerConnection;
+
+    public Player(PlayerConnection playerConnection) {
+        this.playerConnection = playerConnection;
+    }
 
     public PlayerConnection getPlayerConnection() {
         return playerConnection;
@@ -29,4 +34,11 @@ public class Player {
         this.onGround = onGround;
     }
 
+    public void refreshKeepAlive(long lastKeepAlive) {
+        this.lastKeepAlive = lastKeepAlive;
+    }
+
+    public long getLastKeepAlive() {
+        return lastKeepAlive;
+    }
 }

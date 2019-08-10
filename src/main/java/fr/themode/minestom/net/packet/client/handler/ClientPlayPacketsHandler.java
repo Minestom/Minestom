@@ -10,6 +10,9 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x11, ClientPlayerPositionPacket.class);
         register(0x12, ClientPlayerPositionAndLookPacket.class);
         register(0x00, ClientTeleportConfirmPacket.class);
+        register(0x0F, ClientKeepAlivePacket.class);
+        register(0x19, ClientPlayerAbilitiesPacket.class);
+        register(0x13, ClientPlayerLookPacket.class);
     }
 
 }

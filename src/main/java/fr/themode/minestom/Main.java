@@ -7,6 +7,7 @@ import fr.adamaq01.ozao.net.server.ServerHandler;
 import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
+import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.protocol.MinecraftProtocol;
 
 import java.lang.reflect.InvocationTargetException;
@@ -56,6 +57,20 @@ public class Main {
         server.bind(25565);
         System.out.println("Server started");
 
-    }
+        long lastTime = System.currentTimeMillis();
+        while (true) {
+            if (System.currentTimeMillis() - lastTime >= 50) {
+                lastTime = System.currentTimeMillis();
+                // Tick
 
+                // Keep Alive Handling
+                server.getConnections().stream().filter(connection -> packetProcessor.hasPlayerConnection(connection) && connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null && System.currentTimeMillis() - connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)).getLastKeepAlive() > 20000).map(connection -> connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection))).forEach(player -> {
+                    long id = System.currentTimeMillis();
+                    player.refreshKeepAlive(id);
+                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
+                    player.getPlayerConnection().sendPacket(keepAlivePacket);
+                });
+            }
+        }
+    }
 }
