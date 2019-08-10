@@ -3,6 +3,8 @@ package fr.themode.minestom.net.packet.client.login;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.entity.GameMode;
+import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
@@ -26,10 +28,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         connection.setConnectionState(ConnectionState.PLAY);
         connectionManager.createPlayer(connection);
+        Player player = connectionManager.getPlayer(connection);
+        player.addToWorld();
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
-        joinGamePacket.entityId = 32;
+        joinGamePacket.entityId = player.getEntityId();
         joinGamePacket.gameMode = GameMode.CREATIVE;
         joinGamePacket.dimension = Dimension.OVERWORLD;
         joinGamePacket.maxPlayers = 0;
@@ -71,6 +75,15 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerPositionAndLookPacket.flags = 0;
         playerPositionAndLookPacket.teleportId = 42;
         connection.sendPacket(playerPositionAndLookPacket);
+
+        for (int x = -20; x < 20; x++)
+            for (int z = -20; z < 20; z++) {
+                // TODO test entity
+                ChickenCreature chickenCreature = new ChickenCreature();
+                chickenCreature.setPosition(50 + (double) x * 1, 5, 50 + (double) z * 1);
+                connectionManager.getOnlinePlayers().forEach(p -> chickenCreature.addViewer(p));
+                chickenCreature.addToWorld();
+            }
     }
 
     @Override

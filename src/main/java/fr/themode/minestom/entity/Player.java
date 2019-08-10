@@ -2,17 +2,23 @@ package fr.themode.minestom.entity;
 
 import fr.themode.minestom.net.player.PlayerConnection;
 
-public class Player {
+public class Player extends LivingEntity {
 
-    private double x, y, z;
-    private float yaw, pitch;
-    private boolean onGround;
+    private boolean isSneaking;
+    private boolean isSprinting;
+
     private long lastKeepAlive;
 
     private PlayerConnection playerConnection;
 
+    // TODO set proper UUID
     public Player(PlayerConnection playerConnection) {
         this.playerConnection = playerConnection;
+    }
+
+    @Override
+    public void update() {
+        // System.out.println("Je suis l'update");
     }
 
     public PlayerConnection getPlayerConnection() {
@@ -32,6 +38,14 @@ public class Player {
 
     public void refreshOnGround(boolean onGround) {
         this.onGround = onGround;
+    }
+
+    public void refreshSneaking(boolean sneaking) {
+        isSneaking = sneaking;
+    }
+
+    public void refreshSprinting(boolean sprinting) {
+        isSprinting = sprinting;
     }
 
     public void refreshKeepAlive(long lastKeepAlive) {

@@ -18,8 +18,7 @@ public class ClientAnimationPacket implements ClientPlayPacket {
         this.hand = Hand.values()[Utils.readVarInt(buffer)];
     }
 
-    public static enum Hand {
-
+    public enum Hand {
         MAIN,
         OFF
     }

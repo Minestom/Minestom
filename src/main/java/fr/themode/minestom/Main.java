@@ -5,6 +5,7 @@ import fr.adamaq01.ozao.net.server.Connection;
 import fr.adamaq01.ozao.net.server.Server;
 import fr.adamaq01.ozao.net.server.ServerHandler;
 import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
+import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
@@ -14,10 +15,15 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 
+    // In-Game Manager
+    private static EntityManager entityManager;
+
+    // Others
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
 
     public static void main(String[] args) {
+        entityManager = new EntityManager();
 
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor(connectionManager);
@@ -70,7 +76,18 @@ public class Main {
                     KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
                     player.getPlayerConnection().sendPacket(keepAlivePacket);
                 });
+
+                // Entities update
+                entityManager.update();
             }
         }
+    }
+
+    public static EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public static ConnectionManager getConnectionManager() {
+        return connectionManager;
     }
 }
