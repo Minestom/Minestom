@@ -19,7 +19,7 @@ Instances also come with performance benefits, unlike some others which will be 
 Minestom by default does not know what is stone block, not even a chest, you will have to tell him that it opens an inventory. Every "special blocks" (which aren't only visual) have to be registered, then they can be placed anywhere simply.
 
 ## Entities
-The terms "passive", "aggressive" monsters do not exist, nobody forbid you from making a flying chicken rushing into any players coming too close, doing so with NMS is a real mess because of obfuscation and the large inheritance.
+The terms "passive" or "aggressive" monsters do not exist, nobody forbid you from making a flying chicken rushing into any players coming too close, doing so with NMS is a real mess because of obfuscation and the large inheritance.
 
 ## Inventories
 It is a field where Minecraft evolved a lot, inventories are now used a lot as client<->server interface with clickable items and callback, we support it natively without the need of programming your solution.
