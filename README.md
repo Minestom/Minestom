@@ -1,12 +1,12 @@
 # About Minestom
-Minestom is an alternative to the popular minecraft server API named Bukkit/Spigot. The principal difference is that our implementation of Notchian server do not contain any feature by default! However we have a complete API which allow you to make anything possible with current spigot's plugin.
+Minestom is an alternative to the popular minecraft server API named Bukkit/Spigot. The main difference is that our implementation of Notchian server does not contain any features by default! However, we have a complete API which allows you to make anything possible with current spigot's plugins.
 
-# Why Minestom ?
-Minecraft evolued a lot since its release, most servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default survival.
-The goal is to offer more performance for those who need it, minecraft being single-threaded is the most important problem for them.
+# Why Minestom?
+Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
+The goal is to offer more performance for those who need it, Minecraft being single-threaded is the most important problem for them.
 
 # Pros & Cons
-Minestom isn't perfect, our choices make it much better for some case, worse for some.
+Minestom isn't perfect, our choices make it much better for some cases, worse for some others.
 
 ## Pros
 * Remove the overhead of vanilla features
@@ -18,5 +18,5 @@ Minestom isn't perfect, our choices make it much better for some case, worse for
 * No more disgusting NMS
 
 ## Cons
-* Do not work with bukkit plugins
+* Does not work with bukkit plugins
 * Bad for those who want vanilla experience
