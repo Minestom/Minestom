@@ -11,7 +11,6 @@ public class ChickenCreature extends EntityCreature {
 
     @Override
     public void update() {
-        //System.out.println("Update poulet");
         onGround = true;
 
         double speed = 0.01;

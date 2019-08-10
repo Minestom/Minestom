@@ -11,10 +11,9 @@ public class EntityManager {
 
     private Set<LivingEntity> livingEntities = Collections.synchronizedSet(new HashSet<>());
 
-    private ExecutorService pool = Executors.newFixedThreadPool(5);
+    private ExecutorService pool = Executors.newFixedThreadPool(50);
 
     public void update() {
-
         livingEntities.removeIf(livingEntity -> livingEntity.shouldRemove());
 
         synchronized (livingEntities) {
