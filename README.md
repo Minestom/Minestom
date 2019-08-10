@@ -9,7 +9,7 @@ The goal is to offer more performance for those who need it, Minecraft being sin
 Even if we do not include anything by default in the game, we simplify the way you add them, here is a preview.
 
 ## Instances
-It is our major concept, worlds are great for survival with friends, but when it scales up it can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunk in memory only, copying it and sending it to another player in no time, making your serializer and much more...
+It is our major concept, worlds are great for survival with friends, but when it scales up it can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunk in memory only, copying and sending it to another player in no time, making your serializer and much more...
 
 Being able to create instances directly on the go is a must-have, according to us it can push many more projects forward.
 
