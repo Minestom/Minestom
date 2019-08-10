@@ -13,6 +13,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x0F, ClientKeepAlivePacket.class);
         register(0x19, ClientPlayerAbilitiesPacket.class);
         register(0x13, ClientPlayerLookPacket.class);
+        register(0x14, ClientPlayerPacket.class);
+        register(0x2A, ClientAnimationPacket.class);
     }
-
 }
