@@ -67,9 +67,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.sendPacket(spawnPositionPacket);
 
         PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-        playerPositionAndLookPacket.x = 50;
+        playerPositionAndLookPacket.x = 0;
         playerPositionAndLookPacket.y = 5;
-        playerPositionAndLookPacket.z = 50;
+        playerPositionAndLookPacket.z = 0;
         playerPositionAndLookPacket.yaw = 0;
         playerPositionAndLookPacket.pitch = 0;
         playerPositionAndLookPacket.flags = 0;
@@ -80,7 +80,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
             for (int z = -20; z < 20; z++) {
                 // TODO test entity
                 ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.setPosition(50 + (double) x * 1, 5, 50 + (double) z * 1);
+                chickenCreature.setPosition((double) x * 1, 5, (double) z * 1);
                 connectionManager.getOnlinePlayers().forEach(p -> chickenCreature.addViewer(p));
                 chickenCreature.addToWorld();
             }

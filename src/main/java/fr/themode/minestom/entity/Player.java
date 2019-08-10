@@ -18,7 +18,7 @@ public class Player extends LivingEntity {
 
     @Override
     public void update() {
-        // System.out.println("Je suis l'update");
+        //System.out.println("Je suis l'update");
     }
 
     public PlayerConnection getPlayerConnection() {

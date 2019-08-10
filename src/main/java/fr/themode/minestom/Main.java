@@ -15,18 +15,18 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 
-    // In-Game Manager
-    private static EntityManager entityManager;
-
-    // Others
+    // Networking
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
 
-    public static void main(String[] args) {
-        entityManager = new EntityManager();
+    // In-Game Manager
+    private static EntityManager entityManager;
 
+    public static void main(String[] args) {
         connectionManager = new ConnectionManager();
-        packetProcessor = new PacketProcessor(connectionManager);
+        packetProcessor = new PacketProcessor();
+
+        entityManager = new EntityManager();
 
         Server server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
             @Override
@@ -63,10 +63,12 @@ public class Main {
         server.bind(25565);
         System.out.println("Server started");
 
-        long lastTime = System.currentTimeMillis();
+        long tickDistance = 50 * 1000000; // 50 ms
+        long nextTick = System.nanoTime();
+        long currentTime;
         while (true) {
-            if (System.currentTimeMillis() - lastTime >= 50) {
-                lastTime = System.currentTimeMillis();
+            currentTime = System.nanoTime();
+            if (currentTime >= nextTick) {
                 // Tick
 
                 // Keep Alive Handling
@@ -79,6 +81,10 @@ public class Main {
 
                 // Entities update
                 entityManager.update();
+
+                // Set next tick update time
+                currentTime = System.nanoTime();
+                nextTick = currentTime + tickDistance - (currentTime - nextTick);
             }
         }
     }

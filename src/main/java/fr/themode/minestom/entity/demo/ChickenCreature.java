@@ -13,7 +13,7 @@ public class ChickenCreature extends EntityCreature {
     public void update() {
         onGround = true;
 
-        double speed = 0.01;
+        double speed = 0.05;
         double newPos = getZ() + speed;
 
         EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();

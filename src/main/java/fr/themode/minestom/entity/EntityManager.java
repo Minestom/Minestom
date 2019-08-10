@@ -1,35 +1,46 @@
 package fr.themode.minestom.entity;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import fr.themode.minestom.Main;
+import fr.themode.minestom.net.ConnectionManager;
+
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class EntityManager {
 
-    private Set<LivingEntity> livingEntities = Collections.synchronizedSet(new HashSet<>());
+    private Set<EntityCreature> creatures = Collections.synchronizedSet(new HashSet<>());
 
-    private ExecutorService pool = Executors.newFixedThreadPool(50);
+    private ExecutorService creaturesPool = Executors.newFixedThreadPool(3);
+    private ExecutorService playersPool = Executors.newFixedThreadPool(2);
+
+    private ConnectionManager connectionManager = Main.getConnectionManager();
 
     public void update() {
-        livingEntities.removeIf(livingEntity -> livingEntity.shouldRemove());
+        creatures.removeIf(creature -> creature.shouldRemove());
 
-        synchronized (livingEntities) {
-            Iterator<LivingEntity> iterator = livingEntities.iterator();
+        synchronized (creatures) {
+            Iterator<EntityCreature> iterator = creatures.iterator();
             while (iterator.hasNext()) {
-                LivingEntity entity = iterator.next();
-                pool.submit(entity::update);
+                EntityCreature creature = iterator.next();
+                creaturesPool.submit(creature::update);
             }
         }
+
+        Collection<Player> players = connectionManager.getOnlinePlayers();
+        Iterator<Player> iterator = players.iterator();
+        while (iterator.hasNext()) {
+            Player player = iterator.next();
+            playersPool.submit(player::update);
+        }
+
     }
 
-    public Set<LivingEntity> getEntities() {
-        return Collections.unmodifiableSet(livingEntities);
+    public Set<EntityCreature> getCreatures() {
+        return Collections.unmodifiableSet(creatures);
     }
 
-    protected void addLivingEntity(LivingEntity livingEntity) {
-        this.livingEntities.add(livingEntity);
+    protected void addCreature(EntityCreature creature) {
+        this.creatures.add(creature);
     }
 }

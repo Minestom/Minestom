@@ -37,8 +37,8 @@ public class Entity {
     public void addToWorld() {
         this.isActive = true;
         EntityManager entityManager = Main.getEntityManager();
-        if (this instanceof LivingEntity) {
-            entityManager.addLivingEntity((LivingEntity) this);
+        if (this instanceof EntityCreature) {
+            entityManager.addCreature((EntityCreature) this);
         }
     }
 
