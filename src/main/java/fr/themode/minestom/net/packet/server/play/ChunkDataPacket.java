@@ -25,16 +25,23 @@ public class ChunkDataPacket implements ServerPacket {
 
         // Nbt
         buffer.putByte((byte) 10);
+        buffer.putShort((short) 0);
+        buffer.putByte((byte) 12);
         buffer.putShort((short) "MOTION_BLOCKING".length());
         try {
             buffer.putBytes("MOTION_BLOCKING".getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        buffer.putInt(256);
+        for (int i = 0; i < 256; i++) {
+            buffer.putLong(Long.MAX_VALUE);
+        }
+
         buffer.putByte((byte) 12);
-        buffer.putShort((short) "MOTION_BLOCKING".length());
+        buffer.putShort((short) "WORLD_SURFACE".length());
         try {
-            buffer.putBytes("MOTION_BLOCKING".getBytes("UTF-8"));
+            buffer.putBytes("WORLD_SURFACE".getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -1,18 +1,18 @@
 package fr.themode.minestom.net.packet.client.login;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
-import fr.themode.minestom.world.Dimension;
+import fr.themode.minestom.world.*;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
@@ -44,31 +44,22 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO player abilities
 
-        for (int x = 0; x < 8; x++) {
-            for (int z = 0; z < 8; z++) {
-                ChunkDataPacket.ChunkSection chunkSection = new ChunkDataPacket.ChunkSection();
-                chunkSection.bitsPerBlock = 13;
-                chunkSection.data = new long[]{0x1001880C0060020L, 0x200D0068004C020L, 1111L};
+        CustomChunk customChunk = new CustomChunk(CustomBiome.VOID);
+        for (int x = 0; x < 16; x++)
+            for (int z = 0; z < 16; z++)
+                customChunk.setBlock(x, 4, z, new CustomBlock(1)); // Stone
 
-                ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-                chunkDataPacket.columnX = x;
-                chunkDataPacket.columnZ = z;
-                chunkDataPacket.fullChunk = true;
-                chunkDataPacket.mask = 0xFFFF; // 16 bits
-                ChunkDataPacket.ChunkSection[] sections = new ChunkDataPacket.ChunkSection[16];
-                for (int i = 0; i < 16; i++) {
-                    sections[i] = chunkSection;
-                }
-                chunkDataPacket.chunkSections = sections;
-
-                connection.sendPacket(chunkDataPacket);
+        for (int x = -5; x < 5; x++) {
+            for (int z = -5; z < 5; z++) {
+                Packet packet = ChunkPacketCreator.create(x, z, customChunk, 0, 15);
+                connection.getConnection().sendPacket(packet);
             }
         }
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-        spawnPositionPacket.x = 50;
-        spawnPositionPacket.y = 5;
-        spawnPositionPacket.z = 50;
+        spawnPositionPacket.x = 0;
+        spawnPositionPacket.y = 18;
+        spawnPositionPacket.z = 0;
         connection.sendPacket(spawnPositionPacket);
 
         PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
