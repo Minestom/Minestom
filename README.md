@@ -9,23 +9,23 @@ The goal is to offer more performance for those who need it, Minecraft being sin
 Even if we do not include anything by default in the game, we simplify the way you add them, here is a preview.
 
 ## Instances
-It is our major concept, worlds are really great for survival with friends, but when it scales up it can become really unmanageable. Best example can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunks in memory only, copying it and sending it to another player in no time, making your own serializer and much more...
+It is our major concept, worlds are great for survival with friends, but when it scales up it can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunk in memory only, copying it and sending it to another player in no time, making your serializer and much more...
 
-Being able to create instances directly on the go is a must have, according to us it can push many more projects forward.
+Being able to create instances directly on the go is a must-have, according to us it can push many more projects forward.
 
-Instances also come with performance benefits, unlike some others which will be fully single-threaded or may be using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more of the CPU power.
+Instances also come with performance benefits, unlike some others which will be fully single-threaded or maybe using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more of the CPU power.
 
 ## Blocks
 Minestom by default does not know what is stone block, not even a chest, you will have to tell him that it opens an inventory. Every "special blocks" (which aren't only visual) have to be registered, then they can be placed anywhere simply.
 
 ## Entities
-The terms "passive", "aggresive" monsters do not exist, nobody forbid you from making a flying chicken rushing into any players coming too close, doing so with NMS is a real mess because of obfuscation and the large inheritance.
+The terms "passive", "aggressive" monsters do not exist, nobody forbid you from making a flying chicken rushing into any players coming too close, doing so with NMS is a real mess because of obfuscation and the large inheritance.
 
 ## Inventories
-It is a field where Minecraft evolved a lot, inventories are now used a lot as client<->server interface with clickable items and callback, we support it natively without the need of programming your own solution.
+It is a field where Minecraft evolved a lot, inventories are now used a lot as client<->server interface with clickable items and callback, we support it natively without the need of programming your solution.
 
 ## Commands
-Commands are the simplest way of communication between clients and server, since 1.13 Minecraft has incorpored a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
+Commands are the simplest way of communication between clients and server. Since 1.13 Minecraft has incorporated a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
 
 # Pros & Cons
 Minestom isn't perfect, our choices make it much better for some cases, worse for some others.
@@ -43,4 +43,4 @@ Minestom isn't perfect, our choices make it much better for some cases, worse fo
 * Does not work with bukkit plugins
 * Does not work with older clients
 * Bad for those who want vanilla experience
-* Obviously longer to obtain something playable
+* Longer to obtain something playable
