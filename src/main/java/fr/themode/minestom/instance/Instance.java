@@ -22,12 +22,11 @@ public class Instance {
 
     // TODO BlockBatch with pool
     public synchronized void setBlock(int x, int y, int z, Block block) {
-        int chunkX = Math.floorDiv(x, 16);
-        int chunkZ = Math.floorDiv(z, 16);
+        final int chunkX = Math.floorDiv(x, 16);
+        final int chunkZ = Math.floorDiv(z, 16);
         Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk == null) {
-            chunk = new Chunk(Biome.VOID, chunkX, chunkZ);
-            this.chunksSet.add(chunk);
+            chunk = createChunk(Biome.VOID, chunkX, chunkZ);
         }
         synchronized (chunk) {
             chunk.setBlock(x % 16, y, z % 16, block);
@@ -59,7 +58,7 @@ public class Instance {
         }
 
         if (entity instanceof EntityCreature) {
-            // TODO based on distance with player
+            // TODO based on distance with players
             getPlayers().forEach(p -> ((EntityCreature) entity).addViewer(p));
         } else if (entity instanceof Player) {
             getCreatures().forEach(entityCreature -> entityCreature.addViewer((Player) entity));
@@ -103,8 +102,8 @@ public class Instance {
         return uniqueId;
     }
 
-    private Chunk createChunk(int chunkX, int chunkZ) {
-        Chunk chunk = new Chunk(Biome.VOID, chunkX, chunkZ);
+    private Chunk createChunk(Biome biome, int chunkX, int chunkZ) {
+        Chunk chunk = new Chunk(biome, chunkX, chunkZ);
         this.chunksSet.add(chunk);
         return chunk;
     }

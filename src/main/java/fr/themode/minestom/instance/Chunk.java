@@ -7,13 +7,13 @@ import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Chunk {
 
-    protected Set<EntityCreature> creatures = Collections.synchronizedSet(new HashSet<>());
-    protected Set<Player> players = Collections.synchronizedSet(new HashSet<>());
+    protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
+    protected Set<Player> players = new CopyOnWriteArraySet<>();
     private int chunkX, chunkZ;
     private Biome biome;
     private HashMap<Short, Block> blocks = new HashMap<>();

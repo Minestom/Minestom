@@ -13,8 +13,10 @@ public class ClientPlayerPositionAndLookPacket implements ClientPlayPacket {
     @Override
     public void process(Player player) {
         boolean chunkTest = player.chunkTest(x, z);
-        if (chunkTest)
+        if (chunkTest) {
+            player.teleport(player.getX(), player.getY(), player.getZ());
             return;
+        }
 
         player.refreshPosition(x, y, z);
         player.refreshView(yaw, pitch);

@@ -1,7 +1,6 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
-import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.server.play.EntityTeleportPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.UpdateViewPositionPacket;
@@ -44,21 +43,16 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(new UpdateViewPositionPacket(Math.floorDiv((int) x, 16), Math.floorDiv((int) z, 16)));
     }
 
-    public boolean chunkTest(double x, double z) {
-        Chunk newChunk = getInstance().getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16));
-        if (newChunk == null) {
-            PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-            positionAndLookPacket.x = getX();
-            positionAndLookPacket.y = getY();
-            positionAndLookPacket.z = getZ();
-            positionAndLookPacket.yaw = getYaw();
-            positionAndLookPacket.pitch = getPitch();
-            positionAndLookPacket.flags = 0x00;
-            positionAndLookPacket.teleportId = 67;
-            getPlayerConnection().sendPacket(positionAndLookPacket);
-            return true;
-        }
-        return false;
+    public void teleport(double x, double y, double z) {
+        PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
+        positionAndLookPacket.x = x;
+        positionAndLookPacket.y = y;
+        positionAndLookPacket.z = z;
+        positionAndLookPacket.yaw = getYaw();
+        positionAndLookPacket.pitch = getPitch();
+        positionAndLookPacket.flags = 0x00;
+        positionAndLookPacket.teleportId = 67;
+        getPlayerConnection().sendPacket(positionAndLookPacket);
     }
 
     public String getUsername() {

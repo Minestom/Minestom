@@ -18,6 +18,14 @@ public class ConnectionManager {
         return Collections.unmodifiableCollection(players);
     }
 
+    public Player getPlayer(String username) {
+        for (Player player : getOnlinePlayers()) {
+            if (player.getUsername().equalsIgnoreCase(username))
+                return player;
+        }
+        return null;
+    }
+
     // Is only used at LoginStartPacket#process
     public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
         Player player = new Player(uuid, username, connection);

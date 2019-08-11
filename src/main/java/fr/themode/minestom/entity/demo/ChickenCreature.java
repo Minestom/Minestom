@@ -1,7 +1,6 @@
 package fr.themode.minestom.entity.demo;
 
 import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
 
 public class ChickenCreature extends EntityCreature {
 
@@ -11,16 +10,13 @@ public class ChickenCreature extends EntityCreature {
 
     @Override
     public void update() {
-        onGround = true;
-
         double speed = 0.075;
-        double newPos = getZ() + speed;
 
-        EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
-        entityRelativeMovePacket.entityId = getEntityId();
-        entityRelativeMovePacket.deltaZ = (short) ((newPos * 32 - getZ() * 32) * 128);
-        entityRelativeMovePacket.onGround = true;
-        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(entityRelativeMovePacket));
-        setZ(newPos);
+        /*Player player = Main.getConnectionManager().getPlayer("TheMode911");
+        if (player != null) {
+            teleport(player.getX(), 5, player.getZ());
+        }*/
+
+        move(0, 0, speed);
     }
 }
