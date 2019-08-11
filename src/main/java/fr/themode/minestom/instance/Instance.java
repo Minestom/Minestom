@@ -8,15 +8,16 @@ import fr.themode.minestom.utils.GroupedCollections;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class Instance {
 
-    private int id;
+    private UUID uniqueId;
 
     private Set<Chunk> chunksSet = Collections.synchronizedSet(new HashSet<>());
 
-    public Instance(int id) {
-        this.id = id;
+    public Instance(UUID uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     // TODO BlockBatch with pool
@@ -98,8 +99,8 @@ public class Instance {
         return players;
     }
 
-    public int getId() {
-        return id;
+    public UUID getUniqueId() {
+        return uniqueId;
     }
 
     private Chunk createChunk(int chunkX, int chunkZ) {

@@ -11,6 +11,10 @@ public class ClientPlayerPositionPacket implements ClientPlayPacket {
 
     @Override
     public void process(Player player) {
+        boolean chunkTest = player.chunkTest(x, z);
+        if (chunkTest)
+            return;
+
         player.refreshPosition(x, y, z);
         player.refreshOnGround(onGround);
     }

@@ -3,19 +3,14 @@ package fr.themode.minestom.instance;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class InstanceManager {
 
-    private static volatile int lastInstanceId;
-
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
 
-    private static int generateId() {
-        return ++lastInstanceId;
-    }
-
     public Instance createInstance() {
-        Instance instance = new Instance(generateId());
+        Instance instance = new Instance(UUID.randomUUID());
         this.instances.add(instance);
         return instance;
     }
