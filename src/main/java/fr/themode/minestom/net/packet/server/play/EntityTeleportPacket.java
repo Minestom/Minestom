@@ -17,8 +17,8 @@ public class EntityTeleportPacket implements ServerPacket {
         buffer.putDouble(x);
         buffer.putDouble(y);
         buffer.putDouble(y);
-        buffer.getData().writeByte((int) (this.yaw * 256 / 360));
-        buffer.getData().writeByte((int) (this.pitch * 256 / 360));
+        buffer.putByte((byte) (this.yaw * 256 / 360));
+        buffer.putByte((byte) (this.pitch * 256 / 360));
         buffer.putBoolean(onGround);
     }
 

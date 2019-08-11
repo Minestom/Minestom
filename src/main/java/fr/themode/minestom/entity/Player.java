@@ -2,6 +2,7 @@ package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
 import fr.themode.minestom.net.packet.server.play.EntityTeleportPacket;
+import fr.themode.minestom.net.packet.server.play.UpdateViewPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.UUID;
@@ -38,6 +39,7 @@ public class Player extends LivingEntity {
             if (!onlinePlayer.equals(this))
                 onlinePlayer.getPlayerConnection().sendPacket(entityTeleportPacket);
         }
+        playerConnection.sendPacket(new UpdateViewPositionPacket(Math.floorDiv((int) x, 16), Math.floorDiv((int) z, 16)));
     }
 
     public String getUsername() {
