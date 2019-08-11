@@ -40,9 +40,12 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     public void removeViewer(Player player) {
-        if (!viewers.contains(player))
-            return;
-        // TODO send packet to remove entity
+        synchronized (viewers) {
+            if (!viewers.contains(player))
+                return;
+            this.viewers.remove(player);
+            // TODO send packet to remove entity
+        }
     }
 
     public Set<Player> getViewers() {

@@ -17,10 +17,11 @@ public class EntityLookAndRelativeMovePacket implements ServerPacket {
         buffer.putShort(deltaX);
         buffer.putShort(deltaY);
         buffer.putShort(deltaZ);
-        buffer.putFloat(yaw);
-        buffer.putFloat(pitch);
+        buffer.putByte((byte) (this.yaw * 256 / 360));
+        buffer.putByte((byte) (this.pitch * 256 / 360));
         buffer.putBoolean(onGround);
     }
+
 
     @Override
     public int getId() {

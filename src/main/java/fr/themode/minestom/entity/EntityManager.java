@@ -1,47 +1,45 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
-import fr.themode.minestom.net.ConnectionManager;
+import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.InstanceManager;
 
-import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class EntityManager {
 
-    private Set<EntityCreature> creatures = Collections.synchronizedSet(new HashSet<>());
+    private static InstanceManager instanceManager = Main.getInstanceManager();
 
     private ExecutorService creaturesPool = Executors.newFixedThreadPool(3);
     private ExecutorService playersPool = Executors.newFixedThreadPool(2);
 
-    private ConnectionManager connectionManager = Main.getConnectionManager();
-
     public void update() {
-        creatures.removeIf(creature -> creature.shouldRemove());
 
-        synchronized (creatures) {
-            Iterator<EntityCreature> iterator = creatures.iterator();
-            while (iterator.hasNext()) {
-                EntityCreature creature = iterator.next();
-                creaturesPool.submit(creature::update);
+        for (Instance instance : instanceManager.getInstances()) {
+            // Creatures
+            for (EntityCreature creature : instance.getCreatures()) {
+                creaturesPool.submit(() -> {
+                    creature.update();
+                    boolean shouldRemove = creature.shouldRemove();
+                    if (shouldRemove) {
+                        instance.removeEntity(creature);
+                    }
+                });
+            }
+
+            // Players
+            for (Player player : instance.getPlayers()) {
+                playersPool.submit(() -> {
+                    player.update();
+                    boolean shouldRemove = player.shouldRemove();
+                    if (shouldRemove) {
+                        instance.removeEntity(player);
+                    }
+                });
             }
         }
 
-        Collection<Player> players = connectionManager.getOnlinePlayers();
-        Iterator<Player> iterator = players.iterator();
-        while (iterator.hasNext()) {
-            Player player = iterator.next();
-            playersPool.submit(player::update);
-        }
-
-    }
-
-    public Set<EntityCreature> getCreatures() {
-        return Collections.unmodifiableSet(creatures);
-    }
-
-    protected void addCreature(EntityCreature creature) {
-        this.creatures.add(creature);
     }
 
 }

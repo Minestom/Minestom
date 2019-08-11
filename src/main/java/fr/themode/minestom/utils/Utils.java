@@ -1,7 +1,7 @@
 package fr.themode.minestom.utils;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.world.CustomBlock;
+import fr.themode.minestom.instance.Block;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -124,7 +124,7 @@ public class Utils {
         buffer.putLong(((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
     }
 
-    public static void writeBlocks(Buffer buffer, CustomBlock[] blocks, int bitsPerEntry) {
+    public static void writeBlocks(Buffer buffer, Block[] blocks, int bitsPerEntry) {
         buffer.putShort((short) Arrays.stream(blocks).filter(customBlock -> customBlock.getType() != 0).collect(Collectors.toList()).size());
         buffer.putByte((byte) bitsPerEntry);
         int[] blocksData = new int[16 * 16 * 16];

@@ -1,8 +1,8 @@
-package fr.themode.minestom.world;
+package fr.themode.minestom.instance;
 
 import java.util.Arrays;
 
-public enum CustomBiome {
+public enum Biome {
 
     OCEAN(0),
     PLAINS(1),
@@ -10,11 +10,11 @@ public enum CustomBiome {
 
     private int id;
 
-    CustomBiome(int id) {
+    Biome(int id) {
         this.id = id;
     }
 
-    public static CustomBiome fromId(int id) {
+    public static Biome fromId(int id) {
         return Arrays.stream(values()).filter(customBiome -> customBiome.id == id).findFirst().get();
     }
 

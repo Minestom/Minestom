@@ -1,9 +1,7 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
-import fr.themode.minestom.net.packet.server.play.EntityLookAndRelativeMovePacket;
 import fr.themode.minestom.net.packet.server.play.EntityTeleportPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.UUID;
@@ -48,12 +46,6 @@ public class Player extends LivingEntity {
 
     public PlayerConnection getPlayerConnection() {
         return playerConnection;
-    }
-
-    public void refreshPosition(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
     }
 
     public void refreshView(float yaw, float pitch) {

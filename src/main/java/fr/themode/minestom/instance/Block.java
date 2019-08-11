@@ -1,15 +1,15 @@
-package fr.themode.minestom.world;
+package fr.themode.minestom.instance;
 
-public class CustomBlock {
+public class Block {
 
     private short typeAndDamage;
 
-    public CustomBlock(int type) {
+    public Block(int type) {
         this.typeAndDamage = (short) (type & 0x0FFF);
         this.typeAndDamage |= (0 << 12) & 0xF000;
     }
 
-    public CustomBlock(int type, int damage) {
+    public Block(int type, int damage) {
         this.typeAndDamage = (short) (type & 0x0FFF);
         this.typeAndDamage |= (damage << 12) & 0xF000;
     }

@@ -1,22 +1,22 @@
 package fr.themode.minestom.net.packet.client.login;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.adamaq01.ozao.net.packet.Packet;
+import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
+import fr.themode.minestom.instance.Block;
+import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPlayerPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
+import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
-import fr.themode.minestom.world.*;
+import fr.themode.minestom.world.Dimension;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -24,6 +24,16 @@ import java.util.UUID;
 public class LoginStartPacket implements ClientPreplayPacket {
 
     private String username;
+
+    // Test
+    private static Instance instance;
+
+    static {
+        instance = Main.getInstanceManager().createInstance();
+        for (int x = -64; x < 64; x++)
+            for (int z = -64; z < 64; z++)
+                instance.setBlock(x, 4, z, new Block(1));
+    }
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
@@ -41,15 +51,15 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.setConnectionState(ConnectionState.PLAY);
         connectionManager.createPlayer(uuids.get(username), username, connection);
         Player player = connectionManager.getPlayer(connection);
-        player.addToWorld();
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = player.getEntityId();
         joinGamePacket.gameMode = GameMode.CREATIVE;
         joinGamePacket.dimension = Dimension.OVERWORLD;
-        joinGamePacket.maxPlayers = 10;
+        joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = "default";
+        joinGamePacket.viewDistance = 14;
         joinGamePacket.reducedDebugInfo = false;
         connection.sendPacket(joinGamePacket);
 
@@ -59,16 +69,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO player abilities
 
-        CustomChunk customChunk = new CustomChunk(CustomBiome.VOID);
-        for (int x = 0; x < 16; x++)
-            for (int z = 0; z < 16; z++)
-                customChunk.setBlock(x, 4, z, new CustomBlock(1)); // Stone
-
-        for (int x = -2; x < 2; x++) {
-            for (int z = -2; z < 2; z++) {
-                Packet packet = ChunkPacketCreator.create(x, z, customChunk, 0, 15);
-                connection.getConnection().sendPacket(packet);
-            }
+        player.setInstance(instance);
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = true;
+        for (Chunk chunk : instance.getChunks()) {
+            chunkDataPacket.chunk = chunk;
+            connection.sendPacket(chunkDataPacket);
         }
 
 
@@ -99,9 +105,8 @@ public class LoginStartPacket implements ClientPreplayPacket {
             for (int z = -2; z < 2; z++) {
                 // TODO test entity
                 ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.setPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);
-                connectionManager.getOnlinePlayers().forEach(p -> chickenCreature.addViewer(p));
-                chickenCreature.addToWorld();
+                chickenCreature.refreshPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);
+                instance.addEntity(chickenCreature);
             }
 
 

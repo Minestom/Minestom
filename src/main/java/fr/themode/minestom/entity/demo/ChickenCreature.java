@@ -13,13 +13,13 @@ public class ChickenCreature extends EntityCreature {
     public void update() {
         onGround = true;
 
-        double speed = 0.05;
+        double speed = 0.075;
         double newPos = getZ() + speed;
 
         EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
         entityRelativeMovePacket.entityId = getEntityId();
         entityRelativeMovePacket.deltaZ = (short) ((newPos * 32 - getZ() * 32) * 128);
-        entityRelativeMovePacket.onGround = false;
+        entityRelativeMovePacket.onGround = true;
         getViewers().forEach(player -> player.getPlayerConnection().sendPacket(entityRelativeMovePacket));
         setZ(newPos);
     }

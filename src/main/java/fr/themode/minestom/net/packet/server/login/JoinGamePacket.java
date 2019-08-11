@@ -13,6 +13,7 @@ public class JoinGamePacket implements ServerPacket {
     public Dimension dimension = Dimension.OVERWORLD;
     public byte maxPlayers = 0; // Unused
     public String levelType = "default";
+    public int viewDistance;
     public boolean reducedDebugInfo = false;
 
     @Override
@@ -26,7 +27,7 @@ public class JoinGamePacket implements ServerPacket {
         buffer.putInt(dimension.getId());
         buffer.putByte(maxPlayers);
         Utils.writeString(buffer, levelType);
-        Utils.writeVarInt(buffer, 8);
+        Utils.writeVarInt(buffer, viewDistance);
         buffer.putBoolean(reducedDebugInfo);
     }
 
