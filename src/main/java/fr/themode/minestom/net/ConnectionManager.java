@@ -7,6 +7,7 @@ import java.util.*;
 
 public class ConnectionManager {
 
+    private volatile Set<Player> players = new HashSet<>();
     private volatile Map<PlayerConnection, Player> connectionPlayerMap = new HashMap<>();
 
     public Player getPlayer(PlayerConnection connection) {
@@ -14,15 +15,13 @@ public class ConnectionManager {
     }
 
     public Collection<Player> getOnlinePlayers() {
-        return Collections.unmodifiableCollection(connectionPlayerMap.values());
+        return Collections.unmodifiableCollection(players);
     }
 
     // Is only used at LoginStartPacket#process
-    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
-        this.connectionPlayerMap.put(connection, new Player(uuid, username, connection));
-    }
-
-    public void removePlayer(PlayerConnection connection) {
-        this.connectionPlayerMap.remove(connection);
+    public void createPlayer(PlayerConnection connection) {
+        Player player = new Player(connection);
+        this.players.add(player);
+        this.connectionPlayerMap.put(connection, player);
     }
 }

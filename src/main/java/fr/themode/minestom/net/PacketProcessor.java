@@ -3,6 +3,7 @@ package fr.themode.minestom.net;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.adamaq01.ozao.net.server.Connection;
+import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
@@ -29,8 +30,8 @@ public class PacketProcessor {
     private ClientLoginPacketsHandler loginPacketsHandler;
     private ClientPlayPacketsHandler playPacketsHandler;
 
-    public PacketProcessor(ConnectionManager connectionManager) {
-        this.connectionManager = connectionManager;
+    public PacketProcessor() {
+        this.connectionManager = Main.getConnectionManager();
 
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();
