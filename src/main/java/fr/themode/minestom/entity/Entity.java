@@ -16,8 +16,6 @@ public class Entity {
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean shouldRemove;
 
-    private Object monitor = new Object();
-
     public Entity() {
         this.id = generateId();
         this.uuid = UUID.randomUUID();
@@ -68,7 +66,7 @@ public class Entity {
         if (instance != null) {
             Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             Chunk newChunk = instance.getChunkAt(x, z);
-            if (newChunk != null && lastChunk != newChunk) {
+            if (lastChunk != null && newChunk != null && lastChunk != newChunk) {
                 synchronized (lastChunk) {
                     synchronized (newChunk) {
                         lastChunk.removeEntity(this);

@@ -31,8 +31,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
     static {
         instance = Main.getInstanceManager().createInstance();
         for (int x = -64; x < 64; x++)
-            for (int z = -64; z < 64; z++)
+            for (int z = -64; z < 64; z++) {
                 instance.setBlock(x, 4, z, new Block(1));
+            }
     }
 
     @Override

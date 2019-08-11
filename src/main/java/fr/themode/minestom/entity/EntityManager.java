@@ -17,27 +17,31 @@ public class EntityManager {
     public void update() {
 
         for (Instance instance : instanceManager.getInstances()) {
-            // Creatures
-            for (EntityCreature creature : instance.getCreatures()) {
-                creaturesPool.submit(() -> {
-                    creature.update();
-                    boolean shouldRemove = creature.shouldRemove();
-                    if (shouldRemove) {
-                        instance.removeEntity(creature);
-                    }
-                });
+
+            synchronized (instance) {
+                // Creatures
+                for (EntityCreature creature : instance.getCreatures()) {
+                    creaturesPool.submit(() -> {
+                        creature.update();
+                        boolean shouldRemove = creature.shouldRemove();
+                        if (shouldRemove) {
+                            instance.removeEntity(creature);
+                        }
+                    });
+                }
+
+                // Players
+                for (Player player : instance.getPlayers()) {
+                    playersPool.submit(() -> {
+                        player.update();
+                        boolean shouldRemove = player.shouldRemove();
+                        if (shouldRemove) {
+                            instance.removeEntity(player);
+                        }
+                    });
+                }
             }
 
-            // Players
-            for (Player player : instance.getPlayers()) {
-                playersPool.submit(() -> {
-                    player.update();
-                    boolean shouldRemove = player.shouldRemove();
-                    if (shouldRemove) {
-                        instance.removeEntity(player);
-                    }
-                });
-            }
         }
 
     }
