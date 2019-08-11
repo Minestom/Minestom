@@ -19,9 +19,15 @@ public class ConnectionManager {
     }
 
     // Is only used at LoginStartPacket#process
-    public void createPlayer(PlayerConnection connection) {
-        Player player = new Player(connection);
+    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
+        Player player = new Player(uuid, username, connection);
         this.players.add(player);
         this.connectionPlayerMap.put(connection, player);
+    }
+
+    public void removePlayer(PlayerConnection connection) {
+        Player player = this.connectionPlayerMap.get(connection);
+        this.players.remove(player);
+        this.connectionPlayerMap.remove(player);
     }
 }
