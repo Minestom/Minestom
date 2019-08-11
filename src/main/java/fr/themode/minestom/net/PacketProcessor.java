@@ -85,4 +85,8 @@ public class PacketProcessor {
     public boolean hasPlayerConnection(Connection connection) {
         return connectionPlayerConnectionMap.containsKey(connection);
     }
+
+    public void removePlayerConnection(Connection connection) {
+        connectionPlayerConnectionMap.remove(connection);
+    }
 }

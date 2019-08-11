@@ -19,7 +19,7 @@ public class ChickenCreature extends EntityCreature {
         EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
         entityRelativeMovePacket.entityId = getEntityId();
         entityRelativeMovePacket.deltaZ = (short) ((newPos * 32 - getZ() * 32) * 128);
-        entityRelativeMovePacket.onGround = true;
+        entityRelativeMovePacket.onGround = false;
         getViewers().forEach(player -> player.getPlayerConnection().sendPacket(entityRelativeMovePacket));
         setZ(newPos);
     }

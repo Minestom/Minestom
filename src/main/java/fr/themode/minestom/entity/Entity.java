@@ -9,7 +9,7 @@ public class Entity {
     private static volatile int lastEntityId;
     protected double x, y, z;
     private int id;
-    private UUID uuid;
+    protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean shouldRemove;
 
@@ -79,5 +79,4 @@ public class Entity {
     protected boolean shouldRemove() {
         return shouldRemove;
     }
-
 }

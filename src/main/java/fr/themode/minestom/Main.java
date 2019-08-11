@@ -6,9 +6,13 @@ import fr.adamaq01.ozao.net.server.Server;
 import fr.adamaq01.ozao.net.server.ServerHandler;
 import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.entity.EntityManager;
+import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
+import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
+import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
+import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.net.protocol.MinecraftProtocol;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +25,7 @@ public class Main {
     // Others
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
+    private static Server server;
 
     public static void main(String[] args) {
         entityManager = new EntityManager();
@@ -28,7 +33,7 @@ public class Main {
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor(connectionManager);
 
-        Server server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
+        server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
             @Override
             public void onConnect(Server server, Connection connection) {
                 System.out.println("A connection");
@@ -37,6 +42,25 @@ public class Main {
             @Override
             public void onDisconnect(Server server, Connection connection) {
                 System.out.println("A DISCONNECTION");
+                if (packetProcessor.hasPlayerConnection(connection)) {
+                    if (connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null) {
+                        Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
+                        player.remove();
+                        connectionManager.removePlayer(packetProcessor.getPlayerConnection(connection));
+
+                        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
+                        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(player.getUuid()));
+                        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
+                        destroyEntitiesPacket.entityIds = new int[] {player.getEntityId()};
+                        for (Player onlinePlayer : connectionManager.getOnlinePlayers()) {
+                            if (!onlinePlayer.equals(player)) {
+                                onlinePlayer.getPlayerConnection().sendPacket(destroyEntitiesPacket);
+                                onlinePlayer.getPlayerConnection().sendPacket(playerInfoPacket);
+                            }
+                        }
+                    }
+                    packetProcessor.removePlayerConnection(connection);
+                }
             }
 
             @Override
@@ -81,6 +105,10 @@ public class Main {
                 entityManager.update();
             }
         }
+    }
+
+    public static Server getServer() {
+        return server;
     }
 
     public static EntityManager getEntityManager() {

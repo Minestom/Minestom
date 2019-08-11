@@ -3,10 +3,7 @@ package fr.themode.minestom.net;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ConnectionManager {
 
@@ -21,7 +18,11 @@ public class ConnectionManager {
     }
 
     // Is only used at LoginStartPacket#process
-    public void createPlayer(PlayerConnection connection) {
-        this.connectionPlayerMap.put(connection, new Player(connection));
+    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
+        this.connectionPlayerMap.put(connection, new Player(uuid, username, connection));
+    }
+
+    public void removePlayer(PlayerConnection connection) {
+        this.connectionPlayerMap.remove(connection);
     }
 }

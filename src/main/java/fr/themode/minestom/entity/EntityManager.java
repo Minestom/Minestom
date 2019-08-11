@@ -32,4 +32,5 @@ public class EntityManager {
     protected void addLivingEntity(LivingEntity livingEntity) {
         this.livingEntities.add(livingEntity);
     }
+
 }

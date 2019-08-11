@@ -16,5 +16,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x14, ClientPlayerPacket.class);
         register(0x2A, ClientAnimationPacket.class);
         register(0x1B, ClientEntityActionPacket.class);
+        register(0x0E, ClientUseEntityPacket.class);
+        register(0x03, ClientChatMessagePacket.class);
     }
 }

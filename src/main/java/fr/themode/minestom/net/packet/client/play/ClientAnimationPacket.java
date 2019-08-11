@@ -7,7 +7,7 @@ import fr.themode.minestom.utils.Utils;
 
 public class ClientAnimationPacket implements ClientPlayPacket {
 
-    public Hand hand;
+    public Player.Hand hand;
 
     @Override
     public void process(Player player) {
@@ -15,11 +15,6 @@ public class ClientAnimationPacket implements ClientPlayPacket {
 
     @Override
     public void read(Buffer buffer) {
-        this.hand = Hand.values()[Utils.readVarInt(buffer)];
-    }
-
-    public enum Hand {
-        MAIN,
-        OFF
+        this.hand = Player.Hand.values()[Utils.readVarInt(buffer)];
     }
 }
