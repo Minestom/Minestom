@@ -40,7 +40,7 @@ public class PacketProcessor {
 
     public void process(Connection connection, Packet packet) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         int id = packet.get(PACKET_ID_IDENTIFIER);
-        System.out.println("RECEIVED ID: " + id);
+        // System.out.println("RECEIVED ID: " + id);
         Buffer buffer = packet.getPayload();
         connectionPlayerConnectionMap.get(connection);
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(connection, c -> new PlayerConnection(c));

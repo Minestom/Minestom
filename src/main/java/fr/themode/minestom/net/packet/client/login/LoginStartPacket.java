@@ -103,8 +103,8 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        for (int x = -5; x < 5; x++)
-            for (int z = -5; z < 5; z++) {
+        for (int x = 0; x < 4; x++)
+            for (int z = 0; z < 4; z++) {
                 // TODO test entity
                 ChickenCreature chickenCreature = new ChickenCreature();
                 chickenCreature.refreshPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);

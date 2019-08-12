@@ -11,7 +11,7 @@ public class EntityManager {
 
     private static InstanceManager instanceManager = Main.getInstanceManager();
 
-    private ExecutorService creaturesPool = Executors.newFixedThreadPool(4);
+    private ExecutorService creaturesPool = Executors.newFixedThreadPool(2);
     private ExecutorService playersPool = Executors.newFixedThreadPool(2);
 
     public void update() {

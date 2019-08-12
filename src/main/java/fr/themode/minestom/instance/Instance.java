@@ -35,8 +35,12 @@ public class Instance {
         }
         synchronized (chunk) {
             chunk.setBlock(x % 16, y, z % 16, block);
-            sendChunkUpdate(chunk); // TODO partial chunk data
+            sendChunkUpdate(chunk);
         }
+    }
+
+    public BlockBatch createBlockBatch() {
+        return new BlockBatch(this);
     }
 
     public Chunk getChunk(int chunkX, int chunkZ) {
@@ -102,12 +106,19 @@ public class Instance {
         return uniqueId;
     }
 
-    private Chunk createChunk(Biome biome, int chunkX, int chunkZ) {
+    protected Chunk createChunk(Biome biome, int chunkX, int chunkZ) {
         Chunk chunk = new Chunk(biome, chunkX, chunkZ);
         this.creatures.addCollection(chunk.creatures);
         this.players.addCollection(chunk.players);
         this.chunksSet.add(chunk);
         return chunk;
+    }
+
+    protected void sendChunkUpdate(Chunk chunk) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = true; // TODO partial chunk data
+        chunkDataPacket.chunk = chunk;
+        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
     }
 
     private void sendChunks(Player player) {
@@ -117,12 +128,5 @@ public class Instance {
             chunkDataPacket.chunk = chunk;
             player.getPlayerConnection().sendPacket(chunkDataPacket);
         }
-    }
-
-    private void sendChunkUpdate(Chunk chunk) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = true;
-        chunkDataPacket.chunk = chunk;
-        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
     }
 }

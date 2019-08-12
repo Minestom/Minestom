@@ -3,7 +3,6 @@ package fr.themode.minestom.instance;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ public class Chunk {
     private int chunkX, chunkZ;
     private Biome biome;
     private HashMap<Short, Block> blocks = new HashMap<>();
-    private ChunkDataPacket fullChunkPacket;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -89,16 +87,5 @@ public class Chunk {
 
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
-    }
-
-    private void refreshFullChunkPacket() {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = true;
-        chunkDataPacket.chunk = this;
-        // TODO fill buffer
-    }
-
-    public ChunkDataPacket getFullChunkPacket() {
-        return fullChunkPacket;
     }
 }

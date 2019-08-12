@@ -7,7 +7,7 @@ public class GroupedCollections<E> implements Iterable<E> {
 
     private Collection<Collection<E>> collections;
 
-    public GroupedCollections(Collection collection) {
+    public GroupedCollections(Collection<Collection<E>> collection) {
         this.collections = collection;
     }
 
@@ -27,18 +27,6 @@ public class GroupedCollections<E> implements Iterable<E> {
     public Iterator<E> iterator() {
         return collections.stream().flatMap(Collection::stream).iterator();
     }
-
-    /*public Object[] toArray() {
-        return collections.stream().flatMap(Collection::stream).collect(Collectors.toList()).toArray();
-    }
-
-    public <T> T[] toArray(T[] ts) {
-        return collections.stream().flatMap(Collection::stream).collect(Collectors.toList()).toArray(ts);
-    }
-
-    public boolean containsAll(Collection<?> collection) {
-        return collections.stream().flatMap(Collection::stream).collect(Collectors.toList()).containsAll(collection);
-    }*/
 
     public void addCollection(Collection<E> list) {
         this.collections.add(list);
