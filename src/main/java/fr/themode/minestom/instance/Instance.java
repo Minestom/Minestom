@@ -9,11 +9,15 @@ import fr.themode.minestom.utils.GroupedCollections;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
 
     private UUID uniqueId;
+
+    private GroupedCollections<EntityCreature> creatures = new GroupedCollections<>(new CopyOnWriteArrayList());
+    private GroupedCollections<Player> players = new GroupedCollections<>(new CopyOnWriteArrayList());
 
     private Set<Chunk> chunksSet = new CopyOnWriteArraySet<>();
 
@@ -87,18 +91,10 @@ public class Instance {
     }
 
     public GroupedCollections<EntityCreature> getCreatures() {
-        GroupedCollections<EntityCreature> creatures = new GroupedCollections();
-        for (Chunk chunk : getChunks()) {
-            creatures.addCollection(chunk.creatures);
-        }
         return creatures;
     }
 
     public GroupedCollections<Player> getPlayers() {
-        GroupedCollections<Player> players = new GroupedCollections();
-        for (Chunk chunk : getChunks()) {
-            players.addCollection(chunk.players);
-        }
         return players;
     }
 
@@ -108,6 +104,8 @@ public class Instance {
 
     private Chunk createChunk(Biome biome, int chunkX, int chunkZ) {
         Chunk chunk = new Chunk(biome, chunkX, chunkZ);
+        this.creatures.addCollection(chunk.creatures);
+        this.players.addCollection(chunk.players);
         this.chunksSet.add(chunk);
         return chunk;
     }

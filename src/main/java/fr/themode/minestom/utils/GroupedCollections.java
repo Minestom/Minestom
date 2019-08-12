@@ -1,15 +1,14 @@
 package fr.themode.minestom.utils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 public class GroupedCollections<E> implements Iterable<E> {
 
-    private ArrayList<Collection<E>> collections;
+    private Collection<Collection<E>> collections;
 
-    public GroupedCollections() {
-        this.collections = new ArrayList<>();
+    public GroupedCollections(Collection collection) {
+        this.collections = collection;
     }
 
     public int size() {
