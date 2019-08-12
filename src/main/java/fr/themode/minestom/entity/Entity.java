@@ -4,10 +4,12 @@ import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Entity {
 
-    private static volatile int lastEntityId;
+    private static AtomicInteger lastEntityId = new AtomicInteger();
+
     protected Instance instance;
     protected double lastX, lastY, lastZ;
     protected double x, y, z;
@@ -22,7 +24,7 @@ public class Entity {
     }
 
     private static int generateId() {
-        return ++lastEntityId;
+        return lastEntityId.incrementAndGet();
     }
 
     public int getEntityId() {

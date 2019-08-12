@@ -6,14 +6,18 @@ import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.instance.Block;
-import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.*;
+import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
+import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
+import fr.themode.minestom.net.packet.server.play.SpawnPlayerPacket;
+import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
@@ -32,7 +36,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         instance = Main.getInstanceManager().createInstance();
         for (int x = -64; x < 64; x++)
             for (int z = -64; z < 64; z++) {
-                instance.setBlock(x, 4, z, new Block(1));
+                instance.setBlock(x, 4, z, new Block(10));
             }
     }
 
@@ -52,11 +56,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.setConnectionState(ConnectionState.PLAY);
         connectionManager.createPlayer(uuids.get(username), username, connection);
         Player player = connectionManager.getPlayer(connection);
+        GameMode gameMode = GameMode.CREATIVE;
+
+        player.refreshGameMode(gameMode);
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = player.getEntityId();
-        joinGamePacket.gameMode = GameMode.CREATIVE;
+        joinGamePacket.gameMode = gameMode;
         joinGamePacket.dimension = Dimension.OVERWORLD;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = "default";
@@ -71,12 +78,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
         // TODO player abilities
 
         player.setInstance(instance);
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = true;
-        for (Chunk chunk : instance.getChunks()) {
-            chunkDataPacket.chunk = chunk;
-            connection.sendPacket(chunkDataPacket);
-        }
 
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
@@ -102,13 +103,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        for (int x = -10; x < 10; x++)
-            for (int z = -10; z < 10; z++) {
+        for (int x = -5; x < 5; x++)
+            for (int z = -5; z < 5; z++) {
                 // TODO test entity
                 ChickenCreature chickenCreature = new ChickenCreature();
                 chickenCreature.refreshPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);
                 chickenCreature.setInstance(instance);
-                //instance.addEntity(chickenCreature);
             }
 
 
@@ -138,7 +138,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
             connection.sendPacket(pInfoPacket);
             connection.sendPacket(spawnPacket);
         }
-        System.out.println("HAHAHAHHAHHAH               " + player.getUuid());
+        //System.out.println("HAHAHAHHAHHAH               " + player.getUuid());
+
+        PlayerInventory inventory = player.getInventory();
+        inventory.setItemStack(1, new ItemStack(1, (byte) 1));
+        inventory.update();
+
     }
 
     @Override

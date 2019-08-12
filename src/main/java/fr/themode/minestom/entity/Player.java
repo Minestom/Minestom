@@ -1,9 +1,9 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
-import fr.themode.minestom.net.packet.server.play.EntityTeleportPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
-import fr.themode.minestom.net.packet.server.play.UpdateViewPositionPacket;
+import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.UUID;
@@ -18,11 +18,17 @@ public class Player extends LivingEntity {
     private String username;
     private PlayerConnection playerConnection;
 
+    private GameMode gameMode;
+    private PlayerInventory inventory;
+    private short heldSlot;
+
     // TODO set proper UUID
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
+
+        this.inventory = new PlayerInventory(this);
     }
 
     @Override
@@ -63,6 +69,43 @@ public class Player extends LivingEntity {
         return playerConnection;
     }
 
+    public PlayerInventory getInventory() {
+        return inventory;
+    }
+
+    public GameMode getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
+        changeGameStatePacket.reason = ChangeGameStatePacket.Reason.CHANGE_GAMEMODE;
+        changeGameStatePacket.value = gameMode.getId();
+        playerConnection.sendPacket(changeGameStatePacket);
+        refreshGameMode(gameMode);
+    }
+
+    public void setHeldItemSlot(short slot) {
+        if (slot < 0 || slot > 8)
+            throw new IllegalArgumentException("Slot has to be between 0 and 8");
+        HeldItemChangePacket heldItemChangePacket = new HeldItemChangePacket();
+        heldItemChangePacket.slot = slot;
+        playerConnection.sendPacket(heldItemChangePacket);
+        refreshHeldSlot(slot);
+    }
+
+    public short getHeldSlot() {
+        return heldSlot;
+    }
+
+    public ItemStack getHeldItemStack() {
+        return inventory.getItemStack(heldSlot);
+    }
+
+    public void refreshGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
     public void refreshView(float yaw, float pitch) {
         this.yaw = yaw;
         this.pitch = pitch;
@@ -82,6 +125,10 @@ public class Player extends LivingEntity {
 
     public void refreshKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
+    }
+
+    public void refreshHeldSlot(short slot) {
+        this.heldSlot = slot;
     }
 
     public long getLastKeepAlive() {

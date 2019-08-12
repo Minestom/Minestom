@@ -121,7 +121,15 @@ public class Utils {
     }
 
     public static void writePosition(Buffer buffer, int x, int y, int z) {
-        buffer.putLong(((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
+        buffer.putLong(((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF));
+    }
+
+    public static Position readPosition(Buffer buffer) {
+        long val = buffer.getLong();
+        int x = (int) (val >> 38);
+        int y = (int) (val & 0xFFF);
+        int z = (int) (val << 26 >> 38);
+        return new Position(x, y, z);
     }
 
     public static void writeBlocks(Buffer buffer, Block[] blocks, int bitsPerEntry) {

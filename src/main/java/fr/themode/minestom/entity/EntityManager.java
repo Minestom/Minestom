@@ -18,7 +18,6 @@ public class EntityManager {
         for (Instance instance : instanceManager.getInstances()) {
 
             // Creatures
-            //long time = System.nanoTime();
             for (EntityCreature creature : instance.getCreatures()) {
                 creaturesPool.submit(() -> {
                     boolean shouldRemove = creature.shouldRemove();
@@ -31,19 +30,16 @@ public class EntityManager {
                     }
                 });
             }
-            /*creaturesPool.shutdown();
-            while (!creaturesPool.isTerminated()) {
-
-            }
-            System.out.println("delay: " + (System.nanoTime() - time));
-            creaturesPool = Executors.newFixedThreadPool(4);*/
 
             // Players
             for (Player player : instance.getPlayers()) {
                 playersPool.submit(() -> {
-                    player.update();
                     boolean shouldRemove = player.shouldRemove();
-                    if (shouldRemove) {
+                    if (!shouldRemove) {
+                        player.update();
+                    }
+
+                    if (player.shouldRemove()) {
                         instance.removeEntity(player);
                     }
                 });

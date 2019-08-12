@@ -3,18 +3,19 @@ package fr.themode.minestom.instance;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.GroupedCollections;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Instance {
 
     private UUID uniqueId;
 
-    private Set<Chunk> chunksSet = Collections.synchronizedSet(new HashSet<>());
+    private Set<Chunk> chunksSet = new CopyOnWriteArraySet<>();
 
     public Instance(UUID uniqueId) {
         this.uniqueId = uniqueId;
@@ -30,6 +31,7 @@ public class Instance {
         }
         synchronized (chunk) {
             chunk.setBlock(x % 16, y, z % 16, block);
+            sendChunkUpdate(chunk); // TODO partial chunk data
         }
     }
 
@@ -61,7 +63,9 @@ public class Instance {
             // TODO based on distance with players
             getPlayers().forEach(p -> ((EntityCreature) entity).addViewer(p));
         } else if (entity instanceof Player) {
-            getCreatures().forEach(entityCreature -> entityCreature.addViewer((Player) entity));
+            Player player = (Player) entity;
+            sendChunks(player);
+            getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
         }
 
         Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
@@ -106,5 +110,21 @@ public class Instance {
         Chunk chunk = new Chunk(biome, chunkX, chunkZ);
         this.chunksSet.add(chunk);
         return chunk;
+    }
+
+    private void sendChunks(Player player) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = true;
+        for (Chunk chunk : getChunks()) {
+            chunkDataPacket.chunk = chunk;
+            player.getPlayerConnection().sendPacket(chunkDataPacket);
+        }
+    }
+
+    private void sendChunkUpdate(Chunk chunk) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = true;
+        chunkDataPacket.chunk = chunk;
+        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
     }
 }
