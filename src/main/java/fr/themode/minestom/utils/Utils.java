@@ -2,6 +2,7 @@ package fr.themode.minestom.utils;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Block;
+import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -130,6 +131,17 @@ public class Utils {
         int y = (int) (val & 0xFFF);
         int z = (int) (val << 26 >> 38);
         return new Position(x, y, z);
+    }
+
+    public static void writeItemStack(Buffer buffer, ItemStack itemStack) {
+        if (itemStack == null) {
+            buffer.putBoolean(false);
+        } else {
+            buffer.putBoolean(true);
+            Utils.writeVarInt(buffer, itemStack.getItemId());
+            buffer.putByte(itemStack.getAmount());
+            buffer.putByte((byte) 0); // End nbt TODO
+        }
     }
 
     public static void writeBlocks(Buffer buffer, Block[] blocks, int bitsPerEntry) {

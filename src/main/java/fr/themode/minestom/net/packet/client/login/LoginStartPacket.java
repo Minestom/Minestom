@@ -7,6 +7,8 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.instance.Block;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.inventory.Inventory;
+import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionManager;
@@ -56,7 +58,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.setConnectionState(ConnectionState.PLAY);
         connectionManager.createPlayer(uuids.get(username), username, connection);
         Player player = connectionManager.getPlayer(connection);
-        GameMode gameMode = GameMode.CREATIVE;
+        GameMode gameMode = GameMode.SURVIVAL;
 
         player.refreshGameMode(gameMode);
 
@@ -141,8 +143,15 @@ public class LoginStartPacket implements ClientPreplayPacket {
         //System.out.println("HAHAHAHHAHHAH               " + player.getUuid());
 
         PlayerInventory inventory = player.getInventory();
-        inventory.setItemStack(1, new ItemStack(1, (byte) 1));
+        inventory.setItemStack(1, new ItemStack(1, (byte) 32));
+        inventory.setItemStack(2, new ItemStack(1, (byte) 32));
         inventory.update();
+
+        Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
+        inv.setItemStack(0, new ItemStack(1, (byte) 1));
+        player.openInventory(inv);
+        inv.setItemStack(1, new ItemStack(1, (byte) 2));
+        inv.updateItems();
 
     }
 

@@ -47,7 +47,7 @@ public class BlockBatch {
                     for (BlockData data : dataList) {
                         data.apply(chunk);
                     }
-                    instance.sendChunkUpdate(chunk);
+                    instance.sendChunkUpdate(chunk); // TODO partial chunk data
                 });
             }
         }
@@ -59,7 +59,7 @@ public class BlockBatch {
         private Block block;
 
         public void apply(Chunk chunk) {
-            chunk.setBlock(x % 16, y, z % 16, block);
+            chunk.setBlock(x, y, z, block);
         }
 
     }

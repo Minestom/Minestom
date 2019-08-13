@@ -7,7 +7,7 @@ import fr.themode.minestom.utils.Utils;
 
 public class WindowItemsPacket implements ServerPacket {
 
-    public byte windowId;
+    public int windowId;
     public short count;
     public ItemStack[] items;
 
@@ -15,21 +15,14 @@ public class WindowItemsPacket implements ServerPacket {
 
     @Override
     public void write(Buffer buffer) {
-        buffer.putByte(windowId);
+        Utils.writeVarInt(buffer, windowId);
         buffer.putShort(count);
 
         if (items == null)
             return;
         for (int i = 0; i < items.length; i++) {
             ItemStack item = items[i];
-            if (item == null) {
-                buffer.putBoolean(false);
-            } else {
-                buffer.putBoolean(true);
-                Utils.writeVarInt(buffer, item.getItemId());
-                buffer.putByte(item.getCount());
-                buffer.putByte((byte) 0); // End nbt TODO
-            }
+            Utils.writeItemStack(buffer, item);
         }
     }
 

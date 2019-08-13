@@ -25,7 +25,7 @@ public class ChatMessagePacket implements ServerPacket {
         return 0x0E;
     }
 
-    public static enum Position {
+    public enum Position {
 
         CHAT,
         SYSTEM_MESSAGE,

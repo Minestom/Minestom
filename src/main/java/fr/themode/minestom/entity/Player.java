@@ -1,6 +1,7 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -21,6 +22,7 @@ public class Player extends LivingEntity {
     private GameMode gameMode;
     private PlayerInventory inventory;
     private short heldSlot;
+    private Inventory openInventory;
 
     // TODO set proper UUID
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
@@ -102,6 +104,40 @@ public class Player extends LivingEntity {
         return inventory.getItemStack(heldSlot);
     }
 
+    public Inventory getOpenInventory() {
+        return openInventory;
+    }
+
+    public void openInventory(Inventory inventory) {
+        if (inventory == null)
+            throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
+
+        if (getOpenInventory() != null) {
+            getOpenInventory().removeViewer(this);
+        }
+
+        OpenWindowPacket openWindowPacket = new OpenWindowPacket();
+        openWindowPacket.windowId = inventory.getUniqueId();
+        openWindowPacket.windowType = inventory.getInventoryType().getWindowType();
+        openWindowPacket.title = inventory.getTitle();
+        playerConnection.sendPacket(openWindowPacket);
+        inventory.addViewer(this);
+        refreshOpenInventory(inventory);
+    }
+
+    public void closeInventory() {
+        Inventory openInventory = getOpenInventory();
+        CloseWindowPacket closeWindowPacket = new CloseWindowPacket();
+        if (openInventory == null) {
+            closeWindowPacket.windowId = 0;
+        } else {
+            closeWindowPacket.windowId = openInventory.getUniqueId();
+            openInventory.removeViewer(this);
+            refreshOpenInventory(null);
+        }
+        playerConnection.sendPacket(closeWindowPacket);
+    }
+
     public void refreshGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
     }
@@ -129,6 +165,10 @@ public class Player extends LivingEntity {
 
     public void refreshHeldSlot(short slot) {
         this.heldSlot = slot;
+    }
+
+    public void refreshOpenInventory(Inventory openInventory) {
+        this.openInventory = openInventory;
     }
 
     public long getLastKeepAlive() {

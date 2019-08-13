@@ -23,7 +23,7 @@ public class Chunk {
         this.chunkZ = chunkZ;
     }
 
-    public void setBlock(int x, int y, int z, Block block) {
+    protected void setBlock(int x, int y, int z, Block block) {
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;

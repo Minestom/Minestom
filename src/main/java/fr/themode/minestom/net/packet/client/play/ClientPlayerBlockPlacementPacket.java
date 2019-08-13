@@ -9,6 +9,8 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Utils;
 
+import java.util.Random;
+
 public class ClientPlayerBlockPlacementPacket implements ClientPlayPacket {
 
     public Hand hand;
@@ -23,10 +25,12 @@ public class ClientPlayerBlockPlacementPacket implements ClientPlayPacket {
         if (instance == null)
             return;
 
+        Random random = new Random();
         BlockBatch blockBatch = instance.createBlockBatch();
         for (int x = -64; x < 64; x++)
             for (int z = -64; z < 64; z++) {
-                blockBatch.setBlock(x, position.getY() + 1, z, new Block(1));
+                if (random.nextInt(100) > 75)
+                    blockBatch.setBlock(x, position.getY() + 1, z, new Block(1));
             }
         blockBatch.flush();
     }
