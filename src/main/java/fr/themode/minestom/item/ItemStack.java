@@ -1,6 +1,6 @@
 package fr.themode.minestom.item;
 
-public class ItemStack implements Cloneable {
+public class ItemStack {
 
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
 

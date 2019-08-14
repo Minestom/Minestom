@@ -52,7 +52,7 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
                 }
                 break;
             case 2:
-                // Number key 1-9
+                inventory.changeHeld(player, slot, button);
                 break;
             case 3:
                 // Middle click (only creative players in non-player inventories)

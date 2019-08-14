@@ -2,6 +2,7 @@ package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
 import fr.themode.minestom.net.packet.server.play.WindowItemsPacket;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Inventory implements InventoryClickHandler {
+public class Inventory implements InventoryModifier, InventoryClickHandler {
 
     private static AtomicInteger lastInventoryId = new AtomicInteger();
 
@@ -52,6 +53,7 @@ public class Inventory implements InventoryClickHandler {
         return id;
     }
 
+    @Override
     public void setItemStack(int slot, ItemStack itemStack) {
         if (slot < 0 || slot > inventoryType.getAdditionalSlot())
             throw new IllegalArgumentException(inventoryType.toString() + " does not have slot " + slot);
@@ -59,6 +61,12 @@ public class Inventory implements InventoryClickHandler {
         safeItemInsert(slot, itemStack);
     }
 
+    @Override
+    public boolean addItemStack(ItemStack itemStack) {
+        return false;
+    }
+
+    @Override
     public ItemStack getItemStack(int slot) {
         return itemStacks[slot];
     }
@@ -88,7 +96,13 @@ public class Inventory implements InventoryClickHandler {
 
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
-            this.itemStacks[slot] = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
+            itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
+            this.itemStacks[slot] = itemStack;
+            SetSlotPacket setSlotPacket = new SetSlotPacket();
+            setSlotPacket.windowId = 1;
+            setSlotPacket.slot = (short) slot;
+            setSlotPacket.itemStack = itemStack;
+            getViewers().forEach(player -> player.getPlayerConnection().sendPacket(setSlotPacket));
         }
     }
 
@@ -125,9 +139,9 @@ public class Inventory implements InventoryClickHandler {
             resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
             int amount = cursorItem.getAmount() + clicked.getAmount();
-            if (amount > 100) {
-                resultCursor.setAmount((byte) (amount - 100));
-                resultClicked.setAmount((byte) 100);
+            if (amount > 64) {
+                resultCursor.setAmount((byte) (amount - 64));
+                resultClicked.setAmount((byte) 64);
             } else {
                 resultCursor = ItemStack.AIR_ITEM;
                 resultClicked.setAmount((byte) amount);
@@ -140,11 +154,11 @@ public class Inventory implements InventoryClickHandler {
         if (isInWindow) {
             setItemStack(slot, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            updateItems();
+            //updateItems();
         } else {
             playerInventory.setItemStack(slot, offset, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            playerInventory.update();
+            //playerInventory.update();
         }
     }
 
@@ -165,7 +179,7 @@ public class Inventory implements InventoryClickHandler {
             resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
             int amount = clicked.getAmount() + 1;
-            if (amount > 100) {
+            if (amount > 64) {
                 return;
             } else {
                 resultCursor = cursorItem.clone();
@@ -200,11 +214,9 @@ public class Inventory implements InventoryClickHandler {
         if (isInWindow) {
             setItemStack(slot, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            updateItems();
         } else {
             playerInventory.setItemStack(slot, offset, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            playerInventory.update();
         }
     }
 
@@ -215,7 +227,41 @@ public class Inventory implements InventoryClickHandler {
 
     @Override
     public void changeHeld(Player player, int slot, int key) {
+        PlayerInventory playerInventory = player.getInventory();
 
+        if (!getCursorItem(player).isAir())
+            return;
+
+        boolean isInWindow = isClickInWindow(slot);
+        ItemStack heldItem = playerInventory.getItemStack(key);
+        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
+
+        ItemStack resultClicked;
+        ItemStack resultHeld;
+
+        if (clicked.isAir()) {
+            // Set held item [key] to slot
+            resultClicked = ItemStack.AIR_ITEM;
+            resultHeld = clicked.clone();
+        } else {
+            if (heldItem.isAir()) {
+                // if held item [key] is air then set clicked to held
+                resultClicked = ItemStack.AIR_ITEM;
+                resultHeld = clicked.clone();
+            } else {
+                System.out.println("CASE3");
+                // Otherwise replace held item and held
+                resultClicked = heldItem.clone();
+                resultHeld = clicked.clone();
+            }
+        }
+
+        if (isInWindow) {
+            setItemStack(slot, resultClicked);
+        } else {
+            playerInventory.setItemStack(slot, offset, resultClicked);
+        }
+        playerInventory.setItemStack(key, resultHeld);
     }
 
     @Override

@@ -136,6 +136,7 @@ public class Player extends LivingEntity {
             refreshOpenInventory(null);
         }
         playerConnection.sendPacket(closeWindowPacket);
+        inventory.update();
     }
 
     public void refreshGameMode(GameMode gameMode) {
