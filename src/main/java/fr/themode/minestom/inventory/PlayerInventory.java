@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class PlayerInventory implements InventoryModifier {
 
-    private static final int TOTAL_INVENTORY_SIZE = 46;
+    public static final int INVENTORY_SIZE = 46;
 
     private static final int CRAFT_SLOT_1 = 36;
     private static final int CRAFT_SLOT_2 = 37;
@@ -24,7 +24,7 @@ public class PlayerInventory implements InventoryModifier {
     private static final int OFFHAND_SLOT = 45;
 
     private Player player;
-    private ItemStack[] items = new ItemStack[TOTAL_INVENTORY_SIZE];
+    private ItemStack[] items = new ItemStack[INVENTORY_SIZE];
 
     public PlayerInventory(Player player) {
         this.player = player;
@@ -35,6 +35,11 @@ public class PlayerInventory implements InventoryModifier {
     @Override
     public ItemStack getItemStack(int slot) {
         return this.items[slot];
+    }
+
+    @Override
+    public ItemStack[] getItemStacks() {
+        return Arrays.copyOf(items, items.length);
     }
 
     @Override
@@ -131,7 +136,7 @@ public class PlayerInventory implements InventoryModifier {
         return slot;
     }
 
-    private int convertToPacketSlot(int slot) {
+    protected int convertToPacketSlot(int slot) {
         if (slot > -1 && slot < 9) { // Held bar 0-9
             slot = slot + 36;
         } else if (slot > 8 && slot < 36) { // Inventory 9-35
@@ -148,14 +153,14 @@ public class PlayerInventory implements InventoryModifier {
 
     private void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = (byte) (slot > 35 && slot < TOTAL_INVENTORY_SIZE ? 0 : -2);
+        setSlotPacket.windowId = (byte) (slot > 35 && slot < INVENTORY_SIZE ? 0 : -2);
         setSlotPacket.slot = slot;
         setSlotPacket.itemStack = itemStack;
         player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
     private WindowItemsPacket createWindowItemsPacket() {
-        ItemStack[] convertedSlots = new ItemStack[TOTAL_INVENTORY_SIZE];
+        ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
         Arrays.fill(convertedSlots, ItemStack.AIR_ITEM); // TODO armor and craft
 
         for (int i = 0; i < items.length; i++) {
@@ -165,7 +170,7 @@ public class PlayerInventory implements InventoryModifier {
 
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = 0;
-        windowItemsPacket.count = TOTAL_INVENTORY_SIZE;
+        windowItemsPacket.count = INVENTORY_SIZE;
         windowItemsPacket.items = convertedSlots;
         return windowItemsPacket;
     }

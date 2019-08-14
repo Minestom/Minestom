@@ -42,14 +42,7 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
                 }
                 break;
             case 1:
-                switch (button) {
-                    case 0:
-                        // Shift + left click
-                        break;
-                    case 1:
-                        // Shift + right click
-                        break;
-                }
+                inventory.shiftClick(player, slot); // Shift + left/right have identical behavior
                 break;
             case 2:
                 inventory.changeHeld(player, slot, button);
@@ -64,7 +57,7 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
                 // Dragging
                 break;
             case 6:
-                // Double click (merge similar items)
+                inventory.doubleClick(player, slot);
                 break;
         }
 

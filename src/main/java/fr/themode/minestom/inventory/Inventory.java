@@ -71,6 +71,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
         return itemStacks[slot];
     }
 
+    @Override
+    public ItemStack[] getItemStacks() {
+        return Arrays.copyOf(itemStacks, itemStacks.length);
+    }
+
     public void updateItems() {
         WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
         getViewers().forEach(p -> p.getPlayerConnection().sendPacket(windowItemsPacket));
@@ -138,13 +143,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
         if (cursorItem.isSimilar(clicked)) {
             resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
-            int amount = cursorItem.getAmount() + clicked.getAmount();
-            if (amount > 64) {
-                resultCursor.setAmount((byte) (amount - 64));
+            int totalAmount = cursorItem.getAmount() + clicked.getAmount();
+            if (totalAmount > 64) {
+                resultCursor.setAmount((byte) (totalAmount - 64));
                 resultClicked.setAmount((byte) 64);
             } else {
                 resultCursor = ItemStack.AIR_ITEM;
-                resultClicked.setAmount((byte) amount);
+                resultClicked.setAmount((byte) totalAmount);
             }
         } else {
             resultCursor = clicked.clone();
@@ -154,11 +159,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
         if (isInWindow) {
             setItemStack(slot, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            //updateItems();
         } else {
             playerInventory.setItemStack(slot, offset, resultClicked);
             setCursorPlayerItem(player, resultCursor);
-            //playerInventory.update();
         }
     }
 
@@ -176,7 +179,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
         ItemStack resultClicked;
 
         if (cursorItem.isSimilar(clicked)) {
-            resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
             int amount = clicked.getAmount() + 1;
             if (amount > 64) {
@@ -222,7 +224,81 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
 
     @Override
     public void shiftClick(Player player, int slot) {
+        PlayerInventory playerInventory = player.getInventory();
+        boolean isInWindow = isClickInWindow(slot);
+        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
+        if (clicked.isAir())
+            return;
+
+        ItemStack resultClicked = clicked.clone();
+        boolean filled = false;
+
+        if (!isInWindow) {
+            for (int i = 0; i < itemStacks.length; i++) {
+                ItemStack item = itemStacks[i];
+                if (item.isSimilar(clicked)) {
+                    int amount = item.getAmount();
+                    if (amount == 64)
+                        continue;
+                    int totalAmount = resultClicked.getAmount() + amount;
+                    if (totalAmount > 64) {
+                        item.setAmount((byte) 64);
+                        setItemStack(i, item);
+                        resultClicked.setAmount((byte) (totalAmount - 64));
+                        filled = false;
+                        continue;
+                    } else {
+                        resultClicked.setAmount((byte) totalAmount);
+                        setItemStack(i, resultClicked);
+                        playerInventory.setItemStack(slot, offset, ItemStack.AIR_ITEM);
+                        filled = true;
+                        break;
+                    }
+                } else if (item.isAir()) {
+                    // Switch
+                    setItemStack(i, resultClicked);
+                    playerInventory.setItemStack(slot, offset, ItemStack.AIR_ITEM);
+                    filled = true;
+                    break;
+                }
+            }
+            if (!filled) {
+                playerInventory.setItemStack(slot, offset, resultClicked);
+            }
+        } else {
+            for (int i = 44; i >= 0; i--) { // Hotbar
+                ItemStack item = playerInventory.getItemStack(i, offset);
+                if (item.isSimilar(clicked)) {
+                    int amount = item.getAmount();
+                    if (amount == 64)
+                        continue;
+                    int totalAmount = resultClicked.getAmount() + amount;
+                    if (totalAmount > 64) {
+                        item.setAmount((byte) 64);
+                        playerInventory.setItemStack(i, offset, item);
+                        resultClicked.setAmount((byte) (totalAmount - 64));
+                        filled = false;
+                        continue;
+                    } else {
+                        resultClicked.setAmount((byte) totalAmount);
+                        playerInventory.setItemStack(i, offset, resultClicked);
+                        setItemStack(slot, ItemStack.AIR_ITEM);
+                        filled = true;
+                        break;
+                    }
+                } else if (item.isAir()) {
+                    // Switch
+                    playerInventory.setItemStack(i, offset, resultClicked);
+                    setItemStack(slot, ItemStack.AIR_ITEM);
+                    filled = true;
+                    break;
+                }
+            }
+            if (!filled) { // Still not filled, inventory is full
+                setItemStack(slot, resultClicked);
+            }
+        }
     }
 
     @Override
@@ -249,7 +325,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
                 resultClicked = ItemStack.AIR_ITEM;
                 resultHeld = clicked.clone();
             } else {
-                System.out.println("CASE3");
                 // Otherwise replace held item and held
                 resultClicked = heldItem.clone();
                 resultHeld = clicked.clone();
@@ -277,5 +352,83 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
     @Override
     public void dropItemStack(Player player, int slot) {
 
+    }
+
+    @Override
+    public void doubleClick(Player player, int slot) {
+        PlayerInventory playerInventory = player.getInventory();
+        ItemStack cursorItem = getCursorItem(player).clone();
+        if (cursorItem.isAir())
+            return;
+
+        int amount = cursorItem.getAmount();
+
+        if (amount == 64)
+            return;
+
+        // Start by looping through the opened inventory
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (i == slot)
+                continue;
+            if (amount == 64)
+                break;
+            ItemStack item = itemStacks[i];
+            if (cursorItem.isSimilar(item)) {
+                int totalAmount = amount + item.getAmount();
+                if (totalAmount > 64) {
+                    cursorItem.setAmount((byte) 64);
+                    item.setAmount((byte) (totalAmount - 64));
+                    setItemStack(i, item);
+                } else {
+                    cursorItem.setAmount((byte) totalAmount);
+                    setItemStack(i, ItemStack.AIR_ITEM);
+                }
+                amount = cursorItem.getAmount();
+            }
+        }
+
+        // Looping through player inventory
+        for (int i = 9; i < PlayerInventory.INVENTORY_SIZE - 9; i++) { // Inventory
+            if (playerInventory.convertToPacketSlot(i) == slot)
+                continue;
+            if (amount == 64)
+                break;
+            ItemStack item = playerInventory.getItemStack(i);
+            if (cursorItem.isSimilar(item)) {
+                int totalAmount = amount + item.getAmount();
+                if (totalAmount > 64) {
+                    cursorItem.setAmount((byte) 64);
+                    item.setAmount((byte) (totalAmount - 64));
+                    playerInventory.setItemStack(i, offset, item);
+                } else {
+                    cursorItem.setAmount((byte) totalAmount);
+                    playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
+                }
+                amount = cursorItem.getAmount();
+            }
+        }
+
+        for (int i = 0; i < 9; i++) { // Hotbar
+            if (playerInventory.convertToPacketSlot(i) == slot)
+                continue;
+            if (amount == 64)
+                break;
+            ItemStack item = playerInventory.getItemStack(i);
+            if (cursorItem.isSimilar(item)) {
+                int totalAmount = amount + item.getAmount();
+                if (totalAmount > 64) {
+                    cursorItem.setAmount((byte) 64);
+                    item.setAmount((byte) (totalAmount - 64));
+                    playerInventory.setItemStack(i, offset, item);
+                } else {
+                    cursorItem.setAmount((byte) totalAmount);
+                    playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
+                }
+                amount = cursorItem.getAmount();
+            }
+        }
+
+        setCursorPlayerItem(player, cursorItem);
+        playerInventory.update();
     }
 }

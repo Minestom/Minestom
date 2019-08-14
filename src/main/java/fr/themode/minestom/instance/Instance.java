@@ -116,7 +116,7 @@ public class Instance {
 
     protected void sendChunkUpdate(Chunk chunk) {
         ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = true; // TODO partial chunk data
+        chunkDataPacket.fullChunk = false; // TODO partial chunk data
         chunkDataPacket.chunk = chunk;
         getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
     }

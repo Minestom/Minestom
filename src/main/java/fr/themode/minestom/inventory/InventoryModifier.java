@@ -9,4 +9,6 @@ public interface InventoryModifier {
     boolean addItemStack(ItemStack itemStack);
 
     ItemStack getItemStack(int slot);
+
+    ItemStack[] getItemStacks();
 }

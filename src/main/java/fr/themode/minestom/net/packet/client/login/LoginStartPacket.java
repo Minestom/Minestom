@@ -143,8 +143,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         //System.out.println("HAHAHAHHAHHAH               " + player.getUuid());
 
         PlayerInventory inventory = player.getInventory();
-        inventory.addItemStack(new ItemStack(1, (byte) 60));
-        inventory.addItemStack(new ItemStack(1, (byte) 50));
+        for (int i = 0; i < 20; i++) {
+            inventory.addItemStack(new ItemStack(1, (byte) 64));
+        }
 
         Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
         inv.setItemStack(0, new ItemStack(1, (byte) 1));

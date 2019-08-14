@@ -12,7 +12,6 @@ public class ClientCloseWindow implements ClientPlayPacket {
 
     @Override
     public void process(Player player) {
-        System.out.println("CLOSED: " + windowId);
         Inventory openInventory = player.getOpenInventory();
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         if (openInventory != null)
