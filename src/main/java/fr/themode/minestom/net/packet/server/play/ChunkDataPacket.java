@@ -74,11 +74,11 @@ public class ChunkDataPacket implements ServerPacket {
 
     private Short[] getSection(Chunk chunk, int section) {
         Short[] blocks = new Short[16 * 16 * 16];
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
+        for (byte y = 0; y < 16; y++) {
+            for (byte x = 0; x < 16; x++) {
+                for (byte z = 0; z < 16; z++) {
                     int index = (((y * 16) + x) * 16) + z;
-                    blocks[index] = chunk.getBlockId(x, y + 16 * section, z);
+                    blocks[index] = chunk.getBlockId(x, (byte) (y + 16 * section), z);
                 }
             }
         }

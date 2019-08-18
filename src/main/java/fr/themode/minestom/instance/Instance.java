@@ -25,18 +25,30 @@ public class Instance {
         this.uniqueId = uniqueId;
     }
 
-    // TODO BlockBatch with pool
     public synchronized void setBlock(int x, int y, int z, short blockId) {
-        final int chunkX = Math.floorDiv(x, 16);
-        final int chunkZ = Math.floorDiv(z, 16);
-        Chunk chunk = getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            chunk = createChunk(Biome.VOID, chunkX, chunkZ);
-        }
+        Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            chunk.setBlock(x % 16, y, z % 16, blockId);
+            chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
             sendChunkUpdate(chunk);
         }
+    }
+
+    public synchronized void setBlock(int x, int y, int z, String blockId) {
+        Chunk chunk = getChunkAt(x, z);
+        synchronized (chunk) {
+            chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
+            sendChunkUpdate(chunk);
+        }
+    }
+
+    public short getBlockId(int x, int y, int z) {
+        Chunk chunk = getChunkAt(x, z);
+        return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
+    }
+
+    public String getCustomBlockId(int x, int y, int z) {
+        Chunk chunk = getChunkAt(x, z);
+        return chunk.getCustomBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
     public BlockBatch createBlockBatch() {
@@ -48,7 +60,7 @@ public class Instance {
             if (chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ)
                 return chunk;
         }
-        return null;
+        return createChunk(Biome.VOID, chunkX, chunkZ); // TODO generation API
     }
 
     public Chunk getChunkAt(double x, double z) {

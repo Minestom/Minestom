@@ -59,7 +59,7 @@ public class BlockBatch {
         private short blockId;
 
         public void apply(Chunk chunk) {
-            chunk.setBlock(x, y, z, blockId);
+            chunk.setBlock((byte) x, (byte) y, (byte) z, blockId);
         }
 
     }

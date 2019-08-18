@@ -15,7 +15,10 @@ import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.*;
+import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
+import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
+import fr.themode.minestom.net.packet.server.play.SpawnPlayerPacket;
+import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
@@ -148,15 +151,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
         player.openInventory(inv);
         inv.setItemStack(1, new ItemStack(1, (byte) 2));
         inv.updateItems();
-
-
-        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
-        entityEffectPacket.entityId = player.getEntityId();
-        entityEffectPacket.effectId = 4;
-        entityEffectPacket.amplifier = -1;
-        entityEffectPacket.duration = 3600;
-        entityEffectPacket.flags = 0;
-        connection.sendPacket(entityEffectPacket);
     }
 
     @Override

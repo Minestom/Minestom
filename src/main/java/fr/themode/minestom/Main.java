@@ -7,7 +7,9 @@ import fr.adamaq01.ozao.net.server.ServerHandler;
 import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.BlockManager;
 import fr.themode.minestom.instance.InstanceManager;
+import fr.themode.minestom.instance.demo.StoneBlock;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
@@ -26,6 +28,7 @@ public class Main {
 
     // In-Game Manager
     private static InstanceManager instanceManager;
+    private static BlockManager blockManager;
     private static EntityManager entityManager;
 
     public static void main(String[] args) {
@@ -33,7 +36,10 @@ public class Main {
         packetProcessor = new PacketProcessor();
 
         instanceManager = new InstanceManager();
+        blockManager = new BlockManager();
         entityManager = new EntityManager();
+
+        blockManager.registerBlock("stone", StoneBlock::new);
 
         server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
             @Override
@@ -121,6 +127,10 @@ public class Main {
 
     public static InstanceManager getInstanceManager() {
         return instanceManager;
+    }
+
+    public static BlockManager getBlockManager() {
+        return blockManager;
     }
 
     public static EntityManager getEntityManager() {

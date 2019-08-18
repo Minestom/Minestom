@@ -1,6 +1,7 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
@@ -25,6 +26,7 @@ public class Player extends LivingEntity {
     private short heldSlot;
     private Inventory openInventory;
 
+    private CustomBlock targetCustomBlock;
     private Position targetBlockPosition;
     private long targetBlockTime;
 
@@ -41,20 +43,17 @@ public class Player extends LivingEntity {
     public void update() {
 
         // Target block stage
-        if (instance != null && targetBlockPosition != null) {
-            int timeBreak = 750; // In ms
+        if (instance != null && targetCustomBlock != null) {
+            int timeBreak = targetCustomBlock.getBreakDelay(this);
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
             byte stage = (byte) (since / (timeBreak / animationCount));
-            BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
-            breakAnimationPacket.entityId = getEntityId() + 1;
-            breakAnimationPacket.blockPosition = targetBlockPosition;
-            breakAnimationPacket.destroyStage = stage;
+            sendBlockBreakAnimation(targetBlockPosition, stage);// TODO send to all near players
             if (stage > 9) {
                 instance.setBlock(targetBlockPosition.getX(), targetBlockPosition.getY(), targetBlockPosition.getZ(), (short) 0);
-                refreshTargetBlock(null);
+                testParticle(targetBlockPosition.getX() + 0.5f, targetBlockPosition.getY(), targetBlockPosition.getZ() + 0.5f);
+                resetTargetBlock();
             }
-            playerConnection.sendPacket(breakAnimationPacket); // TODO send to all online players
         }
 
 
@@ -72,6 +71,29 @@ public class Player extends LivingEntity {
                 onlinePlayer.getPlayerConnection().sendPacket(entityTeleportPacket);
         }
         playerConnection.sendPacket(new UpdateViewPositionPacket(Math.floorDiv((int) x, 16), Math.floorDiv((int) z, 16)));
+    }
+
+    public void sendBlockBreakAnimation(Position blockPosition, byte destroyStage) {
+        BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
+        breakAnimationPacket.entityId = getEntityId() + 1;
+        breakAnimationPacket.blockPosition = blockPosition;
+        breakAnimationPacket.destroyStage = destroyStage;
+        playerConnection.sendPacket(breakAnimationPacket);
+    }
+
+    private void testParticle(float x, float y, float z) {
+        ParticlePacket particlePacket = new ParticlePacket();
+        particlePacket.particleId = 3; // Block particle
+        particlePacket.longDistance = false;
+        particlePacket.x = x;
+        particlePacket.y = y;
+        particlePacket.z = z;
+        particlePacket.offsetX = 0.55f;
+        particlePacket.offsetY = 0.75f;
+        particlePacket.offsetZ = 0.55f;
+        particlePacket.particleData = 0.25f;
+        particlePacket.particleCount = 100;
+        playerConnection.sendPacket(particlePacket);
     }
 
     public void sendMessage(String message) {
@@ -134,6 +156,10 @@ public class Player extends LivingEntity {
 
     public Inventory getOpenInventory() {
         return openInventory;
+    }
+
+    public CustomBlock getCustomBlockTarget() {
+        return targetCustomBlock;
     }
 
     public void openInventory(Inventory inventory) {
@@ -200,9 +226,16 @@ public class Player extends LivingEntity {
         this.openInventory = openInventory;
     }
 
-    public void refreshTargetBlock(Position targetBlockPosition) {
+    public void refreshTargetBlock(CustomBlock targetCustomBlock, Position targetBlockPosition) {
+        this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
         this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
+    }
+
+    public void resetTargetBlock() {
+        this.targetCustomBlock = null;
+        this.targetBlockPosition = null;
+        this.targetBlockTime = 0;
     }
 
     public long getLastKeepAlive() {

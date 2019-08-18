@@ -1,10 +1,14 @@
 package fr.themode.minestom.net.packet.client.play;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
+import fr.themode.minestom.net.packet.server.play.EntityEffectPacket;
+import fr.themode.minestom.net.packet.server.play.RemoveEntityEffectPacket;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Utils;
 
@@ -24,17 +28,54 @@ public class ClientPlayerDiggingPacket implements ClientPlayPacket {
                         instance.setBlock(position.getX(), position.getY(), position.getZ(), (short) 0);
                     }
                 } else if (player.getGameMode() == GameMode.SURVIVAL) {
-                    player.refreshTargetBlock(position);
-                    // TODO survival mining
+                    Instance instance = player.getInstance();
+                    if (instance != null) {
+                        String customBlockId = instance.getCustomBlockId(position.getX(), position.getY(), position.getZ());
+                        if (customBlockId != null) {
+                            CustomBlock customBlock = Main.getBlockManager().getBlock(customBlockId);
+                            player.refreshTargetBlock(customBlock, position);
+                            addEffect(player);
+                        } else {
+                            player.resetTargetBlock();
+                            removeEffect(player);
+                        }
+                    }
                 }
                 break;
             case CANCELLED_DIGGING:
-                player.refreshTargetBlock(null);
+                player.sendBlockBreakAnimation(position, (byte) -1);
+                player.resetTargetBlock();
+                removeEffect(player);
                 break;
             case FINISHED_DIGGING:
-                player.refreshTargetBlock(null);
+                if (player.getCustomBlockTarget() != null) {
+                    player.resetTargetBlock();
+                    removeEffect(player);
+                } else {
+                    Instance instance = player.getInstance();
+                    if (instance != null) {
+                        instance.setBlock(position.getX(), position.getY(), position.getZ(), (short) 0);
+                    }
+                }
                 break;
         }
+    }
+
+    private void addEffect(Player player) {
+        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
+        entityEffectPacket.entityId = player.getEntityId();
+        entityEffectPacket.effectId = 4;
+        entityEffectPacket.amplifier = -1;
+        entityEffectPacket.duration = 0;
+        entityEffectPacket.flags = 0;
+        player.getPlayerConnection().sendPacket(entityEffectPacket);
+    }
+
+    private void removeEffect(Player player) {
+        RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
+        removeEntityEffectPacket.entityId = player.getEntityId();
+        removeEntityEffectPacket.effectId = 4;
+        player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
     }
 
     @Override
