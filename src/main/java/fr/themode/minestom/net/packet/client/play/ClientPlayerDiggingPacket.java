@@ -1,7 +1,6 @@
 package fr.themode.minestom.net.packet.client.play;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.CustomBlock;
@@ -30,9 +29,8 @@ public class ClientPlayerDiggingPacket implements ClientPlayPacket {
                 } else if (player.getGameMode() == GameMode.SURVIVAL) {
                     Instance instance = player.getInstance();
                     if (instance != null) {
-                        String customBlockId = instance.getCustomBlockId(position.getX(), position.getY(), position.getZ());
-                        if (customBlockId != null) {
-                            CustomBlock customBlock = Main.getBlockManager().getBlock(customBlockId);
+                        CustomBlock customBlock = instance.getCustomBlock(position.getX(), position.getY(), position.getZ());
+                        if (customBlock != null) {
                             player.refreshTargetBlock(customBlock, position);
                             addEffect(player);
                         } else {

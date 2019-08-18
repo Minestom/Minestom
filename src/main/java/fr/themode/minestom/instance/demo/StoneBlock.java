@@ -5,8 +5,14 @@ import fr.themode.minestom.instance.CustomBlock;
 
 public class StoneBlock extends CustomBlock {
 
-    public StoneBlock() {
-        super((short) 1);
+    @Override
+    public short getType() {
+        return 1;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "stone_block";
     }
 
     @Override

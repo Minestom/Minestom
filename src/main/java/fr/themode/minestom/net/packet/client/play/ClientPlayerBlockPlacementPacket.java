@@ -25,7 +25,7 @@ public class ClientPlayerBlockPlacementPacket implements ClientPlayPacket {
         int offsetY = blockFace == ClientPlayerDiggingPacket.BlockFace.BOTTOM ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.TOP ? 1 : 0;
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
-        instance.setBlock(position.getX() + offsetX, position.getY() + offsetY, position.getZ() + offsetZ, "stone");
+        instance.setBlock(position.getX() + offsetX, position.getY() + offsetY, position.getZ() + offsetZ, "stone_block");
         player.getInventory().refreshSlot(player.getHeldSlot());
         // TODO consume block in hand for survival players
         /*Random random = new Random();

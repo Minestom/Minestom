@@ -18,7 +18,7 @@ public class Chunk {
     private int chunkX, chunkZ;
     private Biome biome;
     private short[] blocksId = new short[CHUNK_SIZE];
-    private String[] customBlocks = new String[CHUNK_SIZE];
+    private int[] customBlocks = new int[CHUNK_SIZE];
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -30,23 +30,27 @@ public class Chunk {
         int index = getIndex(x, y, z);
         this.blocksId[index] = blockId;
         if (blockId == 0) {
-            this.customBlocks[index] = null;
+            this.customBlocks[index] = 0;
         }
     }
 
     protected void setBlock(byte x, byte y, byte z, String blockId) {
-        int index = getIndex(x, y, z);
         CustomBlock customBlock = Main.getBlockManager().getBlock(blockId);
+        if (customBlock == null)
+            throw new IllegalArgumentException("The block " + blockId + " does not exist or isn't registered");
+
+        int index = getIndex(x, y, z);
         this.blocksId[index] = customBlock.getType();
-        this.customBlocks[index] = blockId;
+        this.customBlocks[index] = customBlock.getId();
     }
 
     public short getBlockId(byte x, byte y, byte z) {
         return this.blocksId[getIndex(x, y, z)];
     }
 
-    public String getCustomBlockId(byte x, byte y, byte z) {
-        return this.customBlocks[getIndex(x, y, z)];
+    public CustomBlock getCustomBlock(byte x, byte y, byte z) {
+        int id = this.customBlocks[getIndex(x, y, z)];
+        return id != 0 ? Main.getBlockManager().getBlock(id) : null;
     }
 
     public void addEntity(Entity entity) {

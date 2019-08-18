@@ -6,14 +6,23 @@ import java.util.function.Supplier;
 
 public class BlockManager {
 
-    private Map<String, CustomBlock> blocks = new HashMap<>();
+    private Map<Integer, CustomBlock> blocksInternalId = new HashMap<>();
+    private Map<String, CustomBlock> blocksId = new HashMap<>();
 
-    public void registerBlock(String id, Supplier<CustomBlock> blocks) {
-        this.blocks.put(id, blocks.get());
+    public void registerBlock(Supplier<CustomBlock> blocks) {
+        CustomBlock customBlock = blocks.get();
+        String identifier = customBlock.getIdentifier();
+        int id = customBlock.getId();
+        this.blocksInternalId.put(id, customBlock);
+        this.blocksId.put(identifier, customBlock);
     }
 
-    public CustomBlock getBlock(String id) {
-        return this.blocks.get(id);
+    public CustomBlock getBlock(String identifier) {
+        return blocksId.get(identifier);
+    }
+
+    public CustomBlock getBlock(int id) {
+        return blocksInternalId.get(id);
     }
 
 }

@@ -39,7 +39,7 @@ public class Main {
         blockManager = new BlockManager();
         entityManager = new EntityManager();
 
-        blockManager.registerBlock("stone", StoneBlock::new);
+        blockManager.registerBlock(StoneBlock::new);
 
         server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
             @Override

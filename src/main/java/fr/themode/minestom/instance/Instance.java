@@ -19,7 +19,7 @@ public class Instance {
     private GroupedCollections<EntityCreature> creatures = new GroupedCollections<>(new CopyOnWriteArrayList());
     private GroupedCollections<Player> players = new GroupedCollections<>(new CopyOnWriteArrayList());
 
-    private Set<Chunk> chunksSet = new CopyOnWriteArraySet<>();
+    private Set<Chunk> chunksSet = new CopyOnWriteArraySet<>(); // TODO change for a map with position as key and chunk as value
 
     public Instance(UUID uniqueId) {
         this.uniqueId = uniqueId;
@@ -46,9 +46,9 @@ public class Instance {
         return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
-    public String getCustomBlockId(int x, int y, int z) {
+    public CustomBlock getCustomBlock(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
-        return chunk.getCustomBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
+        return chunk.getCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
     public BlockBatch createBlockBatch() {
