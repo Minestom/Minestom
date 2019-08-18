@@ -26,7 +26,7 @@ public class Instance {
     }
 
     // TODO BlockBatch with pool
-    public synchronized void setBlock(int x, int y, int z, Block block) {
+    public synchronized void setBlock(int x, int y, int z, short blockId) {
         final int chunkX = Math.floorDiv(x, 16);
         final int chunkZ = Math.floorDiv(z, 16);
         Chunk chunk = getChunk(chunkX, chunkZ);
@@ -34,7 +34,7 @@ public class Instance {
             chunk = createChunk(Biome.VOID, chunkX, chunkZ);
         }
         synchronized (chunk) {
-            chunk.setBlock(x % 16, y, z % 16, block);
+            chunk.setBlock(x % 16, y, z % 16, blockId);
             sendChunkUpdate(chunk);
         }
     }

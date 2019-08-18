@@ -3,7 +3,6 @@ package fr.themode.minestom.net.packet.client.play;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.instance.Block;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.Position;
@@ -22,9 +21,18 @@ public class ClientPlayerDiggingPacket implements ClientPlayPacket {
                 if (player.getGameMode() == GameMode.CREATIVE) {
                     Instance instance = player.getInstance();
                     if (instance != null) {
-                        instance.setBlock(position.getX(), position.getY(), position.getZ(), new Block(0));
+                        instance.setBlock(position.getX(), position.getY(), position.getZ(), (short) 0);
                     }
+                } else if (player.getGameMode() == GameMode.SURVIVAL) {
+                    player.refreshTargetBlock(position);
+                    // TODO survival mining
                 }
+                break;
+            case CANCELLED_DIGGING:
+                player.refreshTargetBlock(null);
+                break;
+            case FINISHED_DIGGING:
+                player.refreshTargetBlock(null);
                 break;
         }
     }

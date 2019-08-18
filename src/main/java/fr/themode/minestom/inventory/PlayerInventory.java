@@ -8,9 +8,13 @@ import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.Arrays;
 
-public class PlayerInventory implements InventoryModifier {
+public class PlayerInventory implements InventoryModifier, InventoryClickHandler {
 
     public static final int INVENTORY_SIZE = 46;
+
+    private static final byte ITEM_MAX_SIZE = 127;
+
+    private static final int OFFSET = 9;
 
     private static final int CRAFT_SLOT_1 = 36;
     private static final int CRAFT_SLOT_2 = 37;
@@ -25,6 +29,7 @@ public class PlayerInventory implements InventoryModifier {
 
     private Player player;
     private ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+    private ItemStack cursorItem = ItemStack.AIR_ITEM;
 
     public PlayerInventory(Player player) {
         this.player = player;
@@ -56,15 +61,14 @@ public class PlayerInventory implements InventoryModifier {
                     setItemStack(i, itemStack);
                     return true;
                 } else if (itemStack.isSimilar(item)) {
-                    // TODO check max stack size
                     int itemAmount = item.getAmount();
-                    if (itemAmount == 64)
+                    if (itemAmount == ITEM_MAX_SIZE)
                         continue;
                     int totalAmount = itemStack.getAmount() + itemAmount;
-                    if (totalAmount > 64) {
-                        item.setAmount((byte) 64);
+                    if (totalAmount > ITEM_MAX_SIZE) {
+                        item.setAmount((byte) ITEM_MAX_SIZE);
                         sendSlotRefresh((short) convertToPacketSlot(i), item);
-                        itemStack.setAmount((byte) (totalAmount - 64));
+                        itemStack.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
                     } else {
                         item.setAmount((byte) totalAmount);
                         sendSlotRefresh((short) convertToPacketSlot(i), item);
@@ -105,12 +109,25 @@ public class PlayerInventory implements InventoryModifier {
         playerConnection.sendPacket(createWindowItemsPacket());
     }
 
+    public void refreshSlot(int slot) {
+        sendSlotRefresh((short) convertToPacketSlot(slot), getItemStack(slot));
+    }
+
+    public ItemStack getCursorItem() {
+        return cursorItem;
+    }
+
+    public void setCursorItem(ItemStack cursorItem) {
+        this.cursorItem = cursorItem;
+    }
+
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
             itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
             this.items[slot] = itemStack;
-            System.out.println("INSERT: " + slot);
-            sendSlotRefresh((short) slot, itemStack);
+            // System.out.println("INSERT: " + slot);
+            //sendSlotRefresh((short) slot, itemStack);
+            update();
         }
     }
 
@@ -126,6 +143,17 @@ public class PlayerInventory implements InventoryModifier {
 
 
     protected int convertSlot(int slot, int offset) {
+        switch (slot) {
+            case 1:
+                return CRAFT_SLOT_1 + 1;
+            case 2:
+                return CRAFT_SLOT_2 + 1;
+            case 3:
+                return CRAFT_SLOT_3 + 1;
+            case 4:
+                return CRAFT_SLOT_4 + 1;
+        }
+        //System.out.println("ENTRY: " + slot + " | " + offset);
         final int rowSize = 9;
         slot -= offset;
         if (slot >= rowSize * 3 && slot < rowSize * 4) {
@@ -133,6 +161,7 @@ public class PlayerInventory implements InventoryModifier {
         } else {
             slot = slot + rowSize;
         }
+        //System.out.println("CONVERT: " + slot);
         return slot;
     }
 
@@ -161,7 +190,6 @@ public class PlayerInventory implements InventoryModifier {
 
     private WindowItemsPacket createWindowItemsPacket() {
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
-        Arrays.fill(convertedSlots, ItemStack.AIR_ITEM); // TODO armor and craft
 
         for (int i = 0; i < items.length; i++) {
             int slot = convertToPacketSlot(i);
@@ -175,4 +203,220 @@ public class PlayerInventory implements InventoryModifier {
         return windowItemsPacket;
     }
 
+    @Override
+    public void leftClick(Player player, int slot) {
+        ItemStack cursorItem = getCursorItem();
+        ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
+
+        if (!cursorItem.isAir()) {
+            if (slot == 0 || slot == 6 || slot == 7 || slot == 8) {
+                return; // Disable putting item on CRAFTING_RESULT and chestplate/leggings/boots slots
+            }
+        }
+
+        if (cursorItem.isAir() && clicked.isAir())
+            return;
+
+        ItemStack resultCursor;
+        ItemStack resultClicked;
+
+        if (cursorItem.isSimilar(clicked)) {
+            resultCursor = cursorItem.clone();
+            resultClicked = clicked.clone();
+            int totalAmount = cursorItem.getAmount() + clicked.getAmount();
+            if (totalAmount > ITEM_MAX_SIZE) {
+                resultCursor.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
+                resultClicked.setAmount((byte) ITEM_MAX_SIZE);
+            } else {
+                resultCursor = ItemStack.AIR_ITEM;
+                resultClicked.setAmount((byte) totalAmount);
+            }
+        } else {
+            resultCursor = clicked.clone();
+            resultClicked = cursorItem.clone();
+        }
+
+        setItemStack(slot, OFFSET, resultClicked);
+        setCursorItem(resultCursor);
+    }
+
+    @Override
+    public void rightClick(Player player, int slot) {
+        ItemStack cursorItem = getCursorItem();
+        ItemStack clicked = getItemStack(slot, OFFSET);
+
+        if (!cursorItem.isAir()) {
+            if (slot == 0 || slot == 6 || slot == 7 || slot == 8) {
+                return; // Disable putting item on CRAFTING_RESULT and chestplate/leggings/boots slots
+            }
+        }
+
+        if (cursorItem.isAir() && clicked.isAir())
+            return;
+
+        ItemStack resultCursor;
+        ItemStack resultClicked;
+
+        if (cursorItem.isSimilar(clicked)) {
+            resultClicked = clicked.clone();
+            int amount = clicked.getAmount() + 1;
+            if (amount > ITEM_MAX_SIZE) {
+                return;
+            } else {
+                resultCursor = cursorItem.clone();
+                resultCursor.setAmount((byte) (resultCursor.getAmount() - 1));
+                if (resultCursor.getAmount() < 1)
+                    resultCursor = ItemStack.AIR_ITEM;
+                resultClicked.setAmount((byte) amount);
+            }
+        } else {
+            if (cursorItem.isAir()) {
+                int amount = (int) Math.ceil((double) clicked.getAmount() / 2d);
+                resultCursor = clicked.clone();
+                resultCursor.setAmount((byte) amount);
+                resultClicked = clicked.clone();
+                resultClicked.setAmount((byte) (clicked.getAmount() / 2));
+            } else {
+                if (clicked.isAir()) {
+                    int amount = cursorItem.getAmount();
+                    resultCursor = cursorItem.clone();
+                    resultCursor.setAmount((byte) (amount - 1));
+                    if (resultCursor.getAmount() < 1)
+                        resultCursor = ItemStack.AIR_ITEM;
+                    resultClicked = cursorItem.clone();
+                    resultClicked.setAmount((byte) 1);
+                } else {
+                    resultCursor = clicked.clone();
+                    resultClicked = cursorItem.clone();
+                }
+            }
+        }
+
+        setItemStack(slot, OFFSET, resultClicked);
+        setCursorItem(resultCursor);
+    }
+
+    @Override
+    public void shiftClick(Player player, int slot) {
+        ItemStack clicked = getItemStack(slot, OFFSET);
+
+        if (clicked.isAir())
+            return;
+
+        ItemStack resultClicked = clicked.clone();
+        boolean filled = false;
+        for (int i = 0; i < items.length; i++) {
+            int index = i < 9 ? i + 9 : i - 9;
+            ItemStack item = items[index];
+            if (item.isSimilar(clicked)) {
+                int amount = item.getAmount();
+                if (amount == ITEM_MAX_SIZE)
+                    continue;
+                int totalAmount = resultClicked.getAmount() + amount;
+                if (totalAmount > ITEM_MAX_SIZE) {
+                    item.setAmount((byte) ITEM_MAX_SIZE);
+                    setItemStack(index, item);
+                    resultClicked.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
+                    filled = false;
+                    continue;
+                } else {
+                    resultClicked.setAmount((byte) totalAmount);
+                    setItemStack(index, resultClicked);
+                    setItemStack(slot, OFFSET, ItemStack.AIR_ITEM);
+                    filled = true;
+                    break;
+                }
+            } else if (item.isAir()) {
+                // Switch
+                setItemStack(index, resultClicked);
+                setItemStack(slot, OFFSET, ItemStack.AIR_ITEM);
+                filled = true;
+                break;
+            }
+        }
+        if (!filled) {
+            setItemStack(slot, OFFSET, resultClicked);
+        }
+    }
+
+    @Override
+    public void changeHeld(Player player, int slot, int key) {
+        if (!getCursorItem().isAir())
+            return;
+
+        ItemStack heldItem = getItemStack(key);
+        ItemStack clicked = getItemStack(slot, OFFSET);
+
+        ItemStack resultClicked;
+        ItemStack resultHeld;
+
+        if (clicked.isAir()) {
+            // Set held item [key] to slot
+            resultClicked = ItemStack.AIR_ITEM;
+            resultHeld = clicked.clone();
+        } else {
+            if (heldItem.isAir()) {
+                // if held item [key] is air then set clicked to held
+                resultClicked = ItemStack.AIR_ITEM;
+                resultHeld = clicked.clone();
+            } else {
+                // Otherwise replace held item and held
+                resultClicked = heldItem.clone();
+                resultHeld = clicked.clone();
+            }
+        }
+
+        setItemStack(slot, OFFSET, resultClicked);
+        setItemStack(key, resultHeld);
+    }
+
+    @Override
+    public void middleClick(Player player, int slot) {
+
+    }
+
+    @Override
+    public void dropOne(Player player, int slot) {
+
+    }
+
+    @Override
+    public void dropItemStack(Player player, int slot) {
+
+    }
+
+    @Override
+    public void doubleClick(Player player, int slot) {
+        ItemStack cursorItem = getCursorItem().clone();
+        if (cursorItem.isAir())
+            return;
+
+        int amount = cursorItem.getAmount();
+
+        if (amount == ITEM_MAX_SIZE)
+            return;
+
+        for (int i = 0; i < items.length; i++) {
+            int index = i < 9 ? i + 9 : i - 9;
+            if (index == slot)
+                continue;
+            if (amount == ITEM_MAX_SIZE)
+                break;
+            ItemStack item = items[index];
+            if (cursorItem.isSimilar(item)) {
+                int totalAmount = amount + item.getAmount();
+                if (totalAmount > ITEM_MAX_SIZE) {
+                    cursorItem.setAmount((byte) ITEM_MAX_SIZE);
+                    item.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
+                    setItemStack(index, item);
+                } else {
+                    cursorItem.setAmount((byte) totalAmount);
+                    setItemStack(index, ItemStack.AIR_ITEM);
+                }
+                amount = cursorItem.getAmount();
+            }
+        }
+
+        setCursorItem(cursorItem);
+    }
 }

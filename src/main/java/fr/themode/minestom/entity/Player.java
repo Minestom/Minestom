@@ -6,6 +6,7 @@ import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.utils.Position;
 
 import java.util.UUID;
 
@@ -24,6 +25,9 @@ public class Player extends LivingEntity {
     private short heldSlot;
     private Inventory openInventory;
 
+    private Position targetBlockPosition;
+    private long targetBlockTime;
+
     // TODO set proper UUID
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         this.uuid = uuid;
@@ -35,7 +39,26 @@ public class Player extends LivingEntity {
 
     @Override
     public void update() {
-        // System.out.println("Je suis l'update");
+
+        // Target block stage
+        if (instance != null && targetBlockPosition != null) {
+            int timeBreak = 750; // In ms
+            int animationCount = 10;
+            long since = System.currentTimeMillis() - targetBlockTime;
+            byte stage = (byte) (since / (timeBreak / animationCount));
+            BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
+            breakAnimationPacket.entityId = getEntityId() + 1;
+            breakAnimationPacket.blockPosition = targetBlockPosition;
+            breakAnimationPacket.destroyStage = stage;
+            if (stage > 9) {
+                instance.setBlock(targetBlockPosition.getX(), targetBlockPosition.getY(), targetBlockPosition.getZ(), (short) 0);
+                refreshTargetBlock(null);
+            }
+            playerConnection.sendPacket(breakAnimationPacket); // TODO send to all online players
+        }
+
+
+        // Multiplayer sync
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.x = x;
@@ -49,6 +72,11 @@ public class Player extends LivingEntity {
                 onlinePlayer.getPlayerConnection().sendPacket(entityTeleportPacket);
         }
         playerConnection.sendPacket(new UpdateViewPositionPacket(Math.floorDiv((int) x, 16), Math.floorDiv((int) z, 16)));
+    }
+
+    public void sendMessage(String message) {
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket("{\"text\": \"" + message + "\"}", ChatMessagePacket.Position.CHAT);
+        playerConnection.sendPacket(chatMessagePacket);
     }
 
     public void teleport(double x, double y, double z) {
@@ -170,6 +198,11 @@ public class Player extends LivingEntity {
 
     public void refreshOpenInventory(Inventory openInventory) {
         this.openInventory = openInventory;
+    }
+
+    public void refreshTargetBlock(Position targetBlockPosition) {
+        this.targetBlockPosition = targetBlockPosition;
+        this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
     }
 
     public long getLastKeepAlive() {

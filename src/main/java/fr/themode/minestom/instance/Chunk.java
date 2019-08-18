@@ -15,7 +15,7 @@ public class Chunk {
     protected Set<Player> players = new CopyOnWriteArraySet<>();
     private int chunkX, chunkZ;
     private Biome biome;
-    private HashMap<Short, Block> blocks = new HashMap<>();
+    private HashMap<Short, Short> blocks = new HashMap<>(); // Index/BlockID
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -23,18 +23,18 @@ public class Chunk {
         this.chunkZ = chunkZ;
     }
 
-    protected void setBlock(int x, int y, int z, Block block) {
+    protected void setBlock(int x, int y, int z, short blockId) {
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;
-        this.blocks.put(index, block);
+        this.blocks.put(index, blockId);
     }
 
-    public Block getBlock(int x, int y, int z) {
+    public short getBlockId(int x, int y, int z) {
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;
-        return this.blocks.getOrDefault(index, new Block(0));
+        return this.blocks.getOrDefault(index, (short) 0);
     }
 
     public void addEntity(Entity entity) {
@@ -65,7 +65,7 @@ public class Chunk {
         }
     }
 
-    public HashMap<Short, Block> getBlocks() {
+    public HashMap<Short, Short> getBlocks() {
         return blocks;
     }
 

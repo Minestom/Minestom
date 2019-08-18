@@ -16,6 +16,7 @@ public class EntityManager {
 
     public void update() {
         for (Instance instance : instanceManager.getInstances()) {
+            // TODO loop chunks and entities on it instead of individual (to have more non-blocking operation)
 
             // Creatures
             for (EntityCreature creature : instance.getCreatures()) {

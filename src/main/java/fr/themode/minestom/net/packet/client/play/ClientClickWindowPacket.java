@@ -3,6 +3,8 @@ package fr.themode.minestom.net.packet.client.play;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.inventory.Inventory;
+import fr.themode.minestom.inventory.InventoryClickHandler;
+import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.play.ConfirmTransactionPacket;
@@ -20,7 +22,10 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
 
     @Override
     public void process(Player player) {
-        Inventory inventory = player.getOpenInventory();
+        InventoryClickHandler clickHandler = player.getOpenInventory();
+        if (clickHandler == null) {
+            clickHandler = player.getInventory();
+        }
         System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
 
         ConfirmTransactionPacket confirmTransactionPacket = new ConfirmTransactionPacket();
@@ -33,19 +38,19 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
                 switch (button) {
                     case 0:
                         // Left click
-                        inventory.leftClick(player, slot);
+                        clickHandler.leftClick(player, slot);
                         break;
                     case 1:
                         // Right click
-                        inventory.rightClick(player, slot);
+                        clickHandler.rightClick(player, slot);
                         break;
                 }
                 break;
             case 1:
-                inventory.shiftClick(player, slot); // Shift + left/right have identical behavior
+                clickHandler.shiftClick(player, slot); // Shift + left/right have identical behavior
                 break;
             case 2:
-                inventory.changeHeld(player, slot, button);
+                clickHandler.changeHeld(player, slot, button);
                 break;
             case 3:
                 // Middle click (only creative players in non-player inventories)
@@ -57,11 +62,11 @@ public class ClientClickWindowPacket implements ClientPlayPacket {
                 // Dragging
                 break;
             case 6:
-                inventory.doubleClick(player, slot);
+                clickHandler.doubleClick(player, slot);
                 break;
         }
 
-        ItemStack cursorItem = inventory.getCursorItem(player);
+        ItemStack cursorItem = clickHandler instanceof Inventory ? ((Inventory) clickHandler).getCursorItem(player) : ((PlayerInventory) clickHandler).getCursorItem();
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = -1;
         setSlotPacket.slot = -1;

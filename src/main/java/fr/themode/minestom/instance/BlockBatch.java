@@ -19,7 +19,7 @@ public class BlockBatch {
         this.instance = instance;
     }
 
-    public synchronized void setBlock(int x, int y, int z, Block block) {
+    public synchronized void setBlock(int x, int y, int z, short blockId) {
         final int chunkX = Math.floorDiv(x, 16);
         final int chunkZ = Math.floorDiv(z, 16);
         Chunk chunk = this.instance.getChunk(chunkX, chunkZ);
@@ -31,7 +31,7 @@ public class BlockBatch {
         data.x = x % 16;
         data.y = y;
         data.z = z % 16;
-        data.block = block;
+        data.blockId = blockId;
 
         blockData.add(data);
 
@@ -56,10 +56,10 @@ public class BlockBatch {
     private class BlockData {
 
         private int x, y, z;
-        private Block block;
+        private short blockId;
 
         public void apply(Chunk chunk) {
-            chunk.setBlock(x, y, z, block);
+            chunk.setBlock(x, y, z, blockId);
         }
 
     }

@@ -1,7 +1,6 @@
 package fr.themode.minestom.utils;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.instance.Block;
 import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
@@ -122,7 +121,11 @@ public class Utils {
     }
 
     public static void writePosition(Buffer buffer, int x, int y, int z) {
-        buffer.putLong(((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF));
+        buffer.putLong((((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF));
+    }
+
+    public static void writePosition(Buffer buffer, Position position) {
+        writePosition(buffer, position.getX(), position.getY(), position.getZ());
     }
 
     public static Position readPosition(Buffer buffer) {
@@ -144,8 +147,8 @@ public class Utils {
         }
     }
 
-    public static void writeBlocks(Buffer buffer, Block[] blocks, int bitsPerEntry) {
-        buffer.putShort((short) Arrays.stream(blocks).filter(customBlock -> customBlock.getType() != 0).collect(Collectors.toList()).size());
+    public static void writeBlocks(Buffer buffer, Short[] blocksId, int bitsPerEntry) {
+        buffer.putShort((short) Arrays.stream(blocksId).filter(customBlock -> customBlock != 0).collect(Collectors.toList()).size());
         buffer.putByte((byte) bitsPerEntry);
         int[] blocksData = new int[16 * 16 * 16];
         for (int y = 0; y < 16; y++) {
@@ -153,7 +156,7 @@ public class Utils {
                 for (int z = 0; z < 16; z++) {
                     int sectionIndex = (((y * 16) + x) * 16) + z;
                     int index = y << 8 | z << 4 | x;
-                    blocksData[index] = blocks[sectionIndex].getType();
+                    blocksData[index] = blocksId[sectionIndex];
                 }
             }
         }

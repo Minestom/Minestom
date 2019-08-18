@@ -17,6 +17,6 @@ public class ClientHeldItemChangePacket implements ClientPlayPacket {
 
     @Override
     public void read(Buffer buffer) {
-        buffer.getShort();
+        this.slot = buffer.getShort();
     }
 }

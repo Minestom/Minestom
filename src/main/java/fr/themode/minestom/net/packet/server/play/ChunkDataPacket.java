@@ -1,7 +1,6 @@
 package fr.themode.minestom.net.packet.server.play;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.instance.Block;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Utils;
@@ -30,7 +29,7 @@ public class ChunkDataPacket implements ServerPacket {
         for (int i = 0; i < 16; i++) {
             // TODO if fullchunk is false then only send changed sections
             mask |= 1 << i;
-            Block[] section = getSection(chunk, i);
+            Short[] section = getSection(chunk, i);
             Utils.writeBlocks(blocks, section, 14);
         }
         // Biome data
@@ -73,13 +72,13 @@ public class ChunkDataPacket implements ServerPacket {
         Utils.writeVarInt(buffer, 0);
     }
 
-    private Block[] getSection(Chunk chunk, int section) {
-        Block[] blocks = new Block[16 * 16 * 16];
+    private Short[] getSection(Chunk chunk, int section) {
+        Short[] blocks = new Short[16 * 16 * 16];
         for (int y = 0; y < 16; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     int index = (((y * 16) + x) * 16) + z;
-                    blocks[index] = chunk.getBlock(x, y + 16 * section, z);
+                    blocks[index] = chunk.getBlockId(x, y + 16 * section, z);
                 }
             }
         }

@@ -5,7 +5,6 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
-import fr.themode.minestom.instance.Block;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.InventoryType;
@@ -16,10 +15,7 @@ import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPlayerPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
+import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
@@ -38,7 +34,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         instance = Main.getInstanceManager().createInstance();
         for (int x = -64; x < 64; x++)
             for (int z = -64; z < 64; z++) {
-                instance.setBlock(x, 4, z, new Block(10));
+                instance.setBlock(x, 4, z, (short) 10);
             }
     }
 
@@ -153,6 +149,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
         inv.setItemStack(1, new ItemStack(1, (byte) 2));
         inv.updateItems();
 
+
+        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
+        entityEffectPacket.entityId = player.getEntityId();
+        entityEffectPacket.effectId = 4;
+        entityEffectPacket.amplifier = -1;
+        entityEffectPacket.duration = 3600;
+        entityEffectPacket.flags = 0;
+        connection.sendPacket(entityEffectPacket);
     }
 
     @Override
