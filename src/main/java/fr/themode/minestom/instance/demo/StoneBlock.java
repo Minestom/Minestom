@@ -7,12 +7,12 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public short getType() {
-        return 1;
+        return 117;
     }
 
     @Override
     public String getIdentifier() {
-        return "stone_block";
+        return "custom_block";
     }
 
     @Override

@@ -1,20 +1,23 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.bossbar.BossBar;
+import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.utils.GroupedCollections;
 import fr.themode.minestom.utils.Position;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Player extends LivingEntity {
-
-    private boolean isSneaking;
-    private boolean isSprinting;
 
     private long lastKeepAlive;
 
@@ -30,8 +33,11 @@ public class Player extends LivingEntity {
     private Position targetBlockPosition;
     private long targetBlockTime;
 
+    private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
+
     // TODO set proper UUID
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
+        super(93); // TODO correct ?
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
@@ -51,8 +57,22 @@ public class Player extends LivingEntity {
             sendBlockBreakAnimation(targetBlockPosition, stage);// TODO send to all near players
             if (stage > 9) {
                 instance.setBlock(targetBlockPosition.getX(), targetBlockPosition.getY(), targetBlockPosition.getZ(), (short) 0);
-                testParticle(targetBlockPosition.getX() + 0.5f, targetBlockPosition.getY(), targetBlockPosition.getZ() + 0.5f);
+                testParticle(targetBlockPosition.getX() + 0.5f, targetBlockPosition.getY(), targetBlockPosition.getZ() + 0.5f, targetCustomBlock.getType());
                 resetTargetBlock();
+            }
+        }
+
+        // Item pickup
+        if (instance != null) {
+            GroupedCollections<ObjectEntity> objectEntities = instance.getObjectEntities();
+            for (ObjectEntity objectEntity : objectEntities) {
+                if (objectEntity instanceof ItemEntity) {
+                    float distance = getDistance(objectEntity);
+                    if (distance <= 1) { // FIXME set correct value
+                        getInventory().addItemStack(((ItemEntity) objectEntity).getItemStack());
+                        objectEntity.remove();
+                    }
+                }
             }
         }
 
@@ -81,7 +101,7 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(breakAnimationPacket);
     }
 
-    private void testParticle(float x, float y, float z) {
+    private void testParticle(float x, float y, float z, int blockId) {
         ParticlePacket particlePacket = new ParticlePacket();
         particlePacket.particleId = 3; // Block particle
         particlePacket.longDistance = false;
@@ -93,11 +113,12 @@ public class Player extends LivingEntity {
         particlePacket.offsetZ = 0.55f;
         particlePacket.particleData = 0.25f;
         particlePacket.particleCount = 100;
+        particlePacket.blockId = blockId;
         playerConnection.sendPacket(particlePacket);
     }
 
     public void sendMessage(String message) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket("{\"text\": \"" + message + "\"}", ChatMessagePacket.Position.CHAT);
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(Chat.rawText(message), ChatMessagePacket.Position.CHAT);
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -162,6 +183,10 @@ public class Player extends LivingEntity {
         return targetCustomBlock;
     }
 
+    public Set<BossBar> getBossBars() {
+        return Collections.unmodifiableSet(bossBars);
+    }
+
     public void openInventory(Inventory inventory) {
         if (inventory == null)
             throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
@@ -207,11 +232,11 @@ public class Player extends LivingEntity {
     }
 
     public void refreshSneaking(boolean sneaking) {
-        isSneaking = sneaking;
+        sneaking = sneaking;
     }
 
     public void refreshSprinting(boolean sprinting) {
-        isSprinting = sprinting;
+        sprinting = sprinting;
     }
 
     public void refreshKeepAlive(long lastKeepAlive) {
@@ -236,6 +261,14 @@ public class Player extends LivingEntity {
         this.targetCustomBlock = null;
         this.targetBlockPosition = null;
         this.targetBlockTime = 0;
+    }
+
+    public void refreshAddBossbar(BossBar bossBar) {
+        this.bossBars.add(bossBar);
+    }
+
+    public void refreshRemoveBossbar(BossBar bossBar) {
+        this.bossBars.remove(bossBar);
     }
 
     public long getLastKeepAlive() {

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class BlockBatch {
+public class BlockBatch implements BlockModifier {
 
     private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(2);
 
@@ -19,12 +19,9 @@ public class BlockBatch {
         this.instance = instance;
     }
 
+    @Override
     public synchronized void setBlock(int x, int y, int z, short blockId) {
-        final int chunkX = Math.floorDiv(x, 16);
-        final int chunkZ = Math.floorDiv(z, 16);
-        Chunk chunk = this.instance.getChunk(chunkX, chunkZ);
-        if (chunk == null)
-            chunk = this.instance.createChunk(Biome.VOID, chunkX, chunkZ);
+        Chunk chunk = this.instance.getChunkAt(x, z);
         List<BlockData> blockData = this.data.getOrDefault(chunk, new ArrayList<>());
 
         BlockData data = new BlockData();
@@ -32,6 +29,22 @@ public class BlockBatch {
         data.y = y;
         data.z = z % 16;
         data.blockId = blockId;
+
+        blockData.add(data);
+
+        this.data.put(chunk, blockData);
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, String blockId) {
+        Chunk chunk = this.instance.getChunkAt(x, z);
+        List<BlockData> blockData = this.data.getOrDefault(chunk, new ArrayList<>());
+
+        BlockData data = new BlockData();
+        data.x = x % 16;
+        data.y = y;
+        data.z = z % 16;
+        data.blockIdentifier = blockId;
 
         blockData.add(data);
 
@@ -57,9 +70,14 @@ public class BlockBatch {
 
         private int x, y, z;
         private short blockId;
+        private String blockIdentifier;
 
         public void apply(Chunk chunk) {
-            chunk.setBlock((byte) x, (byte) y, (byte) z, blockId);
+            if (blockIdentifier == null) {
+                chunk.setBlock((byte) x, (byte) y, (byte) z, blockId);
+            } else {
+                chunk.setBlock((byte) x, (byte) y, (byte) z, blockIdentifier);
+            }
         }
 
     }

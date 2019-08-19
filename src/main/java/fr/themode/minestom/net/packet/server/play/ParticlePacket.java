@@ -12,7 +12,8 @@ public class ParticlePacket implements ServerPacket {
     public float offsetX, offsetY, offsetZ;
     public float particleData;
     public int particleCount;
-    // TODO data
+
+    public int blockId;
 
     @Override
     public void write(Buffer buffer) {
@@ -26,7 +27,8 @@ public class ParticlePacket implements ServerPacket {
         buffer.putFloat(offsetZ);
         buffer.putFloat(particleData);
         buffer.putInt(particleCount);
-        Utils.writeVarInt(buffer, 1);
+        if (particleId == 3)
+            Utils.writeVarInt(buffer, blockId);
     }
 
     @Override

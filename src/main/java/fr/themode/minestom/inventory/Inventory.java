@@ -1,5 +1,6 @@
 package fr.themode.minestom.inventory;
 
+import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Inventory implements InventoryModifier, InventoryClickHandler {
+public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
 
     private static AtomicInteger lastInventoryId = new AtomicInteger();
 
@@ -81,16 +82,19 @@ public class Inventory implements InventoryModifier, InventoryClickHandler {
         getViewers().forEach(p -> p.getPlayerConnection().sendPacket(windowItemsPacket));
     }
 
+    @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
+    @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
         WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
         player.getPlayerConnection().sendPacket(windowItemsPacket);
     }
 
+    @Override
     public void removeViewer(Player player) {
         this.viewers.remove(player);
     }

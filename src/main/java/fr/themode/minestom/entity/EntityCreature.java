@@ -1,25 +1,20 @@
 package fr.themode.minestom.entity;
 
+import fr.themode.minestom.Viewable;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.net.packet.server.play.EntityPacket;
-import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
-import fr.themode.minestom.net.packet.server.play.EntityTeleportPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnMobPacket;
+import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-public abstract class EntityCreature extends LivingEntity {
+public abstract class EntityCreature extends LivingEntity implements Viewable {
 
-    private Set<Player> viewers = Collections.synchronizedSet(new HashSet<>());
-
-    private int entityType;
+    private Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     public EntityCreature(int entityType) {
-        super();
-        this.entityType = entityType;
+        super(entityType);
     }
 
     public void move(double x, double y, double z) {
@@ -56,6 +51,7 @@ public abstract class EntityCreature extends LivingEntity {
         sendPacketToViewers(entityTeleportPacket);
     }
 
+    @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
@@ -72,10 +68,15 @@ public abstract class EntityCreature extends LivingEntity {
         spawnMobPacket.yaw = getYaw();
         spawnMobPacket.pitch = getPitch();
         spawnMobPacket.headPitch = 0;
+        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
+        entityMetaDataPacket.entityId = getEntityId();
+        entityMetaDataPacket.data = getMetadataBuffer();
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
+        playerConnection.sendPacket(entityMetaDataPacket);
     }
 
+    @Override
     public void removeViewer(Player player) {
         synchronized (viewers) {
             if (!viewers.contains(player))
@@ -85,15 +86,12 @@ public abstract class EntityCreature extends LivingEntity {
         }
     }
 
-    protected void sendPacketToViewers(ServerPacket packet) {
-        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
-    }
-
+    @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
-    public int getEntityType() {
-        return entityType;
+    protected void sendPacketToViewers(ServerPacket packet) {
+        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
     }
 }

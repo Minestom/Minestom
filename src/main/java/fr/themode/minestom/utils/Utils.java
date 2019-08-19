@@ -5,6 +5,7 @@ import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -134,6 +135,11 @@ public class Utils {
         int y = (int) (val & 0xFFF);
         int z = (int) (val << 26 >> 38);
         return new Position(x, y, z);
+    }
+
+    public static void writeUuid(Buffer buffer, UUID uuid) {
+        buffer.putLong(uuid.getMostSignificantBits());
+        buffer.putLong(uuid.getLeastSignificantBits());
     }
 
     public static void writeItemStack(Buffer buffer, ItemStack itemStack) {

@@ -6,36 +6,30 @@ import fr.themode.minestom.utils.Utils;
 
 import java.util.UUID;
 
-public class SpawnMobPacket implements ServerPacket {
+public class SpawnObjectPacket implements ServerPacket {
 
     public int entityId;
-    public UUID entityUuid;
-    public int entityType;
+    public UUID uuid;
+    public int type;
     public double x, y, z;
     public float yaw, pitch;
-    public float headPitch;
-    public short velocityX, velocityY, velocityZ;
-    // TODO metadata
+    public int data;
 
     @Override
     public void write(Buffer buffer) {
         Utils.writeVarInt(buffer, entityId);
-        Utils.writeUuid(buffer, entityUuid);
-        Utils.writeVarInt(buffer, entityType);
+        Utils.writeUuid(buffer, uuid);
+        Utils.writeVarInt(buffer, type);
         buffer.putDouble(x);
         buffer.putDouble(y);
         buffer.putDouble(z);
         buffer.putFloat(yaw);
         buffer.putFloat(pitch);
-        buffer.putFloat(headPitch);
-        buffer.putShort(velocityX);
-        buffer.putShort(velocityY);
-        buffer.putShort(velocityZ);
-        buffer.putByte((byte) 0xff); // TODO metadata
+        buffer.putInt(data);
     }
 
     @Override
     public int getId() {
-        return 0x03;
+        return 0x00;
     }
 }

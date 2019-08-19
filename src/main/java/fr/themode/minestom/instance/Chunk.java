@@ -3,6 +3,7 @@ package fr.themode.minestom.instance;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
+import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
 
 import java.util.Collections;
@@ -13,12 +14,13 @@ public class Chunk {
 
     private static final int CHUNK_SIZE = 16 * 256 * 16;
 
+    protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
     protected Set<Player> players = new CopyOnWriteArraySet<>();
     private int chunkX, chunkZ;
     private Biome biome;
     private short[] blocksId = new short[CHUNK_SIZE];
-    private int[] customBlocks = new int[CHUNK_SIZE];
+    private short[] customBlocks = new short[CHUNK_SIZE];
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -29,9 +31,7 @@ public class Chunk {
     protected void setBlock(byte x, byte y, byte z, short blockId) {
         int index = getIndex(x, y, z);
         this.blocksId[index] = blockId;
-        if (blockId == 0) {
-            this.customBlocks[index] = 0;
-        }
+        this.customBlocks[index] = 0;
     }
 
     protected void setBlock(byte x, byte y, byte z, String blockId) {
@@ -49,7 +49,7 @@ public class Chunk {
     }
 
     public CustomBlock getCustomBlock(byte x, byte y, byte z) {
-        int id = this.customBlocks[getIndex(x, y, z)];
+        short id = this.customBlocks[getIndex(x, y, z)];
         return id != 0 ? Main.getBlockManager().getBlock(id) : null;
     }
 
@@ -66,6 +66,12 @@ public class Chunk {
                     return;
                 this.creatures.add((EntityCreature) entity);
             }
+        } else if (entity instanceof ObjectEntity) {
+            synchronized (objectEntities) {
+                if (this.objectEntities.contains(entity))
+                    return;
+                this.objectEntities.add((ObjectEntity) entity);
+            }
         }
     }
 
@@ -77,6 +83,10 @@ public class Chunk {
         } else if (entity instanceof EntityCreature) {
             synchronized (creatures) {
                 this.creatures.remove(entity);
+            }
+        } else if (entity instanceof ObjectEntity) {
+            synchronized (objectEntities) {
+                this.objectEntities.remove(entity);
             }
         }
     }
@@ -95,6 +105,10 @@ public class Chunk {
 
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    public Set<ObjectEntity> getObjectEntities() {
+        return Collections.unmodifiableSet(objectEntities);
     }
 
     public Set<EntityCreature> getCreatures() {
