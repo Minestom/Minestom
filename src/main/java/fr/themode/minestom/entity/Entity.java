@@ -9,6 +9,8 @@ import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
+import fr.themode.minestom.net.packet.server.play.EntityMetaDataPacket;
 import fr.themode.minestom.net.packet.server.play.SetPassengersPacket;
 import fr.themode.minestom.utils.Utils;
 
@@ -38,6 +40,7 @@ public abstract class Entity implements Viewable {
     protected double lastX, lastY, lastZ;
     protected double x, y, z;
     protected float yaw, pitch;
+    protected float lastYaw, lastPitch;
     private int id;
 
     protected Entity vehicle;
@@ -90,7 +93,9 @@ public abstract class Entity implements Viewable {
             if (!viewers.contains(player))
                 return;
             this.viewers.remove(player);
-            // TODO send packet to remove entity
+            DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
+            destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+            player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
         }
     }
 
@@ -183,6 +188,11 @@ public abstract class Entity implements Viewable {
         return Collections.unmodifiableSet(passengers);
     }
 
+    public void setOnFire(boolean fire) {
+        this.onFire = fire;
+        sendMetadata(0);
+    }
+
     public void refreshPosition(double x, double y, double z) {
         this.lastX = this.x;
         this.lastY = this.y;
@@ -204,6 +214,23 @@ public abstract class Entity implements Viewable {
                 }
             }
         }
+    }
+
+    public void refreshView(float yaw, float pitch) {
+        this.lastYaw = this.yaw;
+        this.lastPitch = this.pitch;
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    public void refreshSneaking(boolean sneaking) {
+        this.crouched = sneaking;
+        sendMetadata(0);
+    }
+
+    public void refreshSprinting(boolean sprinting) {
+        this.sprinting = sprinting;
+        sendMetadata(0);
     }
 
     public double getX() {
@@ -230,28 +257,34 @@ public abstract class Entity implements Viewable {
         this.shouldRemove = true;
     }
 
-    protected void sendPacketToViewers(ServerPacket packet) {
+    public void sendPacketToViewers(ServerPacket packet) {
         getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
+    }
+
+    public void sendPacketsToViewers(ServerPacket... packets) {
+        getViewers().forEach(player -> {
+            for (ServerPacket packet : packets)
+                player.getPlayerConnection().sendPacket(packet);
+        });
     }
 
     public Buffer getMetadataBuffer() {
         Buffer buffer = Buffer.create();
         fillMetadataIndex(buffer, 0);
-        /*Utils.writeVarInt(buffer, 0);
-        Utils.writeString(buffer, customName);
-        buffer.putBoolean(silent);
-        buffer.putBoolean(noGravity);
-        Utils.writeVarInt(buffer, pose.ordinal());*/
-
-        // Chicken test
-        /*buffer.putByte((byte) 0); // Hand states
-        buffer.putFloat(10f); // Health
-        Utils.writeVarInt(buffer, 0); // Potion effect color
-        buffer.putBoolean(false); // Potion effect ambient
-        Utils.writeVarInt(buffer, 0); // Arrow count in entity
-        buffer.putByte((byte) 0); // (Insentient)
-        buffer.putBoolean(false); // baby (Ageable)*/
         return buffer;
+    }
+
+    protected void sendMetadata(int index) {
+        Buffer buffer = Buffer.create();
+        fillMetadataIndex(buffer, index);
+
+        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
+        metaDataPacket.entityId = getEntityId();
+        metaDataPacket.data = buffer;
+        sendPacketToViewers(metaDataPacket);
+        if (this instanceof Player) {
+            ((Player) this).getPlayerConnection().sendPacket(metaDataPacket);
+        }
     }
 
     private void fillMetadataIndex(Buffer buffer, int index) {

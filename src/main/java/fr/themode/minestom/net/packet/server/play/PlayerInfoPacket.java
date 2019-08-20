@@ -35,7 +35,7 @@ public class PlayerInfoPacket implements ServerPacket {
         return 0x33;
     }
 
-    public static enum Action {
+    public enum Action {
 
         ADD_PLAYER(AddPlayer.class),
         UPDATE_GAMEMODE(UpdateGamemode.class),

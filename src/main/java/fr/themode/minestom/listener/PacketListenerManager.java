@@ -26,6 +26,7 @@ public class PacketListenerManager {
         addListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         addListener(ClientPlayerPositionAndLookPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         addListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
+        addListener(ClientAnimationPacket.class, AnimationListener::animationListener);
 
     }
 

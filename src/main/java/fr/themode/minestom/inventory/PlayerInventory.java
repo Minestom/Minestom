@@ -2,6 +2,7 @@ package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.server.play.EntityEquipmentPacket;
 import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
 import fr.themode.minestom.net.packet.server.play.WindowItemsPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -80,28 +81,58 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         return false;
     }
 
-    public void setHelmet(ItemStack itemStack) {
-        safeItemInsert(HELMET_SLOT, itemStack);
-    }
-
-    public void setChestplate(ItemStack itemStack) {
-        safeItemInsert(CHESTPLATE_SLOT, itemStack);
-    }
-
-    public void setLeggings(ItemStack itemStack) {
-        safeItemInsert(LEGGINGS_SLOT, itemStack);
-    }
-
-    public void setBoots(ItemStack itemStack) {
-        safeItemInsert(BOOTS_SLOT, itemStack);
+    public ItemStack getItemInMainHand() {
+        return getItemStack(player.getHeldSlot());
     }
 
     public void setItemInMainHand(ItemStack itemStack) {
         safeItemInsert(player.getHeldSlot(), itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+    }
+
+    public ItemStack getItemInOffHand() {
+        return getItemStack(OFFHAND_SLOT);
     }
 
     public void setItemInOffHand(ItemStack itemStack) {
         safeItemInsert(OFFHAND_SLOT, itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+    }
+
+    public ItemStack getHelmet() {
+        return getItemStack(HELMET_SLOT);
+    }
+
+    public void setHelmet(ItemStack itemStack) {
+        safeItemInsert(HELMET_SLOT, itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+    }
+
+    public ItemStack getChestplate() {
+        return getItemStack(CHESTPLATE_SLOT);
+    }
+
+    public void setChestplate(ItemStack itemStack) {
+        safeItemInsert(CHESTPLATE_SLOT, itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+    }
+
+    public ItemStack getLeggings() {
+        return getItemStack(LEGGINGS_SLOT);
+    }
+
+    public void setLeggings(ItemStack itemStack) {
+        safeItemInsert(LEGGINGS_SLOT, itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+    }
+
+    public ItemStack getBoots() {
+        return getItemStack(BOOTS_SLOT);
+    }
+
+    public void setBoots(ItemStack itemStack) {
+        safeItemInsert(BOOTS_SLOT, itemStack);
+        player.syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
     public void update() {
@@ -121,6 +152,24 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         this.cursorItem = cursorItem;
     }
 
+    public ItemStack getEquipment(EntityEquipmentPacket.Slot slot) {
+        switch (slot) {
+            case MAIN_HAND:
+                return getItemInMainHand();
+            case OFF_HAND:
+                return getItemInOffHand();
+            case HELMET:
+                return getHelmet();
+            case CHESTPLATE:
+                return getChestplate();
+            case LEGGINGS:
+                return getLeggings();
+            case BOOTS:
+                return getBoots();
+        }
+        return ItemStack.AIR_ITEM;
+    }
+
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
             itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
@@ -128,6 +177,19 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             // System.out.println("INSERT: " + slot);
             //sendSlotRefresh((short) slot, itemStack);
             update();
+            if (slot == player.getHeldSlot()) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+            } else if (slot == OFFHAND_SLOT) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+            } else if (slot == HELMET_SLOT) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+            } else if (slot == CHESTPLATE_SLOT) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+            } else if (slot == LEGGINGS_SLOT) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+            } else if (slot == BOOTS_SLOT) {
+                player.syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+            }
         }
     }
 

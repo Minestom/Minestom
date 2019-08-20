@@ -8,14 +8,13 @@ import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.BlockManager;
+import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
 import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
-import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
-import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.protocol.MinecraftProtocol;
 
 import java.lang.reflect.InvocationTargetException;
@@ -59,18 +58,13 @@ public class Main {
                     if (connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null) {
                         Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
                         player.remove();
-                        connectionManager.removePlayer(packetProcessor.getPlayerConnection(connection));
 
-                        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-                        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(player.getUuid()));
-                        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-                        destroyEntitiesPacket.entityIds = new int[]{player.getEntityId()};
-                        for (Player onlinePlayer : connectionManager.getOnlinePlayers()) {
-                            if (!onlinePlayer.equals(player)) {
-                                onlinePlayer.getPlayerConnection().sendPacket(destroyEntitiesPacket);
-                                onlinePlayer.getPlayerConnection().sendPacket(playerInfoPacket);
-                            }
+                        Instance instance = player.getInstance();
+                        if (instance != null) {
+                            instance.removeEntity(player);
                         }
+
+                        connectionManager.removePlayer(packetProcessor.getPlayerConnection(connection));
                     }
                     packetProcessor.removePlayerConnection(connection);
                 }

@@ -13,8 +13,8 @@ public class SpawnPlayerPacket implements ServerPacket {
     public double x;
     public double y;
     public double z;
-    // public float yaw;
-    // public float pitch;
+    public float yaw;
+    public float pitch;
 
     @Override
     public void write(Buffer buffer) {
@@ -24,8 +24,8 @@ public class SpawnPlayerPacket implements ServerPacket {
         buffer.putDouble(x);
         buffer.putDouble(y);
         buffer.putDouble(z);
-        buffer.getData().writeByte(0);
-        buffer.getData().writeByte(0);
+        buffer.putByte((byte) (yaw * 256 / 360));
+        buffer.putByte((byte) (pitch * 256 / 360));
         buffer.putByte((byte) 0xff); // TODO Metadata
     }
 

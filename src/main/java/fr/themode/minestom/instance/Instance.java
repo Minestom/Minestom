@@ -4,8 +4,10 @@ import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.event.BlockBreakEvent;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
+import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.GroupedCollections;
 import fr.themode.minestom.utils.Position;
 
@@ -49,6 +51,37 @@ public class Instance implements BlockModifier {
         }
     }
 
+    public void breakBlock(Player player, Position position, short blockId) {
+        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(position);
+        player.callEvent(BlockBreakEvent.class, blockBreakEvent);
+        if (!blockBreakEvent.isCancelled()) {
+            int x = position.getX();
+            int y = position.getY();
+            int z = position.getZ();
+            setBlock(x, y, z, (short) 0);
+            ParticlePacket particlePacket = new ParticlePacket(); // TODO change by a proper particle API
+            particlePacket.particleId = 3; // Block particle
+            particlePacket.longDistance = false;
+            particlePacket.x = x + 0.5f;
+            particlePacket.y = y;
+            particlePacket.z = z + 0.5f;
+            particlePacket.offsetX = 0.4f;
+            particlePacket.offsetY = 0.65f;
+            particlePacket.offsetZ = 0.4f;
+            particlePacket.particleData = 0.3f;
+            particlePacket.particleCount = 75;
+            particlePacket.blockId = blockId;
+            player.getPlayerConnection().sendPacket(particlePacket);
+            player.sendPacketToViewers(particlePacket);
+        } else {
+            sendChunkUpdate(player, getChunkAt(position));
+        }
+    }
+
+    public void breakBlock(Player player, Position position, CustomBlock customBlock) {
+        breakBlock(player, position, customBlock.getType());
+    }
+
     public Chunk loadChunk(int chunkX, int chunkZ) {
         Chunk chunk = getChunk(chunkX, chunkZ);
         return chunk == null ? createChunk(chunkX, chunkZ) : chunk; // TODO load from file
@@ -57,6 +90,10 @@ public class Instance implements BlockModifier {
     public short getBlockId(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
         return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
+    }
+
+    public short getBlockId(Position position) {
+        return getBlockId(position.getX(), position.getY(), position.getZ());
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
@@ -96,13 +133,14 @@ public class Instance implements BlockModifier {
             lastInstance.removeEntity(entity);
         }
 
+        // TODO based on distance with players
+        getPlayers().forEach(p -> entity.addViewer(p));
+
         if (entity instanceof Player) {
             Player player = (Player) entity;
             sendChunks(player);
             getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
-        } else {
-            // TODO based on distance with players
-            getPlayers().forEach(p -> entity.addViewer(p));
+            getPlayers().forEach(p -> p.addViewer(player));
         }
 
         Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
@@ -114,12 +152,13 @@ public class Instance implements BlockModifier {
         if (entityInstance == null || entityInstance != this)
             return;
 
+        entity.getViewers().forEach(p -> entity.removeViewer(p));
+
         if (!(entity instanceof Player)) {
             DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
             destroyEntitiesPacket.entityIds = new int[]{entity.getEntityId()};
 
             entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
-            entity.getViewers().forEach(p -> entity.removeViewer(p));
         }
 
         Chunk chunk = getChunkAt(entity.getX(), entity.getZ());

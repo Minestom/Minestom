@@ -41,7 +41,6 @@ public class PlayerDiggingListener {
                 }
                 break;
             case CANCELLED_DIGGING:
-                // TODO BlockBreakEvent
                 player.sendBlockBreakAnimation(position, (byte) -1);
                 player.resetTargetBlock();
                 removeEffect(player);
@@ -53,7 +52,8 @@ public class PlayerDiggingListener {
                 } else {
                     Instance instance = player.getInstance();
                     if (instance != null) {
-                        instance.setBlock(position.getX(), position.getY(), position.getZ(), (short) 0);
+                        short blockId = instance.getBlockId(position);
+                        instance.breakBlock(player, position, blockId);
                     }
                 }
                 break;

@@ -11,8 +11,6 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
-import fr.themode.minestom.inventory.Inventory;
-import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionManager;
@@ -22,13 +20,11 @@ import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPlayerPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
@@ -54,23 +50,29 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
-        HashMap<String, UUID> uuids = new HashMap<>();
+        String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
+        /*HashMap<String, UUID> uuids = new HashMap<>();
         uuids.put("TheMode911", UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e"));
         uuids.put("Adamaq01", UUID.fromString("58ffa9d8-aee1-4587-8b79-41b754f6f238"));
         HashMap<String, String> properties = new HashMap<>();
         properties.put("TheMode911", "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19");
-        properties.put("Adamaq01", "eyJ0aW1lc3RhbXAiOjE1NjU0NzgyODU4MTksInByb2ZpbGVJZCI6IjU4ZmZhOWQ4YWVlMTQ1ODc4Yjc5NDFiNzU0ZjZmMjM4IiwicHJvZmlsZU5hbWUiOiJBZGFtYXEwMSIsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9lMTNiNmMyMjNlMTFiYjM1Nzc5OTdkZWY3YzA2ZDUwZmM4NzMxYjBkZWQyOTRlZDQ2ZmM4ZDczNDI1NGM5ZTkifSwiQ0FQRSI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2IwY2MwODg0MDcwMDQ0NzMyMmQ5NTNhMDJiOTY1ZjFkNjVhMTNhNjAzYmY2NGIxN2M4MDNjMjE0NDZmZTE2MzUifX19");
+        properties.put("Adamaq01", "eyJ0aW1lc3RhbXAiOjE1NjU0NzgyODU4MTksInByb2ZpbGVJZCI6IjU4ZmZhOWQ4YWVlMTQ1ODc4Yjc5NDFiNzU0ZjZmMjM4IiwicHJvZmlsZU5hbWUiOiJBZGFtYXEwMSIsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9lMTNiNmMyMjNlMTFiYjM1Nzc5OTdkZWY3YzA2ZDUwZmM4NzMxYjBkZWQyOTRlZDQ2ZmM4ZDczNDI1NGM5ZTkifSwiQ0FQRSI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2IwY2MwODg0MDcwMDQ0NzMyMmQ5NTNhMDJiOTY1ZjFkNjVhMTNhNjAzYmY2NGIxN2M4MDNjMjE0NDZmZTE2MzUifX19");*/
 
         // TODO send encryption request OR directly login success
-        LoginSuccessPacket successPacket = new LoginSuccessPacket(uuids.get(username), username);
+        UUID playerUuid = UUID.randomUUID();//UUID.fromString("OfflinePlayer:" + username);
+        LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);//new LoginSuccessPacket(uuids.get(username), username);
         connection.sendPacket(successPacket);
 
         connection.setConnectionState(ConnectionState.PLAY);
-        connectionManager.createPlayer(uuids.get(username), username, connection);
+        connectionManager.createPlayer(playerUuid, username, connection);
         Player player = connectionManager.getPlayer(connection);
         GameMode gameMode = GameMode.SURVIVAL;
+        float x = 5;
+        float y = 5;
+        float z = 5;
 
         player.refreshGameMode(gameMode);
+        player.refreshPosition(x, y, z);
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
@@ -89,8 +91,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO player abilities
 
-        player.setInstance(instance);
-
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
         spawnPositionPacket.x = 0;
@@ -99,9 +99,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.sendPacket(spawnPositionPacket);
 
         PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-        playerPositionAndLookPacket.x = 0;
-        playerPositionAndLookPacket.y = 5;
-        playerPositionAndLookPacket.z = 0;
+        playerPositionAndLookPacket.x = x;
+        playerPositionAndLookPacket.y = y;
+        playerPositionAndLookPacket.z = z;
         playerPositionAndLookPacket.yaw = 0;
         playerPositionAndLookPacket.pitch = 0;
         playerPositionAndLookPacket.flags = 0;
@@ -109,70 +109,43 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.sendPacket(playerPositionAndLookPacket);
 
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(uuids.get(username), username, GameMode.CREATIVE, 10);
-        PlayerInfoPacket.AddPlayer.Property property = new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(username));
-        addPlayer.properties.add(property);
+        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(player.getUuid(), username, GameMode.CREATIVE, 10);
+        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property); //new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(username));
+        addPlayer.properties.add(prop);
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        for (int x = 0; x < 4; x++)
-            for (int z = 0; z < 4; z++) {
+        player.setInstance(instance);
+
+        for (int cx = 0; cx < 4; cx++)
+            for (int cz = 0; cz < 4; cz++) {
                 ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);
+                chickenCreature.refreshPosition(0 + (double) cx * 1, 5, 0 + (double) cz * 1);
+                chickenCreature.setOnFire(true);
                 chickenCreature.setInstance(instance);
-                if (x == 3 && z == 3) {
+                if (cx == 3 && cz == 3) {
                     //chickenCreature.addPassenger(player);
                 }
             }
-
-
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = player.getEntityId();
-        spawnPlayerPacket.playerUuid = uuids.get(username);
-        spawnPlayerPacket.x = 0;
-        spawnPlayerPacket.y = 5;
-        spawnPlayerPacket.z = 0;
-        for (Player onlinePlayer : connectionManager.getOnlinePlayers()) {
-            if (onlinePlayer.getUsername().equals(username)) continue;
-            onlinePlayer.getPlayerConnection().sendPacket(playerInfoPacket);
-            onlinePlayer.getPlayerConnection().sendPacket(spawnPlayerPacket);
-
-            SpawnPlayerPacket spawnPacket = new SpawnPlayerPacket();
-            spawnPacket.entityId = onlinePlayer.getEntityId();
-            spawnPacket.playerUuid = uuids.get(onlinePlayer.getUsername());
-            spawnPacket.x = onlinePlayer.getX();
-            spawnPacket.y = onlinePlayer.getY();
-            spawnPacket.z = onlinePlayer.getZ();
-
-            PlayerInfoPacket pInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-            PlayerInfoPacket.AddPlayer addP = new PlayerInfoPacket.AddPlayer(uuids.get(onlinePlayer.getUsername()), onlinePlayer.getUsername(), GameMode.CREATIVE, 10);
-            PlayerInfoPacket.AddPlayer.Property p = new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(onlinePlayer.getUsername()));
-            addP.properties.add(p);
-            pInfoPacket.playerInfos.add(addP);
-            connection.sendPacket(pInfoPacket);
-            connection.sendPacket(spawnPacket);
-        }
-        //System.out.println("HAHAHAHHAHHAH               " + player.getUuid());
 
         PlayerInventory inventory = player.getInventory();
         for (int i = 0; i < 20; i++) {
             inventory.addItemStack(new ItemStack(1, (byte) 64));
         }
 
-        Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
+        /*Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
         inv.setItemStack(0, new ItemStack(1, (byte) 1));
         player.openInventory(inv);
-        inv.setItemStack(1, new ItemStack(1, (byte) 2));
-        //inv.updateItems();
+        inv.setItemStack(1, new ItemStack(1, (byte) 2));*/
 
         BossBar bossBar = new BossBar("Le titre", BarColor.BLUE, BarDivision.SEGMENT_12);
         bossBar.setProgress(0.75f);
         bossBar.addViewer(player);
 
-        for (int x = 0; x < 4; x++)
-            for (int z = 0; z < 4; z++) {
+        for (int ix = 0; ix < 4; ix++)
+            for (int iz = 0; iz < 4; iz++) {
                 ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                itemEntity.refreshPosition(x, 5, z);
+                itemEntity.refreshPosition(ix, 5, iz);
                 itemEntity.setInstance(instance);
                 //itemEntity.remove();
             }
