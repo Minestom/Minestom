@@ -1,6 +1,5 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
@@ -8,6 +7,7 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.utils.GroupedCollections;
+import fr.themode.minestom.utils.Position;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -78,6 +78,10 @@ public class Instance implements BlockModifier {
         return getChunk(chunkX, chunkZ);
     }
 
+    public Chunk getChunkAt(Position position) {
+        return getChunkAt(position.getX(), position.getZ());
+    }
+
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
     }
@@ -92,14 +96,13 @@ public class Instance implements BlockModifier {
             lastInstance.removeEntity(entity);
         }
 
-        if (entity instanceof Viewable) {
-            // TODO based on distance with players
-            Viewable viewable = (Viewable) entity;
-            getPlayers().forEach(p -> ((Viewable) entity).addViewer(p));
-        } else if (entity instanceof Player) {
+        if (entity instanceof Player) {
             Player player = (Player) entity;
             sendChunks(player);
             getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
+        } else {
+            // TODO based on distance with players
+            getPlayers().forEach(p -> entity.addViewer(p));
         }
 
         Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
@@ -111,13 +114,12 @@ public class Instance implements BlockModifier {
         if (entityInstance == null || entityInstance != this)
             return;
 
-        if (entity instanceof Viewable) {
+        if (!(entity instanceof Player)) {
             DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
             destroyEntitiesPacket.entityIds = new int[]{entity.getEntityId()};
 
-            Viewable viewable = (Viewable) entity;
-            viewable.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
-            viewable.getViewers().forEach(p -> viewable.removeViewer(p));
+            entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
+            entity.getViewers().forEach(p -> entity.removeViewer(p));
         }
 
         Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
@@ -138,6 +140,13 @@ public class Instance implements BlockModifier {
 
     public UUID getUniqueId() {
         return uniqueId;
+    }
+
+    public void sendChunkUpdate(Player player, Chunk chunk) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = false;
+        chunkDataPacket.chunk = chunk;
+        player.getPlayerConnection().sendPacket(chunkDataPacket);
     }
 
     protected Chunk createChunk(int chunkX, int chunkZ) {
@@ -161,7 +170,7 @@ public class Instance implements BlockModifier {
 
     protected void sendChunkUpdate(Chunk chunk) {
         ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = false; // TODO partial chunk data
+        chunkDataPacket.fullChunk = false;
         chunkDataPacket.chunk = chunk;
         getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
     }

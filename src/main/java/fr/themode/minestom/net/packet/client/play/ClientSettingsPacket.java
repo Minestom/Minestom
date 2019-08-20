@@ -1,23 +1,17 @@
 package fr.themode.minestom.net.packet.client.play;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.Utils;
 
-public class ClientSettingsPacket implements ClientPlayPacket {
+public class ClientSettingsPacket extends ClientPlayPacket {
 
-    private String locale;
-    private byte viewDistance;
+    public String locale;
+    public byte viewDistance;
     // TODO chat mode
-    private boolean chatColors;
-    private byte displayedSkinParts;
+    public boolean chatColors;
+    public byte displayedSkinParts;
     // TODO main hand
-
-    @Override
-    public void process(Player player) {
-
-    }
 
     @Override
     public void read(Buffer buffer) {

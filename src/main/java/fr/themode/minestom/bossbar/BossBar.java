@@ -81,12 +81,12 @@ public class BossBar implements Viewable {
         updateStyle();
     }
 
-    public void remove() {
+    public void delete() {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.REMOVE;
         sendPacket(bossBarPacket);
-        // TODO remove bar from player class
+        getViewers().forEach(player -> player.refreshRemoveBossbar(this));
     }
 
     private void addToPlayer(Player player) {

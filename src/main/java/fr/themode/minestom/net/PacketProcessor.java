@@ -14,7 +14,9 @@ import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static fr.themode.minestom.net.protocol.MinecraftProtocol.PACKET_ID_IDENTIFIER;
@@ -38,9 +40,13 @@ public class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
+    private List<Integer> printBlackList = Arrays.asList(17);
+
     public void process(Connection connection, Packet packet) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         int id = packet.get(PACKET_ID_IDENTIFIER);
-        // System.out.println("RECEIVED ID: " + id);
+        if (!printBlackList.contains(id)) {
+            // System.out.println("RECEIVED ID: " + id);
+        }
         Buffer buffer = packet.getPayload();
         connectionPlayerConnectionMap.get(connection);
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(connection, c -> new PlayerConnection(c));
@@ -61,7 +67,7 @@ public class PacketProcessor {
                 Player player = connectionManager.getPlayer(playerConnection);
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketClass(id).getDeclaredConstructor().newInstance();
                 playPacket.read(buffer);
-                playPacket.process(player);
+                player.addPacketToQueue(playPacket); // Processed during player tick update
                 break;
             case LOGIN:
                 ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketClass(id).getDeclaredConstructor().newInstance();

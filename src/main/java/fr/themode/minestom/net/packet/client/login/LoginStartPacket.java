@@ -120,6 +120,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
                 ChickenCreature chickenCreature = new ChickenCreature();
                 chickenCreature.refreshPosition(0 + (double) x * 1, 5, 0 + (double) z * 1);
                 chickenCreature.setInstance(instance);
+                if (x == 3 && z == 3) {
+                    //chickenCreature.addPassenger(player);
+                }
             }
 
 
@@ -160,7 +163,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         inv.setItemStack(0, new ItemStack(1, (byte) 1));
         player.openInventory(inv);
         inv.setItemStack(1, new ItemStack(1, (byte) 2));
-        inv.updateItems();
+        //inv.updateItems();
 
         BossBar bossBar = new BossBar("Le titre", BarColor.BLUE, BarDivision.SEGMENT_12);
         bossBar.setProgress(0.75f);

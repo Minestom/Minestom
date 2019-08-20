@@ -1,17 +1,9 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.Viewable;
-import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-public abstract class EntityCreature extends LivingEntity implements Viewable {
-
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+public abstract class EntityCreature extends LivingEntity {
 
     public EntityCreature(int entityType) {
         super(entityType);
@@ -53,7 +45,7 @@ public abstract class EntityCreature extends LivingEntity implements Viewable {
 
     @Override
     public void addViewer(Player player) {
-        this.viewers.add(player);
+        super.addViewer(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         EntityPacket entityPacket = new EntityPacket();
@@ -74,24 +66,5 @@ public abstract class EntityCreature extends LivingEntity implements Viewable {
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
         playerConnection.sendPacket(entityMetaDataPacket);
-    }
-
-    @Override
-    public void removeViewer(Player player) {
-        synchronized (viewers) {
-            if (!viewers.contains(player))
-                return;
-            this.viewers.remove(player);
-            // TODO send packet to remove entity
-        }
-    }
-
-    @Override
-    public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
-    }
-
-    protected void sendPacketToViewers(ServerPacket packet) {
-        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
     }
 }

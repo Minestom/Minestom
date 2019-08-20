@@ -24,5 +24,6 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x09, ClientClickWindowPacket.class);
         register(0x0A, ClientCloseWindow.class);
         register(0x07, ClientConfirmTransactionPacket.class);
+        register(0x1C, ClientSteerVehiclePacket.class);
     }
 }

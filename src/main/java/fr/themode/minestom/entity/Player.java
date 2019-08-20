@@ -3,18 +3,22 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
+import fr.themode.minestom.event.BlockPlaceEvent;
+import fr.themode.minestom.event.PickupItemEvent;
+import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.GroupedCollections;
 import fr.themode.minestom.utils.Position;
 
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Player extends LivingEntity {
@@ -23,6 +27,7 @@ public class Player extends LivingEntity {
 
     private String username;
     private PlayerConnection playerConnection;
+    private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
 
     private GameMode gameMode;
     private PlayerInventory inventory;
@@ -35,6 +40,10 @@ public class Player extends LivingEntity {
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
 
+    // Vehicle
+    private float sideways;
+    private float forward;
+
     // TODO set proper UUID
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(93); // TODO correct ?
@@ -43,10 +52,31 @@ public class Player extends LivingEntity {
         this.playerConnection = playerConnection;
 
         this.inventory = new PlayerInventory(this);
+
+        /*setEventCallback(PickupItemEvent.class, event -> {
+            sendMessage("Hey you're trying to pick an item!");
+            event.setCancelled(true);
+        });*/
+
+        /*setEventCallback(StartDiggingEvent.class, event -> {
+            Random random = new Random();
+            boolean cancel = random.nextBoolean();
+            event.setCancelled(cancel);
+            sendMessage("Cancelled: " + cancel);
+        });*/
+
+        setEventCallback(BlockPlaceEvent.class, event -> {
+            event.setCancelled(true);
+            sendMessage("CANCELLED");
+        });
     }
 
     @Override
     public void update() {
+        while (!packets.isEmpty()) {
+            ClientPlayPacket packet = packets.remove();
+            packet.process(this);
+        }
 
         // Target block stage
         if (instance != null && targetCustomBlock != null) {
@@ -64,13 +94,30 @@ public class Player extends LivingEntity {
 
         // Item pickup
         if (instance != null) {
-            GroupedCollections<ObjectEntity> objectEntities = instance.getObjectEntities();
+            Chunk chunk = instance.getChunkAt(getX(), getZ());
+            Set<ObjectEntity> objectEntities = chunk.getObjectEntities();
             for (ObjectEntity objectEntity : objectEntities) {
                 if (objectEntity instanceof ItemEntity) {
+                    ItemEntity itemEntity = (ItemEntity) objectEntity;
+                    if (!itemEntity.isPickable())
+                        continue;
                     float distance = getDistance(objectEntity);
-                    if (distance <= 1) { // FIXME set correct value
-                        getInventory().addItemStack(((ItemEntity) objectEntity).getItemStack());
-                        objectEntity.remove();
+                    if (distance <= 2.04) {
+                        synchronized (itemEntity) {
+                            if (itemEntity.shouldRemove())
+                                continue;
+                            ItemStack item = itemEntity.getItemStack();
+                            PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
+                            callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                                CollectItemPacket collectItemPacket = new CollectItemPacket();
+                                collectItemPacket.collectedEntityId = itemEntity.getEntityId();
+                                collectItemPacket.collectorEntityId = getEntityId();
+                                collectItemPacket.pickupItemCount = item.getAmount();
+                                instance.getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(collectItemPacket));
+                                getInventory().addItemStack(item);
+                                objectEntity.remove();
+                            });
+                        }
                     }
                 }
             }
@@ -108,11 +155,11 @@ public class Player extends LivingEntity {
         particlePacket.x = x;
         particlePacket.y = y;
         particlePacket.z = z;
-        particlePacket.offsetX = 0.55f;
-        particlePacket.offsetY = 0.75f;
-        particlePacket.offsetZ = 0.55f;
-        particlePacket.particleData = 0.25f;
-        particlePacket.particleCount = 100;
+        particlePacket.offsetX = 0.4f;
+        particlePacket.offsetY = 0.65f;
+        particlePacket.offsetZ = 0.4f;
+        particlePacket.particleData = 0.3f;
+        particlePacket.particleCount = 75;
         particlePacket.blockId = blockId;
         playerConnection.sendPacket(particlePacket);
     }
@@ -187,6 +234,14 @@ public class Player extends LivingEntity {
         return Collections.unmodifiableSet(bossBars);
     }
 
+    public float getVehicleSideways() {
+        return sideways;
+    }
+
+    public float getVehicleForward() {
+        return forward;
+    }
+
     public void openInventory(Inventory inventory) {
         if (inventory == null)
             throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
@@ -216,6 +271,10 @@ public class Player extends LivingEntity {
         }
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
+    }
+
+    public void addPacketToQueue(ClientPlayPacket packet) {
+        this.packets.add(packet);
     }
 
     public void refreshGameMode(GameMode gameMode) {
@@ -269,6 +328,11 @@ public class Player extends LivingEntity {
 
     public void refreshRemoveBossbar(BossBar bossBar) {
         this.bossBars.remove(bossBar);
+    }
+
+    public void refreshVehicleSteer(float sideways, float forward) {
+        this.sideways = sideways;
+        this.forward = forward;
     }
 
     public long getLastKeepAlive() {

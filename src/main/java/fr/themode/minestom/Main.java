@@ -10,6 +10,7 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.BlockManager;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
+import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
@@ -21,9 +22,12 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 
+    public static final int TICK_MS = 50;
+
     // Networking
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
+    private static PacketListenerManager packetListenerManager;
     private static Server server;
 
     // In-Game Manager
@@ -34,6 +38,7 @@ public class Main {
     public static void main(String[] args) {
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
+        packetListenerManager = new PacketListenerManager();
 
         instanceManager = new InstanceManager();
         blockManager = new BlockManager();
@@ -95,7 +100,7 @@ public class Main {
         server.bind(25565);
         System.out.println("Server started");
 
-        long tickDistance = 50 * 1000000; // 50 ms
+        long tickDistance = TICK_MS * 1000000;
         long nextTick = System.nanoTime();
         long currentTime;
         while (true) {
@@ -119,6 +124,10 @@ public class Main {
                 nextTick = currentTime + tickDistance - (currentTime - nextTick);
             }
         }
+    }
+
+    public static PacketListenerManager getPacketListenerManager() {
+        return packetListenerManager;
     }
 
     public static Server getServer() {

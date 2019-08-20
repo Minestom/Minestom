@@ -1,14 +1,26 @@
 package fr.themode.minestom.entity;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.Main;
+import fr.themode.minestom.Viewable;
+import fr.themode.minestom.event.Callback;
+import fr.themode.minestom.event.CancellableEvent;
+import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.play.SetPassengersPacket;
 import fr.themode.minestom.utils.Utils;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class Entity {
+public abstract class Entity implements Viewable {
 
     private static AtomicInteger lastEntityId = new AtomicInteger();
 
@@ -27,6 +39,12 @@ public abstract class Entity {
     protected double x, y, z;
     protected float yaw, pitch;
     private int id;
+
+    protected Entity vehicle;
+    private Map<Class<Event>, Callback> eventCallbacks = new ConcurrentHashMap<>();
+    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private Set<Entity> passengers = new CopyOnWriteArraySet<>();
+
     // Metadata
     protected boolean onFire;
     protected UUID uuid;
@@ -61,10 +79,51 @@ public abstract class Entity {
 
     public abstract void update();
 
+    @Override
+    public void addViewer(Player player) {
+        this.viewers.add(player);
+    }
+
+    @Override
+    public void removeViewer(Player player) {
+        synchronized (viewers) {
+            if (!viewers.contains(player))
+                return;
+            this.viewers.remove(player);
+            // TODO send packet to remove entity
+        }
+    }
+
+    @Override
+    public Set<Player> getViewers() {
+        return Collections.unmodifiableSet(viewers);
+    }
+
     public void tick() {
         if (shouldUpdate()) {
             update();
             this.lastUpdate = System.currentTimeMillis();
+        }
+    }
+
+    public <E extends Event> void setEventCallback(Class<E> eventClass, Callback<E> callback) {
+        this.eventCallbacks.put((Class<Event>) eventClass, callback);
+    }
+
+    public <E extends Event> Callback<E> getEventCallback(Class<E> eventClass) {
+        return this.eventCallbacks.getOrDefault(eventClass, null);
+    }
+
+    public <E extends Event> void callEvent(Class<E> eventClass, E event) {
+        Callback<E> callback = getEventCallback(eventClass);
+        if (callback != null)
+            getEventCallback(eventClass).run(event);
+    }
+
+    public <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable runnable) {
+        callEvent(eventClass, event);
+        if (!event.isCancelled()) {
+            runnable.run();
         }
     }
 
@@ -103,6 +162,25 @@ public abstract class Entity {
 
     public float getDistance(Entity entity) {
         return (float) Math.sqrt(Math.pow(entity.getX() - getX(), 2) + Math.pow(entity.getY() - getY(), 2) + Math.pow(entity.getZ() - getZ(), 2));
+    }
+
+    public void addPassenger(Entity entity) {
+        this.passengers.add(entity);
+        entity.vehicle = this;
+        if (instance != null) {
+            SetPassengersPacket passengersPacket = new SetPassengersPacket();
+            passengersPacket.vehicleEntityId = getEntityId();
+            passengersPacket.passengersId = new int[]{entity.getEntityId()};
+            sendPacketToViewers(passengersPacket);
+        }
+    }
+
+    public boolean hasPassenger() {
+        return !passengers.isEmpty();
+    }
+
+    public Set<Entity> getPassengers() {
+        return Collections.unmodifiableSet(passengers);
     }
 
     public void refreshPosition(double x, double y, double z) {
@@ -150,6 +228,10 @@ public abstract class Entity {
 
     public void remove() {
         this.shouldRemove = true;
+    }
+
+    protected void sendPacketToViewers(ServerPacket packet) {
+        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
     }
 
     public Buffer getMetadataBuffer() {
@@ -222,7 +304,7 @@ public abstract class Entity {
     }
 
     private boolean shouldUpdate() {
-        return (float) (System.currentTimeMillis() - lastUpdate) >= 50f * 0.9f; // Margin of error
+        return (float) (System.currentTimeMillis() - lastUpdate) >= Main.TICK_MS * 0.9f; // Margin of error
     }
 
     public enum Pose {

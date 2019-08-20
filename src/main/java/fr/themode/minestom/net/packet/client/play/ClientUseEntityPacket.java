@@ -5,7 +5,7 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.Utils;
 
-public class ClientUseEntityPacket implements ClientPlayPacket {
+public class ClientUseEntityPacket extends ClientPlayPacket {
 
     private int target;
     private Type type;
@@ -13,11 +13,6 @@ public class ClientUseEntityPacket implements ClientPlayPacket {
     private float y;
     private float z;
     private Player.Hand hand;
-
-    @Override
-    public void process(Player player) {
-
-    }
 
     @Override
     public void read(Buffer buffer) {
@@ -32,7 +27,7 @@ public class ClientUseEntityPacket implements ClientPlayPacket {
             this.hand = Player.Hand.values()[Utils.readVarInt(buffer)];
     }
 
-    public static enum Type {
+    public enum Type {
 
         INTERACT,
         ATTACK,
