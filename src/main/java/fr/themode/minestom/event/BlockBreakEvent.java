@@ -1,16 +1,16 @@
 package fr.themode.minestom.event;
 
-import fr.themode.minestom.utils.Position;
+import fr.themode.minestom.utils.BlockPosition;
 
 public class BlockBreakEvent extends CancellableEvent {
 
-    private Position position;
+    private BlockPosition blockPosition;
 
-    public BlockBreakEvent(Position position) {
-        this.position = position;
+    public BlockBreakEvent(BlockPosition blockPosition) {
+        this.blockPosition = blockPosition;
     }
 
-    public Position getPosition() {
-        return position;
+    public BlockPosition getBlockPosition() {
+        return blockPosition;
     }
 }

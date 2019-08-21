@@ -7,16 +7,16 @@ import fr.themode.minestom.utils.Utils;
 
 public class ClientUseEntityPacket extends ClientPlayPacket {
 
-    private int target;
-    private Type type;
-    private float x;
-    private float y;
-    private float z;
-    private Player.Hand hand;
+    public int targetId;
+    public Type type;
+    public float x;
+    public float y;
+    public float z;
+    public Player.Hand hand;
 
     @Override
     public void read(Buffer buffer) {
-        this.target = Utils.readVarInt(buffer);
+        this.targetId = Utils.readVarInt(buffer);
         this.type = Type.values()[Utils.readVarInt(buffer)];
         if (this.type == Type.INTERACT_AT) {
             this.x = buffer.getFloat();
@@ -28,7 +28,6 @@ public class ClientUseEntityPacket extends ClientPlayPacket {
     }
 
     public enum Type {
-
         INTERACT,
         ATTACK,
         INTERACT_AT;

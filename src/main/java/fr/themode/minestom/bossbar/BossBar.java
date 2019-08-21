@@ -85,7 +85,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.REMOVE;
-        sendPacket(bossBarPacket);
+        sendPacketToViewers(bossBarPacket);
         getViewers().forEach(player -> player.refreshRemoveBossbar(this));
     }
 
@@ -113,7 +113,7 @@ public class BossBar implements Viewable {
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_TITLE;
         bossBarPacket.title = title;
-        sendPacket(bossBarPacket);
+        sendPacketToViewers(bossBarPacket);
     }
 
     private void updateProgress() {
@@ -121,7 +121,7 @@ public class BossBar implements Viewable {
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_HEALTH;
         bossBarPacket.health = progress;
-        sendPacket(bossBarPacket);
+        sendPacketToViewers(bossBarPacket);
     }
 
     private void updateStyle() {
@@ -129,10 +129,6 @@ public class BossBar implements Viewable {
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_STYLE;
         bossBarPacket.color = color;
-        sendPacket(bossBarPacket);
-    }
-
-    private void sendPacket(BossBarPacket bossBarPacket) {
-        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(bossBarPacket));
+        sendPacketToViewers(bossBarPacket);
     }
 }

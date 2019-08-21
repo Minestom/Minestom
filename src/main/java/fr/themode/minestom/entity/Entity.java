@@ -8,22 +8,18 @@ import fr.themode.minestom.event.CancellableEvent;
 import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
-import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
-import fr.themode.minestom.net.packet.server.play.EntityMetaDataPacket;
-import fr.themode.minestom.net.packet.server.play.SetPassengersPacket;
+import fr.themode.minestom.net.packet.server.play.*;
+import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Utils;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Entity implements Viewable {
 
+    private static Map<Integer, Entity> entityById = new HashMap<>();
     private static AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
@@ -37,9 +33,8 @@ public abstract class Entity implements Viewable {
     protected static final byte METADATA_BOOLEAN = 7;
 
     protected Instance instance;
+    protected Position position;
     protected double lastX, lastY, lastZ;
-    protected double x, y, z;
-    protected float yaw, pitch;
     protected float lastYaw, lastPitch;
     private int id;
 
@@ -48,12 +43,16 @@ public abstract class Entity implements Viewable {
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Set<Entity> passengers = new CopyOnWriteArraySet<>();
 
-    // Metadata
-    protected boolean onFire;
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
-    protected boolean crouched;
     private boolean shouldRemove;
+    private long scheduledRemoveTime;
+    private int entityType;
+    private long lastUpdate;
+
+    // Metadata
+    protected boolean onFire;
+    protected boolean crouched;
     protected boolean UNUSED_METADATA;
     protected boolean sprinting;
     protected boolean swimming;
@@ -66,21 +65,40 @@ public abstract class Entity implements Viewable {
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
-    private int entityType;
-    private long lastUpdate;
 
     public Entity(int entityType) {
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
+        this.position = new Position();
+
+        synchronized (entityById) {
+            entityById.put(id, this);
+        }
     }
 
+    public static Entity getEntity(int id) {
+        synchronized (entityById) {
+            return entityById.get(id);
+        }
+    }
 
     private static int generateId() {
         return lastEntityId.incrementAndGet();
     }
 
     public abstract void update();
+
+    public void teleport(Position position) {
+        if (isChunkUnloaded(position.getX(), position.getZ()))
+            return;
+
+        EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
+        entityTeleportPacket.entityId = getEntityId();
+        entityTeleportPacket.position = position;
+        entityTeleportPacket.onGround = true;
+        sendPacketToViewers(entityTeleportPacket);
+    }
 
     @Override
     public void addViewer(Player player) {
@@ -105,6 +123,13 @@ public abstract class Entity implements Viewable {
     }
 
     public void tick() {
+        if (scheduledRemoveTime != 0) { // Any entity with scheduled remove does not update
+            boolean finished = System.currentTimeMillis() >= scheduledRemoveTime;
+            if (finished) {
+                remove();
+            }
+            return;
+        }
         if (shouldUpdate()) {
             update();
             this.lastUpdate = System.currentTimeMillis();
@@ -166,16 +191,17 @@ public abstract class Entity implements Viewable {
     }
 
     public float getDistance(Entity entity) {
-        return (float) Math.sqrt(Math.pow(entity.getX() - getX(), 2) + Math.pow(entity.getY() - getY(), 2) + Math.pow(entity.getZ() - getZ(), 2));
+        return getPosition().getDistance(entity.getPosition());
     }
 
     public void addPassenger(Entity entity) {
+        // TODO if entity already has a vehicle, leave it before?
         this.passengers.add(entity);
         entity.vehicle = this;
         if (instance != null) {
             SetPassengersPacket passengersPacket = new SetPassengersPacket();
             passengersPacket.vehicleEntityId = getEntityId();
-            passengersPacket.passengersId = new int[]{entity.getEntityId()};
+            passengersPacket.passengersId = new int[]{entity.getEntityId()}; // TODO all passengers not only the new
             sendPacketToViewers(passengersPacket);
         }
     }
@@ -188,18 +214,29 @@ public abstract class Entity implements Viewable {
         return Collections.unmodifiableSet(passengers);
     }
 
+    public void triggerStatus(byte status) {
+        EntityStatusPacket statusPacket = new EntityStatusPacket();
+        statusPacket.entityId = getEntityId();
+        statusPacket.status = status;
+        sendPacketToViewers(statusPacket);
+    }
+
     public void setOnFire(boolean fire) {
         this.onFire = fire;
         sendMetadata(0);
     }
 
-    public void refreshPosition(double x, double y, double z) {
-        this.lastX = this.x;
-        this.lastY = this.y;
-        this.lastZ = this.z;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public boolean isChunkUnloaded(float x, float z) {
+        return getInstance().getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16)) == null;
+    }
+
+    public void refreshPosition(float x, float y, float z) {
+        this.lastX = position.getX();
+        this.lastY = position.getY();
+        this.lastZ = position.getZ();
+        position.setX(x);
+        position.setY(y);
+        position.setZ(z);
 
         Instance instance = getInstance();
         if (instance != null) {
@@ -217,10 +254,10 @@ public abstract class Entity implements Viewable {
     }
 
     public void refreshView(float yaw, float pitch) {
-        this.lastYaw = this.yaw;
-        this.lastPitch = this.pitch;
-        this.yaw = yaw;
-        this.pitch = pitch;
+        this.lastYaw = position.getYaw();
+        this.lastPitch = position.getPitch();
+        position.setYaw(yaw);
+        position.setPitch(pitch);
     }
 
     public void refreshSneaking(boolean sneaking) {
@@ -233,39 +270,23 @@ public abstract class Entity implements Viewable {
         sendMetadata(0);
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getZ() {
-        return z;
-    }
-
-    public float getYaw() {
-        return yaw;
-    }
-
-    public float getPitch() {
-        return pitch;
+    public Position getPosition() {
+        return position;
     }
 
     public void remove() {
         this.shouldRemove = true;
+        synchronized (entityById) {
+            entityById.remove(id);
+        }
     }
 
-    public void sendPacketToViewers(ServerPacket packet) {
-        getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
-    }
-
-    public void sendPacketsToViewers(ServerPacket... packets) {
-        getViewers().forEach(player -> {
-            for (ServerPacket packet : packets)
-                player.getPlayerConnection().sendPacket(packet);
-        });
+    public void scheduleRemove(long delay) {
+        if (delay == 0) { // Cancel the scheduled remove
+            this.scheduledRemoveTime = 0;
+            return;
+        }
+        this.scheduledRemoveTime = System.currentTimeMillis() + delay;
     }
 
     public Buffer getMetadataBuffer() {

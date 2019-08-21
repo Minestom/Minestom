@@ -4,9 +4,7 @@ import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -125,16 +123,16 @@ public class Utils {
         buffer.putLong((((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF));
     }
 
-    public static void writePosition(Buffer buffer, Position position) {
-        writePosition(buffer, position.getX(), position.getY(), position.getZ());
+    public static void writePosition(Buffer buffer, BlockPosition blockPosition) {
+        writePosition(buffer, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
-    public static Position readPosition(Buffer buffer) {
+    public static BlockPosition readPosition(Buffer buffer) {
         long val = buffer.getLong();
         int x = (int) (val >> 38);
         int y = (int) (val & 0xFFF);
         int z = (int) (val << 26 >> 38);
-        return new Position(x, y, z);
+        return new BlockPosition(x, y, z);
     }
 
     public static void writeUuid(Buffer buffer, UUID uuid) {
@@ -153,8 +151,13 @@ public class Utils {
         }
     }
 
-    public static void writeBlocks(Buffer buffer, Short[] blocksId, int bitsPerEntry) {
-        buffer.putShort((short) Arrays.stream(blocksId).filter(customBlock -> customBlock != 0).collect(Collectors.toList()).size());
+    public static void writeBlocks(Buffer buffer, short[] blocksId, int bitsPerEntry) {
+        short count = 0;
+        for (short id : blocksId)
+            if (id != 0)
+                count++;
+
+        buffer.putShort(count);
         buffer.putByte((byte) bitsPerEntry);
         int[] blocksData = new int[16 * 16 * 16];
         for (int y = 0; y < 16; y++) {

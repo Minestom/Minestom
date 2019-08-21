@@ -8,6 +8,7 @@ import fr.themode.minestom.event.BlockBreakEvent;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.GroupedCollections;
 import fr.themode.minestom.utils.Position;
 
@@ -51,13 +52,13 @@ public class Instance implements BlockModifier {
         }
     }
 
-    public void breakBlock(Player player, Position position, short blockId) {
-        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(position);
+    public void breakBlock(Player player, BlockPosition blockPosition, short blockId) {
+        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(blockPosition);
         player.callEvent(BlockBreakEvent.class, blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
-            int x = position.getX();
-            int y = position.getY();
-            int z = position.getZ();
+            int x = blockPosition.getX();
+            int y = blockPosition.getY();
+            int z = blockPosition.getZ();
             setBlock(x, y, z, (short) 0);
             ParticlePacket particlePacket = new ParticlePacket(); // TODO change by a proper particle API
             particlePacket.particleId = 3; // Block particle
@@ -74,12 +75,12 @@ public class Instance implements BlockModifier {
             player.getPlayerConnection().sendPacket(particlePacket);
             player.sendPacketToViewers(particlePacket);
         } else {
-            sendChunkUpdate(player, getChunkAt(position));
+            sendChunkUpdate(player, getChunkAt(blockPosition));
         }
     }
 
-    public void breakBlock(Player player, Position position, CustomBlock customBlock) {
-        breakBlock(player, position, customBlock.getType());
+    public void breakBlock(Player player, BlockPosition blockPosition, CustomBlock customBlock) {
+        breakBlock(player, blockPosition, customBlock.getType());
     }
 
     public Chunk loadChunk(int chunkX, int chunkZ) {
@@ -92,8 +93,8 @@ public class Instance implements BlockModifier {
         return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
-    public short getBlockId(Position position) {
-        return getBlockId(position.getX(), position.getY(), position.getZ());
+    public short getBlockId(BlockPosition blockPosition) {
+        return getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
@@ -113,6 +114,10 @@ public class Instance implements BlockModifier {
         int chunkX = Math.floorDiv((int) x, 16);
         int chunkZ = Math.floorDiv((int) z, 16);
         return getChunk(chunkX, chunkZ);
+    }
+
+    public Chunk getChunkAt(BlockPosition blockPosition) {
+        return getChunkAt(blockPosition.getX(), blockPosition.getZ());
     }
 
     public Chunk getChunkAt(Position position) {
@@ -143,7 +148,7 @@ public class Instance implements BlockModifier {
             getPlayers().forEach(p -> p.addViewer(player));
         }
 
-        Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
+        Chunk chunk = getChunkAt(entity.getPosition());
         chunk.addEntity(entity);
     }
 
@@ -161,7 +166,7 @@ public class Instance implements BlockModifier {
             entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
         }
 
-        Chunk chunk = getChunkAt(entity.getX(), entity.getZ());
+        Chunk chunk = getChunkAt(entity.getPosition());
         chunk.removeEntity(entity);
     }
 

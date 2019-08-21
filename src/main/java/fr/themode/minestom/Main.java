@@ -34,7 +34,7 @@ public class Main {
     private static BlockManager blockManager;
     private static EntityManager entityManager;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
@@ -95,28 +95,28 @@ public class Main {
         System.out.println("Server started");
 
         long tickDistance = TICK_MS * 1000000;
-        long nextTick = System.nanoTime();
         long currentTime;
         while (true) {
             currentTime = System.nanoTime();
-            if (currentTime >= nextTick) {
-                // Tick
 
-                // Keep Alive Handling
-                server.getConnections().stream().filter(connection -> packetProcessor.hasPlayerConnection(connection) && connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null && System.currentTimeMillis() - connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)).getLastKeepAlive() > 20000).map(connection -> connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection))).forEach(player -> {
-                    long id = System.currentTimeMillis();
-                    player.refreshKeepAlive(id);
-                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
-                    player.getPlayerConnection().sendPacket(keepAlivePacket);
-                });
+            // Keep Alive Handling
+            server.getConnections().stream().filter(connection -> packetProcessor.hasPlayerConnection(connection) && connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null && System.currentTimeMillis() - connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)).getLastKeepAlive() > 20000).map(connection -> connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection))).forEach(player -> {
+                long id = System.currentTimeMillis();
+                player.refreshKeepAlive(id);
+                KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
+                player.getPlayerConnection().sendPacket(keepAlivePacket);
+            });
 
-                // Entities update
-                entityManager.update();
+            // Entities update
+            entityManager.update();
 
-                // Set next tick update time
-                currentTime = System.nanoTime();
-                nextTick = currentTime + tickDistance - (currentTime - nextTick);
-            }
+            // Sleep until next tick
+            long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
+
+            //String perfMessage = "Online: " + getConnectionManager().getOnlinePlayers().size() + " Tick time: " + (TICK_MS - sleepTime) + " ms";
+            //getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(perfMessage));
+
+            Thread.sleep(sleepTime);
         }
     }
 

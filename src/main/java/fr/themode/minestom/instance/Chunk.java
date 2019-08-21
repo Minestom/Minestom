@@ -17,8 +17,9 @@ public class Chunk {
     protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
     protected Set<Player> players = new CopyOnWriteArraySet<>();
-    private int chunkX, chunkZ;
+
     private Biome biome;
+    private int chunkX, chunkZ;
     private short[] blocksId = new short[CHUNK_SIZE];
     private short[] customBlocks = new short[CHUNK_SIZE];
 

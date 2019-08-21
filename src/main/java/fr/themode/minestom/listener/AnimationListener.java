@@ -8,7 +8,7 @@ public class AnimationListener {
 
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         AnimationPacket animationPacket = new AnimationPacket();
-        animationPacket.playerId = player.getEntityId();
+        animationPacket.entityId = player.getEntityId();
         animationPacket.animation = packet.hand == Player.Hand.MAIN ? AnimationPacket.Animation.SWING_MAIN_ARM : AnimationPacket.Animation.SWING_OFF_HAND;
         player.sendPacketToViewers(animationPacket);
     }

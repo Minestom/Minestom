@@ -10,7 +10,7 @@ public class ChickenCreature extends EntityCreature {
 
     @Override
     public void update() {
-        float speed = 0.075f;
+        float speed = 0.05f;
 
         /*if (hasPassenger()) {
             Entity passenger = getPassengers().iterator().next();
@@ -41,6 +41,7 @@ public class ChickenCreature extends EntityCreature {
                 move(x * speed, 0, z * speed);
             }
         }*/
+
         move(0, 0, speed);
     }
 }

@@ -29,7 +29,7 @@ public class ChunkDataPacket implements ServerPacket {
         for (int i = 0; i < 16; i++) {
             // TODO if fullchunk is false then only send changed sections
             mask |= 1 << i;
-            Short[] section = getSection(chunk, i);
+            short[] section = getSection(chunk, i);
             Utils.writeBlocks(blocks, section, 14);
         }
         // Biome data
@@ -72,8 +72,8 @@ public class ChunkDataPacket implements ServerPacket {
         Utils.writeVarInt(buffer, 0);
     }
 
-    private Short[] getSection(Chunk chunk, int section) {
-        Short[] blocks = new Short[16 * 16 * 16];
+    private short[] getSection(Chunk chunk, int section) {
+        short[] blocks = new short[16 * 16 * 16];
         for (byte y = 0; y < 16; y++) {
             for (byte x = 0; x < 16; x++) {
                 for (byte z = 0; z < 16; z++) {

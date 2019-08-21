@@ -28,11 +28,7 @@ public abstract class ObjectEntity extends Entity implements Viewable {
         spawnObjectPacket.entityId = getEntityId();
         spawnObjectPacket.uuid = getUuid();
         spawnObjectPacket.type = getEntityType();
-        spawnObjectPacket.x = getX();
-        spawnObjectPacket.y = getY();
-        spawnObjectPacket.z = getZ();
-        spawnObjectPacket.yaw = getYaw();
-        spawnObjectPacket.pitch = getPitch();
+        spawnObjectPacket.position = getPosition();
         spawnObjectPacket.data = getData();
         EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
         entityMetaDataPacket.entityId = getEntityId();

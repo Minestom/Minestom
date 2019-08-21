@@ -2,13 +2,13 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Position;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
 
 public class BlockBreakAnimationPacket implements ServerPacket {
 
     public int entityId;
-    public Position blockPosition;
+    public BlockPosition blockPosition;
     public byte destroyStage;
 
     @Override

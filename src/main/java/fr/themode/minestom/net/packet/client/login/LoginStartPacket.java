@@ -24,6 +24,7 @@ import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
+import fr.themode.minestom.world.LevelType;
 
 import java.util.UUID;
 
@@ -67,20 +68,24 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connectionManager.createPlayer(playerUuid, username, connection);
         Player player = connectionManager.getPlayer(connection);
         GameMode gameMode = GameMode.SURVIVAL;
+        Dimension dimension = Dimension.OVERWORLD;
+        LevelType levelType = LevelType.DEFAULT;
         float x = 5;
         float y = 5;
         float z = 5;
 
+        player.refreshDimension(dimension);
         player.refreshGameMode(gameMode);
+        player.refreshLevelType(levelType);
         player.refreshPosition(x, y, z);
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = player.getEntityId();
         joinGamePacket.gameMode = gameMode;
-        joinGamePacket.dimension = Dimension.OVERWORLD;
+        joinGamePacket.dimension = dimension;
         joinGamePacket.maxPlayers = 0; // Unused
-        joinGamePacket.levelType = "default";
+        joinGamePacket.levelType = levelType;
         joinGamePacket.viewDistance = 14;
         joinGamePacket.reducedDebugInfo = false;
         connection.sendPacket(joinGamePacket);
@@ -99,11 +104,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.sendPacket(spawnPositionPacket);
 
         PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-        playerPositionAndLookPacket.x = x;
-        playerPositionAndLookPacket.y = y;
-        playerPositionAndLookPacket.z = z;
-        playerPositionAndLookPacket.yaw = 0;
-        playerPositionAndLookPacket.pitch = 0;
+        playerPositionAndLookPacket.position = player.getPosition();
         playerPositionAndLookPacket.flags = 0;
         playerPositionAndLookPacket.teleportId = 42;
         connection.sendPacket(playerPositionAndLookPacket);
@@ -120,12 +121,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
         for (int cx = 0; cx < 4; cx++)
             for (int cz = 0; cz < 4; cz++) {
                 ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(0 + (double) cx * 1, 5, 0 + (double) cz * 1);
-                chickenCreature.setOnFire(true);
+                chickenCreature.refreshPosition(0 + (float) cx * 1, 5, 0 + (float) cz * 1);
+                //chickenCreature.setOnFire(true);
                 chickenCreature.setInstance(instance);
-                if (cx == 3 && cz == 3) {
-                    //chickenCreature.addPassenger(player);
-                }
+                //chickenCreature.addPassenger(player);
             }
 
         PlayerInventory inventory = player.getInventory();

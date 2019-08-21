@@ -2,19 +2,19 @@ package fr.themode.minestom.net.packet.client.play;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
-import fr.themode.minestom.utils.Position;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
 
 public class ClientPlayerDiggingPacket extends ClientPlayPacket {
 
     public Status status;
-    public Position position;
+    public BlockPosition blockPosition;
     public BlockFace blockFace;
 
     @Override
     public void read(Buffer buffer) {
         this.status = Status.values()[Utils.readVarInt(buffer)];
-        this.position = Utils.readPosition(buffer);
+        this.blockPosition = Utils.readPosition(buffer);
         this.blockFace = BlockFace.values()[Utils.readVarInt(buffer)];
     }
 

@@ -19,7 +19,7 @@ public class EntityManager {
 
     public void update() {
         for (Instance instance : instanceManager.getInstances()) {
-            testTick2(instance);
+            testTick2(instance); // TODO optimize update engine for when there are too many entities on one chunk
         }
 
     }

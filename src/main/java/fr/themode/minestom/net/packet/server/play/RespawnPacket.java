@@ -1,4 +1,4 @@
-package fr.themode.minestom.net.packet.server.login;
+package fr.themode.minestom.net.packet.server.play;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.GameMode;
@@ -7,15 +7,11 @@ import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
-public class JoinGamePacket implements ServerPacket {
+public class RespawnPacket implements ServerPacket {
 
-    public int entityId;
-    public GameMode gameMode = GameMode.SURVIVAL;
-    public Dimension dimension = Dimension.OVERWORLD;
-    public byte maxPlayers = 0; // Unused
+    public Dimension dimension;
+    public GameMode gameMode;
     public LevelType levelType;
-    public int viewDistance;
-    public boolean reducedDebugInfo = false;
 
     @Override
     public void write(Buffer buffer) {
@@ -23,17 +19,13 @@ public class JoinGamePacket implements ServerPacket {
         if (gameMode.isHardcore())
             gameModeId |= 8;
 
-        buffer.putInt(entityId);
         buffer.putByte((byte) gameModeId);
         buffer.putInt(dimension.getId());
-        buffer.putByte(maxPlayers);
         Utils.writeString(buffer, levelType.getType());
-        Utils.writeVarInt(buffer, viewDistance);
-        buffer.putBoolean(reducedDebugInfo);
     }
 
     @Override
     public int getId() {
-        return 0x25;
+        return 0x3A;
     }
 }

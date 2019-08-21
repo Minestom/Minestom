@@ -6,13 +6,13 @@ import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerBlockPlacementPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
-import fr.themode.minestom.utils.Position;
+import fr.themode.minestom.utils.BlockPosition;
 
 public class BlockPlacementListener {
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         ClientPlayerDiggingPacket.BlockFace blockFace = packet.blockFace;
-        Position position = packet.position;
+        BlockPosition blockPosition = packet.blockPosition;
 
         Instance instance = player.getInstance();
         if (instance == null)
@@ -25,10 +25,10 @@ public class BlockPlacementListener {
         BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10);
         player.callEvent(BlockPlaceEvent.class, blockPlaceEvent);
         if (!blockPlaceEvent.isCancelled()) {
-            instance.setBlock(position.getX() + offsetX, position.getY() + offsetY, position.getZ() + offsetZ, "custom_block");
+            instance.setBlock(blockPosition.getX() + offsetX, blockPosition.getY() + offsetY, blockPosition.getZ() + offsetZ, "custom_block");
             // TODO consume block in hand for survival players
         } else {
-            Chunk chunk = instance.getChunkAt(position);
+            Chunk chunk = instance.getChunkAt(blockPosition);
             instance.sendChunkUpdate(player, chunk);
         }
         player.getInventory().refreshSlot(player.getHeldSlot());

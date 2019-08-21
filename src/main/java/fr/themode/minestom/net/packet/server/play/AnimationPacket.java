@@ -6,12 +6,12 @@ import fr.themode.minestom.utils.Utils;
 
 public class AnimationPacket implements ServerPacket {
 
-    public int playerId; // FIXME verify if this is only player?
+    public int entityId;
     public Animation animation;
 
     @Override
     public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, playerId);
+        Utils.writeVarInt(buffer, entityId);
         buffer.putByte((byte) animation.ordinal());
     }
 

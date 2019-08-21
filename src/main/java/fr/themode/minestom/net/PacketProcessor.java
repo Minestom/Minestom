@@ -40,12 +40,12 @@ public class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    private List<Integer> printBlackList = Arrays.asList(17);
+    private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
     public void process(Connection connection, Packet packet) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         int id = packet.get(PACKET_ID_IDENTIFIER);
         if (!printBlackList.contains(id)) {
-            // System.out.println("RECEIVED ID: " + id);
+            System.out.println("RECEIVED ID: " + id);
         }
         Buffer buffer = packet.getPayload();
         connectionPlayerConnectionMap.get(connection);
