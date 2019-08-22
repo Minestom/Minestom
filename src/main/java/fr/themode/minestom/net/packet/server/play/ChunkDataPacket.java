@@ -3,13 +3,16 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
 import net.querz.nbt.CompoundTag;
+import net.querz.nbt.DoubleTag;
 import net.querz.nbt.LongArrayTag;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Set;
 
 public class ChunkDataPacket implements ServerPacket {
 
@@ -55,21 +58,43 @@ public class ChunkDataPacket implements ServerPacket {
                 worldSurface[x + z * 16] = 5;
             }
         }
-        CompoundTag compound = new CompoundTag();
-        compound.put("MOTION_BLOCKING", new LongArrayTag(Utils.encodeBlocks(motionBlocking, 9)));
-        compound.put("WORLD_SURFACE", new LongArrayTag(Utils.encodeBlocks(worldSurface, 9)));
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            compound.serialize(new DataOutputStream(outputStream), 100);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        {
+            CompoundTag compound = new CompoundTag();
+            compound.put("MOTION_BLOCKING", new LongArrayTag(Utils.encodeBlocks(motionBlocking, 9)));
+            compound.put("WORLD_SURFACE", new LongArrayTag(Utils.encodeBlocks(worldSurface, 9)));
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            try {
+                compound.serialize(new DataOutputStream(outputStream), 100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            byte[] data = outputStream.toByteArray();
+            buffer.putBytes(data);
         }
-        byte[] data = outputStream.toByteArray();
-        buffer.putBytes(data);
 
         Utils.writeVarInt(buffer, blocks.length());
         buffer.putBuffer(blocks);
-        Utils.writeVarInt(buffer, 0);
+
+        // Block entities
+        Set<Integer> blockEntities = chunk.getBlockEntities();
+        Utils.writeVarInt(buffer, blockEntities.size());
+
+        for (Integer index : blockEntities) {
+            BlockPosition blockPosition = indexToBlockPosition(index);
+            CompoundTag blockEntity = new CompoundTag();
+            blockEntity.put("x", new DoubleTag(blockPosition.getX()));
+            blockEntity.put("y", new DoubleTag(blockPosition.getY()));
+            blockEntity.put("z", new DoubleTag(blockPosition.getZ()));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            try {
+                blockEntity.serialize(new DataOutputStream(os), 100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            byte[] d = os.toByteArray();
+            buffer.putBytes(d);
+        }
     }
 
     private short[] getSection(Chunk chunk, int section) {
@@ -83,6 +108,13 @@ public class ChunkDataPacket implements ServerPacket {
             }
         }
         return blocks;
+    }
+
+    private BlockPosition indexToBlockPosition(int index) {
+        byte z = (byte) (index >> 12 & 0xF);
+        byte y = (byte) (index >> 4 & 0xFF);
+        byte x = (byte) (index >> 0 & 0xF);
+        return new BlockPosition(x + 16 * chunk.getChunkX(), y, z + 16 * chunk.getChunkZ());
     }
 
     @Override

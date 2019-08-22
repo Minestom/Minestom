@@ -13,6 +13,7 @@ import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
@@ -30,17 +31,12 @@ import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
-    private String username;
-
-    // Test
-    private static Instance instance;
-
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         instance = Main.getInstanceManager().createInstance();
         instance.setChunkGenerator(chunkGeneratorDemo);
-        int loopStart = -4;
-        int loopEnd = 4;
+        int loopStart = -2;
+        int loopEnd = 2;
         long time = System.currentTimeMillis();
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
@@ -48,6 +44,11 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
         System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
     }
+
+    // Test
+    private static Instance instance;
+
+    public String username;
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
@@ -128,16 +129,15 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
 
         PlayerInventory inventory = player.getInventory();
-        for (int i = 0; i < 20; i++) {
-            inventory.addItemStack(new ItemStack(1, (byte) 64));
-        }
+        inventory.addItemStack(new ItemStack(Material.BOW, (byte) 1));
+        inventory.addItemStack(new ItemStack(Material.ARROW, (byte) 100));
 
         /*Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
         inv.setItemStack(0, new ItemStack(1, (byte) 1));
         player.openInventory(inv);
         inv.setItemStack(1, new ItemStack(1, (byte) 2));*/
 
-        BossBar bossBar = new BossBar("Le titre", BarColor.BLUE, BarDivision.SEGMENT_12);
+        BossBar bossBar = new BossBar("Bossbar Title", BarColor.BLUE, BarDivision.SEGMENT_12);
         bossBar.setProgress(0.75f);
         bossBar.addViewer(player);
 

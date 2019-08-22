@@ -55,14 +55,15 @@ public class Main {
             public void onDisconnect(Server server, Connection connection) {
                 System.out.println("A DISCONNECTION");
                 if (packetProcessor.hasPlayerConnection(connection)) {
-                    if (connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null) {
-                        Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
-                        player.remove();
+                    Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
+                    if (player != null) {
 
                         Instance instance = player.getInstance();
                         if (instance != null) {
                             instance.removeEntity(player);
                         }
+
+                        player.remove();
 
                         connectionManager.removePlayer(packetProcessor.getPlayerConnection(connection));
                     }
@@ -112,6 +113,7 @@ public class Main {
 
             // Sleep until next tick
             long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
+            sleepTime = Math.max(1, sleepTime);
 
             //String perfMessage = "Online: " + getConnectionManager().getOnlinePlayers().size() + " Tick time: " + (TICK_MS - sleepTime) + " ms";
             //getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(perfMessage));

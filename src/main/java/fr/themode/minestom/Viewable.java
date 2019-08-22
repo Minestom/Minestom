@@ -18,14 +18,30 @@ public interface Viewable {
     }
 
     default void sendPacketToViewers(ServerPacket packet) {
+        if (getViewers().isEmpty())
+            return;
+
+        //Packet p = PacketUtils.writePacket(packet);
         getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
     }
 
     default void sendPacketsToViewers(ServerPacket... packets) {
-        getViewers().forEach(player -> {
-            for (ServerPacket packet : packets)
-                player.getPlayerConnection().sendPacket(packet);
-        });
+        if (getViewers().isEmpty())
+            return;
+
+        for (ServerPacket packet : packets) {
+            //Packet p = PacketUtils.writePacket(packet);
+            getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
+        }
+    }
+
+    default void sendPacketToViewersAndSelf(ServerPacket packet) {
+        if (this instanceof Player) {
+            //Packet p = PacketUtils.writePacket(packet);
+            ((Player) this).getPlayerConnection().sendPacket(packet);
+            if (!getViewers().isEmpty())
+                getViewers().forEach(player -> player.getPlayerConnection().sendPacket(packet));
+        }
     }
 
 }

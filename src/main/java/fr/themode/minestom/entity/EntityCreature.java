@@ -1,6 +1,5 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.net.packet.server.play.EntityMetaDataPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPacket;
 import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
 import fr.themode.minestom.net.packet.server.play.SpawnMobPacket;
@@ -51,11 +50,8 @@ public abstract class EntityCreature extends LivingEntity {
         spawnMobPacket.entityType = getEntityType();
         spawnMobPacket.position = getPosition();
         spawnMobPacket.headPitch = 0;
-        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
-        entityMetaDataPacket.entityId = getEntityId();
-        entityMetaDataPacket.data = getMetadataBuffer();
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
-        playerConnection.sendPacket(entityMetaDataPacket);
+        playerConnection.sendPacket(getMetadataPacket());
     }
 }

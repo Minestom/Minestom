@@ -7,7 +7,7 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public short getType() {
-        return 117;
+        return 1;
     }
 
     @Override

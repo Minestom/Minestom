@@ -60,7 +60,7 @@ public class Instance implements BlockModifier {
             int y = blockPosition.getY();
             int z = blockPosition.getZ();
             setBlock(x, y, z, (short) 0);
-            ParticlePacket particlePacket = new ParticlePacket(); // TODO change by a proper particle API
+            ParticlePacket particlePacket = new ParticlePacket(); // TODO change to a proper particle API
             particlePacket.particleId = 3; // Block particle
             particlePacket.longDistance = false;
             particlePacket.x = x + 0.5f;
@@ -107,7 +107,7 @@ public class Instance implements BlockModifier {
     }
 
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.getOrDefault(getChunkKey(chunkX, chunkZ), null);
+        return chunks.get(getChunkKey(chunkX, chunkZ));
     }
 
     public Chunk getChunkAt(double x, double z) {
@@ -144,6 +144,7 @@ public class Instance implements BlockModifier {
         if (entity instanceof Player) {
             Player player = (Player) entity;
             sendChunks(player);
+            getObjectEntities().forEach(objectEntity -> objectEntity.addViewer(player));
             getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
             getPlayers().forEach(p -> p.addViewer(player));
         }
@@ -164,6 +165,13 @@ public class Instance implements BlockModifier {
             destroyEntitiesPacket.entityIds = new int[]{entity.getEntityId()};
 
             entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
+        } else {
+            // TODO optimize (cache all entities that the player see)
+            Player player = (Player) entity;
+            getObjectEntities().forEach(objectEntity -> objectEntity.removeViewer(player));
+            getCreatures().forEach(entityCreature -> entityCreature.removeViewer(player));
+            getPlayers().forEach(p -> p.removeViewer(player));
+
         }
 
         Chunk chunk = getChunkAt(entity.getPosition());
@@ -190,7 +198,7 @@ public class Instance implements BlockModifier {
         ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
         chunkDataPacket.fullChunk = false;
         chunkDataPacket.chunk = chunk;
-        player.getPlayerConnection().sendPacket(chunkDataPacket);
+        player.getPlayerConnection().sendPacket(chunkDataPacket); // TODO write packet buffer in another thread (Chunk packets are heavy)
     }
 
     protected Chunk createChunk(int chunkX, int chunkZ) {
@@ -216,7 +224,7 @@ public class Instance implements BlockModifier {
         ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
         chunkDataPacket.fullChunk = false;
         chunkDataPacket.chunk = chunk;
-        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket));
+        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket)); // TODO write packet buffer in another thread (Chunk packets are heavy)
     }
 
     private void sendChunks(Player player) {
@@ -224,7 +232,7 @@ public class Instance implements BlockModifier {
         chunkDataPacket.fullChunk = true;
         for (Chunk chunk : getChunks()) {
             chunkDataPacket.chunk = chunk;
-            player.getPlayerConnection().sendPacket(chunkDataPacket);
+            player.getPlayerConnection().sendPacket(chunkDataPacket); // TODO write packet buffer in another thread (Chunk packets are heavy)
         }
     }
 

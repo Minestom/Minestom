@@ -55,14 +55,14 @@ public class BlockBatch implements BlockModifier {
         for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
             Chunk chunk = entry.getKey();
             List<BlockData> dataList = entry.getValue();
-            synchronized (chunk) {
-                batchesPool.submit(() -> {
+            batchesPool.submit(() -> {
+                synchronized (chunk) {
                     for (BlockData data : dataList) {
                         data.apply(chunk);
                     }
                     instance.sendChunkUpdate(chunk); // TODO partial chunk data
-                });
-            }
+                }
+            });
         }
     }
 

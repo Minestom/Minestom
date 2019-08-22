@@ -1,7 +1,6 @@
 package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Viewable;
-import fr.themode.minestom.net.packet.server.play.EntityMetaDataPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
@@ -21,7 +20,7 @@ public abstract class ObjectEntity extends Entity implements Viewable {
 
     @Override
     public void addViewer(Player player) {
-        this.viewers.add(player);
+        super.addViewer(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnObjectPacket spawnObjectPacket = new SpawnObjectPacket();
@@ -30,16 +29,13 @@ public abstract class ObjectEntity extends Entity implements Viewable {
         spawnObjectPacket.type = getEntityType();
         spawnObjectPacket.position = getPosition();
         spawnObjectPacket.data = getData();
-        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
-        entityMetaDataPacket.entityId = getEntityId();
-        entityMetaDataPacket.data = getMetadataBuffer();
         playerConnection.sendPacket(spawnObjectPacket);
-        playerConnection.sendPacket(entityMetaDataPacket);
+        playerConnection.sendPacket(getMetadataPacket());
     }
 
     @Override
     public void removeViewer(Player player) {
-        this.viewers.remove(player);
+        super.removeViewer(player);
     }
 
     @Override

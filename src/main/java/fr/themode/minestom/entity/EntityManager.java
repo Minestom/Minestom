@@ -17,6 +17,7 @@ public class EntityManager {
     private ExecutorService creaturesPool = Executors.newFixedThreadPool(2);
     private ExecutorService playersPool = Executors.newFixedThreadPool(2);
 
+    // TODO API for custom thread division (
     public void update() {
         for (Instance instance : instanceManager.getInstances()) {
             testTick2(instance); // TODO optimize update engine for when there are too many entities on one chunk

@@ -14,7 +14,7 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
     public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
         for (byte x = 0; x < 16; x++)
             for (byte z = 0; z < 16; z++) {
-                if (random.nextInt(2) == 1) {
+                if (random.nextInt(10) > 5) {
                     batch.setBlock(x, (byte) 4, z, (short) 10);
                 } else {
                     batch.setBlock(x, (byte) 4, z, "custom_block");

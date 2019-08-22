@@ -22,24 +22,17 @@ public class BlockPlacementListener {
         int offsetY = blockFace == ClientPlayerDiggingPacket.BlockFace.BOTTOM ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.TOP ? 1 : 0;
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
-        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10);
+        blockPosition.add(offsetX, offsetY, offsetZ);
+        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10, blockPosition);
         player.callEvent(BlockPlaceEvent.class, blockPlaceEvent);
         if (!blockPlaceEvent.isCancelled()) {
-            instance.setBlock(blockPosition.getX() + offsetX, blockPosition.getY() + offsetY, blockPosition.getZ() + offsetZ, "custom_block");
+            instance.setBlock(blockPosition, "custom_block");
             // TODO consume block in hand for survival players
         } else {
             Chunk chunk = instance.getChunkAt(blockPosition);
             instance.sendChunkUpdate(player, chunk);
         }
         player.getInventory().refreshSlot(player.getHeldSlot());
-        /*Random random = new Random();
-        BlockBatch blockBatch = instance.createBlockBatch();
-        for (int x = -64; x < 64; x++)
-            for (int z = -64; z < 64; z++) {
-                if (random.nextInt(100) > 75)
-                    blockBatch.setBlock(x, position.getY() + 1, z, new Block(1));
-            }
-        blockBatch.flush();*/
     }
 
 }

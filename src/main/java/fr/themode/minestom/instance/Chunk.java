@@ -23,6 +23,9 @@ public class Chunk {
     private short[] blocksId = new short[CHUNK_SIZE];
     private short[] customBlocks = new short[CHUNK_SIZE];
 
+    // Block entities
+    private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
+
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
         this.chunkX = chunkX;
@@ -30,9 +33,7 @@ public class Chunk {
     }
 
     protected void setBlock(byte x, byte y, byte z, short blockId) {
-        int index = getIndex(x, y, z);
-        this.blocksId[index] = blockId;
-        this.customBlocks[index] = 0;
+        setBlock(x, y, z, blockId, (short) 0);
     }
 
     protected void setBlock(byte x, byte y, byte z, String blockId) {
@@ -40,9 +41,18 @@ public class Chunk {
         if (customBlock == null)
             throw new IllegalArgumentException("The block " + blockId + " does not exist or isn't registered");
 
+        setBlock(x, y, z, customBlock.getType(), customBlock.getId());
+    }
+
+    private void setBlock(byte x, byte y, byte z, short blockType, short customId) {
         int index = getIndex(x, y, z);
-        this.blocksId[index] = customBlock.getType();
-        this.customBlocks[index] = customBlock.getId();
+        this.blocksId[index] = blockType;
+        this.customBlocks[index] = customId;
+        if (isBlockEntity(blockType)) {
+            blockEntities.add(index);
+        } else {
+            blockEntities.remove(index);
+        }
     }
 
     public short getBlockId(byte x, byte y, byte z) {
@@ -118,6 +128,15 @@ public class Chunk {
 
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
+    }
+
+    private boolean isBlockEntity(short blockId) {
+        // TODO complete
+        return blockId == 2033;
+    }
+
+    public Set<Integer> getBlockEntities() {
+        return blockEntities;
     }
 
     private int getIndex(byte x, byte y, byte z) {

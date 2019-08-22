@@ -3,6 +3,7 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.event.AttackEvent;
+import fr.themode.minestom.event.BlockPlaceEvent;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
@@ -43,6 +44,7 @@ public class Player extends LivingEntity {
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
     private long targetBlockTime;
+    private byte targetLastStage;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
 
@@ -91,6 +93,10 @@ public class Player extends LivingEntity {
             updateHealthPacket.foodSaturation = 0;
             playerConnection.sendPacket(updateHealthPacket);*/
         });
+
+        setEventCallback(BlockPlaceEvent.class, event -> {
+            sendMessage("Placed block!");
+        });
     }
 
     @Override
@@ -108,7 +114,10 @@ public class Player extends LivingEntity {
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
             byte stage = (byte) (since / (timeBreak / animationCount));
-            sendBlockBreakAnimation(targetBlockPosition, stage);// TODO send to all near players
+            if (stage != targetLastStage) {
+                sendBlockBreakAnimation(targetBlockPosition, stage);
+            }
+            this.targetLastStage = stage;
             if (stage > 9) {
                 instance.breakBlock(this, targetBlockPosition, targetCustomBlock);
                 resetTargetBlock();
@@ -138,8 +147,7 @@ public class Player extends LivingEntity {
                                     collectItemPacket.collectedEntityId = itemEntity.getEntityId();
                                     collectItemPacket.collectorEntityId = getEntityId();
                                     collectItemPacket.pickupItemCount = item.getAmount();
-                                    playerConnection.sendPacket(collectItemPacket);
-                                    sendPacketToViewers(collectItemPacket);
+                                    sendPacketToViewersAndSelf(collectItemPacket);
                                     objectEntity.remove();
                                 }
                             });
@@ -220,7 +228,7 @@ public class Player extends LivingEntity {
             for (Player viewer : getViewers()) {
                 EntityTeleportPacket teleportPacket = new EntityTeleportPacket();
                 teleportPacket.entityId = viewer.getEntityId();
-                teleportPacket.position = getPosition();
+                teleportPacket.position = viewer.getPosition();
                 teleportPacket.onGround = viewer.onGround;
                 playerConnection.sendPacket(teleportPacket);
             }
@@ -264,8 +272,7 @@ public class Player extends LivingEntity {
         breakAnimationPacket.entityId = getEntityId() + 1;
         breakAnimationPacket.blockPosition = blockPosition;
         breakAnimationPacket.destroyStage = destroyStage;
-        playerConnection.sendPacket(breakAnimationPacket);
-        sendPacketToViewers(breakAnimationPacket);
+        sendPacketToViewersAndSelf(breakAnimationPacket);
     }
 
     public void sendMessage(String message) {
@@ -275,13 +282,16 @@ public class Player extends LivingEntity {
 
     @Override
     public void teleport(Position position) {
+        if (isChunkUnloaded(position.getX(), position.getZ()))
+            return;
+
         refreshPosition(position.getX(), position.getY(), position.getZ());
         refreshView(position.getYaw(), position.getPitch());
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position;
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = 67;
-        getPlayerConnection().sendPacket(positionAndLookPacket);
+        playerConnection.sendPacket(positionAndLookPacket);
     }
 
     public String getUsername() {

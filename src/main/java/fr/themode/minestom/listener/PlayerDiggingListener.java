@@ -57,6 +57,11 @@ public class PlayerDiggingListener {
                     }
                 }
                 break;
+            case UPDATE_ITEM_STATE:
+                // TODO check if is updatable item
+                //player.refreshActiveHand(false, false, false);
+                //player.sendPacketToViewers(player.getMetadataPacket());
+                break;
         }
     }
 

@@ -10,6 +10,12 @@ public class BlockPosition {
         this.z = z;
     }
 
+    public void add(int x, int y, int z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+
     public int getX() {
         return x;
     }
@@ -33,6 +39,7 @@ public class BlockPosition {
     public void setZ(int z) {
         this.z = z;
     }
+
 
     @Override
     public String toString() {

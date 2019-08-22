@@ -1,12 +1,10 @@
 package fr.themode.minestom.net.player;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.adamaq01.ozao.net.server.Connection;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-
-import static fr.themode.minestom.net.protocol.MinecraftProtocol.PACKET_ID_IDENTIFIER;
+import fr.themode.minestom.utils.PacketUtils;
 
 public class PlayerConnection {
 
@@ -18,13 +16,12 @@ public class PlayerConnection {
         this.connectionState = ConnectionState.UNKNOWN;
     }
 
-    public void sendPacket(ServerPacket serverPacket) {
-        Packet packet = Packet.create();
-        Buffer buffer = packet.getPayload();
-        serverPacket.write(buffer);
-        packet.put(PACKET_ID_IDENTIFIER, serverPacket.getId());
-
+    public void sendPacket(Packet packet) {
         this.connection.sendPacket(packet);
+    }
+
+    public void sendPacket(ServerPacket serverPacket) {
+        sendPacket(PacketUtils.writePacket(serverPacket));
     }
 
     public Connection getConnection() {

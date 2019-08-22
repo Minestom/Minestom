@@ -93,6 +93,8 @@ public abstract class Entity implements Viewable {
         if (isChunkUnloaded(position.getX(), position.getZ()))
             return;
 
+        refreshPosition(position.getX(), position.getY(), position.getZ());
+        refreshView(position.getYaw(), position.getPitch());
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = position;
@@ -289,13 +291,21 @@ public abstract class Entity implements Viewable {
         this.scheduledRemoveTime = System.currentTimeMillis() + delay;
     }
 
+    public EntityMetaDataPacket getMetadataPacket() {
+        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
+        metaDataPacket.entityId = getEntityId();
+        metaDataPacket.data = getMetadataBuffer();
+        return metaDataPacket;
+    }
+
     public Buffer getMetadataBuffer() {
         Buffer buffer = Buffer.create();
         fillMetadataIndex(buffer, 0);
+        fillMetadataIndex(buffer, 1);
         return buffer;
     }
 
-    protected void sendMetadata(int index) {
+    private void sendMetadata(int index) {
         Buffer buffer = Buffer.create();
         fillMetadataIndex(buffer, index);
 

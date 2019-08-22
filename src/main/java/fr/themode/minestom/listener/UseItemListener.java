@@ -13,6 +13,12 @@ public class UseItemListener {
         Player.Hand hand = packet.hand;
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         UseItemEvent useItemEvent = new UseItemEvent(hand, itemStack);
+        player.callEvent(UseItemEvent.class, useItemEvent);
+
+        // TODO check if item in main or off hand is food or item with animation (bow/crossbow/riptide)
+        // TODO in material enum?
+        //player.refreshActiveHand(true, false, false);
+        //player.sendPacketToViewers(player.getMetadataPacket());
     }
 
 }

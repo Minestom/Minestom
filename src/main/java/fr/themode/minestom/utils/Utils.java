@@ -1,6 +1,7 @@
 package fr.themode.minestom.utils;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
@@ -145,10 +146,39 @@ public class Utils {
             buffer.putBoolean(false);
         } else {
             buffer.putBoolean(true);
-            Utils.writeVarInt(buffer, itemStack.getItemId());
+            Utils.writeVarInt(buffer, itemStack.getMaterial().getId());
             buffer.putByte(itemStack.getAmount());
+
+            buffer.putByte((byte) 0x0A); // Compound
+            buffer.putShort((short) 0);
+
+            // Unbreakable
+            if (itemStack.isUnbreakable()) {
+                buffer.putByte((byte) 0x03); // Integer
+                buffer.putString("Unbreakable");
+                buffer.putInt(1);
+            }
+
+            // Display
+            buffer.putByte((byte) 0x0A); // Compound
+            buffer.putString("display");
+
+            if (itemStack.getDisplayName() != null) {
+                buffer.putByte((byte) 0x08);
+                buffer.putString("Name");
+                buffer.putString(Chat.rawText(itemStack.getDisplayName()));
+            }
+
+            // TODO lore
+            buffer.putByte((byte) 0x08);
+            buffer.putString("Lore");
+            buffer.putString(Chat.rawText("a line"));
+
+            buffer.putByte((byte) 0); // End display compound
+
             buffer.putByte((byte) 0); // End nbt TODO
         }
+
     }
 
     public static void writeBlocks(Buffer buffer, short[] blocksId, int bitsPerEntry) {
