@@ -1,15 +1,18 @@
 package fr.themode.minestom.event;
 
+import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.utils.BlockPosition;
 
 public class BlockPlaceEvent extends CancellableEvent {
 
     private short blockId;
     private BlockPosition blockPosition;
+    private Player.Hand hand;
 
-    public BlockPlaceEvent(short blockId, BlockPosition blockPosition) {
+    public BlockPlaceEvent(short blockId, BlockPosition blockPosition, Player.Hand hand) {
         this.blockId = blockId;
         this.blockPosition = blockPosition;
+        this.hand = hand;
     }
 
     public short getBlockId() {
@@ -18,5 +21,9 @@ public class BlockPlaceEvent extends CancellableEvent {
 
     public BlockPosition getBlockPosition() {
         return blockPosition;
+    }
+
+    public Player.Hand getHand() {
+        return hand;
     }
 }

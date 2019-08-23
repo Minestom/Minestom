@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class ChunkBatch implements BlockModifier {
 
@@ -43,7 +44,7 @@ public class ChunkBatch implements BlockModifier {
         this.dataList.add(data);
     }
 
-    public void flush() {
+    public void flush(Consumer<Chunk> callback) {
         synchronized (chunk) {
             batchesPool.submit(() -> {
                 for (BlockData data : dataList) {
@@ -51,6 +52,8 @@ public class ChunkBatch implements BlockModifier {
                 }
                 chunk.refreshDataPacket(); // TODO partial refresh instead of full
                 instance.sendChunkUpdate(chunk); // TODO partial chunk data
+                if (callback != null)
+                    callback.accept(chunk);
             });
         }
     }

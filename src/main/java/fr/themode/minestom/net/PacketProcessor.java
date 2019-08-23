@@ -50,7 +50,7 @@ public class PacketProcessor {
         ConnectionState connectionState = playerConnection.getConnectionState();
 
         if (!printBlackList.contains(id)) {
-            System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
+            //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         }
 
         if (connectionState == ConnectionState.UNKNOWN) {

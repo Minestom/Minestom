@@ -34,7 +34,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    public int getData() {
+    public int getObjectData() {
         return 1;
     }
 

@@ -4,6 +4,7 @@ import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.Utils;
 import net.querz.nbt.CompoundTag;
 import net.querz.nbt.DoubleTag;
@@ -81,7 +82,7 @@ public class ChunkDataPacket implements ServerPacket {
         Utils.writeVarInt(buffer, blockEntities.size());
 
         for (Integer index : blockEntities) {
-            BlockPosition blockPosition = indexToBlockPosition(index);
+            BlockPosition blockPosition = SerializerUtils.indexToBlockPosition(index, chunk.getChunkX(), chunk.getChunkZ());
             CompoundTag blockEntity = new CompoundTag();
             blockEntity.put("x", new DoubleTag(blockPosition.getX()));
             blockEntity.put("y", new DoubleTag(blockPosition.getY()));
@@ -108,13 +109,6 @@ public class ChunkDataPacket implements ServerPacket {
             }
         }
         return blocks;
-    }
-
-    private BlockPosition indexToBlockPosition(int index) {
-        byte z = (byte) (index >> 12 & 0xF);
-        byte y = (byte) (index >> 4 & 0xFF);
-        byte x = (byte) (index >> 0 & 0xF);
-        return new BlockPosition(x + 16 * chunk.getChunkX(), y, z + 16 * chunk.getChunkZ());
     }
 
     @Override

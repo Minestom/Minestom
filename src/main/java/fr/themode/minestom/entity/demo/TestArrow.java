@@ -13,7 +13,7 @@ public class TestArrow extends ObjectEntity {
     }
 
     @Override
-    public int getData() {
+    public int getObjectData() {
         return shooter.getEntityId() + 1;
     }
 

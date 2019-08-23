@@ -2,25 +2,13 @@ package fr.themode.minestom.net.packet.client.login;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
-import fr.themode.minestom.bossbar.BarColor;
-import fr.themode.minestom.bossbar.BarDivision;
-import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.entity.GameMode;
-import fr.themode.minestom.entity.ItemEntity;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.entity.demo.ChickenCreature;
-import fr.themode.minestom.entity.demo.TestArrow;
-import fr.themode.minestom.instance.Instance;
-import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
-import fr.themode.minestom.inventory.PlayerInventory;
-import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.DeclareCommandsPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
@@ -34,21 +22,24 @@ import java.util.UUID;
 public class LoginStartPacket implements ClientPreplayPacket {
 
     // Test
-    private static Instance instance;
+    /*private static Instance instance;
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        instance = Main.getInstanceManager().createInstance();
+        instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        //instance = Main.getInstanceManager().createInstance();
         instance.setChunkGenerator(chunkGeneratorDemo);
         int loopStart = -2;
         int loopEnd = 2;
         long time = System.currentTimeMillis();
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
-                instance.loadChunk(x, z);
+                instance.loadChunk(x, z, chunk -> {
+                    System.out.println("JE SUIS LE CALLBACK CHUNK");
+                });
             }
         System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
-    }
+    }*/
 
     public String username;
 
@@ -73,9 +64,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         GameMode gameMode = GameMode.SURVIVAL;
         Dimension dimension = Dimension.OVERWORLD;
         LevelType levelType = LevelType.DEFAULT;
-        float x = 5;
-        float y = 65;
-        float z = 5;
+        float x = 0;
+        float y = 0;
+        float z = 0;
 
         player.refreshDimension(dimension);
         player.refreshGameMode(gameMode);
@@ -121,10 +112,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // Next is optional TODO put all that somewhere else (LoginEvent)
         // TODO LoginEvent in another thread (here we are in netty thread)
+        System.out.println("ADD WAITING PLAYER");
+        Main.getEntityManager().addWaitingPlayer(player);
 
-        player.setInstance(instance);
 
-        for (int cx = 0; cx < 4; cx++)
+        // TODO REMOVE EVERYTHING DOWN THERE
+        //player.setInstance(instance);
+
+        /*for (int cx = 0; cx < 4; cx++)
             for (int cz = 0; cz < 4; cz++) {
                 ChickenCreature chickenCreature = new ChickenCreature();
                 chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
@@ -140,7 +135,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         /*Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
         inv.setItemStack(0, new ItemStack(1, (byte) 1));
         player.openInventory(inv);
-        inv.setItemStack(1, new ItemStack(1, (byte) 2));*/
+        inv.setItemStack(1, new ItemStack(1, (byte) 2));
 
         BossBar bossBar = new BossBar("Bossbar Title", BarColor.BLUE, BarDivision.SEGMENT_12);
         bossBar.setProgress(0.75f);
@@ -178,7 +173,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         declareCommandsPacket.rootIndex = 0;
 
 
-        connection.sendPacket(declareCommandsPacket);
+        connection.sendPacket(declareCommandsPacket);*/
     }
 
     @Override

@@ -23,9 +23,9 @@ public class Main {
 
     // Thread number
     public static final int THREAD_COUNT_PACKET_WRITER = 3;
+    public static final int THREAD_COUNT_CHUNK_IO = 2;
     public static final int THREAD_COUNT_CHUNK_BATCH = 2;
-    public static final int THREAD_COUNT_OBJECTS_ENTITIES = 2;
-    public static final int THREAD_COUNT_CREATURES_ENTITIES = 2;
+    public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 
     public static final int TICK_MS = 50;

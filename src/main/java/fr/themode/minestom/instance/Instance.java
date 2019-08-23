@@ -7,23 +7,24 @@ import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.BlockBreakEvent;
 import fr.themode.minestom.net.PacketWriter;
-import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.GroupedCollections;
 import fr.themode.minestom.utils.Position;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.io.File;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 public class Instance implements BlockModifier {
 
+    private static ChunkLoaderIO chunkLoaderIO = new ChunkLoaderIO();
+
     private UUID uniqueId;
+    private File folder;
 
     private GroupedCollections<ObjectEntity> objectEntities = new GroupedCollections<>(new CopyOnWriteArrayList<>());
     private GroupedCollections<EntityCreature> creatures = new GroupedCollections<>(new CopyOnWriteArrayList());
@@ -32,8 +33,9 @@ public class Instance implements BlockModifier {
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
 
-    public Instance(UUID uniqueId) {
+    public Instance(UUID uniqueId, File folder) {
         this.uniqueId = uniqueId;
+        this.folder = folder;
     }
 
     @Override
@@ -41,10 +43,12 @@ public class Instance implements BlockModifier {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            chunk.refreshDataPacket();
+            sendChunkUpdate(chunk);
+            /*PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
-            });
+            });*/
         }
     }
 
@@ -53,10 +57,12 @@ public class Instance implements BlockModifier {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            chunk.refreshDataPacket();
+            sendChunkUpdate(chunk);
+            /*PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
-            });
+            });*/
         }
     }
 
@@ -92,9 +98,28 @@ public class Instance implements BlockModifier {
         breakBlock(player, blockPosition, customBlock.getType());
     }
 
-    public Chunk loadChunk(int chunkX, int chunkZ) {
+    public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Chunk chunk = getChunk(chunkX, chunkZ);
-        return chunk == null ? createChunk(chunkX, chunkZ) : chunk; // TODO load from file
+        if (chunk != null) {
+            if (callback != null)
+                callback.accept(chunk);
+        } else {
+            retrieveChunk(chunkX, chunkZ, callback);
+        }
+    }
+
+    public void loadChunk(int chunkX, int chunkZ) {
+        loadChunk(chunkX, chunkZ, null);
+    }
+
+    public void loadChunk(Position position, Consumer<Chunk> callback) {
+        int chunkX = Math.floorDiv((int) position.getX(), 16);
+        int chunkZ = Math.floorDiv((int) position.getY(), 16);
+        loadChunk(chunkX, chunkZ, callback);
+    }
+
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return getChunk(chunkX, chunkZ) != null;
     }
 
     public short getBlockId(int x, int y, int z) {
@@ -132,6 +157,23 @@ public class Instance implements BlockModifier {
     public Chunk getChunkAt(Position position) {
         return getChunkAt(position.getX(), position.getZ());
     }
+
+    public void saveToFolder(Runnable callback) {
+        if (folder == null)
+            throw new UnsupportedOperationException("You cannot save an instance without specified folder.");
+
+        Iterator<Chunk> chunks = getChunks().iterator();
+        while (chunks.hasNext()) {
+            Chunk chunk = chunks.next();
+            boolean isLast = !chunks.hasNext();
+            chunkLoaderIO.saveChunk(chunk, getFolder(), isLast ? callback : null);
+        }
+    }
+
+    public void saveToFolder() {
+        saveToFolder(null);
+    }
+
 
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
@@ -203,26 +245,50 @@ public class Instance implements BlockModifier {
         return uniqueId;
     }
 
-    public void sendChunkUpdate(Player player, Chunk chunk) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = false;
-        chunkDataPacket.chunk = chunk;
-        player.getPlayerConnection().sendPacket(chunkDataPacket); // TODO write packet buffer in another thread (Chunk packets are heavy)
+    public File getFolder() {
+        return folder;
     }
 
-    protected Chunk createChunk(int chunkX, int chunkZ) {
+    public void setFolder(File folder) {
+        this.folder = folder;
+    }
+
+    public void sendChunkUpdate(Player player, Chunk chunk) {
+        Buffer chunkData = chunk.getFullDataPacket();
+        chunkData.getData().retain(1).markReaderIndex();
+        player.getPlayerConnection().sendUnencodedPacket(chunkData);
+        chunkData.getData().resetReaderIndex();
+    }
+
+    protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+        if (folder != null) {
+            // Load from file if possible
+            chunkLoaderIO.loadChunk(chunkX, chunkZ, this, chunk -> {
+                cacheChunk(chunk);
+                if (callback != null)
+                    callback.accept(chunk);
+            });
+        } else {
+            createChunk(chunkX, chunkZ, callback);
+        }
+    }
+
+    public void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Biome biome = chunkGenerator != null ? chunkGenerator.getBiome(chunkX, chunkZ) : Biome.VOID;
         Chunk chunk = new Chunk(biome, chunkX, chunkZ);
-        this.objectEntities.addCollection(chunk.objectEntities);
-        this.creatures.addCollection(chunk.creatures);
-        this.players.addCollection(chunk.players);
-        this.chunks.put(getChunkKey(chunkX, chunkZ), chunk);
+        cacheChunk(chunk);
         if (chunkGenerator != null) {
             ChunkBatch chunkBatch = createChunkBatch(chunk);
             chunkGenerator.generateChunkData(chunkBatch, chunkX, chunkZ);
-            chunkBatch.flush();
+            chunkBatch.flush(callback);
         }
-        return chunk;
+    }
+
+    private void cacheChunk(Chunk chunk) {
+        this.objectEntities.addCollection(chunk.objectEntities);
+        this.creatures.addCollection(chunk.creatures);
+        this.players.addCollection(chunk.players);
+        this.chunks.put(getChunkKey(chunk.getChunkX(), chunk.getChunkZ()), chunk);
     }
 
     protected ChunkBatch createChunkBatch(Chunk chunk) {
@@ -230,6 +296,9 @@ public class Instance implements BlockModifier {
     }
 
     protected void sendChunkUpdate(Chunk chunk) {
+        if (getPlayers().isEmpty())
+            return;
+
         Buffer chunkData = chunk.getFullDataPacket();
         chunkData.getData().retain(getPlayers().size()).markReaderIndex();
         getPlayers().forEach(player -> {

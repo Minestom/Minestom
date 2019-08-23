@@ -3,13 +3,14 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
+// TODO viewers synchronization each X ticks?
 public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(int entityType) {
         super(entityType);
     }
 
-    public abstract int getData();
+    public abstract int getObjectData();
 
     @Override
     public void addViewer(Player player) {
@@ -21,7 +22,7 @@ public abstract class ObjectEntity extends Entity {
         spawnObjectPacket.uuid = getUuid();
         spawnObjectPacket.type = getEntityType();
         spawnObjectPacket.position = getPosition();
-        spawnObjectPacket.data = getData();
+        spawnObjectPacket.data = getObjectData();
         playerConnection.sendPacket(spawnObjectPacket);
         playerConnection.sendPacket(getMetadataPacket());
     }

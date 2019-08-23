@@ -6,7 +6,10 @@ import fr.themode.minestom.net.packet.server.play.SpawnMobPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Position;
 
+// TODO viewers synchronization each X ticks?
 public abstract class EntityCreature extends LivingEntity {
+
+    protected boolean isDead;
 
     public EntityCreature(int entityType) {
         super(entityType);
@@ -33,6 +36,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     public void kill() {
+        this.isDead = true;
         triggerStatus((byte) 3);
         scheduleRemove(1000);
     }
@@ -53,5 +57,9 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
         playerConnection.sendPacket(getMetadataPacket());
+    }
+
+    public boolean isDead() {
+        return isDead;
     }
 }

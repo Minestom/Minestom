@@ -1,6 +1,7 @@
 package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.Entity;
+import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.AttackEvent;
 import fr.themode.minestom.event.InteractEvent;
@@ -14,6 +15,9 @@ public class UseEntityListener {
             return;
         ClientUseEntityPacket.Type type = packet.type;
         if (type == ClientUseEntityPacket.Type.ATTACK) {
+            if (entity instanceof EntityCreature && ((EntityCreature) entity).isDead()) // Can't attack dead entities
+                return;
+
             AttackEvent attackEvent = new AttackEvent(entity);
             player.callEvent(AttackEvent.class, attackEvent);
         } else if (type == ClientUseEntityPacket.Type.INTERACT) {

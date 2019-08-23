@@ -6,6 +6,7 @@ import fr.adamaq01.ozao.net.server.Connection;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.PacketUtils;
+import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 
 import java.lang.reflect.Field;
@@ -40,12 +41,15 @@ public class PlayerConnection {
     }
 
     public void sendUnencodedPacket(Buffer packet) {
-        try {
-            SocketChannel channel = ((SocketChannel) field.get(connection));
-            channel.writeAndFlush(packet.getData());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        getChannel().writeAndFlush(packet.getData());
+    }
+
+    public void writeUnencodedPacket(Buffer packet) {
+        getChannel().write(packet.getData());
+    }
+
+    public void flush() {
+        getChannel().flush();
     }
 
     public void sendPacket(ServerPacket serverPacket) {
@@ -62,5 +66,14 @@ public class PlayerConnection {
 
     public ConnectionState getConnectionState() {
         return connectionState;
+    }
+
+    private Channel getChannel() {
+        try {
+            return ((SocketChannel) field.get(connection));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

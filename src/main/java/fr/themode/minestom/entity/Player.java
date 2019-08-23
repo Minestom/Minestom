@@ -1,12 +1,14 @@
 package fr.themode.minestom.entity;
 
+import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
-import fr.themode.minestom.event.AttackEvent;
-import fr.themode.minestom.event.BlockPlaceEvent;
-import fr.themode.minestom.event.PickupItemEvent;
+import fr.themode.minestom.entity.demo.ChickenCreature;
+import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
+import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
@@ -19,6 +21,7 @@ import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
@@ -36,6 +39,8 @@ public class Player extends LivingEntity {
     private Dimension dimension;
     private GameMode gameMode;
     private LevelType levelType;
+    // DEBUG
+    private static Instance instance;
     private PlayerSettings settings;
     private PlayerInventory inventory;
     private short heldSlot;
@@ -55,6 +60,23 @@ public class Player extends LivingEntity {
     // Vehicle
     private float sideways;
     private float forward;
+
+    static {
+        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
+        instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        //instance = Main.getInstanceManager().createInstance();
+        instance.setChunkGenerator(chunkGeneratorDemo);
+        int loopStart = -2;
+        int loopEnd = 2;
+        long time = System.currentTimeMillis();
+        for (int x = loopStart; x < loopEnd; x++)
+            for (int z = loopStart; z < loopEnd; z++) {
+                instance.loadChunk(x, z);
+            }
+        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
+    }
+
+    protected boolean spawned;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(93); // FIXME verify
@@ -96,7 +118,39 @@ public class Player extends LivingEntity {
         });
 
         setEventCallback(BlockPlaceEvent.class, event -> {
-            sendMessage("Placed block!");
+            /*sendMessage("Placed block! " + event.getHand());
+            Data data = new Data();
+            data.set("test", 5, DataType.INTEGER);
+            setData(data);
+
+            sendMessage("Data: " + getData().get("test"));*/
+            if (event.getHand() != Hand.MAIN)
+                return;
+
+            sendMessage("Save chunk data...");
+            long time = System.currentTimeMillis();
+            getInstance().saveToFolder(() -> {
+                sendMessage("Saved in " + (System.currentTimeMillis() - time) + " ms");
+            });
+        });
+
+        // TODO loginevent set instance
+        setEventCallback(PlayerLoginEvent.class, event -> {
+            System.out.println("PLAYER LOGIN EVENT");
+            event.setSpawningInstance(instance);
+        });
+
+        setEventCallback(PlayerSpawnPacket.class, event -> {
+            System.out.println("TELEPORT");
+            teleport(new Position(0, 66, 0));
+            for (int cx = 0; cx < 4; cx++)
+                for (int cz = 0; cz < 4; cz++) {
+                    ChickenCreature chickenCreature = new ChickenCreature();
+                    chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
+                    //chickenCreature.setOnFire(true);
+                    chickenCreature.setInstance(instance);
+                    //chickenCreature.addPassenger(player);
+                }
         });
     }
 
@@ -108,7 +162,7 @@ public class Player extends LivingEntity {
         }
 
         // Target block stage
-        if (instance != null && targetCustomBlock != null) {
+        if (targetCustomBlock != null) {
             int timeBreak = targetCustomBlock.getBreakDelay(this);
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
@@ -124,33 +178,31 @@ public class Player extends LivingEntity {
         }
 
         // Item pickup
-        if (instance != null) {
-            Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-            Set<ObjectEntity> objectEntities = chunk.getObjectEntities();
-            for (ObjectEntity objectEntity : objectEntities) {
-                if (objectEntity instanceof ItemEntity) {
-                    ItemEntity itemEntity = (ItemEntity) objectEntity;
-                    if (!itemEntity.isPickable())
-                        continue;
-                    float distance = getDistance(objectEntity);
-                    if (distance <= 2.04) {
-                        synchronized (itemEntity) {
-                            if (itemEntity.shouldRemove())
-                                continue;
-                            ItemStack item = itemEntity.getItemStack();
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
-                            callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
-                                boolean result = getInventory().addItemStack(item);
-                                if (result) {
-                                    CollectItemPacket collectItemPacket = new CollectItemPacket();
-                                    collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                                    collectItemPacket.collectorEntityId = getEntityId();
-                                    collectItemPacket.pickupItemCount = item.getAmount();
-                                    sendPacketToViewersAndSelf(collectItemPacket);
-                                    objectEntity.remove();
-                                }
-                            });
-                        }
+        Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
+        Set<ObjectEntity> objectEntities = chunk.getObjectEntities();
+        for (ObjectEntity objectEntity : objectEntities) {
+            if (objectEntity instanceof ItemEntity) {
+                ItemEntity itemEntity = (ItemEntity) objectEntity;
+                if (!itemEntity.isPickable())
+                    continue;
+                float distance = getDistance(objectEntity);
+                if (distance <= 2.04) {
+                    synchronized (itemEntity) {
+                        if (itemEntity.shouldRemove())
+                            continue;
+                        ItemStack item = itemEntity.getItemStack();
+                        PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
+                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                            boolean result = getInventory().addItemStack(item);
+                            if (result) {
+                                CollectItemPacket collectItemPacket = new CollectItemPacket();
+                                collectItemPacket.collectedEntityId = itemEntity.getEntityId();
+                                collectItemPacket.collectorEntityId = getEntityId();
+                                collectItemPacket.pickupItemCount = item.getAmount();
+                                sendPacketToViewersAndSelf(collectItemPacket);
+                                objectEntity.remove();
+                            }
+                        });
                     }
                 }
             }
@@ -264,6 +316,14 @@ public class Player extends LivingEntity {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
         player.playerConnection.sendPacket(playerInfoPacket);
+    }
+
+    @Override
+    public void setInstance(Instance instance) {
+        if (!spawned)
+            throw new IllegalStateException("Player#setInstance is only available during and after PlayerSpawnEvent");
+
+        super.setInstance(instance);
     }
 
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {

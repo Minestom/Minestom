@@ -17,7 +17,7 @@ public class PacketWriter {
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<Buffer> consumer) {
         batchesPool.submit(() -> {
             Packet p = PacketUtils.writePacket(serverPacket);
-            consumer.accept(PacketUtils.encode(p));
+            consumer.accept(PacketUtils.encode(p)); // TODO accept in another thread?
         });
     }
 

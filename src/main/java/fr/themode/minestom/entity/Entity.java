@@ -3,6 +3,8 @@ package fr.themode.minestom.entity;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
+import fr.themode.minestom.data.Data;
+import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.event.Callback;
 import fr.themode.minestom.event.CancellableEvent;
 import fr.themode.minestom.event.Event;
@@ -17,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class Entity implements Viewable {
+public abstract class Entity implements Viewable, DataContainer {
 
     private static Map<Integer, Entity> entityById = new HashMap<>();
     private static AtomicInteger lastEntityId = new AtomicInteger();
@@ -41,6 +43,7 @@ public abstract class Entity implements Viewable {
     protected Entity vehicle;
     private Map<Class<Event>, Callback> eventCallbacks = new ConcurrentHashMap<>();
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private Data data;
     private Set<Entity> passengers = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -124,7 +127,20 @@ public abstract class Entity implements Viewable {
         return Collections.unmodifiableSet(viewers);
     }
 
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Data data) {
+        this.data = data;
+    }
+
     public void tick() {
+        if (instance == null)
+            return;
+
         if (scheduledRemoveTime != 0) { // Any entity with scheduled remove does not update
             boolean finished = System.currentTimeMillis() >= scheduledRemoveTime;
             if (finished) {
@@ -132,9 +148,17 @@ public abstract class Entity implements Viewable {
             }
             return;
         }
-        if (shouldUpdate()) {
+
+        if (shouldRemove()) {
+            remove();
+            return;
+        } else if (shouldUpdate()) {
             update();
             this.lastUpdate = System.currentTimeMillis();
+        }
+
+        if (shouldRemove()) {
+            remove();
         }
     }
 
@@ -286,6 +310,7 @@ public abstract class Entity implements Viewable {
         synchronized (entityById) {
             entityById.remove(id);
         }
+        instance.removeEntity(this);
     }
 
     public void scheduleRemove(long delay) {

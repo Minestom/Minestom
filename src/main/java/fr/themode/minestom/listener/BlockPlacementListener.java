@@ -23,7 +23,7 @@ public class BlockPlacementListener {
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10, blockPosition);
+        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10, blockPosition, packet.hand);
         player.callEvent(BlockPlaceEvent.class, blockPlaceEvent);
         if (!blockPlaceEvent.isCancelled()) {
             instance.setBlock(blockPosition, "custom_block");
