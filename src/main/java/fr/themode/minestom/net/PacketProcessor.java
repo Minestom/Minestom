@@ -44,13 +44,14 @@ public class PacketProcessor {
 
     public void process(Connection connection, Packet packet) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         int id = packet.get(PACKET_ID_IDENTIFIER);
-        if (!printBlackList.contains(id)) {
-            //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id));
-        }
         Buffer buffer = packet.getPayload();
         connectionPlayerConnectionMap.get(connection);
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(connection, c -> new PlayerConnection(c));
         ConnectionState connectionState = playerConnection.getConnectionState();
+
+        if (!printBlackList.contains(id)) {
+            System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
+        }
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet

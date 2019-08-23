@@ -21,8 +21,18 @@ public class Position {
         this(0, 0, 0);
     }
 
+    public void add(float x, float y, float z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+
     public float getDistance(Position position) {
         return (float) Math.sqrt(Math.pow(position.getX() - getX(), 2) + Math.pow(position.getY() - getY(), 2) + Math.pow(position.getZ() - getZ(), 2));
+    }
+
+    public Position clone() {
+        return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
     }
 
     public float getX() {
@@ -63,5 +73,10 @@ public class Position {
 
     public void setPitch(float pitch) {
         this.pitch = pitch;
+    }
+
+    @Override
+    public String toString() {
+        return "Position[" + x + ":" + y + ":" + z + "] (" + yaw + "/" + pitch + ")";
     }
 }

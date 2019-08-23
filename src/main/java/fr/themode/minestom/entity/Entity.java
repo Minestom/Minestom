@@ -225,7 +225,12 @@ public abstract class Entity implements Viewable {
 
     public void setOnFire(boolean fire) {
         this.onFire = fire;
-        sendMetadata(0);
+        sendMetadataIndex(0);
+    }
+
+    public void setNoGravity(boolean noGravity) {
+        this.noGravity = noGravity;
+        sendMetadataIndex(5);
     }
 
     public boolean isChunkUnloaded(float x, float z) {
@@ -264,12 +269,12 @@ public abstract class Entity implements Viewable {
 
     public void refreshSneaking(boolean sneaking) {
         this.crouched = sneaking;
-        sendMetadata(0);
+        sendMetadataIndex(0);
     }
 
     public void refreshSprinting(boolean sprinting) {
         this.sprinting = sprinting;
-        sendMetadata(0);
+        sendMetadataIndex(0);
     }
 
     public Position getPosition() {
@@ -302,10 +307,11 @@ public abstract class Entity implements Viewable {
         Buffer buffer = Buffer.create();
         fillMetadataIndex(buffer, 0);
         fillMetadataIndex(buffer, 1);
+        fillMetadataIndex(buffer, 5);
         return buffer;
     }
 
-    private void sendMetadata(int index) {
+    protected void sendMetadataIndex(int index) {
         Buffer buffer = Buffer.create();
         fillMetadataIndex(buffer, index);
 
@@ -328,6 +334,9 @@ public abstract class Entity implements Viewable {
                 break;
             case 2:
                 fillCustomNameMetaData(buffer);
+                break;
+            case 5:
+                fillNoGravityMetaData(buffer);
                 break;
         }
     }
@@ -365,6 +374,12 @@ public abstract class Entity implements Viewable {
         buffer.putByte((byte) 2);
         buffer.putByte(METADATA_CHAT);
         Utils.writeString(buffer, customName);
+    }
+
+    private void fillNoGravityMetaData(Buffer buffer) {
+        buffer.putByte((byte) 5);
+        buffer.putByte(METADATA_BOOLEAN);
+        buffer.putBoolean(noGravity);
     }
 
     private boolean shouldUpdate() {

@@ -13,9 +13,9 @@ public class EntityManager {
 
     private static InstanceManager instanceManager = Main.getInstanceManager();
 
-    private ExecutorService objectsPool = Executors.newFixedThreadPool(2);
-    private ExecutorService creaturesPool = Executors.newFixedThreadPool(2);
-    private ExecutorService playersPool = Executors.newFixedThreadPool(2);
+    private ExecutorService objectsPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_OBJECTS_ENTITIES);
+    private ExecutorService creaturesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CREATURES_ENTITIES);
+    private ExecutorService playersPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_PLAYERS_ENTITIES);
 
     // TODO API for custom thread division (
     public void update() {

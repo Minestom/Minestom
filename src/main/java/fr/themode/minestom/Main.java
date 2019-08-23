@@ -21,6 +21,13 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 
+    // Thread number
+    public static final int THREAD_COUNT_PACKET_WRITER = 3;
+    public static final int THREAD_COUNT_CHUNK_BATCH = 2;
+    public static final int THREAD_COUNT_OBJECTS_ENTITIES = 2;
+    public static final int THREAD_COUNT_CREATURES_ENTITIES = 2;
+    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
+
     public static final int TICK_MS = 50;
 
     // Networking
@@ -101,12 +108,14 @@ public class Main {
             currentTime = System.nanoTime();
 
             // Keep Alive Handling
-            server.getConnections().stream().filter(connection -> packetProcessor.hasPlayerConnection(connection) && connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)) != null && System.currentTimeMillis() - connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection)).getLastKeepAlive() > 20000).map(connection -> connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection))).forEach(player -> {
-                long id = System.currentTimeMillis();
-                player.refreshKeepAlive(id);
-                KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
-                player.getPlayerConnection().sendPacket(keepAlivePacket);
-            });
+            for (Player player : getConnectionManager().getOnlinePlayers()) {
+                if (System.currentTimeMillis() - player.getLastKeepAlive() > 20000) {
+                    long id = System.currentTimeMillis();
+                    player.refreshKeepAlive(id);
+                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
+                    player.getPlayerConnection().sendPacket(keepAlivePacket);
+                }
+            }
 
             // Entities update
             entityManager.update();

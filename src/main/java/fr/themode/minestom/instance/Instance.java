@@ -1,10 +1,12 @@
 package fr.themode.minestom.instance;
 
+import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.BlockBreakEvent;
+import fr.themode.minestom.net.PacketWriter;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
@@ -39,7 +41,10 @@ public class Instance implements BlockModifier {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            sendChunkUpdate(chunk);
+            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+                chunk.setFullDataPacket(buffer);
+                sendChunkUpdate(chunk);
+            });
         }
     }
 
@@ -48,7 +53,10 @@ public class Instance implements BlockModifier {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            sendChunkUpdate(chunk);
+            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+                chunk.setFullDataPacket(buffer);
+                sendChunkUpdate(chunk);
+            });
         }
     }
 
@@ -56,6 +64,7 @@ public class Instance implements BlockModifier {
         BlockBreakEvent blockBreakEvent = new BlockBreakEvent(blockPosition);
         player.callEvent(BlockBreakEvent.class, blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
+            // TODO blockbreak setBlock result
             int x = blockPosition.getX();
             int y = blockPosition.getY();
             int z = blockPosition.getZ();
@@ -67,7 +76,7 @@ public class Instance implements BlockModifier {
             particlePacket.y = y;
             particlePacket.z = z + 0.5f;
             particlePacket.offsetX = 0.4f;
-            particlePacket.offsetY = 0.65f;
+            particlePacket.offsetY = 0.6f;
             particlePacket.offsetZ = 0.4f;
             particlePacket.particleData = 0.3f;
             particlePacket.particleCount = 75;
@@ -221,18 +230,29 @@ public class Instance implements BlockModifier {
     }
 
     protected void sendChunkUpdate(Chunk chunk) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = false;
-        chunkDataPacket.chunk = chunk;
-        getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(chunkDataPacket)); // TODO write packet buffer in another thread (Chunk packets are heavy)
+        Buffer chunkData = chunk.getFullDataPacket();
+        chunkData.getData().retain(getPlayers().size()).markReaderIndex();
+        getPlayers().forEach(player -> {
+            player.getPlayerConnection().sendUnencodedPacket(chunkData);
+            chunkData.getData().resetReaderIndex();
+        });
     }
 
     private void sendChunks(Player player) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = true;
         for (Chunk chunk : getChunks()) {
-            chunkDataPacket.chunk = chunk;
-            player.getPlayerConnection().sendPacket(chunkDataPacket); // TODO write packet buffer in another thread (Chunk packets are heavy)
+            Buffer chunkData = chunk.getFullDataPacket();
+            if (chunkData == null) {
+                PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+                    buffer.getData().retain(1).markReaderIndex();
+                    player.getPlayerConnection().sendUnencodedPacket(buffer);
+                    buffer.getData().resetReaderIndex();
+                    chunk.setFullDataPacket(buffer);
+                });
+            } else {
+                chunkData.getData().retain(1).markReaderIndex();
+                player.getPlayerConnection().sendUnencodedPacket(chunkData);
+                chunkData.getData().resetReaderIndex();
+            }
         }
     }
 

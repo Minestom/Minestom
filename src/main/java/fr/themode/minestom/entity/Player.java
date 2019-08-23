@@ -20,9 +20,9 @@ import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Player extends LivingEntity {
@@ -31,7 +31,7 @@ public class Player extends LivingEntity {
 
     private String username;
     private PlayerConnection playerConnection;
-    private LinkedList<ClientPlayPacket> packets = new LinkedList<>();
+    private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
 
     private Dimension dimension;
     private GameMode gameMode;
@@ -87,6 +87,7 @@ public class Player extends LivingEntity {
                 ((EntityCreature) entity).kill();
                 sendMessage("You killed an entity!");
             }
+            sendMessage("ATTACK");
             /*UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
             updateHealthPacket.health = -1f;
             updateHealthPacket.food = 5;
@@ -101,11 +102,9 @@ public class Player extends LivingEntity {
 
     @Override
     public void update() {
-        synchronized (packets) {
-            while (!packets.isEmpty()) {
-                ClientPlayPacket packet = packets.pollFirst();
-                packet.process(this);
-            }
+        ClientPlayPacket packet = null;
+        while ((packet = packets.poll()) != null) {
+            packet.process(this);
         }
 
         // Target block stage
@@ -422,9 +421,7 @@ public class Player extends LivingEntity {
     }
 
     public void addPacketToQueue(ClientPlayPacket packet) {
-        synchronized (packets) {
-            this.packets.add(packet);
-        }
+        this.packets.add(packet);
     }
 
     public void refreshDimension(Dimension dimension) {

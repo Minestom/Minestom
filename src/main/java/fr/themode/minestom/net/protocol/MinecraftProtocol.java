@@ -3,12 +3,12 @@ package fr.themode.minestom.net.protocol;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.adamaq01.ozao.net.protocol.Protocol;
+import fr.themode.minestom.utils.PacketUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static fr.themode.minestom.utils.Utils.readVarInt;
-import static fr.themode.minestom.utils.Utils.writeVarInt;
 
 public class MinecraftProtocol extends Protocol {
 
@@ -29,7 +29,7 @@ public class MinecraftProtocol extends Protocol {
 
     @Override
     public boolean verify(Packet packet) {
-        return packet.get("id") != null;
+        return PacketUtils.verify(packet);
     }
 
     @Override
@@ -56,12 +56,6 @@ public class MinecraftProtocol extends Protocol {
 
     @Override
     public Buffer encode(Packet packet) {
-        Buffer buffer = Buffer.create();
-        Buffer idAndPayload = Buffer.create();
-        writeVarInt(idAndPayload, packet.get(PACKET_ID_IDENTIFIER));
-        idAndPayload.putBuffer(packet.getPayload());
-        writeVarInt(buffer, idAndPayload.length());
-        buffer.putBuffer(idAndPayload);
-        return buffer;
+        return PacketUtils.encode(packet);
     }
 }

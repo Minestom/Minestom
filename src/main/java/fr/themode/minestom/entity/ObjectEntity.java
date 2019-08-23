@@ -1,16 +1,9 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.Viewable;
 import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
-public abstract class ObjectEntity extends Entity implements Viewable {
-
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(int entityType) {
         super(entityType);
@@ -36,10 +29,5 @@ public abstract class ObjectEntity extends Entity implements Viewable {
     @Override
     public void removeViewer(Player player) {
         super.removeViewer(player);
-    }
-
-    @Override
-    public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
     }
 }

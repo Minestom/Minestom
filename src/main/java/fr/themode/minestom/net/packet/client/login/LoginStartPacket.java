@@ -9,6 +9,7 @@ import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.ItemEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.entity.demo.ChickenCreature;
+import fr.themode.minestom.entity.demo.TestArrow;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.PlayerInventory;
@@ -19,6 +20,7 @@ import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
+import fr.themode.minestom.net.packet.server.play.DeclareCommandsPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
@@ -30,6 +32,9 @@ import fr.themode.minestom.world.LevelType;
 import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
+
+    // Test
+    private static Instance instance;
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
@@ -44,9 +49,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
             }
         System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
     }
-
-    // Test
-    private static Instance instance;
 
     public String username;
 
@@ -72,7 +74,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         Dimension dimension = Dimension.OVERWORLD;
         LevelType levelType = LevelType.DEFAULT;
         float x = 5;
-        float y = 5;
+        float y = 65;
         float z = 5;
 
         player.refreshDimension(dimension);
@@ -117,12 +119,15 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
+        // Next is optional TODO put all that somewhere else (LoginEvent)
+        // TODO LoginEvent in another thread (here we are in netty thread)
+
         player.setInstance(instance);
 
         for (int cx = 0; cx < 4; cx++)
             for (int cz = 0; cz < 4; cz++) {
                 ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(0 + (float) cx * 1, 5, 0 + (float) cz * 1);
+                chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
                 //chickenCreature.setOnFire(true);
                 chickenCreature.setInstance(instance);
                 //chickenCreature.addPassenger(player);
@@ -144,10 +149,36 @@ public class LoginStartPacket implements ClientPreplayPacket {
         for (int ix = 0; ix < 4; ix++)
             for (int iz = 0; iz < 4; iz++) {
                 ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                itemEntity.refreshPosition(ix, 5, iz);
+                itemEntity.refreshPosition(ix, 66, iz);
+                itemEntity.setNoGravity(true);
                 itemEntity.setInstance(instance);
                 //itemEntity.remove();
             }
+
+        TestArrow arrow = new TestArrow(player);
+        arrow.refreshPosition(5, 65, 5);
+        arrow.setInstance(instance);
+        arrow.setNoGravity(true);
+
+        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
+        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+        argumentNode.flags = 0b1010;
+        argumentNode.children = new int[0];
+        argumentNode.name = "arg name";
+        argumentNode.parser = "minecraft:nbt_path";
+        DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
+        literalNode.flags = 0b1;
+        literalNode.children = new int[]{2};
+        literalNode.name = "hey";
+        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
+        rootNode.flags = 0;
+        rootNode.children = new int[]{1};
+
+        declareCommandsPacket.nodes = new DeclareCommandsPacket.Node[]{rootNode, literalNode, argumentNode};
+        declareCommandsPacket.rootIndex = 0;
+
+
+        connection.sendPacket(declareCommandsPacket);
     }
 
     @Override

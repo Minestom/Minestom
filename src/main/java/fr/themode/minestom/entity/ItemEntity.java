@@ -2,6 +2,7 @@ package fr.themode.minestom.entity;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
 import fr.themode.minestom.utils.Utils;
 
 public class ItemEntity extends ObjectEntity {
@@ -16,7 +17,11 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void update() {
-
+        // TODO how to keep items at the same position?
+        EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
+        entityRelativeMovePacket.entityId = getEntityId();
+        entityRelativeMovePacket.onGround = false;
+        sendPacketToViewers(entityRelativeMovePacket);
     }
 
     @Override
@@ -35,6 +40,11 @@ public class ItemEntity extends ObjectEntity {
 
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
+        sendMetadataIndex(7); // Refresh itemstack for viewers
     }
 
     public boolean isPickable() {

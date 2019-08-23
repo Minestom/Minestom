@@ -1,5 +1,7 @@
 package fr.themode.minestom.instance;
 
+import fr.themode.minestom.Main;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -7,7 +9,7 @@ import java.util.concurrent.Executors;
 
 public class ChunkBatch implements BlockModifier {
 
-    private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(3);
+    private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_BATCH);
 
     private Instance instance;
     private Chunk chunk;
@@ -47,6 +49,7 @@ public class ChunkBatch implements BlockModifier {
                 for (BlockData data : dataList) {
                     data.apply(chunk);
                 }
+                chunk.refreshDataPacket(); // TODO partial refresh instead of full
                 instance.sendChunkUpdate(chunk); // TODO partial chunk data
             });
         }

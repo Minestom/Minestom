@@ -7,6 +7,7 @@ import fr.themode.minestom.net.packet.client.play.ClientChatMessagePacket;
 public class ChatMessageListener {
 
     public static void listener(ClientChatMessagePacket packet, Player player) {
+        // TODO commands check
         Main.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(String.format("<%s> %s", player.getUsername(), packet.message)));
     }
 

@@ -43,6 +43,6 @@ public class BlockPosition {
 
     @Override
     public String toString() {
-        return "Position[" + x + ":" + y + ":" + z + "]";
+        return "BlockPosition[" + x + ":" + y + ":" + z + "]";
     }
 }

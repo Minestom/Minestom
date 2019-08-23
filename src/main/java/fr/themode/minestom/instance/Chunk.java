@@ -1,10 +1,14 @@
 package fr.themode.minestom.instance;
 
+import fr.adamaq01.ozao.net.Buffer;
+import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
+import fr.themode.minestom.utils.PacketUtils;
 
 import java.util.Collections;
 import java.util.Set;
@@ -26,10 +30,14 @@ public class Chunk {
     // Block entities
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
+    // Cache
+    private Buffer fullDataPacket;
+
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+        //refreshDataPacket(); // TODO remove
     }
 
     protected void setBlock(byte x, byte y, byte z, short blockId) {
@@ -130,6 +138,10 @@ public class Chunk {
         return Collections.unmodifiableSet(players);
     }
 
+    public Buffer getFullDataPacket() {
+        return fullDataPacket;
+    }
+
     private boolean isBlockEntity(short blockId) {
         // TODO complete
         return blockId == 2033;
@@ -144,5 +156,21 @@ public class Chunk {
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;
         return index & 0xffff;
+    }
+
+    public void setFullDataPacket(Buffer fullDataPacket) {
+        this.fullDataPacket = fullDataPacket;
+    }
+
+    protected ChunkDataPacket getFreshFullDataPacket() {
+        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
+        fullDataPacket.chunk = this;
+        fullDataPacket.fullChunk = true;
+        return fullDataPacket;
+    }
+
+    protected void refreshDataPacket() {
+        Packet packet = PacketUtils.writePacket(getFreshFullDataPacket());
+        this.fullDataPacket = PacketUtils.encode(packet); // TODO write packet buffer in another thread (heavy calculations)
     }
 }
