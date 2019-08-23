@@ -112,7 +112,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // Next is optional TODO put all that somewhere else (LoginEvent)
         // TODO LoginEvent in another thread (here we are in netty thread)
-        System.out.println("ADD WAITING PLAYER");
         Main.getEntityManager().addWaitingPlayer(player);
 
 

@@ -16,5 +16,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.github.Adamaq01:ozao-net:2.3.1'
     compile 'com.github.Querz:NBT:4.1'
+    // https://mvnrepository.com/artifact/org.lz4/lz4-java
     implementation 'com.github.luben:zstd-jni:1.4.3-1'
 }

@@ -310,7 +310,8 @@ public abstract class Entity implements Viewable, DataContainer {
         synchronized (entityById) {
             entityById.remove(id);
         }
-        instance.removeEntity(this);
+        if (instance != null)
+            instance.removeEntity(this);
     }
 
     public void scheduleRemove(long delay) {

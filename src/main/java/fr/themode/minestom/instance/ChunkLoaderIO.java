@@ -1,5 +1,6 @@
 package fr.themode.minestom.instance;
 
+import com.github.luben.zstd.Zstd;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.utils.SerializerUtils;
 
@@ -9,8 +10,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-// TODO compression
 public class ChunkLoaderIO {
+
+    private static final int COMPRESSION_LEVEL = 1;
 
     private ExecutorService chunkLoaderPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_IO);
 
@@ -27,8 +29,14 @@ public class ChunkLoaderIO {
             File chunkFile = getChunkFile(chunk.getChunkX(), chunk.getChunkZ(), folder);
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 byte[] data = chunk.getSerializedData();
-                // Zstd.compress(data, 1)
-                fos.write(data);
+                byte[] decompressedLength = SerializerUtils.intToBytes(data.length);
+                byte[] compressed = Zstd.compress(data, COMPRESSION_LEVEL);
+
+                byte[] result = new byte[decompressedLength.length + compressed.length];
+                System.arraycopy(decompressedLength, 0, result, 0, decompressedLength.length);
+                System.arraycopy(compressed, 0, result, decompressedLength.length, compressed.length);
+
+                fos.write(result);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -48,12 +56,27 @@ public class ChunkLoaderIO {
                 return;
             }
 
-            byte[] array = new byte[0];
+            byte[] array;
             try {
                 array = Files.readAllBytes(getChunkFile(chunkX, chunkZ, instance.getFolder()).toPath());
             } catch (IOException e) {
                 e.printStackTrace();
+                instance.createChunk(chunkX, chunkZ, callback); // Unknown error, create new chunk by default
+                return;
             }
+
+            int decompressedLength = SerializerUtils.bytesToInt(array);
+
+            byte[] compressedChunkData = new byte[array.length - 4];
+            System.arraycopy(array, 4, compressedChunkData, 0, compressedChunkData.length); // Remove the decompressed length from the array
+
+            byte[] decompressed = new byte[decompressedLength];
+            long result = Zstd.decompress(decompressed, compressedChunkData); // Decompressed in an array with the max size
+
+            array = new byte[(int) result];
+            System.arraycopy(decompressed, 0, array, 0, (int) result); // Resize the data array properly
+
+
             DataInputStream stream = new DataInputStream(new ByteArrayInputStream(array));
 
             Chunk chunk = null;
@@ -65,6 +88,7 @@ public class ChunkLoaderIO {
                     int index = stream.readInt();
                     boolean isCustomBlock = stream.readBoolean();
                     short blockId = stream.readShort();
+                    //System.out.println("id: " + blockId);
 
                     byte[] chunkPos = SerializerUtils.indexToChunkPosition(index);
                     if (isCustomBlock) {
@@ -77,6 +101,7 @@ public class ChunkLoaderIO {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             callback.accept(chunk); // Success, null if file isn't properly encoded
         });
     }

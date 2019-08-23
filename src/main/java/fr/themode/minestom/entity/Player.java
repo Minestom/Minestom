@@ -142,6 +142,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnPacket.class, event -> {
             System.out.println("TELEPORT");
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
             for (int cx = 0; cx < 4; cx++)
                 for (int cz = 0; cz < 4; cz++) {
