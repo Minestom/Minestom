@@ -6,7 +6,6 @@ import fr.themode.minestom.event.PlayerSpawnPacket;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
-import fr.themode.minestom.utils.GroupedCollections;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -25,7 +24,6 @@ public class EntityManager {
     public void update() {
         waitingPlayersTick();
         for (Instance instance : instanceManager.getInstances()) {
-            // TODO optimize update engine for when there are too many entities on one chunk
             testTick1(instance);
         }
 
@@ -38,7 +36,7 @@ public class EntityManager {
             playersPool.execute(() -> {
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
-                Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstance() : loginEvent.getSpawningInstance();
+                Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
                 // TODO load multiple chunks around player (based on view distance) instead of only one
                 spawningInstance.loadChunk(playerCache.getPosition(), chunk -> {
                     playerCache.spawned = true;
@@ -50,28 +48,16 @@ public class EntityManager {
         }
     }
 
+    // TODO optimize for when there are too many entities on one chunk
     private void testTick2(Instance instance) {
 
         for (Chunk chunk : instance.getChunks()) {
-            Set<ObjectEntity> objects = chunk.getObjectEntities();
-            Set<EntityCreature> creatures = chunk.getCreatures();
-            Set<Player> players = chunk.getPlayers();
+            Set<Entity> entities = instance.getChunkEntities(chunk);
 
-            if (!creatures.isEmpty() || !objects.isEmpty()) {
+            if (!entities.isEmpty()) {
                 entitiesPool.execute(() -> {
-                    for (EntityCreature creature : creatures) {
-                        creature.tick();
-                    }
-                    for (ObjectEntity objectEntity : objects) {
-                        objectEntity.tick();
-                    }
-                });
-            }
-
-            if (!players.isEmpty()) {
-                playersPool.execute(() -> {
-                    for (Player player : players) {
-                        player.tick();
+                    for (Entity entity : entities) {
+                        entity.tick();
                     }
                 });
             }
@@ -79,9 +65,9 @@ public class EntityManager {
     }
 
     private void testTick1(Instance instance) {
-        GroupedCollections<ObjectEntity> objects = instance.getObjectEntities();
-        GroupedCollections<EntityCreature> creatures = instance.getCreatures();
-        GroupedCollections<Player> players = instance.getPlayers();
+        Set<ObjectEntity> objects = instance.getObjectEntities();
+        Set<EntityCreature> creatures = instance.getCreatures();
+        Set<Player> players = instance.getPlayers();
 
         if (!creatures.isEmpty() || !objects.isEmpty()) {
             entitiesPool.execute(() -> {

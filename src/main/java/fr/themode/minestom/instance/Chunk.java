@@ -3,17 +3,12 @@ package fr.themode.minestom.instance;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.Main;
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.ObjectEntity;
-import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -23,10 +18,6 @@ public class Chunk {
     private static final int CHUNK_SIZE_Y = 256;
     private static final int CHUNK_SIZE_Z = 16;
     private static final int CHUNK_SIZE = CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z;
-
-    protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
-    protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
-    protected Set<Player> players = new CopyOnWriteArraySet<>();
 
     private Biome biome;
     private int chunkX, chunkZ;
@@ -86,44 +77,6 @@ public class Chunk {
         return id != 0 ? Main.getBlockManager().getBlock(id) : null;
     }
 
-    public void addEntity(Entity entity) {
-        if (entity instanceof Player) {
-            synchronized (players) {
-                if (this.players.contains(entity))
-                    return;
-                this.players.add((Player) entity);
-            }
-        } else if (entity instanceof EntityCreature) {
-            synchronized (creatures) {
-                if (this.creatures.contains(entity))
-                    return;
-                this.creatures.add((EntityCreature) entity);
-            }
-        } else if (entity instanceof ObjectEntity) {
-            synchronized (objectEntities) {
-                if (this.objectEntities.contains(entity))
-                    return;
-                this.objectEntities.add((ObjectEntity) entity);
-            }
-        }
-    }
-
-    public void removeEntity(Entity entity) {
-        if (entity instanceof Player) {
-            synchronized (players) {
-                this.players.remove(entity);
-            }
-        } else if (entity instanceof EntityCreature) {
-            synchronized (creatures) {
-                this.creatures.remove(entity);
-            }
-        } else if (entity instanceof ObjectEntity) {
-            synchronized (objectEntities) {
-                this.objectEntities.remove(entity);
-            }
-        }
-    }
-
     public Biome getBiome() {
         return biome;
     }
@@ -134,18 +87,6 @@ public class Chunk {
 
     public int getChunkZ() {
         return chunkZ;
-    }
-
-    public Set<ObjectEntity> getObjectEntities() {
-        return Collections.unmodifiableSet(objectEntities);
-    }
-
-    public Set<EntityCreature> getCreatures() {
-        return Collections.unmodifiableSet(creatures);
-    }
-
-    public Set<Player> getPlayers() {
-        return Collections.unmodifiableSet(players);
     }
 
     public Buffer getFullDataPacket() {

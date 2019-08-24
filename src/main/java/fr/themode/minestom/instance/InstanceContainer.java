@@ -1,16 +1,11 @@
 package fr.themode.minestom.instance;
 
 import fr.adamaq01.ozao.net.Buffer;
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.BlockBreakEvent;
 import fr.themode.minestom.net.PacketWriter;
-import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.GroupedCollections;
 
 import java.io.File;
 import java.util.*;
@@ -21,26 +16,17 @@ import java.util.function.Consumer;
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
-public class InstanceContainer implements Instance {
+public class InstanceContainer extends Instance {
 
-    private UUID uniqueId;
     private File folder;
 
-    // Entities present in this instance
-    private GroupedCollections<ObjectEntity> objectEntities = new GroupedCollections<>(new CopyOnWriteArrayList<>());
-    private GroupedCollections<EntityCreature> creatures = new GroupedCollections<>(new CopyOnWriteArrayList());
-    private GroupedCollections<Player> players = new GroupedCollections<>(new CopyOnWriteArrayList());
-
-    // Entities present in all shared instances referenced AND this instance
-    private GroupedCollections<ObjectEntity> referencedObjectEntities = new GroupedCollections<>(new CopyOnWriteArrayList<>());
-    private GroupedCollections<EntityCreature> referencedCreatures = new GroupedCollections<>(new CopyOnWriteArrayList());
-    private GroupedCollections<Player> referencedPlayers = new GroupedCollections<>(new CopyOnWriteArrayList());
+    private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
 
-    public InstanceContainer(UUID uniqueId, File folder) {
-        this.uniqueId = uniqueId;
+    protected InstanceContainer(UUID uniqueId, File folder) {
+        super(uniqueId);
         this.folder = folder;
     }
 
@@ -111,7 +97,7 @@ public class InstanceContainer implements Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(getChunkKey(chunkX, chunkZ));
+        return chunks.get(getChunkIndex(chunkX, chunkZ));
     }
 
     @Override
@@ -137,7 +123,7 @@ public class InstanceContainer implements Instance {
         return new ChunkBatch(this, chunk);
     }
 
-    @Override
+    /*@Override
     public void addEntity(Entity entity) {
         Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
@@ -183,7 +169,7 @@ public class InstanceContainer implements Instance {
 
         Chunk chunk = getChunkAt(entity.getPosition());
         chunk.removeEntity(entity);
-    }
+    }*/
 
     @Override
     public void sendChunkUpdate(Player player, Chunk chunk) {
@@ -219,11 +205,17 @@ public class InstanceContainer implements Instance {
         }
     }
 
-    public void sendChunkUpdate(Chunk chunk) { // TODO work with referenced SharedInstances
-        if (getPlayers().isEmpty())
-            return;
+    public void sendChunkUpdate(Chunk chunk) {
 
-        sendChunkUpdate(getPlayers(), chunk);
+        // Update for players in this instance
+        if (!getPlayers().isEmpty())
+            sendChunkUpdate(getPlayers(), chunk);
+
+        // Update for shared instances
+        this.sharedInstances.forEach(sharedInstance -> {
+            if (!sharedInstance.getPlayers().isEmpty())
+                sendChunkUpdate(sharedInstance.getPlayers(), chunk);
+        });
     }
 
     @Override
@@ -245,18 +237,15 @@ public class InstanceContainer implements Instance {
         }
     }
 
-    @Override
-    public SharedInstance createSharedInstance() {
-        SharedInstance sharedInstance = new SharedInstance(this);
-        // TODO add list of entities
-        return sharedInstance;
+    protected void addSharedInstance(SharedInstance sharedInstance) {
+        this.sharedInstances.add(sharedInstance);
     }
 
     private void cacheChunk(Chunk chunk) {
-        this.objectEntities.addCollection(chunk.objectEntities);
-        this.creatures.addCollection(chunk.creatures);
-        this.players.addCollection(chunk.players);
-        this.chunks.put(getChunkKey(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        //this.objectEntities.addCollection(chunk.objectEntities);
+        //this.creatures.addCollection(chunk.creatures);
+        //this.players.addCollection(chunk.players);
+        this.chunks.put(getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
     }
 
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
@@ -265,22 +254,6 @@ public class InstanceContainer implements Instance {
 
     public Collection<Chunk> getChunks() {
         return Collections.unmodifiableCollection(chunks.values());
-    }
-
-    public GroupedCollections<ObjectEntity> getObjectEntities() {
-        return objectEntities;
-    }
-
-    public GroupedCollections<EntityCreature> getCreatures() {
-        return creatures;
-    }
-
-    public GroupedCollections<Player> getPlayers() {
-        return players;
-    }
-
-    public UUID getUniqueId() {
-        return uniqueId;
     }
 
     public File getFolder() {

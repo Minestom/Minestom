@@ -338,11 +338,9 @@ public abstract class Entity implements Viewable, DataContainer {
             Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             Chunk newChunk = instance.getChunkAt(x, z);
             if (lastChunk != null && newChunk != null && lastChunk != newChunk) {
-                synchronized (lastChunk) {
-                    synchronized (newChunk) {
-                        lastChunk.removeEntity(this);
-                        newChunk.addEntity(this);
-                    }
+                synchronized (instance) {
+                    instance.removeEntityFromChunk(this, lastChunk);
+                    instance.addEntityToChunk(this, newChunk);
                 }
             }
         }

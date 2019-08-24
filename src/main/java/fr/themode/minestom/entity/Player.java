@@ -7,9 +7,11 @@ import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -55,19 +57,19 @@ public class Player extends LivingEntity {
     private float sideways;
     private float forward;
 
-    private static Instance instance;
+    private static InstanceContainer instanceContainer;
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        instance = Main.getInstanceManager().createInstance();
-        instance.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer = Main.getInstanceManager().createInstanceContainer();
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
         int loopStart = -2;
         int loopEnd = 2;
         long time = System.currentTimeMillis();
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
-                instance.loadChunk(x, z);
+                instanceContainer.loadChunk(x, z);
             }
         System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
     }
@@ -136,7 +138,7 @@ public class Player extends LivingEntity {
         });
 
         setEventCallback(PlayerLoginEvent.class, event -> {
-            event.setSpawningInstance(instance);
+            event.setSpawningInstance(instanceContainer);
         });
 
         setEventCallback(PlayerSpawnPacket.class, event -> {
@@ -147,18 +149,18 @@ public class Player extends LivingEntity {
                     ChickenCreature chickenCreature = new ChickenCreature();
                     chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
                     //chickenCreature.setOnFire(true);
-                    chickenCreature.setInstance(instance);
+                    chickenCreature.setInstance(getInstance());
                     //chickenCreature.addPassenger(player);
                 }
 
-            /*for (int ix = 0; ix < 4; ix++)
+            for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
                     ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
                     itemEntity.refreshPosition(ix, 66, iz);
                     itemEntity.setNoGravity(true);
-                    itemEntity.setInstance(instance);
+                    itemEntity.setInstance(getInstance());
                     //itemEntity.remove();
-                }*/
+                }
 
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
@@ -170,7 +172,6 @@ public class Player extends LivingEntity {
             teamsPacket.teamSuffix = Chat.rawText("suf");
             teamsPacket.collisionRule = "never";
             teamsPacket.entities = new String[]{getUsername()};
-            System.out.println(getViewers().size());
             sendPacketToViewersAndSelf(teamsPacket);
         });
     }

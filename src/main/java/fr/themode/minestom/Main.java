@@ -96,7 +96,7 @@ public class Main {
 
             @Override
             public void onException(Server server, Connection connection, Throwable cause) {
-                // cause.printStackTrace();
+                cause.printStackTrace();
             }
         });
 

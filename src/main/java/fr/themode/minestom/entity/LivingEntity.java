@@ -28,13 +28,13 @@ public abstract class LivingEntity extends Entity {
     public void update() {
         if (canPickupItem) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-            Set<ObjectEntity> objectEntities = chunk.getObjectEntities();
-            for (ObjectEntity objectEntity : objectEntities) {
-                if (objectEntity instanceof ItemEntity) {
-                    ItemEntity itemEntity = (ItemEntity) objectEntity;
+            Set<Entity> entities = instance.getChunkEntities(chunk);
+            for (Entity entity : entities) {
+                if (entity instanceof ItemEntity) {
+                    ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
-                    float distance = getDistance(objectEntity);
+                    float distance = getDistance(entity);
                     if (distance <= 2.04) {
                         synchronized (itemEntity) {
                             if (itemEntity.shouldRemove())
@@ -47,7 +47,7 @@ public abstract class LivingEntity extends Entity {
                                 collectItemPacket.collectorEntityId = getEntityId();
                                 collectItemPacket.pickupItemCount = item.getAmount();
                                 sendPacketToViewersAndSelf(collectItemPacket);
-                                objectEntity.remove();
+                                entity.remove();
                             });
                         }
                     }

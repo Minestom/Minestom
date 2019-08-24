@@ -1,11 +1,7 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.GroupedCollections;
 
 import java.io.File;
 import java.util.Collection;
@@ -15,11 +11,12 @@ import java.util.function.Consumer;
 /**
  * Shared instance is an instance that share the same chunks as instanceContainer, entities are separated.
  */
-public class SharedInstance implements Instance {
+public class SharedInstance extends Instance {
 
     private InstanceContainer instanceContainer;
 
-    public SharedInstance(InstanceContainer instanceContainer) {
+    protected SharedInstance(UUID uniqueId, InstanceContainer instanceContainer) {
+        super(uniqueId);
         this.instanceContainer = instanceContainer;
     }
 
@@ -64,21 +61,6 @@ public class SharedInstance implements Instance {
     }
 
     @Override
-    public GroupedCollections<ObjectEntity> getObjectEntities() {
-        return null;
-    }
-
-    @Override
-    public GroupedCollections<EntityCreature> getCreatures() {
-        return null;
-    }
-
-    @Override
-    public GroupedCollections<Player> getPlayers() {
-        return null;
-    }
-
-    @Override
     public UUID getUniqueId() {
         // FIXME: share same UUID ?
         return null;
@@ -112,21 +94,6 @@ public class SharedInstance implements Instance {
     @Override
     public void sendChunks(Player player) {
         instanceContainer.sendChunks(player);
-    }
-
-    @Override
-    public SharedInstance createSharedInstance() {
-        return new SharedInstance(instanceContainer);
-    }
-
-    @Override
-    public void addEntity(Entity entity) {
-
-    }
-
-    @Override
-    public void removeEntity(Entity entity) {
-
     }
 
     @Override
