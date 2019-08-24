@@ -12,12 +12,12 @@ public class ChunkBatch implements BlockModifier {
 
     private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_BATCH);
 
-    private Instance instance;
+    private InstanceContainer instance;
     private Chunk chunk;
 
     private List<BlockData> dataList = new ArrayList<>();
 
-    public ChunkBatch(Instance instance, Chunk chunk) {
+    public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
         this.chunk = chunk;
     }
@@ -46,7 +46,7 @@ public class ChunkBatch implements BlockModifier {
 
     public void flush(Consumer<Chunk> callback) {
         synchronized (chunk) {
-            batchesPool.submit(() -> {
+            batchesPool.execute(() -> {
                 for (BlockData data : dataList) {
                     data.apply(chunk);
                 }

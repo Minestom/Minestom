@@ -23,9 +23,12 @@ public interface Viewable {
             return;
 
         PacketWriter.writeCallbackPacket(packet, buffer -> {
+            int size = getViewers().size();
+            if (size == 0)
+                return;
             buffer.getData().retain(getViewers().size()).markReaderIndex();
             getViewers().forEach(player -> {
-                player.getPlayerConnection().sendUnencodedPacket(buffer);
+                player.getPlayerConnection().writeUnencodedPacket(buffer);
                 buffer.getData().resetReaderIndex();
             });
         });
@@ -39,7 +42,7 @@ public interface Viewable {
             PacketWriter.writeCallbackPacket(packet, buffer -> {
                 buffer.getData().retain(getViewers().size()).markReaderIndex();
                 getViewers().forEach(player -> {
-                    player.getPlayerConnection().sendUnencodedPacket(buffer);
+                    player.getPlayerConnection().writeUnencodedPacket(buffer);
                     buffer.getData().resetReaderIndex();
                 });
             });
@@ -50,12 +53,12 @@ public interface Viewable {
         if (this instanceof Player) {
             PacketWriter.writeCallbackPacket(packet, buffer -> {
                 buffer.getData().retain(getViewers().size() + 1).markReaderIndex();
-                ((Player) this).getPlayerConnection().sendUnencodedPacket(buffer);
+                ((Player) this).getPlayerConnection().writeUnencodedPacket(buffer);
                 buffer.getData().resetReaderIndex();
                 if (!getViewers().isEmpty()) {
                     getViewers().forEach(player -> {
                         buffer.getData().resetReaderIndex();
-                        player.getPlayerConnection().sendUnencodedPacket(buffer);
+                        player.getPlayerConnection().writeUnencodedPacket(buffer);
                     });
                 }
             });

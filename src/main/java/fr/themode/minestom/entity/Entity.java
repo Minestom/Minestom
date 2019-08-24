@@ -13,6 +13,7 @@ import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Utils;
+import fr.themode.minestom.utils.Vector;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +37,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     protected Instance instance;
     protected Position position;
+    protected boolean onGround;
     protected double lastX, lastY, lastZ;
     protected float lastYaw, lastPitch;
     private int id;
@@ -52,6 +54,15 @@ public abstract class Entity implements Viewable, DataContainer {
     private long scheduledRemoveTime;
     private int entityType;
     private long lastUpdate;
+
+    // Velocity
+    // TODO gravity implementation for entity other than players
+    protected float velocityX, velocityY, velocityZ; // Movement in block per second
+    protected long velocityTime; // Reset velocity to 0 after countdown
+
+    // Synchronization
+    private long synchronizationDelay = 2000; // In ms
+    private long lastSynchronizationTime;
 
     // Metadata
     protected boolean onFire;
@@ -92,6 +103,9 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public abstract void update();
 
+    // Called when entity a new instance is set
+    public abstract void spawn();
+
     public void teleport(Position position) {
         if (isChunkUnloaded(position.getX(), position.getZ()))
             return;
@@ -101,13 +115,14 @@ public abstract class Entity implements Viewable, DataContainer {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = position;
-        entityTeleportPacket.onGround = true;
+        entityTeleportPacket.onGround = onGround;
         sendPacketToViewers(entityTeleportPacket);
     }
 
     @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
+        player.getPlayerConnection().sendPacket(getVelocityPacket());
     }
 
     @Override
@@ -153,7 +168,36 @@ public abstract class Entity implements Viewable, DataContainer {
             remove();
             return;
         } else if (shouldUpdate()) {
+            long time = System.currentTimeMillis();
+
+            // Velocity
+            if (velocityTime != 0) {
+                if (time >= velocityTime) {
+                    // TODO send synchronization packet?
+                    resetVelocity();
+                } else {
+                    if (this instanceof Player) {
+                        sendPacketToViewersAndSelf(getVelocityPacket());
+                    } else {
+                        float tps = Main.TICK_PER_SECOND;
+                        refreshPosition(position.getX() + velocityX / tps, position.getY() + velocityY / tps, position.getZ() + velocityZ / tps);
+                        if (this instanceof ObjectEntity) {
+                            sendPacketToViewers(getVelocityPacket());
+                        } else if (this instanceof EntityCreature) {
+                            teleport(getPosition());
+                        }
+                    }
+                }
+            }
+
             update();
+
+            // Synchronization
+            if (time - lastSynchronizationTime >= synchronizationDelay) {
+                lastSynchronizationTime = System.currentTimeMillis();
+                sendPositionSynchronization();
+            }
+
             this.lastUpdate = System.currentTimeMillis();
         }
 
@@ -214,6 +258,21 @@ public abstract class Entity implements Viewable, DataContainer {
         this.isActive = true;
         this.instance = instance;
         instance.addEntity(this);
+        spawn();
+    }
+
+    public void setVelocity(Vector velocity, long velocityTime) {
+        this.velocityX = velocity.getX();
+        this.velocityY = velocity.getY();
+        this.velocityZ = velocity.getZ();
+        this.velocityTime = System.currentTimeMillis() + velocityTime;
+    }
+
+    public void resetVelocity() {
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.velocityZ = 0;
+        this.velocityTime = 0;
     }
 
     public float getDistance(Entity entity) {
@@ -249,6 +308,11 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public void setOnFire(boolean fire) {
         this.onFire = fire;
+        sendMetadataIndex(0);
+    }
+
+    public void setGlowing(boolean glowing) {
+        this.glowing = glowing;
         sendMetadataIndex(0);
     }
 
@@ -322,6 +386,16 @@ public abstract class Entity implements Viewable, DataContainer {
         this.scheduledRemoveTime = System.currentTimeMillis() + delay;
     }
 
+    protected EntityVelocityPacket getVelocityPacket() {
+        final float strength = 8000f / Main.TICK_PER_SECOND;
+        EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
+        velocityPacket.entityId = getEntityId();
+        velocityPacket.velocityX = (short) (velocityX * strength);
+        velocityPacket.velocityY = (short) (velocityY * strength);
+        velocityPacket.velocityZ = (short) (velocityZ * strength);
+        return velocityPacket;
+    }
+
     public EntityMetaDataPacket getMetadataPacket() {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
@@ -344,9 +418,11 @@ public abstract class Entity implements Viewable, DataContainer {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
         metaDataPacket.data = buffer;
-        sendPacketToViewers(metaDataPacket);
         if (this instanceof Player) {
-            ((Player) this).getPlayerConnection().sendPacket(metaDataPacket);
+            Player player = (Player) this;
+            player.sendPacketToViewersAndSelf(metaDataPacket);
+        } else {
+            sendPacketToViewers(metaDataPacket);
         }
     }
 
@@ -388,6 +464,14 @@ public abstract class Entity implements Viewable, DataContainer {
         if (usingElytra)
             index0 += 128;
         buffer.putByte(index0);
+    }
+
+    protected void sendPositionSynchronization() {
+        EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
+        entityTeleportPacket.entityId = getEntityId();
+        entityTeleportPacket.position = getPosition();
+        entityTeleportPacket.onGround = onGround;
+        sendPacketToViewers(entityTeleportPacket);
     }
 
     private void fillAirTickMetaData(Buffer buffer) {

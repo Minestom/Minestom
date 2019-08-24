@@ -124,10 +124,6 @@ public class Chunk {
         }
     }
 
-    public short[] getBlocksId() {
-        return blocksId;
-    }
-
     public Biome getBiome() {
         return biome;
     }
@@ -176,7 +172,7 @@ public class Chunk {
 
         // TODO customblock id map (StringId -> short id)
         // TODO List of (sectionId;blockcount;blocktype;blockarray)
-
+        // TODO block data
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (byte y = -128; y < 127; y++) {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {

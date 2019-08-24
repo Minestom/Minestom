@@ -17,6 +17,7 @@ public class StatusListener {
                 player.getPlayerConnection().sendPacket(respawnPacket);
                 PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(player.getPosition());
                 player.callEvent(PlayerRespawnEvent.class, respawnEvent);
+                player.refreshIsDead(false);
                 player.teleport(respawnEvent.getRespawnPosition());
                 player.getInventory().update();
                 break;

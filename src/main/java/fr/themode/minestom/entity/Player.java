@@ -5,24 +5,23 @@ import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.event.*;
-import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
-import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Position;
+import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
-import java.io.File;
 import java.util.Collections;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -39,8 +38,7 @@ public class Player extends LivingEntity {
     private Dimension dimension;
     private GameMode gameMode;
     private LevelType levelType;
-    // DEBUG
-    private static Instance instance;
+
     private PlayerSettings settings;
     private PlayerInventory inventory;
     private short heldSlot;
@@ -53,18 +51,16 @@ public class Player extends LivingEntity {
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
 
-    // Synchronization
-    private long synchronizationDelay = 1000; // In ms
-    private long lastSynchronizationTime;
-
     // Vehicle
     private float sideways;
     private float forward;
 
+    private static Instance instance;
+
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        //instance = Main.getInstanceManager().createInstance();
+        //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        instance = Main.getInstanceManager().createInstance();
         instance.setChunkGenerator(chunkGeneratorDemo);
         int loopStart = -2;
         int loopEnd = 2;
@@ -84,32 +80,29 @@ public class Player extends LivingEntity {
         this.username = username;
         this.playerConnection = playerConnection;
 
+        this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
-        /*setEventCallback(PickupItemEvent.class, event -> {
-            sendMessage("Hey you're trying to pick an item!");
-            event.setCancelled(true);
-        });*/
-
-        /*setEventCallback(StartDiggingEvent.class, event -> {
-            Random random = new Random();
-            boolean cancel = random.nextBoolean();
-            event.setCancelled(cancel);
-            sendMessage("Cancelled: " + cancel);
-        });*/
-
-        /*setEventCallback(BlockPlaceEvent.class, event -> {
-            event.setCancelled(true);
-            sendMessage("CANCELLED");
-        });*/
+        setCanPickupItem(true); // By default
 
         setEventCallback(AttackEvent.class, event -> {
             Entity entity = event.getTarget();
             if (entity instanceof EntityCreature) {
                 ((EntityCreature) entity).kill();
                 sendMessage("You killed an entity!");
+            } else if (entity instanceof Player) {
+                Player player = (Player) entity;
+                Vector velocity = getPosition().clone().getDirection().multiply(6);
+                velocity.setY(3.5f);
+                player.setVelocity(velocity, 150);
+
+                AnimationPacket animationPacket = new AnimationPacket();
+                animationPacket.entityId = player.getEntityId();
+                animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
+                sendPacketToViewersAndSelf(animationPacket);
+
+                sendMessage("ATTACK");
             }
-            sendMessage("ATTACK");
             /*UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
             updateHealthPacket.health = -1f;
             updateHealthPacket.food = 5;
@@ -127,22 +120,27 @@ public class Player extends LivingEntity {
             if (event.getHand() != Hand.MAIN)
                 return;
 
-            sendMessage("Save chunk data...");
+            /*sendMessage("Save chunk data...");
             long time = System.currentTimeMillis();
             getInstance().saveToFolder(() -> {
                 sendMessage("Saved in " + (System.currentTimeMillis() - time) + " ms");
-            });
+            });*/
+
+            for (Player player : Main.getConnectionManager().getOnlinePlayers()) {
+                player.teleport(getPosition());
+            }
         });
 
-        // TODO loginevent set instance
+        setEventCallback(PickupItemEvent.class, event -> {
+            event.setCancelled(!getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
+        });
+
         setEventCallback(PlayerLoginEvent.class, event -> {
-            System.out.println("PLAYER LOGIN EVENT");
             event.setSpawningInstance(instance);
         });
 
         setEventCallback(PlayerSpawnPacket.class, event -> {
-            System.out.println("TELEPORT");
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
             for (int cx = 0; cx < 4; cx++)
                 for (int cz = 0; cz < 4; cz++) {
@@ -152,15 +150,42 @@ public class Player extends LivingEntity {
                     chickenCreature.setInstance(instance);
                     //chickenCreature.addPassenger(player);
                 }
+
+            /*for (int ix = 0; ix < 4; ix++)
+                for (int iz = 0; iz < 4; iz++) {
+                    ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
+                    itemEntity.refreshPosition(ix, 66, iz);
+                    itemEntity.setNoGravity(true);
+                    itemEntity.setInstance(instance);
+                    //itemEntity.remove();
+                }*/
+
+            TeamsPacket teamsPacket = new TeamsPacket();
+            teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
+            teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
+            teamsPacket.teamDisplayName = Chat.rawText("WOWdisplay");
+            teamsPacket.nameTagVisibility = "always";
+            teamsPacket.teamColor = 2;
+            teamsPacket.teamPrefix = Chat.rawText("pre");
+            teamsPacket.teamSuffix = Chat.rawText("suf");
+            teamsPacket.collisionRule = "never";
+            teamsPacket.entities = new String[]{getUsername()};
+            System.out.println(getViewers().size());
+            sendPacketToViewersAndSelf(teamsPacket);
         });
     }
 
     @Override
     public void update() {
-        ClientPlayPacket packet = null;
+
+        playerConnection.flush();
+
+        ClientPlayPacket packet;
         while ((packet = packets.poll()) != null) {
             packet.process(this);
         }
+
+        super.update(); // Super update (item pickup)
 
         // Target block stage
         if (targetCustomBlock != null) {
@@ -175,37 +200,6 @@ public class Player extends LivingEntity {
             if (stage > 9) {
                 instance.breakBlock(this, targetBlockPosition, targetCustomBlock);
                 resetTargetBlock();
-            }
-        }
-
-        // Item pickup
-        Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-        Set<ObjectEntity> objectEntities = chunk.getObjectEntities();
-        for (ObjectEntity objectEntity : objectEntities) {
-            if (objectEntity instanceof ItemEntity) {
-                ItemEntity itemEntity = (ItemEntity) objectEntity;
-                if (!itemEntity.isPickable())
-                    continue;
-                float distance = getDistance(objectEntity);
-                if (distance <= 2.04) {
-                    synchronized (itemEntity) {
-                        if (itemEntity.shouldRemove())
-                            continue;
-                        ItemStack item = itemEntity.getItemStack();
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
-                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
-                            boolean result = getInventory().addItemStack(item);
-                            if (result) {
-                                CollectItemPacket collectItemPacket = new CollectItemPacket();
-                                collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                                collectItemPacket.collectorEntityId = getEntityId();
-                                collectItemPacket.pickupItemCount = item.getAmount();
-                                sendPacketToViewersAndSelf(collectItemPacket);
-                                objectEntity.remove();
-                            }
-                        });
-                    }
-                }
             }
         }
 
@@ -226,17 +220,12 @@ public class Player extends LivingEntity {
             entityLookAndRelativeMovePacket.pitch = position.getPitch();
             entityLookAndRelativeMovePacket.onGround = onGround;
 
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.getYaw();
-
             lastX = position.getX();
             lastY = position.getY();
             lastZ = position.getZ();
             lastYaw = position.getYaw();
             lastPitch = position.getPitch();
             updatePacket = entityLookAndRelativeMovePacket;
-            optionalUpdatePacket = entityHeadLookPacket;
         } else if (positionChanged) {
             EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
             entityRelativeMovePacket.entityId = getEntityId();
@@ -255,15 +244,18 @@ public class Player extends LivingEntity {
             entityLookPacket.pitch = position.getPitch();
             entityLookPacket.onGround = onGround;
 
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.getYaw();
-
             lastYaw = position.getYaw();
             lastPitch = position.getPitch();
             updatePacket = entityLookPacket;
+        }
+
+        if (viewChanged) {
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
             optionalUpdatePacket = entityHeadLookPacket;
         }
+
         if (updatePacket != null) {
             if (optionalUpdatePacket != null) {
                 sendPacketsToViewers(updatePacket, optionalUpdatePacket);
@@ -271,20 +263,11 @@ public class Player extends LivingEntity {
                 sendPacketToViewers(updatePacket);
             }
         }
-        playerConnection.sendPacket(new UpdateViewPositionPacket(instance.getChunkAt(getPosition())));
+    }
 
-        // Synchronization
-        long time = System.currentTimeMillis();
-        if (time - lastSynchronizationTime >= synchronizationDelay) {
-            lastSynchronizationTime = System.currentTimeMillis();
-            for (Player viewer : getViewers()) {
-                EntityTeleportPacket teleportPacket = new EntityTeleportPacket();
-                teleportPacket.entityId = viewer.getEntityId();
-                teleportPacket.position = viewer.getPosition();
-                teleportPacket.onGround = viewer.onGround;
-                playerConnection.sendPacket(teleportPacket);
-            }
-        }
+    @Override
+    public void spawn() {
+
     }
 
     @Override
@@ -305,6 +288,7 @@ public class Player extends LivingEntity {
 
         connection.sendPacket(pInfoPacket);
         connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getMetadataPacket());
 
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             syncEquipment(slot); // TODO only send packets to "player" and not all viewers
@@ -327,6 +311,12 @@ public class Player extends LivingEntity {
         super.setInstance(instance);
     }
 
+    @Override
+    public void kill() {
+        this.isDead = true;
+        // TODO set health to -1
+    }
+
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
         BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
         breakAnimationPacket.entityId = getEntityId() + 1;
@@ -342,6 +332,7 @@ public class Player extends LivingEntity {
 
     @Override
     public void teleport(Position position) {
+        super.teleport(position); // Send new position to all viewers directly
         if (isChunkUnloaded(position.getX(), position.getZ()))
             return;
 

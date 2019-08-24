@@ -6,6 +6,7 @@ import fr.themode.minestom.event.PlayerSpawnPacket;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
+import fr.themode.minestom.utils.GroupedCollections;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -24,19 +25,21 @@ public class EntityManager {
     public void update() {
         waitingPlayersTick();
         for (Instance instance : instanceManager.getInstances()) {
-            testTick2(instance); // TODO optimize update engine for when there are too many entities on one chunk
+            // TODO optimize update engine for when there are too many entities on one chunk
+            testTick1(instance);
         }
 
     }
 
     private void waitingPlayersTick() {
-        Player waitingPlayer = null;
+        Player waitingPlayer;
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
             final Player playerCache = waitingPlayer;
-            playersPool.submit(() -> {
+            playersPool.execute(() -> {
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstance() : loginEvent.getSpawningInstance();
+                // TODO load multiple chunks around player (based on view distance) instead of only one
                 spawningInstance.loadChunk(playerCache.getPosition(), chunk -> {
                     playerCache.spawned = true;
                     playerCache.setInstance(spawningInstance);
@@ -55,7 +58,7 @@ public class EntityManager {
             Set<Player> players = chunk.getPlayers();
 
             if (!creatures.isEmpty() || !objects.isEmpty()) {
-                entitiesPool.submit(() -> {
+                entitiesPool.execute(() -> {
                     for (EntityCreature creature : creatures) {
                         creature.tick();
                     }
@@ -66,7 +69,7 @@ public class EntityManager {
             }
 
             if (!players.isEmpty()) {
-                playersPool.submit(() -> {
+                playersPool.execute(() -> {
                     for (Player player : players) {
                         player.tick();
                     }
@@ -75,38 +78,33 @@ public class EntityManager {
         }
     }
 
+    private void testTick1(Instance instance) {
+        GroupedCollections<ObjectEntity> objects = instance.getObjectEntities();
+        GroupedCollections<EntityCreature> creatures = instance.getCreatures();
+        GroupedCollections<Player> players = instance.getPlayers();
+
+        if (!creatures.isEmpty() || !objects.isEmpty()) {
+            entitiesPool.execute(() -> {
+                for (EntityCreature creature : creatures) {
+                    creature.tick();
+                }
+                for (ObjectEntity objectEntity : objects) {
+                    objectEntity.tick();
+                }
+            });
+        }
+
+        if (!players.isEmpty()) {
+            playersPool.execute(() -> {
+                for (Player player : players) {
+                    player.tick();
+                }
+            });
+        }
+    }
+
     public void addWaitingPlayer(Player player) {
         this.waitingPlayers.add(player);
     }
-
-    /*private void testTick(Instance instance) {
-        // Creatures
-        for (EntityCreature creature : instance.getCreatures()) {
-            creaturesPool.submit(() -> {
-                boolean shouldRemove = creature.shouldRemove();
-                if (!shouldRemove) {
-                    creature.tick();
-                }
-
-                if (creature.shouldRemove()) {
-                    instance.removeEntity(creature);
-                }
-            });
-        }
-
-        // Players
-        for (Player player : instance.getPlayers()) {
-            playersPool.submit(() -> {
-                boolean shouldRemove = player.shouldRemove();
-                if (!shouldRemove) {
-                    player.tick();
-                }
-
-                if (player.shouldRemove()) {
-                    instance.removeEntity(player);
-                }
-            });
-        }
-    }*/
 
 }

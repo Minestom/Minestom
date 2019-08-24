@@ -25,7 +25,7 @@ public class ChunkLoaderIO {
     }
 
     protected void saveChunk(Chunk chunk, File folder, Runnable callback) {
-        chunkLoaderPool.submit(() -> {
+        chunkLoaderPool.execute(() -> {
             File chunkFile = getChunkFile(chunk.getChunkX(), chunk.getChunkZ(), folder);
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 byte[] data = chunk.getSerializedData();
@@ -49,7 +49,7 @@ public class ChunkLoaderIO {
     }
 
     protected void loadChunk(int chunkX, int chunkZ, Instance instance, Consumer<Chunk> callback) {
-        chunkLoaderPool.submit(() -> {
+        chunkLoaderPool.execute(() -> {
             File chunkFile = getChunkFile(chunkX, chunkZ, instance.getFolder());
             if (!chunkFile.exists()) {
                 instance.createChunk(chunkX, chunkZ, callback); // Chunk file does not exist, create new chunk
@@ -67,8 +67,8 @@ public class ChunkLoaderIO {
 
             int decompressedLength = SerializerUtils.bytesToInt(array);
 
-            byte[] compressedChunkData = new byte[array.length - 4];
-            System.arraycopy(array, 4, compressedChunkData, 0, compressedChunkData.length); // Remove the decompressed length from the array
+            byte[] compressedChunkData = new byte[array.length - Integer.BYTES];
+            System.arraycopy(array, Integer.BYTES, compressedChunkData, 0, compressedChunkData.length); // Remove the decompressed length from the array
 
             byte[] decompressed = new byte[decompressedLength];
             long result = Zstd.decompress(decompressed, compressedChunkData); // Decompressed in an array with the max size
@@ -85,10 +85,10 @@ public class ChunkLoaderIO {
                 chunk = new Chunk(biome, chunkX, chunkZ);
 
                 while (true) {
+                    // TODO block data
                     int index = stream.readInt();
                     boolean isCustomBlock = stream.readBoolean();
                     short blockId = stream.readShort();
-                    //System.out.println("id: " + blockId);
 
                     byte[] chunkPos = SerializerUtils.indexToChunkPosition(index);
                     if (isCustomBlock) {

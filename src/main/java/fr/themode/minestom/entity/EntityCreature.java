@@ -9,13 +9,22 @@ import fr.themode.minestom.utils.Position;
 // TODO viewers synchronization each X ticks?
 public abstract class EntityCreature extends LivingEntity {
 
-    protected boolean isDead;
-
     public EntityCreature(int entityType) {
         super(entityType);
     }
 
+    @Override
+    public void update() {
+        super.update();
+    }
+
     public void move(float x, float y, float z) {
+        if (velocityTime != 0) {
+            // Cancel movements if velocity is active
+            return;
+        }
+
+        // TODO change yaw/pitch based on next position?
         Position position = getPosition();
         float newX = position.getX() + x;
         float newY = position.getY() + y;
@@ -35,6 +44,7 @@ public abstract class EntityCreature extends LivingEntity {
         refreshPosition(newX, newY, newZ);
     }
 
+    @Override
     public void kill() {
         this.isDead = true;
         triggerStatus((byte) 3);
@@ -59,7 +69,4 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(getMetadataPacket());
     }
 
-    public boolean isDead() {
-        return isDead;
-    }
 }

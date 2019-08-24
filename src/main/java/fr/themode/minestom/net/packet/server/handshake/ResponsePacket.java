@@ -22,7 +22,7 @@ public class ResponsePacket implements ServerPacket {
             "        ]\n" +
             "    },\t\n" +
             "    \"description\": {\n" +
-            "        \"text\": \"Wallah les cubes\"\n" +
+            "        \"text\": \"Hey guys!\"\n" +
             "    },\n" +
             "    \"favicon\": \"data:image/png;base64,<data>\"\n" +
             "}";

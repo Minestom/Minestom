@@ -38,16 +38,14 @@ public class TeamsPacket implements ServerPacket {
             case REMOVE_TEAM:
 
                 break;
-            case ADD_PLAYERS_TEAM:
-            case REMOVE_PLAYERS_TEAM:
-                Utils.writeVarInt(buffer, entities.length);
-                for (String entity : entities) {
-                    Utils.writeString(buffer, entity);
-                }
-                break;
         }
 
-        if (action == Action.CREATE_TEAM) {
+        if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
+            if (entities == null) {
+                Utils.writeVarInt(buffer, 0);
+                return;
+            }
+
             Utils.writeVarInt(buffer, entities.length);
             for (String entity : entities) {
                 Utils.writeString(buffer, entity);

@@ -15,7 +15,7 @@ public class PacketWriter {
     private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_PACKET_WRITER);
 
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<Buffer> consumer) {
-        batchesPool.submit(() -> {
+        batchesPool.execute(() -> {
             Packet p = PacketUtils.writePacket(serverPacket);
             consumer.accept(PacketUtils.encode(p)); // TODO accept in another thread?
         });

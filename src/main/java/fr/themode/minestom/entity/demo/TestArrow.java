@@ -13,12 +13,21 @@ public class TestArrow extends ObjectEntity {
     }
 
     @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void spawn() {
+
+    }
+
+    @Override
     public int getObjectData() {
         return shooter.getEntityId() + 1;
     }
 
-    @Override
-    public void update() {
-
+    public LivingEntity getShooter() {
+        return shooter;
     }
 }

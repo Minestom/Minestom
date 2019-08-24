@@ -22,13 +22,14 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
 
     // Thread number
-    public static final int THREAD_COUNT_PACKET_WRITER = 3;
+    public static final int THREAD_COUNT_PACKET_WRITER = 5;
     public static final int THREAD_COUNT_CHUNK_IO = 2;
     public static final int THREAD_COUNT_CHUNK_BATCH = 2;
-    public static final int THREAD_COUNT_ENTITIES = 2;
-    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
+    public static final int THREAD_COUNT_ENTITIES = 1;
+    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 3;
 
     public static final int TICK_MS = 50;
+    public static final int TICK_PER_SECOND = 1000 / TICK_MS;
 
     // Networking
     private static ConnectionManager connectionManager;
@@ -41,7 +42,7 @@ public class Main {
     private static BlockManager blockManager;
     private static EntityManager entityManager;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
@@ -95,7 +96,7 @@ public class Main {
 
             @Override
             public void onException(Server server, Connection connection, Throwable cause) {
-                cause.printStackTrace();
+                // cause.printStackTrace();
             }
         });
 
@@ -127,7 +128,11 @@ public class Main {
             //String perfMessage = "Online: " + getConnectionManager().getOnlinePlayers().size() + " Tick time: " + (TICK_MS - sleepTime) + " ms";
             //getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(perfMessage));
 
-            Thread.sleep(sleepTime);
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

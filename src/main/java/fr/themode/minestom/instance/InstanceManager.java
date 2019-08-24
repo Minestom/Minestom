@@ -11,7 +11,7 @@ public class InstanceManager {
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
 
     public Instance createInstance(File folder) {
-        Instance instance = new Instance(UUID.randomUUID(), folder);
+        Instance instance = new InstanceContainer(UUID.randomUUID(), folder);
         this.instances.add(instance);
         return instance;
     }

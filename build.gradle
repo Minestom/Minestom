@@ -5,7 +5,7 @@ plugins {
 group 'fr.themode.minestom'
 version '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()

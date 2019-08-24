@@ -11,11 +11,11 @@ public class BlockBatch implements BlockModifier {
 
     private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(2);
 
-    private Instance instance;
+    private InstanceContainer instance;
 
     private Map<Chunk, List<BlockData>> data = new HashMap<>();
 
-    public BlockBatch(Instance instance) {
+    public BlockBatch(InstanceContainer instance) {
         this.instance = instance;
     }
 
@@ -55,7 +55,7 @@ public class BlockBatch implements BlockModifier {
         for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
             Chunk chunk = entry.getKey();
             List<BlockData> dataList = entry.getValue();
-            batchesPool.submit(() -> {
+            batchesPool.execute(() -> {
                 synchronized (chunk) {
                     for (BlockData data : dataList) {
                         data.apply(chunk);

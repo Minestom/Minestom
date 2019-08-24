@@ -48,12 +48,12 @@ public class PlayerConnection {
         getChannel().write(packet.getData());
     }
 
-    public void flush() {
-        getChannel().flush();
-    }
-
     public void sendPacket(ServerPacket serverPacket) {
         sendPacket(PacketUtils.writePacket(serverPacket));
+    }
+
+    public void flush() {
+        getChannel().flush();
     }
 
     public Connection getConnection() {
