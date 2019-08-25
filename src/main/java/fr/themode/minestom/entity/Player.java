@@ -4,8 +4,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.data.Data;
-import fr.themode.minestom.data.DataType;
-import fr.themode.minestom.entity.demo.ChickenCreature;
+import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
@@ -14,7 +13,6 @@ import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
-import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -45,6 +43,8 @@ public class Player extends LivingEntity {
     private GameMode gameMode;
     private LevelType levelType;
 
+    private static InstanceContainer instanceContainer;
+
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
@@ -62,13 +62,14 @@ public class Player extends LivingEntity {
     }
 
     protected Set<Entity> viewableEntity = new CopyOnWriteArraySet<>();
-    private float health;
 
     private PlayerSettings settings;
     private PlayerInventory inventory;
     private short heldSlot;
     private Inventory openInventory;
+
     private int food;
+    private float foodSaturation;
 
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
@@ -81,17 +82,15 @@ public class Player extends LivingEntity {
     private float sideways;
     private float forward;
 
-    private static InstanceContainer instanceContainer;
-    private float foodSaturation;
-
     protected boolean spawned;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
-        super(93); // FIXME verify
+        super(93);
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
 
+        playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
 
         this.settings = new PlayerSettings();
@@ -115,11 +114,11 @@ public class Player extends LivingEntity {
         });
 
         setEventCallback(PlayerBlockPlaceEvent.class, event -> {
-            sendMessage("Placed block! " + event.getHand());
+            /*sendMessage("Placed block! " + event.getHand());
             int value = getData().getOrDefault("test", 0);
             getData().set("test", value + 1, DataType.INTEGER);
 
-            System.out.println("OLD DATA VALUE: " + value);
+            System.out.println("OLD DATA VALUE: " + value);*/
             if (event.getHand() != Hand.MAIN)
                 return;
 
@@ -129,10 +128,10 @@ public class Player extends LivingEntity {
                 sendMessage("Saved in " + (System.currentTimeMillis() - time) + " ms");
             });*/
 
-            /*for (Player player : instance.getPlayers()) {
+            for (Player player : instance.getPlayers()) {
                 if (player != this)
                     player.teleport(getPosition());
-            }*/
+            }
         });
 
         setEventCallback(PickupItemEvent.class, event -> {
@@ -146,10 +145,10 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN ");
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
-            ChickenCreature chickenCreature = new ChickenCreature();
+            /*ChickenCreature chickenCreature = new ChickenCreature();
             chickenCreature.refreshPosition(2, 65, 2);
             chickenCreature.setInstance(getInstance());
 
@@ -160,7 +159,7 @@ public class Player extends LivingEntity {
                     itemEntity.setNoGravity(true);
                     itemEntity.setInstance(getInstance());
                     //itemEntity.remove();
-                }
+                }*/
 
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
@@ -173,6 +172,9 @@ public class Player extends LivingEntity {
             teamsPacket.collisionRule = "never";
             teamsPacket.entities = new String[]{getUsername()};
             sendPacketToViewersAndSelf(teamsPacket);
+
+            setAttribute(Attribute.MAX_HEALTH, 21);
+            heal();
         });
     }
 
@@ -301,7 +303,7 @@ public class Player extends LivingEntity {
         connection.sendPacket(getMetadataPacket());
 
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            syncEquipment(slot); // TODO only send packets to "player" and not all viewers
+            player.playerConnection.sendPacket(getEquipmentPacket(slot));
         }
     }
 
@@ -324,7 +326,13 @@ public class Player extends LivingEntity {
     @Override
     public void kill() {
         this.isDead = true;
-        setHealth(-1);
+        refreshIsDead(true);
+        EntityStatusPacket entityStatusPacket = new EntityStatusPacket();
+        entityStatusPacket.entityId = getEntityId();
+        entityStatusPacket.status = 3; // Death sound/animation
+        sendPacketToViewers(entityStatusPacket);
+        DeathEvent deathEvent = new DeathEvent();
+        callEvent(DeathEvent.class, deathEvent);
     }
 
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
@@ -341,6 +349,9 @@ public class Player extends LivingEntity {
     }
 
     public void damage(float amount) {
+        if (getGameMode() == GameMode.CREATIVE)
+            return;
+
         AnimationPacket animationPacket = new AnimationPacket();
         animationPacket.entityId = getEntityId();
         animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
@@ -348,23 +359,17 @@ public class Player extends LivingEntity {
         setHealth(health - amount);
     }
 
-    public float getHealth() {
-        return health;
+    @Override
+    public void setAttribute(Attribute attribute, float value) {
+        super.setAttribute(attribute, value);
+        if (playerConnection != null)
+            playerConnection.sendPacket(getPropertiesPacket());
     }
 
+    @Override
     public void setHealth(float health) {
-        this.health = health;
+        super.setHealth(health);
         sendUpdateHealthPacket();
-        if (this.health <= 0) {
-            // Kill player
-            refreshIsDead(true);
-            EntityStatusPacket entityStatusPacket = new EntityStatusPacket();
-            entityStatusPacket.entityId = getEntityId();
-            entityStatusPacket.status = 3; // Death sound/animation
-            sendPacketToViewers(entityStatusPacket);
-            DeathEvent deathEvent = new DeathEvent();
-            callEvent(DeathEvent.class, deathEvent);
-        }
     }
 
     public int getFood() {
@@ -408,12 +413,13 @@ public class Player extends LivingEntity {
             spawnPlayerPacket.playerUuid = getUuid();
             spawnPlayerPacket.position = getPosition();
             sendPacketToViewers(spawnPlayerPacket);
+            playerConnection.sendPacket(getPropertiesPacket());
+            sendUpdateHealthPacket();
         });
     }
 
     private void refreshHealth() {
-        // TODO improve
-        this.health = 20;
+        heal();
         this.food = 20;
         this.foodSaturation = 5;
     }
@@ -473,8 +479,7 @@ public class Player extends LivingEntity {
 
         }
 
-        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(newChunk);
-        playerConnection.sendPacket(updateViewPositionPacket);
+        updateViewPosition(newChunk);
     }
 
     @Override
@@ -625,11 +630,20 @@ public class Player extends LivingEntity {
     }
 
     public void syncEquipment(EntityEquipmentPacket.Slot slot) {
+        sendPacketToViewers(getEquipmentPacket(slot));
+    }
+
+    protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
         equipmentPacket.entityId = getEntityId();
         equipmentPacket.slot = slot;
         equipmentPacket.itemStack = inventory.getEquipment(slot);
-        sendPacketToViewers(equipmentPacket);
+        return equipmentPacket;
+    }
+
+    protected void updateViewPosition(Chunk chunk) {
+        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
+        playerConnection.sendPacket(updateViewPositionPacket);
     }
 
     public void addPacketToQueue(ClientPlayPacket packet) {

@@ -172,7 +172,7 @@ public class Utils {
 
             buffer.putByte((byte) 0); // End display compound
 
-            buffer.putByte((byte) 0); // End nbt TODO
+            buffer.putByte((byte) 0); // End nbt
         }
 
     }

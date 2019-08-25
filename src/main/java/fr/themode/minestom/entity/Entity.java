@@ -109,21 +109,7 @@ public abstract class Entity implements Viewable, DataContainer {
         if (instance == null)
             return;
 
-        if (instance.hasEnabledAutoChunkLoad()) {
-            instance.loadChunk(position, chunk -> {
-                refreshPosition(position.getX(), position.getY(), position.getZ());
-                refreshView(position.getYaw(), position.getPitch());
-                EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
-                entityTeleportPacket.entityId = getEntityId();
-                entityTeleportPacket.position = position;
-                entityTeleportPacket.onGround = onGround;
-                sendPacketToViewers(entityTeleportPacket);
-                if (callback != null)
-                    callback.run();
-            });
-        } else {
-            if (isChunkUnloaded(position.getX(), position.getZ()))
-                return;
+        Runnable runnable = () -> {
             refreshPosition(position.getX(), position.getY(), position.getZ());
             refreshView(position.getYaw(), position.getPitch());
             EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
@@ -131,6 +117,18 @@ public abstract class Entity implements Viewable, DataContainer {
             entityTeleportPacket.position = position;
             entityTeleportPacket.onGround = onGround;
             sendPacketToViewers(entityTeleportPacket);
+        };
+
+        if (instance.hasEnabledAutoChunkLoad()) {
+            instance.loadChunk(position, chunk -> {
+                runnable.run();
+                if (callback != null)
+                    callback.run();
+            });
+        } else {
+            if (isChunkUnloaded(position.getX(), position.getZ()))
+                return;
+            runnable.run();
             if (callback != null)
                 callback.run();
         }
@@ -196,7 +194,7 @@ public abstract class Entity implements Viewable, DataContainer {
             // Velocity
             if (velocityTime != 0) {
                 if (time >= velocityTime) {
-                    // TODO send synchronization packet?
+                    sendPositionSynchronization(); // Send synchronization after velocity ended
                     resetVelocity();
                 } else {
                     if (this instanceof Player) {
@@ -215,7 +213,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
             update();
 
-            // Synchronization
+            // Scheduled synchronization
             if (time - lastSynchronizationTime >= synchronizationDelay) {
                 lastSynchronizationTime = System.currentTimeMillis();
                 sendPositionSynchronization();
@@ -309,7 +307,14 @@ public abstract class Entity implements Viewable, DataContainer {
         if (instance != null) {
             SetPassengersPacket passengersPacket = new SetPassengersPacket();
             passengersPacket.vehicleEntityId = getEntityId();
-            passengersPacket.passengersId = new int[]{entity.getEntityId()}; // TODO all passengers not only the new
+
+            int[] passengers = new int[this.passengers.size()];
+            int counter = 0;
+            for (Entity passenger : this.passengers) {
+                passengers[counter++] = passenger.getEntityId();
+            }
+
+            passengersPacket.passengersId = passengers;
             sendPacketToViewers(passengersPacket);
         }
     }

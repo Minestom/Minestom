@@ -26,11 +26,11 @@ public interface Viewable {
             int size = getViewers().size();
             if (size == 0)
                 return;
-            buffer.getData().retain(getViewers().size()).markReaderIndex();
-            getViewers().forEach(player -> {
-                player.getPlayerConnection().writeUnencodedPacket(buffer);
+            buffer.getData().retain(size).markReaderIndex();
+            for (Player viewer : getViewers()) {
+                viewer.getPlayerConnection().writeUnencodedPacket(buffer);
                 buffer.getData().resetReaderIndex();
-            });
+            }
         });
     }
 
@@ -40,11 +40,14 @@ public interface Viewable {
 
         for (ServerPacket packet : packets) {
             PacketWriter.writeCallbackPacket(packet, buffer -> {
-                buffer.getData().retain(getViewers().size()).markReaderIndex();
-                getViewers().forEach(player -> {
-                    player.getPlayerConnection().writeUnencodedPacket(buffer);
+                int size = getViewers().size();
+                if (size == 0)
+                    return;
+                buffer.getData().retain(size).markReaderIndex();
+                for (Player viewer : getViewers()) {
+                    viewer.getPlayerConnection().writeUnencodedPacket(buffer);
                     buffer.getData().resetReaderIndex();
-                });
+                }
             });
         }
     }
@@ -52,14 +55,15 @@ public interface Viewable {
     default void sendPacketToViewersAndSelf(ServerPacket packet) {
         if (this instanceof Player) {
             PacketWriter.writeCallbackPacket(packet, buffer -> {
-                buffer.getData().retain(getViewers().size() + 1).markReaderIndex();
+                int size = getViewers().size();
+                buffer.getData().retain(size + 1).markReaderIndex();
                 ((Player) this).getPlayerConnection().writeUnencodedPacket(buffer);
                 buffer.getData().resetReaderIndex();
-                if (!getViewers().isEmpty()) {
-                    getViewers().forEach(player -> {
+                if (size != 0) {
+                    for (Player viewer : getViewers()) {
                         buffer.getData().resetReaderIndex();
-                        player.getPlayerConnection().writeUnencodedPacket(buffer);
-                    });
+                        viewer.getPlayerConnection().writeUnencodedPacket(buffer);
+                    }
                 }
             });
         }

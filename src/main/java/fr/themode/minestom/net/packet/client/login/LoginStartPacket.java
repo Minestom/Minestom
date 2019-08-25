@@ -21,26 +21,6 @@ import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
-    // Test
-    /*private static Instance instance;
-
-    static {
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        //instance = Main.getInstanceManager().createInstance();
-        instance.setChunkGenerator(chunkGeneratorDemo);
-        int loopStart = -2;
-        int loopEnd = 2;
-        long time = System.currentTimeMillis();
-        for (int x = loopStart; x < loopEnd; x++)
-            for (int z = loopStart; z < loopEnd; z++) {
-                instance.loadChunk(x, z, chunk -> {
-                    System.out.println("JE SUIS LE CALLBACK CHUNK");
-                });
-            }
-        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
-    }*/
-
     public String username;
 
     @Override
@@ -110,51 +90,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        // Next is optional TODO put all that somewhere else (LoginEvent)
-        // TODO LoginEvent in another thread (here we are in netty thread)
         Main.getEntityManager().addWaitingPlayer(player);
 
-
-        // TODO REMOVE EVERYTHING DOWN THERE
-        //player.setInstance(instance);
-
-        /*for (int cx = 0; cx < 4; cx++)
-            for (int cz = 0; cz < 4; cz++) {
-                ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
-                //chickenCreature.setOnFire(true);
-                chickenCreature.setInstance(instance);
-                //chickenCreature.addPassenger(player);
-            }
-
-        PlayerInventory inventory = player.getInventory();
-        inventory.addItemStack(new ItemStack(Material.BOW, (byte) 1));
-        inventory.addItemStack(new ItemStack(Material.ARROW, (byte) 100));
-
-        /*Inventory inv = new Inventory(InventoryType.WINDOW_3X3, "Salut je suis le titre");
-        inv.setItemStack(0, new ItemStack(1, (byte) 1));
-        player.openInventory(inv);
-        inv.setItemStack(1, new ItemStack(1, (byte) 2));
-
-        BossBar bossBar = new BossBar("Bossbar Title", BarColor.BLUE, BarDivision.SEGMENT_12);
-        bossBar.setProgress(0.75f);
-        bossBar.addViewer(player);
-
-        for (int ix = 0; ix < 4; ix++)
-            for (int iz = 0; iz < 4; iz++) {
-                ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                itemEntity.refreshPosition(ix, 66, iz);
-                itemEntity.setNoGravity(true);
-                itemEntity.setInstance(instance);
-                //itemEntity.remove();
-            }
-
-        TestArrow arrow = new TestArrow(player);
-        arrow.refreshPosition(5, 65, 5);
-        arrow.setInstance(instance);
-        arrow.setNoGravity(true);
-
-        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
+        /*DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         argumentNode.flags = 0b1010;
         argumentNode.children = new int[0];

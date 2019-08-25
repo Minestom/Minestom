@@ -13,7 +13,6 @@ import fr.themode.minestom.net.packet.client.handler.ClientStatusPacketsHandler;
 import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +41,7 @@ public class PacketProcessor {
 
     private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
-    public void process(Connection connection, Packet packet) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void process(Connection connection, Packet packet) {
         int id = packet.get(PACKET_ID_IDENTIFIER);
         Buffer buffer = packet.getPayload();
         connectionPlayerConnectionMap.get(connection);
@@ -66,17 +65,17 @@ public class PacketProcessor {
         switch (connectionState) {
             case PLAY:
                 Player player = connectionManager.getPlayer(playerConnection);
-                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketClass(id).getDeclaredConstructor().newInstance();
+                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
                 playPacket.read(buffer);
                 player.addPacketToQueue(playPacket); // Processed during player tick update
                 break;
             case LOGIN:
-                ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketClass(id).getDeclaredConstructor().newInstance();
+                ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(id);
                 loginPacket.read(buffer);
                 loginPacket.process(playerConnection, connectionManager);
                 break;
             case STATUS:
-                ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketClass(id).getDeclaredConstructor().newInstance();
+                ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(id);
                 statusPacket.read(buffer);
                 statusPacket.process(playerConnection, connectionManager);
                 break;

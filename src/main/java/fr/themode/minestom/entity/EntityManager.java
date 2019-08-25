@@ -49,13 +49,15 @@ public class EntityManager {
                     int chunkZ = chunkPos[1];
                     boolean isLast = i == visibleChunks.length - 1;
                     Consumer<Chunk> callback = isLast ? chunk -> {
-                        System.out.println("END CHUNK LOADING");
                         playerCache.spawned = true;
                         playerCache.setInstance(spawningInstance);
                         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent();
                         playerCache.callEvent(PlayerSpawnEvent.class, spawnEvent);
+                        playerCache.updateViewPosition(chunk);
                     } : null;
-                    spawningInstance.loadChunk(chunkX, chunkZ, callback); // TODO loadOptionalChunk for not loading chunks when autoload is false
+
+                    // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
+                    spawningInstance.loadChunk(chunkX, chunkZ, callback);
                 }
 
             });

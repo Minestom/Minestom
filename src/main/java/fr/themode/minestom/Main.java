@@ -17,16 +17,14 @@ import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.protocol.MinecraftProtocol;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class Main {
 
     // Thread number
     public static final int THREAD_COUNT_PACKET_WRITER = 5;
     public static final int THREAD_COUNT_CHUNK_IO = 2;
-    public static final int THREAD_COUNT_CHUNK_BATCH = 2;
-    public static final int THREAD_COUNT_ENTITIES = 1;
-    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 3;
+    public static final int THREAD_COUNT_CHUNK_BATCH = 3;
+    public static final int THREAD_COUNT_ENTITIES = 3;
+    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 
     public static final int TICK_MS = 50;
     public static final int TICK_PER_SECOND = 1000 / TICK_MS;
@@ -65,12 +63,14 @@ public class Main {
 
             @Override
             public void onDisconnect(Server server, Connection connection) {
-                System.out.println("A DISCONNECTION");
+                System.out.println("A Disconnection");
                 if (packetProcessor.hasPlayerConnection(connection)) {
                     Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
                     if (player != null) {
 
                         Instance instance = player.getInstance();
+
+
                         if (instance != null) {
                             instance.removeEntity(player);
                         }
@@ -85,17 +85,7 @@ public class Main {
 
             @Override
             public void onPacketReceive(Server server, Connection connection, Packet packet) {
-                try {
-                    packetProcessor.process(connection, packet);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
+                packetProcessor.process(connection, packet);
             }
 
             @Override

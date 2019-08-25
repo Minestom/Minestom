@@ -1,18 +1,23 @@
 package fr.themode.minestom.entity;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
+import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
 
 import java.util.Set;
 
-// TODO attributes https://wiki.vg/Protocol#Entity_Properties
 public abstract class LivingEntity extends Entity {
 
     protected boolean canPickupItem;
     protected boolean isDead;
+
+    protected float health;
+
+    private float[] attributeValues = new float[Attribute.values().length];
 
     private boolean isHandActive;
     private boolean activeHand;
@@ -20,6 +25,7 @@ public abstract class LivingEntity extends Entity {
 
     public LivingEntity(int entityType) {
         super(entityType);
+        setupAttributes();
     }
 
     public abstract void kill();
@@ -73,6 +79,33 @@ public abstract class LivingEntity extends Entity {
         return buffer;
     }
 
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+        if (this.health <= 0) {
+            kill();
+        }
+    }
+
+    public float getMaxHealth() {
+        return getAttributeValue(Attribute.MAX_HEALTH);
+    }
+
+    public void heal() {
+        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+    }
+
+    public void setAttribute(Attribute attribute, float value) {
+        this.attributeValues[attribute.ordinal()] = value;
+    }
+
+    public float getAttributeValue(Attribute attribute) {
+        return this.attributeValues[attribute.ordinal()];
+    }
+
     public boolean isDead() {
         return isDead;
     }
@@ -93,5 +126,29 @@ public abstract class LivingEntity extends Entity {
 
     public void refreshIsDead(boolean isDead) {
         this.isDead = isDead;
+    }
+
+    protected EntityPropertiesPacket getPropertiesPacket() {
+        EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
+        propertiesPacket.entityId = getEntityId();
+
+        int length = Attribute.values().length;
+        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[length];
+        for (int i = 0; i < length; i++) {
+            Attribute attribute = Attribute.values()[i];
+            EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
+            property.key = attribute.getKey();
+            property.value = getAttributeValue(attribute);
+            properties[i] = property;
+        }
+
+        propertiesPacket.properties = properties;
+        return propertiesPacket;
+    }
+
+    private void setupAttributes() {
+        for (Attribute attribute : Attribute.values()) {
+            setAttribute(attribute, attribute.getDefaultValue());
+        }
     }
 }
