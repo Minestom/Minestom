@@ -80,7 +80,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         joinGamePacket.dimension = dimension;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = levelType;
-        joinGamePacket.viewDistance = 14;
+        joinGamePacket.viewDistance = Main.CHUNK_VIEW_DISTANCE;
         joinGamePacket.reducedDebugInfo = false;
         connection.sendPacket(joinGamePacket);
 

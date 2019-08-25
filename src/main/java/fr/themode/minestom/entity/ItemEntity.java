@@ -3,7 +3,6 @@ package fr.themode.minestom.entity;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.Utils;
-import fr.themode.minestom.utils.Vector;
 
 public class ItemEntity extends ObjectEntity {
 
@@ -22,7 +21,7 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void spawn() {
-        setVelocity(new Vector(0, 1, 0), 5000);
+        // setVelocity(new Vector(0, 1, 0), 5000);
     }
 
     @Override

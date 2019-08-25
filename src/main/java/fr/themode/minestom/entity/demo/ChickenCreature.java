@@ -1,6 +1,7 @@
 package fr.themode.minestom.entity.demo;
 
 import fr.themode.minestom.entity.EntityCreature;
+import fr.themode.minestom.utils.Vector;
 
 public class ChickenCreature extends EntityCreature {
 
@@ -42,12 +43,11 @@ public class ChickenCreature extends EntityCreature {
                 move(x * speed, 0, z * speed);
             }
         }*/
-
         move(0, 0, speed);
     }
 
     @Override
     public void spawn() {
-        // setVelocity(new Vector(0, 1, 0), 1000);
+        setVelocity(new Vector(0, 1, 0), 3000);
     }
 }

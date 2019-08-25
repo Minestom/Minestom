@@ -38,12 +38,14 @@ public abstract class Entity implements Viewable, DataContainer {
     protected Instance instance;
     protected Position position;
     protected boolean onGround;
-    protected double lastX, lastY, lastZ;
+    protected float lastX, lastY, lastZ;
     protected float lastYaw, lastPitch;
     private int id;
 
     protected Entity vehicle;
-    private Map<Class<Event>, Callback> eventCallbacks = new ConcurrentHashMap<>();
+    // Velocity
+    // TODO gravity implementation for entity other than players
+    protected Vector velocity = new Vector(); // Movement in block per second
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
     private Set<Entity> passengers = new CopyOnWriteArraySet<>();
@@ -54,10 +56,7 @@ public abstract class Entity implements Viewable, DataContainer {
     private long scheduledRemoveTime;
     private int entityType;
     private long lastUpdate;
-
-    // Velocity
-    // TODO gravity implementation for entity other than players
-    protected float velocityX, velocityY, velocityZ; // Movement in block per second
+    private Map<Class<? extends Event>, Callback> eventCallbacks = new ConcurrentHashMap<>();
     protected long velocityTime; // Reset velocity to 0 after countdown
 
     // Synchronization
@@ -106,22 +105,45 @@ public abstract class Entity implements Viewable, DataContainer {
     // Called when entity a new instance is set
     public abstract void spawn();
 
-    public void teleport(Position position) {
-        if (isChunkUnloaded(position.getX(), position.getZ()))
+    public void teleport(Position position, Runnable callback) {
+        if (instance == null)
             return;
 
-        refreshPosition(position.getX(), position.getY(), position.getZ());
-        refreshView(position.getYaw(), position.getPitch());
-        EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
-        entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = position;
-        entityTeleportPacket.onGround = onGround;
-        sendPacketToViewers(entityTeleportPacket);
+        if (instance.hasEnabledAutoChunkLoad()) {
+            instance.loadChunk(position, chunk -> {
+                refreshPosition(position.getX(), position.getY(), position.getZ());
+                refreshView(position.getYaw(), position.getPitch());
+                EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
+                entityTeleportPacket.entityId = getEntityId();
+                entityTeleportPacket.position = position;
+                entityTeleportPacket.onGround = onGround;
+                sendPacketToViewers(entityTeleportPacket);
+                if (callback != null)
+                    callback.run();
+            });
+        } else {
+            if (isChunkUnloaded(position.getX(), position.getZ()))
+                return;
+            refreshPosition(position.getX(), position.getY(), position.getZ());
+            refreshView(position.getYaw(), position.getPitch());
+            EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
+            entityTeleportPacket.entityId = getEntityId();
+            entityTeleportPacket.position = position;
+            entityTeleportPacket.onGround = onGround;
+            sendPacketToViewers(entityTeleportPacket);
+            if (callback != null)
+                callback.run();
+        }
+    }
+
+    public void teleport(Position position) {
+        teleport(position, null);
     }
 
     @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
+        player.viewableEntity.add(this);
         player.getPlayerConnection().sendPacket(getVelocityPacket());
     }
 
@@ -135,6 +157,7 @@ public abstract class Entity implements Viewable, DataContainer {
             destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
             player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
         }
+        player.viewableEntity.remove(this);
     }
 
     @Override
@@ -180,7 +203,7 @@ public abstract class Entity implements Viewable, DataContainer {
                         sendPacketToViewersAndSelf(getVelocityPacket());
                     } else {
                         float tps = Main.TICK_PER_SECOND;
-                        refreshPosition(position.getX() + velocityX / tps, position.getY() + velocityY / tps, position.getZ() + velocityZ / tps);
+                        refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
                         if (this instanceof ObjectEntity) {
                             sendPacketToViewers(getVelocityPacket());
                         } else if (this instanceof EntityCreature) {
@@ -207,11 +230,11 @@ public abstract class Entity implements Viewable, DataContainer {
     }
 
     public <E extends Event> void setEventCallback(Class<E> eventClass, Callback<E> callback) {
-        this.eventCallbacks.put((Class<Event>) eventClass, callback);
+        this.eventCallbacks.put(eventClass, callback);
     }
 
     public <E extends Event> Callback<E> getEventCallback(Class<E> eventClass) {
-        return this.eventCallbacks.getOrDefault(eventClass, null);
+        return this.eventCallbacks.get(eventClass);
     }
 
     public <E extends Event> void callEvent(Class<E> eventClass, E event) {
@@ -261,17 +284,17 @@ public abstract class Entity implements Viewable, DataContainer {
         spawn();
     }
 
+    public Vector getVelocity() {
+        return velocity;
+    }
+
     public void setVelocity(Vector velocity, long velocityTime) {
-        this.velocityX = velocity.getX();
-        this.velocityY = velocity.getY();
-        this.velocityZ = velocity.getZ();
+        this.velocity = velocity;
         this.velocityTime = System.currentTimeMillis() + velocityTime;
     }
 
     public void resetVelocity() {
-        this.velocityX = 0;
-        this.velocityY = 0;
-        this.velocityZ = 0;
+        this.velocity = new Vector();
         this.velocityTime = 0;
     }
 
@@ -341,6 +364,9 @@ public abstract class Entity implements Viewable, DataContainer {
                 synchronized (instance) {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
+                    if (this instanceof Player)
+                        ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
+                    // TODO compare with viewers and remove if too far away
                 }
             }
         }
@@ -388,9 +414,9 @@ public abstract class Entity implements Viewable, DataContainer {
         final float strength = 8000f / Main.TICK_PER_SECOND;
         EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
         velocityPacket.entityId = getEntityId();
-        velocityPacket.velocityX = (short) (velocityX * strength);
-        velocityPacket.velocityY = (short) (velocityY * strength);
-        velocityPacket.velocityZ = (short) (velocityZ * strength);
+        velocityPacket.velocityX = (short) (velocity.getX() * strength);
+        velocityPacket.velocityY = (short) (velocity.getY() * strength);
+        velocityPacket.velocityZ = (short) (velocity.getZ() * strength);
         return velocityPacket;
     }
 

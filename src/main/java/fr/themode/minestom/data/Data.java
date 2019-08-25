@@ -16,6 +16,10 @@ public class Data {
         return (T) data.get(key);
     }
 
-    // TODO serialize
+    public <T> T getOrDefault(String key, T defaultValue) {
+        return (T) data.getOrDefault(key, defaultValue);
+    }
+
+    // TODO serialization
 
 }

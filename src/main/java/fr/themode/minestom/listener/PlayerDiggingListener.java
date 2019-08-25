@@ -2,7 +2,7 @@ package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.event.StartDiggingEvent;
+import fr.themode.minestom.event.PlayerStartDiggingEvent;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
@@ -27,9 +27,9 @@ public class PlayerDiggingListener {
                     if (instance != null) {
                         CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
-                            StartDiggingEvent startDiggingEvent = new StartDiggingEvent(customBlock);
-                            player.callEvent(StartDiggingEvent.class, startDiggingEvent);
-                            if (!startDiggingEvent.isCancelled()) {
+                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(customBlock);
+                            player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                            if (!playerStartDiggingEvent.isCancelled()) {
                                 player.refreshTargetBlock(customBlock, blockPosition);
                             }
                             addEffect(player);
@@ -52,8 +52,7 @@ public class PlayerDiggingListener {
                 } else {
                     Instance instance = player.getInstance();
                     if (instance != null) {
-                        short blockId = instance.getBlockId(blockPosition);
-                        instance.breakBlock(player, blockPosition, blockId);
+                        instance.breakBlock(player, blockPosition);
                     }
                 }
                 break;

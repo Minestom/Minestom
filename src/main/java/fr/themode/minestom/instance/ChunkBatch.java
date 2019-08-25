@@ -50,6 +50,7 @@ public class ChunkBatch implements BlockModifier {
                 for (BlockData data : dataList) {
                     data.apply(chunk);
                 }
+                // System.out.println("FINISHED chunk creation " + chunk.getChunkX() + ":" + chunk.getChunkZ());
                 chunk.refreshDataPacket(); // TODO partial refresh instead of full
                 instance.sendChunkUpdate(chunk); // TODO partial chunk data
                 if (callback != null)
@@ -68,7 +69,7 @@ public class ChunkBatch implements BlockModifier {
             if (blockIdentifier == null) {
                 chunk.setBlock(x, y, z, blockId);
             } else {
-                chunk.setBlock(x, y, z, blockIdentifier);
+                chunk.setCustomBlock(x, y, z, blockIdentifier);
             }
         }
 

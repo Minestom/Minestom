@@ -21,13 +21,18 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void breakBlock(Player player, BlockPosition blockPosition, short blockId) {
-        instanceContainer.breakBlock(player, blockPosition, blockId);
+    public void breakBlock(Player player, BlockPosition blockPosition) {
+        instanceContainer.breakBlock(player, blockPosition);
     }
 
     @Override
     public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         instanceContainer.loadChunk(chunkX, chunkZ, callback);
+    }
+
+    @Override
+    public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+        instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
     @Override
@@ -61,12 +66,6 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public UUID getUniqueId() {
-        // FIXME: share same UUID ?
-        return null;
-    }
-
-    @Override
     public File getFolder() {
         return instanceContainer.getFolder();
     }
@@ -94,6 +93,21 @@ public class SharedInstance extends Instance {
     @Override
     public void sendChunks(Player player) {
         instanceContainer.sendChunks(player);
+    }
+
+    @Override
+    public void sendChunk(Player player, Chunk chunk) {
+        instanceContainer.sendChunk(player, chunk);
+    }
+
+    @Override
+    public void enableAutoChunkLoad(boolean enable) {
+        instanceContainer.enableAutoChunkLoad(enable);
+    }
+
+    @Override
+    public boolean hasEnabledAutoChunkLoad() {
+        return instanceContainer.hasEnabledAutoChunkLoad();
     }
 
     @Override

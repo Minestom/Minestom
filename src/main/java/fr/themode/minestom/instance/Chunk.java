@@ -14,10 +14,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Chunk {
 
-    private static final int CHUNK_SIZE_X = 16;
-    private static final int CHUNK_SIZE_Y = 256;
-    private static final int CHUNK_SIZE_Z = 16;
-    private static final int CHUNK_SIZE = CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z;
+    public static final int CHUNK_SIZE_X = 16;
+    public static final int CHUNK_SIZE_Y = 256;
+    public static final int CHUNK_SIZE_Z = 16;
+    public static final int CHUNK_SIZE = CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z;
 
     private Biome biome;
     private int chunkX, chunkZ;
@@ -41,7 +41,7 @@ public class Chunk {
         setBlock(x, y, z, blockId, (short) 0);
     }
 
-    protected void setBlock(byte x, byte y, byte z, String blockId) {
+    protected void setCustomBlock(byte x, byte y, byte z, String blockId) {
         CustomBlock customBlock = Main.getBlockManager().getBlock(blockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The block " + blockId + " does not exist or isn't registered");
@@ -151,15 +151,27 @@ public class Chunk {
 
     }
 
-    protected ChunkDataPacket getFreshFullDataPacket() {
+    public ChunkDataPacket getFreshFullDataPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();
         fullDataPacket.chunk = this;
         fullDataPacket.fullChunk = true;
         return fullDataPacket;
     }
 
+    public ChunkDataPacket getFreshPartialDataPacket() {
+        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
+        fullDataPacket.chunk = this;
+        fullDataPacket.fullChunk = false;
+        return fullDataPacket;
+    }
+
     protected void refreshDataPacket() {
         Packet packet = PacketUtils.writePacket(getFreshFullDataPacket());
         this.fullDataPacket = PacketUtils.encode(packet); // TODO write packet buffer in another thread (heavy calculations)
+    }
+
+    @Override
+    public String toString() {
+        return "Chunk[" + chunkX + ":" + chunkZ + "]";
     }
 }

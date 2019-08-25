@@ -121,7 +121,7 @@ public class Utils {
     }
 
     public static void writePosition(Buffer buffer, int x, int y, int z) {
-        buffer.putLong((((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF));
+        buffer.putLong(SerializerUtils.positionToLong(x, y, z));
     }
 
     public static void writePosition(Buffer buffer, BlockPosition blockPosition) {
@@ -129,11 +129,7 @@ public class Utils {
     }
 
     public static BlockPosition readPosition(Buffer buffer) {
-        long val = buffer.getLong();
-        int x = (int) (val >> 38);
-        int y = (int) (val & 0xFFF);
-        int z = (int) (val << 26 >> 38);
-        return new BlockPosition(x, y, z);
+        return SerializerUtils.longToBlockPosition(buffer.getLong());
     }
 
     public static void writeUuid(Buffer buffer, UUID uuid) {

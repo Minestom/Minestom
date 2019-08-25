@@ -12,6 +12,7 @@ public class SpawnPlayerPacket implements ServerPacket {
     public int entityId;
     public UUID playerUuid;
     public Position position;
+    public Buffer metadata;
 
     @Override
     public void write(Buffer buffer) {
@@ -23,7 +24,11 @@ public class SpawnPlayerPacket implements ServerPacket {
         buffer.putDouble(position.getZ());
         buffer.putByte((byte) (position.getYaw() * 256f / 360f));
         buffer.putByte((byte) (position.getPitch() * 256f / 360f));
-        buffer.putByte((byte) 0xff); // TODO Metadata
+        if (metadata != null) {
+            buffer.putBuffer(metadata);
+        } else {
+            buffer.putByte((byte) 0xff);
+        }
     }
 
     @Override

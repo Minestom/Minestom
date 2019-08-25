@@ -2,10 +2,11 @@ package fr.themode.minestom.instance;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.event.BlockBreakEvent;
+import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.net.PacketWriter;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.ChunkUtils;
 
 import java.io.File;
 import java.util.*;
@@ -25,6 +26,8 @@ public class InstanceContainer extends Instance {
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
 
+    private boolean autoChunkLoad;
+
     protected InstanceContainer(UUID uniqueId, File folder) {
         super(uniqueId);
         this.folder = folder;
@@ -35,7 +38,7 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            PacketWriter.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
             });
@@ -46,8 +49,8 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, String blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            chunk.setCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
+            PacketWriter.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
             });
@@ -56,9 +59,16 @@ public class InstanceContainer extends Instance {
 
     // TODO deplace
     @Override
-    public void breakBlock(Player player, BlockPosition blockPosition, short blockId) {
-        BlockBreakEvent blockBreakEvent = new BlockBreakEvent(blockPosition);
-        player.callEvent(BlockBreakEvent.class, blockBreakEvent);
+    public void breakBlock(Player player, BlockPosition blockPosition) {
+        Chunk chunk = getChunkAt(blockPosition);
+        short blockId = chunk.getBlockId((byte) (blockPosition.getX() % 16), (byte) blockPosition.getY(), (byte) (blockPosition.getZ() % 16));
+        if (blockId == 0) {
+            sendChunkUpdate(player, chunk);
+            return;
+        }
+
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition);
+        player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
             // TODO blockbreak setBlock result
             int x = blockPosition.getX();
@@ -71,16 +81,16 @@ public class InstanceContainer extends Instance {
             particlePacket.x = x + 0.5f;
             particlePacket.y = y;
             particlePacket.z = z + 0.5f;
-            particlePacket.offsetX = 0.4f;
-            particlePacket.offsetY = 0.6f;
-            particlePacket.offsetZ = 0.4f;
+            particlePacket.offsetX = 0.45f;
+            particlePacket.offsetY = 0.55f;
+            particlePacket.offsetZ = 0.45f;
             particlePacket.particleData = 0.3f;
-            particlePacket.particleCount = 75;
+            particlePacket.particleCount = 100;
             particlePacket.blockId = blockId;
             player.getPlayerConnection().sendPacket(particlePacket);
             player.sendPacketToViewers(particlePacket);
         } else {
-            sendChunkUpdate(player, getChunkAt(blockPosition));
+            sendChunkUpdate(player, chunk);
         }
     }
 
@@ -96,8 +106,23 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            if (callback != null)
+                callback.accept(chunk);
+        } else {
+            if (hasEnabledAutoChunkLoad()) {
+                retrieveChunk(chunkX, chunkZ, callback);
+            } else {
+                callback.accept(null);
+            }
+        }
+    }
+
+    @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(getChunkIndex(chunkX, chunkZ));
+        return chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
     }
 
     @Override
@@ -123,54 +148,6 @@ public class InstanceContainer extends Instance {
         return new ChunkBatch(this, chunk);
     }
 
-    /*@Override
-    public void addEntity(Entity entity) {
-        Instance lastInstance = entity.getInstance();
-        if (lastInstance != null && lastInstance != this) {
-            lastInstance.removeEntity(entity);
-        }
-
-        // TODO based on distance with players
-        getPlayers().forEach(p -> entity.addViewer(p));
-
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            sendChunks(player);
-            getObjectEntities().forEach(objectEntity -> objectEntity.addViewer(player));
-            getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
-            getPlayers().forEach(p -> p.addViewer(player));
-        }
-
-        Chunk chunk = getChunkAt(entity.getPosition());
-        chunk.addEntity(entity);
-    }
-
-    @Override
-    public void removeEntity(Entity entity) {
-        Instance entityInstance = entity.getInstance();
-        if (entityInstance == null || entityInstance != this)
-            return;
-
-        entity.getViewers().forEach(p -> entity.removeViewer(p));
-
-        if (!(entity instanceof Player)) {
-            DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-            destroyEntitiesPacket.entityIds = new int[]{entity.getEntityId()};
-
-            entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
-        } else {
-            // TODO optimize (cache all entities that the player see)
-            Player player = (Player) entity;
-            getObjectEntities().forEach(objectEntity -> objectEntity.removeViewer(player));
-            getCreatures().forEach(entityCreature -> entityCreature.removeViewer(player));
-            getPlayers().forEach(p -> p.removeViewer(player));
-
-        }
-
-        Chunk chunk = getChunkAt(entity.getPosition());
-        chunk.removeEntity(entity);
-    }*/
-
     @Override
     public void sendChunkUpdate(Player player, Chunk chunk) {
         Buffer chunkData = chunk.getFullDataPacket();
@@ -180,7 +157,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         if (folder != null) {
             // Load from file if possible
             CHUNK_LOADER_IO.loadChunk(chunkX, chunkZ, this, chunk -> {
@@ -189,6 +166,7 @@ public class InstanceContainer extends Instance {
                     callback.accept(chunk);
             });
         } else {
+            // Folder isn't defined, create new chunk
             createChunk(chunkX, chunkZ, callback);
         }
     }
@@ -212,29 +190,46 @@ public class InstanceContainer extends Instance {
             sendChunkUpdate(getPlayers(), chunk);
 
         // Update for shared instances
-        this.sharedInstances.forEach(sharedInstance -> {
-            if (!sharedInstance.getPlayers().isEmpty())
-                sendChunkUpdate(sharedInstance.getPlayers(), chunk);
-        });
+        if (!sharedInstances.isEmpty())
+            this.sharedInstances.forEach(sharedInstance -> {
+                Set<Player> instancePlayers = sharedInstance.getPlayers();
+                if (!instancePlayers.isEmpty())
+                    sendChunkUpdate(instancePlayers, chunk);
+            });
     }
 
     @Override
     public void sendChunks(Player player) {
         for (Chunk chunk : getChunks()) {
-            Buffer chunkData = chunk.getFullDataPacket();
-            if (chunkData == null) {
-                PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
-                    buffer.getData().retain(1).markReaderIndex();
-                    player.getPlayerConnection().sendUnencodedPacket(buffer);
-                    buffer.getData().resetReaderIndex();
-                    chunk.setFullDataPacket(buffer);
-                });
-            } else {
-                chunkData.getData().retain(1).markReaderIndex();
-                player.getPlayerConnection().sendUnencodedPacket(chunkData);
-                chunkData.getData().resetReaderIndex();
-            }
+            sendChunk(player, chunk);
         }
+    }
+
+    @Override
+    public void sendChunk(Player player, Chunk chunk) {
+        Buffer chunkData = chunk.getFullDataPacket();
+        if (chunkData == null) {
+            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+                buffer.getData().retain(1).markReaderIndex();
+                player.getPlayerConnection().sendUnencodedPacket(buffer);
+                buffer.getData().resetReaderIndex();
+                chunk.setFullDataPacket(buffer);
+            });
+        } else {
+            chunkData.getData().retain(1).markReaderIndex();
+            player.getPlayerConnection().sendUnencodedPacket(chunkData);
+            chunkData.getData().resetReaderIndex();
+        }
+    }
+
+    @Override
+    public void enableAutoChunkLoad(boolean enable) {
+        this.autoChunkLoad = enable;
+    }
+
+    @Override
+    public boolean hasEnabledAutoChunkLoad() {
+        return autoChunkLoad;
     }
 
     protected void addSharedInstance(SharedInstance sharedInstance) {
@@ -242,10 +237,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(Chunk chunk) {
-        //this.objectEntities.addCollection(chunk.objectEntities);
-        //this.creatures.addCollection(chunk.creatures);
-        //this.players.addCollection(chunk.players);
-        this.chunks.put(getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        this.chunks.put(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
     }
 
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {

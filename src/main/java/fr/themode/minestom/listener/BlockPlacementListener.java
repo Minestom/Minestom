@@ -1,7 +1,7 @@
 package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.event.BlockPlaceEvent;
+import fr.themode.minestom.event.PlayerBlockPlaceEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerBlockPlacementPacket;
@@ -23,9 +23,10 @@ public class BlockPlacementListener {
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent((short) 10, blockPosition, packet.hand);
-        player.callEvent(BlockPlaceEvent.class, blockPlaceEvent);
-        if (!blockPlaceEvent.isCancelled()) {
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
+        player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
+        // TODO if player does not have block in hand, then call InteractEvent with blockPosition
+        if (!playerBlockPlaceEvent.isCancelled()) {
             instance.setBlock(blockPosition, "custom_block");
             // TODO consume block in hand for survival players
         } else {

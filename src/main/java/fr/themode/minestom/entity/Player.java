@@ -3,8 +3,11 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
+import fr.themode.minestom.data.Data;
+import fr.themode.minestom.data.DataType;
 import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.event.*;
+import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceContainer;
@@ -17,6 +20,7 @@ import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.world.Dimension;
@@ -41,10 +45,30 @@ public class Player extends LivingEntity {
     private GameMode gameMode;
     private LevelType levelType;
 
+    static {
+        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
+        //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        instanceContainer = Main.getInstanceManager().createInstanceContainer();
+        instanceContainer.enableAutoChunkLoad(true);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        int loopStart = -3;
+        int loopEnd = 3;
+        long time = System.currentTimeMillis();
+        for (int x = loopStart; x < loopEnd; x++)
+            for (int z = loopStart; z < loopEnd; z++) {
+                instanceContainer.loadChunk(x, z);
+            }
+        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
+    }
+
+    protected Set<Entity> viewableEntity = new CopyOnWriteArraySet<>();
+    private float health;
+
     private PlayerSettings settings;
     private PlayerInventory inventory;
     private short heldSlot;
     private Inventory openInventory;
+    private int food;
 
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
@@ -58,21 +82,7 @@ public class Player extends LivingEntity {
     private float forward;
 
     private static InstanceContainer instanceContainer;
-
-    static {
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        instanceContainer = Main.getInstanceManager().createInstanceContainer();
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-        int loopStart = -2;
-        int loopEnd = 2;
-        long time = System.currentTimeMillis();
-        for (int x = loopStart; x < loopEnd; x++)
-            for (int z = loopStart; z < loopEnd; z++) {
-                instanceContainer.loadChunk(x, z);
-            }
-        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
-    }
+    private float foodSaturation;
 
     protected boolean spawned;
 
@@ -81,6 +91,8 @@ public class Player extends LivingEntity {
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
+
+        refreshHealth();
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -97,28 +109,17 @@ public class Player extends LivingEntity {
                 Vector velocity = getPosition().clone().getDirection().multiply(6);
                 velocity.setY(3.5f);
                 player.setVelocity(velocity, 150);
-
-                AnimationPacket animationPacket = new AnimationPacket();
-                animationPacket.entityId = player.getEntityId();
-                animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
-                sendPacketToViewersAndSelf(animationPacket);
-
+                player.damage(2);
                 sendMessage("ATTACK");
             }
-            /*UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
-            updateHealthPacket.health = -1f;
-            updateHealthPacket.food = 5;
-            updateHealthPacket.foodSaturation = 0;
-            playerConnection.sendPacket(updateHealthPacket);*/
         });
 
-        setEventCallback(BlockPlaceEvent.class, event -> {
-            /*sendMessage("Placed block! " + event.getHand());
-            Data data = new Data();
-            data.set("test", 5, DataType.INTEGER);
-            setData(data);
+        setEventCallback(PlayerBlockPlaceEvent.class, event -> {
+            sendMessage("Placed block! " + event.getHand());
+            int value = getData().getOrDefault("test", 0);
+            getData().set("test", value + 1, DataType.INTEGER);
 
-            sendMessage("Data: " + getData().get("test"));*/
+            System.out.println("OLD DATA VALUE: " + value);
             if (event.getHand() != Hand.MAIN)
                 return;
 
@@ -128,9 +129,10 @@ public class Player extends LivingEntity {
                 sendMessage("Saved in " + (System.currentTimeMillis() - time) + " ms");
             });*/
 
-            for (Player player : Main.getConnectionManager().getOnlinePlayers()) {
-                player.teleport(getPosition());
-            }
+            /*for (Player player : instance.getPlayers()) {
+                if (player != this)
+                    player.teleport(getPosition());
+            }*/
         });
 
         setEventCallback(PickupItemEvent.class, event -> {
@@ -139,19 +141,17 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerLoginEvent.class, event -> {
             event.setSpawningInstance(instanceContainer);
+            setData(new Data());
         });
 
-        setEventCallback(PlayerSpawnPacket.class, event -> {
-            setGameMode(GameMode.SURVIVAL);
+        setEventCallback(PlayerSpawnEvent.class, event -> {
+            System.out.println("SPAWN ");
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
-            for (int cx = 0; cx < 4; cx++)
-                for (int cz = 0; cz < 4; cz++) {
-                    ChickenCreature chickenCreature = new ChickenCreature();
-                    chickenCreature.refreshPosition(0 + (float) cx * 1, 65, 0 + (float) cz * 1);
-                    //chickenCreature.setOnFire(true);
-                    chickenCreature.setInstance(getInstance());
-                    //chickenCreature.addPassenger(player);
-                }
+
+            ChickenCreature chickenCreature = new ChickenCreature();
+            chickenCreature.refreshPosition(2, 65, 2);
+            chickenCreature.setInstance(getInstance());
 
             for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
@@ -199,7 +199,7 @@ public class Player extends LivingEntity {
             }
             this.targetLastStage = stage;
             if (stage > 9) {
-                instance.breakBlock(this, targetBlockPosition, targetCustomBlock);
+                instance.breakBlock(this, targetBlockPosition);
                 resetTargetBlock();
             }
         }
@@ -272,6 +272,15 @@ public class Player extends LivingEntity {
     }
 
     @Override
+    public void remove() {
+        clearBossBars();
+        if (getOpenInventory() != null)
+            getOpenInventory().removeViewer(this);
+        this.viewableEntity.forEach(entity -> entity.removeViewer(this));
+        super.remove();
+    }
+
+    @Override
     public void addViewer(Player player) {
         super.addViewer(player);
         PlayerConnection connection = player.getPlayerConnection();
@@ -315,7 +324,7 @@ public class Player extends LivingEntity {
     @Override
     public void kill() {
         this.isDead = true;
-        // TODO set health to -1
+        setHealth(-1);
     }
 
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
@@ -331,19 +340,165 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(chatMessagePacket);
     }
 
-    @Override
-    public void teleport(Position position) {
-        super.teleport(position); // Send new position to all viewers directly
-        if (isChunkUnloaded(position.getX(), position.getZ()))
+    public void damage(float amount) {
+        AnimationPacket animationPacket = new AnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
+        sendPacketToViewersAndSelf(animationPacket);
+        setHealth(health - amount);
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+        sendUpdateHealthPacket();
+        if (this.health <= 0) {
+            // Kill player
+            refreshIsDead(true);
+            EntityStatusPacket entityStatusPacket = new EntityStatusPacket();
+            entityStatusPacket.entityId = getEntityId();
+            entityStatusPacket.status = 3; // Death sound/animation
+            sendPacketToViewers(entityStatusPacket);
+            DeathEvent deathEvent = new DeathEvent();
+            callEvent(DeathEvent.class, deathEvent);
+        }
+    }
+
+    public int getFood() {
+        return food;
+    }
+
+    public void setFood(int food) {
+        this.food = food;
+        sendUpdateHealthPacket();
+    }
+
+    public float getFoodSaturation() {
+        return foodSaturation;
+    }
+
+    public void setFoodSaturation(float foodSaturation) {
+        this.foodSaturation = foodSaturation;
+        sendUpdateHealthPacket();
+    }
+
+    public void respawn() {
+        if (!isDead())
             return;
 
-        refreshPosition(position.getX(), position.getY(), position.getZ());
-        refreshView(position.getYaw(), position.getPitch());
-        PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = position;
-        positionAndLookPacket.flags = 0x00;
-        positionAndLookPacket.teleportId = 67;
-        playerConnection.sendPacket(positionAndLookPacket);
+        refreshHealth();
+        RespawnPacket respawnPacket = new RespawnPacket();
+        respawnPacket.dimension = getDimension();
+        respawnPacket.gameMode = getGameMode();
+        respawnPacket.levelType = getLevelType();
+        getPlayerConnection().sendPacket(respawnPacket);
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getPosition());
+        callEvent(PlayerRespawnEvent.class, respawnEvent);
+        refreshIsDead(false);
+
+        // Runnable called when teleportation is successfull (after loading and sending necessary chunk)
+        teleport(respawnEvent.getRespawnPosition(), () -> {
+            getInventory().update();
+
+            SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
+            spawnPlayerPacket.entityId = getEntityId();
+            spawnPlayerPacket.playerUuid = getUuid();
+            spawnPlayerPacket.position = getPosition();
+            sendPacketToViewers(spawnPlayerPacket);
+        });
+    }
+
+    private void refreshHealth() {
+        // TODO improve
+        this.health = 20;
+        this.food = 20;
+        this.foodSaturation = 5;
+    }
+
+    protected void sendUpdateHealthPacket() {
+        UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
+        updateHealthPacket.health = health;
+        updateHealthPacket.food = food;
+        updateHealthPacket.foodSaturation = foodSaturation;
+        playerConnection.sendPacket(updateHealthPacket);
+    }
+
+    protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {
+        long[] lastVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()));
+        long[] newVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()));
+
+        // Unload old chunks
+        for (int l = 0; l < lastVisibleChunks.length; l++) {
+            long lastVisibleChunk = lastVisibleChunks[l];
+            boolean contains = false;
+            for (int n = 0; n < newVisibleChunks.length; n++) {
+                long newVisibleChunk = newVisibleChunks[n];
+                if (newVisibleChunk == lastVisibleChunk) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunk);
+                UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+                unloadChunkPacket.chunkX = chunkPos[0];
+                unloadChunkPacket.chunkZ = chunkPos[1];
+                playerConnection.sendPacket(unloadChunkPacket);
+            }
+        }
+
+        // Load new chunks
+        for (int n = 0; n < newVisibleChunks.length; n++) {
+            long newVisibleChunk = newVisibleChunks[n];
+            boolean contains = false;
+            for (int l = 0; l < lastVisibleChunks.length; l++) {
+                long lastVisibleChunk = lastVisibleChunks[l];
+                if (lastVisibleChunk == newVisibleChunk) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                int[] chunkPos = ChunkUtils.getChunkCoord(newVisibleChunk);
+                instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
+                    if (chunk == null) {
+                        return; // Cannot load chunk (autoload not enabled)
+                    }
+                    instance.sendChunk(this, chunk);
+                });
+            }
+
+        }
+
+        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(newChunk);
+        playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    @Override
+    public void teleport(Position position, Runnable callback) {
+        if (instance == null)
+            return;
+        super.teleport(position, () -> {
+            if (!instance.hasEnabledAutoChunkLoad() && isChunkUnloaded(position.getX(), position.getZ()))
+                return;
+            refreshPosition(position.getX(), position.getY(), position.getZ());
+            refreshView(position.getYaw(), position.getPitch());
+            PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
+            positionAndLookPacket.position = position;
+            positionAndLookPacket.flags = 0x00;
+            positionAndLookPacket.teleportId = 67;
+            playerConnection.sendPacket(positionAndLookPacket);
+            if (callback != null)
+                callback.run();
+        });
+    }
+
+    @Override
+    public void teleport(Position position) {
+        teleport(position, null);
     }
 
     public String getUsername() {
@@ -463,6 +618,10 @@ public class Player extends LivingEntity {
         }
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
+    }
+
+    public void clearBossBars() {
+        this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
 
     public void syncEquipment(EntityEquipmentPacket.Slot slot) {

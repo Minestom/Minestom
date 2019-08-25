@@ -2,15 +2,18 @@ package fr.themode.minestom.entity;
 
 import fr.themode.minestom.Main;
 import fr.themode.minestom.event.PlayerLoginEvent;
-import fr.themode.minestom.event.PlayerSpawnPacket;
+import fr.themode.minestom.event.PlayerSpawnEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
+import fr.themode.minestom.utils.ChunkUtils;
+import fr.themode.minestom.utils.Position;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 public class EntityManager {
 
@@ -24,7 +27,7 @@ public class EntityManager {
     public void update() {
         waitingPlayersTick();
         for (Instance instance : instanceManager.getInstances()) {
-            testTick1(instance);
+            testTick2(instance);
         }
 
     }
@@ -37,13 +40,24 @@ public class EntityManager {
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
-                // TODO load multiple chunks around player (based on view distance) instead of only one
-                spawningInstance.loadChunk(playerCache.getPosition(), chunk -> {
-                    playerCache.spawned = true;
-                    playerCache.setInstance(spawningInstance);
-                    PlayerSpawnPacket spawnPacket = new PlayerSpawnPacket();
-                    playerCache.callEvent(PlayerSpawnPacket.class, spawnPacket);
-                });
+                Position position = playerCache.getPosition();
+
+                long[] visibleChunks = ChunkUtils.getVisibleChunks(position);
+                for (int i = 0; i < visibleChunks.length; i++) {
+                    int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
+                    int chunkX = chunkPos[0];
+                    int chunkZ = chunkPos[1];
+                    boolean isLast = i == visibleChunks.length - 1;
+                    Consumer<Chunk> callback = isLast ? chunk -> {
+                        System.out.println("END CHUNK LOADING");
+                        playerCache.spawned = true;
+                        playerCache.setInstance(spawningInstance);
+                        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent();
+                        playerCache.callEvent(PlayerSpawnEvent.class, spawnEvent);
+                    } : null;
+                    spawningInstance.loadChunk(chunkX, chunkZ, callback); // TODO loadOptionalChunk for not loading chunks when autoload is false
+                }
+
             });
         }
     }

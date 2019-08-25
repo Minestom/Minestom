@@ -82,11 +82,11 @@ public class ChunkDataPacket implements ServerPacket {
         Utils.writeVarInt(buffer, blockEntities.size());
 
         for (Integer index : blockEntities) {
-            BlockPosition blockPosition = SerializerUtils.indexToBlockPosition(index, chunk.getChunkX(), chunk.getChunkZ());
+            BlockPosition blockPosition = SerializerUtils.indexToChunkBlockPosition(index);
             CompoundTag blockEntity = new CompoundTag();
-            blockEntity.put("x", new DoubleTag(blockPosition.getX()));
+            blockEntity.put("x", new DoubleTag(blockPosition.getX() + 16 * chunk.getChunkX()));
             blockEntity.put("y", new DoubleTag(blockPosition.getY()));
-            blockEntity.put("z", new DoubleTag(blockPosition.getZ()));
+            blockEntity.put("z", new DoubleTag(blockPosition.getZ() + 16 * chunk.getChunkZ()));
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
                 blockEntity.serialize(new DataOutputStream(os), 100);

@@ -21,10 +21,11 @@ public class Position {
         this(0, 0, 0);
     }
 
-    public void add(float x, float y, float z) {
+    public Position add(float x, float y, float z) {
         this.x += x;
         this.y += y;
         this.z += z;
+        return this;
     }
 
     public float getDistance(Position position) {

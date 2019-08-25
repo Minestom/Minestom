@@ -1,5 +1,6 @@
 package fr.themode.minestom.entity;
 
+import fr.themode.minestom.event.DeathEvent;
 import fr.themode.minestom.net.packet.server.play.EntityPacket;
 import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
 import fr.themode.minestom.net.packet.server.play.SpawnMobPacket;
@@ -19,11 +20,6 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     public void move(float x, float y, float z) {
-        if (velocityTime != 0) {
-            // Cancel movements if velocity is active
-            return;
-        }
-
         // TODO change yaw/pitch based on next position?
         Position position = getPosition();
         float newX = position.getX() + x;
@@ -49,6 +45,8 @@ public abstract class EntityCreature extends LivingEntity {
         this.isDead = true;
         triggerStatus((byte) 3);
         scheduleRemove(1000);
+        DeathEvent deathEvent = new DeathEvent();
+        callEvent(DeathEvent.class, deathEvent);
     }
 
     @Override

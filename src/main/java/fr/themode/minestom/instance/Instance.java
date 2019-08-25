@@ -5,8 +5,8 @@ import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.net.packet.server.play.DestroyEntitiesPacket;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
 
 import java.io.File;
@@ -30,9 +30,12 @@ public abstract class Instance implements BlockModifier {
         this.uniqueId = uniqueId;
     }
 
-    public abstract void breakBlock(Player player, BlockPosition blockPosition, short blockId);
+    public abstract void breakBlock(Player player, BlockPosition blockPosition);
 
     public abstract void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+
+    // Load only if auto chunk load is enabled
+    public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
@@ -52,11 +55,17 @@ public abstract class Instance implements BlockModifier {
 
     public abstract void sendChunkUpdate(Player player, Chunk chunk);
 
-    public abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     public abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     public abstract void sendChunks(Player player);
+
+    public abstract void sendChunk(Player player, Chunk chunk);
+
+    public abstract void enableAutoChunkLoad(boolean enable);
+
+    public abstract boolean hasEnabledAutoChunkLoad();
 
     //
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
@@ -82,11 +91,7 @@ public abstract class Instance implements BlockModifier {
     }
 
     public Set<Entity> getChunkEntities(Chunk chunk) {
-        return Collections.unmodifiableSet(getEntitiesInChunk(getChunkIndex(chunk.getChunkX(), chunk.getChunkZ())));
-    }
-
-    public void breakBlock(Player player, BlockPosition blockPosition, CustomBlock customBlock) {
-        breakBlock(player, blockPosition, customBlock.getType());
+        return Collections.unmodifiableSet(getEntitiesInChunk(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ())));
     }
 
     public void loadChunk(int chunkX, int chunkZ) {
@@ -139,24 +144,21 @@ public abstract class Instance implements BlockModifier {
         return uniqueId;
     }
 
-    protected long getChunkIndex(int chunkX, int chunkZ) {
-        return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
-    }
-
     // UNSAFE METHODS (need most of time to be synchronized)
 
     public void addEntity(Entity entity) {
         Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
-            lastInstance.removeEntity(entity);
+            lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
 
         // TODO based on distance with players
-        getPlayers().forEach(p -> entity.addViewer(p));
+        getPlayers().forEach(p -> entity.addViewer(p)); // Add new entity to all players viewable list
 
         if (entity instanceof Player) {
             Player player = (Player) entity;
             sendChunks(player);
+            // Send player all current entity in the instance
             getObjectEntities().forEach(objectEntity -> objectEntity.addViewer(player));
             getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
             getPlayers().forEach(p -> p.addViewer(player));
@@ -171,28 +173,14 @@ public abstract class Instance implements BlockModifier {
         if (entityInstance == null || entityInstance != this)
             return;
 
-        entity.getViewers().forEach(p -> entity.removeViewer(p));
-
-        if (!(entity instanceof Player)) {
-            DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-            destroyEntitiesPacket.entityIds = new int[]{entity.getEntityId()};
-
-            entity.getViewers().forEach(p -> p.getPlayerConnection().sendPacket(destroyEntitiesPacket)); // TODO destroy batch
-        } else {
-            // TODO optimize (cache all entities that the player see)
-            Player player = (Player) entity;
-            getObjectEntities().forEach(objectEntity -> objectEntity.removeViewer(player));
-            getCreatures().forEach(entityCreature -> entityCreature.removeViewer(player));
-            getPlayers().forEach(p -> p.removeViewer(player));
-
-        }
+        entity.getViewers().forEach(p -> entity.removeViewer(p)); // Remove this entity from players viewable list and send delete entities packet
 
         Chunk chunk = getChunkAt(entity.getPosition());
         removeEntityFromChunk(entity, chunk);
     }
 
     public void addEntityToChunk(Entity entity, Chunk chunk) {
-        long chunkIndex = getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         Set<Entity> entities = getEntitiesInChunk(chunkIndex);
         entities.add(entity);
         this.chunkEntities.put(chunkIndex, entities);
@@ -206,10 +194,14 @@ public abstract class Instance implements BlockModifier {
     }
 
     public void removeEntityFromChunk(Entity entity, Chunk chunk) {
-        long chunkIndex = getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         Set<Entity> entities = getEntitiesInChunk(chunkIndex);
         entities.remove(entity);
-        this.chunkEntities.put(chunkIndex, entities);
+        if (entities.isEmpty()) {
+            this.chunkEntities.remove(chunkIndex);
+        } else {
+            this.chunkEntities.put(chunkIndex, entities);
+        }
         if (entity instanceof Player) {
             this.players.remove(entity);
         } else if (entity instanceof EntityCreature) {

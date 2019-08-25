@@ -76,7 +76,7 @@ public class BlockBatch implements BlockModifier {
             if (blockIdentifier == null) {
                 chunk.setBlock((byte) x, (byte) y, (byte) z, blockId);
             } else {
-                chunk.setBlock((byte) x, (byte) y, (byte) z, blockIdentifier);
+                chunk.setCustomBlock((byte) x, (byte) y, (byte) z, blockIdentifier);
             }
         }
 

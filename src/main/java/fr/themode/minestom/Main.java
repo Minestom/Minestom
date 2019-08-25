@@ -31,6 +31,10 @@ public class Main {
     public static final int TICK_MS = 50;
     public static final int TICK_PER_SECOND = 1000 / TICK_MS;
 
+    // Config
+    public static final int CHUNK_VIEW_DISTANCE = 10;
+    public static final int ENTITY_VIEW_DISTANCE = 10; // TODO
+
     // Networking
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
