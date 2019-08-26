@@ -369,10 +369,11 @@ public abstract class Entity implements Viewable, DataContainer {
                 synchronized (instance) {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
-                    if (this instanceof Player)
-                        ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
-                    // TODO compare with viewers and remove if too far away
                 }
+                if (this instanceof Player)
+                    ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
+
+                // TODO compare with viewers and remove if too far away
             }
         }
     }

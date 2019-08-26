@@ -15,7 +15,7 @@ public abstract class LivingEntity extends Entity {
     protected boolean canPickupItem;
     protected boolean isDead;
 
-    protected float health;
+    private float health;
 
     private float[] attributeValues = new float[Attribute.values().length];
 

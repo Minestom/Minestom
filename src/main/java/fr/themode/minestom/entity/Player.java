@@ -17,10 +17,7 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.ChunkUtils;
-import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Vector;
+import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -51,8 +48,8 @@ public class Player extends LivingEntity {
         instanceContainer = Main.getInstanceManager().createInstanceContainer();
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-        int loopStart = -3;
-        int loopEnd = 3;
+        int loopStart = -2;
+        int loopEnd = 2;
         long time = System.currentTimeMillis();
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
@@ -144,8 +141,8 @@ public class Player extends LivingEntity {
         });
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
-            System.out.println("SPAWN ");
-            setGameMode(GameMode.SURVIVAL);
+            System.out.println("SPAWN");
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -173,7 +170,7 @@ public class Player extends LivingEntity {
             teamsPacket.entities = new String[]{getUsername()};
             sendPacketToViewersAndSelf(teamsPacket);
 
-            setAttribute(Attribute.MAX_HEALTH, 21);
+            setAttribute(Attribute.MAX_HEALTH, 40);
             heal();
         });
     }
@@ -356,7 +353,7 @@ public class Player extends LivingEntity {
         animationPacket.entityId = getEntityId();
         animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
         sendPacketToViewersAndSelf(animationPacket);
-        setHealth(health - amount);
+        setHealth(getHealth() - amount);
     }
 
     @Override
@@ -426,60 +423,51 @@ public class Player extends LivingEntity {
 
     protected void sendUpdateHealthPacket() {
         UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
-        updateHealthPacket.health = health;
+        updateHealthPacket.health = getHealth();
         updateHealthPacket.food = food;
         updateHealthPacket.foodSaturation = foodSaturation;
         playerConnection.sendPacket(updateHealthPacket);
     }
 
     protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {
-        long[] lastVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()));
-        long[] newVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()));
-
-        // Unload old chunks
-        for (int l = 0; l < lastVisibleChunks.length; l++) {
-            long lastVisibleChunk = lastVisibleChunks[l];
-            boolean contains = false;
-            for (int n = 0; n < newVisibleChunks.length; n++) {
-                long newVisibleChunk = newVisibleChunks[n];
-                if (newVisibleChunk == lastVisibleChunk) {
-                    contains = true;
-                    break;
-                }
-            }
-            if (!contains) {
-                int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunk);
-                UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-                unloadChunkPacket.chunkX = chunkPos[0];
-                unloadChunkPacket.chunkZ = chunkPos[1];
-                playerConnection.sendPacket(unloadChunkPacket);
-            }
+        float dx = newChunk.getChunkX() - lastChunk.getChunkX();
+        float dz = newChunk.getChunkZ() - lastChunk.getChunkZ();
+        double distance = Math.sqrt(dx * dx + dz * dz);
+        boolean isFar = distance >= Main.CHUNK_VIEW_DISTANCE / 2;
+        if (isFar) {
+            updatePlayerPosition();
         }
 
-        // Load new chunks
-        for (int n = 0; n < newVisibleChunks.length; n++) {
-            long newVisibleChunk = newVisibleChunks[n];
-            boolean contains = false;
-            for (int l = 0; l < lastVisibleChunks.length; l++) {
-                long lastVisibleChunk = lastVisibleChunks[l];
-                if (lastVisibleChunk == newVisibleChunk) {
-                    contains = true;
-                    break;
-                }
-            }
-            if (!contains) {
-                int[] chunkPos = ChunkUtils.getChunkCoord(newVisibleChunk);
-                instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
-                    if (chunk == null) {
-                        return; // Cannot load chunk (autoload not enabled)
-                    }
-                    instance.sendChunk(this, chunk);
-                });
-            }
+        long[] lastVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()));
+        long[] updatedVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()));
+        int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
+        int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
+        // Unload old chunks
+        for (int index : oldChunks) {
+            int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunks[index]);
+            UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            unloadChunkPacket.chunkX = chunkPos[0];
+            unloadChunkPacket.chunkZ = chunkPos[1];
+            playerConnection.sendPacket(unloadChunkPacket);
         }
 
         updateViewPosition(newChunk);
+
+        // Load new chunks
+        for (int i = 0; i < newChunks.length; i++) {
+            boolean isLast = i == newChunks.length - 1;
+            int index = newChunks[i];
+            int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
+            instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
+                if (chunk == null) {
+                    return; // Cannot load chunk (autoload not enabled)
+                }
+                instance.sendChunk(this, chunk);
+                if (isFar && isLast)
+                    updatePlayerPosition();
+            });
+        }
     }
 
     @Override
@@ -489,13 +477,7 @@ public class Player extends LivingEntity {
         super.teleport(position, () -> {
             if (!instance.hasEnabledAutoChunkLoad() && isChunkUnloaded(position.getX(), position.getZ()))
                 return;
-            refreshPosition(position.getX(), position.getY(), position.getZ());
-            refreshView(position.getYaw(), position.getPitch());
-            PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-            positionAndLookPacket.position = position;
-            positionAndLookPacket.flags = 0x00;
-            positionAndLookPacket.teleportId = 67;
-            playerConnection.sendPacket(positionAndLookPacket);
+            updatePlayerPosition();
             if (callback != null)
                 callback.run();
         });
@@ -644,6 +626,14 @@ public class Player extends LivingEntity {
     protected void updateViewPosition(Chunk chunk) {
         UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
         playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    protected void updatePlayerPosition() {
+        PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
+        positionAndLookPacket.position = position;
+        positionAndLookPacket.flags = 0x00;
+        positionAndLookPacket.teleportId = 67;
+        playerConnection.sendPacket(positionAndLookPacket);
     }
 
     public void addPacketToQueue(ClientPlayPacket packet) {
