@@ -2,6 +2,7 @@ package fr.themode.minestom.entity;
 
 import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.utils.EntityUtils;
 
 // TODO viewers synchronization each X ticks?
 public abstract class ObjectEntity extends Entity {
@@ -31,4 +32,10 @@ public abstract class ObjectEntity extends Entity {
     public void removeViewer(Player player) {
         super.removeViewer(player);
     }
+
+    @Override
+    public boolean isOnGround() {
+        return EntityUtils.isOnGround(this);
+    }
+
 }

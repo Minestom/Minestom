@@ -28,6 +28,13 @@ public class Position {
         return this;
     }
 
+    public Position subtract(float x, float y, float z) {
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+        return this;
+    }
+
     public float getDistance(Position position) {
         return (float) Math.sqrt(MathUtils.square(position.getX() - getX()) + MathUtils.square(position.getY() - getY()) + MathUtils.square(position.getZ() - getZ()));
     }
@@ -133,7 +140,7 @@ public class Position {
     }
 
     public BlockPosition toBlockPosition() {
-        return new BlockPosition((int) getX(), (int) getY(), (int) getZ());
+        return new BlockPosition((int) Math.ceil(getX()), (int) Math.ceil(getY()), (int) Math.ceil(getZ()));
     }
 
     @Override

@@ -153,20 +153,22 @@ public abstract class Instance implements BlockModifier {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
 
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            sendChunks(player);
+        long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), Main.ENTITY_VIEW_DISTANCE);
+        boolean isPlayer = entity instanceof Player;
 
-            // Send player all visible entities
-            long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), Main.ENTITY_VIEW_DISTANCE);
-            for (long chunkIndex : visibleChunksEntity) {
-                getEntitiesInChunk(chunkIndex).forEach(ent -> {
-                    ent.addViewer(player);
-                    if (ent instanceof Player) {
-                        player.addViewer((Player) ent);
-                    }
-                });
-            }
+        if (isPlayer) {
+            sendChunks((Player) entity);
+        }
+
+        // Send all visible entities
+        for (long chunkIndex : visibleChunksEntity) {
+            getEntitiesInChunk(chunkIndex).forEach(ent -> {
+                if (isPlayer)
+                    ent.addViewer((Player) entity);
+                if (ent instanceof Player) {
+                    entity.addViewer((Player) ent);
+                }
+            });
         }
 
         Chunk chunk = getChunkAt(entity.getPosition());

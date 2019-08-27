@@ -12,6 +12,7 @@ public class ItemEntity extends ObjectEntity {
     public ItemEntity(ItemStack itemStack) {
         super(34);
         this.itemStack = itemStack;
+        setGravity(0.02f);
     }
 
     @Override

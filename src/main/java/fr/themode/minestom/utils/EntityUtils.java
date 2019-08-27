@@ -3,6 +3,7 @@ package fr.themode.minestom.utils;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.instance.Instance;
 
 public class EntityUtils {
 
@@ -24,6 +25,15 @@ public class EntityUtils {
         }
 
         return false;
+    }
+
+    public static boolean isOnGround(Entity entity) {
+        Instance instance = entity.getInstance();
+        if (instance == null)
+            return false;
+        Position position = entity.getPosition();
+        short blockId = instance.getBlockId(position.toBlockPosition().subtract(0, 1, 0));
+        return blockId != 0;
     }
 
 }

@@ -5,6 +5,7 @@ import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.server.play.AnimationPacket;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
 
@@ -26,6 +27,7 @@ public abstract class LivingEntity extends Entity {
     public LivingEntity(int entityType) {
         super(entityType);
         setupAttributes();
+        setGravity(0.02f);
     }
 
     public abstract void kill();
@@ -79,11 +81,21 @@ public abstract class LivingEntity extends Entity {
         return buffer;
     }
 
+    public void damage(float value) {
+        AnimationPacket animationPacket = new AnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
+        sendPacketToViewersAndSelf(animationPacket);
+        setHealth(getHealth() - value);
+    }
+
     public float getHealth() {
         return health;
     }
 
     public void setHealth(float health) {
+        health = Math.min(health, getMaxHealth());
+
         this.health = health;
         if (this.health <= 0) {
             kill();

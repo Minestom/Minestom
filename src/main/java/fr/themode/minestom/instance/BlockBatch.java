@@ -65,8 +65,11 @@ public class BlockBatch implements BlockModifier {
                     }
                     chunk.refreshDataPacket();
                     instance.sendChunkUpdate(chunk);
-                    if (isLast && callback != null)
-                        callback.run();
+                    if (isLast) {
+                        // data.clear();
+                        if (callback != null)
+                            callback.run();
+                    }
                 }
             });
         }

@@ -1,6 +1,12 @@
 package fr.themode.minestom.utils;
 
+import fr.themode.minestom.instance.Instance;
+
 public class ChunkUtils {
+
+    public static boolean isChunkUnloaded(Instance instance, float x, float z) {
+        return instance.getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16)) == null;
+    }
 
     public static long getChunkIndex(int chunkX, int chunkZ) {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);

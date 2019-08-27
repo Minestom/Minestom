@@ -54,6 +54,7 @@ public class ChunkBatch implements BlockModifier {
                     data.apply(chunk);
                 }
 
+                // dataList.clear();
                 chunk.refreshDataPacket();
                 instance.sendChunkUpdate(chunk);
                 if (callback != null)

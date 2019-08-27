@@ -10,10 +10,18 @@ public class BlockPosition {
         this.z = z;
     }
 
-    public void add(int x, int y, int z) {
+    public BlockPosition add(int x, int y, int z) {
         this.x += x;
         this.y += y;
         this.z += z;
+        return this;
+    }
+
+    public BlockPosition subtract(int x, int y, int z) {
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
+        return this;
     }
 
     public int getX() {

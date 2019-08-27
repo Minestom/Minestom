@@ -5,13 +5,15 @@ import fr.themode.minestom.net.packet.server.play.EntityPacket;
 import fr.themode.minestom.net.packet.server.play.EntityRelativeMovePacket;
 import fr.themode.minestom.net.packet.server.play.SpawnMobPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.utils.ChunkUtils;
+import fr.themode.minestom.utils.EntityUtils;
 import fr.themode.minestom.utils.Position;
 
 // TODO viewers synchronization each X ticks?
 public abstract class EntityCreature extends LivingEntity {
 
-    public EntityCreature(int entityType) {
-        super(entityType);
+    public EntityCreature(EntityType entityType) {
+        super(entityType.getId());
     }
 
     @Override
@@ -26,7 +28,7 @@ public abstract class EntityCreature extends LivingEntity {
         float newY = position.getY() + y;
         float newZ = position.getZ() + z;
 
-        if (isChunkUnloaded(newX, newZ))
+        if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
             return;
 
         EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
@@ -67,4 +69,8 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(getMetadataPacket());
     }
 
+    @Override
+    public boolean isOnGround() {
+        return EntityUtils.isOnGround(this);
+    }
 }

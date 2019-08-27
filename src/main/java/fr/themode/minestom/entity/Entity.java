@@ -36,7 +36,6 @@ public abstract class Entity implements Viewable, DataContainer {
 
     protected Instance instance;
     protected Position position;
-    protected boolean onGround;
     protected float lastX, lastY, lastZ;
     protected float lastYaw, lastPitch;
     private int id;
@@ -45,6 +44,9 @@ public abstract class Entity implements Viewable, DataContainer {
     // Velocity
     // TODO gravity implementation for entity other than players
     protected Vector velocity = new Vector(); // Movement in block per second
+    protected float gravityDragPerTick;
+    private int gravityTickCounter;
+
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
     private Set<Entity> passengers = new CopyOnWriteArraySet<>();
@@ -104,6 +106,8 @@ public abstract class Entity implements Viewable, DataContainer {
     // Called when entity a new instance is set
     public abstract void spawn();
 
+    public abstract boolean isOnGround();
+
     public void teleport(Position position, Runnable callback) {
         if (instance == null)
             throw new IllegalStateException("You need to use Entity#setInstance before teleporting an entity!");
@@ -114,7 +118,7 @@ public abstract class Entity implements Viewable, DataContainer {
             EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
             entityTeleportPacket.entityId = getEntityId();
             entityTeleportPacket.position = position;
-            entityTeleportPacket.onGround = onGround;
+            entityTeleportPacket.onGround = isOnGround();
             sendPacketToViewers(entityTeleportPacket);
         };
 
@@ -125,7 +129,7 @@ public abstract class Entity implements Viewable, DataContainer {
                     callback.run();
             });
         } else {
-            if (isChunkUnloaded(position.getX(), position.getZ()))
+            if (ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ()))
                 return;
             runnable.run();
             if (callback != null)
@@ -209,6 +213,36 @@ public abstract class Entity implements Viewable, DataContainer {
                     }
                 }
             }
+
+            // Gravity
+            if (!(this instanceof Player) && !noGravity && gravityDragPerTick != 0) { // Players do manage gravity client-side
+                Position position = getPosition();
+                if (!isOnGround()) {
+                    float strength = gravityDragPerTick * gravityTickCounter;
+
+                    int firstBlock = 0;
+                    for (int y = (int) position.getY(); y > 0; y--) {
+                        short blockId = instance.getBlockId((int) position.getX(), y, (int) position.getZ());
+                        if (blockId != 0) {
+                            firstBlock = y;
+                            break;
+                        }
+                    }
+
+                    float newY = position.getY() - strength;
+                    newY = Math.max(newY, firstBlock);
+                    refreshPosition(position.getX(), newY, position.getZ());
+                    gravityTickCounter++;
+                    if (isOnGround()) { // Round Y axis when gravity movement is done
+                        refreshPosition(position.getX(), Math.round(position.getY()), position.getZ());
+                        gravityTickCounter = 0;
+                    }
+
+                    if (this instanceof EntityCreature) // Objects are automatically updated client side
+                        teleport(getPosition());
+                }
+            }
+
 
             update();
 
@@ -295,6 +329,10 @@ public abstract class Entity implements Viewable, DataContainer {
         this.velocityTime = 0;
     }
 
+    public void setGravity(float gravityDragPerTick) {
+        this.gravityDragPerTick = gravityDragPerTick;
+    }
+
     public float getDistance(Entity entity) {
         return getPosition().getDistance(entity.getPosition());
     }
@@ -360,9 +398,17 @@ public abstract class Entity implements Viewable, DataContainer {
         sendMetadataIndex(0);
     }
 
+    public boolean isOnFire() {
+        return onFire;
+    }
+
     public void setGlowing(boolean glowing) {
         this.glowing = glowing;
         sendMetadataIndex(0);
+    }
+
+    public boolean isGlowing() {
+        return glowing;
     }
 
     public void setNoGravity(boolean noGravity) {
@@ -370,8 +416,8 @@ public abstract class Entity implements Viewable, DataContainer {
         sendMetadataIndex(5);
     }
 
-    public boolean isChunkUnloaded(float x, float z) {
-        return getInstance().getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16)) == null;
+    public boolean hasNoGravity() {
+        return noGravity;
     }
 
     public void refreshPosition(float x, float y, float z) {
@@ -434,6 +480,10 @@ public abstract class Entity implements Viewable, DataContainer {
 
             }
         }
+    }
+
+    public void refreshPosition(Position position) {
+        refreshPosition(position.getX(), position.getY(), position.getZ());
     }
 
     public void refreshView(float yaw, float pitch) {
@@ -554,7 +604,7 @@ public abstract class Entity implements Viewable, DataContainer {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = getPosition();
-        entityTeleportPacket.onGround = onGround;
+        entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
     }
 

@@ -4,6 +4,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.data.Data;
+import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -13,6 +14,7 @@ import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -39,6 +41,8 @@ public class Player extends LivingEntity {
     private Dimension dimension;
     private GameMode gameMode;
     private LevelType levelType;
+
+    protected boolean onGround;
 
     private static InstanceContainer instanceContainer;
 
@@ -82,7 +86,7 @@ public class Player extends LivingEntity {
     protected boolean spawned;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
-        super(93);
+        super(100);
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
@@ -98,8 +102,11 @@ public class Player extends LivingEntity {
         setEventCallback(AttackEvent.class, event -> {
             Entity entity = event.getTarget();
             if (entity instanceof EntityCreature) {
-                ((EntityCreature) entity).kill();
-                sendMessage("You killed an entity!");
+                ((EntityCreature) entity).damage(-1);
+                Vector velocity = getPosition().clone().getDirection().multiply(6);
+                velocity.setY(4f);
+                entity.setVelocity(velocity, 150);
+                sendMessage("You attacked an entity!");
             } else if (entity instanceof Player) {
                 Player player = (Player) entity;
                 Vector velocity = getPosition().clone().getDirection().multiply(6);
@@ -145,18 +152,18 @@ public class Player extends LivingEntity {
             setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
-            /*ChickenCreature chickenCreature = new ChickenCreature();
+            ChickenCreature chickenCreature = new ChickenCreature();
             chickenCreature.refreshPosition(2, 65, 2);
             chickenCreature.setInstance(getInstance());
 
             for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
                     ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                    itemEntity.refreshPosition(ix, 66, iz);
-                    itemEntity.setNoGravity(true);
+                    itemEntity.refreshPosition(ix, 68, iz);
+                    //itemEntity.setNoGravity(true);
                     itemEntity.setInstance(getInstance());
                     //itemEntity.remove();
-                }*/
+                }
 
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
@@ -271,6 +278,11 @@ public class Player extends LivingEntity {
     }
 
     @Override
+    public boolean isOnGround() {
+        return onGround;
+    }
+
+    @Override
     public void remove() {
         clearBossBars();
         if (getOpenInventory() != null)
@@ -345,15 +357,12 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(chatMessagePacket);
     }
 
-    public void damage(float amount) {
+    @Override
+    public void damage(float value) {
         if (getGameMode() == GameMode.CREATIVE)
             return;
 
-        AnimationPacket animationPacket = new AnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
-        sendPacketToViewersAndSelf(animationPacket);
-        setHealth(getHealth() - amount);
+        super.damage(value);
     }
 
     @Override
@@ -471,7 +480,7 @@ public class Player extends LivingEntity {
     @Override
     public void teleport(Position position, Runnable callback) {
         super.teleport(position, () -> {
-            if (!instance.hasEnabledAutoChunkLoad() && isChunkUnloaded(position.getX(), position.getZ()))
+            if (!instance.hasEnabledAutoChunkLoad() && ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ()))
                 return;
             updatePlayerPosition();
             if (callback != null)
