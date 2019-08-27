@@ -54,19 +54,25 @@ public interface Viewable {
 
     default void sendPacketToViewersAndSelf(ServerPacket packet) {
         if (this instanceof Player) {
-            PacketWriter.writeCallbackPacket(packet, buffer -> {
-                int size = getViewers().size();
-                buffer.getData().retain(size + 1).markReaderIndex();
-                ((Player) this).getPlayerConnection().writeUnencodedPacket(buffer);
-                buffer.getData().resetReaderIndex();
-                if (size != 0) {
-                    for (Player viewer : getViewers()) {
-                        buffer.getData().resetReaderIndex();
-                        viewer.getPlayerConnection().writeUnencodedPacket(buffer);
-                    }
-                }
-            });
+            UNSAFE_sendPacketToViewersAndSelf(packet);
+        } else {
+            sendPacketToViewers(packet);
         }
+    }
+
+    private void UNSAFE_sendPacketToViewersAndSelf(ServerPacket packet) {
+        PacketWriter.writeCallbackPacket(packet, buffer -> {
+            int size = getViewers().size();
+            buffer.getData().retain(size + 1).markReaderIndex();
+            ((Player) this).getPlayerConnection().writeUnencodedPacket(buffer);
+            buffer.getData().resetReaderIndex();
+            if (size != 0) {
+                for (Player viewer : getViewers()) {
+                    buffer.getData().resetReaderIndex();
+                    viewer.getPlayerConnection().writeUnencodedPacket(buffer);
+                }
+            }
+        });
     }
 
 }

@@ -8,7 +8,6 @@ import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.BlockManager;
-import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
 import fr.themode.minestom.listener.PacketListenerManager;
@@ -30,8 +29,8 @@ public class Main {
     public static final int TICK_PER_SECOND = 1000 / TICK_MS;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 10;
-    public static final int ENTITY_VIEW_DISTANCE = 10; // TODO
+    public static final int CHUNK_VIEW_DISTANCE = 5;
+    public static final int ENTITY_VIEW_DISTANCE = 2;
 
     // Networking
     private static ConnectionManager connectionManager;
@@ -68,16 +67,9 @@ public class Main {
                     Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
                     if (player != null) {
 
-                        Instance instance = player.getInstance();
-
-
-                        if (instance != null) {
-                            instance.removeEntity(player);
-                        }
-
                         player.remove();
 
-                        connectionManager.removePlayer(packetProcessor.getPlayerConnection(connection));
+                        connectionManager.removePlayer(player.getPlayerConnection());
                     }
                     packetProcessor.removePlayerConnection(connection);
                 }

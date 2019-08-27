@@ -42,7 +42,7 @@ public class EntityManager {
                 Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
                 Position position = playerCache.getPosition();
 
-                long[] visibleChunks = ChunkUtils.getVisibleChunks(position);
+                long[] visibleChunks = ChunkUtils.getChunksInRange(position, Main.CHUNK_VIEW_DISTANCE);
                 for (int i = 0; i < visibleChunks.length; i++) {
                     int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
                     int chunkX = chunkPos[0];

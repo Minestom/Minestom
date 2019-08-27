@@ -7,8 +7,9 @@ import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 
-import java.io.*;
-import java.nio.file.Files;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -34,7 +35,6 @@ public class Chunk {
         this.biome = biome;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        //refreshDataPacket(); // TODO remove
     }
 
     protected void setBlock(byte x, byte y, byte z, short blockId) {
@@ -130,25 +130,6 @@ public class Chunk {
         }
         byte[] result = output.toByteArray();
         return result;
-    }
-
-    protected void loadFromFile(File file) throws IOException {
-        System.out.println("LOAD FROM FILE");
-        byte[] array = Files.readAllBytes(file.toPath());
-        DataInputStream stream = new DataInputStream(new ByteArrayInputStream(array));
-        this.chunkX = stream.readInt();
-        this.chunkZ = stream.readInt();
-        System.out.println("chunk: " + chunkX + " : " + chunkZ);
-        try {
-            while (true) {
-                int index = stream.readInt();
-                boolean isCustomBlock = stream.readBoolean();
-                short block = stream.readShort();
-            }
-        } catch (EOFException e) {
-            System.out.println("END");
-        }
-
     }
 
     public ChunkDataPacket getFreshFullDataPacket() {

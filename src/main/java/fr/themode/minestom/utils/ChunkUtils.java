@@ -1,7 +1,5 @@
 package fr.themode.minestom.utils;
 
-import fr.themode.minestom.Main;
-
 public class ChunkUtils {
 
     public static long getChunkIndex(int chunkX, int chunkZ) {
@@ -14,12 +12,11 @@ public class ChunkUtils {
         return new int[]{chunkX, chunkZ};
     }
 
-    public static long[] getVisibleChunks(final Position position) {
-        final int viewDistance = Main.CHUNK_VIEW_DISTANCE;
+    public static long[] getChunksInRange(final Position position, int range) {
 
-        long[] visibleChunks = new long[MathUtils.square(viewDistance + 1)];
-        final int startLoop = -(viewDistance / 2);
-        final int endLoop = viewDistance / 2 + 1;
+        long[] visibleChunks = new long[MathUtils.square(range + 1)];
+        final int startLoop = -(range / 2);
+        final int endLoop = range / 2 + 1;
         int counter = 0;
         for (int x = startLoop; x < endLoop; x++) {
             for (int z = startLoop; z < endLoop; z++) {

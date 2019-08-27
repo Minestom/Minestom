@@ -50,7 +50,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return title;
     }
 
-    public int getUniqueId() {
+    public int getWindowId() {
         return id;
     }
 
@@ -77,7 +77,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return Arrays.copyOf(itemStacks, itemStacks.length);
     }
 
-    public void updateItems() {
+    public void update() {
         WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
         getViewers().forEach(p -> p.getPlayerConnection().sendPacket(windowItemsPacket));
     }
@@ -117,7 +117,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     private WindowItemsPacket getWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
-        windowItemsPacket.windowId = getUniqueId();
+        windowItemsPacket.windowId = getWindowId();
         windowItemsPacket.count = (short) itemStacks.length;
         windowItemsPacket.items = itemStacks;
         return windowItemsPacket;

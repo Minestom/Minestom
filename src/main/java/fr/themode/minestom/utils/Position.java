@@ -132,6 +132,10 @@ public class Position {
         this.pitch = pitch;
     }
 
+    public BlockPosition toBlockPosition() {
+        return new BlockPosition((int) getX(), (int) getY(), (int) getZ());
+    }
+
     @Override
     public String toString() {
         return "Position[" + x + ":" + y + ":" + z + "] (" + yaw + "/" + pitch + ")";

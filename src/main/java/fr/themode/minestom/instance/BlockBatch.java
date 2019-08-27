@@ -51,16 +51,22 @@ public class BlockBatch implements BlockModifier {
         this.data.put(chunk, blockData);
     }
 
-    public void flush() {
+    public void flush(Runnable callback) {
+        int counter = 0;
         for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
+            counter++;
             Chunk chunk = entry.getKey();
             List<BlockData> dataList = entry.getValue();
+            boolean isLast = counter == data.size();
             batchesPool.execute(() -> {
                 synchronized (chunk) {
                     for (BlockData data : dataList) {
                         data.apply(chunk);
                     }
-                    instance.sendChunkUpdate(chunk); // TODO partial chunk data
+                    chunk.refreshDataPacket();
+                    instance.sendChunkUpdate(chunk);
+                    if (isLast && callback != null)
+                        callback.run();
                 }
             });
         }

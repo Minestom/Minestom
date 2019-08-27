@@ -11,9 +11,8 @@ import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.play.*;
-import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.utils.Vector;
+import fr.themode.minestom.utils.*;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +59,7 @@ public abstract class Entity implements Viewable, DataContainer {
     protected long velocityTime; // Reset velocity to 0 after countdown
 
     // Synchronization
-    private long synchronizationDelay = 2000; // In ms
+    private long synchronizationDelay = 1500; // In ms
     private long lastSynchronizationTime;
 
     // Metadata
@@ -107,7 +106,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public void teleport(Position position, Runnable callback) {
         if (instance == null)
-            return;
+            throw new IllegalStateException("You need to use Entity#setInstance before teleporting an entity!");
 
         Runnable runnable = () -> {
             refreshPosition(position.getX(), position.getY(), position.getZ());
@@ -219,7 +218,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 sendPositionSynchronization();
             }
 
-            this.lastUpdate = System.currentTimeMillis();
+            this.lastUpdate = time;
         }
 
         if (shouldRemove()) {
@@ -300,23 +299,31 @@ public abstract class Entity implements Viewable, DataContainer {
         return getPosition().getDistance(entity.getPosition());
     }
 
+    public Entity getVehicle() {
+        return vehicle;
+    }
+
     public void addPassenger(Entity entity) {
-        // TODO if entity already has a vehicle, leave it before?
+        if (instance == null)
+            throw new IllegalStateException("You need to set an instance using Entity#setInstance");
+        if (entity.getVehicle() != null) {
+            entity.getVehicle().removePassenger(entity);
+        }
+
         this.passengers.add(entity);
         entity.vehicle = this;
-        if (instance != null) {
-            SetPassengersPacket passengersPacket = new SetPassengersPacket();
-            passengersPacket.vehicleEntityId = getEntityId();
 
-            int[] passengers = new int[this.passengers.size()];
-            int counter = 0;
-            for (Entity passenger : this.passengers) {
-                passengers[counter++] = passenger.getEntityId();
-            }
+        sendPassengersPacket();
+    }
 
-            passengersPacket.passengersId = passengers;
-            sendPacketToViewers(passengersPacket);
-        }
+    public void removePassenger(Entity entity) {
+        if (instance == null)
+            throw new IllegalStateException("You need to set an instance using Entity#setInstance");
+        if (!passengers.contains(entity))
+            return;
+        this.passengers.remove(entity);
+        entity.vehicle = null;
+        sendPassengersPacket();
     }
 
     public boolean hasPassenger() {
@@ -325,6 +332,20 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public Set<Entity> getPassengers() {
         return Collections.unmodifiableSet(passengers);
+    }
+
+    protected void sendPassengersPacket() {
+        SetPassengersPacket passengersPacket = new SetPassengersPacket();
+        passengersPacket.vehicleEntityId = getEntityId();
+
+        int[] passengers = new int[this.passengers.size()];
+        int counter = 0;
+        for (Entity passenger : this.passengers) {
+            passengers[counter++] = passenger.getEntityId();
+        }
+
+        passengersPacket.passengersId = passengers;
+        sendPacketToViewersAndSelf(passengersPacket);
     }
 
     public void triggerStatus(byte status) {
@@ -373,7 +394,44 @@ public abstract class Entity implements Viewable, DataContainer {
                 if (this instanceof Player)
                     ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
 
-                // TODO compare with viewers and remove if too far away
+                // Refresh entity viewable list
+                long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
+                long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
+
+                int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
+                for (int index : oldChunksEntity) {
+                    int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
+                    Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+                    if (chunk == null)
+                        continue;
+                    instance.getChunkEntities(chunk).forEach(entity -> {
+                        if (entity instanceof Player) {
+                            Player player = (Player) entity;
+                            removeViewer(player);
+                            if (this instanceof Player) {
+                                player.removeViewer((Player) this);
+                            }
+                        }
+                    });
+                }
+
+                int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
+                for (int index : newChunksEntity) {
+                    int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
+                    Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+                    if (chunk == null)
+                        continue;
+                    instance.getChunkEntities(chunk).forEach(entity -> {
+                        if (entity instanceof Player) {
+                            Player player = (Player) entity;
+                            addViewer(player);
+                            if (this instanceof Player) {
+                                player.addViewer((Player) this);
+                            }
+                        }
+                    });
+                }
+
             }
         }
     }
@@ -448,12 +506,8 @@ public abstract class Entity implements Viewable, DataContainer {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
         metaDataPacket.data = buffer;
-        if (this instanceof Player) {
-            Player player = (Player) this;
-            player.sendPacketToViewersAndSelf(metaDataPacket);
-        } else {
-            sendPacketToViewers(metaDataPacket);
-        }
+
+        sendPacketToViewersAndSelf(metaDataPacket);
     }
 
     private void fillMetadataIndex(Buffer buffer, int index) {

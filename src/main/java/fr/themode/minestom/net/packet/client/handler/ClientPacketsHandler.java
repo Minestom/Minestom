@@ -15,7 +15,10 @@ public class ClientPacketsHandler {
     }
 
     public ClientPacket getPacketInstance(int id) {
-        return constructorAccessMap.get(id).newInstance();
+        ClientPacket packet = constructorAccessMap.get(id).newInstance();
+        if (packet == null)
+            System.err.println("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
+        return packet;
     }
 
 }

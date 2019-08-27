@@ -17,6 +17,10 @@ public class ArrayUtils {
         return result;
     }
 
+    public static void removeElement(Object[] arr, int index) {
+        System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
+    }
+
     /**
      * @param a
      * @param b

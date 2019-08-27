@@ -8,6 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * Use chunk coordinate (0-16) instead of world's
+ */
 public class ChunkBatch implements BlockModifier {
 
     private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_BATCH);
@@ -50,9 +53,9 @@ public class ChunkBatch implements BlockModifier {
                 for (BlockData data : dataList) {
                     data.apply(chunk);
                 }
-                // System.out.println("FINISHED chunk creation " + chunk.getChunkX() + ":" + chunk.getChunkZ());
-                chunk.refreshDataPacket(); // TODO partial refresh instead of full
-                instance.sendChunkUpdate(chunk); // TODO partial chunk data
+
+                chunk.refreshDataPacket();
+                instance.sendChunkUpdate(chunk);
                 if (callback != null)
                     callback.accept(chunk);
             });

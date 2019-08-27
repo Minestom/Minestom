@@ -142,7 +142,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN");
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -434,12 +434,9 @@ public class Player extends LivingEntity {
         float dz = newChunk.getChunkZ() - lastChunk.getChunkZ();
         double distance = Math.sqrt(dx * dx + dz * dz);
         boolean isFar = distance >= Main.CHUNK_VIEW_DISTANCE / 2;
-        if (isFar) {
-            updatePlayerPosition();
-        }
 
-        long[] lastVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()));
-        long[] updatedVisibleChunks = ChunkUtils.getVisibleChunks(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()));
+        long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.CHUNK_VIEW_DISTANCE);
+        long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.CHUNK_VIEW_DISTANCE);
         int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
@@ -461,19 +458,18 @@ public class Player extends LivingEntity {
             int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
                 if (chunk == null) {
-                    return; // Cannot load chunk (autoload not enabled)
+                    return; // Cannot load chunk (auto load not enabled)
                 }
                 instance.sendChunk(this, chunk);
-                if (isFar && isLast)
+                if (isFar && isLast) {
                     updatePlayerPosition();
+                }
             });
         }
     }
 
     @Override
     public void teleport(Position position, Runnable callback) {
-        if (instance == null)
-            return;
         super.teleport(position, () -> {
             if (!instance.hasEnabledAutoChunkLoad() && isChunkUnloaded(position.getX(), position.getZ()))
                 return;
@@ -585,7 +581,7 @@ public class Player extends LivingEntity {
         }
 
         OpenWindowPacket openWindowPacket = new OpenWindowPacket();
-        openWindowPacket.windowId = inventory.getUniqueId();
+        openWindowPacket.windowId = inventory.getWindowId();
         openWindowPacket.windowType = inventory.getInventoryType().getWindowType();
         openWindowPacket.title = inventory.getTitle();
         playerConnection.sendPacket(openWindowPacket);
@@ -599,7 +595,7 @@ public class Player extends LivingEntity {
         if (openInventory == null) {
             closeWindowPacket.windowId = 0;
         } else {
-            closeWindowPacket.windowId = openInventory.getUniqueId();
+            closeWindowPacket.windowId = openInventory.getWindowId();
             openInventory.removeViewer(this);
             refreshOpenInventory(null);
         }
@@ -623,7 +619,7 @@ public class Player extends LivingEntity {
         return equipmentPacket;
     }
 
-    protected void updateViewPosition(Chunk chunk) {
+    public void updateViewPosition(Chunk chunk) {
         UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
         playerConnection.sendPacket(updateViewPositionPacket);
     }

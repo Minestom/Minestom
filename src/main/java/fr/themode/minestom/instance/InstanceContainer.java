@@ -207,19 +207,15 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunk(Player player, Chunk chunk) {
-        Buffer chunkData = chunk.getFullDataPacket();
-        if (chunkData == null) {
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
-                buffer.getData().retain(1).markReaderIndex();
-                player.getPlayerConnection().sendUnencodedPacket(buffer);
-                buffer.getData().resetReaderIndex();
-                chunk.setFullDataPacket(buffer);
-            });
-        } else {
-            chunkData.getData().retain(1).markReaderIndex();
+        PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            buffer.getData().retain(1).markReaderIndex();
+            player.getPlayerConnection().sendUnencodedPacket(buffer);
+            buffer.getData().resetReaderIndex();
+        });
+        // TODO use cached chunk data
+            /*chunkData.getData().retain(1).markReaderIndex();
             player.getPlayerConnection().sendUnencodedPacket(chunkData);
-            chunkData.getData().resetReaderIndex();
-        }
+            chunkData.getData().resetReaderIndex();*/
     }
 
     @Override

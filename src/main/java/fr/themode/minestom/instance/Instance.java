@@ -1,6 +1,7 @@
 package fr.themode.minestom.instance;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.ObjectEntity;
@@ -152,16 +153,20 @@ public abstract class Instance implements BlockModifier {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
 
-        // TODO based on distance with players
-        getPlayers().forEach(p -> entity.addViewer(p)); // Add new entity to all players viewable list
-
         if (entity instanceof Player) {
             Player player = (Player) entity;
             sendChunks(player);
-            // Send player all current entity in the instance
-            getObjectEntities().forEach(objectEntity -> objectEntity.addViewer(player));
-            getCreatures().forEach(entityCreature -> entityCreature.addViewer(player));
-            getPlayers().forEach(p -> p.addViewer(player));
+
+            // Send player all visible entities
+            long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), Main.ENTITY_VIEW_DISTANCE);
+            for (long chunkIndex : visibleChunksEntity) {
+                getEntitiesInChunk(chunkIndex).forEach(ent -> {
+                    ent.addViewer(player);
+                    if (ent instanceof Player) {
+                        player.addViewer((Player) ent);
+                    }
+                });
+            }
         }
 
         Chunk chunk = getChunkAt(entity.getPosition());

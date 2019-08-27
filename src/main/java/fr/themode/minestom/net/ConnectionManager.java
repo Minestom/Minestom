@@ -4,11 +4,12 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class ConnectionManager {
 
-    private volatile Set<Player> players = new HashSet<>();
-    private volatile Map<PlayerConnection, Player> connectionPlayerMap = new HashMap<>();
+    private Set<Player> players = new CopyOnWriteArraySet<>();
+    private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     public Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
