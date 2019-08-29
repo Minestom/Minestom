@@ -48,6 +48,9 @@ public class BlockPosition {
         this.z = z;
     }
 
+    public BlockPosition clone() {
+        return new BlockPosition(x, y, z);
+    }
 
     @Override
     public String toString() {

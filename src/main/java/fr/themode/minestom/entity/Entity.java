@@ -3,6 +3,7 @@ package fr.themode.minestom.entity;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
+import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.event.Callback;
@@ -11,6 +12,7 @@ import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.play.*;
+import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.utils.*;
 
@@ -39,6 +41,8 @@ public abstract class Entity implements Viewable, DataContainer {
     protected float lastX, lastY, lastZ;
     protected float lastYaw, lastPitch;
     private int id;
+
+    private BoundingBox boundingBox;
 
     protected Entity vehicle;
     // Velocity
@@ -86,6 +90,8 @@ public abstract class Entity implements Viewable, DataContainer {
         this.uuid = UUID.randomUUID();
         this.position = new Position();
 
+        setBoundingBox(0, 0, 0);
+
         synchronized (entityById) {
             entityById.put(id, this);
         }
@@ -103,7 +109,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public abstract void update();
 
-    // Called when entity a new instance is set
+    // Called when a new instance is set
     public abstract void spawn();
 
     public abstract boolean isOnGround();
@@ -145,7 +151,9 @@ public abstract class Entity implements Viewable, DataContainer {
     public void addViewer(Player player) {
         this.viewers.add(player);
         player.viewableEntity.add(this);
-        player.getPlayerConnection().sendPacket(getVelocityPacket());
+        PlayerConnection playerConnection = player.getPlayerConnection();
+        playerConnection.sendPacket(getVelocityPacket());
+        playerConnection.sendPacket(getPassengersPacket()); // TODO fix synchronization
     }
 
     @Override
@@ -198,7 +206,7 @@ public abstract class Entity implements Viewable, DataContainer {
             // Velocity
             if (velocityTime != 0) {
                 if (time >= velocityTime) {
-                    sendPositionSynchronization(); // Send synchronization after velocity ended
+                    sendSynchronization(); // Send synchronization after velocity ended
                     resetVelocity();
                 } else {
                     if (this instanceof Player) {
@@ -250,7 +258,7 @@ public abstract class Entity implements Viewable, DataContainer {
             // Scheduled synchronization
             if (time - lastSynchronizationTime >= synchronizationDelay) {
                 lastSynchronizationTime = System.currentTimeMillis();
-                sendPositionSynchronization();
+                sendSynchronization();
             }
         }
 
@@ -294,6 +302,14 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return boundingBox;
+    }
+
+    public void setBoundingBox(float x, float y, float z) {
+        this.boundingBox = new BoundingBox(this, x, y, z);
     }
 
     public Instance getInstance() {
@@ -350,7 +366,7 @@ public abstract class Entity implements Viewable, DataContainer {
         this.passengers.add(entity);
         entity.vehicle = this;
 
-        sendPassengersPacket();
+        sendPacketToViewersAndSelf(getPassengersPacket());
     }
 
     public void removePassenger(Entity entity) {
@@ -360,7 +376,7 @@ public abstract class Entity implements Viewable, DataContainer {
             return;
         this.passengers.remove(entity);
         entity.vehicle = null;
-        sendPassengersPacket();
+        sendPacketToViewersAndSelf(getPassengersPacket());
     }
 
     public boolean hasPassenger() {
@@ -371,7 +387,7 @@ public abstract class Entity implements Viewable, DataContainer {
         return Collections.unmodifiableSet(passengers);
     }
 
-    protected void sendPassengersPacket() {
+    protected SetPassengersPacket getPassengersPacket() {
         SetPassengersPacket passengersPacket = new SetPassengersPacket();
         passengersPacket.vehicleEntityId = getEntityId();
 
@@ -382,7 +398,7 @@ public abstract class Entity implements Viewable, DataContainer {
         }
 
         passengersPacket.passengersId = passengers;
-        sendPacketToViewersAndSelf(passengersPacket);
+        return passengersPacket;
     }
 
     public void triggerStatus(byte status) {
@@ -427,6 +443,10 @@ public abstract class Entity implements Viewable, DataContainer {
         position.setY(y);
         position.setZ(z);
 
+        for (Entity passenger : getPassengers()) {
+            passenger.position = getPosition().clone();
+        }
+
         Instance instance = getInstance();
         if (instance != null) {
             Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
@@ -435,52 +455,15 @@ public abstract class Entity implements Viewable, DataContainer {
                 synchronized (instance) {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
+
+                    for (Entity passenger : getPassengers()) {
+                        instance.removeEntityFromChunk(passenger, lastChunk);
+                        instance.addEntityToChunk(passenger, newChunk);
+                    }
                 }
-                if (this instanceof Player)
-                    ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
-
-                // Refresh entity viewable list
-                long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
-                long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
-
-                boolean isPlayer = this instanceof Player;
-
-                int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
-                for (int index : oldChunksEntity) {
-                    int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
-                    Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
-                    if (chunk == null)
-                        continue;
-                    instance.getChunkEntities(chunk).forEach(entity -> {
-                        if (entity instanceof Player) {
-                            Player player = (Player) entity;
-                            removeViewer(player);
-                            if (isPlayer) {
-                                player.removeViewer((Player) this);
-                            }
-                        } else if (isPlayer) {
-                            entity.removeViewer((Player) this);
-                        }
-                    });
-                }
-
-                int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
-                for (int index : newChunksEntity) {
-                    int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
-                    Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
-                    if (chunk == null)
-                        continue;
-                    instance.getChunkEntities(chunk).forEach(entity -> {
-                        if (entity instanceof Player) {
-                            Player player = (Player) entity;
-                            addViewer(player);
-                            if (this instanceof Player) {
-                                player.addViewer((Player) this);
-                            }
-                        } else if (isPlayer) {
-                            entity.addViewer((Player) this);
-                        }
-                    });
+                updateView(this, lastChunk, newChunk);
+                for (Entity passenger : getPassengers()) {
+                    updateView(passenger, lastChunk, newChunk);
                 }
 
             }
@@ -489,6 +472,55 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public void refreshPosition(Position position) {
         refreshPosition(position.getX(), position.getY(), position.getZ());
+    }
+
+    private void updateView(Entity entity, Chunk lastChunk, Chunk newChunk) {
+        if (entity instanceof Player)
+            ((Player) entity).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
+
+        // Refresh entity viewable list
+        long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
+        long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
+
+        boolean isPlayer = entity instanceof Player;
+
+        int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
+        for (int index : oldChunksEntity) {
+            int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
+            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            if (chunk == null)
+                continue;
+            instance.getChunkEntities(chunk).forEach(ent -> {
+                if (ent instanceof Player) {
+                    Player player = (Player) ent;
+                    removeViewer(player);
+                    if (isPlayer) {
+                        player.removeViewer((Player) entity);
+                    }
+                } else if (isPlayer) {
+                    ent.removeViewer((Player) entity);
+                }
+            });
+        }
+
+        int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
+        for (int index : newChunksEntity) {
+            int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
+            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            if (chunk == null)
+                continue;
+            instance.getChunkEntities(chunk).forEach(ent -> {
+                if (ent instanceof Player) {
+                    Player player = (Player) ent;
+                    addViewer(player);
+                    if (entity instanceof Player) {
+                        player.addViewer((Player) entity);
+                    }
+                } else if (isPlayer) {
+                    ent.addViewer((Player) entity);
+                }
+            });
+        }
     }
 
     public void refreshView(float yaw, float pitch) {
@@ -527,6 +559,10 @@ public abstract class Entity implements Viewable, DataContainer {
             return;
         }
         this.scheduledRemoveTime = System.currentTimeMillis() + delay;
+    }
+
+    public boolean isRemoveScheduled() {
+        return scheduledRemoveTime != 0;
     }
 
     protected EntityVelocityPacket getVelocityPacket() {
@@ -605,12 +641,13 @@ public abstract class Entity implements Viewable, DataContainer {
         buffer.putByte(index0);
     }
 
-    protected void sendPositionSynchronization() {
+    protected void sendSynchronization() {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = getPosition();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
+        sendPacketToViewers(getPassengersPacket());
     }
 
     private void fillAirTickMetaData(Buffer buffer) {

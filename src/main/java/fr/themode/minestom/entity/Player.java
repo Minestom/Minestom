@@ -4,6 +4,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.data.Data;
+import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -81,6 +82,8 @@ public class Player extends LivingEntity {
     // Vehicle
     private float sideways;
     private float forward;
+    private boolean jump;
+    private boolean unmount;
 
     protected boolean spawned;
 
@@ -89,6 +92,8 @@ public class Player extends LivingEntity {
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
+
+        setBoundingBox(0.8f, 1.8f, 0.8f);
 
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
@@ -151,11 +156,12 @@ public class Player extends LivingEntity {
             setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
-            /*ChickenCreature chickenCreature = new ChickenCreature();
+            ChickenCreature chickenCreature = new ChickenCreature();
             chickenCreature.refreshPosition(2, 65, 2);
             chickenCreature.setInstance(getInstance());
+            chickenCreature.addPassenger(this);
 
-            for (int ix = 0; ix < 4; ix++)
+            /*for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
                     ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
                     itemEntity.refreshPosition(ix, 68, iz);
@@ -582,6 +588,14 @@ public class Player extends LivingEntity {
         return forward;
     }
 
+    public boolean isVehicleJump() {
+        return jump;
+    }
+
+    public boolean isVehicleUnmount() {
+        return unmount;
+    }
+
     public void openInventory(Inventory inventory) {
         if (inventory == null)
             throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
@@ -695,9 +709,11 @@ public class Player extends LivingEntity {
         this.bossBars.remove(bossBar);
     }
 
-    public void refreshVehicleSteer(float sideways, float forward) {
+    public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
         this.sideways = sideways;
         this.forward = forward;
+        this.jump = jump;
+        this.unmount = unmount;
     }
 
     public long getLastKeepAlive() {

@@ -1,6 +1,7 @@
 package fr.themode.minestom.entity;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
@@ -37,15 +38,16 @@ public abstract class LivingEntity extends Entity {
         if (canPickupItem) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
             Set<Entity> entities = instance.getChunkEntities(chunk);
+            BoundingBox livingBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
                     ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
-                    float distance = getDistance(entity);
-                    if (distance <= 2.04) {
+                    BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
+                    if (livingBoundingBox.intersect(itemBoundingBox)) {
                         synchronized (itemEntity) {
-                            if (itemEntity.shouldRemove())
+                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
                                 continue;
                             ItemStack item = itemEntity.getItemStack();
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
@@ -55,7 +57,7 @@ public abstract class LivingEntity extends Entity {
                                 collectItemPacket.collectorEntityId = getEntityId();
                                 collectItemPacket.pickupItemCount = item.getAmount();
                                 sendPacketToViewersAndSelf(collectItemPacket);
-                                entity.remove();
+                                entity.scheduleRemove(500);
                             });
                         }
                     }

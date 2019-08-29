@@ -15,6 +15,7 @@ public class ItemEntity extends ObjectEntity {
     public ItemEntity(ItemStack itemStack) {
         super(34);
         this.itemStack = itemStack;
+        setBoundingBox(0.25f, 0.25f, 0.25f);
         setGravity(0.02f);
     }
 

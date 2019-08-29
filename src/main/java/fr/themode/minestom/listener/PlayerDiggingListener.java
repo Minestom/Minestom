@@ -97,7 +97,7 @@ public class PlayerDiggingListener {
             player.getInventory().setItemInMainHand(handItem);
 
             ItemEntity itemEntity = new ItemEntity(droppedItem);
-            itemEntity.setPickupDelay(1000);
+            itemEntity.setPickupDelay(500);
             itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
             itemEntity.setInstance(player.getInstance());
             Vector velocity = player.getPosition().clone().getDirection().multiply(5);
