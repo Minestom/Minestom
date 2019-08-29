@@ -1,6 +1,9 @@
 package fr.themode.minestom.item;
 
-public class ItemStack {
+import fr.themode.minestom.data.Data;
+import fr.themode.minestom.data.DataContainer;
+
+public class ItemStack implements DataContainer {
 
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
 
@@ -9,6 +12,8 @@ public class ItemStack {
 
     private String displayName;
     private boolean unbreakable;
+
+    private Data data;
 
     public ItemStack(Material material, byte amount) {
         this.material = material;
@@ -59,6 +64,17 @@ public class ItemStack {
         ItemStack itemStack = new ItemStack(material, amount);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
+        itemStack.setData(getData());
         return itemStack;
+    }
+
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Data data) {
+        this.data = data;
     }
 }

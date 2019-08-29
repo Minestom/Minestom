@@ -10,7 +10,6 @@ import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
@@ -73,15 +72,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
         spawnPositionPacket.x = 0;
-        spawnPositionPacket.y = 18;
+        spawnPositionPacket.y = 0;
         spawnPositionPacket.z = 0;
         connection.sendPacket(spawnPositionPacket);
-
-        PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-        playerPositionAndLookPacket.position = player.getPosition();
-        playerPositionAndLookPacket.flags = 0;
-        playerPositionAndLookPacket.teleportId = 42;
-        connection.sendPacket(playerPositionAndLookPacket);
 
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
         PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(player.getUuid(), username, GameMode.CREATIVE, 10);

@@ -1,14 +1,19 @@
 package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.GameMode;
+import fr.themode.minestom.entity.ItemEntity;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.event.ItemDropEvent;
 import fr.themode.minestom.event.PlayerStartDiggingEvent;
 import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.net.packet.server.play.EntityEffectPacket;
 import fr.themode.minestom.net.packet.server.play.RemoveEntityEffectPacket;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.Vector;
 
 public class PlayerDiggingListener {
 
@@ -31,11 +36,13 @@ public class PlayerDiggingListener {
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
                                 player.refreshTargetBlock(customBlock, blockPosition);
+                                // TODO ACKNOWLEDGE
                             }
                             addEffect(player);
                         } else {
                             player.resetTargetBlock();
                             removeEffect(player);
+                            // TODO ACKNOWLEDGE
                         }
                     }
                 }
@@ -56,12 +63,46 @@ public class PlayerDiggingListener {
                     }
                 }
                 break;
+            case DROP_ITEM_STACK:
+                ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
+                dropItem(player, droppedItemStack, ItemStack.AIR_ITEM);
+                break;
+            case DROP_ITEM:
+                ItemStack droppedItemStack2 = player.getInventory().getItemInMainHand().clone();
+                droppedItemStack2.setAmount((byte) 1);
+
+                ItemStack handItem = player.getInventory().getItemInMainHand();
+                handItem.setAmount((byte) (handItem.getAmount() - 1));
+                handItem = handItem.getAmount() <= 0 ? ItemStack.AIR_ITEM : handItem;
+                dropItem(player, droppedItemStack2, handItem);
+                break;
             case UPDATE_ITEM_STATE:
                 // TODO check if is updatable item
                 //player.refreshActiveHand(false, false, false);
                 //player.sendPacketToViewers(player.getMetadataPacket());
                 break;
+            case SWAP_ITEM_HAND:
+                PlayerInventory playerInventory = player.getInventory();
+                ItemStack mainHand = playerInventory.getItemInMainHand().clone();
+                ItemStack offHand = playerInventory.getItemInOffHand().clone();
+                playerInventory.setItemInMainHand(offHand);
+                playerInventory.setItemInOffHand(mainHand);
+                break;
         }
+    }
+
+    private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {
+        ItemDropEvent itemDropEvent = new ItemDropEvent(droppedItem);
+        player.callCancellableEvent(ItemDropEvent.class, itemDropEvent, () -> {
+            player.getInventory().setItemInMainHand(handItem);
+
+            ItemEntity itemEntity = new ItemEntity(droppedItem);
+            itemEntity.setPickupDelay(1000);
+            itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
+            itemEntity.setInstance(player.getInstance());
+            Vector velocity = player.getPosition().clone().getDirection().multiply(5);
+            itemEntity.setVelocity(velocity, 350);
+        });
     }
 
     private static void addEffect(Player player) {

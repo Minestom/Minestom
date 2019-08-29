@@ -5,16 +5,16 @@ import fr.themode.minestom.entity.Player;
 
 public class PlayerInteractEvent extends Event {
 
-    private Entity target;
+    private Entity entityTarget;
     private Player.Hand hand;
 
-    public PlayerInteractEvent(Entity target, Player.Hand hand) {
-        this.target = target;
+    public PlayerInteractEvent(Entity entityTarget, Player.Hand hand) {
+        this.entityTarget = entityTarget;
         this.hand = hand;
     }
 
     public Entity getTarget() {
-        return target;
+        return entityTarget;
     }
 
     public Player.Hand getHand() {

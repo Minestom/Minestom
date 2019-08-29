@@ -9,10 +9,13 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     private BlockPosition blockPosition;
     private Player.Hand hand;
 
+    private boolean consumeBlock;
+
     public PlayerBlockPlaceEvent(short blockId, BlockPosition blockPosition, Player.Hand hand) {
         this.blockId = blockId;
         this.blockPosition = blockPosition;
         this.hand = hand;
+        this.consumeBlock = true;
     }
 
     public short getBlockId() {
@@ -25,5 +28,13 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     public Player.Hand getHand() {
         return hand;
+    }
+
+    public void consumeBlock(boolean consumeBlock) {
+        this.consumeBlock = consumeBlock;
+    }
+
+    public boolean doesConsumeBlock() {
+        return consumeBlock;
     }
 }

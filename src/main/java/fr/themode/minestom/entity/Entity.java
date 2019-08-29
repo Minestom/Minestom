@@ -193,6 +193,7 @@ public abstract class Entity implements Viewable, DataContainer {
             return;
         } else if (shouldUpdate()) {
             long time = System.currentTimeMillis();
+            this.lastUpdate = time;
 
             // Velocity
             if (velocityTime != 0) {
@@ -251,8 +252,6 @@ public abstract class Entity implements Viewable, DataContainer {
                 lastSynchronizationTime = System.currentTimeMillis();
                 sendPositionSynchronization();
             }
-
-            this.lastUpdate = time;
         }
 
         if (shouldRemove()) {
@@ -444,6 +443,8 @@ public abstract class Entity implements Viewable, DataContainer {
                 long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
                 long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
 
+                boolean isPlayer = this instanceof Player;
+
                 int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
                 for (int index : oldChunksEntity) {
                     int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
@@ -454,9 +455,11 @@ public abstract class Entity implements Viewable, DataContainer {
                         if (entity instanceof Player) {
                             Player player = (Player) entity;
                             removeViewer(player);
-                            if (this instanceof Player) {
+                            if (isPlayer) {
                                 player.removeViewer((Player) this);
                             }
+                        } else if (isPlayer) {
+                            entity.removeViewer((Player) this);
                         }
                     });
                 }
@@ -474,6 +477,8 @@ public abstract class Entity implements Viewable, DataContainer {
                             if (this instanceof Player) {
                                 player.addViewer((Player) this);
                             }
+                        } else if (isPlayer) {
+                            entity.addViewer((Player) this);
                         }
                     });
                 }

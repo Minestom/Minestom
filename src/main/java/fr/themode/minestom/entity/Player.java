@@ -4,7 +4,6 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.data.Data;
-import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -152,7 +151,7 @@ public class Player extends LivingEntity {
             setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
-            ChickenCreature chickenCreature = new ChickenCreature();
+            /*ChickenCreature chickenCreature = new ChickenCreature();
             chickenCreature.refreshPosition(2, 65, 2);
             chickenCreature.setInstance(getInstance());
 
@@ -163,7 +162,9 @@ public class Player extends LivingEntity {
                     //itemEntity.setNoGravity(true);
                     itemEntity.setInstance(getInstance());
                     //itemEntity.remove();
-                }
+                }*/
+
+            getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);

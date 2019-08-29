@@ -9,6 +9,9 @@ public class ItemEntity extends ObjectEntity {
     private ItemStack itemStack;
     private boolean pickable = true;
 
+    private long spawnTime;
+    private long pickupDelay;
+
     public ItemEntity(ItemStack itemStack) {
         super(34);
         this.itemStack = itemStack;
@@ -22,6 +25,7 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void spawn() {
+        this.spawnTime = System.currentTimeMillis();
         // setVelocity(new Vector(0, 1, 0), 5000);
     }
 
@@ -54,10 +58,22 @@ public class ItemEntity extends ObjectEntity {
     }
 
     public boolean isPickable() {
-        return pickable;
+        return pickable && (System.currentTimeMillis() - getSpawnTime() >= pickupDelay);
     }
 
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
+    }
+
+    public long getPickupDelay() {
+        return pickupDelay;
+    }
+
+    public void setPickupDelay(long pickupDelay) {
+        this.pickupDelay = pickupDelay;
+    }
+
+    public long getSpawnTime() {
+        return spawnTime;
     }
 }

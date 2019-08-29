@@ -19,4 +19,5 @@ dependencies {
     // https://mvnrepository.com/artifact/org.lz4/lz4-java
     implementation 'com.github.luben:zstd-jni:1.4.3-1'
     implementation 'com.esotericsoftware:reflectasm:1.11.9'
+    implementation 'com.github.LynnOwens:starlite:9971b899f7'
 }

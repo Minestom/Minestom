@@ -5,10 +5,10 @@ import java.util.Map;
 
 public enum Material {
 
-    AIR(0),
-    STONE(1),
-    BOW(525),
-    ARROW(526);
+    AIR(0, 0),
+    STONE(1, 1),
+    BOW(525, 0),
+    ARROW(526, 0);
 
     private static Map<Integer, Material> idToMaterial = new HashMap<>();
 
@@ -19,9 +19,11 @@ public enum Material {
     }
 
     private int id;
+    private int blockId;
 
-    Material(int id) {
+    Material(int id, int blockId) {
         this.id = id;
+        this.blockId = blockId;
     }
 
     public static Material fromId(int id) {
@@ -29,7 +31,7 @@ public enum Material {
     }
 
     public boolean isBlock() {
-        return false; // TODO
+        return blockId != 0;
     }
 
     public boolean isFood() {
