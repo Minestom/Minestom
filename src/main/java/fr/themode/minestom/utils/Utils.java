@@ -5,7 +5,6 @@ import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
 
 import java.io.UnsupportedEncodingException;
-import java.util.UUID;
 
 public class Utils {
 
@@ -130,11 +129,6 @@ public class Utils {
 
     public static BlockPosition readPosition(Buffer buffer) {
         return SerializerUtils.longToBlockPosition(buffer.getLong());
-    }
-
-    public static void writeUuid(Buffer buffer, UUID uuid) {
-        buffer.putLong(uuid.getMostSignificantBits());
-        buffer.putLong(uuid.getLeastSignificantBits());
     }
 
     public static void writeItemStack(Buffer buffer, ItemStack itemStack) {

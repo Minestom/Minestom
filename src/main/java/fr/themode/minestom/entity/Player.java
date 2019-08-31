@@ -115,7 +115,7 @@ public class Player extends LivingEntity {
                 sendMessage("You attacked an entity!");
             } else if (entity instanceof Player) {
                 Player player = (Player) entity;
-                Vector velocity = getPosition().clone().getDirection().multiply(6);
+                Vector velocity = getPosition().clone().getDirection().multiply(4);
                 velocity.setY(3.5f);
                 player.setVelocity(velocity, 150);
                 player.damage(2);
@@ -155,7 +155,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN");
-            setGameMode(GameMode.SURVIVAL);
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -330,6 +330,8 @@ public class Player extends LivingEntity {
 
     @Override
     public void addViewer(Player player) {
+        if (player == this)
+            return;
         super.addViewer(player);
         PlayerConnection connection = player.getPlayerConnection();
         String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
@@ -355,6 +357,8 @@ public class Player extends LivingEntity {
 
     @Override
     public void removeViewer(Player player) {
+        if (player == this)
+            return;
         super.removeViewer(player);
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
@@ -523,7 +527,7 @@ public class Player extends LivingEntity {
             int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
                 if (chunk == null) {
-                    return; // Cannot load chunk (auto load not enabled)
+                    return; // Cannot load chunk (auto load is not enabled)
                 }
                 instance.sendChunk(this, chunk);
                 if (isFar && isLast) {
@@ -536,8 +540,6 @@ public class Player extends LivingEntity {
     @Override
     public void teleport(Position position, Runnable callback) {
         super.teleport(position, () -> {
-            if (!instance.hasEnabledAutoChunkLoad() && ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ()))
-                return;
             updatePlayerPosition();
             if (callback != null)
                 callback.run();

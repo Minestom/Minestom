@@ -29,6 +29,7 @@ public class PacketUtils {
     public static Buffer encode(Packet packet) {
         Buffer buffer = Buffer.create();
         Buffer idAndPayload = Buffer.create();
+
         writeVarInt(idAndPayload, packet.get(PACKET_ID_IDENTIFIER));
         idAndPayload.putBuffer(packet.getPayload());
         writeVarInt(buffer, idAndPayload.length());

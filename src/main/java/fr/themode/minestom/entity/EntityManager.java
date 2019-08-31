@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class EntityManager {
@@ -43,18 +44,28 @@ public class EntityManager {
                 Position position = playerCache.getPosition();
 
                 long[] visibleChunks = ChunkUtils.getChunksInRange(position, Main.CHUNK_VIEW_DISTANCE);
-                for (int i = 0; i < visibleChunks.length; i++) {
+                int length = visibleChunks.length;
+
+                AtomicInteger counter = new AtomicInteger(0);
+
+                for (int i = 0; i < length; i++) {
                     int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
                     int chunkX = chunkPos[0];
                     int chunkZ = chunkPos[1];
-                    boolean isLast = i == visibleChunks.length - 1;
-                    Consumer<Chunk> callback = isLast ? chunk -> {
-                        playerCache.spawned = true;
-                        playerCache.setInstance(spawningInstance);
-                        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent();
-                        playerCache.callEvent(PlayerSpawnEvent.class, spawnEvent);
-                        playerCache.updateViewPosition(chunk);
-                    } : null;
+                    Consumer<Chunk> callback = (chunk) -> {
+                        boolean isLast = counter.get() == length - 1;
+                        if (isLast) {
+                            // This is the last chunk to be loaded, spawn player
+                            playerCache.spawned = true;
+                            playerCache.setInstance(spawningInstance);
+                            PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent();
+                            playerCache.callEvent(PlayerSpawnEvent.class, spawnEvent);
+                            playerCache.updateViewPosition(chunk);
+                        } else {
+                            // Increment the counter of current loaded chunks
+                            counter.incrementAndGet();
+                        }
+                    };
 
                     // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
                     spawningInstance.loadChunk(chunkX, chunkZ, callback);

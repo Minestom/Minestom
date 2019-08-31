@@ -46,7 +46,6 @@ public abstract class Entity implements Viewable, DataContainer {
 
     protected Entity vehicle;
     // Velocity
-    // TODO gravity implementation for entity other than players
     protected Vector velocity = new Vector(); // Movement in block per second
     protected float gravityDragPerTick;
     private int gravityTickCounter;
@@ -247,8 +246,9 @@ public abstract class Entity implements Viewable, DataContainer {
                         gravityTickCounter = 0;
                     }
 
-                    if (this instanceof EntityCreature) // Objects are automatically updated client side
+                    if (this instanceof EntityCreature) {
                         teleport(getPosition());
+                    }
                 }
             }
 
@@ -444,7 +444,7 @@ public abstract class Entity implements Viewable, DataContainer {
         position.setZ(z);
 
         for (Entity passenger : getPassengers()) {
-            passenger.position = getPosition().clone();
+            passenger.refreshPosition(x, y, z);
         }
 
         Instance instance = getInstance();
@@ -455,17 +455,8 @@ public abstract class Entity implements Viewable, DataContainer {
                 synchronized (instance) {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
-
-                    for (Entity passenger : getPassengers()) {
-                        instance.removeEntityFromChunk(passenger, lastChunk);
-                        instance.addEntityToChunk(passenger, newChunk);
-                    }
                 }
                 updateView(this, lastChunk, newChunk);
-                for (Entity passenger : getPassengers()) {
-                    updateView(passenger, lastChunk, newChunk);
-                }
-
             }
         }
     }
@@ -647,7 +638,9 @@ public abstract class Entity implements Viewable, DataContainer {
         entityTeleportPacket.position = getPosition();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
-        sendPacketToViewers(getPassengersPacket());
+
+        if (!passengers.isEmpty())
+            sendPacketToViewers(getPassengersPacket());
     }
 
     private void fillAirTickMetaData(Buffer buffer) {

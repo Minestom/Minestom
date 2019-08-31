@@ -42,7 +42,6 @@ public class PlayerPositionListener {
     }
 
     private static void processMovement(Player player, float x, float y, float z, Runnable runnable) {
-        //System.out.println("MOVEMENT PACKET " + Math.round(x) + ":" + Math.round(y) + ":" + Math.round(z));
         boolean chunkTest = ChunkUtils.isChunkUnloaded(player.getInstance(), x, z);
         if (chunkTest) {
             player.teleport(player.getPosition());
