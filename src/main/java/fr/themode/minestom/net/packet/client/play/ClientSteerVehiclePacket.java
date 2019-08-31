@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 
 public class ClientSteerVehiclePacket extends ClientPlayPacket {
@@ -10,9 +10,9 @@ public class ClientSteerVehiclePacket extends ClientPlayPacket {
     public byte flags;
 
     @Override
-    public void read(Buffer buffer) {
-        this.sideways = buffer.getFloat();
-        this.forward = buffer.getFloat();
-        this.flags = buffer.getByte();
+    public void read(PacketReader reader) {
+        this.sideways = reader.readFloat();
+        this.forward = reader.readFloat();
+        this.flags = reader.readByte();
     }
 }

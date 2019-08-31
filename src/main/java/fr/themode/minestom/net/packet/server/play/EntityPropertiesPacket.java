@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class EntityPropertiesPacket implements ServerPacket {
 
@@ -11,11 +10,11 @@ public class EntityPropertiesPacket implements ServerPacket {
 
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, entityId);
-        buffer.putInt(properties.length);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(entityId);
+        writer.writeInt(properties.length);
         for (Property property : properties) {
-            property.write(buffer);
+            property.write(writer);
         }
     }
 
@@ -29,12 +28,12 @@ public class EntityPropertiesPacket implements ServerPacket {
         public String key;
         public double value;
 
-        private void write(Buffer buffer) {
-            Utils.writeString(buffer, key);
-            buffer.putDouble(value);
+        private void write(PacketWriter writer) {
+            writer.writeSizedString(key);
+            writer.writeDouble(value);
 
-            // TODO Modifiers
-            Utils.writeVarInt(buffer, 0);
+            // TODO modifiers
+            writer.writeVarInt(0);
         }
     }
 

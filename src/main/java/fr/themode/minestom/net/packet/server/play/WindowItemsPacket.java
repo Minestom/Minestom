@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class WindowItemsPacket implements ServerPacket {
 
@@ -11,18 +10,19 @@ public class WindowItemsPacket implements ServerPacket {
     public short count;
     public ItemStack[] items;
 
-    // TODO slot data (Array of Slot)
-
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, windowId);
-        buffer.putShort(count);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(windowId);
 
-        if (items == null)
+        if (items == null) {
+            writer.writeShort((short) 0);
             return;
+        }
+
+        writer.writeShort((short) items.length);
         for (int i = 0; i < items.length; i++) {
             ItemStack item = items[i];
-            Utils.writeItemStack(buffer, item);
+            writer.writeItemStack(item);
         }
     }
 

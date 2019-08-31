@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 
 public class ClientPlayerPositionAndLookPacket extends ClientPlayPacket {
@@ -10,12 +10,12 @@ public class ClientPlayerPositionAndLookPacket extends ClientPlayPacket {
     public boolean onGround;
 
     @Override
-    public void read(Buffer buffer) {
-        this.x = buffer.getDouble();
-        this.y = buffer.getDouble();
-        this.z = buffer.getDouble();
-        this.yaw = buffer.getFloat();
-        this.pitch = buffer.getFloat();
-        this.onGround = buffer.getBoolean();
+    public void read(PacketReader reader) {
+        this.x = reader.readDouble();
+        this.y = reader.readDouble();
+        this.z = reader.readDouble();
+        this.yaw = reader.readFloat();
+        this.pitch = reader.readFloat();
+        this.onGround = reader.readBoolean();
     }
 }

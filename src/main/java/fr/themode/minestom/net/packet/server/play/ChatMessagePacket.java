@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ChatMessagePacket implements ServerPacket {
 
@@ -15,9 +14,9 @@ public class ChatMessagePacket implements ServerPacket {
     }
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeString(buffer, this.message);
-        buffer.putByte((byte) this.position.ordinal());
+    public void write(PacketWriter writer) {
+        writer.writeSizedString(message);
+        writer.writeByte((byte) position.ordinal());
     }
 
     @Override

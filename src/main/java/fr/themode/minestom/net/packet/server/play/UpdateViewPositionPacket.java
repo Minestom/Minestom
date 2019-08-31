@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class UpdateViewPositionPacket implements ServerPacket {
 
@@ -14,9 +13,9 @@ public class UpdateViewPositionPacket implements ServerPacket {
     }
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, chunk.getChunkX());
-        Utils.writeVarInt(buffer, chunk.getChunkZ());
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(chunk.getChunkX());
+        writer.writeVarInt(chunk.getChunkZ());
     }
 
     @Override

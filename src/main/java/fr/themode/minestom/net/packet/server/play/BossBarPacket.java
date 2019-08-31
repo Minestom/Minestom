@@ -1,10 +1,9 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.bossbar.BarColor;
 import fr.themode.minestom.bossbar.BarDivision;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 import java.util.UUID;
 
@@ -21,33 +20,33 @@ public class BossBarPacket implements ServerPacket {
 
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeUuid(buffer, uuid);
-        Utils.writeVarInt(buffer, action.ordinal());
+    public void write(PacketWriter writer) {
+        writer.writeUuid(uuid);
+        writer.writeVarInt(action.ordinal());
 
         switch (action) {
             case ADD:
-                Utils.writeString(buffer, title);
-                buffer.putFloat(health);
-                Utils.writeVarInt(buffer, color.ordinal());
-                Utils.writeVarInt(buffer, division.ordinal());
-                buffer.putByte(flags);
+                writer.writeSizedString(title);
+                writer.writeFloat(health);
+                writer.writeVarInt(color.ordinal());
+                writer.writeVarInt(division.ordinal());
+                writer.writeByte(flags);
                 break;
             case REMOVE:
 
                 break;
             case UPDATE_HEALTH:
-                buffer.putFloat(health);
+                writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                Utils.writeString(buffer, title);
+                writer.writeSizedString(title);
                 break;
             case UPDATE_STYLE:
-                Utils.writeVarInt(buffer, color.ordinal());
-                Utils.writeVarInt(buffer, division.ordinal());
+                writer.writeVarInt(color.ordinal());
+                writer.writeVarInt(division.ordinal());
                 break;
             case UPDATE_FLAGS:
-                buffer.putByte(flags);
+                writer.writeByte(flags);
                 break;
         }
     }

@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class DisplayScoreboardPacket implements ServerPacket {
 
@@ -10,9 +9,9 @@ public class DisplayScoreboardPacket implements ServerPacket {
     public String scoreName;
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putByte(position);
-        Utils.writeString(buffer, scoreName);
+    public void write(PacketWriter writer) {
+        writer.writeByte(position);
+        writer.writeSizedString(scoreName);
     }
 
     @Override

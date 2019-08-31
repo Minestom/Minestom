@@ -31,23 +31,26 @@ public class BlockPlacementListener {
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
-        player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
-        if (!playerBlockPlaceEvent.isCancelled()) {
-            instance.setBlock(blockPosition, "custom_block"); // TODO set useItem's block instead
-            if (playerBlockPlaceEvent.doesConsumeBlock()) {
-                usedItem.setAmount((byte) (usedItem.getAmount() - 1));
-                if (usedItem.getAmount() <= 0)
-                    usedItem = ItemStack.AIR_ITEM;
-                if (hand == Player.Hand.OFF) {
-                    playerInventory.setItemInOffHand(usedItem);
-                } else { // Main
-                    playerInventory.setItemInMainHand(usedItem);
+        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition);
+        if (!intersectPlayer) {
+            PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
+            player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
+            if (!playerBlockPlaceEvent.isCancelled()) {
+                instance.setBlock(blockPosition, "custom_block"); // TODO set useItem's block instead
+                if (playerBlockPlaceEvent.doesConsumeBlock()) {
+                    usedItem.setAmount((byte) (usedItem.getAmount() - 1));
+                    if (usedItem.getAmount() <= 0)
+                        usedItem = ItemStack.AIR_ITEM;
+                    if (hand == Player.Hand.OFF) {
+                        playerInventory.setItemInOffHand(usedItem);
+                    } else { // Main
+                        playerInventory.setItemInMainHand(usedItem);
+                    }
                 }
+            } else {
+                Chunk chunk = instance.getChunkAt(blockPosition);
+                instance.sendChunkUpdate(player, chunk);
             }
-        } else {
-            Chunk chunk = instance.getChunkAt(blockPosition);
-            instance.sendChunkUpdate(player, chunk);
         }
         player.getInventory().refreshSlot(player.getHeldSlot());
     }

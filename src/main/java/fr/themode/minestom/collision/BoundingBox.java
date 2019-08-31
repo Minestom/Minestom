@@ -1,6 +1,8 @@
 package fr.themode.minestom.collision;
 
 import fr.themode.minestom.entity.Entity;
+import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.Position;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
@@ -21,6 +23,31 @@ public class BoundingBox {
         return (getMinX() <= boundingBox.getMaxX() && getMaxX() >= boundingBox.getMinX()) &&
                 (getMinY() <= boundingBox.getMaxY() && getMaxY() >= boundingBox.getMinY()) &&
                 (getMinZ() <= boundingBox.getMaxZ() && getMaxZ() >= boundingBox.getMinZ());
+    }
+
+    public boolean intersect(BlockPosition blockPosition) {
+        final float x = 1f;
+        final float y = 1;
+        final float z = 1f;
+        float minX = blockPosition.getX() - (x / 2) + 0.5f;
+        float maxX = blockPosition.getX() + (x / 2) + 0.5f;
+
+        float minY = blockPosition.getY();
+        float maxY = blockPosition.getY() + y;
+
+        float minZ = blockPosition.getZ() - (z / 2) + 0.5f;
+        float maxZ = blockPosition.getZ() + (z / 2) + 0.5f;
+
+        boolean checkX = getMinX() + x / 2 < maxX && getMaxX() - x / 2 > minX;
+        boolean checkY = getMinY() + y < maxY && getMaxY() + y > minY;
+        boolean checkZ = getMinZ() + z / 2 < maxZ && getMaxZ() - z / 2 > minZ;
+        return checkX && checkY && checkZ;
+    }
+
+    public boolean intersect(Position position) {
+        return (position.getX() >= getMinX() && position.getX() <= getMaxX()) &&
+                (position.getY() >= getMinY() && position.getY() <= getMaxY()) &&
+                (position.getZ() >= getMinZ() && position.getZ() <= getMaxZ());
     }
 
     public BoundingBox expand(float x, float y, float z) {
@@ -63,4 +90,8 @@ public class BoundingBox {
         return entity.getPosition().getZ() + (z / 2);
     }
 
+    @Override
+    public String toString() {
+        return "BoundingBox[" + x + ":" + y + ":" + z + "]";
+    }
 }

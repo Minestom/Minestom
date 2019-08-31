@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.handshake;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ResponsePacket implements ServerPacket {
 
@@ -28,8 +27,8 @@ public class ResponsePacket implements ServerPacket {
             "}";
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeString(buffer, JSON_EXAMPLE);
+    public void write(PacketWriter writer) {
+        writer.writeSizedString(JSON_EXAMPLE);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package fr.themode.minestom.net.packet.client.status;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.ConnectionManager;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.status.PongPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -18,7 +18,7 @@ public class PingPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(Buffer buffer) {
-        this.number = buffer.getLong();
+    public void read(PacketReader reader) {
+        this.number = reader.readLong();
     }
 }

@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ConfirmTransactionPacket implements ServerPacket {
 
@@ -11,10 +10,10 @@ public class ConfirmTransactionPacket implements ServerPacket {
     public boolean accepted;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, windowId);
-        buffer.putShort(actionNumber);
-        buffer.putBoolean(accepted);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(windowId);
+        writer.writeShort(actionNumber);
+        writer.writeBoolean(accepted);
     }
 
     @Override

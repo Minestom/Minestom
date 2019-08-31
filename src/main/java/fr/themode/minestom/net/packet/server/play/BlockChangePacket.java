@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.Utils;
 
 public class BlockChangePacket implements ServerPacket {
 
@@ -11,9 +10,9 @@ public class BlockChangePacket implements ServerPacket {
     public int blockId;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writePosition(buffer, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-        Utils.writeVarInt(buffer, blockId);
+    public void write(PacketWriter writer) {
+        writer.writeBlockPosition(blockPosition);
+        writer.writeVarInt(blockId);
     }
 
     @Override

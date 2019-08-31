@@ -1,9 +1,9 @@
 package fr.themode.minestom.net.packet.server.play;
 
 import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Utils;
 
 import java.util.UUID;
 
@@ -15,23 +15,27 @@ public class SpawnMobPacket implements ServerPacket {
     public Position position;
     public float headPitch;
     public short velocityX, velocityY, velocityZ;
-    // TODO metadata
+    public Buffer metadata;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, entityId);
-        Utils.writeUuid(buffer, entityUuid);
-        Utils.writeVarInt(buffer, entityType);
-        buffer.putDouble(position.getX());
-        buffer.putDouble(position.getY());
-        buffer.putDouble(position.getZ());
-        buffer.putFloat(position.getYaw());
-        buffer.putFloat(position.getPitch());
-        buffer.putFloat(headPitch);
-        buffer.putShort(velocityX);
-        buffer.putShort(velocityY);
-        buffer.putShort(velocityZ);
-        buffer.putByte((byte) 0xff); // TODO metadata
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(entityId);
+        writer.writeUuid(entityUuid);
+        writer.writeVarInt(entityType);
+        writer.writeDouble(position.getX());
+        writer.writeDouble(position.getY());
+        writer.writeDouble(position.getZ());
+        writer.writeFloat(position.getYaw());
+        writer.writeFloat(position.getPitch());
+        writer.writeFloat(headPitch);
+        writer.writeShort(velocityX);
+        writer.writeShort(velocityY);
+        writer.writeShort(velocityZ);
+        if (metadata != null) {
+            writer.writeBuffer(metadata);
+        } else {
+            writer.writeByte((byte) 0xff);
+        }
     }
 
     @Override

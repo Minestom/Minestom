@@ -94,9 +94,9 @@ public abstract class EntityCreature extends LivingEntity {
         spawnMobPacket.entityType = getEntityType();
         spawnMobPacket.position = getPosition();
         spawnMobPacket.headPitch = 0;
+        spawnMobPacket.metadata = getMetadataBuffer();
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
-        playerConnection.sendPacket(getMetadataPacket());
     }
 
     @Override

@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ClientSettingsPacket extends ClientPlayPacket {
 
@@ -15,12 +14,12 @@ public class ClientSettingsPacket extends ClientPlayPacket {
     public Player.MainHand mainHand;
 
     @Override
-    public void read(Buffer buffer) {
-        this.locale = Utils.readString(buffer);
-        this.viewDistance = buffer.getByte();
-        this.chatMode = Player.ChatMode.values()[Utils.readVarInt(buffer)];
-        this.chatColors = buffer.getBoolean();
-        this.displayedSkinParts = buffer.getByte();
-        this.mainHand = Player.MainHand.values()[Utils.readVarInt(buffer)];
+    public void read(PacketReader reader) {
+        this.locale = reader.readSizedString();
+        this.viewDistance = reader.readByte();
+        this.chatMode = Player.ChatMode.values()[reader.readVarInt()];
+        this.chatColors = reader.readBoolean();
+        this.displayedSkinParts = reader.readByte();
+        this.mainHand = Player.MainHand.values()[reader.readVarInt()];
     }
 }

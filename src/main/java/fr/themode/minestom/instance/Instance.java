@@ -2,10 +2,7 @@ package fr.themode.minestom.instance;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.ObjectEntity;
-import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.entity.*;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
@@ -20,9 +17,10 @@ public abstract class Instance implements BlockModifier {
 
     protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
     // Entities present in this instance
-    protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
-    protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
     protected Set<Player> players = new CopyOnWriteArraySet<>();
+    protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
+    protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
+    protected Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
     protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     private UUID uniqueId;
@@ -79,16 +77,20 @@ public abstract class Instance implements BlockModifier {
     }
     //
 
-    public Set<ObjectEntity> getObjectEntities() {
-        return Collections.unmodifiableSet(objectEntities);
+    public Set<Player> getPlayers() {
+        return Collections.unmodifiableSet(players);
     }
 
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
     }
 
-    public Set<Player> getPlayers() {
-        return Collections.unmodifiableSet(players);
+    public Set<ObjectEntity> getObjectEntities() {
+        return Collections.unmodifiableSet(objectEntities);
+    }
+
+    public Set<ExperienceOrb> getExperienceOrbs() {
+        return Collections.unmodifiableSet(experienceOrbs);
     }
 
     public Set<Entity> getChunkEntities(Chunk chunk) {
@@ -197,6 +199,8 @@ public abstract class Instance implements BlockModifier {
             this.creatures.add((EntityCreature) entity);
         } else if (entity instanceof ObjectEntity) {
             this.objectEntities.add((ObjectEntity) entity);
+        } else if (entity instanceof ExperienceOrb) {
+            this.experienceOrbs.add((ExperienceOrb) entity);
         }
     }
 
@@ -215,6 +219,8 @@ public abstract class Instance implements BlockModifier {
             this.creatures.remove(entity);
         } else if (entity instanceof ObjectEntity) {
             this.objectEntities.remove(entity);
+        } else if (entity instanceof ExperienceOrb) {
+            this.experienceOrbs.remove((ExperienceOrb) entity);
         }
     }
 

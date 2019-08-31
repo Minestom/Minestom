@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
 public class KeepAlivePacket implements ServerPacket {
@@ -12,8 +12,8 @@ public class KeepAlivePacket implements ServerPacket {
     }
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putLong(id);
+    public void write(PacketWriter writer) {
+        writer.writeLong(id);
     }
 
     @Override

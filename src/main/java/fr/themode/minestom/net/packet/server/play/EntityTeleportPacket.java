@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Utils;
 
 public class EntityTeleportPacket implements ServerPacket {
 
@@ -12,14 +11,14 @@ public class EntityTeleportPacket implements ServerPacket {
     public boolean onGround;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, entityId);
-        buffer.putDouble(position.getX());
-        buffer.putDouble(position.getY());
-        buffer.putDouble(position.getZ());
-        buffer.putByte((byte) (position.getYaw() * 256f / 360f));
-        buffer.putByte((byte) (position.getPitch() * 256f / 360f));
-        buffer.putBoolean(onGround);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(entityId);
+        writer.writeDouble(position.getX());
+        writer.writeDouble(position.getY());
+        writer.writeDouble(position.getZ());
+        writer.writeByte((byte) (position.getYaw() * 256f / 360f));
+        writer.writeByte((byte) (position.getPitch() * 256f / 360f));
+        writer.writeBoolean(onGround);
     }
 
     @Override

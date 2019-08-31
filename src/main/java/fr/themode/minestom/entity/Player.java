@@ -3,8 +3,8 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
+import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.data.Data;
-import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -65,6 +65,8 @@ public class Player extends LivingEntity {
     protected Set<Entity> viewableEntity = new CopyOnWriteArraySet<>();
 
     private PlayerSettings settings;
+    private float exp;
+    private int level;
     private PlayerInventory inventory;
     private short heldSlot;
     private Inventory openInventory;
@@ -156,10 +158,10 @@ public class Player extends LivingEntity {
             setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
-            ChickenCreature chickenCreature = new ChickenCreature();
+            /*ChickenCreature chickenCreature = new ChickenCreature();
             chickenCreature.refreshPosition(2, 65, 2);
             chickenCreature.setInstance(getInstance());
-            chickenCreature.addPassenger(this);
+            chickenCreature.addPassenger(this);*/
 
             /*for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
@@ -169,6 +171,10 @@ public class Player extends LivingEntity {
                     itemEntity.setInstance(getInstance());
                     //itemEntity.remove();
                 }*/
+
+            ExperienceOrb experienceOrb = new ExperienceOrb((short) 500);
+            experienceOrb.refreshPosition(5, 66, 0);
+            experienceOrb.setInstance(getInstance());
 
             getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
@@ -186,6 +192,8 @@ public class Player extends LivingEntity {
 
             setAttribute(Attribute.MAX_HEALTH, 40);
             heal();
+
+            setExp(0.9f);
         });
     }
 
@@ -214,6 +222,28 @@ public class Player extends LivingEntity {
             if (stage > 9) {
                 instance.breakBlock(this, targetBlockPosition);
                 resetTargetBlock();
+            }
+        }
+
+        // Experience orb pickup
+        Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
+        Set<Entity> entities = instance.getChunkEntities(chunk);
+        BoundingBox livingBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+        for (Entity entity : entities) {
+            if (entity instanceof ExperienceOrb) {
+                ExperienceOrb experienceOrb = (ExperienceOrb) entity;
+                BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
+                if (livingBoundingBox.intersect(itemBoundingBox)) {
+                    synchronized (experienceOrb) {
+                        if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
+                            continue;
+                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb.getExperienceCount());
+                        callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
+                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                            entity.remove();
+                        });
+                    }
+                }
             }
         }
 
@@ -443,6 +473,25 @@ public class Player extends LivingEntity {
         updateHealthPacket.food = food;
         updateHealthPacket.foodSaturation = foodSaturation;
         playerConnection.sendPacket(updateHealthPacket);
+    }
+
+    public void setExp(float exp) {
+        if (exp < 0 || exp > 1)
+            throw new IllegalArgumentException("Exp should be between 0 and 1");
+        this.exp = exp;
+        sendExperienceUpdatePacket();
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+        sendExperienceUpdatePacket();
+    }
+
+    protected void sendExperienceUpdatePacket() {
+        SetExperiencePacket setExperiencePacket = new SetExperiencePacket();
+        setExperiencePacket.percentage = exp;
+        setExperiencePacket.level = level;
+        playerConnection.sendPacket(setExperiencePacket);
     }
 
     protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {

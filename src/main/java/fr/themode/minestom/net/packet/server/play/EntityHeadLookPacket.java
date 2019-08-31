@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class EntityHeadLookPacket implements ServerPacket {
 
@@ -10,9 +9,9 @@ public class EntityHeadLookPacket implements ServerPacket {
     public float yaw;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, entityId);
-        buffer.putByte((byte) (this.yaw * 256 / 360));
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(entityId);
+        writer.writeByte((byte) (this.yaw * 256 / 360));
     }
 
     @Override

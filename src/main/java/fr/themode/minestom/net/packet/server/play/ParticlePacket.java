@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ParticlePacket implements ServerPacket {
 
@@ -16,19 +15,19 @@ public class ParticlePacket implements ServerPacket {
     public int blockId;
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putInt(particleId);
-        buffer.putBoolean(longDistance);
-        buffer.putFloat(x);
-        buffer.putFloat(y);
-        buffer.putFloat(z);
-        buffer.putFloat(offsetX);
-        buffer.putFloat(offsetY);
-        buffer.putFloat(offsetZ);
-        buffer.putFloat(particleData);
-        buffer.putInt(particleCount);
+    public void write(PacketWriter writer) {
+        writer.writeInt(particleId);
+        writer.writeBoolean(longDistance);
+        writer.writeFloat(x);
+        writer.writeFloat(y);
+        writer.writeFloat(z);
+        writer.writeFloat(offsetX);
+        writer.writeFloat(offsetY);
+        writer.writeFloat(offsetZ);
+        writer.writeFloat(particleData);
+        writer.writeInt(particleCount);
         if (particleId == 3)
-            Utils.writeVarInt(buffer, blockId);
+            writer.writeVarInt(blockId);
     }
 
     @Override

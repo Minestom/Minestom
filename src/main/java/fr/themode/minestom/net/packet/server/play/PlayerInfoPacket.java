@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.GameMode;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -19,14 +18,14 @@ public class PlayerInfoPacket implements ServerPacket {
     }
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, this.action.ordinal());
-        Utils.writeVarInt(buffer, this.playerInfos.size());
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(action.ordinal());
+        writer.writeVarInt(playerInfos.size());
+
         for (PlayerInfo playerInfo : this.playerInfos) {
             if (!playerInfo.getClass().equals(action.getClazz())) continue;
-            buffer.putLong(playerInfo.uuid.getMostSignificantBits());
-            buffer.putLong(playerInfo.uuid.getLeastSignificantBits());
-            playerInfo.write(buffer);
+            writer.writeUuid(playerInfo.uuid);
+            playerInfo.write(writer);
         }
     }
 
@@ -62,7 +61,7 @@ public class PlayerInfoPacket implements ServerPacket {
             this.uuid = uuid;
         }
 
-        public abstract void write(Buffer buffer);
+        public abstract void write(PacketWriter writer);
     }
 
     public static class AddPlayer extends PlayerInfo {
@@ -83,17 +82,17 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(Buffer buffer) {
-            Utils.writeString(buffer, name);
-            Utils.writeVarInt(buffer, properties.size());
+        public void write(PacketWriter writer) {
+            writer.writeSizedString(name);
+            writer.writeVarInt(properties.size());
             for (Property property : properties) {
-                property.write(buffer);
+                property.write(writer);
             }
-            Utils.writeVarInt(buffer, gameMode.getId());
-            Utils.writeVarInt(buffer, ping);
-            buffer.putBoolean(hasDisplayName);
+            writer.writeVarInt(gameMode.getId());
+            writer.writeVarInt(ping);
+            writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                Utils.writeString(buffer, displayName);
+                writer.writeSizedString(displayName);
         }
 
         public static class Property {
@@ -108,12 +107,12 @@ public class PlayerInfoPacket implements ServerPacket {
                 this.value = value;
             }
 
-            public void write(Buffer buffer) {
-                Utils.writeString(buffer, name);
-                Utils.writeString(buffer, value);
-                buffer.putBoolean(signed);
+            public void write(PacketWriter writer) {
+                writer.writeSizedString(name);
+                writer.writeSizedString(value);
+                writer.writeBoolean(signed);
                 if (signed)
-                    Utils.writeString(buffer, signature);
+                    writer.writeSizedString(signature);
             }
         }
     }
@@ -128,8 +127,8 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(Buffer buffer) {
-            Utils.writeVarInt(buffer, gameMode.getId());
+        public void write(PacketWriter writer) {
+            writer.writeVarInt(gameMode.getId());
         }
     }
 
@@ -143,8 +142,8 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(Buffer buffer) {
-            Utils.writeVarInt(buffer, ping);
+        public void write(PacketWriter writer) {
+            writer.writeVarInt(ping);
         }
     }
 
@@ -158,9 +157,9 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(Buffer buffer) {
-            buffer.putBoolean(true); // ????
-            Utils.writeString(buffer, displayName);
+        public void write(PacketWriter writer) {
+            writer.writeBoolean(true); // ????
+            writer.writeSizedString(displayName);
         }
     }
 
@@ -171,7 +170,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(Buffer buffer) {
+        public void write(PacketWriter writer) {
         }
     }
 }

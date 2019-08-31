@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.login;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 import java.util.UUID;
 
@@ -22,9 +21,9 @@ public class LoginSuccessPacket implements ServerPacket {
     }
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeString(buffer, uuid.toString()); // TODO mojang auth
-        Utils.writeString(buffer, username);
+    public void write(PacketWriter writer) {
+        writer.writeSizedString(uuid.toString()); // TODO mojang auth
+        writer.writeSizedString(username);
     }
 
     @Override

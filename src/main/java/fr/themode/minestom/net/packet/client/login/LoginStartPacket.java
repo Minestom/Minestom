@@ -1,18 +1,17 @@
 package fr.themode.minestom.net.packet.client.login;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -107,7 +106,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(Buffer buffer) {
-        this.username = Utils.readString(buffer);
+    public void read(PacketReader reader) {
+        this.username = reader.readSizedString();
     }
 }

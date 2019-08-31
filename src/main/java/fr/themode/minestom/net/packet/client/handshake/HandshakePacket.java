@@ -1,24 +1,21 @@
 package fr.themode.minestom.net.packet.client.handshake;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
-
-import static fr.themode.minestom.utils.Utils.readString;
-import static fr.themode.minestom.utils.Utils.readVarInt;
 
 public class HandshakePacket implements ClientPreplayPacket {
 
     private int nextState;
 
     @Override
-    public void read(Buffer buffer) {
-        int protocolVersion = readVarInt(buffer);
-        String serverAddress = readString(buffer);
-        short serverPort = buffer.getShort();
-        this.nextState = readVarInt(buffer);
+    public void read(PacketReader reader) {
+        int protocolVersion = reader.readVarInt();
+        String serverAddress = reader.readSizedString();
+        short serverPort = reader.readShort();
+        this.nextState = reader.readVarInt();
     }
 
     @Override

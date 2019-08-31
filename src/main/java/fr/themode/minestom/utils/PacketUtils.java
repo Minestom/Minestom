@@ -2,6 +2,7 @@ package fr.themode.minestom.utils;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
 import static fr.themode.minestom.net.protocol.MinecraftProtocol.PACKET_ID_IDENTIFIER;
@@ -13,7 +14,10 @@ public class PacketUtils {
         int id = serverPacket.getId();
         Packet packet = Packet.create();
         Buffer buffer = packet.getPayload();
-        serverPacket.write(buffer);
+
+        PacketWriter packetWriter = new PacketWriter(buffer);
+
+        serverPacket.write(packetWriter);
         packet.put(PACKET_ID_IDENTIFIER, id);
         return packet;
     }

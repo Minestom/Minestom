@@ -1,9 +1,9 @@
 package fr.themode.minestom.net.packet.client;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 
 public interface ClientPacket {
 
-    void read(Buffer buffer);
+    void read(PacketReader reader);
 
 }

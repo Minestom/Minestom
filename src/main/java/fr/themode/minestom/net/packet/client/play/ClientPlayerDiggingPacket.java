@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.Utils;
 
 public class ClientPlayerDiggingPacket extends ClientPlayPacket {
 
@@ -12,10 +11,10 @@ public class ClientPlayerDiggingPacket extends ClientPlayPacket {
     public BlockFace blockFace;
 
     @Override
-    public void read(Buffer buffer) {
-        this.status = Status.values()[Utils.readVarInt(buffer)];
-        this.blockPosition = Utils.readPosition(buffer);
-        this.blockFace = BlockFace.values()[Utils.readVarInt(buffer)];
+    public void read(PacketReader reader) {
+        this.status = Status.values()[reader.readVarInt()];
+        this.blockPosition = reader.readBlockPosition();
+        this.blockFace = BlockFace.values()[reader.readVarInt()];
     }
 
     public enum Status {

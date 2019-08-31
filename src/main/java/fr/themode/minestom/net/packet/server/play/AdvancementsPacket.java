@@ -1,10 +1,9 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class AdvancementsPacket implements ServerPacket {
 
@@ -14,22 +13,19 @@ public class AdvancementsPacket implements ServerPacket {
     public ProgressMapping[] progressMappings;
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putBoolean(resetAdvancements);
+    public void write(PacketWriter writer) {
+        writer.writeBoolean(resetAdvancements);
 
-        Utils.writeVarInt(buffer, advancementMappings.length);
+        writer.writeVarInt(advancementMappings.length);
         for (AdvancementMapping advancementMapping : advancementMappings) {
-            advancementMapping.write(buffer);
+            advancementMapping.write(writer);
         }
 
-        Utils.writeVarInt(buffer, identifiersToRemove.length);
-        for (String identifierToRemove : identifiersToRemove) {
-            Utils.writeString(buffer, identifierToRemove);
-        }
+        writer.writeStringArray(identifiersToRemove);
 
-        Utils.writeVarInt(buffer, progressMappings.length);
+        writer.writeVarInt(progressMappings.length);
         for (ProgressMapping progressMapping : progressMappings) {
-            progressMapping.write(buffer);
+            progressMapping.write(writer);
         }
     }
 
@@ -47,9 +43,9 @@ public class AdvancementsPacket implements ServerPacket {
         public String key;
         public Advancement value;
 
-        private void write(Buffer buffer) {
-            Utils.writeString(buffer, key);
-            value.write(buffer);
+        private void write(PacketWriter writer) {
+            writer.writeSizedString(key);
+            value.write(writer);
         }
 
     }
@@ -63,25 +59,23 @@ public class AdvancementsPacket implements ServerPacket {
         public String[] criterions;
         public Requirement[] requirements;
 
-        private void write(Buffer buffer) {
-            buffer.putBoolean(hasParent);
+        private void write(PacketWriter writer) {
+            writer.writeBoolean(hasParent);
             if (identifier != null) {
-                Utils.writeString(buffer, identifier);
+                writer.writeSizedString(identifier);
             }
 
-            buffer.putBoolean(hasDisplay);
+            writer.writeBoolean(hasDisplay);
             if (hasDisplay) {
-                displayData.write(buffer);
+                displayData.write(writer);
             }
 
-            Utils.writeVarInt(buffer, criterions.length);
-            for (String criterion : criterions) {
-                Utils.writeString(buffer, criterion);
-            }
+            writer.writeStringArray(criterions);
 
-            Utils.writeVarInt(buffer, requirements.length);
+
+            writer.writeVarInt(requirements.length);
             for (Requirement requirement : requirements) {
-                requirement.write(buffer);
+                requirement.write(writer);
             }
         }
     }
@@ -96,17 +90,17 @@ public class AdvancementsPacket implements ServerPacket {
         public float x;
         public float y;
 
-        private void write(Buffer buffer) {
-            Utils.writeString(buffer, Chat.rawText(title));
-            Utils.writeString(buffer, Chat.rawText(description));
-            Utils.writeItemStack(buffer, icon);
-            Utils.writeVarInt(buffer, frameType.ordinal());
-            buffer.putInt(flags);
+        private void write(PacketWriter writer) {
+            writer.writeSizedString(Chat.rawText(title));
+            writer.writeSizedString(Chat.rawText(description));
+            writer.writeItemStack(icon);
+            writer.writeVarInt(frameType.ordinal());
+            writer.writeInt(flags);
             if ((flags & 0x1) != 0) {
-                Utils.writeString(buffer, backgroundTexture);
+                writer.writeSizedString(backgroundTexture);
             }
-            buffer.putFloat(x);
-            buffer.putFloat(y);
+            writer.writeFloat(x);
+            writer.writeFloat(y);
         }
 
     }
@@ -115,10 +109,10 @@ public class AdvancementsPacket implements ServerPacket {
 
         public String[] requirements;
 
-        private void write(Buffer buffer) {
-            Utils.writeVarInt(buffer, requirements.length);
+        private void write(PacketWriter writer) {
+            writer.writeVarInt(requirements.length);
             for (String requirement : requirements) {
-                Utils.writeString(buffer, requirement);
+                writer.writeSizedString(requirement);
             }
         }
     }
@@ -127,19 +121,19 @@ public class AdvancementsPacket implements ServerPacket {
         public String key;
         public AdvancementProgress value;
 
-        private void write(Buffer buffer) {
-            Utils.writeString(buffer, key);
-            value.write(buffer);
+        private void write(PacketWriter writer) {
+            writer.writeSizedString(key);
+            value.write(writer);
         }
     }
 
     public static class AdvancementProgress {
         public Criteria[] criteria;
 
-        private void write(Buffer buffer) {
-            Utils.writeVarInt(buffer, criteria.length);
+        private void write(PacketWriter writer) {
+            writer.writeVarInt(criteria.length);
             for (Criteria criterion : criteria) {
-                criterion.write(buffer);
+                criterion.write(writer);
             }
         }
     }
@@ -148,9 +142,9 @@ public class AdvancementsPacket implements ServerPacket {
         public String criterionIdentifier;
         public CriterionProgress criterionProgress;
 
-        private void write(Buffer buffer) {
-            Utils.writeString(buffer, criterionIdentifier);
-            criterionProgress.write(buffer);
+        private void write(PacketWriter writer) {
+            writer.writeSizedString(criterionIdentifier);
+            criterionProgress.write(writer);
         }
     }
 
@@ -158,10 +152,10 @@ public class AdvancementsPacket implements ServerPacket {
         public boolean achieved;
         public long dateOfAchieving;
 
-        private void write(Buffer buffer) {
-            buffer.putBoolean(achieved);
+        private void write(PacketWriter writer) {
+            writer.writeBoolean(achieved);
             if (dateOfAchieving != 0)
-                buffer.putLong(dateOfAchieving);
+                writer.writeLong(dateOfAchieving);
         }
 
     }

@@ -1,10 +1,9 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.Utils;
 
 public class AcknowledgePlayerDiggingPacket implements ServerPacket {
 
@@ -14,11 +13,11 @@ public class AcknowledgePlayerDiggingPacket implements ServerPacket {
     public boolean successful;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writePosition(buffer, blockPosition);
-        Utils.writeVarInt(buffer, blockStateId);
-        Utils.writeVarInt(buffer, status.ordinal());
-        buffer.putBoolean(successful);
+    public void write(PacketWriter writer) {
+        writer.writeBlockPosition(blockPosition);
+        writer.writeVarInt(blockStateId);
+        writer.writeVarInt(status.ordinal());
+        writer.writeBoolean(successful);
     }
 
     @Override

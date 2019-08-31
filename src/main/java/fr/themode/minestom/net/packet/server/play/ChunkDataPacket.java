@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.SerializerUtils;
@@ -19,13 +20,12 @@ public class ChunkDataPacket implements ServerPacket {
 
     public boolean fullChunk;
     public Chunk chunk;
-    // TODO nbt tile entities
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putInt(chunk.getChunkX());
-        buffer.putInt(chunk.getChunkZ());
-        buffer.putBoolean(fullChunk);
+    public void write(PacketWriter writer) {
+        writer.writeInt(chunk.getChunkX());
+        writer.writeInt(chunk.getChunkZ());
+        writer.writeBoolean(fullChunk);
 
 
         int mask = 0;
@@ -48,7 +48,7 @@ public class ChunkDataPacket implements ServerPacket {
                 blocks.putInt(biomeData[i]);
             }
         }
-        Utils.writeVarInt(buffer, mask);
+        writer.writeVarInt(mask);
 
         // Heightmap
         int[] motionBlocking = new int[16 * 16];
@@ -71,15 +71,15 @@ public class ChunkDataPacket implements ServerPacket {
                 e.printStackTrace();
             }
             byte[] data = outputStream.toByteArray();
-            buffer.putBytes(data);
+            writer.writeBytes(data);
         }
 
-        Utils.writeVarInt(buffer, blocks.length());
-        buffer.putBuffer(blocks);
+        writer.writeVarInt(blocks.length());
+        writer.writeBuffer(blocks);
 
         // Block entities
         Set<Integer> blockEntities = chunk.getBlockEntities();
-        Utils.writeVarInt(buffer, blockEntities.size());
+        writer.writeVarInt(blockEntities.size());
 
         for (Integer index : blockEntities) {
             BlockPosition blockPosition = SerializerUtils.indexToChunkBlockPosition(index);
@@ -94,7 +94,7 @@ public class ChunkDataPacket implements ServerPacket {
                 e.printStackTrace();
             }
             byte[] d = os.toByteArray();
-            buffer.putBytes(d);
+            writer.writeBytes(d);
         }
     }
 

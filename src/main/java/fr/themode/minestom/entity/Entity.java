@@ -153,7 +153,7 @@ public abstract class Entity implements Viewable, DataContainer {
         player.viewableEntity.add(this);
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getVelocityPacket());
-        playerConnection.sendPacket(getPassengersPacket()); // TODO fix synchronization
+        playerConnection.sendPacket(getPassengersPacket());
     }
 
     @Override

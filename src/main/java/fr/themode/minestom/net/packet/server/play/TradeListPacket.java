@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class TradeListPacket implements ServerPacket {
 
@@ -15,16 +14,16 @@ public class TradeListPacket implements ServerPacket {
     public boolean canRestock;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, windowId);
-        buffer.putByte((byte) trades.length);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(windowId);
+        writer.writeByte((byte) trades.length);
         for (Trade trade : trades) {
-            trade.write(buffer);
+            trade.write(writer);
         }
-        Utils.writeVarInt(buffer, villagerLevel);
-        Utils.writeVarInt(buffer, experience);
-        buffer.putBoolean(regularVillager);
-        buffer.putBoolean(canRestock);
+        writer.writeVarInt(villagerLevel);
+        writer.writeVarInt(experience);
+        writer.writeBoolean(regularVillager);
+        writer.writeBoolean(canRestock);
     }
 
     @Override
@@ -46,19 +45,21 @@ public class TradeListPacket implements ServerPacket {
         public int demand;
 
 
-        private void write(Buffer buffer) {
-            Utils.writeItemStack(buffer, inputItem1);
-            Utils.writeItemStack(buffer, result);
-            buffer.putBoolean(inputItem2 != null);
-            if (inputItem2 != null)
-                Utils.writeItemStack(buffer, inputItem2);
-            buffer.putBoolean(tradeDisabled);
-            buffer.putInt(tradeUsesNumber);
-            buffer.putInt(maxTradeUsesNumber);
-            buffer.putInt(exp);
-            buffer.putInt(specialPrice);
-            buffer.putFloat(priceMultiplier);
-            buffer.putInt(demand);
+        private void write(PacketWriter writer) {
+            boolean hasSecondItem = inputItem2 != null;
+
+            writer.writeItemStack(inputItem1);
+            writer.writeItemStack(result);
+            writer.writeBoolean(hasSecondItem);
+            if (hasSecondItem)
+                writer.writeItemStack(inputItem2);
+            writer.writeBoolean(tradeDisabled);
+            writer.writeInt(tradeUsesNumber);
+            writer.writeInt(maxTradeUsesNumber);
+            writer.writeInt(exp);
+            writer.writeInt(specialPrice);
+            writer.writeFloat(priceMultiplier);
+            writer.writeInt(demand);
         }
 
     }

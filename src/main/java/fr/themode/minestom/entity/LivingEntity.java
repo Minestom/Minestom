@@ -57,7 +57,7 @@ public abstract class LivingEntity extends Entity {
                                 collectItemPacket.collectorEntityId = getEntityId();
                                 collectItemPacket.pickupItemCount = item.getAmount();
                                 sendPacketToViewersAndSelf(collectItemPacket);
-                                entity.scheduleRemove(500);
+                                entity.remove();
                             });
                         }
                     }

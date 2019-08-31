@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ClientUseEntityPacket extends ClientPlayPacket {
 
@@ -15,16 +14,16 @@ public class ClientUseEntityPacket extends ClientPlayPacket {
     public Player.Hand hand;
 
     @Override
-    public void read(Buffer buffer) {
-        this.targetId = Utils.readVarInt(buffer);
-        this.type = Type.values()[Utils.readVarInt(buffer)];
+    public void read(PacketReader reader) {
+        this.targetId = reader.readVarInt();
+        this.type = Type.values()[reader.readVarInt()];
         if (this.type == Type.INTERACT_AT) {
-            this.x = buffer.getFloat();
-            this.y = buffer.getFloat();
-            this.z = buffer.getFloat();
+            this.x = reader.readFloat();
+            this.y = reader.readFloat();
+            this.z = reader.readFloat();
         }
         if (type == Type.INTERACT || type == Type.INTERACT_AT)
-            this.hand = Player.Hand.values()[Utils.readVarInt(buffer)];
+            this.hand = Player.Hand.values()[reader.readVarInt()];
     }
 
     public enum Type {

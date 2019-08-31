@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 
 public class ClientPlayerAbilitiesPacket extends ClientPlayPacket {
@@ -10,9 +10,9 @@ public class ClientPlayerAbilitiesPacket extends ClientPlayPacket {
     public float walkingSpeed;
 
     @Override
-    public void read(Buffer buffer) {
-        this.flags = buffer.getByte();
-        this.flyingSpeed = buffer.getFloat();
-        this.walkingSpeed = buffer.getFloat();
+    public void read(PacketReader reader) {
+        this.flags = reader.readByte();
+        this.flyingSpeed = reader.readFloat();
+        this.walkingSpeed = reader.readFloat();
     }
 }

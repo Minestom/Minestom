@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class TeamsPacket implements ServerPacket {
 
@@ -20,20 +19,20 @@ public class TeamsPacket implements ServerPacket {
     public String[] entities;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeString(buffer, teamName);
-        buffer.putByte((byte) action.ordinal());
+    public void write(PacketWriter writer) {
+        writer.writeSizedString(teamName);
+        writer.writeByte((byte) action.ordinal());
 
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                Utils.writeString(buffer, teamDisplayName);
-                buffer.putByte(friendlyFlags);
-                Utils.writeString(buffer, nameTagVisibility);
-                Utils.writeString(buffer, collisionRule);
-                Utils.writeVarInt(buffer, teamColor);
-                Utils.writeString(buffer, teamPrefix);
-                Utils.writeString(buffer, teamSuffix);
+                writer.writeSizedString(teamDisplayName);
+                writer.writeByte(friendlyFlags);
+                writer.writeSizedString(nameTagVisibility);
+                writer.writeSizedString(collisionRule);
+                writer.writeVarInt(teamColor);
+                writer.writeSizedString(teamPrefix);
+                writer.writeSizedString(teamSuffix);
                 break;
             case REMOVE_TEAM:
 
@@ -41,15 +40,7 @@ public class TeamsPacket implements ServerPacket {
         }
 
         if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
-            if (entities == null) {
-                Utils.writeVarInt(buffer, 0);
-                return;
-            }
-
-            Utils.writeVarInt(buffer, entities.length);
-            for (String entity : entities) {
-                Utils.writeString(buffer, entity);
-            }
+            writer.writeStringArray(entities);
         }
 
     }

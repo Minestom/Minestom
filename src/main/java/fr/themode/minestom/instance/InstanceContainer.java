@@ -3,7 +3,7 @@ package fr.themode.minestom.instance;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
-import fr.themode.minestom.net.PacketWriter;
+import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -38,7 +38,7 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
+            PacketWriterUtils.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
             });
@@ -50,7 +50,7 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             chunk.setCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriter.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
+            PacketWriterUtils.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(chunk);
             });
@@ -216,7 +216,7 @@ public class InstanceContainer extends Instance {
         }else{
             sendChunkUpdate(player, chunk);
         }*/
-        PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+        PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
             chunk.setFullDataPacket(buffer);
             sendChunkUpdate(player, chunk);
         });

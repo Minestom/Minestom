@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
 public class ChangeGameStatePacket implements ServerPacket {
@@ -9,9 +9,9 @@ public class ChangeGameStatePacket implements ServerPacket {
     public float value;
 
     @Override
-    public void write(Buffer buffer) {
-        buffer.putByte((byte) reason.ordinal());
-        buffer.putFloat(value);
+    public void write(PacketWriter writer) {
+        writer.writeByte((byte) reason.ordinal());
+        writer.writeFloat(value);
     }
 
     @Override

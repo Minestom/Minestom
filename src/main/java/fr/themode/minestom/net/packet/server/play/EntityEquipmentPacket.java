@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class EntityEquipmentPacket implements ServerPacket {
 
@@ -12,10 +11,10 @@ public class EntityEquipmentPacket implements ServerPacket {
     public ItemStack itemStack;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeVarInt(buffer, entityId);
-        Utils.writeVarInt(buffer, slot.ordinal());
-        Utils.writeItemStack(buffer, itemStack);
+    public void write(PacketWriter writer) {
+        writer.writeVarInt(entityId);
+        writer.writeVarInt(slot.ordinal());
+        writer.writeItemStack(itemStack);
     }
 
     @Override

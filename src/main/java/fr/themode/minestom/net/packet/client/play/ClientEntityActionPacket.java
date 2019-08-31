@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class ClientEntityActionPacket extends ClientPlayPacket {
 
@@ -11,10 +10,10 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
     public int horseJumpBoost;
 
     @Override
-    public void read(Buffer buffer) {
-        this.playerId = Utils.readVarInt(buffer);
-        this.action = Action.values()[Utils.readVarInt(buffer)];
-        this.horseJumpBoost = Utils.readVarInt(buffer);
+    public void read(PacketReader reader) {
+        this.playerId = reader.readVarInt();
+        this.action = Action.values()[reader.readVarInt()];
+        this.horseJumpBoost = reader.readVarInt();
     }
 
     public enum Action {

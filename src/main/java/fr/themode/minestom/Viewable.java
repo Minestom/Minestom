@@ -1,7 +1,7 @@
 package fr.themode.minestom;
 
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.net.PacketWriter;
+import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
 import java.util.Set;
@@ -22,7 +22,7 @@ public interface Viewable {
         if (getViewers().isEmpty())
             return;
 
-        PacketWriter.writeCallbackPacket(packet, buffer -> {
+        PacketWriterUtils.writeCallbackPacket(packet, buffer -> {
             int size = getViewers().size();
             if (size == 0)
                 return;
@@ -39,7 +39,7 @@ public interface Viewable {
             return;
 
         for (ServerPacket packet : packets) {
-            PacketWriter.writeCallbackPacket(packet, buffer -> {
+            PacketWriterUtils.writeCallbackPacket(packet, buffer -> {
                 int size = getViewers().size();
                 if (size == 0)
                     return;
@@ -61,7 +61,7 @@ public interface Viewable {
     }
 
     private void UNSAFE_sendPacketToViewersAndSelf(ServerPacket packet) {
-        PacketWriter.writeCallbackPacket(packet, buffer -> {
+        PacketWriterUtils.writeCallbackPacket(packet, buffer -> {
             int size = getViewers().size();
             buffer.getData().retain(size + 1).markReaderIndex();
             ((Player) this).getPlayerConnection().writeUnencodedPacket(buffer);

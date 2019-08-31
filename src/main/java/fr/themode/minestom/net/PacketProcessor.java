@@ -5,6 +5,7 @@ import fr.adamaq01.ozao.net.packet.Packet;
 import fr.adamaq01.ozao.net.server.Connection;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.client.handler.ClientLoginPacketsHandler;
@@ -52,11 +53,13 @@ public class PacketProcessor {
             //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         }
 
+        PacketReader packetReader = new PacketReader(buffer);
+
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (id == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(buffer);
+                handshakePacket.read(packetReader);
                 handshakePacket.process(playerConnection, connectionManager);
             }
             return;
@@ -66,17 +69,17 @@ public class PacketProcessor {
             case PLAY:
                 Player player = connectionManager.getPlayer(playerConnection);
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
-                playPacket.read(buffer);
+                playPacket.read(packetReader);
                 player.addPacketToQueue(playPacket); // Processed during player tick update
                 break;
             case LOGIN:
                 ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(id);
-                loginPacket.read(buffer);
+                loginPacket.read(packetReader);
                 loginPacket.process(playerConnection, connectionManager);
                 break;
             case STATUS:
                 ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(id);
-                statusPacket.read(buffer);
+                statusPacket.read(packetReader);
                 statusPacket.process(playerConnection, connectionManager);
                 break;
             case UNKNOWN:

@@ -1,9 +1,8 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.GameMode;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -14,14 +13,14 @@ public class RespawnPacket implements ServerPacket {
     public LevelType levelType;
 
     @Override
-    public void write(Buffer buffer) {
+    public void write(PacketWriter writer) {
         int gameModeId = gameMode.getId();
         if (gameMode.isHardcore())
             gameModeId |= 8;
 
-        buffer.putByte((byte) gameModeId);
-        buffer.putInt(dimension.getId());
-        Utils.writeString(buffer, levelType.getType());
+        writer.writeByte((byte) gameModeId);
+        writer.writeInt(dimension.getId());
+        writer.writeSizedString(levelType.getType());
     }
 
     @Override

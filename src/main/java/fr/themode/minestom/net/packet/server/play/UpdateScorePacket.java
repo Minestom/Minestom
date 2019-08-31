@@ -1,8 +1,7 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.Utils;
 
 public class UpdateScorePacket implements ServerPacket {
 
@@ -12,12 +11,12 @@ public class UpdateScorePacket implements ServerPacket {
     public int value;
 
     @Override
-    public void write(Buffer buffer) {
-        Utils.writeString(buffer, entityName);
-        buffer.putByte(action);
-        Utils.writeString(buffer, objectiveName);
+    public void write(PacketWriter writer) {
+        writer.writeSizedString(entityName);
+        writer.writeByte(action);
+        writer.writeSizedString(objectiveName);
         if (action != 1) {
-            Utils.writeVarInt(buffer, value);
+            writer.writeVarInt(value);
         }
     }
 

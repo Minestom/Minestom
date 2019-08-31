@@ -1,10 +1,9 @@
 package fr.themode.minestom.net.packet.client.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.Utils;
 
 public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
 
@@ -15,14 +14,14 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
     public boolean insideBlock;
 
     @Override
-    public void read(Buffer buffer) {
-        this.hand = Player.Hand.values()[Utils.readVarInt(buffer)];
-        this.blockPosition = Utils.readPosition(buffer);
-        this.blockFace = ClientPlayerDiggingPacket.BlockFace.values()[Utils.readVarInt(buffer)];
-        this.cursorPositionX = buffer.getFloat();
-        this.cursorPositionY = buffer.getFloat();
-        this.cursorPositionZ = buffer.getFloat();
-        this.insideBlock = buffer.getBoolean();
+    public void read(PacketReader reader) {
+        this.hand = Player.Hand.values()[reader.readVarInt()];
+        this.blockPosition = reader.readBlockPosition();
+        this.blockFace = ClientPlayerDiggingPacket.BlockFace.values()[reader.readVarInt()];
+        this.cursorPositionX = reader.readFloat();
+        this.cursorPositionY = reader.readFloat();
+        this.cursorPositionZ = reader.readFloat();
+        this.insideBlock = reader.readBoolean();
     }
 
 }

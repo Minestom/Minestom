@@ -1,10 +1,10 @@
 package fr.themode.minestom.net.packet.server;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.packet.PacketWriter;
 
 public interface ServerPacket {
 
-    void write(Buffer buffer);
+    void write(PacketWriter writer);
 
     int getId();
 

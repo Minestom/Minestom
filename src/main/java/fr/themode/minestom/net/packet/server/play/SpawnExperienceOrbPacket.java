@@ -4,31 +4,23 @@ import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
 
-import java.util.UUID;
-
-public class SpawnObjectPacket implements ServerPacket {
+public class SpawnExperienceOrbPacket implements ServerPacket {
 
     public int entityId;
-    public UUID uuid;
-    public int type;
     public Position position;
-    public int data;
+    public short expCount;
 
     @Override
     public void write(PacketWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeUuid(uuid);
-        writer.writeVarInt(type);
         writer.writeDouble(position.getX());
         writer.writeDouble(position.getY());
         writer.writeDouble(position.getZ());
-        writer.writeFloat(position.getYaw());
-        writer.writeFloat(position.getPitch());
-        writer.writeInt(data);
+        writer.writeShort(expCount);
     }
 
     @Override
     public int getId() {
-        return 0x00;
+        return 0x01;
     }
 }
