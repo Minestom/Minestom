@@ -54,6 +54,8 @@ public abstract class Instance implements BlockModifier {
 
     public abstract void sendChunkUpdate(Player player, Chunk chunk);
 
+    public abstract void sendChunkSectionUpdate(Chunk chunk, int section, Player player);
+
     protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     public abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);

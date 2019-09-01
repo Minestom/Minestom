@@ -25,7 +25,7 @@ public class PlayerDiggingListener {
                 if (player.getGameMode() == GameMode.CREATIVE) {
                     Instance instance = player.getInstance();
                     if (instance != null) {
-                        instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), (short) 0);
+                        instance.breakBlock(player, blockPosition);
                     }
                 } else if (player.getGameMode() == GameMode.SURVIVAL) {
                     Instance instance = player.getInstance();

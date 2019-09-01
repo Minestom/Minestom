@@ -5,6 +5,7 @@ import fr.adamaq01.ozao.net.server.Connection;
 import fr.adamaq01.ozao.net.server.Server;
 import fr.adamaq01.ozao.net.server.ServerHandler;
 import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
+import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.BlockManager;
@@ -42,6 +43,7 @@ public class Main {
     private static InstanceManager instanceManager;
     private static BlockManager blockManager;
     private static EntityManager entityManager;
+    private static DataManager dataManager;
 
     public static void main(String[] args) {
         connectionManager = new ConnectionManager();
@@ -51,6 +53,7 @@ public class Main {
         instanceManager = new InstanceManager();
         blockManager = new BlockManager();
         entityManager = new EntityManager();
+        dataManager = new DataManager();
 
         blockManager.registerBlock(StoneBlock::new);
 
@@ -140,6 +143,10 @@ public class Main {
 
     public static EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public static DataManager getDataManager() {
+        return dataManager;
     }
 
     public static ConnectionManager getConnectionManager() {

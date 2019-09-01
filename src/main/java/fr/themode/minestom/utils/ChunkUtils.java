@@ -18,6 +18,10 @@ public class ChunkUtils {
         return new int[]{chunkX, chunkZ};
     }
 
+    public static int getSectionAt(int y) {
+        return y / 16;
+    }
+
     public static long[] getChunksInRange(final Position position, int range) {
 
         long[] visibleChunks = new long[MathUtils.square(range + 1)];

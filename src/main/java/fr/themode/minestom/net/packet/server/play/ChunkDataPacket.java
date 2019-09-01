@@ -20,6 +20,7 @@ public class ChunkDataPacket implements ServerPacket {
 
     public boolean fullChunk;
     public Chunk chunk;
+    public int[] sections;
 
     @Override
     public void write(PacketWriter writer) {
@@ -31,10 +32,11 @@ public class ChunkDataPacket implements ServerPacket {
         int mask = 0;
         Buffer blocks = Buffer.create();
         for (int i = 0; i < 16; i++) {
-            // TODO if fullchunk is false then only send changed sections
-            mask |= 1 << i;
-            short[] section = getSection(chunk, i);
-            Utils.writeBlocks(blocks, section, 14);
+            if (fullChunk || (sections.length == 16 && sections[i] != 0)) {
+                mask |= 1 << i;
+                short[] section = getSection(chunk, i);
+                Utils.writeBlocks(blocks, section, 14);
+            }
         }
         // Biome data
         if (fullChunk) {

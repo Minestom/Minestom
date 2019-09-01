@@ -3,6 +3,8 @@ package fr.themode.minestom.instance;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.Main;
+import fr.themode.minestom.Viewable;
+import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
@@ -10,10 +12,11 @@ import fr.themode.minestom.utils.SerializerUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class Chunk {
+public class Chunk implements Viewable {
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Y = 256;
@@ -29,6 +32,7 @@ public class Chunk {
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
     // Cache
+    private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Buffer fullDataPacket;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
@@ -154,5 +158,22 @@ public class Chunk {
     @Override
     public String toString() {
         return "Chunk[" + chunkX + ":" + chunkZ + "]";
+    }
+
+    // UNSAFE
+    @Override
+    public void addViewer(Player player) {
+        this.viewers.add(player);
+    }
+
+    // UNSAFE
+    @Override
+    public void removeViewer(Player player) {
+        this.viewers.remove(player);
+    }
+
+    @Override
+    public Set<Player> getViewers() {
+        return Collections.unmodifiableSet(viewers);
     }
 }

@@ -4,6 +4,8 @@ import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.net.PacketWriterUtils;
+import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
+import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -37,11 +39,11 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, short blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            chunk.setBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriterUtils.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
-                chunk.setFullDataPacket(buffer);
-                sendChunkUpdate(chunk);
-            });
+            byte chunkX = (byte) (x % 16);
+            byte chunkY = (byte) y;
+            byte chunkZ = (byte) (z % 16);
+            chunk.setBlock(chunkX, chunkY, chunkZ, blockId);
+            sendBlockChange(chunk, x, y, z, blockId);
         }
     }
 
@@ -49,21 +51,21 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, String blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            chunk.setCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16), blockId);
-            PacketWriterUtils.writeCallbackPacket(chunk.getFreshPartialDataPacket(), buffer -> {
-                chunk.setFullDataPacket(buffer);
-                sendChunkUpdate(chunk);
-            });
+            byte chunkX = (byte) (x % 16);
+            byte chunkY = (byte) y;
+            byte chunkZ = (byte) (z % 16);
+            chunk.setCustomBlock(chunkX, chunkY, chunkZ, blockId);
+            short id = chunk.getBlockId(chunkX, chunkY, chunkZ);
+            sendBlockChange(chunk, x, y, z, id);
         }
     }
 
-    // TODO deplace
     @Override
     public void breakBlock(Player player, BlockPosition blockPosition) {
         Chunk chunk = getChunkAt(blockPosition);
         short blockId = chunk.getBlockId((byte) (blockPosition.getX() % 16), (byte) blockPosition.getY(), (byte) (blockPosition.getZ() % 16));
         if (blockId == 0) {
-            sendChunkUpdate(player, chunk);
+            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
             return;
         }
 
@@ -87,10 +89,9 @@ public class InstanceContainer extends Instance {
             particlePacket.particleData = 0.3f;
             particlePacket.particleCount = 100;
             particlePacket.blockId = blockId;
-            player.getPlayerConnection().sendPacket(particlePacket);
-            player.sendPacketToViewers(particlePacket);
+            chunk.sendPacketToViewers(particlePacket);
         } else {
-            sendChunkUpdate(player, chunk);
+            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
     }
 
@@ -157,6 +158,17 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = false;
+        chunkDataPacket.chunk = chunk;
+        int[] sections = new int[16];
+        sections[section] = 1;
+        chunkDataPacket.sections = sections;
+        PacketWriterUtils.writeAndSend(player, chunkDataPacket);
+    }
+
+    @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         if (folder != null) {
             // Load from file if possible
@@ -184,9 +196,12 @@ public class InstanceContainer extends Instance {
     }
 
     public void sendChunkUpdate(Chunk chunk) {
-
+        Set<Player> chunkViewers = chunk.getViewers();
+        if (!chunkViewers.isEmpty()) {
+            sendChunkUpdate(chunkViewers, chunk);
+        }
         // Update for players in this instance
-        if (!getPlayers().isEmpty())
+        /*if (!getPlayers().isEmpty())
             sendChunkUpdate(getPlayers(), chunk);
 
         // Update for shared instances
@@ -195,7 +210,7 @@ public class InstanceContainer extends Instance {
                 Set<Player> instancePlayers = sharedInstance.getPlayers();
                 if (!instancePlayers.isEmpty())
                     sendChunkUpdate(instancePlayers, chunk);
-            });
+            });*/
     }
 
     @Override
@@ -209,7 +224,7 @@ public class InstanceContainer extends Instance {
     public void sendChunk(Player player, Chunk chunk) {
         /*Buffer data = chunk.getFullDataPacket();
         if(data == null) {
-            PacketWriter.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
+            PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(player, chunk);
             });
@@ -254,6 +269,13 @@ public class InstanceContainer extends Instance {
 
     public void setFolder(File folder) {
         this.folder = folder;
+    }
+
+    private void sendBlockChange(Chunk chunk, int x, int y, int z, short blockId) {
+        BlockChangePacket blockChangePacket = new BlockChangePacket();
+        blockChangePacket.blockPosition = new BlockPosition(x, y, z);
+        blockChangePacket.blockId = blockId;
+        chunk.sendPacketToViewers(blockChangePacket);
     }
 
 }

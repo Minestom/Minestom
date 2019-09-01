@@ -149,7 +149,7 @@ public abstract class Entity implements Viewable, DataContainer {
     @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
-        player.viewableEntity.add(this);
+        player.viewableEntities.add(this);
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getPassengersPacket());
@@ -165,7 +165,7 @@ public abstract class Entity implements Viewable, DataContainer {
             destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
             player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
         }
-        player.viewableEntity.remove(this);
+        player.viewableEntities.remove(this);
     }
 
     @Override

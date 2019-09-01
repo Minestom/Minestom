@@ -4,8 +4,8 @@ import fr.adamaq01.ozao.net.Buffer;
 import fr.adamaq01.ozao.net.packet.Packet;
 import fr.adamaq01.ozao.net.server.Connection;
 import fr.themode.minestom.net.ConnectionState;
+import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import fr.themode.minestom.utils.PacketUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 
@@ -27,9 +27,9 @@ public class PlayerConnection {
 
 
     // TODO make that proper (remove reflection)
-    private Field field;
+    private static Field field;
 
-    {
+    static {
         try {
             field = Class.forName("fr.adamaq01.ozao.net.server.backend.tcp.TCPConnection").getDeclaredField("channel");
         } catch (NoSuchFieldException e) {
@@ -49,7 +49,7 @@ public class PlayerConnection {
     }
 
     public void sendPacket(ServerPacket serverPacket) {
-        sendPacket(PacketUtils.writePacket(serverPacket));
+        PacketWriterUtils.writeAndSend(this, serverPacket);
     }
 
     public void flush() {

@@ -81,6 +81,11 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
+        instanceContainer.sendChunkSectionUpdate(chunk, section, player);
+    }
+
+    @Override
     public void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
     }

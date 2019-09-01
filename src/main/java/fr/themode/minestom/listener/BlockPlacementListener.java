@@ -9,6 +9,7 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerBlockPlacementPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.ChunkUtils;
 
 public class BlockPlacementListener {
 
@@ -23,15 +24,17 @@ public class BlockPlacementListener {
             return;
 
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
-        if (!usedItem.getMaterial().isBlock())
+        if (!usedItem.getMaterial().isBlock()) {
+            //instance.setBlock(blockPosition.clone().add(0, 1, 0), (short) 10);
             return;
+        }
 
         int offsetX = blockFace == ClientPlayerDiggingPacket.BlockFace.WEST ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.EAST ? 1 : 0;
         int offsetY = blockFace == ClientPlayerDiggingPacket.BlockFace.BOTTOM ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.TOP ? 1 : 0;
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition);
+        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby players
         if (!intersectPlayer) {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
@@ -49,7 +52,7 @@ public class BlockPlacementListener {
                 }
             } else {
                 Chunk chunk = instance.getChunkAt(blockPosition);
-                instance.sendChunkUpdate(player, chunk);
+                instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
             }
         }
         player.getInventory().refreshSlot(player.getHeldSlot());

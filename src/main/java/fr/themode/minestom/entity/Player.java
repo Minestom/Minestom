@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class Player extends LivingEntity {
 
@@ -62,7 +64,8 @@ public class Player extends LivingEntity {
         System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
     }
 
-    protected Set<Entity> viewableEntity = new CopyOnWriteArraySet<>();
+    protected Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
+    protected Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
     private PlayerSettings settings;
     private float exp;
@@ -86,8 +89,6 @@ public class Player extends LivingEntity {
     private float forward;
     private boolean jump;
     private boolean unmount;
-
-    protected boolean spawned;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(100);
@@ -247,6 +248,9 @@ public class Player extends LivingEntity {
             }
         }
 
+        // Tick event
+        callEvent(PlayerTickEvent.class, new PlayerTickEvent());
+
 
         // Multiplayer sync
         Position position = getPosition();
@@ -324,7 +328,7 @@ public class Player extends LivingEntity {
         clearBossBars();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
-        this.viewableEntity.forEach(entity -> entity.removeViewer(this));
+        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         super.remove();
     }
 
@@ -367,10 +371,46 @@ public class Player extends LivingEntity {
 
     @Override
     public void setInstance(Instance instance) {
-        if (!spawned)
-            throw new IllegalStateException("Player#setInstance is only available during and after PlayerSpawnEvent");
+        if (instance == null)
+            throw new IllegalArgumentException("instance cannot be null!");
+        if (this.instance == instance)
+            throw new IllegalArgumentException("Instance should be different than the current one");
 
-        super.setInstance(instance);
+        for (Chunk viewableChunk : viewableChunks) {
+            viewableChunk.removeViewer(this);
+        }
+        viewableChunks.clear();
+
+        long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+        int length = visibleChunks.length;
+
+        AtomicInteger counter = new AtomicInteger(0);
+
+        for (int i = 0; i < length; i++) {
+            int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
+            int chunkX = chunkPos[0];
+            int chunkZ = chunkPos[1];
+            Consumer<Chunk> callback = (chunk) -> {
+                if (chunk != null) {
+                    viewableChunks.add(chunk);
+                    chunk.addViewer(this);
+                }
+                boolean isLast = counter.get() == length - 1;
+                if (isLast) {
+                    // This is the last chunk to be loaded, spawn player
+                    super.setInstance(instance);
+                    PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance);
+                    callEvent(PlayerSpawnEvent.class, spawnEvent);
+                    updateViewPosition(chunk);
+                } else {
+                    // Increment the counter of current loaded chunks
+                    counter.incrementAndGet();
+                }
+            };
+
+            // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
+            instance.loadOptionalChunk(chunkX, chunkZ, callback);
+        }
     }
 
     @Override
@@ -516,6 +556,10 @@ public class Player extends LivingEntity {
             unloadChunkPacket.chunkX = chunkPos[0];
             unloadChunkPacket.chunkZ = chunkPos[1];
             playerConnection.sendPacket(unloadChunkPacket);
+
+            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            if (chunk != null)
+                chunk.removeViewer(this);
         }
 
         updateViewPosition(newChunk);
@@ -529,6 +573,8 @@ public class Player extends LivingEntity {
                 if (chunk == null) {
                     return; // Cannot load chunk (auto load is not enabled)
                 }
+                this.viewableChunks.add(chunk);
+                chunk.addViewer(this);
                 instance.sendChunk(this, chunk);
                 if (isFar && isLast) {
                     updatePlayerPosition();
@@ -678,6 +724,10 @@ public class Player extends LivingEntity {
         inventory.update();
     }
 
+    public Set<Chunk> getViewableChunks() {
+        return Collections.unmodifiableSet(viewableChunks);
+    }
+
     public void clearBossBars() {
         this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
@@ -765,6 +815,12 @@ public class Player extends LivingEntity {
         this.forward = forward;
         this.jump = jump;
         this.unmount = unmount;
+    }
+
+    public int getChunkRange() {
+        int serverRange = Main.CHUNK_VIEW_DISTANCE;
+        int playerRange = getSettings().viewDistance;
+        return serverRange;//playerRange < serverRange ? playerRange : serverRange;
     }
 
     public long getLastKeepAlive() {
