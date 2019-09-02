@@ -14,14 +14,17 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
     public boolean insideBlock;
 
     @Override
-    public void read(PacketReader reader) {
-        this.hand = Player.Hand.values()[reader.readVarInt()];
-        this.blockPosition = reader.readBlockPosition();
-        this.blockFace = ClientPlayerDiggingPacket.BlockFace.values()[reader.readVarInt()];
-        this.cursorPositionX = reader.readFloat();
-        this.cursorPositionY = reader.readFloat();
-        this.cursorPositionZ = reader.readFloat();
-        this.insideBlock = reader.readBoolean();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> hand = Player.Hand.values()[value]);
+        reader.readBlockPosition(blockPosition1 -> blockPosition = blockPosition1);
+        reader.readVarInt(value -> blockFace = ClientPlayerDiggingPacket.BlockFace.values()[value]);
+        reader.readFloat(value -> cursorPositionX = value);
+        reader.readFloat(value -> cursorPositionY = value);
+        reader.readFloat(value -> cursorPositionZ = value);
+        reader.readBoolean(value -> {
+            insideBlock = value;
+            callback.run();
+        });
     }
 
 }

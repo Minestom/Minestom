@@ -1,6 +1,5 @@
 package fr.themode.minestom.instance;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.net.PacketWriterUtils;
@@ -151,10 +150,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunkUpdate(Player player, Chunk chunk) {
-        Buffer chunkData = chunk.getFullDataPacket();
-        chunkData.getData().retain(1).markReaderIndex();
-        player.getPlayerConnection().sendUnencodedPacket(chunkData);
-        chunkData.getData().resetReaderIndex();
+        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket());
     }
 
     @Override

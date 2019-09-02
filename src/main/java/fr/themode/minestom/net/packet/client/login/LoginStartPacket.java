@@ -106,7 +106,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(PacketReader reader) {
-        this.username = reader.readSizedString();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readSizedString(s -> {
+            username = s;
+            callback.run();
+        });
     }
 }

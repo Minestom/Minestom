@@ -1,54 +1,55 @@
 package fr.themode.minestom.net.packet;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
+import simplenet.packet.Packet;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PacketWriter {
 
-    private Buffer buffer;
+    private Packet packet;
 
-    public PacketWriter(Buffer buffer) {
-        this.buffer = buffer;
+    public PacketWriter(Packet packet) {
+        this.packet = packet;
     }
 
     public void writeBoolean(boolean b) {
-        buffer.putBoolean(b);
+        packet.putBoolean(b);
     }
 
     public void writeByte(byte b) {
-        buffer.putByte(b);
+        packet.putByte(b);
     }
 
     public void writeShort(short s) {
-        buffer.putShort(s);
+        packet.putShort(s);
     }
 
     public void writeInt(int i) {
-        buffer.putInt(i);
+        packet.putInt(i);
     }
 
     public void writeLong(long l) {
-        buffer.putLong(l);
+        packet.putLong(l);
     }
 
     public void writeFloat(float f) {
-        buffer.putFloat(f);
+        packet.putFloat(f);
     }
 
     public void writeDouble(double d) {
-        buffer.putDouble(d);
+        packet.putDouble(d);
     }
 
     public void writeVarInt(int i) {
-        Utils.writeVarInt(buffer, i);
+        Utils.writeVarInt(packet, i);
     }
 
     public void writeSizedString(String string) {
-        Utils.writeString(buffer, string);
+        Utils.writeString(packet, string);
     }
 
     public void writeVarIntArray(int[] array) {
@@ -63,7 +64,7 @@ public class PacketWriter {
     }
 
     public void writeBytes(byte[] bytes) {
-        buffer.putBytes(bytes);
+        packet.putBytes(bytes);
     }
 
     public void writeStringArray(String[] array) {
@@ -77,8 +78,9 @@ public class PacketWriter {
         }
     }
 
-    public void writeBuffer(Buffer buffer) {
-        this.buffer.putBuffer(buffer);
+    public void write(Consumer<Packet> consumer) {
+        if (consumer != null)
+            consumer.accept(packet);
     }
 
     public void writeUuid(UUID uuid) {
@@ -87,15 +89,15 @@ public class PacketWriter {
     }
 
     public void writeBlockPosition(BlockPosition blockPosition) {
-        Utils.writePosition(buffer, blockPosition);
+        Utils.writePosition(packet, blockPosition);
     }
 
     public void writeBlockPosition(int x, int y, int z) {
-        Utils.writePosition(buffer, x, y, z);
+        Utils.writePosition(packet, x, y, z);
     }
 
     public void writeItemStack(ItemStack itemStack) {
-        Utils.writeItemStack(buffer, itemStack);
+        Utils.writeItemStack(packet, itemStack);
     }
 
 }

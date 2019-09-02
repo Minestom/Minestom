@@ -13,12 +13,15 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     // TODO clicked item
 
     @Override
-    public void read(PacketReader reader) {
-        this.windowId = reader.readByte();
-        this.slot = reader.readShort();
-        this.button = reader.readByte();
-        this.actionNumber = reader.readShort();
-        this.mode = reader.readVarInt();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readByte(value -> windowId = value);
+        reader.readShort(value -> slot = value);
+        reader.readByte(value -> button = value);
+        reader.readShort(value -> actionNumber = value);
+        reader.readVarInt(value -> {
+            mode = value;
+            callback.run();
+        });
         // TODO read clicked item
     }
 }

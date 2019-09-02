@@ -14,16 +14,26 @@ public class ClientUseEntityPacket extends ClientPlayPacket {
     public Player.Hand hand;
 
     @Override
-    public void read(PacketReader reader) {
-        this.targetId = reader.readVarInt();
-        this.type = Type.values()[reader.readVarInt()];
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> targetId = value);
+        reader.readVarInt(value -> {
+            type = Type.values()[value];
+            if (type == Type.ATTACK)
+                callback.run();
+        });
+
         if (this.type == Type.INTERACT_AT) {
-            this.x = reader.readFloat();
-            this.y = reader.readFloat();
-            this.z = reader.readFloat();
+            reader.readFloat(value -> x = value);
+            reader.readFloat(value -> y = value);
+            reader.readFloat(value -> {
+                z = value;
+            });
         }
         if (type == Type.INTERACT || type == Type.INTERACT_AT)
-            this.hand = Player.Hand.values()[reader.readVarInt()];
+            reader.readVarInt(value -> {
+                hand = Player.Hand.values()[value];
+                callback.run();
+            });
     }
 
     public enum Type {

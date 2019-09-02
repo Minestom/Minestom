@@ -8,7 +8,10 @@ public class ClientHeldItemChangePacket extends ClientPlayPacket {
     public short slot;
 
     @Override
-    public void read(PacketReader reader) {
-        this.slot = reader.readShort();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readShort(value -> {
+            slot = value;
+            callback.run();
+        });
     }
 }

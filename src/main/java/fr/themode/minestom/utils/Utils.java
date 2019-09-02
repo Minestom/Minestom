@@ -3,12 +3,17 @@ package fr.themode.minestom.utils;
 import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.ConnectionUtils;
+import fr.themode.minestom.utils.consumer.StringConsumer;
+import simplenet.Client;
+import simplenet.packet.Packet;
 
 import java.io.UnsupportedEncodingException;
+import java.util.function.Consumer;
 
 public class Utils {
 
-    public static void writeString(Buffer buffer, String value) {
+    public static void writeString(Packet packet, String value) {
         byte[] bytes = new byte[0];
         try {
             bytes = value.getBytes("UTF-8");
@@ -18,23 +23,26 @@ public class Utils {
         if (bytes.length > 32767) {
             System.out.println("String too big (was " + value.length() + " bytes encoded, max " + 32767 + ")");
         } else {
-            writeVarInt(buffer, bytes.length);
-            buffer.putBytes(bytes);
+            writeVarInt(packet, bytes.length);
+            packet.putBytes(bytes);
         }
     }
 
-    public static String readString(Buffer buffer) {
-        int length = readVarInt(buffer);
-        byte bytes[] = buffer.getBytes(length);
-        try {
-            return new String(bytes, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static void readString(Client client, StringConsumer consumer) {
+        ConnectionUtils.readVarInt(client, length -> {
+            int stringLength = Utils.lengthVarInt(length) + length;
+            client.readBytes(length, bytes -> {
+                try {
+                    consumer.accept(new String(bytes, "UTF-8"), stringLength);
+                } catch (UnsupportedEncodingException e) {
+                    consumer.accept(null, stringLength);
+                    e.printStackTrace();
+                }
+            });
+        });
     }
 
-    public static void writeVarInt(Buffer buffer, int value) {
+    public static void writeVarIntBuffer(Buffer buffer, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
@@ -45,12 +53,23 @@ public class Utils {
         } while (value != 0);
     }
 
-    public static int readVarInt(Buffer buffer) {
+    public static void writeVarInt(Packet packet, int value) {
+        do {
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+            packet.putByte(temp);
+        } while (value != 0);
+    }
+
+    public static int readVarInt(Client client) {
         int numRead = 0;
         int result = 0;
         byte read;
         do {
-            read = buffer.getByte();
+            read = client.readByte();
             int value = (read & 0b01111111);
             result |= (value << (7 * numRead));
 
@@ -90,23 +109,23 @@ public class Utils {
         return i;
     }
 
-    public static void writeVarLong(Buffer buffer, long value) {
+    public static void writeVarLong(Packet packet, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if (value != 0) {
                 temp |= 0b10000000;
             }
-            buffer.putByte(temp);
+            packet.putByte(temp);
         } while (value != 0);
     }
 
-    public static long readVarLong(Buffer buffer) {
+    public static long readVarLong(Client client) {
         int numRead = 0;
         long result = 0;
         byte read;
         do {
-            read = buffer.getByte();
+            read = client.readByte();
             int value = (read & 0b01111111);
             result |= (value << (7 * numRead));
 
@@ -119,54 +138,56 @@ public class Utils {
         return result;
     }
 
-    public static void writePosition(Buffer buffer, int x, int y, int z) {
-        buffer.putLong(SerializerUtils.positionToLong(x, y, z));
+    public static void writePosition(Packet packet, int x, int y, int z) {
+        packet.putLong(SerializerUtils.positionToLong(x, y, z));
     }
 
-    public static void writePosition(Buffer buffer, BlockPosition blockPosition) {
-        writePosition(buffer, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    public static void writePosition(Packet packet, BlockPosition blockPosition) {
+        writePosition(packet, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
-    public static BlockPosition readPosition(Buffer buffer) {
-        return SerializerUtils.longToBlockPosition(buffer.getLong());
+    public static void readPosition(Client client, Consumer<BlockPosition> consumer) {
+        client.readLong(value -> {
+            consumer.accept(SerializerUtils.longToBlockPosition(value));
+        });
     }
 
-    public static void writeItemStack(Buffer buffer, ItemStack itemStack) {
+    public static void writeItemStack(Packet packet, ItemStack itemStack) {
         if (itemStack == null) {
-            buffer.putBoolean(false);
+            packet.putBoolean(false);
         } else {
-            buffer.putBoolean(true);
-            Utils.writeVarInt(buffer, itemStack.getMaterial().getId());
-            buffer.putByte(itemStack.getAmount());
+            packet.putBoolean(true);
+            Utils.writeVarInt(packet, itemStack.getMaterial().getId());
+            packet.putByte(itemStack.getAmount());
 
-            buffer.putByte((byte) 0x0A); // Compound
-            buffer.putShort((short) 0);
+            packet.putByte((byte) 0x0A); // Compound
+            packet.putShort((short) 0);
 
             // Unbreakable
             if (itemStack.isUnbreakable()) {
-                buffer.putByte((byte) 0x03); // Integer
-                buffer.putString("Unbreakable");
-                buffer.putInt(1);
+                packet.putByte((byte) 0x03); // Integer
+                packet.putString("Unbreakable");
+                packet.putInt(1);
             }
 
             // Display
-            buffer.putByte((byte) 0x0A); // Compound
-            buffer.putString("display");
+            packet.putByte((byte) 0x0A); // Compound
+            packet.putString("display");
 
             if (itemStack.getDisplayName() != null) {
-                buffer.putByte((byte) 0x08);
-                buffer.putString("Name");
-                buffer.putString(Chat.rawText(itemStack.getDisplayName()));
+                packet.putByte((byte) 0x08);
+                packet.putString("Name");
+                packet.putString(Chat.rawText(itemStack.getDisplayName()));
             }
 
             // TODO lore
-            buffer.putByte((byte) 0x08);
-            buffer.putString("Lore");
-            buffer.putString(Chat.rawText("a line"));
+            packet.putByte((byte) 0x08);
+            packet.putString("Lore");
+            packet.putString(Chat.rawText("a line"));
 
-            buffer.putByte((byte) 0); // End display compound
+            packet.putByte((byte) 0); // End display compound
 
-            buffer.putByte((byte) 0); // End nbt
+            packet.putByte((byte) 0); // End nbt
         }
 
     }
@@ -190,7 +211,7 @@ public class Utils {
             }
         }
         long[] data = encodeBlocks(blocksData, 14);
-        writeVarInt(buffer, data.length);
+        writeVarIntBuffer(buffer, data.length);
         for (int i = 0; i < data.length; i++) {
             buffer.putLong(data[i]);
         }

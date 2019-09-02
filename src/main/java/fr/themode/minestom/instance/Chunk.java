@@ -1,13 +1,12 @@
 package fr.themode.minestom.instance;
 
-import fr.adamaq01.ozao.net.Buffer;
-import fr.adamaq01.ozao.net.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
+import simplenet.packet.Packet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -33,7 +32,7 @@ public class Chunk implements Viewable {
 
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private Buffer fullDataPacket;
+    private Packet fullDataPacket;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -93,7 +92,7 @@ public class Chunk implements Viewable {
         return chunkZ;
     }
 
-    public Buffer getFullDataPacket() {
+    public Packet getFullDataPacket() {
         return fullDataPacket;
     }
 
@@ -106,7 +105,7 @@ public class Chunk implements Viewable {
         return blockEntities;
     }
 
-    public void setFullDataPacket(Buffer fullDataPacket) {
+    public void setFullDataPacket(Packet fullDataPacket) {
         this.fullDataPacket = fullDataPacket;
     }
 
@@ -151,8 +150,7 @@ public class Chunk implements Viewable {
     }
 
     protected void refreshDataPacket() {
-        Packet packet = PacketUtils.writePacket(getFreshFullDataPacket());
-        this.fullDataPacket = PacketUtils.encode(packet); // TODO write packet buffer in another thread (heavy calculations)
+        PacketUtils.writePacket(getFreshFullDataPacket(), packet -> fullDataPacket = packet); // TODO write packet buffer in another thread (heavy calculations)
     }
 
     @Override

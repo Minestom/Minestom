@@ -3,21 +3,24 @@ package fr.themode.minestom.net.packet.client.handler;
 import com.esotericsoftware.reflectasm.ConstructorAccess;
 import fr.themode.minestom.net.packet.client.ClientPacket;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class ClientPacketsHandler {
 
-    private Map<Integer, ConstructorAccess<? extends ClientPacket>> constructorAccessMap = new HashMap<>();
+    private static final int SIZE = 0xFF;
+
+    private ConstructorAccess[] constructorAccesses = new ConstructorAccess[SIZE];
 
     public void register(int id, Class<? extends ClientPacket> packet) {
-        this.constructorAccessMap.put(id, ConstructorAccess.get(packet));
+        constructorAccesses[id] = ConstructorAccess.get(packet);
     }
 
     public ClientPacket getPacketInstance(int id) {
-        ClientPacket packet = constructorAccessMap.get(id).newInstance();
-        if (packet == null)
+        if (id > SIZE)
+            throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
+
+        ConstructorAccess<? extends ClientPacket> constructorAccess = constructorAccesses[id];
+        if (constructorAccess == null)
             System.err.println("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
+        ClientPacket packet = constructorAccess.newInstance();
         return packet;
     }
 

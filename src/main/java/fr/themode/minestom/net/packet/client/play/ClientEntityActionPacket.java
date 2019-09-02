@@ -10,10 +10,13 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
     public int horseJumpBoost;
 
     @Override
-    public void read(PacketReader reader) {
-        this.playerId = reader.readVarInt();
-        this.action = Action.values()[reader.readVarInt()];
-        this.horseJumpBoost = reader.readVarInt();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> playerId = value);
+        reader.readVarInt(value -> action = Action.values()[value]);
+        reader.readVarInt(value -> {
+            horseJumpBoost = value;
+            callback.run();
+        });
     }
 
     public enum Action {

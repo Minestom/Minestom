@@ -10,7 +10,8 @@ public class ClientConfirmTransactionPacket extends ClientPlayPacket {
     public boolean accepted;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(PacketReader reader, Runnable callback) {
+        callback.run();
         // TODO
     }
 }

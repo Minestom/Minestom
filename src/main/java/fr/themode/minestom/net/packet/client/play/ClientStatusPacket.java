@@ -8,8 +8,11 @@ public class ClientStatusPacket extends ClientPlayPacket {
     public Action action;
 
     @Override
-    public void read(PacketReader reader) {
-        this.action = Action.values()[reader.readVarInt()];
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> {
+            action = Action.values()[value];
+            callback.run();
+        });
     }
 
     public enum Action {

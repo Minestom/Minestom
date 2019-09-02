@@ -1,6 +1,5 @@
 package fr.themode.minestom.entity;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
@@ -9,8 +8,10 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.AnimationPacket;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
+import simplenet.packet.Packet;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 public abstract class LivingEntity extends Entity {
 
@@ -67,20 +68,21 @@ public abstract class LivingEntity extends Entity {
     }
 
     @Override
-    public Buffer getMetadataBuffer() {
-        Buffer buffer = super.getMetadataBuffer();
-        buffer.putByte((byte) 7);
-        buffer.putByte(METADATA_BYTE);
-        byte activeHandValue = 0;
-        if (isHandActive) {
-            activeHandValue += 1;
-            if (activeHand)
-                activeHandValue += 2;
-            if (riptideSpinAttack)
-                activeHandValue += 4;
-        }
-        buffer.putByte(activeHandValue);
-        return buffer;
+    public Consumer<Packet> getMetadataConsumer() {
+        return packet -> {
+            super.getMetadataConsumer().accept(packet);
+            packet.putByte((byte) 7);
+            packet.putByte(METADATA_BYTE);
+            byte activeHandValue = 0;
+            if (isHandActive) {
+                activeHandValue += 1;
+                if (activeHand)
+                    activeHandValue += 2;
+                if (riptideSpinAttack)
+                    activeHandValue += 4;
+            }
+            packet.putByte(activeHandValue);
+        };
     }
 
     public void damage(float value) {

@@ -1,8 +1,5 @@
 package fr.themode.minestom.net;
 
-import fr.adamaq01.ozao.net.Buffer;
-import fr.adamaq01.ozao.net.packet.Packet;
-import fr.adamaq01.ozao.net.server.Connection;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.PacketReader;
@@ -13,17 +10,16 @@ import fr.themode.minestom.net.packet.client.handler.ClientPlayPacketsHandler;
 import fr.themode.minestom.net.packet.client.handler.ClientStatusPacketsHandler;
 import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import simplenet.Client;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static fr.themode.minestom.net.protocol.MinecraftProtocol.PACKET_ID_IDENTIFIER;
-
 public class PacketProcessor {
 
-    private Map<Connection, PlayerConnection> connectionPlayerConnectionMap = new HashMap<>();
+    private Map<Client, PlayerConnection> connectionPlayerConnectionMap = new HashMap<>();
 
     private ConnectionManager connectionManager;
 
@@ -42,25 +38,20 @@ public class PacketProcessor {
 
     private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
-    public void process(Connection connection, Packet packet) {
-        int id = packet.get(PACKET_ID_IDENTIFIER);
-        Buffer buffer = packet.getPayload();
-        connectionPlayerConnectionMap.get(connection);
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(connection, c -> new PlayerConnection(c));
+    public void process(Client client, int id, int length, int offset) {
+        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(client, c -> new PlayerConnection(client));
         ConnectionState connectionState = playerConnection.getConnectionState();
-
         if (!printBlackList.contains(id)) {
             //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         }
 
-        PacketReader packetReader = new PacketReader(buffer);
+        PacketReader packetReader = new PacketReader(client, length, offset);
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (id == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(packetReader);
-                handshakePacket.process(playerConnection, connectionManager);
+                handshakePacket.read(packetReader, () -> handshakePacket.process(playerConnection, connectionManager));
             }
             return;
         }
@@ -69,18 +60,15 @@ public class PacketProcessor {
             case PLAY:
                 Player player = connectionManager.getPlayer(playerConnection);
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
-                playPacket.read(packetReader);
-                player.addPacketToQueue(playPacket); // Processed during player tick update
+                playPacket.read(packetReader, () -> player.addPacketToQueue(playPacket));
                 break;
             case LOGIN:
                 ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(id);
-                loginPacket.read(packetReader);
-                loginPacket.process(playerConnection, connectionManager);
+                loginPacket.read(packetReader, () -> loginPacket.process(playerConnection, connectionManager));
                 break;
             case STATUS:
                 ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(id);
-                statusPacket.read(packetReader);
-                statusPacket.process(playerConnection, connectionManager);
+                statusPacket.read(packetReader, () -> statusPacket.process(playerConnection, connectionManager));
                 break;
             case UNKNOWN:
                 // Ignore packet (unexpected)
@@ -88,15 +76,15 @@ public class PacketProcessor {
         }
     }
 
-    public PlayerConnection getPlayerConnection(Connection connection) {
-        return connectionPlayerConnectionMap.get(connection);
+    public PlayerConnection getPlayerConnection(Client client) {
+        return connectionPlayerConnectionMap.get(client);
     }
 
-    public boolean hasPlayerConnection(Connection connection) {
-        return connectionPlayerConnectionMap.containsKey(connection);
+    public boolean hasPlayerConnection(Client client) {
+        return connectionPlayerConnectionMap.containsKey(client);
     }
 
-    public void removePlayerConnection(Connection connection) {
-        connectionPlayerConnectionMap.remove(connection);
+    public void removePlayerConnection(Client client) {
+        connectionPlayerConnectionMap.remove(client);
     }
 }

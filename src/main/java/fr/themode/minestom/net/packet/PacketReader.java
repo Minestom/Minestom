@@ -1,55 +1,88 @@
 package fr.themode.minestom.net.packet;
 
-import fr.adamaq01.ozao.net.Buffer;
+import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
+import fr.themode.minestom.utils.consumer.StringConsumer;
+import simplenet.Client;
+import simplenet.utility.exposed.consumer.BooleanConsumer;
+import simplenet.utility.exposed.consumer.ByteConsumer;
+import simplenet.utility.exposed.consumer.FloatConsumer;
+import simplenet.utility.exposed.consumer.ShortConsumer;
+
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
 
 public class PacketReader {
 
-    private Buffer buffer;
+    private Client client;
+    private int length;
+    private int sizeOffset;
 
-    public PacketReader(Buffer buffer) {
-        this.buffer = buffer;
+    public PacketReader(Client client, int length, int sizeOffset) {
+        this.client = client;
+        this.length = length;
+        this.sizeOffset = sizeOffset;
     }
 
-    public int readVarInt() {
-        return Utils.readVarInt(buffer);
+    public void readVarInt(IntConsumer consumer) {
+        ConnectionUtils.readVarInt(client, value -> {
+            consumer.accept(value);
+            sizeOffset += Utils.lengthVarInt(value);
+        });
     }
 
-    public boolean readBoolean() {
-        return buffer.getBoolean();
+    public void readBoolean(BooleanConsumer consumer) {
+        sizeOffset += Byte.BYTES;
+        client.readBoolean(consumer);
     }
 
-    public byte readByte() {
-        return buffer.getByte();
+    public void readByte(ByteConsumer consumer) {
+        sizeOffset += Byte.BYTES;
+        client.readByte(consumer);
     }
 
-    public short readShort() {
-        return buffer.getShort();
+    public void readShort(ShortConsumer consumer) {
+        sizeOffset += Short.BYTES;
+        client.readShort(consumer);
     }
 
-    public long readLong() {
-        return buffer.getLong();
+    public void readLong(LongConsumer consumer) {
+        sizeOffset += Long.BYTES;
+        client.readLong(consumer);
     }
 
-    public float readFloat() {
-        return buffer.getFloat();
+    public void readFloat(FloatConsumer consumer) {
+        sizeOffset += Float.BYTES;
+        client.readFloat(consumer);
     }
 
-    public double readDouble() {
-        return buffer.getDouble();
+    public void readDouble(DoubleConsumer consumer) {
+        sizeOffset += Double.BYTES;
+        client.readDouble(consumer);
     }
 
-    public String readSizedString() {
-        return Utils.readString(buffer);
+    public void readSizedString(StringConsumer consumer) {
+        Utils.readString(client, consumer);
     }
 
-    public byte[] getRemainingBytes() {
-        return buffer.getAllBytes();
+    public void readSizedString(Consumer<String> consumer) {
+        readSizedString((string, length1) -> consumer.accept(string));
     }
 
-    public BlockPosition readBlockPosition() {
-        return Utils.readPosition(buffer);
+    public void getRemainingBytes(int offset, Consumer<byte[]> consumer) {
+        int size = length - 1 - offset;
+        client.readBytes(size, consumer);
+    }
+
+    public void getRemainingBytes(Consumer<byte[]> consumer) {
+        getRemainingBytes(0, consumer);
+    }
+
+    public void readBlockPosition(Consumer<BlockPosition> consumer) {
+        Utils.readPosition(client, consumer);
     }
 
 }

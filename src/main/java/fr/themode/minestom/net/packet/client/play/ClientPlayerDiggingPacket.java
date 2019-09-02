@@ -11,10 +11,13 @@ public class ClientPlayerDiggingPacket extends ClientPlayPacket {
     public BlockFace blockFace;
 
     @Override
-    public void read(PacketReader reader) {
-        this.status = Status.values()[reader.readVarInt()];
-        this.blockPosition = reader.readBlockPosition();
-        this.blockFace = BlockFace.values()[reader.readVarInt()];
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> status = Status.values()[value]);
+        reader.readBlockPosition(blockPosition1 -> blockPosition = blockPosition1);
+        reader.readVarInt(value -> {
+            blockFace = BlockFace.values()[value];
+            callback.run();
+        });
     }
 
     public enum Status {

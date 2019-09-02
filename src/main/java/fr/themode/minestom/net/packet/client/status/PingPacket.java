@@ -14,11 +14,14 @@ public class PingPacket implements ClientPreplayPacket {
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         PongPacket pongPacket = new PongPacket(number);
         connection.sendPacket(pongPacket);
-        connection.getConnection().close();
+        connection.getClient().close();
     }
 
     @Override
-    public void read(PacketReader reader) {
-        this.number = reader.readLong();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readLong(value -> {
+            number = value;
+            callback.run();
+        });
     }
 }

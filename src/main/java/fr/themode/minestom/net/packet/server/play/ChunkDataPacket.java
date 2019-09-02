@@ -77,7 +77,7 @@ public class ChunkDataPacket implements ServerPacket {
         }
 
         writer.writeVarInt(blocks.length());
-        writer.writeBuffer(blocks);
+        writer.writeBytes(blocks.getAllBytes());
 
         // Block entities
         Set<Integer> blockEntities = chunk.getBlockEntities();

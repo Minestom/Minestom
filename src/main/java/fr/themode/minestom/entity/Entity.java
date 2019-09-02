@@ -1,6 +1,5 @@
 package fr.themode.minestom.entity;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.collision.BoundingBox;
@@ -15,11 +14,13 @@ import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.utils.*;
+import simplenet.packet.Packet;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public abstract class Entity implements Viewable, DataContainer {
 
@@ -569,49 +570,48 @@ public abstract class Entity implements Viewable, DataContainer {
     public EntityMetaDataPacket getMetadataPacket() {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
-        metaDataPacket.data = getMetadataBuffer();
+        metaDataPacket.consumer = getMetadataConsumer();
         return metaDataPacket;
     }
 
-    public Buffer getMetadataBuffer() {
-        Buffer buffer = Buffer.create();
-        fillMetadataIndex(buffer, 0);
-        fillMetadataIndex(buffer, 1);
-        fillMetadataIndex(buffer, 5);
-        return buffer;
+    public Consumer<Packet> getMetadataConsumer() {
+        return packet -> {
+            fillMetadataIndex(packet, 0);
+            fillMetadataIndex(packet, 1);
+            fillMetadataIndex(packet, 5);
+        };
     }
 
     protected void sendMetadataIndex(int index) {
-        Buffer buffer = Buffer.create();
-        fillMetadataIndex(buffer, index);
-
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
-        metaDataPacket.data = buffer;
+        metaDataPacket.consumer = packet -> {
+            fillMetadataIndex(packet, index);
+        };
 
         sendPacketToViewersAndSelf(metaDataPacket);
     }
 
-    private void fillMetadataIndex(Buffer buffer, int index) {
+    private void fillMetadataIndex(Packet packet, int index) {
         switch (index) {
             case 0:
-                fillStateMetadata(buffer);
+                fillStateMetadata(packet);
                 break;
             case 1:
-                fillAirTickMetaData(buffer);
+                fillAirTickMetaData(packet);
                 break;
             case 2:
-                fillCustomNameMetaData(buffer);
+                fillCustomNameMetaData(packet);
                 break;
             case 5:
-                fillNoGravityMetaData(buffer);
+                fillNoGravityMetaData(packet);
                 break;
         }
     }
 
-    private void fillStateMetadata(Buffer buffer) {
-        buffer.putByte((byte) 0);
-        buffer.putByte(METADATA_BYTE);
+    private void fillStateMetadata(Packet packet) {
+        packet.putByte((byte) 0);
+        packet.putByte(METADATA_BYTE);
         byte index0 = 0;
         if (onFire)
             index0 += 1;
@@ -629,7 +629,25 @@ public abstract class Entity implements Viewable, DataContainer {
             index0 += 64;
         if (usingElytra)
             index0 += 128;
-        buffer.putByte(index0);
+        packet.putByte(index0);
+    }
+
+    private void fillAirTickMetaData(Packet packet) {
+        packet.putByte((byte) 1);
+        packet.putByte(METADATA_VARINT);
+        Utils.writeVarInt(packet, air);
+    }
+
+    private void fillCustomNameMetaData(Packet packet) {
+        packet.putByte((byte) 2);
+        packet.putByte(METADATA_CHAT);
+        Utils.writeString(packet, customName);
+    }
+
+    private void fillNoGravityMetaData(Packet packet) {
+        packet.putByte((byte) 5);
+        packet.putByte(METADATA_BOOLEAN);
+        packet.putBoolean(noGravity);
     }
 
     protected void sendSynchronization() {
@@ -641,24 +659,6 @@ public abstract class Entity implements Viewable, DataContainer {
 
         if (!passengers.isEmpty())
             sendPacketToViewers(getPassengersPacket());
-    }
-
-    private void fillAirTickMetaData(Buffer buffer) {
-        buffer.putByte((byte) 1);
-        buffer.putByte(METADATA_VARINT);
-        Utils.writeVarInt(buffer, air);
-    }
-
-    private void fillCustomNameMetaData(Buffer buffer) {
-        buffer.putByte((byte) 2);
-        buffer.putByte(METADATA_CHAT);
-        Utils.writeString(buffer, customName);
-    }
-
-    private void fillNoGravityMetaData(Buffer buffer) {
-        buffer.putByte((byte) 5);
-        buffer.putByte(METADATA_BOOLEAN);
-        buffer.putBoolean(noGravity);
     }
 
     private boolean shouldUpdate() {

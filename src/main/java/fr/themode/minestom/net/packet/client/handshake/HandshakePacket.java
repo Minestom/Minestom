@@ -8,14 +8,20 @@ import fr.themode.minestom.net.player.PlayerConnection;
 
 public class HandshakePacket implements ClientPreplayPacket {
 
+    private int protocolVersion;
+    private String serverAddress;
+    private short serverPort;
     private int nextState;
 
     @Override
-    public void read(PacketReader reader) {
-        int protocolVersion = reader.readVarInt();
-        String serverAddress = reader.readSizedString();
-        short serverPort = reader.readShort();
-        this.nextState = reader.readVarInt();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> protocolVersion = value);
+        reader.readSizedString(s -> serverAddress = s);
+        reader.readShort(value -> serverPort = value);
+        reader.readVarInt(value -> {
+            nextState = value;
+            callback.run();
+        });
     }
 
     @Override

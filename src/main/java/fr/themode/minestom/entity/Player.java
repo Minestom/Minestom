@@ -156,7 +156,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN");
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -191,7 +191,7 @@ public class Player extends LivingEntity {
             teamsPacket.entities = new String[]{getUsername()};
             sendPacketToViewersAndSelf(teamsPacket);
 
-            setAttribute(Attribute.MAX_HEALTH, 40);
+            setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
 
             setExp(0.9f);
@@ -502,6 +502,8 @@ public class Player extends LivingEntity {
             sendPacketToViewers(spawnPlayerPacket);
             playerConnection.sendPacket(getPropertiesPacket());
             sendUpdateHealthPacket();
+            syncEquipments();
+
         });
     }
 
@@ -637,7 +639,7 @@ public class Player extends LivingEntity {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = message;
         playerConnection.sendPacket(disconnectPacket);
-        playerConnection.getConnection().close();
+        playerConnection.getClient().close();
     }
 
     public LevelType getLevelType() {
@@ -736,6 +738,12 @@ public class Player extends LivingEntity {
         sendPacketToViewers(getEquipmentPacket(slot));
     }
 
+    public void syncEquipments() {
+        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
+            syncEquipment(slot);
+        }
+    }
+
     protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
         equipmentPacket.entityId = getEntityId();
@@ -820,7 +828,11 @@ public class Player extends LivingEntity {
     public int getChunkRange() {
         int serverRange = Main.CHUNK_VIEW_DISTANCE;
         int playerRange = getSettings().viewDistance;
-        return serverRange;//playerRange < serverRange ? playerRange : serverRange;
+        if (playerRange == 0) {
+            return serverRange; // Didn't receive settings packet yet
+        } else {
+            return playerRange < serverRange ? playerRange : serverRange;
+        }
     }
 
     public long getLastKeepAlive() {

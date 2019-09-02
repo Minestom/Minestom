@@ -8,7 +8,10 @@ public class ClientCloseWindow extends ClientPlayPacket {
     public int windowId;
 
     @Override
-    public void read(PacketReader reader) {
-        this.windowId = reader.readVarInt();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readVarInt(value -> {
+            windowId = value;
+            callback.run();
+        });
     }
 }

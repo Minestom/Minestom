@@ -1,8 +1,10 @@
 package fr.themode.minestom.entity;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.Utils;
+import simplenet.packet.Packet;
+
+import java.util.function.Consumer;
 
 public class ItemEntity extends ObjectEntity {
 
@@ -36,12 +38,13 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    public Buffer getMetadataBuffer() {
-        Buffer buffer = super.getMetadataBuffer();
-        buffer.putByte((byte) 7);
-        buffer.putByte(METADATA_SLOT);
-        Utils.writeItemStack(buffer, itemStack);
-        return buffer;
+    public Consumer<Packet> getMetadataConsumer() {
+        return packet -> {
+            super.getMetadataConsumer().accept(packet);
+            packet.putByte((byte) 7);
+            packet.putByte(METADATA_SLOT);
+            Utils.writeItemStack(packet, itemStack);
+        };
     }
 
     @Override

@@ -1,11 +1,12 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
+import simplenet.packet.Packet;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class SpawnMobPacket implements ServerPacket {
 
@@ -15,7 +16,7 @@ public class SpawnMobPacket implements ServerPacket {
     public Position position;
     public float headPitch;
     public short velocityX, velocityY, velocityZ;
-    public Buffer metadata;
+    public Consumer<Packet> consumer;
 
     @Override
     public void write(PacketWriter writer) {
@@ -31,8 +32,8 @@ public class SpawnMobPacket implements ServerPacket {
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);
         writer.writeShort(velocityZ);
-        if (metadata != null) {
-            writer.writeBuffer(metadata);
+        if (consumer != null) {
+            writer.write(consumer);
         } else {
             writer.writeByte((byte) 0xff);
         }

@@ -8,7 +8,10 @@ public class ClientKeepAlivePacket extends ClientPlayPacket {
     public long id;
 
     @Override
-    public void read(PacketReader reader) {
-        this.id = reader.readLong();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readLong(value -> {
+            id = value;
+            callback.run();
+        });
     }
 }

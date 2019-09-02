@@ -1,10 +1,5 @@
 package fr.themode.minestom;
 
-import fr.adamaq01.ozao.net.packet.Packet;
-import fr.adamaq01.ozao.net.server.Connection;
-import fr.adamaq01.ozao.net.server.Server;
-import fr.adamaq01.ozao.net.server.ServerHandler;
-import fr.adamaq01.ozao.net.server.backend.tcp.TCPServer;
 import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
@@ -13,17 +8,21 @@ import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
 import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
+import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.net.PacketProcessor;
+import fr.themode.minestom.net.packet.PacketReader;
+import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
-import fr.themode.minestom.net.protocol.MinecraftProtocol;
+import fr.themode.minestom.utils.Utils;
+import simplenet.Server;
 
 public class Main {
 
     // Thread number
-    public static final int THREAD_COUNT_PACKET_WRITER = 5;
+    public static final int THREAD_COUNT_PACKET_WRITER = 2;
     public static final int THREAD_COUNT_CHUNK_IO = 2;
-    public static final int THREAD_COUNT_CHUNK_BATCH = 3;
-    public static final int THREAD_COUNT_ENTITIES = 3;
+    public static final int THREAD_COUNT_CHUNK_BATCH = 2;
+    public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 
     public static final int TICK_MS = 50;
@@ -57,39 +56,42 @@ public class Main {
 
         blockManager.registerBlock(StoneBlock::new);
 
-        server = new TCPServer(new MinecraftProtocol()).addHandler(new ServerHandler() {
-            @Override
-            public void onConnect(Server server, Connection connection) {
-                System.out.println("A connection");
-            }
+        server = new Server(136434);
 
-            @Override
-            public void onDisconnect(Server server, Connection connection) {
+        server.onConnect(client -> {
+            System.out.println("CONNECTION");
+
+            client.postDisconnect(() -> {
                 System.out.println("A Disconnection");
-                if (packetProcessor.hasPlayerConnection(connection)) {
-                    Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(connection));
+                if (packetProcessor.hasPlayerConnection(client)) {
+                    Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(client));
                     if (player != null) {
 
                         player.remove();
 
                         connectionManager.removePlayer(player.getPlayerConnection());
                     }
-                    packetProcessor.removePlayerConnection(connection);
+                    packetProcessor.removePlayerConnection(client);
                 }
-            }
+            });
 
-            @Override
-            public void onPacketReceive(Server server, Connection connection, Packet packet) {
-                packetProcessor.process(connection, packet);
-            }
-
-            @Override
-            public void onException(Server server, Connection connection, Throwable cause) {
-                cause.printStackTrace();
-            }
+            ConnectionUtils.readVarIntAlways(client, length -> {
+                if (length == 0xFE) { // Legacy server ping
+                    LegacyServerListPingPacket legacyServerListPingPacket = new LegacyServerListPingPacket();
+                    legacyServerListPingPacket.read(new PacketReader(client, 0, 0), () -> {
+                        legacyServerListPingPacket.process(null, null);
+                    });
+                } else {
+                    final int varIntLength = Utils.lengthVarInt(length);
+                    ConnectionUtils.readVarInt(client, packetId -> {
+                        int offset = varIntLength + Utils.lengthVarInt(packetId);
+                        packetProcessor.process(client, packetId, length, offset);
+                    });
+                }
+            });
         });
 
-        server.bind(25565);
+        server.bind("localhost", 25565);
         System.out.println("Server started");
 
         long tickDistance = TICK_MS * 1000000;

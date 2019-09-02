@@ -1,11 +1,11 @@
 package fr.themode.minestom.instance;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.*;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
+import simplenet.packet.Packet;
 
 import java.io.File;
 import java.util.*;
@@ -70,11 +70,9 @@ public abstract class Instance implements BlockModifier {
 
     //
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
-        Buffer chunkData = chunk.getFullDataPacket();
-        chunkData.getData().retain(players.size()).markReaderIndex();
+        Packet chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
-            player.getPlayerConnection().sendUnencodedPacket(chunkData);
-            chunkData.getData().resetReaderIndex();
+            player.getPlayerConnection().sendPacket(chunkData);
         });
     }
     //

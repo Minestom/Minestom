@@ -10,9 +10,12 @@ public class ClientSteerVehiclePacket extends ClientPlayPacket {
     public byte flags;
 
     @Override
-    public void read(PacketReader reader) {
-        this.sideways = reader.readFloat();
-        this.forward = reader.readFloat();
-        this.flags = reader.readByte();
+    public void read(PacketReader reader, Runnable callback) {
+        reader.readFloat(value -> sideways = value);
+        reader.readFloat(value -> forward = value);
+        reader.readByte(value -> {
+            flags = value;
+            callback.run();
+        });
     }
 }

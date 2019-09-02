@@ -1,18 +1,19 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
+import simplenet.packet.Packet;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class SpawnPlayerPacket implements ServerPacket {
 
     public int entityId;
     public UUID playerUuid;
     public Position position;
-    public Buffer metadata;
+    public Consumer<Packet> metadataConsumer;
 
     @Override
     public void write(PacketWriter writer) {
@@ -24,8 +25,8 @@ public class SpawnPlayerPacket implements ServerPacket {
         writer.writeByte((byte) (position.getYaw() * 256f / 360f));
         writer.writeByte((byte) (position.getPitch() * 256f / 360f));
 
-        if (metadata != null) {
-            writer.writeBuffer(metadata);
+        if (metadataConsumer != null) {
+            writer.write(metadataConsumer);
         } else {
             writer.writeByte((byte) 0xff);
         }
