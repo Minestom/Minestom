@@ -13,6 +13,7 @@ import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
+import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
 import simplenet.Server;
 
@@ -61,10 +62,12 @@ public class Main {
         server.onConnect(client -> {
             System.out.println("CONNECTION");
 
-            client.postDisconnect(() -> {
+            client.preDisconnect(() -> {
                 System.out.println("A Disconnection");
                 if (packetProcessor.hasPlayerConnection(client)) {
-                    Player player = connectionManager.getPlayer(packetProcessor.getPlayerConnection(client));
+                    PlayerConnection playerConnection = packetProcessor.getPlayerConnection(client);
+                    playerConnection.refreshOnline(false);
+                    Player player = connectionManager.getPlayer(playerConnection);
                     if (player != null) {
 
                         player.remove();

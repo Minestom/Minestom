@@ -1,7 +1,7 @@
 package fr.themode.minestom.instance;
 
-import com.github.luben.zstd.Zstd;
 import fr.themode.minestom.Main;
+import fr.themode.minestom.utils.CompressionUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 
 import java.io.*;
@@ -29,14 +29,7 @@ public class ChunkLoaderIO {
             File chunkFile = getChunkFile(chunk.getChunkX(), chunk.getChunkZ(), folder);
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 byte[] data = chunk.getSerializedData();
-                byte[] decompressedLength = SerializerUtils.intToBytes(data.length);
-                byte[] compressed = Zstd.compress(data, COMPRESSION_LEVEL);
-
-                byte[] result = new byte[decompressedLength.length + compressed.length];
-                System.arraycopy(decompressedLength, 0, result, 0, decompressedLength.length);
-                System.arraycopy(compressed, 0, result, decompressedLength.length, compressed.length);
-
-                fos.write(result);
+                fos.write(CompressionUtils.getCompressedData(data));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -65,19 +58,7 @@ public class ChunkLoaderIO {
                 return;
             }
 
-            int decompressedLength = SerializerUtils.bytesToInt(array);
-
-            byte[] compressedChunkData = new byte[array.length - Integer.BYTES];
-            System.arraycopy(array, Integer.BYTES, compressedChunkData, 0, compressedChunkData.length); // Remove the decompressed length from the array
-
-            byte[] decompressed = new byte[decompressedLength];
-            long result = Zstd.decompress(decompressed, compressedChunkData); // Decompressed in an array with the max size
-
-            array = new byte[(int) result];
-            System.arraycopy(decompressed, 0, array, 0, (int) result); // Resize the data array properly
-
-
-            DataInputStream stream = new DataInputStream(new ByteArrayInputStream(array));
+            DataInputStream stream = new DataInputStream(new ByteArrayInputStream(CompressionUtils.getDecompressedData(array)));
 
             Chunk chunk = null;
             try {

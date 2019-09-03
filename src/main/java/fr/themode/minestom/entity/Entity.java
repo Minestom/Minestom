@@ -12,11 +12,13 @@ import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.utils.*;
 import simplenet.packet.Packet;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +26,7 @@ import java.util.function.Consumer;
 
 public abstract class Entity implements Viewable, DataContainer {
 
-    private static Map<Integer, Entity> entityById = new HashMap<>();
+    private static Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
@@ -92,15 +94,11 @@ public abstract class Entity implements Viewable, DataContainer {
 
         setBoundingBox(0, 0, 0);
 
-        synchronized (entityById) {
-            entityById.put(id, this);
-        }
+        entityById.put(id, this);
     }
 
     public static Entity getEntity(int id) {
-        synchronized (entityById) {
-            return entityById.get(id);
-        }
+        return entityById.get(id);
     }
 
     private static int generateId() {
@@ -538,9 +536,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public void remove() {
         this.shouldRemove = true;
-        synchronized (entityById) {
-            entityById.remove(id);
-        }
+        entityById.remove(id);
         if (instance != null)
             instance.removeEntity(this);
     }

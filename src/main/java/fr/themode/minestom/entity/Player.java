@@ -50,7 +50,7 @@ public class Player extends LivingEntity {
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        //instance = Main.getInstanceManager().createInstance(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        //instanceContainer = Main.getInstanceManager().createInstanceContainer(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
         instanceContainer = Main.getInstanceManager().createInstanceContainer();
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
@@ -156,7 +156,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN");
-            setGameMode(GameMode.SURVIVAL);
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -329,6 +329,7 @@ public class Player extends LivingEntity {
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
         super.remove();
     }
 
@@ -605,6 +606,10 @@ public class Player extends LivingEntity {
 
     public PlayerConnection getPlayerConnection() {
         return playerConnection;
+    }
+
+    public boolean isOnline() {
+        return playerConnection.isOnline();
     }
 
     public PlayerSettings getSettings() {

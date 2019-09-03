@@ -8,6 +8,7 @@ import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
+import simplenet.packet.Packet;
 
 import java.io.File;
 import java.util.*;
@@ -196,17 +197,6 @@ public class InstanceContainer extends Instance {
         if (!chunkViewers.isEmpty()) {
             sendChunkUpdate(chunkViewers, chunk);
         }
-        // Update for players in this instance
-        /*if (!getPlayers().isEmpty())
-            sendChunkUpdate(getPlayers(), chunk);
-
-        // Update for shared instances
-        if (!sharedInstances.isEmpty())
-            this.sharedInstances.forEach(sharedInstance -> {
-                Set<Player> instancePlayers = sharedInstance.getPlayers();
-                if (!instancePlayers.isEmpty())
-                    sendChunkUpdate(instancePlayers, chunk);
-            });*/
     }
 
     @Override
@@ -218,19 +208,15 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunk(Player player, Chunk chunk) {
-        /*Buffer data = chunk.getFullDataPacket();
-        if(data == null) {
+        Packet data = chunk.getFullDataPacket();
+        if (data == null) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 sendChunkUpdate(player, chunk);
             });
-        }else{
+        } else {
             sendChunkUpdate(player, chunk);
-        }*/
-        PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
-            chunk.setFullDataPacket(buffer);
-            sendChunkUpdate(player, chunk);
-        });
+        }
     }
 
     @Override

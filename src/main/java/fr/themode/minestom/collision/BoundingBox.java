@@ -26,9 +26,9 @@ public class BoundingBox {
     }
 
     public boolean intersect(BlockPosition blockPosition) {
-        final float x = 1f;
+        final float x = 1.6f;
         final float y = 1;
-        final float z = 1f;
+        final float z = 1.6f;
         float minX = blockPosition.getX() - (x / 2) + 0.5f;
         float maxX = blockPosition.getX() + (x / 2) + 0.5f;
 

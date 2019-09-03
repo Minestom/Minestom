@@ -190,37 +190,41 @@ public abstract class Instance implements BlockModifier {
 
     public void addEntityToChunk(Entity entity, Chunk chunk) {
         long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-        entities.add(entity);
-        this.chunkEntities.put(chunkIndex, entities);
-        if (entity instanceof Player) {
-            this.players.add((Player) entity);
-        } else if (entity instanceof EntityCreature) {
-            this.creatures.add((EntityCreature) entity);
-        } else if (entity instanceof ObjectEntity) {
-            this.objectEntities.add((ObjectEntity) entity);
-        } else if (entity instanceof ExperienceOrb) {
-            this.experienceOrbs.add((ExperienceOrb) entity);
+        synchronized (chunkEntities) {
+            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
+            entities.add(entity);
+            this.chunkEntities.put(chunkIndex, entities);
+            if (entity instanceof Player) {
+                this.players.add((Player) entity);
+            } else if (entity instanceof EntityCreature) {
+                this.creatures.add((EntityCreature) entity);
+            } else if (entity instanceof ObjectEntity) {
+                this.objectEntities.add((ObjectEntity) entity);
+            } else if (entity instanceof ExperienceOrb) {
+                this.experienceOrbs.add((ExperienceOrb) entity);
+            }
         }
     }
 
     public void removeEntityFromChunk(Entity entity, Chunk chunk) {
         long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-        entities.remove(entity);
-        if (entities.isEmpty()) {
-            this.chunkEntities.remove(chunkIndex);
-        } else {
-            this.chunkEntities.put(chunkIndex, entities);
-        }
-        if (entity instanceof Player) {
-            this.players.remove(entity);
-        } else if (entity instanceof EntityCreature) {
-            this.creatures.remove(entity);
-        } else if (entity instanceof ObjectEntity) {
-            this.objectEntities.remove(entity);
-        } else if (entity instanceof ExperienceOrb) {
-            this.experienceOrbs.remove((ExperienceOrb) entity);
+        synchronized (chunkEntities) {
+            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
+            entities.remove(entity);
+            if (entities.isEmpty()) {
+                this.chunkEntities.remove(chunkIndex);
+            } else {
+                this.chunkEntities.put(chunkIndex, entities);
+            }
+            if (entity instanceof Player) {
+                this.players.remove(entity);
+            } else if (entity instanceof EntityCreature) {
+                this.creatures.remove(entity);
+            } else if (entity instanceof ObjectEntity) {
+                this.objectEntities.remove(entity);
+            } else if (entity instanceof ExperienceOrb) {
+                this.experienceOrbs.remove((ExperienceOrb) entity);
+            }
         }
     }
 

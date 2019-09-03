@@ -10,14 +10,17 @@ public class PlayerConnection {
 
     private Client client;
     private ConnectionState connectionState;
+    private boolean online;
 
     public PlayerConnection(Client client) {
         this.client = client;
         this.connectionState = ConnectionState.UNKNOWN;
+        this.online = true;
     }
 
     public void sendPacket(Packet packet) {
-        packet.writeAndFlush(client);
+        if (isOnline())
+            packet.writeAndFlush(client);
     }
 
     public void writeUnencodedPacket(Packet packet) {
@@ -25,8 +28,8 @@ public class PlayerConnection {
     }
 
     public void sendPacket(ServerPacket serverPacket) {
-        PacketUtils.writePacket(serverPacket, packet -> sendPacket(packet));
-        //PacketWriterUtils.writeAndSend(this, serverPacket);
+        if (isOnline())
+            PacketUtils.writePacket(serverPacket, packet -> sendPacket(packet));
     }
 
     public void flush() {
@@ -35,6 +38,14 @@ public class PlayerConnection {
 
     public Client getClient() {
         return client;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void refreshOnline(boolean online) {
+        this.online = online;
     }
 
     public void setConnectionState(ConnectionState connectionState) {
