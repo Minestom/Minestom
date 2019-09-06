@@ -1,12 +1,12 @@
 package fr.themode.minestom.instance;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
-import simplenet.packet.Packet;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -33,6 +33,7 @@ public class Chunk implements Viewable {
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Packet fullDataPacket;
+    protected volatile boolean packetUpdated;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -69,6 +70,7 @@ public class Chunk implements Viewable {
         } else {
             blockEntities.remove(index);
         }
+        this.packetUpdated = false;
     }
 
     public short getBlockId(byte x, byte y, byte z) {
@@ -149,8 +151,12 @@ public class Chunk implements Viewable {
         return fullDataPacket;
     }
 
+    // Write the packet in the current thread
     protected void refreshDataPacket() {
-        PacketUtils.writePacket(getFreshFullDataPacket(), packet -> fullDataPacket = packet); // TODO write packet buffer in another thread (heavy calculations)
+        PacketUtils.writePacket(getFreshFullDataPacket(), packet -> {
+            fullDataPacket = packet;
+            packetUpdated = true;
+        });
     }
 
     @Override

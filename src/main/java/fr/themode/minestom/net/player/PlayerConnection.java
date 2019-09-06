@@ -1,10 +1,10 @@
 package fr.themode.minestom.net.player;
 
+import com.github.simplenet.Client;
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.PacketUtils;
-import simplenet.Client;
-import simplenet.packet.Packet;
 
 public class PlayerConnection {
 
@@ -20,11 +20,11 @@ public class PlayerConnection {
 
     public void sendPacket(Packet packet) {
         if (isOnline())
-            packet.writeAndFlush(client);
+            packet.queueAndFlush(client);
     }
 
     public void writeUnencodedPacket(Packet packet) {
-        packet.write(client);
+        packet.queue(client);
     }
 
     public void sendPacket(ServerPacket serverPacket) {

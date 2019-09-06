@@ -1,9 +1,9 @@
 package fr.themode.minestom.net;
 
-import simplenet.Client;
-import simplenet.packet.Packet;
-import simplenet.utility.exposed.consumer.ByteConsumer;
-import simplenet.utility.exposed.predicate.BytePredicate;
+import com.github.simplenet.Client;
+import com.github.simplenet.packet.Packet;
+import com.github.simplenet.utility.exposed.consumer.ByteConsumer;
+import com.github.simplenet.utility.exposed.predicate.BytePredicate;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;

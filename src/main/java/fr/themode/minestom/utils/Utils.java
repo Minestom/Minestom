@@ -1,12 +1,12 @@
 package fr.themode.minestom.utils;
 
-import fr.adamaq01.ozao.net.Buffer;
+import com.github.simplenet.Client;
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionUtils;
+import fr.themode.minestom.utils.buffer.BufferWrapper;
 import fr.themode.minestom.utils.consumer.StringConsumer;
-import simplenet.Client;
-import simplenet.packet.Packet;
 
 import java.io.UnsupportedEncodingException;
 import java.util.function.Consumer;
@@ -42,7 +42,7 @@ public class Utils {
         });
     }
 
-    public static void writeVarIntBuffer(Buffer buffer, int value) {
+    public static void writeVarIntBuffer(BufferWrapper buffer, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
@@ -64,25 +64,6 @@ public class Utils {
         } while (value != 0);
     }
 
-    public static int readVarInt(Client client) {
-        int numRead = 0;
-        int result = 0;
-        byte read;
-        do {
-            read = client.readByte();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 5) {
-                throw new RuntimeException("VarInt is too big");
-            }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
-    }
-
-    // ??
     public static int lengthVarInt(int value) {
         int i = 0;
         do {
@@ -94,48 +75,6 @@ public class Utils {
             }
         } while (value != 0);
         return i;
-    }
-
-    public static int lengthVarLong(long value) {
-        int i = 0;
-        do {
-            i++;
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
-            }
-        } while (value != 0);
-        return i;
-    }
-
-    public static void writeVarLong(Packet packet, long value) {
-        do {
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
-            }
-            packet.putByte(temp);
-        } while (value != 0);
-    }
-
-    public static long readVarLong(Client client) {
-        int numRead = 0;
-        long result = 0;
-        byte read;
-        do {
-            read = client.readByte();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 10) {
-                throw new RuntimeException("VarLong is too big");
-            }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
     }
 
     public static void writePosition(Packet packet, int x, int y, int z) {
@@ -170,6 +109,11 @@ public class Utils {
                 packet.putInt(1);
             }
 
+            // Damage
+            packet.putByte((byte) 0x02);
+            packet.putString("Damage");
+            packet.putShort(itemStack.getDamage());
+
             // Display
             packet.putByte((byte) 0x0A); // Compound
             packet.putString("display");
@@ -181,18 +125,18 @@ public class Utils {
             }
 
             // TODO lore
-            packet.putByte((byte) 0x08);
+            /*packet.putByte((byte) 0x08);
             packet.putString("Lore");
-            packet.putString(Chat.rawText("a line"));
+            packet.putString(Chat.rawText("a line"));*/
 
             packet.putByte((byte) 0); // End display compound
 
+
             packet.putByte((byte) 0); // End nbt
         }
-
     }
 
-    public static void writeBlocks(Buffer buffer, short[] blocksId, int bitsPerEntry) {
+    public static void writeBlocks(BufferWrapper buffer, short[] blocksId, int bitsPerEntry) {
         short count = 0;
         for (short id : blocksId)
             if (id != 0)
@@ -210,8 +154,8 @@ public class Utils {
                 }
             }
         }
-        long[] data = encodeBlocks(blocksData, 14);
-        writeVarIntBuffer(buffer, data.length);
+        long[] data = encodeBlocks(blocksData, bitsPerEntry);
+        buffer.putVarInt(data.length);
         for (int i = 0; i < data.length; i++) {
             buffer.putLong(data[i]);
         }

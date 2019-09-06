@@ -156,7 +156,7 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
             System.out.println("SPAWN");
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
             /*ChickenCreature chickenCreature = new ChickenCreature();
@@ -173,11 +173,8 @@ public class Player extends LivingEntity {
                     //itemEntity.remove();
                 }*/
 
-            ExperienceOrb experienceOrb = new ExperienceOrb((short) 500);
-            experienceOrb.refreshPosition(5, 66, 0);
-            experienceOrb.setInstance(getInstance());
-
-            getInventory().addItemStack(new ItemStack(1, (byte) 100));
+            getInventory().addItemStack(new ItemStack(541, (byte) 1));
+            //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);

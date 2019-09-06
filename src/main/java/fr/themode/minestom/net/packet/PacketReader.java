@@ -1,14 +1,14 @@
 package fr.themode.minestom.net.packet;
 
+import com.github.simplenet.Client;
+import com.github.simplenet.utility.exposed.consumer.BooleanConsumer;
+import com.github.simplenet.utility.exposed.consumer.ByteConsumer;
+import com.github.simplenet.utility.exposed.consumer.FloatConsumer;
+import com.github.simplenet.utility.exposed.consumer.ShortConsumer;
 import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.utils.consumer.StringConsumer;
-import simplenet.Client;
-import simplenet.utility.exposed.consumer.BooleanConsumer;
-import simplenet.utility.exposed.consumer.ByteConsumer;
-import simplenet.utility.exposed.consumer.FloatConsumer;
-import simplenet.utility.exposed.consumer.ShortConsumer;
 
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;

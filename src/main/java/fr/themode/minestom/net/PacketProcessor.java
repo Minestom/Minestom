@@ -1,5 +1,6 @@
 package fr.themode.minestom.net;
 
+import com.github.simplenet.Client;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.PacketReader;
@@ -10,7 +11,6 @@ import fr.themode.minestom.net.packet.client.handler.ClientPlayPacketsHandler;
 import fr.themode.minestom.net.packet.client.handler.ClientStatusPacketsHandler;
 import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
-import simplenet.Client;
 
 import java.util.Arrays;
 import java.util.HashMap;

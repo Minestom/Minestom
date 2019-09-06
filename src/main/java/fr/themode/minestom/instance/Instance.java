@@ -1,11 +1,13 @@
 package fr.themode.minestom.instance;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.*;
+import fr.themode.minestom.net.PacketWriterUtils;
+import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
-import simplenet.packet.Packet;
 
 import java.io.File;
 import java.util.*;
@@ -29,8 +31,10 @@ public abstract class Instance implements BlockModifier {
         this.uniqueId = uniqueId;
     }
 
+    // Used to call BlockBreakEvent and sending particle packet if true
     public abstract void breakBlock(Player player, BlockPosition blockPosition);
 
+    // Force the generation of the chunk, even if no file and ChunkGenerator are defined
     public abstract void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     // Load only if auto chunk load is enabled
@@ -54,8 +58,6 @@ public abstract class Instance implements BlockModifier {
 
     public abstract void sendChunkUpdate(Player player, Chunk chunk);
 
-    public abstract void sendChunkSectionUpdate(Chunk chunk, int section, Player player);
-
     protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     public abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
@@ -74,6 +76,24 @@ public abstract class Instance implements BlockModifier {
         players.forEach(player -> {
             player.getPlayerConnection().sendPacket(chunkData);
         });
+    }
+
+    protected void sendChunkSectionUpdate(Chunk chunk, int section, Collection<Player> players) {
+        PacketWriterUtils.writeAndSend(players, getChunkSectionUpdatePacket(chunk, section));
+    }
+
+    public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
+        PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(chunk, section));
+    }
+
+    protected ChunkDataPacket getChunkSectionUpdatePacket(Chunk chunk, int section) {
+        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        chunkDataPacket.fullChunk = false;
+        chunkDataPacket.chunk = chunk;
+        int[] sections = new int[16];
+        sections[section] = 1;
+        chunkDataPacket.sections = sections;
+        return chunkDataPacket;
     }
     //
 
@@ -223,7 +243,7 @@ public abstract class Instance implements BlockModifier {
             } else if (entity instanceof ObjectEntity) {
                 this.objectEntities.remove(entity);
             } else if (entity instanceof ExperienceOrb) {
-                this.experienceOrbs.remove((ExperienceOrb) entity);
+                this.experienceOrbs.remove(entity);
             }
         }
     }

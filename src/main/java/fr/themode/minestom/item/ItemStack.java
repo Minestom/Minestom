@@ -9,19 +9,21 @@ public class ItemStack implements DataContainer {
 
     private Material material;
     private byte amount;
+    private short damage;
 
     private String displayName;
     private boolean unbreakable;
 
     private Data data;
 
-    public ItemStack(Material material, byte amount) {
+    public ItemStack(Material material, byte amount, short damage) {
         this.material = material;
         this.amount = amount;
+        this.damage = damage;
     }
 
     public ItemStack(int id, byte amount) {
-        this(Material.fromId(id), amount);
+        this(Material.fromId(id), amount, (short) 0);
     }
 
     public boolean isAir() {
@@ -29,11 +31,18 @@ public class ItemStack implements DataContainer {
     }
 
     public boolean isSimilar(ItemStack itemStack) {
-        return itemStack.getMaterial() == material && itemStack.getDisplayName() == displayName && itemStack.isUnbreakable() == unbreakable;
+        return itemStack.getMaterial() == material &&
+                itemStack.getDisplayName() == displayName &&
+                itemStack.isUnbreakable() == unbreakable &&
+                itemStack.getDamage() == damage;
     }
 
     public byte getAmount() {
         return amount;
+    }
+
+    public short getDamage() {
+        return damage;
     }
 
     public Material getMaterial() {
@@ -42,6 +51,10 @@ public class ItemStack implements DataContainer {
 
     public void setAmount(byte amount) {
         this.amount = amount;
+    }
+
+    public void setDamage(short damage) {
+        this.damage = damage;
     }
 
     public String getDisplayName() {
@@ -61,7 +74,7 @@ public class ItemStack implements DataContainer {
     }
 
     public ItemStack clone() {
-        ItemStack itemStack = new ItemStack(material, amount);
+        ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
         itemStack.setData(getData());

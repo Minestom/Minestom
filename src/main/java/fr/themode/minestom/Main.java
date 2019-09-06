@@ -1,5 +1,6 @@
 package fr.themode.minestom;
 
+import com.github.simplenet.Server;
 import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
@@ -15,7 +16,6 @@ import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.Utils;
-import simplenet.Server;
 
 public class Main {
 
@@ -64,15 +64,14 @@ public class Main {
 
             client.preDisconnect(() -> {
                 System.out.println("A Disconnection");
-                if (packetProcessor.hasPlayerConnection(client)) {
-                    PlayerConnection playerConnection = packetProcessor.getPlayerConnection(client);
+                PlayerConnection playerConnection = packetProcessor.getPlayerConnection(client);
+                if (playerConnection != null) {
                     playerConnection.refreshOnline(false);
                     Player player = connectionManager.getPlayer(playerConnection);
                     if (player != null) {
-
                         player.remove();
 
-                        connectionManager.removePlayer(player.getPlayerConnection());
+                        connectionManager.removePlayer(playerConnection);
                     }
                     packetProcessor.removePlayerConnection(client);
                 }

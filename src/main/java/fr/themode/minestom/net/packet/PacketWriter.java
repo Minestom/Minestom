@@ -1,10 +1,12 @@
 package fr.themode.minestom.net.packet;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
-import simplenet.packet.Packet;
+import fr.themode.minestom.utils.buffer.BufferWrapper;
 
+import java.nio.ByteBuffer;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -81,6 +83,15 @@ public class PacketWriter {
     public void write(Consumer<Packet> consumer) {
         if (consumer != null)
             consumer.accept(packet);
+    }
+
+    public void writeBufferAndFree(BufferWrapper buffer) {
+        ByteBuffer byteBuffer = buffer.getByteBuffer();
+        int size = buffer.getSize();
+        byte[] cache = new byte[size];
+        byteBuffer.position(0).get(cache, 0, size);
+        writeBytes(cache);
+        buffer.free();
     }
 
     public void writeUuid(UUID uuid) {

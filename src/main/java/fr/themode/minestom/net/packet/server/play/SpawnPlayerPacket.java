@@ -1,9 +1,9 @@
 package fr.themode.minestom.net.packet.server.play;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
-import simplenet.packet.Packet;
 
 import java.util.UUID;
 import java.util.function.Consumer;

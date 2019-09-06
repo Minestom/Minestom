@@ -1,5 +1,6 @@
 package fr.themode.minestom.entity;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
@@ -8,7 +9,6 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.AnimationPacket;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
-import simplenet.packet.Packet;
 
 import java.util.Set;
 import java.util.function.Consumer;

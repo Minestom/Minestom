@@ -1,11 +1,11 @@
 package fr.themode.minestom.net;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.PacketUtils;
-import simplenet.packet.Packet;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;

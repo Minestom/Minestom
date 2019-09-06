@@ -1,8 +1,8 @@
 package fr.themode.minestom.utils;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-import simplenet.packet.Packet;
 
 import java.util.function.Consumer;
 

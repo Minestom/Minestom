@@ -1,5 +1,6 @@
 package fr.themode.minestom.entity;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.collision.BoundingBox;
@@ -13,7 +14,6 @@ import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.*;
-import simplenet.packet.Packet;
 
 import java.util.Collections;
 import java.util.Map;

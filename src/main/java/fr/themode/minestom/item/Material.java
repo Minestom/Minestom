@@ -8,7 +8,8 @@ public enum Material {
     AIR(0, 0),
     STONE(1, 1),
     BOW(525, 0),
-    ARROW(526, 0);
+    ARROW(526, 0),
+    DIAMOND_SWORD(541, 0);
 
     private static Map<Integer, Material> idToMaterial = new HashMap<>();
 

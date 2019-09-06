@@ -1,12 +1,13 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.adamaq01.ozao.net.Buffer;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.Utils;
+import fr.themode.minestom.utils.buffer.BufferUtils;
+import fr.themode.minestom.utils.buffer.BufferWrapper;
 import net.querz.nbt.CompoundTag;
 import net.querz.nbt.DoubleTag;
 import net.querz.nbt.LongArrayTag;
@@ -22,34 +23,35 @@ public class ChunkDataPacket implements ServerPacket {
     public Chunk chunk;
     public int[] sections;
 
+    private static final int CHUNK_SECTION_COUNT = 16;
+    private static final int BITS_PER_ENTRY = 14;
+    private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
+
     @Override
     public void write(PacketWriter writer) {
         writer.writeInt(chunk.getChunkX());
         writer.writeInt(chunk.getChunkZ());
         writer.writeBoolean(fullChunk);
 
-
         int mask = 0;
-        Buffer blocks = Buffer.create();
-        for (int i = 0; i < 16; i++) {
-            if (fullChunk || (sections.length == 16 && sections[i] != 0)) {
+        BufferWrapper blocks = BufferUtils.getBuffer(MAX_BUFFER_SIZE);
+        for (int i = 0; i < CHUNK_SECTION_COUNT; i++) {
+            if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 mask |= 1 << i;
                 short[] section = getSection(chunk, i);
-                Utils.writeBlocks(blocks, section, 14);
+                Utils.writeBlocks(blocks, section, BITS_PER_ENTRY);
             }
         }
+
         // Biome data
         if (fullChunk) {
-            int[] biomeData = new int[256];
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
-                    biomeData[z * 16 | x] = chunk.getBiome().getId();
+                    blocks.putInt(chunk.getBiome().getId());
                 }
             }
-            for (int i = 0; i < biomeData.length; i++) {
-                blocks.putInt(biomeData[i]);
-            }
         }
+
         writer.writeVarInt(mask);
 
         // Heightmap
@@ -76,8 +78,8 @@ public class ChunkDataPacket implements ServerPacket {
             writer.writeBytes(data);
         }
 
-        writer.writeVarInt(blocks.length());
-        writer.writeBytes(blocks.getAllBytes());
+        writer.writeVarInt(blocks.getSize());
+        writer.writeBufferAndFree(blocks);
 
         // Block entities
         Set<Integer> blockEntities = chunk.getBlockEntities();

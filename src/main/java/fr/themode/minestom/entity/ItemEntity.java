@@ -1,8 +1,8 @@
 package fr.themode.minestom.entity;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.Utils;
-import simplenet.packet.Packet;
 
 import java.util.function.Consumer;
 

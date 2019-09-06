@@ -1,14 +1,13 @@
 package fr.themode.minestom.instance;
 
+import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
-import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
-import simplenet.packet.Packet;
 
 import java.io.File;
 import java.util.*;
@@ -155,17 +154,6 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
-        chunkDataPacket.fullChunk = false;
-        chunkDataPacket.chunk = chunk;
-        int[] sections = new int[16];
-        sections[section] = 1;
-        chunkDataPacket.sections = sections;
-        PacketWriterUtils.writeAndSend(player, chunkDataPacket);
-    }
-
-    @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         if (folder != null) {
             // Load from file if possible
@@ -209,9 +197,10 @@ public class InstanceContainer extends Instance {
     @Override
     public void sendChunk(Player player, Chunk chunk) {
         Packet data = chunk.getFullDataPacket();
-        if (data == null) {
+        if (data == null || !chunk.packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
+                chunk.packetUpdated = true;
                 sendChunkUpdate(player, chunk);
             });
         } else {
