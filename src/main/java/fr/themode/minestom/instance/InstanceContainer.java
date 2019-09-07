@@ -175,8 +175,7 @@ public class InstanceContainer extends Instance {
         cacheChunk(chunk);
         if (chunkGenerator != null) {
             ChunkBatch chunkBatch = createChunkBatch(chunk);
-            chunkGenerator.generateChunkData(chunkBatch, chunkX, chunkZ);
-            chunkBatch.flush(callback);
+            chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         }
     }
 
@@ -198,6 +197,7 @@ public class InstanceContainer extends Instance {
     public void sendChunk(Player player, Chunk chunk) {
         Packet data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
+            System.out.println("UPDATE CHUNK");
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 chunk.packetUpdated = true;

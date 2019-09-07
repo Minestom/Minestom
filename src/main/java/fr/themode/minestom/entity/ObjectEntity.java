@@ -4,7 +4,6 @@ import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.EntityUtils;
 
-// TODO viewers synchronization each X ticks?
 public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(int entityType) {

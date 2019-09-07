@@ -48,7 +48,6 @@ public class PlayerDiggingListener {
                 }
                 break;
             case CANCELLED_DIGGING:
-                player.sendBlockBreakAnimation(blockPosition, (byte) -1);
                 player.resetTargetBlock();
                 removeEffect(player);
                 break;

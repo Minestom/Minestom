@@ -10,7 +10,6 @@ public class PacketUtils {
 
     public static void writePacket(ServerPacket serverPacket, Consumer<Packet> callback) {
         int id = serverPacket.getId();
-        //System.out.println("SEND PACKET: 0x"+Integer.toHexString(id));
         Packet packet = Packet.builder();
         Utils.writeVarInt(packet, id);
         PacketWriter packetWriter = new PacketWriter(packet);

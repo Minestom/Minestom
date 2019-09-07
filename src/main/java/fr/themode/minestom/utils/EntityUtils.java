@@ -32,8 +32,13 @@ public class EntityUtils {
         if (instance == null)
             return false;
         Position position = entity.getPosition();
-        short blockId = instance.getBlockId(position.toBlockPosition().subtract(0, 1, 0));
-        return blockId != 0;
+        try {
+            short blockId = instance.getBlockId(position.toBlockPosition().subtract(0, 1, 0));
+            return blockId != 0;
+        } catch (NullPointerException e) {
+            // Probably an entity at the border of an unloaded chunk
+            return false;
+        }
     }
 
 }

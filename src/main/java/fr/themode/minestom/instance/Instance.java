@@ -185,8 +185,10 @@ public abstract class Instance implements BlockModifier {
         // Send all visible entities
         for (long chunkIndex : visibleChunksEntity) {
             getEntitiesInChunk(chunkIndex).forEach(ent -> {
-                if (isPlayer)
+                if (isPlayer) {
                     ent.addViewer((Player) entity);
+                }
+
                 if (ent instanceof Player) {
                     entity.addViewer((Player) ent);
                 }
@@ -249,6 +251,7 @@ public abstract class Instance implements BlockModifier {
     }
 
     private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.getOrDefault(index, new CopyOnWriteArraySet<>());
+        Set<Entity> entities = chunkEntities.get(index);
+        return entities != null ? entities : new CopyOnWriteArraySet<>();
     }
 }

@@ -23,7 +23,6 @@ public class ChunkUtils {
     }
 
     public static long[] getChunksInRange(final Position position, int range) {
-
         long[] visibleChunks = new long[MathUtils.square(range + 1)];
         final int startLoop = -(range / 2);
         final int endLoop = range / 2 + 1;

@@ -11,6 +11,8 @@ import net.tofweb.starlite.CostBlockManager;
 import net.tofweb.starlite.Path;
 import net.tofweb.starlite.Pathfinder;
 
+import java.util.Random;
+
 public class ChickenCreature extends EntityCreature {
 
     private Path path;
@@ -18,6 +20,9 @@ public class ChickenCreature extends EntityCreature {
     private Position target;
     private long lastTeleport;
     private long wait = 500;
+
+    private float randomX = new Random().nextFloat();
+    private float randomZ = new Random().nextFloat();
 
     public ChickenCreature() {
         super(EntityType.CHICKEN);
@@ -27,7 +32,7 @@ public class ChickenCreature extends EntityCreature {
     @Override
     public void update() {
         super.update();
-        float speed = 0.25f;
+        float speed = 0.025f;
 
         if (hasPassenger()) {
             Entity passenger = getPassengers().iterator().next();
@@ -81,6 +86,8 @@ public class ChickenCreature extends EntityCreature {
 
                 move(x, 0, z, updateView);
             }
+        } else {
+            move(randomX * speed, 0, randomZ * speed, true);
         }
 
         /*if (path == null) {

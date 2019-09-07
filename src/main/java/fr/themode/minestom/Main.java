@@ -21,8 +21,9 @@ public class Main {
 
     // Thread number
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
-    public static final int THREAD_COUNT_CHUNK_IO = 2;
+    public static final int THREAD_COUNT_IO = 2;
     public static final int THREAD_COUNT_CHUNK_BATCH = 2;
+    public static final int THREAD_COUNT_BLOCK_BATCH = 2;
     public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 

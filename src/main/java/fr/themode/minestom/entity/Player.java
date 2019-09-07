@@ -4,7 +4,6 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.collision.BoundingBox;
-import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -23,6 +22,7 @@ import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
@@ -124,12 +124,21 @@ public class Player extends LivingEntity {
             }
         });
 
-        setEventCallback(PlayerBlockPlaceEvent.class, event -> {
-            /*sendMessage("Placed block! " + event.getHand());
-            int value = getData().getOrDefault("test", 0);
-            getData().set("test", value + 1, DataType.INTEGER);
+        final String dataFileName = "C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data\\" + getUsername() + ".dat";
 
-            System.out.println("OLD DATA VALUE: " + value);*/
+        setEventCallback(PlayerDisconnectEvent.class, event -> {
+            saveData(new File(dataFileName), () -> {
+                System.out.println("SAVE DONE");
+            });
+        });
+
+        setEventCallback(PlayerBlockPlaceEvent.class, event -> {
+            if (getData() != null) {
+                int value = getData().getOrDefault("test", 0);
+                getData().set("test", value + 1, Integer.class);
+                System.out.println("OLD DATA VALUE: " + value);
+            }
+
             if (event.getHand() != Hand.MAIN)
                 return;
 
@@ -151,18 +160,20 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerLoginEvent.class, event -> {
             event.setSpawningInstance(instanceContainer);
-            setData(new Data());
+            loadData(new File(dataFileName));
         });
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
-            System.out.println("SPAWN");
-            setGameMode(GameMode.SURVIVAL);
+            setGameMode(GameMode.CREATIVE);
             teleport(new Position(0, 66, 0));
 
-            /*ChickenCreature chickenCreature = new ChickenCreature();
-            chickenCreature.refreshPosition(2, 65, 2);
-            chickenCreature.setInstance(getInstance());
-            chickenCreature.addPassenger(this);*/
+            /*Random random = new Random();
+            for (int i = 0; i < 50; i++) {
+                ChickenCreature chickenCreature = new ChickenCreature();
+                chickenCreature.refreshPosition(random.nextInt(100), 65, random.nextInt(100));
+                chickenCreature.setInstance(getInstance());
+            }*/
+            //chickenCreature.addPassenger(this);
 
             /*for (int ix = 0; ix < 4; ix++)
                 for (int iz = 0; iz < 4; iz++) {
@@ -173,7 +184,7 @@ public class Player extends LivingEntity {
                     //itemEntity.remove();
                 }*/
 
-            getInventory().addItemStack(new ItemStack(541, (byte) 1));
+            getInventory().addItemStack(new ItemStack(1, (byte) 75));
             //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             TeamsPacket teamsPacket = new TeamsPacket();
@@ -198,8 +209,10 @@ public class Player extends LivingEntity {
     @Override
     public void update() {
 
+        // Flush all pending packets
         playerConnection.flush();
 
+        // Process sent packets
         ClientPlayPacket packet;
         while ((packet = packets.poll()) != null) {
             packet.process(this);
@@ -250,64 +263,67 @@ public class Player extends LivingEntity {
 
 
         // Multiplayer sync
-        Position position = getPosition();
-        boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
-        boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
-        ServerPacket updatePacket = null;
-        ServerPacket optionalUpdatePacket = null;
-        if (positionChanged && viewChanged) {
-            EntityLookAndRelativeMovePacket entityLookAndRelativeMovePacket = new EntityLookAndRelativeMovePacket();
-            entityLookAndRelativeMovePacket.entityId = getEntityId();
-            entityLookAndRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-            entityLookAndRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-            entityLookAndRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-            entityLookAndRelativeMovePacket.yaw = position.getYaw();
-            entityLookAndRelativeMovePacket.pitch = position.getPitch();
-            entityLookAndRelativeMovePacket.onGround = onGround;
+        if (!getViewers().isEmpty()) {
+            Position position = getPosition();
+            boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
+            boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+            ServerPacket updatePacket = null;
+            ServerPacket optionalUpdatePacket = null;
+            if (positionChanged && viewChanged) {
+                EntityLookAndRelativeMovePacket entityLookAndRelativeMovePacket = new EntityLookAndRelativeMovePacket();
+                entityLookAndRelativeMovePacket.entityId = getEntityId();
+                entityLookAndRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                entityLookAndRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                entityLookAndRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                entityLookAndRelativeMovePacket.yaw = position.getYaw();
+                entityLookAndRelativeMovePacket.pitch = position.getPitch();
+                entityLookAndRelativeMovePacket.onGround = onGround;
 
-            lastX = position.getX();
-            lastY = position.getY();
-            lastZ = position.getZ();
-            lastYaw = position.getYaw();
-            lastPitch = position.getPitch();
-            updatePacket = entityLookAndRelativeMovePacket;
-        } else if (positionChanged) {
-            EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
-            entityRelativeMovePacket.entityId = getEntityId();
-            entityRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-            entityRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-            entityRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-            entityRelativeMovePacket.onGround = onGround;
-            lastX = position.getX();
-            lastY = position.getY();
-            lastZ = position.getZ();
-            updatePacket = entityRelativeMovePacket;
-        } else if (viewChanged) {
-            EntityLookPacket entityLookPacket = new EntityLookPacket();
-            entityLookPacket.entityId = getEntityId();
-            entityLookPacket.yaw = position.getYaw();
-            entityLookPacket.pitch = position.getPitch();
-            entityLookPacket.onGround = onGround;
+                lastX = position.getX();
+                lastY = position.getY();
+                lastZ = position.getZ();
+                lastYaw = position.getYaw();
+                lastPitch = position.getPitch();
+                updatePacket = entityLookAndRelativeMovePacket;
+            } else if (positionChanged) {
+                EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
+                entityRelativeMovePacket.entityId = getEntityId();
+                entityRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                entityRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                entityRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                entityRelativeMovePacket.onGround = onGround;
+                lastX = position.getX();
+                lastY = position.getY();
+                lastZ = position.getZ();
+                updatePacket = entityRelativeMovePacket;
+            } else if (viewChanged) {
+                EntityLookPacket entityLookPacket = new EntityLookPacket();
+                entityLookPacket.entityId = getEntityId();
+                entityLookPacket.yaw = position.getYaw();
+                entityLookPacket.pitch = position.getPitch();
+                entityLookPacket.onGround = onGround;
 
-            lastYaw = position.getYaw();
-            lastPitch = position.getPitch();
-            updatePacket = entityLookPacket;
-        }
+                lastYaw = position.getYaw();
+                lastPitch = position.getPitch();
+                updatePacket = entityLookPacket;
+            }
 
-        if (viewChanged) {
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.getYaw();
-            optionalUpdatePacket = entityHeadLookPacket;
-        }
+            if (viewChanged) {
+                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+                entityHeadLookPacket.entityId = getEntityId();
+                entityHeadLookPacket.yaw = position.getYaw();
+                optionalUpdatePacket = entityHeadLookPacket;
+            }
 
-        if (updatePacket != null) {
-            if (optionalUpdatePacket != null) {
-                sendPacketsToViewers(updatePacket, optionalUpdatePacket);
-            } else {
-                sendPacketToViewers(updatePacket);
+            if (updatePacket != null) {
+                if (optionalUpdatePacket != null) {
+                    sendPacketsToViewers(updatePacket, optionalUpdatePacket);
+                } else {
+                    sendPacketToViewers(updatePacket);
+                }
             }
         }
+
     }
 
     @Override
@@ -327,6 +343,8 @@ public class Player extends LivingEntity {
             getOpenInventory().removeViewer(this);
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+        resetTargetBlock();
+        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
         super.remove();
     }
 
@@ -392,6 +410,7 @@ public class Player extends LivingEntity {
                 if (chunk != null) {
                     viewableChunks.add(chunk);
                     chunk.addViewer(this);
+                    chunk.packetUpdated = true;
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
@@ -807,6 +826,8 @@ public class Player extends LivingEntity {
     }
 
     public void resetTargetBlock() {
+        if (targetBlockPosition != null)
+            sendBlockBreakAnimation(targetBlockPosition, (byte) -1); // Clear the break animation
         this.targetCustomBlock = null;
         this.targetBlockPosition = null;
         this.targetBlockTime = 0;

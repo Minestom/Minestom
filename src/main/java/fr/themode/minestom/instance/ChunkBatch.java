@@ -1,11 +1,11 @@
 package fr.themode.minestom.instance;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  */
 public class ChunkBatch implements BlockModifier {
 
-    private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_BATCH);
+    private static final ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_CHUNK_BATCH, "Ms-ChunkBatchPool");
 
     private InstanceContainer instance;
     private Chunk chunk;
@@ -47,19 +47,30 @@ public class ChunkBatch implements BlockModifier {
         this.dataList.add(data);
     }
 
-    public void flush(Consumer<Chunk> callback) {
-        synchronized (chunk) {
-            batchesPool.execute(() -> {
-                for (BlockData data : dataList) {
-                    data.apply(chunk);
-                }
+    public void flushChunkGenerator(ChunkGenerator chunkGenerator, Consumer<Chunk> callback) {
+        batchesPool.execute(() -> {
+            chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
+            singleThreadFlush(callback);
+        });
+    }
 
-                // dataList.clear();
-                chunk.refreshDataPacket();
-                instance.sendChunkUpdate(chunk);
-                if (callback != null)
-                    callback.accept(chunk);
-            });
+    public void flush(Consumer<Chunk> callback) {
+        batchesPool.execute(() -> {
+            singleThreadFlush(callback);
+        });
+    }
+
+    private void singleThreadFlush(Consumer<Chunk> callback) {
+        synchronized (chunk) {
+            for (BlockData data : dataList) {
+                data.apply(chunk);
+            }
+
+            // dataList.clear();
+            chunk.refreshDataPacket();
+            instance.sendChunkUpdate(chunk);
+            if (callback != null)
+                callback.accept(chunk);
         }
     }
 

@@ -1,15 +1,17 @@
 package fr.themode.minestom.instance;
 
+import fr.themode.minestom.Main;
+import fr.themode.minestom.utils.thread.MinestomThread;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BlockBatch implements BlockModifier {
 
-    private static volatile ExecutorService batchesPool = Executors.newFixedThreadPool(2);
+    private static final ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_BLOCK_BATCH, "Ms-BlockBatchPool");
 
     private InstanceContainer instance;
 

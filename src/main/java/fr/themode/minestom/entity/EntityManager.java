@@ -5,18 +5,18 @@ import fr.themode.minestom.event.PlayerLoginEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceManager;
+import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class EntityManager {
 
     private static InstanceManager instanceManager = Main.getInstanceManager();
 
-    private ExecutorService entitiesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_ENTITIES);
-    private ExecutorService playersPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_PLAYERS_ENTITIES);
+    private ExecutorService entitiesPool = new MinestomThread(Main.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
+    private ExecutorService playersPool = new MinestomThread(Main.THREAD_COUNT_PLAYERS_ENTITIES, "Ms-PlayersPool");
 
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
@@ -25,7 +25,6 @@ public class EntityManager {
         for (Instance instance : instanceManager.getInstances()) {
             testTick2(instance);
         }
-
     }
 
     private void waitingPlayersTick() {
@@ -38,7 +37,6 @@ public class EntityManager {
                 Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
 
                 playerCache.setInstance(spawningInstance);
-
             });
         }
     }

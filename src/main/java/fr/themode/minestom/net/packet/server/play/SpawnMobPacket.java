@@ -34,9 +34,9 @@ public class SpawnMobPacket implements ServerPacket {
         writer.writeShort(velocityZ);
         if (consumer != null) {
             writer.write(consumer);
-        } else {
-            writer.writeByte((byte) 0xff);
         }
+        writer.writeByte((byte) 0xff);
+
     }
 
     @Override

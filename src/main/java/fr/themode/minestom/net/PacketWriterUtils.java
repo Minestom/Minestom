@@ -6,15 +6,15 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.PacketUtils;
+import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class PacketWriterUtils {
 
-    private static ExecutorService batchesPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_PACKET_WRITER);
+    private static ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_PACKET_WRITER, "Ms-PacketWriterPool");
 
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<Packet> consumer) {
         batchesPool.execute(() -> {

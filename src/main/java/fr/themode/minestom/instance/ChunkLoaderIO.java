@@ -1,20 +1,14 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.io.IOManager;
 import fr.themode.minestom.utils.CompressionUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class ChunkLoaderIO {
-
-    private static final int COMPRESSION_LEVEL = 1;
-
-    private ExecutorService chunkLoaderPool = Executors.newFixedThreadPool(Main.THREAD_COUNT_CHUNK_IO);
 
     private static File getChunkFile(int chunkX, int chunkZ, File folder) {
         return new File(folder, getChunkFileName(chunkX, chunkZ));
@@ -25,7 +19,7 @@ public class ChunkLoaderIO {
     }
 
     protected void saveChunk(Chunk chunk, File folder, Runnable callback) {
-        chunkLoaderPool.execute(() -> {
+        IOManager.submit(() -> {
             File chunkFile = getChunkFile(chunk.getChunkX(), chunk.getChunkZ(), folder);
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 byte[] data = chunk.getSerializedData();
@@ -42,7 +36,7 @@ public class ChunkLoaderIO {
     }
 
     protected void loadChunk(int chunkX, int chunkZ, Instance instance, Consumer<Chunk> callback) {
-        chunkLoaderPool.execute(() -> {
+        IOManager.submit(() -> {
             File chunkFile = getChunkFile(chunkX, chunkZ, instance.getFolder());
             if (!chunkFile.exists()) {
                 instance.createChunk(chunkX, chunkZ, callback); // Chunk file does not exist, create new chunk

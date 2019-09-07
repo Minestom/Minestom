@@ -33,7 +33,8 @@ public class Chunk implements Viewable {
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Packet fullDataPacket;
-    protected volatile boolean packetUpdated;
+
+    public volatile boolean packetUpdated;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -66,9 +67,9 @@ public class Chunk implements Viewable {
         this.blocksId[index] = blockType;
         this.customBlocks[index] = customId;
         if (isBlockEntity(blockType)) {
-            blockEntities.add(index);
+            this.blockEntities.add(index);
         } else {
-            blockEntities.remove(index);
+            this.blockEntities.remove(index);
         }
         this.packetUpdated = false;
     }
