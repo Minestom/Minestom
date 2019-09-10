@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.bossbar.BarColor;
 import fr.themode.minestom.bossbar.BarDivision;
+import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
@@ -26,7 +27,7 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(title);
+                writer.writeSizedString(Chat.legacyTextString(title));
                 writer.writeFloat(health);
                 writer.writeVarInt(color.ordinal());
                 writer.writeVarInt(division.ordinal());
@@ -39,7 +40,7 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(title);
+                writer.writeSizedString(Chat.legacyTextString(title));
                 break;
             case UPDATE_STYLE:
                 writer.writeVarInt(color.ordinal());

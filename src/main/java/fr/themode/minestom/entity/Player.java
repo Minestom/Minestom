@@ -1,5 +1,7 @@
 package fr.themode.minestom.entity;
 
+import club.thectm.minecraft.text.TextObject;
+import com.google.gson.JsonObject;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
@@ -18,11 +20,11 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.scoreboard.Scoreboard;
 import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
@@ -124,29 +126,9 @@ public class Player extends LivingEntity {
             }
         });
 
-        final String dataFileName = "C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data\\" + getUsername() + ".dat";
-
-        setEventCallback(PlayerDisconnectEvent.class, event -> {
-            saveData(new File(dataFileName), () -> {
-                System.out.println("SAVE DONE");
-            });
-        });
-
         setEventCallback(PlayerBlockPlaceEvent.class, event -> {
-            if (getData() != null) {
-                int value = getData().getOrDefault("test", 0);
-                getData().set("test", value + 1, Integer.class);
-                System.out.println("OLD DATA VALUE: " + value);
-            }
-
             if (event.getHand() != Hand.MAIN)
                 return;
-
-            /*sendMessage("Save chunk data...");
-            long time = System.currentTimeMillis();
-            getInstance().saveToFolder(() -> {
-                sendMessage("Saved in " + (System.currentTimeMillis() - time) + " ms");
-            });*/
 
             for (Player player : instance.getPlayers()) {
                 if (player != this)
@@ -160,7 +142,6 @@ public class Player extends LivingEntity {
 
         setEventCallback(PlayerLoginEvent.class, event -> {
             event.setSpawningInstance(instanceContainer);
-            loadData(new File(dataFileName));
         });
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
@@ -190,11 +171,11 @@ public class Player extends LivingEntity {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
             teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = Chat.rawText("WOWdisplay");
+            teamsPacket.teamDisplayName = "WOWdisplay";
             teamsPacket.nameTagVisibility = "always";
             teamsPacket.teamColor = 2;
-            teamsPacket.teamPrefix = Chat.rawText("pre");
-            teamsPacket.teamSuffix = Chat.rawText("suf");
+            teamsPacket.teamPrefix = "pre";
+            teamsPacket.teamSuffix = "suf";
             teamsPacket.collisionRule = "never";
             teamsPacket.entities = new String[]{getUsername()};
             sendPacketToViewersAndSelf(teamsPacket);
@@ -203,6 +184,13 @@ public class Player extends LivingEntity {
             heal();
 
             setExp(0.9f);
+
+            Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
+            for (int i = 0; i < 15; i++) {
+                scoreboard.createLine(new Scoreboard.ScoreboardLine("id" + i, "Hey guys " + i, i));
+            }
+            scoreboard.addViewer(this);
+            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");
         });
     }
 
@@ -410,7 +398,6 @@ public class Player extends LivingEntity {
                 if (chunk != null) {
                     viewableChunks.add(chunk);
                     chunk.addViewer(this);
-                    chunk.packetUpdated = true;
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
@@ -450,9 +437,22 @@ public class Player extends LivingEntity {
         sendPacketToViewersAndSelf(breakAnimationPacket);
     }
 
+    // Use legacy color formatting
     public void sendMessage(String message) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(Chat.rawText(message), ChatMessagePacket.Position.CHAT);
+        sendMessage(Chat.legacyText(message));
+    }
+
+    public void sendMessage(String message, char colorChar) {
+        sendMessage(Chat.legacyText(message, colorChar));
+    }
+
+    public void sendMessage(JsonObject jsonObject) {
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(jsonObject.toString(), ChatMessagePacket.Position.CHAT);
         playerConnection.sendPacket(chatMessagePacket);
+    }
+
+    public void sendMessage(TextObject textObject) {
+        sendMessage(textObject.toJson());
     }
 
     @Override

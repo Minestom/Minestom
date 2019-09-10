@@ -121,7 +121,7 @@ public class Utils {
             if (itemStack.getDisplayName() != null) {
                 packet.putByte((byte) 0x08);
                 packet.putString("Name");
-                packet.putString(Chat.rawText(itemStack.getDisplayName()));
+                packet.putString(Chat.legacyTextString(itemStack.getDisplayName()));
             }
 
             // TODO lore

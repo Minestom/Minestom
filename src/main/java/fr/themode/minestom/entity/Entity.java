@@ -38,6 +38,7 @@ public abstract class Entity implements Viewable, DataContainer {
     protected static final byte METADATA_OPTCHAT = 5;
     protected static final byte METADATA_SLOT = 6;
     protected static final byte METADATA_BOOLEAN = 7;
+    protected static final byte METADATA_POSE = 18;
 
     protected Instance instance;
     protected Position position;
@@ -522,7 +523,9 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public void refreshSneaking(boolean sneaking) {
         this.crouched = sneaking;
+        this.pose = sneaking ? Pose.SNEAKING : Pose.STANDING;
         sendMetadataIndex(0);
+        sendMetadataIndex(6);
     }
 
     public void refreshSprinting(boolean sprinting) {
@@ -575,6 +578,7 @@ public abstract class Entity implements Viewable, DataContainer {
             fillMetadataIndex(packet, 0);
             fillMetadataIndex(packet, 1);
             fillMetadataIndex(packet, 5);
+            fillMetadataIndex(packet, 6);
         };
     }
 
@@ -601,6 +605,9 @@ public abstract class Entity implements Viewable, DataContainer {
                 break;
             case 5:
                 fillNoGravityMetaData(packet);
+                break;
+            case 6:
+                fillPoseMetaData(packet);
                 break;
         }
     }
@@ -644,6 +651,12 @@ public abstract class Entity implements Viewable, DataContainer {
         packet.putByte((byte) 5);
         packet.putByte(METADATA_BOOLEAN);
         packet.putBoolean(noGravity);
+    }
+
+    private void fillPoseMetaData(Packet packet) {
+        packet.putByte((byte) 6);
+        packet.putByte(METADATA_POSE);
+        Utils.writeVarInt(packet, pose.ordinal());
     }
 
     protected void sendSynchronization() {

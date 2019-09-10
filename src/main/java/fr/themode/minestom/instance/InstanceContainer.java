@@ -197,7 +197,6 @@ public class InstanceContainer extends Instance {
     public void sendChunk(Player player, Chunk chunk) {
         Packet data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
-            System.out.println("UPDATE CHUNK");
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
                 chunk.packetUpdated = true;

@@ -1,5 +1,6 @@
 package fr.themode.minestom.net.packet.server.play;
 
+import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
@@ -16,7 +17,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeSizedString(objectiveValue);
+            writer.writeSizedString(Chat.legacyTextString(objectiveValue));
             writer.writeVarInt(type);
         }
     }

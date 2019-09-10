@@ -1,7 +1,6 @@
 package fr.themode.minestom.bossbar;
 
 import fr.themode.minestom.Viewable;
-import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.BossBarPacket;
 
@@ -22,7 +21,7 @@ public class BossBar implements Viewable {
     private byte flags;
 
     public BossBar(String title, BarColor color, BarDivision division) {
-        this.title = Chat.rawText(title);
+        this.title = title;
         this.color = color;
         this.division = division;
     }
@@ -51,7 +50,7 @@ public class BossBar implements Viewable {
     }
 
     public void setTitle(String title) {
-        this.title = Chat.rawText(title);
+        this.title = title;
     }
 
     public float getProgress() {

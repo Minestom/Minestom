@@ -1,5 +1,6 @@
 package fr.themode.minestom.net.packet.server.play;
 
+import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 
@@ -26,13 +27,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(teamDisplayName);
+                writer.writeSizedString(Chat.legacyTextString(teamDisplayName));
                 writer.writeByte(friendlyFlags);
                 writer.writeSizedString(nameTagVisibility);
                 writer.writeSizedString(collisionRule);
                 writer.writeVarInt(teamColor);
-                writer.writeSizedString(teamPrefix);
-                writer.writeSizedString(teamSuffix);
+                writer.writeSizedString(Chat.legacyTextString(teamPrefix));
+                writer.writeSizedString(Chat.legacyTextString(teamSuffix));
                 break;
             case REMOVE_TEAM:
 

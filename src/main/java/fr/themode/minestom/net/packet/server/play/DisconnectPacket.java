@@ -10,7 +10,7 @@ public class DisconnectPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(Chat.rawText(message));
+        writer.writeSizedString(Chat.legacyTextString(message));
     }
 
     @Override

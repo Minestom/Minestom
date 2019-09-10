@@ -104,10 +104,10 @@ public class Main {
 
             // Keep Alive Handling
             for (Player player : getConnectionManager().getOnlinePlayers()) {
-                if (System.currentTimeMillis() - player.getLastKeepAlive() > 20000) {
-                    long id = System.currentTimeMillis();
-                    player.refreshKeepAlive(id);
-                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(id);
+                long time = System.currentTimeMillis();
+                if (time - player.getLastKeepAlive() > 20000) {
+                    player.refreshKeepAlive(time);
+                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                     player.getPlayerConnection().sendPacket(keepAlivePacket);
                 }
             }
