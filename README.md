@@ -1,6 +1,8 @@
 # About Minestom
 Minestom is an alternative to the popular minecraft server API named Bukkit/Spigot. The main difference is that our implementation of Notchian server does not contain any features by default! However, we have a complete API which allows you to make anything possible with current spigot's plugins.
 
+All planned features are listed on [trello](https://trello.com/b/4ysvj5hT/minestom)
+
 # Why Minestom?
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
 The goal is to offer more performance for those who need it, Minecraft being single-threaded is the most important problem for them.
