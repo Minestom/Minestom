@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO
- * option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (cumulation)
+ *  - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (cumulation)
  */
 public abstract class CustomBlock {
 

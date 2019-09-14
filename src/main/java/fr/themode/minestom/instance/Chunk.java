@@ -5,10 +5,13 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -18,18 +21,17 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-// TODO air management to free memory
 public class Chunk implements Viewable {
+
+    private static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Y = 256;
     public static final int CHUNK_SIZE_Z = 16;
-    public static final int CHUNK_SIZE = CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z;
 
     private Biome biome;
     private int chunkX, chunkZ;
-    private short[] blocksId = new short[CHUNK_SIZE];
-    private short[] customBlocks = new short[CHUNK_SIZE];
+    protected volatile boolean packetUpdated;
 
     // Block entities
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
@@ -39,8 +41,9 @@ public class Chunk implements Viewable {
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Packet fullDataPacket;
-
-    public volatile boolean packetUpdated;
+    // Int represent the chunk coord of the block
+    // value is: 2 bytes -> blockId | 2 bytes -> customBlockId (filled with 0 if isn't)
+    private Int2IntMap blocks = new Int2IntOpenHashMap(16 * 16 * 16); // Start with the size of a full chunk section
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -52,16 +55,8 @@ public class Chunk implements Viewable {
         setBlock(x, y, z, blockId, (short) 0);
     }
 
-    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, String blockId) {
-        CustomBlock customBlock = Main.getBlockManager().getBlock(blockId);
-        if (customBlock == null)
-            throw new IllegalArgumentException("The block " + blockId + " does not exist or isn't registered");
-
-        setCustomBlock(x, y, z, customBlock);
-    }
-
-    protected void setCustomBlock(byte x, byte y, byte z, short customBlockId) {
-        CustomBlock customBlock = Main.getBlockManager().getBlock(customBlockId);
+    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId) {
+        CustomBlock customBlock = BLOCK_MANAGER.getBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
@@ -70,13 +65,20 @@ public class Chunk implements Viewable {
 
     private void setBlock(byte x, byte y, byte z, short blockType, short customId) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        this.blocksId[index] = blockType;
-        this.customBlocks[index] = customId;
+        if (blockType != 0 || customId != 0) {
+            int value = (blockType << 16 | customId & 0xFFFF);
+            this.blocks.put(index, value);
+        } else {
+            // Block has been deleted
+            this.blocks.remove(index);
+        }
+
         if (isBlockEntity(blockType)) {
             this.blockEntities.add(index);
         } else {
             this.blockEntities.remove(index);
         }
+
         this.packetUpdated = false;
     }
 
@@ -89,12 +91,16 @@ public class Chunk implements Viewable {
     }
 
     public short getBlockId(byte x, byte y, byte z) {
-        return this.blocksId[SerializerUtils.chunkCoordToIndex(x, y, z)];
+        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        int value = this.blocks.get(index);
+        return (short) (value >>> 16);
     }
 
     public CustomBlock getCustomBlock(byte x, byte y, byte z) {
-        short id = this.customBlocks[SerializerUtils.chunkCoordToIndex(x, y, z)];
-        return id != 0 ? Main.getBlockManager().getBlock(id) : null;
+        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        int value = this.blocks.get(index);
+        short id = (short) (value & 0xffff);
+        return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
     }
 
     public void updateBlocks() {
@@ -146,20 +152,20 @@ public class Chunk implements Viewable {
         // TODO customblock id map (StringId -> short id)
         // TODO List of (sectionId;blockcount;blocktype;blockarray)
         // TODO block data
-        for (byte x = 0; x < CHUNK_SIZE_X; x++) {
-            for (byte y = -128; y < 127; y++) {
-                for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-                    boolean isCustomBlock = customBlocks[index] != 0;
-                    short id = isCustomBlock ? customBlocks[index] : blocksId[index];
-                    if (id != 0) {
-                        dos.writeInt(index); // Correspond to chunk coord
-                        dos.writeBoolean(isCustomBlock);
-                        dos.writeShort(id);
-                    }
-                }
-            }
+        for (Int2IntMap.Entry entry : blocks.int2IntEntrySet()) {
+            int index = entry.getIntKey();
+            int value = entry.getIntValue();
+
+            short blockId = (short) (value >>> 16);
+            short customBlockId = (short) (value & 0xffff);
+            boolean isCustomBlock = customBlockId != 0;
+            short id = isCustomBlock ? customBlockId : blockId;
+
+            dos.writeInt(index); // Chunk coord
+            dos.writeBoolean(isCustomBlock); // Determine the type of the ID
+            dos.writeShort(id);
         }
+
         byte[] result = output.toByteArray();
         return result;
     }

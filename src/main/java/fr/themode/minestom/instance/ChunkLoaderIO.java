@@ -1,5 +1,6 @@
 package fr.themode.minestom.instance;
 
+import fr.themode.minestom.instance.batch.ChunkBatch;
 import fr.themode.minestom.io.IOManager;
 import fr.themode.minestom.utils.CompressionUtils;
 import fr.themode.minestom.utils.SerializerUtils;
@@ -54,10 +55,12 @@ public class ChunkLoaderIO {
 
             DataInputStream stream = new DataInputStream(new ByteArrayInputStream(CompressionUtils.getDecompressedData(array)));
 
-            Chunk chunk = null;
+            ChunkBatch chunkBatch = null;
             try {
                 Biome biome = Biome.fromId(stream.readByte());
-                chunk = new Chunk(biome, chunkX, chunkZ);
+                Chunk chunk = new Chunk(biome, chunkX, chunkZ);
+
+                chunkBatch = instance.createChunkBatch(chunk);
 
                 while (true) {
                     // TODO block data
@@ -66,10 +69,13 @@ public class ChunkLoaderIO {
                     short blockId = stream.readShort();
 
                     byte[] chunkPos = SerializerUtils.indexToChunkPosition(index);
+                    byte x = chunkPos[0];
+                    byte y = chunkPos[1];
+                    byte z = chunkPos[2];
                     if (isCustomBlock) {
-                        chunk.setCustomBlock(chunkPos[0], chunkPos[1], chunkPos[2], blockId);
+                        chunkBatch.setCustomBlock(x, y, z, blockId);
                     } else {
-                        chunk.UNSAFE_setBlock(chunkPos[0], chunkPos[1], chunkPos[2], blockId);
+                        chunkBatch.setBlock(x, y, z, blockId);
                     }
                 }
             } catch (EOFException e) {
@@ -77,7 +83,7 @@ public class ChunkLoaderIO {
                 e.printStackTrace();
             }
 
-            callback.accept(chunk); // Success, null if file isn't properly encoded
+            chunkBatch.flush(c -> callback.accept(c)); // Success, null if file isn't properly encoded
         });
     }
 

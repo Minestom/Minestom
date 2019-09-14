@@ -5,6 +5,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.entity.*;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
+import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
@@ -21,6 +22,8 @@ import java.util.function.Consumer;
 public abstract class Instance implements BlockModifier {
 
     protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
+    protected static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
+
     // Entities present in this instance
     protected Set<Player> players = new CopyOnWriteArraySet<>();
     protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();

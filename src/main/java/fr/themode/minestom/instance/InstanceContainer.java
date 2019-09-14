@@ -49,14 +49,14 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, String blockId) {
+    public synchronized void setCustomBlock(int x, int y, int z, short blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
             chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId);
-            short id = chunk.getBlockId(chunkX, chunkY, chunkZ);
+            short id = BLOCK_MANAGER.getBlock(blockId).getType();
             sendBlockChange(chunk, x, y, z, id);
         }
     }

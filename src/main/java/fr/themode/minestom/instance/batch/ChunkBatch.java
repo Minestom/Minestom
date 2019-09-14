@@ -30,18 +30,20 @@ public class ChunkBatch implements IBatch, BlockModifier {
         data.x = (byte) x;
         data.y = (byte) y;
         data.z = (byte) z;
+        data.isCustomBlock = false;
         data.blockId = blockId;
 
         this.dataList.add(data);
     }
 
     @Override
-    public void setBlock(int x, int y, int z, String blockId) {
+    public void setCustomBlock(int x, int y, int z, short blockId) {
         BlockData data = new BlockData();
         data.x = (byte) x;
         data.y = (byte) y;
         data.z = (byte) z;
-        data.blockIdentifier = blockId;
+        data.isCustomBlock = true;
+        data.blockId = blockId;
 
         this.dataList.add(data);
     }
@@ -65,7 +67,6 @@ public class ChunkBatch implements IBatch, BlockModifier {
                 data.apply(chunk);
             }
 
-            // dataList.clear();
             chunk.refreshDataPacket();
             instance.sendChunkUpdate(chunk);
             if (callback != null)
@@ -76,14 +77,14 @@ public class ChunkBatch implements IBatch, BlockModifier {
     private class BlockData {
 
         private byte x, y, z;
+        private boolean isCustomBlock;
         private short blockId;
-        private String blockIdentifier;
 
         public void apply(Chunk chunk) {
-            if (blockIdentifier == null) {
+            if (!isCustomBlock) {
                 chunk.UNSAFE_setBlock(x, y, z, blockId);
             } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockIdentifier);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId);
             }
         }
 

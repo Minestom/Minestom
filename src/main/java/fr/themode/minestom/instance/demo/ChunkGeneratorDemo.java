@@ -15,7 +15,7 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
         for (byte x = 0; x < 16; x++)
             for (byte z = 0; z < 16; z++) {
                 for (byte y = 0; y < 65; y++) {
-                    batch.setBlock(x, y, z, "custom_block");
+                    batch.setCustomBlock(x, y, z, "custom_block");
                 }
             }
     }
