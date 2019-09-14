@@ -153,8 +153,12 @@ public abstract class LivingEntity extends Entity {
         for (int i = 0; i < length; i++) {
             Attribute attribute = Attribute.values()[i];
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
+            float maxValue = attribute.getMaxVanillaValue();
+            float value = getAttributeValue(attribute);
+            value = value > maxValue ? maxValue : value; // Bypass vanilla limit client-side if needed (by sending the max value allowed)
+
             property.key = attribute.getKey();
-            property.value = getAttributeValue(attribute);
+            property.value = value;
             properties[i] = property;
         }
 

@@ -69,7 +69,7 @@ public class ChunkLoaderIO {
                     if (isCustomBlock) {
                         chunk.setCustomBlock(chunkPos[0], chunkPos[1], chunkPos[2], blockId);
                     } else {
-                        chunk.setBlock(chunkPos[0], chunkPos[1], chunkPos[2], blockId);
+                        chunk.UNSAFE_setBlock(chunkPos[0], chunkPos[1], chunkPos[2], blockId);
                     }
                 }
             } catch (EOFException e) {

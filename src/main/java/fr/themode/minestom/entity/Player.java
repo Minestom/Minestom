@@ -9,9 +9,9 @@ import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
-import fr.themode.minestom.instance.CustomBlock;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.InstanceContainer;
+import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
@@ -20,7 +20,6 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.scoreboard.Scoreboard;
 import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
@@ -145,7 +144,7 @@ public class Player extends LivingEntity {
         });
 
         setEventCallback(PlayerSpawnEvent.class, event -> {
-            setGameMode(GameMode.CREATIVE);
+            setGameMode(GameMode.SURVIVAL);
             teleport(new Position(0, 66, 0));
 
             /*Random random = new Random();
@@ -183,14 +182,12 @@ public class Player extends LivingEntity {
             setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
 
-            setExp(0.9f);
-
-            Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
+            /*Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
             for (int i = 0; i < 15; i++) {
                 scoreboard.createLine(new Scoreboard.ScoreboardLine("id" + i, "Hey guys " + i, i));
             }
             scoreboard.addViewer(this);
-            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");
+            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");*/
         });
     }
 

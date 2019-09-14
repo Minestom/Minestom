@@ -1,6 +1,6 @@
 package fr.themode.minestom.event;
 
-import fr.themode.minestom.instance.CustomBlock;
+import fr.themode.minestom.instance.block.CustomBlock;
 
 public class PlayerStartDiggingEvent extends CancellableEvent {
 

@@ -3,7 +3,9 @@ package fr.themode.minestom.instance;
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.Viewable;
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
@@ -14,7 +16,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 
+// TODO air management to free memory
 public class Chunk implements Viewable {
 
     public static final int CHUNK_SIZE_X = 16;
@@ -30,6 +34,8 @@ public class Chunk implements Viewable {
     // Block entities
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
+    // TODO blocks update
+
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Packet fullDataPacket;
@@ -42,16 +48,16 @@ public class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    protected void setBlock(byte x, byte y, byte z, short blockId) {
+    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId) {
         setBlock(x, y, z, blockId, (short) 0);
     }
 
-    protected void setCustomBlock(byte x, byte y, byte z, String blockId) {
+    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, String blockId) {
         CustomBlock customBlock = Main.getBlockManager().getBlock(blockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The block " + blockId + " does not exist or isn't registered");
 
-        setBlock(x, y, z, customBlock.getType(), customBlock.getId());
+        setCustomBlock(x, y, z, customBlock);
     }
 
     protected void setCustomBlock(byte x, byte y, byte z, short customBlockId) {
@@ -59,7 +65,7 @@ public class Chunk implements Viewable {
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
-        setBlock(x, y, z, customBlock.getType(), customBlockId);
+        setCustomBlock(x, y, z, customBlock);
     }
 
     private void setBlock(byte x, byte y, byte z, short blockType, short customId) {
@@ -74,6 +80,14 @@ public class Chunk implements Viewable {
         this.packetUpdated = false;
     }
 
+    private void setCustomBlock(byte x, byte y, byte z, CustomBlock customBlock) {
+        if (customBlock.hasUpdate()) {
+            Consumer<Data> test = customBlock::update;
+            // TODO add update callback
+        }
+        setBlock(x, y, z, customBlock.getType(), customBlock.getId());
+    }
+
     public short getBlockId(byte x, byte y, byte z) {
         return this.blocksId[SerializerUtils.chunkCoordToIndex(x, y, z)];
     }
@@ -81,6 +95,17 @@ public class Chunk implements Viewable {
     public CustomBlock getCustomBlock(byte x, byte y, byte z) {
         short id = this.customBlocks[SerializerUtils.chunkCoordToIndex(x, y, z)];
         return id != 0 ? Main.getBlockManager().getBlock(id) : null;
+    }
+
+    public void updateBlocks() {
+        /**
+         * TODO blocks' update:
+         *  - get all custom blocks
+         *  - check if they have an update method
+         *  - check if they should be updated
+         *  - get custom block's data
+         *  - call update method
+         */
     }
 
     public Biome getBiome() {
@@ -110,6 +135,7 @@ public class Chunk implements Viewable {
 
     public void setFullDataPacket(Packet fullDataPacket) {
         this.fullDataPacket = fullDataPacket;
+        this.packetUpdated = true;
     }
 
     protected byte[] getSerializedData() throws IOException {
@@ -153,10 +179,9 @@ public class Chunk implements Viewable {
     }
 
     // Write the packet in the current thread
-    protected void refreshDataPacket() {
+    public void refreshDataPacket() {
         PacketUtils.writePacket(getFreshFullDataPacket(), packet -> {
-            fullDataPacket = packet;
-            packetUpdated = true;
+            setFullDataPacket(packet);
         });
     }
 

@@ -1,5 +1,6 @@
 package fr.themode.minestom.listener;
 
+import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockPlaceEvent;
 import fr.themode.minestom.instance.Chunk;
@@ -37,6 +38,8 @@ public class BlockPlacementListener {
         boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby players
         if (!intersectPlayer) {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
+            playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
+
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled()) {
                 instance.setBlock(blockPosition, "custom_block"); // TODO set useItem's block instead

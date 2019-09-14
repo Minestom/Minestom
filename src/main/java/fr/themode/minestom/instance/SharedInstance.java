@@ -1,6 +1,8 @@
 package fr.themode.minestom.instance;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.batch.BlockBatch;
+import fr.themode.minestom.instance.batch.ChunkBatch;
 import fr.themode.minestom.utils.BlockPosition;
 
 import java.io.File;

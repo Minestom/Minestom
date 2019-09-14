@@ -4,8 +4,8 @@ import com.github.simplenet.Server;
 import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.instance.BlockManager;
 import fr.themode.minestom.instance.InstanceManager;
+import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
 import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
@@ -22,7 +22,6 @@ public class Main {
     // Thread number
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
     public static final int THREAD_COUNT_IO = 2;
-    public static final int THREAD_COUNT_CHUNK_BATCH = 2;
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
     public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
@@ -64,7 +63,7 @@ public class Main {
             System.out.println("CONNECTION");
 
             client.preDisconnect(() -> {
-                System.out.println("A Disconnection");
+                System.out.println("DISCONNECTION");
                 PlayerConnection playerConnection = packetProcessor.getPlayerConnection(client);
                 if (playerConnection != null) {
                     playerConnection.refreshOnline(false);
@@ -114,6 +113,11 @@ public class Main {
 
             // Entities update
             entityManager.update();
+
+            // Blocks update
+            blockManager.update();
+
+            // TODO miscellaneous update (scoreboard)
 
             // Sleep until next tick
             long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;

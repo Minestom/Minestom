@@ -1,17 +1,15 @@
-package fr.themode.minestom.instance;
+package fr.themode.minestom.instance.batch;
 
-import fr.themode.minestom.Main;
-import fr.themode.minestom.utils.thread.MinestomThread;
+import fr.themode.minestom.instance.BlockModifier;
+import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.instance.InstanceContainer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 
-public class BlockBatch implements BlockModifier {
-
-    private static final ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_BLOCK_BATCH, "Ms-BlockBatchPool");
+public class BlockBatch implements IBatch, BlockModifier {
 
     private InstanceContainer instance;
 
@@ -85,9 +83,9 @@ public class BlockBatch implements BlockModifier {
 
         public void apply(Chunk chunk) {
             if (blockIdentifier == null) {
-                chunk.setBlock((byte) x, (byte) y, (byte) z, blockId);
+                chunk.UNSAFE_setBlock((byte) x, (byte) y, (byte) z, blockId);
             } else {
-                chunk.setCustomBlock((byte) x, (byte) y, (byte) z, blockIdentifier);
+                chunk.UNSAFE_setCustomBlock((byte) x, (byte) y, (byte) z, blockIdentifier);
             }
         }
 

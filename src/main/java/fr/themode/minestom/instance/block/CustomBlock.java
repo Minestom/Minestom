@@ -1,5 +1,6 @@
-package fr.themode.minestom.instance;
+package fr.themode.minestom.instance.block;
 
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,6 +19,12 @@ public abstract class CustomBlock {
         this.id = (short) idCounter.incrementAndGet();
     }
 
+    public void update(Data data) {
+        throw new UnsupportedOperationException("Update method not overriden");
+    }
+
+    public abstract UpdateOption getUpdateOption();
+
     public abstract short getType();
 
     public abstract String getIdentifier();
@@ -26,6 +33,10 @@ public abstract class CustomBlock {
       Time in ms
      */
     public abstract int getBreakDelay(Player player);
+
+    public boolean hasUpdate() {
+        return getUpdateOption().getValue() > 0;
+    }
 
     public short getId() {
         return id;

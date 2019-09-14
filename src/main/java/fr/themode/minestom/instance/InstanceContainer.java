@@ -3,6 +3,8 @@ package fr.themode.minestom.instance;
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
+import fr.themode.minestom.instance.batch.BlockBatch;
+import fr.themode.minestom.instance.batch.ChunkBatch;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
@@ -41,7 +43,7 @@ public class InstanceContainer extends Instance {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.setBlock(chunkX, chunkY, chunkZ, blockId);
+            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId);
             sendBlockChange(chunk, x, y, z, blockId);
         }
     }
@@ -53,7 +55,7 @@ public class InstanceContainer extends Instance {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.setCustomBlock(chunkX, chunkY, chunkZ, blockId);
+            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId);
             short id = chunk.getBlockId(chunkX, chunkY, chunkZ);
             sendBlockChange(chunk, x, y, z, id);
         }
@@ -199,7 +201,6 @@ public class InstanceContainer extends Instance {
         if (data == null || !chunk.packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
                 chunk.setFullDataPacket(buffer);
-                chunk.packetUpdated = true;
                 sendChunkUpdate(player, chunk);
             });
         } else {

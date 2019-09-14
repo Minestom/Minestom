@@ -2,22 +2,24 @@ package fr.themode.minestom.entity.property;
 
 public enum Attribute {
 
-    MAX_HEALTH("generic.maxHealth", 20),
-    FOLLOW_RANGE("generic.followRange", 32),
-    KNOCKBACK_RESISTANCE("generic.knockbackResistance", 0),
-    MOVEMENT_SPEED("generic.movementSpeed", 0.7f),
-    ATTACK_DAMAGE("generic.attackDamage", 2),
-    ATTACK_SPEED("generic.attackSpeed", 4),
-    FLYING_SPEED("generic.flyingSpeed", 0.4f),
-    HORSE_JUMP_STRENGTH("horse.jumpStrength", 0.7f),
-    ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawnReinforcements", 0);
+    MAX_HEALTH("generic.maxHealth", 20, 1024),
+    FOLLOW_RANGE("generic.followRange", 32, 2048),
+    KNOCKBACK_RESISTANCE("generic.knockbackResistance", 0, 1),
+    MOVEMENT_SPEED("generic.movementSpeed", 0.7f, 1024),
+    ATTACK_DAMAGE("generic.attackDamage", 2, 2048),
+    ATTACK_SPEED("generic.attackSpeed", 4, 1024),
+    FLYING_SPEED("generic.flyingSpeed", 0.4f, 1024),
+    HORSE_JUMP_STRENGTH("horse.jumpStrength", 0.7f, 2),
+    ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawnReinforcements", 0, 1);
 
     private String key;
     private float defaultValue;
+    private float maxVanillaValue;
 
-    Attribute(String key, float defaultValue) {
+    Attribute(String key, float defaultValue, float maxVanillaValue) {
         this.key = key;
         this.defaultValue = defaultValue;
+        this.maxVanillaValue = maxVanillaValue;
     }
 
     public String getKey() {
@@ -26,5 +28,9 @@ public enum Attribute {
 
     public float getDefaultValue() {
         return defaultValue;
+    }
+
+    public float getMaxVanillaValue() {
+        return maxVanillaValue;
     }
 }

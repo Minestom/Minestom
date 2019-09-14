@@ -204,21 +204,20 @@ public abstract class Entity implements Viewable, DataContainer {
 
             // Velocity
             if (velocityTime != 0) {
+                if (this instanceof Player) {
+                    sendPacketToViewersAndSelf(getVelocityPacket());
+                } else {
+                    float tps = Main.TICK_PER_SECOND;
+                    refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
+                    if (this instanceof ObjectEntity) {
+                        sendPacketToViewers(getVelocityPacket());
+                    } else if (this instanceof EntityCreature) {
+                        teleport(getPosition());
+                    }
+                }
                 if (time >= velocityTime) {
                     sendSynchronization(); // Send synchronization after velocity ended
                     resetVelocity();
-                } else {
-                    if (this instanceof Player) {
-                        sendPacketToViewersAndSelf(getVelocityPacket());
-                    } else {
-                        float tps = Main.TICK_PER_SECOND;
-                        refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
-                        if (this instanceof ObjectEntity) {
-                            sendPacketToViewers(getVelocityPacket());
-                        } else if (this instanceof EntityCreature) {
-                            teleport(getPosition());
-                        }
-                    }
                 }
             }
 

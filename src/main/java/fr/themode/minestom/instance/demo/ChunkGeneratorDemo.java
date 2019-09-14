@@ -1,8 +1,8 @@
 package fr.themode.minestom.instance.demo;
 
 import fr.themode.minestom.instance.Biome;
-import fr.themode.minestom.instance.ChunkBatch;
 import fr.themode.minestom.instance.ChunkGenerator;
+import fr.themode.minestom.instance.batch.ChunkBatch;
 
 import java.util.Random;
 

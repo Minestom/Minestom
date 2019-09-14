@@ -1,19 +1,18 @@
-package fr.themode.minestom.instance;
+package fr.themode.minestom.instance.batch;
 
-import fr.themode.minestom.Main;
-import fr.themode.minestom.utils.thread.MinestomThread;
+import fr.themode.minestom.instance.BlockModifier;
+import fr.themode.minestom.instance.Chunk;
+import fr.themode.minestom.instance.ChunkGenerator;
+import fr.themode.minestom.instance.InstanceContainer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 /**
  * Use chunk coordinate (0-16) instead of world's
  */
-public class ChunkBatch implements BlockModifier {
-
-    private static final ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_CHUNK_BATCH, "Ms-ChunkBatchPool");
+public class ChunkBatch implements IBatch, BlockModifier {
 
     private InstanceContainer instance;
     private Chunk chunk;
@@ -82,9 +81,9 @@ public class ChunkBatch implements BlockModifier {
 
         public void apply(Chunk chunk) {
             if (blockIdentifier == null) {
-                chunk.setBlock(x, y, z, blockId);
+                chunk.UNSAFE_setBlock(x, y, z, blockId);
             } else {
-                chunk.setCustomBlock(x, y, z, blockIdentifier);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockIdentifier);
             }
         }
 
