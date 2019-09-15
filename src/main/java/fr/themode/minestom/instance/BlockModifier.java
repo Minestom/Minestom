@@ -1,6 +1,7 @@
 package fr.themode.minestom.instance;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.utils.BlockPosition;
@@ -10,9 +11,17 @@ public interface BlockModifier {
 
     BlockManager BLOCK_MANAGER = Main.getBlockManager();
 
-    void setBlock(int x, int y, int z, short blockId);
+    void setBlock(int x, int y, int z, short blockId, Data data);
 
-    void setCustomBlock(int x, int y, int z, short blockId);
+    void setCustomBlock(int x, int y, int z, short blockId, Data data);
+
+    default void setBlock(int x, int y, int z, short blockId) {
+        setBlock(x, y, z, blockId, null);
+    }
+
+    default void setCustomBlock(int x, int y, int z, short blockId) {
+        setCustomBlock(x, y, z, blockId, null);
+    }
 
     default void setBlock(BlockPosition blockPosition, short blockId) {
         setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockId);
@@ -22,9 +31,13 @@ public interface BlockModifier {
         setBlock(position.toBlockPosition(), blockId);
     }
 
-    default void setCustomBlock(int x, int y, int z, String blockId) {
+    default void setCustomBlock(int x, int y, int z, String blockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getBlock(blockId);
-        setCustomBlock(x, y, z, customBlock.getId());
+        setCustomBlock(x, y, z, customBlock.getId(), data);
+    }
+
+    default void setCustomBlock(int x, int y, int z, String blockId) {
+        setCustomBlock(x, y, z, blockId, null);
     }
 
     default void setCustomBlock(BlockPosition blockPosition, String blockId) {

@@ -1,6 +1,7 @@
 package fr.themode.minestom.instance;
 
 import com.github.simplenet.packet.Packet;
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.instance.batch.BlockBatch;
@@ -37,25 +38,25 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, short blockId) {
+    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId);
+            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId, data);
             sendBlockChange(chunk, x, y, z, blockId);
         }
     }
 
     @Override
-    public synchronized void setCustomBlock(int x, int y, int z, short blockId) {
+    public synchronized void setCustomBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId);
+            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId, data);
             short id = BLOCK_MANAGER.getBlock(blockId).getType();
             sendBlockChange(chunk, x, y, z, id);
         }

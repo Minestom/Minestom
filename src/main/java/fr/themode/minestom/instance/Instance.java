@@ -2,6 +2,7 @@ package fr.themode.minestom.instance;
 
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.*;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
@@ -145,6 +146,11 @@ public abstract class Instance implements BlockModifier {
     public CustomBlock getCustomBlock(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
         return chunk.getCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16));
+    }
+
+    public Data getBlockData(int x, int y, int z) {
+        Chunk chunk = getChunkAt(x, z);
+        return chunk.getData((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
     public Chunk getChunkAt(double x, double z) {

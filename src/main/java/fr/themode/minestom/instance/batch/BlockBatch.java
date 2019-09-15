@@ -1,5 +1,6 @@
 package fr.themode.minestom.instance.batch;
 
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.instance.BlockModifier;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.InstanceContainer;
@@ -20,36 +21,38 @@ public class BlockBatch implements IBatch, BlockModifier {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, short blockId) {
+    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = this.instance.getChunkAt(x, z);
-        List<BlockData> blockData = this.data.getOrDefault(chunk, new ArrayList<>());
+        List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
 
-        BlockData data = new BlockData();
-        data.x = x % 16;
-        data.y = y;
-        data.z = z % 16;
-        data.blockId = blockId;
+        BlockData blockData = new BlockData();
+        blockData.x = x % 16;
+        blockData.y = y;
+        blockData.z = z % 16;
+        blockData.blockId = blockId;
+        blockData.data = data;
 
-        blockData.add(data);
+        blocksData.add(blockData);
 
-        this.data.put(chunk, blockData);
+        this.data.put(chunk, blocksData);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short blockId) {
+    public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = this.instance.getChunkAt(x, z);
-        List<BlockData> blockData = this.data.getOrDefault(chunk, new ArrayList<>());
+        List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
 
-        BlockData data = new BlockData();
-        data.x = x % 16;
-        data.y = y;
-        data.z = z % 16;
-        data.isCustomBlock = true;
-        data.blockId = blockId;
+        BlockData blockData = new BlockData();
+        blockData.x = x % 16;
+        blockData.y = y;
+        blockData.z = z % 16;
+        blockData.isCustomBlock = true;
+        blockData.blockId = blockId;
+        blockData.data = data;
 
-        blockData.add(data);
+        blocksData.add(blockData);
 
-        this.data.put(chunk, blockData);
+        this.data.put(chunk, blocksData);
     }
 
     public void flush(Runnable callback) {
@@ -81,12 +84,13 @@ public class BlockBatch implements IBatch, BlockModifier {
         private int x, y, z;
         private boolean isCustomBlock;
         private short blockId;
+        private Data data;
 
         public void apply(Chunk chunk) {
             if (!isCustomBlock) {
-                chunk.UNSAFE_setBlock((byte) x, (byte) y, (byte) z, blockId);
+                chunk.UNSAFE_setBlock((byte) x, (byte) y, (byte) z, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock((byte) x, (byte) y, (byte) z, blockId);
+                chunk.UNSAFE_setCustomBlock((byte) x, (byte) y, (byte) z, blockId, data);
             }
         }
 

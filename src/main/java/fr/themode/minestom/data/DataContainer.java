@@ -1,10 +1,13 @@
 package fr.themode.minestom.data;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.io.DataReader;
 import fr.themode.minestom.io.IOManager;
 import fr.themode.minestom.utils.CompressionUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.function.Consumer;
 
@@ -58,46 +61,7 @@ public interface DataContainer {
                 return;
             }
 
-            DataInputStream stream = new DataInputStream(new ByteArrayInputStream(CompressionUtils.getDecompressedData(array)));
-
-            Data data = new Data();
-            try {
-                while (true) {
-                    short typeLength = stream.readShort();
-
-                    if (typeLength == 0xff) {
-                        // End of data
-                        break;
-                    }
-
-                    byte[] typeCache = new byte[typeLength];
-                    for (int i = 0; i < typeLength; i++) {
-                        typeCache[i] = stream.readByte();
-                    }
-
-                    short nameLength = stream.readShort();
-                    byte[] nameCache = new byte[nameLength];
-                    for (int i = 0; i < nameLength; i++) {
-                        nameCache[i] = stream.readByte();
-                    }
-
-                    int valueLength = stream.readInt();
-                    byte[] valueCache = new byte[valueLength];
-                    for (int i = 0; i < valueLength; i++) {
-                        valueCache[i] = stream.readByte();
-                    }
-
-                    Class type = Class.forName(new String(typeCache));
-                    String name = new String(nameCache);
-                    Object value = Main.getDataManager().getDataType(type).decode(valueCache);
-
-                    data.set(name, value, type);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            Data data = DataReader.readData(array, true);
 
             setData(data);
             if (callback != null)

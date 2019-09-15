@@ -41,7 +41,11 @@ public class ChunkDataPacket implements ServerPacket {
                 if (section != null) { // section contains at least one block
                     mask |= 1 << i;
                     Utils.writeBlocks(blocks, section, BITS_PER_ENTRY);
+                } else {
+                    mask |= 0 << i;
                 }
+            } else {
+                mask |= 0 << i;
             }
         }
 

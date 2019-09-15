@@ -6,6 +6,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.collision.BoundingBox;
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -24,6 +25,7 @@ import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
@@ -51,8 +53,8 @@ public class Player extends LivingEntity {
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        //instanceContainer = Main.getInstanceManager().createInstanceContainer(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        instanceContainer = Main.getInstanceManager().createInstanceContainer();
+        instanceContainer = Main.getInstanceManager().createInstanceContainer(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        //instanceContainer = Main.getInstanceManager().createInstanceContainer();
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
         int loopStart = -2;
@@ -133,6 +135,20 @@ public class Player extends LivingEntity {
                 if (player != this)
                     player.teleport(getPosition());
             }
+
+            getInstance().saveToFolder(() -> {
+                sendMessage("SAVED");
+            });
+        });
+
+        setEventCallback(PlayerStartDiggingEvent.class, event -> {
+            BlockPosition blockPosition = event.getBlockPosition();
+            Data data = getInstance().getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+            if (data == null) {
+                sendMessage("DATA NULL");
+                return;
+            }
+            sendMessage("BLOCK DATA: " + data.get("x"));
         });
 
         setEventCallback(PickupItemEvent.class, event -> {

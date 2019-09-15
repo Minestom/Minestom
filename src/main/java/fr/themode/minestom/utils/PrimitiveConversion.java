@@ -22,4 +22,24 @@ public class PrimitiveConversion {
         return clazz;
     }
 
+    public static String getObjectClassString(String clazz) {
+        if (clazz == "boolean")
+            return "java.lang.Boolean";
+        if (clazz == "byte")
+            return "java.lang.Byte";
+        if (clazz == "char")
+            return "java.lang.Character";
+        if (clazz == "short")
+            return "java.lang.Short";
+        if (clazz == "int")
+            return "java.lang.Integer";
+        if (clazz == "long")
+            return "java.lang.Long";
+        if (clazz == "float")
+            return "java.lang.Float";
+        if (clazz == "double")
+            return "java.lang.Double";
+        return clazz;
+    }
+
 }

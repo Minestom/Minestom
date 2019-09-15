@@ -1,11 +1,13 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.instance.batch.ChunkBatch;
+import fr.themode.minestom.io.ChunkReader;
 import fr.themode.minestom.io.IOManager;
 import fr.themode.minestom.utils.CompressionUtils;
-import fr.themode.minestom.utils.SerializerUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.function.Consumer;
 
@@ -53,37 +55,7 @@ public class ChunkLoaderIO {
                 return;
             }
 
-            DataInputStream stream = new DataInputStream(new ByteArrayInputStream(CompressionUtils.getDecompressedData(array)));
-
-            ChunkBatch chunkBatch = null;
-            try {
-                Biome biome = Biome.fromId(stream.readByte());
-                Chunk chunk = new Chunk(biome, chunkX, chunkZ);
-
-                chunkBatch = instance.createChunkBatch(chunk);
-
-                while (true) {
-                    // TODO block data
-                    int index = stream.readInt();
-                    boolean isCustomBlock = stream.readBoolean();
-                    short blockId = stream.readShort();
-
-                    byte[] chunkPos = SerializerUtils.indexToChunkPosition(index);
-                    byte x = chunkPos[0];
-                    byte y = chunkPos[1];
-                    byte z = chunkPos[2];
-                    if (isCustomBlock) {
-                        chunkBatch.setCustomBlock(x, y, z, blockId);
-                    } else {
-                        chunkBatch.setBlock(x, y, z, blockId);
-                    }
-                }
-            } catch (EOFException e) {
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            chunkBatch.flush(c -> callback.accept(c)); // Success, null if file isn't properly encoded
+            ChunkReader.readChunk(array, instance, chunkX, chunkZ, true, callback);
         });
     }
 

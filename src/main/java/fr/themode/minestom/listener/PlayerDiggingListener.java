@@ -32,7 +32,7 @@ public class PlayerDiggingListener {
                     if (instance != null) {
                         CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
-                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(customBlock);
+                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
                                 player.refreshTargetBlock(customBlock, blockPosition);

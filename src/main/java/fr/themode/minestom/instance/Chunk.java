@@ -12,6 +12,8 @@ import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -31,6 +33,16 @@ public class Chunk implements Viewable {
 
     private Biome biome;
     private int chunkX, chunkZ;
+
+    // Int represent the chunk coord of the block
+    // value is: 2 bytes -> blockId | 2 bytes -> customBlockId (filled with 0 if isn't)
+    private Int2IntMap blocks = new Int2IntOpenHashMap(16 * 16 * 16); // Start with the size of a full chunk section
+
+    // Used to get all blocks with data (no null)
+    // Key is still chunk coord
+    // TODO shouldn't take Data object (too much memory overhead)
+    private Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
+
     protected volatile boolean packetUpdated;
 
     // Block entities
@@ -41,9 +53,6 @@ public class Chunk implements Viewable {
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Packet fullDataPacket;
-    // Int represent the chunk coord of the block
-    // value is: 2 bytes -> blockId | 2 bytes -> customBlockId (filled with 0 if isn't)
-    private Int2IntMap blocks = new Int2IntOpenHashMap(16 * 16 * 16); // Start with the size of a full chunk section
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -51,19 +60,35 @@ public class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId) {
-        setBlock(x, y, z, blockId, (short) 0);
+    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId, Data data) {
+        setBlock(x, y, z, blockId, (short) 0, data);
     }
 
-    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId) {
+    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId) {
+        UNSAFE_setBlock(x, y, z, blockId, null);
+    }
+
+    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
-        setCustomBlock(x, y, z, customBlock);
+        setCustomBlock(x, y, z, customBlock, data);
     }
 
-    private void setBlock(byte x, byte y, byte z, short blockType, short customId) {
+    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId) {
+        UNSAFE_setCustomBlock(x, y, z, customBlockId, null);
+    }
+
+    private void setCustomBlock(byte x, byte y, byte z, CustomBlock customBlock, Data data) {
+        if (customBlock.hasUpdate()) {
+            Consumer<Data> test = customBlock::update;
+            // TODO add update callback
+        }
+        setBlock(x, y, z, customBlock.getType(), customBlock.getId(), data);
+    }
+
+    private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
         if (blockType != 0 || customId != 0) {
             int value = (blockType << 16 | customId & 0xFFFF);
@@ -71,6 +96,13 @@ public class Chunk implements Viewable {
         } else {
             // Block has been deleted
             this.blocks.remove(index);
+        }
+
+        // Set the new data (or remove from the map if is null)
+        if (data != null) {
+            this.blocksData.put(index, data);
+        } else {
+            this.blocksData.remove(index);
         }
 
         if (isBlockEntity(blockType)) {
@@ -82,12 +114,13 @@ public class Chunk implements Viewable {
         this.packetUpdated = false;
     }
 
-    private void setCustomBlock(byte x, byte y, byte z, CustomBlock customBlock) {
-        if (customBlock.hasUpdate()) {
-            Consumer<Data> test = customBlock::update;
-            // TODO add update callback
+    public void setBlockData(byte x, byte y, byte z, Data data) {
+        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        if (data != null) {
+            this.blocksData.put(index, data);
+        } else {
+            this.blocksData.remove(index);
         }
-        setBlock(x, y, z, customBlock.getType(), customBlock.getId());
     }
 
     public short getBlockId(byte x, byte y, byte z) {
@@ -101,6 +134,11 @@ public class Chunk implements Viewable {
         int value = this.blocks.get(index);
         short id = (short) (value & 0xffff);
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
+    }
+
+    public Data getData(byte x, byte y, byte z) {
+        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        return blocksData.get(index);
     }
 
     public void updateBlocks() {
@@ -161,9 +199,20 @@ public class Chunk implements Viewable {
             boolean isCustomBlock = customBlockId != 0;
             short id = isCustomBlock ? customBlockId : blockId;
 
+            Data data = blocksData.get(index);
+            boolean hasData = data != null;
+
             dos.writeInt(index); // Chunk coord
             dos.writeBoolean(isCustomBlock); // Determine the type of the ID
             dos.writeShort(id);
+
+            dos.writeBoolean(hasData);
+            if (hasData) {
+                byte[] d = data.getSerializedData();
+                dos.writeInt(d.length);
+                dos.write(d);
+            }
+
         }
 
         byte[] result = output.toByteArray();

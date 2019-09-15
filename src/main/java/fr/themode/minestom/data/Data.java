@@ -1,6 +1,7 @@
 package fr.themode.minestom.data;
 
 import fr.themode.minestom.Main;
+import fr.themode.minestom.utils.PrimitiveConversion;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -10,13 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Data {
 
-    private DataManager dataManager = Main.getDataManager();
+    private static final DataManager DATA_MANAGER = Main.getDataManager();
 
+    // TODO replace maps for something more memory-friendly
     private ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     public <T> void set(String key, T value, Class<T> type) {
-        if (dataManager.getDataType(type) == null) {
+        if (DATA_MANAGER.getDataType(type) == null) {
             throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
         }
         this.data.put(key, value);
@@ -41,7 +43,7 @@ public class Data {
             Object value = entry.getValue();
             DataType dataType = Main.getDataManager().getDataType(type);
 
-            byte[] encodedType = type.getName().getBytes(); // Data type
+            byte[] encodedType = PrimitiveConversion.getObjectClassString(type.getName()).getBytes(); // Data type (fix for primitives)
             dos.writeShort(encodedType.length);
             dos.write(encodedType);
 

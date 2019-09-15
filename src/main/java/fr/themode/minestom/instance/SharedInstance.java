@@ -1,5 +1,6 @@
 package fr.themode.minestom.instance;
 
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
@@ -118,13 +119,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId) {
-        instanceContainer.setBlock(x, y, z, blockId);
+    public void setBlock(int x, int y, int z, short blockId, Data data) {
+        instanceContainer.setBlock(x, y, z, blockId, data);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short blockId) {
-        instanceContainer.setBlock(x, y, z, blockId);
+    public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
+        instanceContainer.setBlock(x, y, z, blockId, data);
     }
 
     public InstanceContainer getContainer() {
