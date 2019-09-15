@@ -2,13 +2,19 @@ package fr.themode.minestom.instance.demo;
 
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.block.UpdateOption;
 import fr.themode.minestom.timer.TimeUnit;
+import fr.themode.minestom.utils.BlockPosition;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StoneBlock extends CustomBlock {
 
     private static final UpdateOption UPDATE_OPTION = new UpdateOption(1, TimeUnit.TICK);
+
+    private final AtomicInteger counter = new AtomicInteger();
 
     @Override
     public UpdateOption getUpdateOption() {
@@ -16,8 +22,11 @@ public class StoneBlock extends CustomBlock {
     }
 
     @Override
-    public void update(Data data) {
-        System.out.println("BLOCK HAS BEEN UPDATED");
+    public void update(Instance instance, BlockPosition blockPosition, Data data) {
+        if (data == null)
+            return;
+
+        data.set("value", counter.incrementAndGet(), int.class);
     }
 
     @Override

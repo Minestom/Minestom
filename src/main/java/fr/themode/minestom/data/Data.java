@@ -13,7 +13,7 @@ public class Data {
 
     private static final DataManager DATA_MANAGER = Main.getDataManager();
 
-    // TODO replace maps for something more memory-friendly
+    // TODO replace maps to something more memory-friendly
     private ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 

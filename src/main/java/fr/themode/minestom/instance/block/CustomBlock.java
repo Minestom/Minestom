@@ -2,12 +2,14 @@ package fr.themode.minestom.instance.block;
 
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.utils.BlockPosition;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TODO
- *  - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (cumulation)
+ * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (cumulation)
  */
 public abstract class CustomBlock {
 
@@ -19,7 +21,7 @@ public abstract class CustomBlock {
         this.id = (short) idCounter.incrementAndGet();
     }
 
-    public void update(Data data) {
+    public void update(Instance instance, BlockPosition blockPosition, Data data) {
         throw new UnsupportedOperationException("Update method not overriden");
     }
 

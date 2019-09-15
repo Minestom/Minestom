@@ -7,13 +7,12 @@ import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
+import fr.themode.minestom.instance.block.UpdateConsumer;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 
 public class Chunk implements Viewable {
 
@@ -43,6 +41,9 @@ public class Chunk implements Viewable {
     // TODO shouldn't take Data object (too much memory overhead)
     private Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
 
+    // Contains CustomBlocks' index which are updatable
+    private IntSet updatableBlocks = new IntOpenHashSet();
+
     protected volatile boolean packetUpdated;
 
     // Block entities
@@ -61,7 +62,7 @@ public class Chunk implements Viewable {
     }
 
     public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId, Data data) {
-        setBlock(x, y, z, blockId, (short) 0, data);
+        setBlock(x, y, z, blockId, (short) 0, data, null);
     }
 
     public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId) {
@@ -81,14 +82,11 @@ public class Chunk implements Viewable {
     }
 
     private void setCustomBlock(byte x, byte y, byte z, CustomBlock customBlock, Data data) {
-        if (customBlock.hasUpdate()) {
-            Consumer<Data> test = customBlock::update;
-            // TODO add update callback
-        }
-        setBlock(x, y, z, customBlock.getType(), customBlock.getId(), data);
+        UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
+        setBlock(x, y, z, customBlock.getType(), customBlock.getId(), data, updateConsumer);
     }
 
-    private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data) {
+    private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
         if (blockType != 0 || customId != 0) {
             int value = (blockType << 16 | customId & 0xFFFF);
@@ -103,6 +101,13 @@ public class Chunk implements Viewable {
             this.blocksData.put(index, data);
         } else {
             this.blocksData.remove(index);
+        }
+
+        // Set update consumer
+        if (updateConsumer != null) {
+            this.updatableBlocks.add(index);
+        } else {
+            this.updatableBlocks.rem(index);
         }
 
         if (isBlockEntity(blockType)) {
@@ -125,31 +130,50 @@ public class Chunk implements Viewable {
 
     public short getBlockId(byte x, byte y, byte z) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        int value = this.blocks.get(index);
+        int value = getBlockValue(index);
         return (short) (value >>> 16);
     }
 
     public CustomBlock getCustomBlock(byte x, byte y, byte z) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        int value = this.blocks.get(index);
+        return getCustomBlock(index);
+    }
+
+    private CustomBlock getCustomBlock(int index) {
+        int value = getBlockValue(index);
         short id = (short) (value & 0xffff);
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
     }
 
+    private int getBlockValue(int index) {
+        return blocks.get(index);
+    }
+
     public Data getData(byte x, byte y, byte z) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        return getData(index);
+    }
+
+    private Data getData(int index) {
         return blocksData.get(index);
     }
 
-    public void updateBlocks() {
-        /**
-         * TODO blocks' update:
-         *  - get all custom blocks
-         *  - check if they have an update method
-         *  - check if they should be updated
-         *  - get custom block's data
-         *  - call update method
-         */
+    public void updateBlocks(long time, Instance instance) {
+        synchronized (this) {
+            IntIterator iterator = updatableBlocks.iterator();
+            while (iterator.hasNext()) {
+                int index = iterator.nextInt();
+                byte[] blockPos = SerializerUtils.indexToChunkPosition(index);
+                byte x = blockPos[0];
+                byte y = blockPos[1];
+                byte z = blockPos[2];
+                CustomBlock customBlock = getCustomBlock(x, y, z);
+                BlockPosition blockPosition = new BlockPosition(x * chunkX, y, z * chunkZ);
+                Data data = getData(index);
+                // TODO should customBlock be updated?
+                customBlock.update(instance, blockPosition, data);
+            }
+        }
     }
 
     public Biome getBiome() {

@@ -27,10 +27,12 @@ public class BlockManager {
     }
 
     public void update() {
+        long time = System.currentTimeMillis();
+        // TODO another thread pool
         for (Instance instance : instanceManager.getInstances()) {
-            // TODO only InstanceContainer?
+            // FIXME: only InstanceContainer?
             for (Chunk chunk : instance.getChunks()) {
-                chunk.updateBlocks();
+                chunk.updateBlocks(time, instance);
             }
         }
     }

@@ -16,9 +16,11 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
         for (byte x = 0; x < 16; x++)
             for (byte z = 0; z < 16; z++) {
                 for (byte y = 0; y < 65; y++) {
-                    Data data = new Data();
-                    data.set("x", (int) x, int.class);
-                    batch.setCustomBlock(x, y, z, "custom_block", data);
+                    if (random.nextInt(100) > 90) {
+                        batch.setCustomBlock(x, y, z, "custom_block", new Data());
+                    } else {
+                        batch.setBlock(x, y, z, (short) 10);
+                    }
                 }
             }
     }

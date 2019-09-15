@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 public class ChunkReader {
 
     public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, boolean shouldDecompress, Consumer<Chunk> callback) {
-
         b = shouldDecompress ? CompressionUtils.getDecompressedData(b) : b;
 
         DataInputStream stream = new DataInputStream(new ByteArrayInputStream(b));
@@ -30,7 +29,6 @@ public class ChunkReader {
             chunkBatch = instance.createChunkBatch(chunk);
 
             while (true) {
-                // TODO block data
                 int index = stream.readInt();
                 boolean isCustomBlock = stream.readBoolean();
                 short blockId = stream.readShort();
@@ -55,6 +53,7 @@ public class ChunkReader {
                 }
             }
         } catch (EOFException e) {
+            // Finished reading
         } catch (IOException e) {
             e.printStackTrace();
         }
