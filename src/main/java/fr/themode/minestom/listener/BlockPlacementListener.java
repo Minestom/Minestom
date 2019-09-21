@@ -42,7 +42,7 @@ public class BlockPlacementListener {
 
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled()) {
-                instance.setCustomBlock(blockPosition, "custom_block"); // TODO set useItem's block instead
+                instance.setCustomBlock(blockPosition, "updatable"); // TODO set useItem's block instead
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
                     usedItem.setAmount((byte) (usedItem.getAmount() - 1));
                     if (usedItem.getAmount() <= 0)

@@ -6,7 +6,5 @@ import fr.themode.minestom.utils.BlockPosition;
 
 @FunctionalInterface
 public interface UpdateConsumer {
-
     void update(Instance instance, BlockPosition blockPosition, Data data);
-
 }

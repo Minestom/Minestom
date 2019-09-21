@@ -14,11 +14,7 @@ public class RespawnPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        int gameModeId = gameMode.getId();
-        if (gameMode.isHardcore())
-            gameModeId |= 8;
-
-        writer.writeByte((byte) gameModeId);
+        writer.writeByte((byte) gameMode.getId()); // Hardcore flag not included
         writer.writeInt(dimension.getId());
         writer.writeSizedString(levelType.getType());
     }

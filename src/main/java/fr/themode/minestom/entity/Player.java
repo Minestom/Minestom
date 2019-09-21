@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
+import fr.themode.minestom.chat.ChatColor;
 import fr.themode.minestom.collision.BoundingBox;
-import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -21,12 +21,14 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.scoreboard.BelowNameScoreboard;
+import fr.themode.minestom.scoreboard.Team;
+import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
 import java.util.Collections;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -85,6 +87,8 @@ public class Player extends LivingEntity {
     private byte targetLastStage;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
+    private Team team;
+    private BelowNameScoreboard belowNameScoreboard;
 
     // Vehicle
     private float sideways;
@@ -136,16 +140,6 @@ public class Player extends LivingEntity {
             }
         });
 
-        setEventCallback(PlayerStartDiggingEvent.class, event -> {
-            BlockPosition blockPosition = event.getBlockPosition();
-            Data data = getInstance().getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-            if (data == null) {
-                sendMessage("DATA IS NULL");
-                return;
-            }
-            sendMessage("BLOCK DATA: " + data.get("value"));
-        });
-
         setEventCallback(PickupItemEvent.class, event -> {
             event.setCancelled(!getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
         });
@@ -178,17 +172,12 @@ public class Player extends LivingEntity {
             getInventory().addItemStack(new ItemStack(1, (byte) 75));
             //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
-            TeamsPacket teamsPacket = new TeamsPacket();
-            teamsPacket.teamName = "TEAMNAME" + new Random().nextInt(100);
-            teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = "WOWdisplay";
-            teamsPacket.nameTagVisibility = "always";
-            teamsPacket.teamColor = 2;
-            teamsPacket.teamPrefix = "pre";
-            teamsPacket.teamSuffix = "suf";
-            teamsPacket.collisionRule = "never";
-            teamsPacket.entities = new String[]{getUsername()};
-            sendPacketToViewersAndSelf(teamsPacket);
+            TeamManager teamManager = Main.getTeamManager();
+            Team team = teamManager.createTeam(getUsername());
+            team.setTeamDisplayName("display");
+            team.setPrefix("[Test] ");
+            team.setTeamColor(ChatColor.RED);
+            setTeam(team);
 
             setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
@@ -199,6 +188,8 @@ public class Player extends LivingEntity {
             }
             scoreboard.addViewer(this);
             scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");*/
+
+            setBelowNameScoreboard(new BelowNameScoreboard());
         });
     }
 
@@ -349,7 +340,7 @@ public class Player extends LivingEntity {
         if (player == this)
             return;
         super.addViewer(player);
-        PlayerConnection connection = player.getPlayerConnection();
+        PlayerConnection viewerConnection = player.getPlayerConnection();
         String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
         spawnPlayerPacket.entityId = getEntityId();
@@ -362,13 +353,17 @@ public class Player extends LivingEntity {
         addP.properties.add(p);
         pInfoPacket.playerInfos.add(addP);
 
-        connection.sendPacket(pInfoPacket);
-        connection.sendPacket(spawnPlayerPacket);
-        connection.sendPacket(getMetadataPacket());
+        viewerConnection.sendPacket(pInfoPacket);
+        viewerConnection.sendPacket(spawnPlayerPacket);
+        viewerConnection.sendPacket(getMetadataPacket());
 
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            player.playerConnection.sendPacket(getEquipmentPacket(slot));
+            viewerConnection.sendPacket(getEquipmentPacket(slot));
         }
+
+        // Team
+        if (team != null)
+            viewerConnection.sendPacket(team.getTeamsCreationPacket());
     }
 
     @Override
@@ -376,9 +371,14 @@ public class Player extends LivingEntity {
         if (player == this)
             return;
         super.removeViewer(player);
+        PlayerConnection viewerConnection = player.getPlayerConnection();
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
-        player.playerConnection.sendPacket(playerInfoPacket);
+        viewerConnection.sendPacket(playerInfoPacket);
+
+        // Team
+        if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
+            viewerConnection.sendPacket(team.createTeamDestructionPacket());
     }
 
     @Override
@@ -690,6 +690,36 @@ public class Player extends LivingEntity {
         heldItemChangePacket.slot = slot;
         playerConnection.sendPacket(heldItemChangePacket);
         refreshHeldSlot(slot);
+    }
+
+    public void setTeam(Team team) {
+        if (this.team == team)
+            return;
+
+        if (this.team != null) {
+            this.team.removePlayer(this);
+        }
+
+        this.team = team;
+        if (team != null) {
+            team.addPlayer(this);
+            sendPacketToViewers(team.getTeamsCreationPacket()); // FIXME: only if viewer hasn't already register this team
+        }
+    }
+
+    public void setBelowNameScoreboard(BelowNameScoreboard belowNameScoreboard) {
+        if (this.belowNameScoreboard == belowNameScoreboard)
+            return;
+
+        if (this.belowNameScoreboard != null) {
+            this.belowNameScoreboard.removeViewer(this);
+        }
+
+        this.belowNameScoreboard = belowNameScoreboard;
+        if (belowNameScoreboard != null) {
+            belowNameScoreboard.addViewer(this);
+            getViewers().forEach(player -> belowNameScoreboard.addViewer(player));
+        }
     }
 
     public short getHeldSlot() {

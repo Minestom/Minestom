@@ -16,11 +16,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO update tick
-public class Scoreboard implements Viewable {
+public class Sidebar implements Viewable {
 
     private static final AtomicInteger counter = new AtomicInteger();
+
+    // WARNING: you shouldn't create scoreboards/teams with the same prefixes as those
     private static final String SCOREBOARD_PREFIX = "sb-";
     private static final String TEAM_PREFIX = "sbt-";
+
+    // Limited by notchian client, do not change
     private static final int MAX_LINES_COUNT = 15;
 
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -32,7 +36,7 @@ public class Scoreboard implements Viewable {
 
     private String title;
 
-    public Scoreboard(String title) {
+    public Sidebar(String title) {
         this.title = title;
 
         this.objectiveName = SCOREBOARD_PREFIX + counter.incrementAndGet();
@@ -64,7 +68,7 @@ public class Scoreboard implements Viewable {
             this.lines.add(scoreboardLine);
 
             // Send to current viewers
-            sendPacketsToViewers(scoreboardLine.team.getCreationPacket(), scoreboardLine.getScoreCreationPacket(objectiveName));
+            sendPacketsToViewers(scoreboardLine.sidebarTeam.getCreationPacket(), scoreboardLine.getScoreCreationPacket(objectiveName));
         }
     }
 
@@ -72,7 +76,7 @@ public class Scoreboard implements Viewable {
         for (ScoreboardLine line : lines) {
             if (line.id.equals(id)) {
                 line.refreshContent(content);
-                sendPacketToViewers(line.team.updatePrefix(content));
+                sendPacketToViewers(line.sidebarTeam.updatePrefix(content));
             }
         }
     }
@@ -102,7 +106,7 @@ public class Scoreboard implements Viewable {
                 if (line.id.equals(id)) {
 
                     // Remove the line for current viewers
-                    sendPacketsToViewers(line.getScoreCreationPacket(objectiveName), line.team.getDestructionPacket());
+                    sendPacketsToViewers(line.getScoreCreationPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
 
                     line.returnName(availableColors);
                     iterator.remove();
@@ -130,7 +134,7 @@ public class Scoreboard implements Viewable {
         playerConnection.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
 
         for (ScoreboardLine line : lines) {
-            playerConnection.sendPacket(line.team.getCreationPacket());
+            playerConnection.sendPacket(line.sidebarTeam.getCreationPacket());
             playerConnection.sendPacket(line.getScoreCreationPacket(objectiveName));
         }
     }
@@ -146,7 +150,7 @@ public class Scoreboard implements Viewable {
 
         for (ScoreboardLine line : lines) {
             playerConnection.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
-            playerConnection.sendPacket(line.team.getDestructionPacket());
+            playerConnection.sendPacket(line.sidebarTeam.getDestructionPacket());
         }
     }
 
@@ -164,7 +168,7 @@ public class Scoreboard implements Viewable {
         private String teamName;
         private int colorName; // Name of the score (entityName) which is essentially an ID
         private String entityName;
-        private Team team;
+        private SidebarTeam sidebarTeam;
 
         public ScoreboardLine(String id, String content, int line) {
             this.id = id;
@@ -179,7 +183,7 @@ public class Scoreboard implements Viewable {
         }
 
         public String getContent() {
-            return team == null ? content : team.getPrefix();
+            return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
         public int getLine() {
@@ -195,7 +199,7 @@ public class Scoreboard implements Viewable {
         private void createTeam() {
             this.entityName = Chat.COLOR_CHAR + Integer.toHexString(colorName);
 
-            this.team = new Team(teamName, content, "", entityName);
+            this.sidebarTeam = new SidebarTeam(teamName, content, "", entityName);
         }
 
         private void returnName(LinkedList<Integer> colors) {
@@ -228,7 +232,7 @@ public class Scoreboard implements Viewable {
         }
 
         private void refreshContent(String content) {
-            this.team.refreshPrefix(content);
+            this.sidebarTeam.refreshPrefix(content);
         }
 
     }

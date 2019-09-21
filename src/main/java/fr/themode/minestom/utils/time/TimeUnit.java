@@ -1,4 +1,4 @@
-package fr.themode.minestom.timer;
+package fr.themode.minestom.utils.time;
 
 import fr.themode.minestom.Main;
 

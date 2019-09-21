@@ -11,12 +11,11 @@ public class TeamsPacket implements ServerPacket {
 
     public String teamDisplayName;
     public byte friendlyFlags;
-    public String nameTagVisibility;
-    public String collisionRule;
+    public NameTagVisibility nameTagVisibility;
+    public CollisionRule collisionRule;
     public int teamColor;
     public String teamPrefix;
     public String teamSuffix;
-    public int entityCount;
     public String[] entities;
 
     @Override
@@ -29,8 +28,8 @@ public class TeamsPacket implements ServerPacket {
             case UPDATE_TEAM_INFO:
                 writer.writeSizedString(Chat.legacyTextString(teamDisplayName));
                 writer.writeByte(friendlyFlags);
-                writer.writeSizedString(nameTagVisibility);
-                writer.writeSizedString(collisionRule);
+                writer.writeSizedString(nameTagVisibility.getIdentifier());
+                writer.writeSizedString(collisionRule.getIdentifier());
                 writer.writeVarInt(teamColor);
                 writer.writeSizedString(Chat.legacyTextString(teamPrefix));
                 writer.writeSizedString(Chat.legacyTextString(teamSuffix));
@@ -57,6 +56,40 @@ public class TeamsPacket implements ServerPacket {
         UPDATE_TEAM_INFO,
         ADD_PLAYERS_TEAM,
         REMOVE_PLAYERS_TEAM;
+    }
+
+    public enum NameTagVisibility {
+        ALWAYS("always"),
+        HIDE_FOR_OTHER_TEAMS("hideForOtherTeams"),
+        HIDE_FOR_OWN_TEAM("hideForOwnTeam"),
+        NEVER("never");
+
+        private String identifier;
+
+        NameTagVisibility(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+    }
+
+    public enum CollisionRule {
+        ALWAYS("always"),
+        PUSH_OTHER_TEAMS("pushOtherTeams"),
+        PUSH_OWN_TEAM("pushOwnTeam"),
+        NEVER("never");
+
+        private String identifier;
+
+        CollisionRule(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
     }
 
 }

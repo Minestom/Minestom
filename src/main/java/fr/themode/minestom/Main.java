@@ -7,6 +7,7 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.demo.StoneBlock;
+import fr.themode.minestom.instance.demo.UpdatableBlockDemo;
 import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionUtils;
@@ -15,6 +16,7 @@ import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.utils.Utils;
 
 public class Main {
@@ -23,6 +25,7 @@ public class Main {
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
     public static final int THREAD_COUNT_IO = 2;
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
+    public static final int THREAD_COUNT_BLOCK_UPDATE = 2;
     public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 
@@ -44,6 +47,7 @@ public class Main {
     private static BlockManager blockManager;
     private static EntityManager entityManager;
     private static DataManager dataManager;
+    private static TeamManager teamManager;
 
     public static void main(String[] args) {
         connectionManager = new ConnectionManager();
@@ -54,8 +58,10 @@ public class Main {
         blockManager = new BlockManager();
         entityManager = new EntityManager();
         dataManager = new DataManager();
+        teamManager = new TeamManager();
 
-        blockManager.registerBlock(StoneBlock::new);
+        blockManager.registerBlock(new StoneBlock());
+        blockManager.registerBlock(new UpdatableBlockDemo());
 
         server = new Server(136434);
 
@@ -115,7 +121,7 @@ public class Main {
             entityManager.update();
 
             // Blocks update
-            blockManager.update();
+            instanceManager.updateBlocks();
 
             // TODO miscellaneous update (scoreboard)
 
@@ -156,6 +162,10 @@ public class Main {
 
     public static DataManager getDataManager() {
         return dataManager;
+    }
+
+    public static TeamManager getTeamManager() {
+        return teamManager;
     }
 
     public static ConnectionManager getConnectionManager() {

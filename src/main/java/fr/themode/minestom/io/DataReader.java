@@ -37,10 +37,7 @@ public class DataReader {
                 }
 
                 int valueLength = stream.readInt();
-                byte[] valueCache = new byte[valueLength];
-                for (int i = 0; i < valueLength; i++) {
-                    valueCache[i] = stream.readByte();
-                }
+                byte[] valueCache = stream.readNBytes(valueLength);
 
                 Class type = Class.forName(new String(typeCache));
 

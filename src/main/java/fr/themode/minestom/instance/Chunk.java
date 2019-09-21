@@ -8,10 +8,12 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.block.UpdateConsumer;
+import fr.themode.minestom.instance.block.UpdateOption;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
+import fr.themode.minestom.utils.time.CooldownUtils;
 import it.unimi.dsi.fastutil.ints.*;
 
 import java.io.ByteArrayOutputStream;
@@ -43,6 +45,8 @@ public class Chunk implements Viewable {
 
     // Contains CustomBlocks' index which are updatable
     private IntSet updatableBlocks = new IntOpenHashSet();
+    // (block index)/(last update in ms)
+    private Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     protected volatile boolean packetUpdated;
 
@@ -89,7 +93,7 @@ public class Chunk implements Viewable {
     private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
         if (blockType != 0 || customId != 0) {
-            int value = (blockType << 16 | customId & 0xFFFF);
+            int value = (blockType << 16 | customId & 0xFFFF); // Merge blockType and customId to one unique Integer (16/16)
             this.blocks.put(index, value);
         } else {
             // Block has been deleted
@@ -106,8 +110,10 @@ public class Chunk implements Viewable {
         // Set update consumer
         if (updateConsumer != null) {
             this.updatableBlocks.add(index);
+            this.updatableBlocksLastUpdate.put(index, System.currentTimeMillis());
         } else {
-            this.updatableBlocks.rem(index);
+            this.updatableBlocks.remove(index);
+            this.updatableBlocksLastUpdate.remove(index);
         }
 
         if (isBlockEntity(blockType)) {
@@ -159,8 +165,12 @@ public class Chunk implements Viewable {
     }
 
     public void updateBlocks(long time, Instance instance) {
+        if (updatableBlocks.isEmpty())
+            return;
+
+        // Block all chunk operation during the update
         synchronized (this) {
-            IntIterator iterator = updatableBlocks.iterator();
+            IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
             while (iterator.hasNext()) {
                 int index = iterator.nextInt();
                 byte[] blockPos = SerializerUtils.indexToChunkPosition(index);
@@ -168,9 +178,17 @@ public class Chunk implements Viewable {
                 byte y = blockPos[1];
                 byte z = blockPos[2];
                 CustomBlock customBlock = getCustomBlock(x, y, z);
-                BlockPosition blockPosition = new BlockPosition(x * chunkX, y, z * chunkZ);
+
+                // Update cooldown
+                UpdateOption updateOption = customBlock.getUpdateOption();
+                long lastUpdate = updatableBlocksLastUpdate.get(index);
+                boolean shouldUpdate = !CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
+                if (!shouldUpdate)
+                    continue;
+
+                this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
+                BlockPosition blockPosition = new BlockPosition(x + 16 * chunkX, y, z + 16 * chunkZ);
                 Data data = getData(index);
-                // TODO should customBlock be updated?
                 customBlock.update(instance, blockPosition, data);
             }
         }

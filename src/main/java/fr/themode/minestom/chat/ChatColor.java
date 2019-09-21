@@ -28,6 +28,10 @@ public enum ChatColor {
         this.id = id;
     }
 
+    public byte getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return Chat.COLOR_CHAR + String.valueOf(HexUtils.byteToHex(id));

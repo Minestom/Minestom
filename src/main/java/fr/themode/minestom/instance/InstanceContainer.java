@@ -45,6 +45,8 @@ public class InstanceContainer extends Instance {
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
             chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId, data);
+
+            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
         }
     }
@@ -58,6 +60,8 @@ public class InstanceContainer extends Instance {
             byte chunkZ = (byte) (z % 16);
             chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId, data);
             short id = BLOCK_MANAGER.getBlock(blockId).getType();
+
+            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, id);
         }
     }

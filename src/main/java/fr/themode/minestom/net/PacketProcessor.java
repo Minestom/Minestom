@@ -13,13 +13,13 @@ import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketProcessor {
 
-    private Map<Client, PlayerConnection> connectionPlayerConnectionMap = new HashMap<>();
+    private Map<Client, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
     private ConnectionManager connectionManager;
 

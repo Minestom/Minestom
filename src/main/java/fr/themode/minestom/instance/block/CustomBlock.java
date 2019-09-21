@@ -15,21 +15,22 @@ public abstract class CustomBlock {
 
     private static final AtomicInteger idCounter = new AtomicInteger();
 
+    private short type;
+    private String identifier;
     private short id;
 
-    public CustomBlock() {
+    public CustomBlock(short type, String identifier) {
+        this.type = type;
+        this.identifier = identifier;
         this.id = (short) idCounter.incrementAndGet();
     }
 
+    // TODO add another object parameter which will offer a lot of integrated features (like break animation, id change etc...)
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
         throw new UnsupportedOperationException("Update method not overriden");
     }
 
     public abstract UpdateOption getUpdateOption();
-
-    public abstract short getType();
-
-    public abstract String getIdentifier();
 
     /*
       Time in ms
@@ -37,7 +38,19 @@ public abstract class CustomBlock {
     public abstract int getBreakDelay(Player player);
 
     public boolean hasUpdate() {
-        return getUpdateOption().getValue() > 0;
+        UpdateOption updateOption = getUpdateOption();
+        if (updateOption == null)
+            return false;
+
+        return updateOption.getValue() > 0;
+    }
+
+    public short getType() {
+        return type;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     public short getId() {
