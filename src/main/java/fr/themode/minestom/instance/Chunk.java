@@ -8,12 +8,12 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.block.UpdateConsumer;
-import fr.themode.minestom.instance.block.UpdateOption;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.time.CooldownUtils;
+import fr.themode.minestom.utils.time.UpdateOption;
 import it.unimi.dsi.fastutil.ints.*;
 
 import java.io.ByteArrayOutputStream;
@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+// TODO light data & API
 public class Chunk implements Viewable {
 
     private static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
@@ -40,7 +41,7 @@ public class Chunk implements Viewable {
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coord
-    // TODO shouldn't take Data object (too much memory overhead)
+    // FIXME: shouldn't take Data object (too much memory overhead)
     private Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
 
     // Contains CustomBlocks' index which are updatable
@@ -52,8 +53,6 @@ public class Chunk implements Viewable {
 
     // Block entities
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
-
-    // TODO blocks update
 
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -92,12 +91,24 @@ public class Chunk implements Viewable {
 
     private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        if (blockType != 0 || customId != 0) {
-            int value = (blockType << 16 | customId & 0xFFFF); // Merge blockType and customId to one unique Integer (16/16)
+        if (blockType != 0
+                || (blockType == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
+            int value = (blockType << 16 | customId & 0xFFFF); // Merge blockType and customId to one unique Integer (16/16 bits)
             this.blocks.put(index, value);
         } else {
-            // Block has been deleted
+            // Block has been deleted, clear cache and return
+
             this.blocks.remove(index);
+
+            this.blocksData.remove(index);
+
+            this.updatableBlocks.remove(index);
+            this.updatableBlocksLastUpdate.remove(index);
+
+            this.blockEntities.remove(index);
+
+            this.packetUpdated = false;
+            return;
         }
 
         // Set the new data (or remove from the map if is null)
@@ -173,11 +184,7 @@ public class Chunk implements Viewable {
             IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
             while (iterator.hasNext()) {
                 int index = iterator.nextInt();
-                byte[] blockPos = SerializerUtils.indexToChunkPosition(index);
-                byte x = blockPos[0];
-                byte y = blockPos[1];
-                byte z = blockPos[2];
-                CustomBlock customBlock = getCustomBlock(x, y, z);
+                CustomBlock customBlock = getCustomBlock(index);
 
                 // Update cooldown
                 UpdateOption updateOption = customBlock.getUpdateOption();
@@ -187,6 +194,12 @@ public class Chunk implements Viewable {
                     continue;
 
                 this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
+
+                byte[] blockPos = SerializerUtils.indexToChunkPosition(index);
+                byte x = blockPos[0];
+                byte y = blockPos[1];
+                byte z = blockPos[2];
+
                 BlockPosition blockPosition = new BlockPosition(x + 16 * chunkX, y, z + 16 * chunkZ);
                 Data data = getData(index);
                 customBlock.update(instance, blockPosition, data);

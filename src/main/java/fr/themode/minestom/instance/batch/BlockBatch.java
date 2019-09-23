@@ -1,7 +1,6 @@
 package fr.themode.minestom.instance.batch;
 
 import fr.themode.minestom.data.Data;
-import fr.themode.minestom.instance.BlockModifier;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.InstanceContainer;
 
@@ -10,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlockBatch implements IBatch, BlockModifier {
+public class BlockBatch implements IBatch {
 
     private InstanceContainer instance;
 
@@ -21,38 +20,42 @@ public class BlockBatch implements IBatch, BlockModifier {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
-        Chunk chunk = this.instance.getChunkAt(x, z);
-        List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
+    public void setBlock(int x, int y, int z, short blockId, Data data) {
+        synchronized (this) {
+            Chunk chunk = this.instance.getChunkAt(x, z);
+            List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
 
-        BlockData blockData = new BlockData();
-        blockData.x = x % 16;
-        blockData.y = y;
-        blockData.z = z % 16;
-        blockData.blockId = blockId;
-        blockData.data = data;
+            BlockData blockData = new BlockData();
+            blockData.x = x % 16;
+            blockData.y = y;
+            blockData.z = z % 16;
+            blockData.blockId = blockId;
+            blockData.data = data;
 
-        blocksData.add(blockData);
+            blocksData.add(blockData);
 
-        this.data.put(chunk, blocksData);
+            this.data.put(chunk, blocksData);
+        }
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        Chunk chunk = this.instance.getChunkAt(x, z);
-        List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
+        synchronized (this) {
+            Chunk chunk = this.instance.getChunkAt(x, z);
+            List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
 
-        BlockData blockData = new BlockData();
-        blockData.x = x % 16;
-        blockData.y = y;
-        blockData.z = z % 16;
-        blockData.isCustomBlock = true;
-        blockData.blockId = blockId;
-        blockData.data = data;
+            BlockData blockData = new BlockData();
+            blockData.x = x % 16;
+            blockData.y = y;
+            blockData.z = z % 16;
+            blockData.isCustomBlock = true;
+            blockData.blockId = blockId;
+            blockData.data = data;
 
-        blocksData.add(blockData);
+            blocksData.add(blockData);
 
-        this.data.put(chunk, blocksData);
+            this.data.put(chunk, blocksData);
+        }
     }
 
     public void flush(Runnable callback) {

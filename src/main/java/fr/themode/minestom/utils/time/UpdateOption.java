@@ -1,6 +1,4 @@
-package fr.themode.minestom.instance.block;
-
-import fr.themode.minestom.utils.time.TimeUnit;
+package fr.themode.minestom.utils.time;
 
 public class UpdateOption {
 

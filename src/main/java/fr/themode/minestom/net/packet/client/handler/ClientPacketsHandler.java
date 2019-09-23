@@ -19,7 +19,8 @@ public class ClientPacketsHandler {
 
         ConstructorAccess<? extends ClientPacket> constructorAccess = constructorAccesses[id];
         if (constructorAccess == null)
-            System.err.println("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
+            throw new IllegalStateException("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
+
         ClientPacket packet = constructorAccess.newInstance();
         return packet;
     }

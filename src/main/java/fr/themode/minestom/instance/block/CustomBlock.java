@@ -4,6 +4,7 @@ import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.time.UpdateOption;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

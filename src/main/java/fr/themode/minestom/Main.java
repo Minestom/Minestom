@@ -17,19 +17,23 @@ import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.scoreboard.TeamManager;
+import fr.themode.minestom.timer.SchedulerManager;
 import fr.themode.minestom.utils.Utils;
 
 public class Main {
 
-    // Thread number
+    // Thread pools
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
     public static final int THREAD_COUNT_IO = 2;
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
     public static final int THREAD_COUNT_BLOCK_UPDATE = 2;
     public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
+    public static final int THREAD_COUNT_SCHEDULER = 2;
 
+    // Can be modified at performance cost when decreased
     public static final int TICK_MS = 50;
+
     public static final int TICK_PER_SECOND = 1000 / TICK_MS;
 
     // Config
@@ -48,6 +52,7 @@ public class Main {
     private static EntityManager entityManager;
     private static DataManager dataManager;
     private static TeamManager teamManager;
+    private static SchedulerManager schedulerManager;
 
     public static void main(String[] args) {
         connectionManager = new ConnectionManager();
@@ -59,6 +64,7 @@ public class Main {
         entityManager = new EntityManager();
         dataManager = new DataManager();
         teamManager = new TeamManager();
+        schedulerManager = new SchedulerManager();
 
         blockManager.registerBlock(new StoneBlock());
         blockManager.registerBlock(new UpdatableBlockDemo());
@@ -123,6 +129,9 @@ public class Main {
             // Blocks update
             instanceManager.updateBlocks();
 
+            // Scheduler
+            schedulerManager.update();
+
             // TODO miscellaneous update (scoreboard)
 
             // Sleep until next tick
@@ -166,6 +175,10 @@ public class Main {
 
     public static TeamManager getTeamManager() {
         return teamManager;
+    }
+
+    public static SchedulerManager getSchedulerManager() {
+        return schedulerManager;
     }
 
     public static ConnectionManager getConnectionManager() {

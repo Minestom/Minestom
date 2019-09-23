@@ -4,9 +4,9 @@ import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.block.CustomBlock;
-import fr.themode.minestom.instance.block.UpdateOption;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.time.TimeUnit;
+import fr.themode.minestom.utils.time.UpdateOption;
 
 public class UpdatableBlockDemo extends CustomBlock {
 

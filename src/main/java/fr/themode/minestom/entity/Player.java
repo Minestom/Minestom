@@ -90,6 +90,14 @@ public class Player extends LivingEntity {
     private Team team;
     private BelowNameScoreboard belowNameScoreboard;
 
+    // Abilities
+    private boolean invulnerable;
+    private boolean flying;
+    private boolean allowFlying;
+    private boolean instantBreak;
+    private float flyingSpeed = 0.05f;
+    private float fieldViewModifier = 0.1f;
+
     // Vehicle
     private float sideways;
     private float forward;
@@ -189,7 +197,9 @@ public class Player extends LivingEntity {
             scoreboard.addViewer(this);
             scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");*/
 
-            setBelowNameScoreboard(new BelowNameScoreboard());
+            BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
+            setBelowNameScoreboard(belowNameScoreboard);
+            belowNameScoreboard.updateScore(this, 50);
         });
     }
 
@@ -718,6 +728,7 @@ public class Player extends LivingEntity {
         this.belowNameScoreboard = belowNameScoreboard;
         if (belowNameScoreboard != null) {
             belowNameScoreboard.addViewer(this);
+            belowNameScoreboard.displayScoreboard(this);
             getViewers().forEach(player -> belowNameScoreboard.addViewer(player));
         }
     }
@@ -822,6 +833,72 @@ public class Player extends LivingEntity {
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = 67;
         playerConnection.sendPacket(positionAndLookPacket);
+    }
+
+    public boolean isInvulnerable() {
+        return invulnerable;
+    }
+
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+        refreshAbilities();
+    }
+
+    public boolean isFlying() {
+        return flying;
+    }
+
+    public void setFlying(boolean flying) {
+        this.flying = flying;
+        refreshAbilities();
+    }
+
+    public boolean isAllowFlying() {
+        return allowFlying;
+    }
+
+    public void setAllowFlying(boolean allowFlying) {
+        this.allowFlying = allowFlying;
+        refreshAbilities();
+    }
+
+    public boolean isInstantBreak() {
+        return instantBreak;
+    }
+
+    public void setInstantBreak(boolean instantBreak) {
+        this.instantBreak = instantBreak;
+        refreshAbilities();
+    }
+
+    public float getFlyingSpeed() {
+        return flyingSpeed;
+    }
+
+    public void setFlyingSpeed(float flyingSpeed) {
+        this.flyingSpeed = flyingSpeed;
+        refreshAbilities();
+    }
+
+    public float getFieldViewModifier() {
+        return fieldViewModifier;
+    }
+
+    public void setFieldViewModifier(float fieldViewModifier) {
+        this.fieldViewModifier = fieldViewModifier;
+        refreshAbilities();
+    }
+
+    private void refreshAbilities() {
+        PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
+        playerAbilitiesPacket.invulnerable = invulnerable;
+        playerAbilitiesPacket.flying = flying;
+        playerAbilitiesPacket.allowFlying = allowFlying;
+        playerAbilitiesPacket.instantBreak = instantBreak;
+        playerAbilitiesPacket.flyingSpeed = flyingSpeed;
+        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
+
+        playerConnection.sendPacket(playerAbilitiesPacket);
     }
 
     public void addPacketToQueue(ClientPlayPacket packet) {

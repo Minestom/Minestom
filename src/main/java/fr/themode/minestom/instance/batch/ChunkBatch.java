@@ -1,24 +1,24 @@
 package fr.themode.minestom.instance.batch;
 
 import fr.themode.minestom.data.Data;
-import fr.themode.minestom.instance.BlockModifier;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.ChunkGenerator;
 import fr.themode.minestom.instance.InstanceContainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * Use chunk coordinate (0-16) instead of world's
  */
-public class ChunkBatch implements IBatch, BlockModifier {
+public class ChunkBatch implements IBatch {
 
     private InstanceContainer instance;
     private Chunk chunk;
 
-    private List<BlockData> dataList = new ArrayList<>();
+    private List<BlockData> dataList = Collections.synchronizedList(new ArrayList<>());
 
     public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
