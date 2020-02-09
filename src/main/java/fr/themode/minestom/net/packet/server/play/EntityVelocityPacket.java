@@ -18,6 +18,6 @@ public class EntityVelocityPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x45;
+        return 0x46;
     }
 }

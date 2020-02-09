@@ -21,7 +21,7 @@ public class ChatMessagePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0E;
+        return 0x0F;
     }
 
     public enum Position {

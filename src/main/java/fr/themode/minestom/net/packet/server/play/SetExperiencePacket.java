@@ -18,6 +18,6 @@ public class SetExperiencePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x47;
+        return 0x48;
     }
 }

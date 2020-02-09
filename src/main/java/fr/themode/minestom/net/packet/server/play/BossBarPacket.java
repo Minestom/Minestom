@@ -54,7 +54,7 @@ public class BossBarPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0C;
+        return 0x0D;
     }
 
     public enum Action {

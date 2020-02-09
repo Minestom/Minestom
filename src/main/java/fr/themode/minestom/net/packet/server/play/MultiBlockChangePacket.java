@@ -30,7 +30,7 @@ public class MultiBlockChangePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0F;
+        return 0x10;
     }
 
     public static class BlockChange {

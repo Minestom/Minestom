@@ -20,6 +20,6 @@ public class UpdateViewPositionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x40;
+        return 0x41;
     }
 }

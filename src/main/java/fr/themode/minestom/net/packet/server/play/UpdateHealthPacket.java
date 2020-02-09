@@ -18,6 +18,6 @@ public class UpdateHealthPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x48;
+        return 0x49;
     }
 }

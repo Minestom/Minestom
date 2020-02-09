@@ -15,6 +15,6 @@ public class DisconnectPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x1A;
+        return 0x1B;
     }
 }

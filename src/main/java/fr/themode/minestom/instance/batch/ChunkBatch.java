@@ -27,24 +27,20 @@ public class ChunkBatch implements IBatch {
 
     @Override
     public void setBlock(int x, int y, int z, short blockId, Data data) {
-        BlockData blockData = new BlockData();
-        blockData.x = (byte) x;
-        blockData.y = (byte) y;
-        blockData.z = (byte) z;
-        blockData.isCustomBlock = false;
-        blockData.blockId = blockId;
-        blockData.data = data;
-
-        this.dataList.add(blockData);
+        addBlockData((byte) x, (byte) y, (byte) z, false, blockId, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
+        addBlockData((byte) x, (byte) y, (byte) z, true, blockId, data);
+    }
+
+    private void addBlockData(byte x, byte y, byte z, boolean customBlock, short blockId, Data data) {
         BlockData blockData = new BlockData();
-        blockData.x = (byte) x;
-        blockData.y = (byte) y;
-        blockData.z = (byte) z;
-        blockData.isCustomBlock = true;
+        blockData.x = x;
+        blockData.y = y;
+        blockData.z = z;
+        blockData.isCustomBlock = customBlock;
         blockData.blockId = blockId;
         blockData.data = data;
 

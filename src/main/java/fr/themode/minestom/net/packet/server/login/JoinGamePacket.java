@@ -11,10 +11,12 @@ public class JoinGamePacket implements ServerPacket {
     public int entityId;
     public GameMode gameMode = GameMode.SURVIVAL;
     public Dimension dimension = Dimension.OVERWORLD;
+    public long hashedSeed;
     public byte maxPlayers = 0; // Unused
     public LevelType levelType;
     public int viewDistance;
     public boolean reducedDebugInfo = false;
+    public boolean enableRespawnScreen = true;
 
     @Override
     public void write(PacketWriter writer) {
@@ -25,14 +27,16 @@ public class JoinGamePacket implements ServerPacket {
         writer.writeInt(entityId);
         writer.writeByte((byte) gameModeId);
         writer.writeInt(dimension.getId());
+        writer.writeLong(hashedSeed);
         writer.writeByte(maxPlayers);
         writer.writeSizedString(levelType.getType());
         writer.writeVarInt(viewDistance);
         writer.writeBoolean(reducedDebugInfo);
+        writer.writeBoolean(enableRespawnScreen);
     }
 
     @Override
     public int getId() {
-        return 0x25;
+        return 0x26;
     }
 }

@@ -24,6 +24,6 @@ public class ScoreboardObjectivePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x49;
+        return 0x4A;
     }
 }

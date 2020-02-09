@@ -9,6 +9,7 @@ import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
+import fr.themode.minestom.net.packet.server.play.DeclareCommandsPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -76,7 +77,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connection.sendPacket(spawnPositionPacket);
 
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(player.getUuid(), username, GameMode.CREATIVE, 10);
+        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(player.getUuid(), username, player.getGameMode(), 10);
         PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property); //new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(username));
         addPlayer.properties.add(prop);
         playerInfoPacket.playerInfos.add(addPlayer);
@@ -84,7 +85,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         Main.getEntityManager().addWaitingPlayer(player);
 
-        /*DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
+        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         argumentNode.flags = 0b1010;
         argumentNode.children = new int[0];
@@ -102,7 +103,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         declareCommandsPacket.rootIndex = 0;
 
 
-        connection.sendPacket(declareCommandsPacket);*/
+        connection.sendPacket(declareCommandsPacket);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class TradeListPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x27;
+        return 0x28;
     }
 
     public static class Trade {

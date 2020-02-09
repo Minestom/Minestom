@@ -32,9 +32,9 @@ public class Main {
     public static final int THREAD_COUNT_SCHEDULER = 2;
 
     // Can be modified at performance cost when decreased
-    public static final int TICK_MS = 50;
-
-    public static final int TICK_PER_SECOND = 1000 / TICK_MS;
+    private static final int MS_TO_SEC = 1000;
+    public static final int TICK_MS = MS_TO_SEC / 20;
+    public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
 
     // Config
     public static final int CHUNK_VIEW_DISTANCE = 5;
@@ -69,7 +69,8 @@ public class Main {
         blockManager.registerBlock(new StoneBlock());
         blockManager.registerBlock(new UpdatableBlockDemo());
 
-        server = new Server(136434);
+        server = new Server();
+        //server = new Server(136434);
 
         server.onConnect(client -> {
             System.out.println("CONNECTION");
@@ -105,17 +106,17 @@ public class Main {
             });
         });
 
-        server.bind("localhost", 25565);
+        server.bind("localhost", 55555);
         System.out.println("Server started");
 
-        long tickDistance = TICK_MS * 1000000;
+        final long tickDistance = TICK_MS * 1000000;
         long currentTime;
         while (true) {
             currentTime = System.nanoTime();
 
             // Keep Alive Handling
             for (Player player : getConnectionManager().getOnlinePlayers()) {
-                long time = System.currentTimeMillis();
+                long time = currentTime / 1_000_000;
                 if (time - player.getLastKeepAlive() > 20000) {
                     player.refreshKeepAlive(time);
                     KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);

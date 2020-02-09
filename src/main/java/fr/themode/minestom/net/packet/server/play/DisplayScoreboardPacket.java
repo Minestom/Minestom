@@ -16,6 +16,6 @@ public class DisplayScoreboardPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x42;
+        return 0x43;
     }
 }

@@ -16,6 +16,6 @@ public class EntityHeadLookPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x3B;
+        return 0x3C;
     }
 }

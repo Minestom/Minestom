@@ -7,8 +7,8 @@ public class ResponsePacket implements ServerPacket {
 
     private static final String JSON_EXAMPLE = "{\n" +
             "    \"version\": {\n" +
-            "        \"name\": \"1.14.4\",\n" +
-            "        \"protocol\": 498\n" +
+            "        \"name\": \"1.15.2\",\n" +
+            "        \"protocol\": 578\n" +
             "    },\n" +
             "    \"players\": {\n" +
             "        \"max\": 100,\n" +

@@ -14,6 +14,6 @@ public class DestroyEntitiesPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x37;
+        return 0x38;
     }
 }

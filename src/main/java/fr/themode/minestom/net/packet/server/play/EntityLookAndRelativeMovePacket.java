@@ -24,6 +24,6 @@ public class EntityLookAndRelativeMovePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x29;
+        return 0x2A;
     }
 }

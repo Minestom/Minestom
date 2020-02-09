@@ -89,11 +89,11 @@ public class InstanceContainer extends Instance {
             particlePacket.x = x + 0.5f;
             particlePacket.y = y;
             particlePacket.z = z + 0.5f;
-            particlePacket.offsetX = 0.45f;
-            particlePacket.offsetY = 0.55f;
-            particlePacket.offsetZ = 0.45f;
+            particlePacket.offsetX = 0.4f;
+            particlePacket.offsetY = 0.5f;
+            particlePacket.offsetZ = 0.4f;
             particlePacket.particleData = 0.3f;
-            particlePacket.particleCount = 100;
+            particlePacket.particleCount = 125;
             particlePacket.blockId = blockId;
             chunk.sendPacketToViewers(particlePacket);
         } else {
@@ -133,7 +133,12 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void saveToFolder(Runnable callback) {
+    public void saveChunkToFolder(Chunk chunk, Runnable callback) {
+        CHUNK_LOADER_IO.saveChunk(chunk, getFolder(), callback);
+    }
+
+    @Override
+    public void saveChunksToFolder(Runnable callback) {
         if (folder == null)
             throw new UnsupportedOperationException("You cannot save an instance without setting a folder.");
 
@@ -141,7 +146,7 @@ public class InstanceContainer extends Instance {
         while (chunks.hasNext()) {
             Chunk chunk = chunks.next();
             boolean isLast = !chunks.hasNext();
-            CHUNK_LOADER_IO.saveChunk(chunk, getFolder(), isLast ? callback : null);
+            saveChunkToFolder(chunk, isLast ? callback : null);
         }
     }
 
@@ -204,8 +209,8 @@ public class InstanceContainer extends Instance {
     public void sendChunk(Player player, Chunk chunk) {
         Packet data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
-            PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), buffer -> {
-                chunk.setFullDataPacket(buffer);
+            PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), packet -> {
+                chunk.setFullDataPacket(packet);
                 sendChunkUpdate(player, chunk);
             });
         } else {

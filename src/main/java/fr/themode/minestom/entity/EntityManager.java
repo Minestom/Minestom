@@ -21,9 +21,11 @@ public class EntityManager {
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
     public void update() {
+        final long time = System.currentTimeMillis();
+
         waitingPlayersTick();
         for (Instance instance : instanceManager.getInstances()) {
-            testTick2(instance);
+            testTick2(instance, time);
         }
     }
 
@@ -42,21 +44,21 @@ public class EntityManager {
     }
 
     // TODO optimize for when there are too many entities on one chunk
-    private void testTick2(Instance instance) {
+    private void testTick2(Instance instance, long time) {
         for (Chunk chunk : instance.getChunks()) {
             Set<Entity> entities = instance.getChunkEntities(chunk);
 
             if (!entities.isEmpty()) {
                 entitiesPool.execute(() -> {
                     for (Entity entity : entities) {
-                        entity.tick();
+                        entity.tick(time);
                     }
                 });
             }
         }
     }
 
-    private void testTick1(Instance instance) {
+    private void testTick1(Instance instance, long time) {
         Set<ObjectEntity> objects = instance.getObjectEntities();
         Set<EntityCreature> creatures = instance.getCreatures();
         Set<Player> players = instance.getPlayers();
@@ -64,10 +66,10 @@ public class EntityManager {
         if (!creatures.isEmpty() || !objects.isEmpty()) {
             entitiesPool.execute(() -> {
                 for (EntityCreature creature : creatures) {
-                    creature.tick();
+                    creature.tick(time);
                 }
                 for (ObjectEntity objectEntity : objects) {
-                    objectEntity.tick();
+                    objectEntity.tick(time);
                 }
             });
         }
@@ -75,7 +77,7 @@ public class EntityManager {
         if (!players.isEmpty()) {
             playersPool.execute(() -> {
                 for (Player player : players) {
-                    player.tick();
+                    player.tick(time);
                 }
             });
         }

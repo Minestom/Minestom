@@ -3,6 +3,7 @@ package fr.themode.minestom.instance;
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.data.Data;
+import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.entity.*;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-public abstract class Instance implements BlockModifier {
+public abstract class Instance implements BlockModifier, DataContainer {
 
     protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
     protected static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
@@ -33,6 +34,8 @@ public abstract class Instance implements BlockModifier {
     // Entities per chunk
     protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     private UUID uniqueId;
+
+    private Data data;
 
     protected Instance(UUID uniqueId) {
         this.uniqueId = uniqueId;
@@ -49,7 +52,9 @@ public abstract class Instance implements BlockModifier {
 
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
-    public abstract void saveToFolder(Runnable callback);
+    public abstract void saveChunkToFolder(Chunk chunk, Runnable callback);
+
+    public abstract void saveChunksToFolder(Runnable callback);
 
     public abstract BlockBatch createBlockBatch();
 
@@ -171,12 +176,26 @@ public abstract class Instance implements BlockModifier {
         return getChunkAt(position.getX(), position.getZ());
     }
 
-    public void saveToFolder() {
-        saveToFolder(null);
+    public void saveChunkToFolder(Chunk chunk) {
+        saveChunkToFolder(chunk, null);
+    }
+
+    public void saveChunksToFolder() {
+        saveChunksToFolder(null);
     }
 
     public UUID getUniqueId() {
         return uniqueId;
+    }
+
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Data data) {
+        this.data = data;
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)

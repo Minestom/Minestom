@@ -20,7 +20,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x58;
+        return 0x59;
     }
 
     public static class Property {

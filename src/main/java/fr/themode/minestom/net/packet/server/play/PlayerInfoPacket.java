@@ -31,7 +31,7 @@ public class PlayerInfoPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x33;
+        return 0x34;
     }
 
     public enum Action {

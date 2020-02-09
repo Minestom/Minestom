@@ -17,6 +17,6 @@ public class BlockChangePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0B;
+        return 0x0C;
     }
 }

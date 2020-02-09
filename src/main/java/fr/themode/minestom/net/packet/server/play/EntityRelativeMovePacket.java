@@ -20,6 +20,6 @@ public class EntityRelativeMovePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x28;
+        return 0x29;
     }
 }

@@ -21,6 +21,6 @@ public class BlockActionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0A;
+        return 0x0B;
     }
 }

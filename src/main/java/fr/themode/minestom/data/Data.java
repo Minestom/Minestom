@@ -33,6 +33,13 @@ public class Data {
         return (T) data.getOrDefault(key, defaultValue);
     }
 
+    public Data clone() {
+        Data data = new Data();
+        data.data = new ConcurrentHashMap<>(this.data);
+        data.dataType = new ConcurrentHashMap<>(dataType);
+        return data;
+    }
+
     public byte[] getSerializedData() throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(output);

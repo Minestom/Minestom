@@ -18,6 +18,6 @@ public class OpenWindowPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x2E;
+        return 0x2F;
     }
 }

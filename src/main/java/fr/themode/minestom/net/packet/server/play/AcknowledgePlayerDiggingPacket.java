@@ -22,6 +22,6 @@ public class AcknowledgePlayerDiggingPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x5c;
+        return 0x8;
     }
 }

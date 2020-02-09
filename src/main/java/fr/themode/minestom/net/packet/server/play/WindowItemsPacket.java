@@ -28,6 +28,6 @@ public class WindowItemsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x14;
+        return 0x15;
     }
 }

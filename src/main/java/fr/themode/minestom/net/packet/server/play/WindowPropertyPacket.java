@@ -18,6 +18,6 @@ public class WindowPropertyPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x15;
+        return 0x16;
     }
 }

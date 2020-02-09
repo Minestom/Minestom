@@ -22,6 +22,6 @@ public class EntityEffectPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x59;
+        return 0x5A;
     }
 }

@@ -31,7 +31,7 @@ public class AdvancementsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x57;
+        return 0x58;
     }
 
     public enum FrameType {

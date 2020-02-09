@@ -19,7 +19,7 @@ public class EntityEquipmentPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x46;
+        return 0x47;
     }
 
     public enum Slot {

@@ -16,6 +16,6 @@ public class SetPassengersPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x4A;
+        return 0x4B;
     }
 }

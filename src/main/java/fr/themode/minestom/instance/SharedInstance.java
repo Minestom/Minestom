@@ -44,8 +44,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveToFolder(Runnable callback) {
-        instanceContainer.saveToFolder(callback);
+    public void saveChunkToFolder(Chunk chunk, Runnable callback) {
+        instanceContainer.saveChunkToFolder(chunk, callback);
+    }
+
+    @Override
+    public void saveChunksToFolder(Runnable callback) {
+        instanceContainer.saveChunksToFolder(callback);
     }
 
     @Override

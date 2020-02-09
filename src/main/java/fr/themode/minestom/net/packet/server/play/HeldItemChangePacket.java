@@ -14,6 +14,6 @@ public class HeldItemChangePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x3F;
+        return 0x40;
     }
 }

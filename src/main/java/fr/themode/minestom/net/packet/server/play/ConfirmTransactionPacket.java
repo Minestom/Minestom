@@ -18,6 +18,6 @@ public class ConfirmTransactionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x12;
+        return 0x13;
     }
 }

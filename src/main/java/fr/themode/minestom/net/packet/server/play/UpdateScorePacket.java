@@ -22,6 +22,6 @@ public class UpdateScorePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x4C;
+        return 0x4D;
     }
 }

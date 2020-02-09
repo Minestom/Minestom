@@ -19,6 +19,6 @@ public class SetSlotPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x16;
+        return 0x17;
     }
 }

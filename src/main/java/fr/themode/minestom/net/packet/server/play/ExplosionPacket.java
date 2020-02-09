@@ -26,6 +26,6 @@ public class ExplosionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x1C;
+        return 0x1D;
     }
 }

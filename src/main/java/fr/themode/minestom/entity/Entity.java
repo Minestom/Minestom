@@ -183,12 +183,12 @@ public abstract class Entity implements Viewable, DataContainer {
         this.data = data;
     }
 
-    public void tick() {
+    public void tick(long time) {
         if (instance == null)
             return;
 
         if (scheduledRemoveTime != 0) { // Any entity with scheduled remove does not update
-            boolean finished = System.currentTimeMillis() >= scheduledRemoveTime;
+            boolean finished = time >= scheduledRemoveTime;
             if (finished) {
                 remove();
             }
@@ -198,8 +198,7 @@ public abstract class Entity implements Viewable, DataContainer {
         if (shouldRemove()) {
             remove();
             return;
-        } else if (shouldUpdate()) {
-            long time = System.currentTimeMillis();
+        } else if (shouldUpdate(time)) {
             this.lastUpdate = time;
 
             // Velocity
@@ -207,7 +206,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 if (this instanceof Player) {
                     sendPacketToViewersAndSelf(getVelocityPacket());
                 } else {
-                    float tps = Main.TICK_PER_SECOND;
+                    final float tps = Main.TICK_PER_SECOND;
                     refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
                     if (this instanceof ObjectEntity) {
                         sendPacketToViewers(getVelocityPacket());
@@ -256,7 +255,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
             // Scheduled synchronization
             if (time - lastSynchronizationTime >= synchronizationDelay) {
-                lastSynchronizationTime = System.currentTimeMillis();
+                lastSynchronizationTime = time;
                 sendSynchronization();
             }
         }
@@ -669,8 +668,8 @@ public abstract class Entity implements Viewable, DataContainer {
             sendPacketToViewers(getPassengersPacket());
     }
 
-    private boolean shouldUpdate() {
-        return (float) (System.currentTimeMillis() - lastUpdate) >= Main.TICK_MS * 0.9f; // Margin of error
+    private boolean shouldUpdate(long time) {
+        return (float) (time - lastUpdate) >= Main.TICK_MS * 0.9f; // Margin of error
     }
 
     public enum Pose {

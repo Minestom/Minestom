@@ -18,6 +18,6 @@ public class CollectItemPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x55;
+        return 0x56;
     }
 }

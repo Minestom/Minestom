@@ -16,7 +16,7 @@ public class ChangeGameStatePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x1E;
+        return 0x1F;
     }
 
     public enum Reason {
@@ -30,7 +30,8 @@ public class ChangeGameStatePacket implements ServerPacket {
         FADE_VALUE,
         FADE_TIME,
         PLAY_PUFFERFISH_STING_SOUND,
-        PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE;
+        PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
+        ENABLE_RESPAWN_SCREEN;
     }
 
 }

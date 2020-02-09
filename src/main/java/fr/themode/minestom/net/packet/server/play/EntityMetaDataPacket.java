@@ -20,6 +20,6 @@ public class EntityMetaDataPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x43;
+        return 0x44;
     }
 }

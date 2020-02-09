@@ -7,7 +7,7 @@ public class ParticlePacket implements ServerPacket {
 
     public int particleId;
     public boolean longDistance;
-    public float x, y, z;
+    public double x, y, z;
     public float offsetX, offsetY, offsetZ;
     public float particleData;
     public int particleCount;
@@ -18,9 +18,9 @@ public class ParticlePacket implements ServerPacket {
     public void write(PacketWriter writer) {
         writer.writeInt(particleId);
         writer.writeBoolean(longDistance);
-        writer.writeFloat(x);
-        writer.writeFloat(y);
-        writer.writeFloat(z);
+        writer.writeDouble(x);
+        writer.writeDouble(y);
+        writer.writeDouble(z);
         writer.writeFloat(offsetX);
         writer.writeFloat(offsetY);
         writer.writeFloat(offsetZ);
@@ -32,6 +32,6 @@ public class ParticlePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x23;
+        return 0x24;
     }
 }

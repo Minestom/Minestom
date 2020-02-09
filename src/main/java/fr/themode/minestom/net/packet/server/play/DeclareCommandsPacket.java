@@ -22,7 +22,7 @@ public class DeclareCommandsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x11;
+        return 0x12;
     }
 
     public static class Node {

@@ -14,6 +14,6 @@ public class CloseWindowPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x13;
+        return 0x14;
     }
 }

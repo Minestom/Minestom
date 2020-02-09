@@ -16,6 +16,6 @@ public class RemoveEntityEffectPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x38;
+        return 0x39;
     }
 }

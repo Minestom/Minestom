@@ -309,7 +309,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         if (!cursorItem.isAir()) {
             if (slot == 0 || slot == 6 || slot == 7 || slot == 8) {
-                return; // Disable putting item on CRAFTING_RESULT and chestplate/leggings/boots slots
+                return; // Disable putting item on CRAFTING_RESULT and on helmet/chestplate/leggings/boots slots
             }
         }
 

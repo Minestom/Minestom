@@ -5,6 +5,7 @@ import com.github.simplenet.utility.exposed.consumer.BooleanConsumer;
 import com.github.simplenet.utility.exposed.consumer.ByteConsumer;
 import com.github.simplenet.utility.exposed.consumer.FloatConsumer;
 import com.github.simplenet.utility.exposed.consumer.ShortConsumer;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Utils;
@@ -83,6 +84,10 @@ public class PacketReader {
 
     public void readBlockPosition(Consumer<BlockPosition> consumer) {
         Utils.readPosition(client, consumer);
+    }
+
+    public void readSlot(Consumer<ItemStack> consumer) {
+        Utils.readItemStack(this, consumer);
     }
 
 }

@@ -18,6 +18,6 @@ public class KeepAlivePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x20;
+        return 0x21;
     }
 }

@@ -5,6 +5,7 @@ import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionUtils;
+import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.utils.buffer.BufferWrapper;
 import fr.themode.minestom.utils.consumer.StringConsumer;
 
@@ -134,6 +135,30 @@ public class Utils {
 
             packet.putByte((byte) 0); // End nbt
         }
+    }
+
+    public static void readItemStack(PacketReader reader, Consumer<ItemStack> consumer) {
+        // FIXME: need finishing
+        reader.readBoolean(present -> {
+            if (!present) {
+                consumer.accept(ItemStack.AIR_ITEM); // Consume air item if empty
+                return;
+            }
+
+            reader.readVarInt(id -> {
+
+                reader.readByte(count -> {
+
+                    reader.readByte(nbt -> { // FIXME: assume that there is no NBT data
+                        consumer.accept(new ItemStack(id, count));
+                    });
+
+                });
+
+            });
+
+
+        });
     }
 
     public static void writeBlocks(BufferWrapper buffer, short[] blocksId, int bitsPerEntry) {

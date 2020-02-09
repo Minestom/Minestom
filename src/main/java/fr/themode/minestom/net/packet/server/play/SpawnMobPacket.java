@@ -1,12 +1,10 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.Position;
 
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class SpawnMobPacket implements ServerPacket {
 
@@ -16,7 +14,6 @@ public class SpawnMobPacket implements ServerPacket {
     public Position position;
     public float headPitch;
     public short velocityX, velocityY, velocityZ;
-    public Consumer<Packet> consumer;
 
     @Override
     public void write(PacketWriter writer) {
@@ -32,10 +29,6 @@ public class SpawnMobPacket implements ServerPacket {
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);
         writer.writeShort(velocityZ);
-        if (consumer != null) {
-            writer.write(consumer);
-        }
-        writer.writeByte((byte) 0xff);
 
     }
 

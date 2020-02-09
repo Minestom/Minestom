@@ -49,15 +49,6 @@ public class ChunkDataPacket implements ServerPacket {
             }
         }
 
-        // Biome data
-        if (fullChunk) {
-            for (int z = 0; z < 16; z++) {
-                for (int x = 0; x < 16; x++) {
-                    blocks.putInt(chunk.getBiome().getId());
-                }
-            }
-        }
-
         writer.writeVarInt(mask);
 
         // Heightmap
@@ -84,6 +75,15 @@ public class ChunkDataPacket implements ServerPacket {
             writer.writeBytes(data);
         }
 
+        // Biome data
+        if (fullChunk) {
+            for (int z = 0; z < 1024; z++) {
+                writer.writeInt(chunk.getBiome().getId());
+                //blocks.putInt(chunk.getBiome().getId()); // FIXME
+            }
+        }
+
+        // Data
         writer.writeVarInt(blocks.getSize());
         writer.writeBufferAndFree(blocks);
 
@@ -129,6 +129,6 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x21;
+        return 0x22;
     }
 }

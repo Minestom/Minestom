@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
-import fr.themode.minestom.chat.ChatColor;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
@@ -23,7 +22,6 @@ import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.scoreboard.BelowNameScoreboard;
 import fr.themode.minestom.scoreboard.Team;
-import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.utils.*;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
@@ -180,7 +178,7 @@ public class Player extends LivingEntity {
             getInventory().addItemStack(new ItemStack(1, (byte) 75));
             //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
-            TeamManager teamManager = Main.getTeamManager();
+            /*TeamManager teamManager = Main.getTeamManager();
             Team team = teamManager.createTeam(getUsername());
             team.setTeamDisplayName("display");
             team.setPrefix("[Test] ");
@@ -190,16 +188,16 @@ public class Player extends LivingEntity {
             setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
 
-            /*Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
+            Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
             for (int i = 0; i < 15; i++) {
                 scoreboard.createLine(new Scoreboard.ScoreboardLine("id" + i, "Hey guys " + i, i));
             }
             scoreboard.addViewer(this);
-            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");*/
+            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");
 
             BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
             setBelowNameScoreboard(belowNameScoreboard);
-            belowNameScoreboard.updateScore(this, 50);
+            belowNameScoreboard.updateScore(this, 50);*/
         });
     }
 
@@ -209,7 +207,7 @@ public class Player extends LivingEntity {
         // Flush all pending packets
         playerConnection.flush();
 
-        // Process sent packets
+        // Process received packets
         ClientPlayPacket packet;
         while ((packet = packets.poll()) != null) {
             packet.process(this);
@@ -358,7 +356,7 @@ public class Player extends LivingEntity {
         spawnPlayerPacket.position = getPosition();
 
         PlayerInfoPacket pInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addP = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), GameMode.CREATIVE, 10);
+        PlayerInfoPacket.AddPlayer addP = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), 10);
         PlayerInfoPacket.AddPlayer.Property p = new PlayerInfoPacket.AddPlayer.Property("textures", property);//new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(onlinePlayer.getUsername()));
         addP.properties.add(p);
         pInfoPacket.playerInfos.add(addP);

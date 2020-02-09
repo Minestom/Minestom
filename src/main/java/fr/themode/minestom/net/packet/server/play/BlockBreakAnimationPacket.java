@@ -19,6 +19,6 @@ public class BlockBreakAnimationPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x08;
+        return 0x09;
     }
 }

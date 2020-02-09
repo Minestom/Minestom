@@ -82,6 +82,8 @@ public abstract class LivingEntity extends Entity {
                     activeHandValue += 4;
             }
             packet.putByte(activeHandValue);
+
+            // TODO all remaining metadata
         };
     }
 

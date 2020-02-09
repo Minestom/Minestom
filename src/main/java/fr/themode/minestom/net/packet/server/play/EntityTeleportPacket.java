@@ -23,6 +23,6 @@ public class EntityTeleportPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x56;
+        return 0x57;
     }
 }

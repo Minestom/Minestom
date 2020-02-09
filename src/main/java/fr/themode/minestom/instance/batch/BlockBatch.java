@@ -23,18 +23,7 @@ public class BlockBatch implements IBatch {
     public void setBlock(int x, int y, int z, short blockId, Data data) {
         synchronized (this) {
             Chunk chunk = this.instance.getChunkAt(x, z);
-            List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
-
-            BlockData blockData = new BlockData();
-            blockData.x = x % 16;
-            blockData.y = y;
-            blockData.z = z % 16;
-            blockData.blockId = blockId;
-            blockData.data = data;
-
-            blocksData.add(blockData);
-
-            this.data.put(chunk, blocksData);
+            addBlockData(chunk, x, y, z, false, blockId, data);
         }
     }
 
@@ -42,20 +31,26 @@ public class BlockBatch implements IBatch {
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
         synchronized (this) {
             Chunk chunk = this.instance.getChunkAt(x, z);
-            List<BlockData> blocksData = this.data.getOrDefault(chunk, new ArrayList<>());
-
-            BlockData blockData = new BlockData();
-            blockData.x = x % 16;
-            blockData.y = y;
-            blockData.z = z % 16;
-            blockData.isCustomBlock = true;
-            blockData.blockId = blockId;
-            blockData.data = data;
-
-            blocksData.add(blockData);
-
-            this.data.put(chunk, blocksData);
+            addBlockData(chunk, x, y, z, true, blockId, data);
         }
+    }
+
+    private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockId, Data data) {
+        List<BlockData> blocksData = this.data.get(chunk);
+        if (blocksData == null)
+            blocksData = new ArrayList<>();
+
+        BlockData blockData = new BlockData();
+        blockData.x = x % 16;
+        blockData.y = y;
+        blockData.z = z % 16;
+        blockData.isCustomBlock = customBlock;
+        blockData.blockId = blockId;
+        blockData.data = data;
+
+        blocksData.add(blockData);
+
+        this.data.put(chunk, blocksData);
     }
 
     public void flush(Runnable callback) {

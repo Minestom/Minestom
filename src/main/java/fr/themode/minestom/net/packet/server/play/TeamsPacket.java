@@ -47,7 +47,7 @@ public class TeamsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x4B;
+        return 0x4C;
     }
 
     public enum Action {

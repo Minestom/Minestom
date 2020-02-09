@@ -77,7 +77,9 @@ public class ItemStack implements DataContainer {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
-        itemStack.setData(getData());
+        Data data = getData();
+        if (data != null)
+            itemStack.setData(data.clone());
         return itemStack;
     }
 

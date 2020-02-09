@@ -14,6 +14,6 @@ public class EntityPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x2B;
+        return 0x2C;
     }
 }

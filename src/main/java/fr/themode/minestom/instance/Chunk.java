@@ -189,8 +189,8 @@ public class Chunk implements Viewable {
                 // Update cooldown
                 UpdateOption updateOption = customBlock.getUpdateOption();
                 long lastUpdate = updatableBlocksLastUpdate.get(index);
-                boolean shouldUpdate = !CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
-                if (!shouldUpdate)
+                boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
+                if (hasCooldown)
                     continue;
 
                 this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
@@ -242,9 +242,6 @@ public class Chunk implements Viewable {
         DataOutputStream dos = new DataOutputStream(output);
         dos.writeByte(biome.getId());
 
-        // TODO customblock id map (StringId -> short id)
-        // TODO List of (sectionId;blockcount;blocktype;blockarray)
-        // TODO block data
         for (Int2IntMap.Entry entry : blocks.int2IntEntrySet()) {
             int index = entry.getIntKey();
             int value = entry.getIntValue();

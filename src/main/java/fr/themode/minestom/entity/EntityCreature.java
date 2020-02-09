@@ -88,15 +88,21 @@ public abstract class EntityCreature extends LivingEntity {
 
         EntityPacket entityPacket = new EntityPacket();
         entityPacket.entityId = getEntityId();
+
         SpawnMobPacket spawnMobPacket = new SpawnMobPacket();
         spawnMobPacket.entityId = getEntityId();
         spawnMobPacket.entityUuid = getUuid();
         spawnMobPacket.entityType = getEntityType();
         spawnMobPacket.position = getPosition();
         spawnMobPacket.headPitch = 0;
-        spawnMobPacket.consumer = getMetadataConsumer();
+
+        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
+        entityMetaDataPacket.entityId = getEntityId();
+        entityMetaDataPacket.consumer = getMetadataConsumer();
+
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
+        playerConnection.sendPacket(entityMetaDataPacket);
     }
 
     @Override

@@ -24,6 +24,6 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x35;
+        return 0x36;
     }
 }

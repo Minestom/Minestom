@@ -9,18 +9,20 @@ import fr.themode.minestom.world.LevelType;
 public class RespawnPacket implements ServerPacket {
 
     public Dimension dimension;
+    public long hashedSeed;
     public GameMode gameMode;
     public LevelType levelType;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeByte((byte) gameMode.getId()); // Hardcore flag not included
         writer.writeInt(dimension.getId());
+        writer.writeLong(hashedSeed);
+        writer.writeByte((byte) gameMode.getId()); // Hardcore flag not included
         writer.writeSizedString(levelType.getType());
     }
 
     @Override
     public int getId() {
-        return 0x3A;
+        return 0x3B;
     }
 }

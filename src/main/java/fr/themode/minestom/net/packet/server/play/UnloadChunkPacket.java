@@ -15,6 +15,6 @@ public class UnloadChunkPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x1D;
+        return 0x1E;
     }
 }
