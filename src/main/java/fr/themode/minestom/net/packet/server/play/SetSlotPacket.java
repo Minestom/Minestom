@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class SetSlotPacket implements ServerPacket {
 
@@ -19,6 +20,6 @@ public class SetSlotPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x17;
+        return ServerPacketIdentifier.SET_SLOT;
     }
 }

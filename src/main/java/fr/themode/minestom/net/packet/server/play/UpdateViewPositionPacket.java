@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class UpdateViewPositionPacket implements ServerPacket {
 
@@ -20,6 +21,6 @@ public class UpdateViewPositionPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x41;
+        return ServerPacketIdentifier.UPDATE_VIEW_POSITION;
     }
 }

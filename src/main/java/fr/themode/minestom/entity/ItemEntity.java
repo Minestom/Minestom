@@ -15,7 +15,7 @@ public class ItemEntity extends ObjectEntity {
     private long pickupDelay;
 
     public ItemEntity(ItemStack itemStack) {
-        super(34);
+        super(35);
         this.itemStack = itemStack;
         setBoundingBox(0.25f, 0.25f, 0.25f);
         setGravity(0.025f);

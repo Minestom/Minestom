@@ -5,21 +5,27 @@ import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 
-public class BlockBreakAnimationPacket implements ServerPacket {
+import java.util.UUID;
+
+public class SpawnPaintingPacket implements ServerPacket {
 
     public int entityId;
-    public BlockPosition blockPosition;
-    public byte destroyStage;
+    public UUID entityUuid;
+    public int motive;
+    public BlockPosition position;
+    public byte direction;
 
     @Override
     public void write(PacketWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeBlockPosition(blockPosition);
-        writer.writeByte(destroyStage);
+        writer.writeUuid(entityUuid);
+        writer.writeVarInt(motive);
+        writer.writeBlockPosition(position);
+        writer.writeByte(direction);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.BLOCK_BREAK_ANIMATION;
+        return ServerPacketIdentifier.SPAWN_PAINTING;
     }
 }

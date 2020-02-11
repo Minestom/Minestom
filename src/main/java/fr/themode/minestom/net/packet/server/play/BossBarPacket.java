@@ -5,6 +5,7 @@ import fr.themode.minestom.bossbar.BarDivision;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class BossBarPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0D;
+        return ServerPacketIdentifier.BOSS_BAR;
     }
 
     public enum Action {

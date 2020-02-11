@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class EntityEffectPacket implements ServerPacket {
 
@@ -22,6 +23,6 @@ public class EntityEffectPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x5A;
+        return ServerPacketIdentifier.ENTITY_EFFECT;
     }
 }

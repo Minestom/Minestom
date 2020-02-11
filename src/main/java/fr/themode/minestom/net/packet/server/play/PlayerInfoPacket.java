@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class PlayerInfoPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x34;
+        return ServerPacketIdentifier.PLAYER_INFO;
     }
 
     public enum Action {

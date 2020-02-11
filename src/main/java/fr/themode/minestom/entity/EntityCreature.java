@@ -25,6 +25,7 @@ public abstract class EntityCreature extends LivingEntity {
         float newY = position.getY() + y;
         float newZ = position.getZ() + z;
 
+        // Creatures cannot move in unload chunk
         if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
             return;
 
@@ -34,24 +35,28 @@ public abstract class EntityCreature extends LivingEntity {
         float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
         float pitch = position.getPitch(); // TODO
 
+        short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
+        short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
+        short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
+
         if (updateView) {
-            EntityLookAndRelativeMovePacket entityLookAndRelativeMovePacket = new EntityLookAndRelativeMovePacket();
-            entityLookAndRelativeMovePacket.entityId = getEntityId();
-            entityLookAndRelativeMovePacket.deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
-            entityLookAndRelativeMovePacket.deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
-            entityLookAndRelativeMovePacket.deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
-            entityLookAndRelativeMovePacket.yaw = yaw;
-            entityLookAndRelativeMovePacket.pitch = pitch;
-            entityLookAndRelativeMovePacket.onGround = isOnGround();
-            sendPacketToViewers(entityLookAndRelativeMovePacket);
+            EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
+            entityPositionAndRotationPacket.entityId = getEntityId();
+            entityPositionAndRotationPacket.deltaX = deltaX;
+            entityPositionAndRotationPacket.deltaY = deltaY;
+            entityPositionAndRotationPacket.deltaZ = deltaZ;
+            entityPositionAndRotationPacket.yaw = yaw;
+            entityPositionAndRotationPacket.pitch = pitch;
+            entityPositionAndRotationPacket.onGround = isOnGround();
+            sendPacketToViewers(entityPositionAndRotationPacket);
         } else {
-            EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
-            entityRelativeMovePacket.entityId = getEntityId();
-            entityRelativeMovePacket.deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
-            entityRelativeMovePacket.deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
-            entityRelativeMovePacket.deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
-            entityRelativeMovePacket.onGround = isOnGround();
-            sendPacketToViewers(entityRelativeMovePacket);
+            EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
+            entityPositionPacket.entityId = getEntityId();
+            entityPositionPacket.deltaX = deltaX;
+            entityPositionPacket.deltaY = deltaY;
+            entityPositionPacket.deltaZ = deltaZ;
+            entityPositionPacket.onGround = isOnGround();
+            sendPacketToViewers(entityPositionPacket);
         }
 
         if (lastYaw != yaw) {
@@ -76,7 +81,7 @@ public abstract class EntityCreature extends LivingEntity {
     public void kill() {
         this.isDead = true;
         triggerStatus((byte) 3);
-        scheduleRemove(1000);
+        scheduleRemove(1000); // Needed for proper death animation
         DeathEvent deathEvent = new DeathEvent();
         callEvent(DeathEvent.class, deathEvent);
     }
@@ -96,13 +101,9 @@ public abstract class EntityCreature extends LivingEntity {
         spawnMobPacket.position = getPosition();
         spawnMobPacket.headPitch = 0;
 
-        EntityMetaDataPacket entityMetaDataPacket = new EntityMetaDataPacket();
-        entityMetaDataPacket.entityId = getEntityId();
-        entityMetaDataPacket.consumer = getMetadataConsumer();
-
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnMobPacket);
-        playerConnection.sendPacket(entityMetaDataPacket);
+        playerConnection.sendPacket(getMetadataPacket());
     }
 
     @Override

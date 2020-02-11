@@ -6,8 +6,8 @@ import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.net.packet.server.play.AnimationPacket;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
+import fr.themode.minestom.net.packet.server.play.EntityAnimationPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
 
 import java.util.Set;
@@ -19,6 +19,9 @@ public abstract class LivingEntity extends Entity {
     protected boolean isDead;
 
     private float health;
+
+    // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
+    private BoundingBox expandedBoundingBox = getBoundingBox();
 
     private float[] attributeValues = new float[Attribute.values().length];
 
@@ -39,7 +42,7 @@ public abstract class LivingEntity extends Entity {
         if (canPickupItem) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
             Set<Entity> entities = instance.getChunkEntities(chunk);
-            BoundingBox livingBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+            BoundingBox livingBoundingBox = expandedBoundingBox;
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
                     ItemEntity itemEntity = (ItemEntity) entity;
@@ -88,10 +91,10 @@ public abstract class LivingEntity extends Entity {
     }
 
     public void damage(float value) {
-        AnimationPacket animationPacket = new AnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = AnimationPacket.Animation.TAKE_DAMAGE;
-        sendPacketToViewersAndSelf(animationPacket);
+        EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
+        entityAnimationPacket.entityId = getEntityId();
+        entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
+        sendPacketToViewersAndSelf(entityAnimationPacket);
         setHealth(getHealth() - value);
     }
 
@@ -134,6 +137,12 @@ public abstract class LivingEntity extends Entity {
 
     public void setCanPickupItem(boolean canPickupItem) {
         this.canPickupItem = canPickupItem;
+    }
+
+    @Override
+    public void setBoundingBox(float x, float y, float z) {
+        super.setBoundingBox(x, y, z);
+        this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {

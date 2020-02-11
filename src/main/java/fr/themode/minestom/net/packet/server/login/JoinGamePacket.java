@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.login;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -37,6 +38,6 @@ public class JoinGamePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x26;
+        return ServerPacketIdentifier.JOIN_GAME;
     }
 }

@@ -5,23 +5,18 @@ import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 
-public class BlockActionPacket implements ServerPacket {
+public class OpenSignEditorPacket implements ServerPacket {
 
-    public BlockPosition blockPosition;
-    public byte actionId;
-    public byte actionParam;
-    public int blockId;
+    // WARNING: There must be a sign in this location (you can send a BlockChangePacket beforehand)
+    public BlockPosition signPosition;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeBlockPosition(blockPosition);
-        writer.writeByte(actionId);
-        writer.writeByte(actionParam);
-        writer.writeVarInt(blockId);
+        writer.writeBlockPosition(signPosition);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.BLOCK_ACTION;
+        return ServerPacketIdentifier.OPEN_SIGN_EDITOR;
     }
 }

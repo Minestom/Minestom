@@ -1,6 +1,6 @@
 package fr.themode.minestom.entity;
 
-import java.util.Arrays;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 public enum EntityType {
     ARMOR_STAND(1), // Object
@@ -69,6 +69,14 @@ public enum EntityType {
     PHANTOM(97),
     RAVAGER(98);
 
+    private static Int2ObjectOpenHashMap<EntityType> map = new Int2ObjectOpenHashMap();
+
+    static {
+        for (EntityType type : EntityType.values()) {
+            map.put(type.id, type);
+        }
+    }
+
     private int id;
 
     EntityType(int id) {
@@ -76,7 +84,7 @@ public enum EntityType {
     }
 
     public static EntityType fromId(int id) {
-        return Arrays.stream(values()).filter(entityType -> entityType.id == id).findFirst().get();
+        return map.get(id);
     }
 
     public int getId() {

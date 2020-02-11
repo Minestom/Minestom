@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class EntityPropertiesPacket implements ServerPacket {
 
@@ -20,7 +21,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x59;
+        return ServerPacketIdentifier.ENTITY_PROPERTIES;
     }
 
     public static class Property {

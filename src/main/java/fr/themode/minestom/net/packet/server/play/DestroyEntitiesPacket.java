@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class DestroyEntitiesPacket implements ServerPacket {
 
@@ -14,6 +15,6 @@ public class DestroyEntitiesPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x38;
+        return ServerPacketIdentifier.DESTROY_ENTITIES;
     }
 }

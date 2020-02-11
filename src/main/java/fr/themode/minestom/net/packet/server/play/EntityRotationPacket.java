@@ -2,8 +2,9 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
-public class EntityLookPacket implements ServerPacket {
+public class EntityRotationPacket implements ServerPacket {
 
     public int entityId;
     public float yaw, pitch;
@@ -19,6 +20,6 @@ public class EntityLookPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x2B;
+        return ServerPacketIdentifier.ENTITY_ROTATION;
     }
 }

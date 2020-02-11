@@ -2,26 +2,27 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class ChatMessagePacket implements ServerPacket {
 
-    private String message;
+    private String jsonMessage;
     private Position position;
 
-    public ChatMessagePacket(String message, Position position) {
-        this.message = message;
+    public ChatMessagePacket(String jsonMessage, Position position) {
+        this.jsonMessage = jsonMessage;
         this.position = position;
     }
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(message);
+        writer.writeSizedString(jsonMessage);
         writer.writeByte((byte) position.ordinal());
     }
 
     @Override
     public int getId() {
-        return 0x0F;
+        return ServerPacketIdentifier.CHAT_MESSAGE;
     }
 
     public enum Position {

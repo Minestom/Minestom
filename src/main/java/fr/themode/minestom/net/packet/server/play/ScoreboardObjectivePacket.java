@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class ScoreboardObjectivePacket implements ServerPacket {
 
@@ -24,6 +25,6 @@ public class ScoreboardObjectivePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x4A;
+        return ServerPacketIdentifier.SCOREBOARD_OBJECTIVE;
     }
 }

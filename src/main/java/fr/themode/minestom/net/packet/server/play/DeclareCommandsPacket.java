@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 import java.util.function.Consumer;
 
@@ -22,7 +23,7 @@ public class DeclareCommandsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x12;
+        return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
     public static class Node {

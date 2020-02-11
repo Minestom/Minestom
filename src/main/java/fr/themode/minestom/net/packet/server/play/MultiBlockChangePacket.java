@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class MultiBlockChangePacket implements ServerPacket {
 
@@ -30,7 +31,7 @@ public class MultiBlockChangePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x10;
+        return ServerPacketIdentifier.MULTI_BLOCK_CHANGE;
     }
 
     public static class BlockChange {

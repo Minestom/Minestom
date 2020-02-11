@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.Position;
 
 public class SpawnExperienceOrbPacket implements ServerPacket {
@@ -21,6 +22,6 @@ public class SpawnExperienceOrbPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x01;
+        return ServerPacketIdentifier.SPAWN_EXPERIENCE_ORB;
     }
 }

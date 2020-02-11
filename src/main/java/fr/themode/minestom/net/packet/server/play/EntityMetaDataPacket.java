@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 import java.util.function.Consumer;
 
@@ -20,6 +21,6 @@ public class EntityMetaDataPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x44;
+        return ServerPacketIdentifier.ENTITY_METADATA;
     }
 }

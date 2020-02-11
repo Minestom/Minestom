@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class EntityEquipmentPacket implements ServerPacket {
 
@@ -19,7 +20,7 @@ public class EntityEquipmentPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x47;
+        return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 
     public enum Slot {

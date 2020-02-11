@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.Utils;
@@ -78,8 +79,8 @@ public class ChunkDataPacket implements ServerPacket {
         // Biome data
         if (fullChunk) {
             for (int z = 0; z < 1024; z++) {
+                // TODO proper chunk section biome
                 writer.writeInt(chunk.getBiome().getId());
-                //blocks.putInt(chunk.getBiome().getId()); // FIXME
             }
         }
 
@@ -129,6 +130,6 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x22;
+        return ServerPacketIdentifier.CHUNK_DATA;
     }
 }

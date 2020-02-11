@@ -2,8 +2,9 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
-public class AnimationPacket implements ServerPacket {
+public class EntityAnimationPacket implements ServerPacket {
 
     public int entityId;
     public Animation animation;
@@ -16,7 +17,7 @@ public class AnimationPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x06;
+        return ServerPacketIdentifier.ENTITY_ANIMATION;
     }
 
     public enum Animation {

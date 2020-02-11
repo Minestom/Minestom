@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class WindowItemsPacket implements ServerPacket {
 
@@ -28,6 +29,6 @@ public class WindowItemsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x15;
+        return ServerPacketIdentifier.WINDOW_ITEMS;
     }
 }

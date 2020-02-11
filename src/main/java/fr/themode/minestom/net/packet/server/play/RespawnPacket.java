@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -23,6 +24,6 @@ public class RespawnPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x3B;
+        return ServerPacketIdentifier.RESPAWN;
     }
 }

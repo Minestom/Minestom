@@ -1,21 +1,25 @@
 package fr.themode.minestom.net.packet.server.play;
 
-import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
-public class DisconnectPacket implements ServerPacket {
+public class VehicleMovePacket implements ServerPacket {
 
-    public String message;
+    public double x, y, z;
+    public float yaw, pitch;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(Chat.legacyTextString(message));
+        writer.writeDouble(x);
+        writer.writeDouble(y);
+        writer.writeDouble(z);
+        writer.writeFloat(yaw);
+        writer.writeFloat(pitch);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.DISCONNECT;
+        return ServerPacketIdentifier.VEHICLE_MOVE;
     }
 }

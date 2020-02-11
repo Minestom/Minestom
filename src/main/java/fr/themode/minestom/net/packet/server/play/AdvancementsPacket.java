@@ -4,6 +4,7 @@ import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class AdvancementsPacket implements ServerPacket {
 
@@ -31,7 +32,7 @@ public class AdvancementsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x58;
+        return ServerPacketIdentifier.ADVANCEMENTS;
     }
 
     public enum FrameType {

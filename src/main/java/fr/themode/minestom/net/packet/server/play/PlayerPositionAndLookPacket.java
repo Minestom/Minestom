@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.Position;
 
 public class PlayerPositionAndLookPacket implements ServerPacket {
@@ -24,6 +25,6 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x36;
+        return ServerPacketIdentifier.PLAYER_POSITION_AND_LOOK;
     }
 }

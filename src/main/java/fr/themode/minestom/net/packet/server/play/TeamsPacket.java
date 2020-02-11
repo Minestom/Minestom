@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class TeamsPacket implements ServerPacket {
 
@@ -47,7 +48,7 @@ public class TeamsPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x4C;
+        return ServerPacketIdentifier.TEAMS;
     }
 
     public enum Action {

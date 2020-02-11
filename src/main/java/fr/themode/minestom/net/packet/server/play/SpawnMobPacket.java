@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.Position;
 
 import java.util.UUID;
@@ -20,12 +21,15 @@ public class SpawnMobPacket implements ServerPacket {
         writer.writeVarInt(entityId);
         writer.writeUuid(entityUuid);
         writer.writeVarInt(entityType);
+
         writer.writeDouble(position.getX());
         writer.writeDouble(position.getY());
         writer.writeDouble(position.getZ());
-        writer.writeFloat(position.getYaw());
-        writer.writeFloat(position.getPitch());
-        writer.writeFloat(headPitch);
+
+        writer.writeByte((byte) (position.getYaw() * 256 / 360));
+        writer.writeByte((byte) (position.getPitch() * 256 / 360));
+        writer.writeByte((byte) (headPitch * 256 / 360));
+
         writer.writeShort(velocityX);
         writer.writeShort(velocityY);
         writer.writeShort(velocityZ);
@@ -34,6 +38,6 @@ public class SpawnMobPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x03;
+        return ServerPacketIdentifier.SPAWN_MOB;
     }
 }

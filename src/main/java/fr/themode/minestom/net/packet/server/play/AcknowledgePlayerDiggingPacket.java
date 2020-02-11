@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 
 public class AcknowledgePlayerDiggingPacket implements ServerPacket {
@@ -22,6 +23,6 @@ public class AcknowledgePlayerDiggingPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x8;
+        return ServerPacketIdentifier.ACKNOWLEDGE_PLAYER_DIGGING;
     }
 }

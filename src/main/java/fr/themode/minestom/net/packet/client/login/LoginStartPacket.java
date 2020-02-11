@@ -43,9 +43,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         GameMode gameMode = GameMode.SURVIVAL;
         Dimension dimension = Dimension.OVERWORLD;
         LevelType levelType = LevelType.DEFAULT;
-        float x = 0;
-        float y = 0;
-        float z = 0;
+        final float x = 0;
+        final float y = 0;
+        final float z = 0;
 
         player.refreshDimension(dimension);
         player.refreshGameMode(gameMode);

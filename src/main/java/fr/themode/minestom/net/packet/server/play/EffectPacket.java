@@ -5,23 +5,23 @@ import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 
-public class BlockActionPacket implements ServerPacket {
+public class EffectPacket implements ServerPacket {
 
-    public BlockPosition blockPosition;
-    public byte actionId;
-    public byte actionParam;
-    public int blockId;
+    public int effectId;
+    public BlockPosition position;
+    public int data;
+    public boolean disableRelativeVolume;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeBlockPosition(blockPosition);
-        writer.writeByte(actionId);
-        writer.writeByte(actionParam);
-        writer.writeVarInt(blockId);
+        writer.writeInt(effectId);
+        writer.writeBlockPosition(position);
+        writer.writeInt(data);
+        writer.writeBoolean(disableRelativeVolume);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.BLOCK_ACTION;
+        return ServerPacketIdentifier.EFFECT;
     }
 }

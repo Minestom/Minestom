@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class UpdateHealthPacket implements ServerPacket {
 
@@ -18,6 +19,6 @@ public class UpdateHealthPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x49;
+        return ServerPacketIdentifier.UPDATE_HEALTH;
     }
 }

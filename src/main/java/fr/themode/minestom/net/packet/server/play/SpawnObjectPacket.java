@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.Position;
 
 import java.util.UUID;
@@ -29,6 +30,6 @@ public class SpawnObjectPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x00;
+        return ServerPacketIdentifier.SPAWN_OBJECT;
     }
 }

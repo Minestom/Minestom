@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
 public class EntityHeadLookPacket implements ServerPacket {
 
@@ -16,6 +17,6 @@ public class EntityHeadLookPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x3C;
+        return ServerPacketIdentifier.ENTITY_HEAD_LOOK;
     }
 }

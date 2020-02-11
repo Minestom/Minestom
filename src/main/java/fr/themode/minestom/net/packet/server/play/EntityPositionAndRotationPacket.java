@@ -2,8 +2,9 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
-public class EntityLookAndRelativeMovePacket implements ServerPacket {
+public class EntityPositionAndRotationPacket implements ServerPacket {
 
     public int entityId;
     public short deltaX, deltaY, deltaZ;
@@ -24,6 +25,6 @@ public class EntityLookAndRelativeMovePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x2A;
+        return ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION;
     }
 }

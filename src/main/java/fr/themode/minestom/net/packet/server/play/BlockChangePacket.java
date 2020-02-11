@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet.server.play;
 
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
+import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 import fr.themode.minestom.utils.BlockPosition;
 
 public class BlockChangePacket implements ServerPacket {
@@ -17,6 +18,6 @@ public class BlockChangePacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x0C;
+        return ServerPacketIdentifier.BLOCK_CHANGE;
     }
 }

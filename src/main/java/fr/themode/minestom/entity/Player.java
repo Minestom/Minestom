@@ -6,6 +6,7 @@ import fr.themode.minestom.Main;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.collision.BoundingBox;
+import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
@@ -144,6 +145,11 @@ public class Player extends LivingEntity {
                 if (player != this)
                     player.teleport(getPosition());
             }
+
+            ChickenCreature chickenCreature = new ChickenCreature();
+            chickenCreature.refreshPosition(getPosition());
+            chickenCreature.setInstance(getInstance());
+
         });
 
         setEventCallback(PickupItemEvent.class, event -> {
@@ -188,12 +194,12 @@ public class Player extends LivingEntity {
             setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
 
-            Scoreboard scoreboard = new Scoreboard("Scoreboard Title");
+            Sidebar scoreboard = new Sidebar("Scoreboard Title");
             for (int i = 0; i < 15; i++) {
-                scoreboard.createLine(new Scoreboard.ScoreboardLine("id" + i, "Hey guys " + i, i));
+                scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
             }
             scoreboard.addViewer(this);
-            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED &2TEST");
+            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
 
             BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
             setBelowNameScoreboard(belowNameScoreboard);
@@ -265,42 +271,42 @@ public class Player extends LivingEntity {
             ServerPacket updatePacket = null;
             ServerPacket optionalUpdatePacket = null;
             if (positionChanged && viewChanged) {
-                EntityLookAndRelativeMovePacket entityLookAndRelativeMovePacket = new EntityLookAndRelativeMovePacket();
-                entityLookAndRelativeMovePacket.entityId = getEntityId();
-                entityLookAndRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                entityLookAndRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                entityLookAndRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-                entityLookAndRelativeMovePacket.yaw = position.getYaw();
-                entityLookAndRelativeMovePacket.pitch = position.getPitch();
-                entityLookAndRelativeMovePacket.onGround = onGround;
+                EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
+                entityPositionAndRotationPacket.entityId = getEntityId();
+                entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                entityPositionAndRotationPacket.yaw = position.getYaw();
+                entityPositionAndRotationPacket.pitch = position.getPitch();
+                entityPositionAndRotationPacket.onGround = onGround;
 
                 lastX = position.getX();
                 lastY = position.getY();
                 lastZ = position.getZ();
                 lastYaw = position.getYaw();
                 lastPitch = position.getPitch();
-                updatePacket = entityLookAndRelativeMovePacket;
+                updatePacket = entityPositionAndRotationPacket;
             } else if (positionChanged) {
-                EntityRelativeMovePacket entityRelativeMovePacket = new EntityRelativeMovePacket();
-                entityRelativeMovePacket.entityId = getEntityId();
-                entityRelativeMovePacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                entityRelativeMovePacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                entityRelativeMovePacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-                entityRelativeMovePacket.onGround = onGround;
+                EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
+                entityPositionPacket.entityId = getEntityId();
+                entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                entityPositionPacket.onGround = onGround;
                 lastX = position.getX();
                 lastY = position.getY();
                 lastZ = position.getZ();
-                updatePacket = entityRelativeMovePacket;
+                updatePacket = entityPositionPacket;
             } else if (viewChanged) {
-                EntityLookPacket entityLookPacket = new EntityLookPacket();
-                entityLookPacket.entityId = getEntityId();
-                entityLookPacket.yaw = position.getYaw();
-                entityLookPacket.pitch = position.getPitch();
-                entityLookPacket.onGround = onGround;
+                EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+                entityRotationPacket.entityId = getEntityId();
+                entityRotationPacket.yaw = position.getYaw();
+                entityRotationPacket.pitch = position.getPitch();
+                entityRotationPacket.onGround = onGround;
 
                 lastYaw = position.getYaw();
                 lastPitch = position.getPitch();
-                updatePacket = entityLookPacket;
+                updatePacket = entityRotationPacket;
             }
 
             if (viewChanged) {
