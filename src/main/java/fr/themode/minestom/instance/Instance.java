@@ -159,8 +159,8 @@ public abstract class Instance implements BlockModifier, DataContainer {
     }
 
     public Chunk getChunkAt(double x, double z) {
-        int chunkX = Math.floorDiv((int) x, 16);
-        int chunkZ = Math.floorDiv((int) z, 16);
+        int chunkX = ChunkUtils.getChunkX((int) x);
+        int chunkZ = ChunkUtils.getChunkX((int) z);
         return getChunk(chunkX, chunkZ);
     }
 

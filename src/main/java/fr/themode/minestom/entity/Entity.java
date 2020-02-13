@@ -535,6 +535,21 @@ public abstract class Entity implements Viewable, DataContainer {
         return position;
     }
 
+    public boolean sameChunk(Position position) {
+        Position pos = getPosition();
+        int chunkX1 = ChunkUtils.getChunkX((int) pos.getX());
+        int chunkZ1 = ChunkUtils.getChunkX((int) pos.getZ());
+
+        int chunkX2 = ChunkUtils.getChunkX((int) position.getX());
+        int chunkZ2 = ChunkUtils.getChunkX((int) position.getZ());
+
+        return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
+    }
+
+    public boolean sameChunk(Entity entity) {
+        return sameChunk(entity.getPosition());
+    }
+
     public void remove() {
         this.shouldRemove = true;
         entityById.remove(id);

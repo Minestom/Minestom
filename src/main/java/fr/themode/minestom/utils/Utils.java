@@ -10,6 +10,7 @@ import fr.themode.minestom.utils.buffer.BufferWrapper;
 import fr.themode.minestom.utils.consumer.StringConsumer;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class Utils {
@@ -29,7 +30,7 @@ public class Utils {
         }
     }
 
-    public static void readString(Client client, StringConsumer consumer) {
+    public static void readStringVarIntSized(Client client, StringConsumer consumer) {
         ConnectionUtils.readVarInt(client, length -> {
             int stringLength = Utils.lengthVarInt(length) + length;
             client.readBytes(length, bytes -> {
@@ -37,6 +38,20 @@ public class Utils {
                     consumer.accept(new String(bytes, "UTF-8"), stringLength);
                 } catch (UnsupportedEncodingException e) {
                     consumer.accept(null, stringLength);
+                    e.printStackTrace();
+                }
+            });
+        });
+    }
+
+    public static void readStringShortSized(Client client, StringConsumer consumer) {
+
+        client.readShort(length -> {
+            client.readBytes(length, bytes -> {
+                try {
+                    consumer.accept(new String(bytes, "UTF-8"), length);
+                } catch (UnsupportedEncodingException e) {
+                    consumer.accept(null, length);
                     e.printStackTrace();
                 }
             });
@@ -93,15 +108,20 @@ public class Utils {
     }
 
     public static void writeItemStack(Packet packet, ItemStack itemStack) {
-        if (itemStack == null) {
+        if (itemStack == null || itemStack.isAir()) {
             packet.putBoolean(false);
         } else {
             packet.putBoolean(true);
             Utils.writeVarInt(packet, itemStack.getMaterial().getId());
             packet.putByte(itemStack.getAmount());
 
+            if (!itemStack.hasNbtTag()) {
+                packet.putByte((byte) 0x00); // No nbt
+                return;
+            }
+
             packet.putByte((byte) 0x0A); // Compound
-            packet.putShort((short) 0);
+            packet.putShort((short) 0); // Empty compound name
 
             // Unbreakable
             if (itemStack.isUnbreakable()) {
@@ -116,29 +136,40 @@ public class Utils {
             packet.putShort(itemStack.getDamage());
 
             // Display
-            packet.putByte((byte) 0x0A); // Compound
-            packet.putString("display");
+            boolean hasDisplayName = itemStack.hasDisplayName();
+            boolean hasLore = itemStack.hasLore();
 
-            if (itemStack.getDisplayName() != null) {
-                packet.putByte((byte) 0x08);
-                packet.putString("Name");
-                packet.putString(Chat.legacyTextString(itemStack.getDisplayName()));
+            if (hasDisplayName || hasLore) {
+                packet.putByte((byte) 0x0A); // Start display compound
+                packet.putString("display");
+
+                if (hasDisplayName) {
+                    packet.putByte((byte) 0x08);
+                    packet.putString("Name");
+                    packet.putString(Chat.legacyTextString(itemStack.getDisplayName()));
+                }
+
+                if (hasLore) {
+                    ArrayList<String> lore = itemStack.getLore();
+
+                    packet.putByte((byte) 0x09);
+                    packet.putString("Lore");
+                    packet.putByte((byte) 0x08);
+                    packet.putInt(lore.size());
+                    for (String line : lore) {
+                        packet.putString(Chat.legacyTextString(line));
+                    }
+                }
+
+                packet.putByte((byte) 0); // End display compound
             }
-
-            // TODO lore
-            /*packet.putByte((byte) 0x08);
-            packet.putString("Lore");
-            packet.putString(Chat.rawText("a line"));*/
-
-            packet.putByte((byte) 0); // End display compound
-
+            // End display
 
             packet.putByte((byte) 0); // End nbt
         }
     }
 
     public static void readItemStack(PacketReader reader, Consumer<ItemStack> consumer) {
-        // FIXME: need finishing
         reader.readBoolean(present -> {
             if (!present) {
                 consumer.accept(ItemStack.AIR_ITEM); // Consume air item if empty
@@ -146,11 +177,18 @@ public class Utils {
             }
 
             reader.readVarInt(id -> {
-
                 reader.readByte(count -> {
+                    ItemStack item = new ItemStack(id, count);
+                    reader.readByte(nbt -> { // Should be compound start (0x0A) or 0 if there isn't NBT data
+                        if (nbt == 0x00) {
+                            consumer.accept(item);
+                            return;
+                        } else if (nbt == 0x0A) {
+                            reader.readShort(compoundName -> { // Ignored, should be empty (main compound name)
+                                NbtReaderUtils.readItemStackNBT(reader, item);
+                            });
 
-                    reader.readByte(nbt -> { // FIXME: assume that there is no NBT data
-                        consumer.accept(new ItemStack(id, count));
+                        }
                     });
 
                 });

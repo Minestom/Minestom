@@ -3,6 +3,8 @@ package fr.themode.minestom.item;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
 
+import java.util.ArrayList;
+
 public class ItemStack implements DataContainer {
 
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
@@ -13,6 +15,7 @@ public class ItemStack implements DataContainer {
 
     private String displayName;
     private boolean unbreakable;
+    private ArrayList<String> lore;
 
     private Data data;
 
@@ -20,6 +23,7 @@ public class ItemStack implements DataContainer {
         this.material = material;
         this.amount = amount;
         this.damage = damage;
+        this.lore = new ArrayList<>();
     }
 
     public ItemStack(int id, byte amount) {
@@ -30,11 +34,18 @@ public class ItemStack implements DataContainer {
         return material == Material.AIR;
     }
 
+    /**
+     * Do not take amount in consideration
+     *
+     * @param itemStack
+     * @return
+     */
     public boolean isSimilar(ItemStack itemStack) {
         return itemStack.getMaterial() == material &&
                 itemStack.getDisplayName() == displayName &&
                 itemStack.isUnbreakable() == unbreakable &&
-                itemStack.getDamage() == damage;
+                itemStack.getDamage() == damage &&
+                itemStack.getData() == data;
     }
 
     public byte getAmount() {
@@ -65,12 +76,32 @@ public class ItemStack implements DataContainer {
         this.displayName = displayName;
     }
 
+    public boolean hasDisplayName() {
+        return displayName != null;
+    }
+
+    public ArrayList<String> getLore() {
+        return lore;
+    }
+
+    public void setLore(ArrayList<String> lore) {
+        this.lore = lore;
+    }
+
+    public boolean hasLore() {
+        return lore != null && !lore.isEmpty();
+    }
+
     public boolean isUnbreakable() {
         return unbreakable;
     }
 
     public void setUnbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
+    }
+
+    public boolean hasNbtTag() {
+        return hasDisplayName() || hasLore() || isUnbreakable();
     }
 
     public ItemStack clone() {

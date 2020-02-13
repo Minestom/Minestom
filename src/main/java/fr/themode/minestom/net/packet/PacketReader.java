@@ -50,6 +50,11 @@ public class PacketReader {
         client.readShort(consumer);
     }
 
+    public void readInteger(IntConsumer consumer) {
+        sizeOffset += Integer.BYTES;
+        client.readInt(consumer);
+    }
+
     public void readLong(LongConsumer consumer) {
         sizeOffset += Long.BYTES;
         client.readLong(consumer);
@@ -66,11 +71,15 @@ public class PacketReader {
     }
 
     public void readSizedString(StringConsumer consumer) {
-        Utils.readString(client, consumer);
+        Utils.readStringVarIntSized(client, consumer);
     }
 
     public void readSizedString(Consumer<String> consumer) {
         readSizedString((string, length1) -> consumer.accept(string));
+    }
+
+    public void readShortSizedString(StringConsumer consumer) {
+        Utils.readStringShortSized(client, consumer);
     }
 
     public void getRemainingBytes(int offset, Consumer<byte[]> consumer) {
@@ -90,4 +99,11 @@ public class PacketReader {
         Utils.readItemStack(this, consumer);
     }
 
+    public int getPacketLength() {
+        return length;
+    }
+
+    public int getReaderOffset() {
+        return sizeOffset;
+    }
 }

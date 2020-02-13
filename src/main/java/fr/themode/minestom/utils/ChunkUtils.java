@@ -8,6 +8,14 @@ public class ChunkUtils {
         return instance.getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16)) == null;
     }
 
+    public static int getChunkX(int x) {
+        return Math.floorDiv(x, 16);
+    }
+
+    public static int getChunkZ(int z) {
+        return Math.floorDiv(z, 16);
+    }
+
     public static long getChunkIndex(int chunkX, int chunkZ) {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
     }

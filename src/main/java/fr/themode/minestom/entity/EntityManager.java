@@ -15,6 +15,9 @@ public class EntityManager {
 
     private static InstanceManager instanceManager = Main.getInstanceManager();
 
+    private UpdateType updateType = UpdateType.PER_CHUNK;
+    private Set<Instance> instances = instanceManager.getInstances();
+
     private ExecutorService entitiesPool = new MinestomThread(Main.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
     private ExecutorService playersPool = new MinestomThread(Main.THREAD_COUNT_PLAYERS_ENTITIES, "Ms-PlayersPool");
 
@@ -23,10 +26,45 @@ public class EntityManager {
     public void update() {
         final long time = System.currentTimeMillis();
 
+        // Connect waiting players
         waitingPlayersTick();
-        for (Instance instance : instanceManager.getInstances()) {
-            testTick2(instance, time);
+
+        // Update entities
+        switch (updateType) {
+            case PER_CHUNK:
+                chunkUpdate(instances, time);
+                break;
+            case PER_ENTITY_TYPE:
+                entityTypeUpdate(instances, time);
+                break;
+            case PER_INSTANCE:
+                instanceUpdate(instances, time);
+                break;
         }
+
+    }
+
+    /**
+     * Update is chunk based
+     *
+     * @param time
+     */
+    private void chunkUpdate(Set<Instance> instances, long time) {
+        // TODO optimize for when there are too many entities on one chunk
+        for (Instance instance : instanceManager.getInstances()) {
+            for (Chunk chunk : instance.getChunks()) {
+                Set<Entity> entities = instance.getChunkEntities(chunk);
+
+                if (!entities.isEmpty()) {
+                    entitiesPool.execute(() -> {
+                        for (Entity entity : entities) {
+                            entity.tick(time);
+                        }
+                    });
+                }
+            }
+        }
+
     }
 
     private void waitingPlayersTick() {
@@ -43,48 +81,81 @@ public class EntityManager {
         }
     }
 
-    // TODO optimize for when there are too many entities on one chunk
-    private void testTick2(Instance instance, long time) {
-        for (Chunk chunk : instance.getChunks()) {
-            Set<Entity> entities = instance.getChunkEntities(chunk);
+    /**
+     * Update each entity type separately independently of their location
+     *
+     * @param time
+     */
+    private void entityTypeUpdate(Set<Instance> instances, long time) {
+        for (Instance instance : instanceManager.getInstances()) {
+            Set<Player> players = instance.getPlayers();
+            Set<EntityCreature> creatures = instance.getCreatures();
+            Set<ObjectEntity> objects = instance.getObjectEntities();
 
-            if (!entities.isEmpty()) {
+            if (!players.isEmpty()) {
+                playersPool.execute(() -> {
+                    for (Player player : players) {
+                        player.tick(time);
+                    }
+                });
+            }
+
+            if (!creatures.isEmpty() || !objects.isEmpty()) {
                 entitiesPool.execute(() -> {
-                    for (Entity entity : entities) {
-                        entity.tick(time);
+                    for (EntityCreature creature : creatures) {
+                        creature.tick(time);
+                    }
+                    for (ObjectEntity objectEntity : objects) {
+                        objectEntity.tick(time);
                     }
                 });
             }
         }
     }
 
-    private void testTick1(Instance instance, long time) {
-        Set<ObjectEntity> objects = instance.getObjectEntities();
-        Set<EntityCreature> creatures = instance.getCreatures();
-        Set<Player> players = instance.getPlayers();
+    /**
+     * Each instance get its pool, should suppress most of the problems related to thread-safety
+     *
+     * @param instances
+     * @param time
+     */
+    private void instanceUpdate(Set<Instance> instances, long time) {
+        for (Instance instance : instances) {
+            Set<Player> players = instance.getPlayers();
+            Set<EntityCreature> creatures = instance.getCreatures();
+            Set<ObjectEntity> objects = instance.getObjectEntities();
 
-        if (!creatures.isEmpty() || !objects.isEmpty()) {
-            entitiesPool.execute(() -> {
-                for (EntityCreature creature : creatures) {
-                    creature.tick(time);
-                }
-                for (ObjectEntity objectEntity : objects) {
-                    objectEntity.tick(time);
-                }
-            });
+            if (!players.isEmpty() || !creatures.isEmpty() || !objects.isEmpty()) {
+                entitiesPool.execute(() -> {
+                    for (Player player : players) {
+                        player.tick(time);
+                    }
+                    for (EntityCreature creature : creatures) {
+                        creature.tick(time);
+                    }
+                    for (ObjectEntity objectEntity : objects) {
+                        objectEntity.tick(time);
+                    }
+                });
+            }
         }
+    }
 
-        if (!players.isEmpty()) {
-            playersPool.execute(() -> {
-                for (Player player : players) {
-                    player.tick(time);
-                }
-            });
-        }
+    public UpdateType getUpdateType() {
+        return updateType;
     }
 
     public void addWaitingPlayer(Player player) {
         this.waitingPlayers.add(player);
     }
 
+    public void setUpdateType(UpdateType updateType) {
+        this.updateType = updateType;
+    }
+
+    public enum UpdateType {
+        PER_CHUNK,
+        PER_ENTITY_TYPE,
+        PER_INSTANCE;
+    }
 }

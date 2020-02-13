@@ -10,7 +10,6 @@ public class ClientClickWindowButtonPacket extends ClientPlayPacket {
 
     @Override
     public void read(PacketReader reader, Runnable callback) {
-        // FIXME: 2 packets have the same id (Confirm Transaction / Click window button)
         reader.readByte(value -> windowId = value);
         reader.readByte(value -> {
             buttonId = value;

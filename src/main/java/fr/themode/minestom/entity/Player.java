@@ -181,7 +181,12 @@ public class Player extends LivingEntity {
                     //itemEntity.remove();
                 }*/
 
-            getInventory().addItemStack(new ItemStack(1, (byte) 75));
+            ItemStack item = new ItemStack(1, (byte) 75);
+            item.setDisplayName("LE NOM PUTAIN");
+            item.getLore().add("lol le lore");
+            item.getLore().add("lol le lore2");
+            item.getLore().add("lol le lore3");
+            getInventory().addItemStack(item);
             //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             /*TeamManager teamManager = Main.getTeamManager();
