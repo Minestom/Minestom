@@ -177,6 +177,12 @@ public class Utils {
             }
 
             reader.readVarInt(id -> {
+
+                if (id == -1) {
+                    // Drop mode
+                    consumer.accept(ItemStack.AIR_ITEM);
+                }
+
                 reader.readByte(count -> {
                     ItemStack item = new ItemStack(id, count);
                     reader.readByte(nbt -> { // Should be compound start (0x0A) or 0 if there isn't NBT data
@@ -185,7 +191,7 @@ public class Utils {
                             return;
                         } else if (nbt == 0x0A) {
                             reader.readShort(compoundName -> { // Ignored, should be empty (main compound name)
-                                NbtReaderUtils.readItemStackNBT(reader, item);
+                                NbtReaderUtils.readItemStackNBT(reader, consumer, item);
                             });
 
                         }

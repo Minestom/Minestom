@@ -15,7 +15,9 @@ import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
+import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.inventory.rule.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
@@ -181,12 +183,21 @@ public class Player extends LivingEntity {
                     //itemEntity.remove();
                 }*/
 
-            ItemStack item = new ItemStack(1, (byte) 75);
+            ItemStack item = new ItemStack(1, (byte) 4);
             item.setDisplayName("LE NOM PUTAIN");
-            item.getLore().add("lol le lore");
-            item.getLore().add("lol le lore2");
-            item.getLore().add("lol le lore3");
+            //item.getLore().add("lol le lore");
             getInventory().addItemStack(item);
+
+            Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
+            inventory.setInventoryCondition((slot, inventory1, clickedItem, cursorItem) -> {
+                InventoryConditionResult result = new InventoryConditionResult(clickedItem, cursorItem);
+                result.setCancel(false);
+                return result;
+            });
+            inventory.setItemStack(0, item.clone());
+
+            openInventory(inventory);
+
             //getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             /*TeamManager teamManager = Main.getTeamManager();
@@ -480,6 +491,17 @@ public class Player extends LivingEntity {
 
     public void sendMessage(TextObject textObject) {
         sendMessage(textObject.toJson());
+    }
+
+    public void sendActionBarMessage(String message, char colorChar) {
+        TitlePacket titlePacket = new TitlePacket();
+        titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
+        titlePacket.actionBarText = Chat.legacyText(message, colorChar).toString();
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    public void sendActionBarMessage(String message) {
+        sendActionBarMessage(message, Chat.COLOR_CHAR);
     }
 
     @Override

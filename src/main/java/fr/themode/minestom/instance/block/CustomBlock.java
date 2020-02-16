@@ -28,7 +28,7 @@ public abstract class CustomBlock {
 
     // TODO add another object parameter which will offer a lot of integrated features (like break animation, id change etc...)
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
-        throw new UnsupportedOperationException("Update method not overriden");
+        throw new UnsupportedOperationException("Update method not overridden");
     }
 
     public abstract UpdateOption getUpdateOption();

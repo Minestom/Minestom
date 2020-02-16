@@ -2,6 +2,7 @@ package fr.themode.minestom.item;
 
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
+import fr.themode.minestom.item.rule.VanillaStackingRule;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class ItemStack implements DataContainer {
     private boolean unbreakable;
     private ArrayList<String> lore;
 
+    private StackingRule stackingRule = new VanillaStackingRule((byte) 64);
     private Data data;
 
     public ItemStack(Material material, byte amount, short damage) {
@@ -45,6 +47,7 @@ public class ItemStack implements DataContainer {
                 itemStack.getDisplayName() == displayName &&
                 itemStack.isUnbreakable() == unbreakable &&
                 itemStack.getDamage() == damage &&
+                itemStack.getStackingRule() == stackingRule &&
                 itemStack.getData() == data;
     }
 
@@ -108,10 +111,23 @@ public class ItemStack implements DataContainer {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
+        itemStack.setLore(getLore());
+        itemStack.setStackingRule(getStackingRule());
         Data data = getData();
         if (data != null)
             itemStack.setData(data.clone());
         return itemStack;
+    }
+
+    public StackingRule getStackingRule() {
+        return stackingRule;
+    }
+
+    public void setStackingRule(StackingRule stackingRule) {
+        if (stackingRule == null)
+            throw new NullPointerException("StackingRule cannot be null!");
+
+        this.stackingRule = stackingRule;
     }
 
     @Override

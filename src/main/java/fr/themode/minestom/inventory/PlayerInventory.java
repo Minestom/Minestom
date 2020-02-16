@@ -1,6 +1,7 @@
 package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.inventory.rule.InventoryCondition;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.EntityEquipmentPacket;
 import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
@@ -32,6 +33,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     private ItemStack[] items = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.AIR_ITEM;
 
+    private InventoryCondition inventoryCondition;
+
     public PlayerInventory(Player player) {
         this.player = player;
 
@@ -46,6 +49,21 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public ItemStack[] getItemStacks() {
         return Arrays.copyOf(items, items.length);
+    }
+
+    @Override
+    public void setInventoryRule() {
+
+    }
+
+    @Override
+    public InventoryCondition getInventoryCondition() {
+        return inventoryCondition;
+    }
+
+    @Override
+    public void setInventoryCondition(InventoryCondition inventoryCondition) {
+        this.inventoryCondition = inventoryCondition;
     }
 
     @Override

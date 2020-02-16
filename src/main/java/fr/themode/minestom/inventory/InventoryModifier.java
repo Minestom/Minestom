@@ -1,5 +1,6 @@
 package fr.themode.minestom.inventory;
 
+import fr.themode.minestom.inventory.rule.InventoryCondition;
 import fr.themode.minestom.item.ItemStack;
 
 public interface InventoryModifier {
@@ -11,4 +12,10 @@ public interface InventoryModifier {
     ItemStack getItemStack(int slot);
 
     ItemStack[] getItemStacks();
+
+    void setInventoryRule();
+
+    InventoryCondition getInventoryCondition();
+
+    void setInventoryCondition(InventoryCondition inventoryCondition);
 }

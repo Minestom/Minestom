@@ -70,7 +70,6 @@ public class Main {
         blockManager.registerBlock(new UpdatableBlockDemo());
 
         server = new Server();
-        //server = new Server(136434);
 
         server.onConnect(client -> {
             System.out.println("CONNECTION");

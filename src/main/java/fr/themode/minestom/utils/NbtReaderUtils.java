@@ -7,14 +7,16 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.PacketReader;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class NbtReaderUtils {
 
-    public static void readItemStackNBT(PacketReader reader, ItemStack item) {
+    public static void readItemStackNBT(PacketReader reader, Consumer<ItemStack> consumer, ItemStack item) {
         reader.readByte(typeId -> {
             switch (typeId) {
                 case 0x00: // TAG_End
                     // End of item NBT
+                    consumer.accept(item);
                     break;
                 case 0x01: // TAG_Byte
 
@@ -26,7 +28,7 @@ public class NbtReaderUtils {
                         if (name.equals("Damage")) {
                             reader.readShort(damage -> {
                                 item.setDamage(damage);
-                                readItemStackNBT(reader, item);
+                                readItemStackNBT(reader, consumer, item);
                             });
                         }
 
@@ -39,7 +41,7 @@ public class NbtReaderUtils {
                         if (name.equals("Unbreakable")) {
                             reader.readInteger(value -> {
                                 item.setUnbreakable(value == 1);
-                                readItemStackNBT(reader, item);
+                                readItemStackNBT(reader, consumer, item);
                             });
                         }
 
@@ -69,7 +71,7 @@ public class NbtReaderUtils {
 
                         // Display Compound
                         if (compoundName.equals("display")) {
-                            readItemStackDisplayNBT(reader, item);
+                            readItemStackDisplayNBT(reader, consumer, item);
                         }
 
                     });
@@ -79,13 +81,13 @@ public class NbtReaderUtils {
         });
     }
 
-    public static void readItemStackDisplayNBT(PacketReader reader, ItemStack item) {
+    public static void readItemStackDisplayNBT(PacketReader reader, Consumer<ItemStack> consumer, ItemStack item) {
 
         reader.readByte(typeId -> {
             switch (typeId) {
                 case 0x00: // TAG_End
                     // End of the display compound
-                    readItemStackNBT(reader, item);
+                    readItemStackNBT(reader, consumer, item);
                     break;
                 case 0x08: // TAG_String
 
@@ -96,7 +98,7 @@ public class NbtReaderUtils {
                                 TextObject textObject = TextObject.fromJson(new JsonParser().parse(jsonDisplayName).getAsJsonObject());
                                 String displayName = LegacyText.toLegacy(textObject);
                                 item.setDisplayName(displayName);
-                                readItemStackDisplayNBT(reader, item);
+                                readItemStackDisplayNBT(reader, consumer, item);
                             });
                         }
 
@@ -117,9 +119,12 @@ public class NbtReaderUtils {
                                             TextObject textObject = TextObject.fromJson(new JsonParser().parse(string).getAsJsonObject());
                                             String line = LegacyText.toLegacy(textObject);
                                             lore.add(line);
+                                            if (lore.size() == size) {
+                                                item.setLore(lore);
+                                            }
                                         });
                                         if (i == size - 1) { // Last iteration
-                                            readItemStackDisplayNBT(reader, item);
+                                            readItemStackDisplayNBT(reader, consumer, item);
                                         }
                                     }
 
