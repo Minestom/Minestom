@@ -1,4 +1,4 @@
-package fr.themode.minestom.instance.demo;
+package fr.themode.demo.generator;
 
 import fr.themode.minestom.instance.Biome;
 import fr.themode.minestom.instance.ChunkGenerator;

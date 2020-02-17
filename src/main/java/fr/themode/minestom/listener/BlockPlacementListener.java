@@ -7,6 +7,7 @@ import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.item.StackingRule;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerBlockPlacementPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.utils.BlockPosition;
@@ -44,9 +45,10 @@ public class BlockPlacementListener {
             if (!playerBlockPlaceEvent.isCancelled()) {
                 instance.setCustomBlock(blockPosition, "updatable"); // TODO set useItem's block instead
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
-                    usedItem.setAmount((byte) (usedItem.getAmount() - 1));
-                    if (usedItem.getAmount() <= 0)
-                        usedItem = ItemStack.AIR_ITEM;
+
+                    StackingRule stackingRule = usedItem.getStackingRule();
+                    stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
+
                     if (hand == Player.Hand.OFF) {
                         playerInventory.setItemInOffHand(usedItem);
                     } else { // Main

@@ -2,30 +2,27 @@ package fr.themode.minestom.entity;
 
 import club.thectm.minecraft.text.TextObject;
 import com.google.gson.JsonObject;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.collision.BoundingBox;
-import fr.themode.minestom.entity.demo.ChickenCreature;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
-import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.instance.block.CustomBlock;
-import fr.themode.minestom.instance.demo.ChunkGeneratorDemo;
 import fr.themode.minestom.inventory.Inventory;
-import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.inventory.PlayerInventory;
-import fr.themode.minestom.inventory.rule.InventoryConditionResult;
-import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.scoreboard.BelowNameScoreboard;
 import fr.themode.minestom.scoreboard.Team;
-import fr.themode.minestom.utils.*;
+import fr.themode.minestom.utils.ArrayUtils;
+import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.ChunkUtils;
+import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
@@ -50,24 +47,6 @@ public class Player extends LivingEntity {
     private LevelType levelType;
 
     protected boolean onGround;
-
-    private static InstanceContainer instanceContainer;
-
-    static {
-        ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        //instanceContainer = Main.getInstanceManager().createInstanceContainer(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
-        instanceContainer = Main.getInstanceManager().createInstanceContainer();
-        instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-        int loopStart = -2;
-        int loopEnd = 2;
-        long time = System.currentTimeMillis();
-        for (int x = loopStart; x < loopEnd; x++)
-            for (int z = loopStart; z < loopEnd; z++) {
-                instanceContainer.loadChunk(x, z);
-            }
-        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
-    }
 
     protected Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
     protected Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
@@ -120,107 +99,6 @@ public class Player extends LivingEntity {
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
-
-        setEventCallback(AttackEvent.class, event -> {
-            Entity entity = event.getTarget();
-            if (entity instanceof EntityCreature) {
-                ((EntityCreature) entity).damage(-1);
-                Vector velocity = getPosition().clone().getDirection().multiply(6);
-                velocity.setY(4f);
-                entity.setVelocity(velocity, 150);
-                sendMessage("You attacked an entity!");
-            } else if (entity instanceof Player) {
-                Player player = (Player) entity;
-                Vector velocity = getPosition().clone().getDirection().multiply(4);
-                velocity.setY(3.5f);
-                player.setVelocity(velocity, 150);
-                player.damage(2);
-                sendMessage("ATTACK");
-            }
-        });
-
-        setEventCallback(PlayerBlockPlaceEvent.class, event -> {
-            if (event.getHand() != Hand.MAIN)
-                return;
-
-            for (Player player : instance.getPlayers()) {
-                if (player != this)
-                    player.teleport(getPosition());
-            }
-
-            ChickenCreature chickenCreature = new ChickenCreature();
-            chickenCreature.refreshPosition(getPosition());
-            chickenCreature.setInstance(getInstance());
-
-        });
-
-        setEventCallback(PickupItemEvent.class, event -> {
-            event.setCancelled(!getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
-        });
-
-        setEventCallback(PlayerLoginEvent.class, event -> {
-            event.setSpawningInstance(instanceContainer);
-        });
-
-        setEventCallback(PlayerSpawnEvent.class, event -> {
-            setGameMode(GameMode.SURVIVAL);
-            teleport(new Position(0, 66, 0));
-
-            /*Random random = new Random();
-            for (int i = 0; i < 50; i++) {
-                ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(random.nextInt(100), 65, random.nextInt(100));
-                chickenCreature.setInstance(getInstance());
-            }*/
-            //chickenCreature.addPassenger(this);
-
-            /*for (int ix = 0; ix < 4; ix++)
-                for (int iz = 0; iz < 4; iz++) {
-                    ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                    itemEntity.refreshPosition(ix, 68, iz);
-                    //itemEntity.setNoGravity(true);
-                    itemEntity.setInstance(getInstance());
-                    //itemEntity.remove();
-                }*/
-
-            ItemStack item = new ItemStack(1, (byte) 4);
-            item.setDisplayName("LE NOM PUTAIN");
-            //item.getLore().add("lol le lore");
-            getInventory().addItemStack(item);
-
-            Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-            inventory.setInventoryCondition((slot, inventory1, clickedItem, cursorItem) -> {
-                InventoryConditionResult result = new InventoryConditionResult(clickedItem, cursorItem);
-                result.setCancel(false);
-                return result;
-            });
-            inventory.setItemStack(0, item.clone());
-
-            openInventory(inventory);
-
-            //getInventory().addItemStack(new ItemStack(1, (byte) 100));
-
-            /*TeamManager teamManager = Main.getTeamManager();
-            Team team = teamManager.createTeam(getUsername());
-            team.setTeamDisplayName("display");
-            team.setPrefix("[Test] ");
-            team.setTeamColor(ChatColor.RED);
-            setTeam(team);
-
-            setAttribute(Attribute.MAX_HEALTH, 10);
-            heal();
-
-            Sidebar scoreboard = new Sidebar("Scoreboard Title");
-            for (int i = 0; i < 15; i++) {
-                scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
-            }
-            scoreboard.addViewer(this);
-            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
-
-            BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
-            setBelowNameScoreboard(belowNameScoreboard);
-            belowNameScoreboard.updateScore(this, 50);*/
-        });
     }
 
     @Override
@@ -610,10 +488,10 @@ public class Player extends LivingEntity {
         float dx = newChunk.getChunkX() - lastChunk.getChunkX();
         float dz = newChunk.getChunkZ() - lastChunk.getChunkZ();
         double distance = Math.sqrt(dx * dx + dz * dz);
-        boolean isFar = distance >= Main.CHUNK_VIEW_DISTANCE / 2;
+        boolean isFar = distance >= MinecraftServer.CHUNK_VIEW_DISTANCE / 2;
 
-        long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.CHUNK_VIEW_DISTANCE);
-        long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.CHUNK_VIEW_DISTANCE);
+        long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
+        long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
         int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
@@ -995,7 +873,7 @@ public class Player extends LivingEntity {
     }
 
     public int getChunkRange() {
-        int serverRange = Main.CHUNK_VIEW_DISTANCE;
+        int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
         int playerRange = getSettings().viewDistance;
         if (playerRange == 0) {
             return serverRange; // Didn't receive settings packet yet

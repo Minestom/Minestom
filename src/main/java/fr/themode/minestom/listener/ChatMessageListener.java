@@ -1,7 +1,7 @@
 package fr.themode.minestom.listener;
 
 import club.thectm.minecraft.text.*;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerChatEvent;
@@ -14,7 +14,7 @@ public class ChatMessageListener {
     public static void listener(ClientChatMessagePacket packet, Player player) {
         String message = Chat.uncoloredLegacyText(packet.message);
 
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, Main.getConnectionManager().getOnlinePlayers(), message);
+        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, MinecraftServer.getConnectionManager().getOnlinePlayers(), message);
 
         // Default format
         playerChatEvent.setChatFormat((event) -> {

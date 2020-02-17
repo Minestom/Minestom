@@ -1,4 +1,4 @@
-package fr.themode.minestom.instance.demo;
+package fr.themode.demo.blocks;
 
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;

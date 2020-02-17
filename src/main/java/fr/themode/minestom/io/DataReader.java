@@ -1,7 +1,8 @@
 package fr.themode.minestom.io;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
+import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.utils.CompressionUtils;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +10,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 public class DataReader {
+
+    private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     public static Data readData(byte[] b, boolean shouldDecompress) {
         b = shouldDecompress ? CompressionUtils.getDecompressedData(b) : b;
@@ -42,7 +45,7 @@ public class DataReader {
                 Class type = Class.forName(new String(typeCache));
 
                 String name = new String(nameCache);
-                Object value = Main.getDataManager().getDataType(type).decode(valueCache);
+                Object value = DATA_MANAGER.getDataType(type).decode(valueCache);
 
                 data.set(name, value, type);
             }

@@ -1,7 +1,7 @@
 package fr.themode.minestom.net;
 
 import com.github.simplenet.packet.Packet;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class PacketWriterUtils {
 
-    private static ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_PACKET_WRITER, "Ms-PacketWriterPool");
+    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, "Ms-PacketWriterPool");
 
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<Packet> consumer) {
         batchesPool.execute(() -> {

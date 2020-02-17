@@ -1,6 +1,6 @@
 package fr.themode.minestom.utils;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
@@ -15,7 +15,7 @@ public class EntityUtils {
 
         Chunk chunk = ent1.getInstance().getChunkAt(ent1.getPosition());
 
-        long[] visibleChunksEntity = ChunkUtils.getChunksInRange(ent2.getPosition(), Main.ENTITY_VIEW_DISTANCE);
+        long[] visibleChunksEntity = ChunkUtils.getChunksInRange(ent2.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
         for (long visibleChunk : visibleChunksEntity) {
             int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
             int chunkX = chunkPos[0];

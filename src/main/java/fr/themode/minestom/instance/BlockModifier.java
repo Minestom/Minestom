@@ -1,6 +1,6 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
@@ -9,7 +9,7 @@ import fr.themode.minestom.utils.Position;
 
 public interface BlockModifier {
 
-    BlockManager BLOCK_MANAGER = Main.getBlockManager();
+    BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     void setBlock(int x, int y, int z, short blockId, Data data);
 

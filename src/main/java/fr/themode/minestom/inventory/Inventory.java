@@ -542,7 +542,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                     item = cursorRule.apply(item, totalAmount - maxSize);
                     setItemStack(i, item);
                 } else {
-                    cursorItem.setAmount((byte) totalAmount);
+                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
                     setItemStack(i, ItemStack.AIR_ITEM);
                 }
                 amount = cursorItem.getAmount();
@@ -563,7 +563,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                     item = cursorRule.apply(item, totalAmount - maxSize);
                     playerInventory.setItemStack(i, offset, item);
                 } else {
-                    cursorItem.setAmount((byte) totalAmount);
+                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
                     playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
                 }
                 amount = cursorItem.getAmount();
@@ -583,7 +583,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                     item = cursorRule.apply(item, totalAmount - maxSize);
                     playerInventory.setItemStack(i, offset, item);
                 } else {
-                    cursorItem.setAmount((byte) totalAmount);
+                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
                     playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
                 }
                 amount = cursorItem.getAmount();

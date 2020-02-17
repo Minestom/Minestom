@@ -1,6 +1,6 @@
 package fr.themode.minestom.data;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.utils.PrimitiveConversion;
 
 import java.io.ByteArrayOutputStream;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Data {
 
-    private static final DataManager DATA_MANAGER = Main.getDataManager();
+    private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     // TODO replace maps to something more memory-friendly
     private ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
@@ -48,7 +48,7 @@ public class Data {
             String key = entry.getKey();
             Class type = dataType.get(key);
             Object value = entry.getValue();
-            DataType dataType = Main.getDataManager().getDataType(type);
+            DataType dataType = DATA_MANAGER.getDataType(type);
 
             byte[] encodedType = PrimitiveConversion.getObjectClassString(type.getName()).getBytes(); // Data type (fix for primitives)
             dos.writeShort(encodedType.length);

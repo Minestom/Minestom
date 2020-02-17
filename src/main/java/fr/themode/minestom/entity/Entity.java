@@ -1,7 +1,7 @@
 package fr.themode.minestom.entity;
 
 import com.github.simplenet.packet.Packet;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.data.Data;
@@ -206,7 +206,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 if (this instanceof Player) {
                     sendPacketToViewersAndSelf(getVelocityPacket());
                 } else {
-                    final float tps = Main.TICK_PER_SECOND;
+                    final float tps = MinecraftServer.TICK_PER_SECOND;
                     refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
                     if (this instanceof ObjectEntity) {
                         sendPacketToViewers(getVelocityPacket());
@@ -468,8 +468,8 @@ public abstract class Entity implements Viewable, DataContainer {
             ((Player) entity).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
 
         // Refresh entity viewable list
-        long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
-        long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), Main.ENTITY_VIEW_DISTANCE);
+        long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
+        long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
 
         boolean isPlayer = entity instanceof Player;
 
@@ -570,7 +570,7 @@ public abstract class Entity implements Viewable, DataContainer {
     }
 
     protected EntityVelocityPacket getVelocityPacket() {
-        final float strength = 8000f / Main.TICK_PER_SECOND;
+        final float strength = 8000f / MinecraftServer.TICK_PER_SECOND;
         EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
         velocityPacket.entityId = getEntityId();
         velocityPacket.velocityX = (short) (velocity.getX() * strength);
@@ -684,7 +684,7 @@ public abstract class Entity implements Viewable, DataContainer {
     }
 
     private boolean shouldUpdate(long time) {
-        return (float) (time - lastUpdate) >= Main.TICK_MS * 0.9f; // Margin of error
+        return (float) (time - lastUpdate) >= MinecraftServer.TICK_MS * 0.9f; // Margin of error
     }
 
     public enum Pose {

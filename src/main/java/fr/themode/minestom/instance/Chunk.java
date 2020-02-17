@@ -1,7 +1,7 @@
 package fr.themode.minestom.instance;
 
 import com.github.simplenet.packet.Packet;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 // TODO light data & API
 public class Chunk implements Viewable {
 
-    private static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
+    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Y = 256;

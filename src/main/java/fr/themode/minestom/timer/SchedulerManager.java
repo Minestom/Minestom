@@ -1,6 +1,6 @@
 package fr.themode.minestom.timer;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.utils.thread.MinestomThread;
 import fr.themode.minestom.utils.time.CooldownUtils;
 import fr.themode.minestom.utils.time.UpdateOption;
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SchedulerManager {
 
     private static final AtomicInteger COUNTER = new AtomicInteger();
-    private static ExecutorService batchesPool = new MinestomThread(Main.THREAD_COUNT_SCHEDULER, "Ms-SchedulerPool");
+    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, "Ms-SchedulerPool");
     private List<Task> tasks = new CopyOnWriteArrayList<>();
 
     public int addTask(TaskRunnable runnable, UpdateOption updateOption, int maxCallCount) {

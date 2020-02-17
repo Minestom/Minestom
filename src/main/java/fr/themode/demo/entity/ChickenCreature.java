@@ -1,4 +1,4 @@
-package fr.themode.minestom.entity.demo;
+package fr.themode.demo.entity;
 
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;

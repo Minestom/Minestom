@@ -1,6 +1,6 @@
 package fr.themode.minestom.net.packet.client.login;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.ConnectionManager;
@@ -17,6 +17,7 @@ import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
@@ -59,7 +60,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         joinGamePacket.dimension = dimension;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = levelType;
-        joinGamePacket.viewDistance = Main.CHUNK_VIEW_DISTANCE;
+        joinGamePacket.viewDistance = MinecraftServer.CHUNK_VIEW_DISTANCE;
         joinGamePacket.reducedDebugInfo = false;
         connection.sendPacket(joinGamePacket);
 
@@ -83,7 +84,11 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        Main.getEntityManager().addWaitingPlayer(player);
+        Consumer<Player> playerInitialization = MinecraftServer.getConnectionManager().getPlayerInitialization();
+        if (playerInitialization != null)
+            playerInitialization.accept(player);
+
+        MinecraftServer.getEntityManager().addWaitingPlayer(player);
 
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();

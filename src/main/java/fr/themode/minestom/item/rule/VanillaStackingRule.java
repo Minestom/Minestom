@@ -11,7 +11,7 @@ public class VanillaStackingRule extends StackingRule {
 
     @Override
     public boolean canApply(ItemStack item, int newAmount) {
-        return newAmount >= 1 && newAmount <= getMaxSize();
+        return newAmount > 0 && newAmount <= getMaxSize();
     }
 
     @Override

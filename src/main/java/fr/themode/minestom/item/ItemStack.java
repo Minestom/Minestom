@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class ItemStack implements DataContainer {
 
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
+    private static StackingRule defaultStackingRule = new VanillaStackingRule(64);
 
     private Material material;
     private byte amount;
@@ -18,7 +19,7 @@ public class ItemStack implements DataContainer {
     private boolean unbreakable;
     private ArrayList<String> lore;
 
-    private StackingRule stackingRule = new VanillaStackingRule((byte) 64);
+    private StackingRule stackingRule;
     private Data data;
 
     public ItemStack(Material material, byte amount, short damage) {
@@ -26,6 +27,8 @@ public class ItemStack implements DataContainer {
         this.amount = amount;
         this.damage = damage;
         this.lore = new ArrayList<>();
+
+        this.stackingRule = defaultStackingRule;
     }
 
     public ItemStack(int id, byte amount) {
@@ -138,5 +141,16 @@ public class ItemStack implements DataContainer {
     @Override
     public void setData(Data data) {
         this.data = data;
+    }
+
+    public static StackingRule getDefaultStackingRule() {
+        return defaultStackingRule;
+    }
+
+    public static void setDefaultStackingRule(StackingRule defaultStackingRule) {
+        if (defaultStackingRule == null)
+            throw new NullPointerException("StackingRule cannot be null!");
+
+        ItemStack.defaultStackingRule = defaultStackingRule;
     }
 }

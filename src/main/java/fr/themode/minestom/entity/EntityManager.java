@@ -1,6 +1,6 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.event.PlayerLoginEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
@@ -13,13 +13,13 @@ import java.util.concurrent.ExecutorService;
 
 public class EntityManager {
 
-    private static InstanceManager instanceManager = Main.getInstanceManager();
+    private static InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
     private UpdateType updateType = UpdateType.PER_CHUNK;
     private Set<Instance> instances = instanceManager.getInstances();
 
-    private ExecutorService entitiesPool = new MinestomThread(Main.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
-    private ExecutorService playersPool = new MinestomThread(Main.THREAD_COUNT_PLAYERS_ENTITIES, "Ms-PlayersPool");
+    private ExecutorService entitiesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
+    private ExecutorService playersPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PLAYERS_ENTITIES, "Ms-PlayersPool");
 
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 

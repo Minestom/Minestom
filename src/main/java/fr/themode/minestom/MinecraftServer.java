@@ -6,8 +6,6 @@ import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.block.BlockManager;
-import fr.themode.minestom.instance.demo.StoneBlock;
-import fr.themode.minestom.instance.demo.UpdatableBlockDemo;
 import fr.themode.minestom.listener.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionUtils;
@@ -20,7 +18,7 @@ import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.timer.SchedulerManager;
 import fr.themode.minestom.utils.Utils;
 
-public class Main {
+public class MinecraftServer {
 
     // Thread pools
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
@@ -30,16 +28,13 @@ public class Main {
     public static final int THREAD_COUNT_ENTITIES = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
     public static final int THREAD_COUNT_SCHEDULER = 2;
-
+    // Config
+    public static final int CHUNK_VIEW_DISTANCE = 5;
+    public static final int ENTITY_VIEW_DISTANCE = 2;
     // Can be modified at performance cost when decreased
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / 20;
     public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
-
-    // Config
-    public static final int CHUNK_VIEW_DISTANCE = 5;
-    public static final int ENTITY_VIEW_DISTANCE = 2;
-
     // Networking
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
@@ -54,7 +49,9 @@ public class Main {
     private static TeamManager teamManager;
     private static SchedulerManager schedulerManager;
 
-    public static void main(String[] args) {
+    private static MinecraftServer minecraftServer;
+
+    public static MinecraftServer init() {
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
@@ -66,11 +63,56 @@ public class Main {
         teamManager = new TeamManager();
         schedulerManager = new SchedulerManager();
 
-        blockManager.registerBlock(new StoneBlock());
-        blockManager.registerBlock(new UpdatableBlockDemo());
-
         server = new Server();
 
+        minecraftServer = new MinecraftServer();
+
+        return minecraftServer;
+    }
+
+    public static PacketListenerManager getPacketListenerManager() {
+        return packetListenerManager;
+    }
+
+    public static Server getServer() {
+        return server;
+    }
+
+    public static InstanceManager getInstanceManager() {
+        return instanceManager;
+    }
+
+    public static BlockManager getBlockManager() {
+        return blockManager;
+    }
+
+    public static EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public static DataManager getDataManager() {
+        return dataManager;
+    }
+
+    public static TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    public static SchedulerManager getSchedulerManager() {
+        return schedulerManager;
+    }
+
+    public static ConnectionManager getConnectionManager() {
+        return connectionManager;
+    }
+
+    public void start(String address, int port) {
+        initClients();
+        server.bind(address, port);
+        initUpdates();
+    }
+
+    private void initClients() {
         server.onConnect(client -> {
             System.out.println("CONNECTION");
 
@@ -104,10 +146,9 @@ public class Main {
                 }
             });
         });
+    }
 
-        server.bind("localhost", 55555);
-        System.out.println("Server started");
-
+    private void initUpdates() {
         final long tickDistance = TICK_MS * 1000000;
         long currentTime;
         while (true) {
@@ -149,39 +190,4 @@ public class Main {
         }
     }
 
-    public static PacketListenerManager getPacketListenerManager() {
-        return packetListenerManager;
-    }
-
-    public static Server getServer() {
-        return server;
-    }
-
-    public static InstanceManager getInstanceManager() {
-        return instanceManager;
-    }
-
-    public static BlockManager getBlockManager() {
-        return blockManager;
-    }
-
-    public static EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public static DataManager getDataManager() {
-        return dataManager;
-    }
-
-    public static TeamManager getTeamManager() {
-        return teamManager;
-    }
-
-    public static SchedulerManager getSchedulerManager() {
-        return schedulerManager;
-    }
-
-    public static ConnectionManager getConnectionManager() {
-        return connectionManager;
-    }
 }

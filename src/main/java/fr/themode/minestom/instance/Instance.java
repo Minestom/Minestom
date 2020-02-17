@@ -1,7 +1,7 @@
 package fr.themode.minestom.instance;
 
 import com.github.simplenet.packet.Packet;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.entity.*;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public abstract class Instance implements BlockModifier, DataContainer {
 
     protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
-    protected static final BlockManager BLOCK_MANAGER = Main.getBlockManager();
+    protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     // Entities present in this instance
     protected Set<Player> players = new CopyOnWriteArraySet<>();
@@ -206,7 +206,7 @@ public abstract class Instance implements BlockModifier, DataContainer {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
 
-        long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), Main.ENTITY_VIEW_DISTANCE);
+        long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
         boolean isPlayer = entity instanceof Player;
 
         if (isPlayer) {

@@ -1,7 +1,7 @@
 package fr.themode.minestom.net;
 
 import com.github.simplenet.Client;
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
@@ -29,7 +29,7 @@ public class PacketProcessor {
     private ClientPlayPacketsHandler playPacketsHandler;
 
     public PacketProcessor() {
-        this.connectionManager = Main.getConnectionManager();
+        this.connectionManager = MinecraftServer.getConnectionManager();
 
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();

@@ -1,6 +1,6 @@
 package fr.themode.minestom.instance;
 
-import fr.themode.minestom.Main;
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 
 public class InstanceManager {
 
-    private ExecutorService blocksPool = new MinestomThread(Main.THREAD_COUNT_BLOCK_UPDATE, "Ms-BlockUpdatePool");
+    private ExecutorService blocksPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_UPDATE, "Ms-BlockUpdatePool");
 
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
 
