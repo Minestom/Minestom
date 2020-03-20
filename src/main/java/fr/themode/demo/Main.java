@@ -10,11 +10,11 @@ public class Main {
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        PlayerInit.init();
-
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlock(new StoneBlock());
         blockManager.registerBlock(new UpdatableBlockDemo());
+
+        PlayerInit.init();
 
         minecraftServer.start("localhost", 55555);
     }

@@ -186,11 +186,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         ItemStack resultCursor;
         ItemStack resultClicked;
+        StackingRule cursorRule = cursorItem.getStackingRule();
+        StackingRule clickedRule = clicked.getStackingRule();
 
-        if (cursorItem.isSimilar(clicked)) {
-            // They should have the same stacking rule
-            StackingRule cursorRule = cursorItem.getStackingRule();
-            StackingRule clickedRule = clicked.getStackingRule();
+        if (cursorRule.canBeStacked(cursorItem, clicked)) {
 
             resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
@@ -257,9 +256,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack resultCursor;
         ItemStack resultClicked;
 
-        if (cursorItem.isSimilar(clicked)) {
-            // They should have the same stacking rule
-
+        if (cursorRule.canBeStacked(cursorItem, clicked)) {
             resultClicked = clicked.clone();
             int amount = clickedRule.getAmount(clicked) + 1;
 
@@ -346,7 +343,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!isInWindow) {
             for (int i = 0; i < itemStacks.length; i++) {
                 ItemStack item = itemStacks[i];
-                if (item.isSimilar(clicked)) {
+                if (clickedRule.canBeStacked(clicked, item)) {
                     int amount = item.getAmount();
                     if (amount == maxSize)
                         continue;
@@ -378,7 +375,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         } else {
             for (int i = 44; i >= 0; i--) { // Hotbar
                 ItemStack item = playerInventory.getItemStack(i, offset);
-                if (item.isSimilar(clicked)) {
+                if (clickedRule.canBeStacked(clicked, item)) {
                     int amount = item.getAmount();
                     if (amount == maxSize)
                         continue;
@@ -488,11 +485,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
+    public void dragging(Player player, int slot, int button) {
+
+    }
+
+    @Override
     public void doubleClick(Player player, int slot) {
         PlayerInventory playerInventory = player.getInventory();
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset); // Isn't used in the algorithm
-        ItemStack cursorItem = getCursorItem(player).clone();
+        ItemStack cursorItem = getCursorItem(player);
 
         // Start condition
         InventoryCondition inventoryCondition = getInventoryCondition();
@@ -535,7 +537,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             if (amount == maxSize)
                 break;
             ItemStack item = itemStacks[i];
-            if (cursorItem.isSimilar(item)) {
+            if (cursorRule.canBeStacked(cursorItem, item)) {
                 int totalAmount = amount + item.getAmount();
                 if (!cursorRule.canApply(cursorItem, totalAmount)) {
                     cursorItem = cursorRule.apply(cursorItem, maxSize);
@@ -556,7 +558,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             if (amount == maxSize)
                 break;
             ItemStack item = playerInventory.getItemStack(i);
-            if (cursorItem.isSimilar(item)) {
+            if (cursorRule.canBeStacked(cursorItem, item)) {
                 int totalAmount = amount + item.getAmount();
                 if (!cursorRule.canApply(cursorItem, totalAmount)) {
                     cursorItem = cursorRule.apply(cursorItem, maxSize);
@@ -576,7 +578,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             if (amount == maxSize)
                 break;
             ItemStack item = playerInventory.getItemStack(i);
-            if (cursorItem.isSimilar(item)) {
+            if (cursorRule.canBeStacked(cursorItem, item)) {
                 int totalAmount = amount + item.getAmount();
                 if (!cursorRule.canApply(cursorItem, totalAmount)) {
                     cursorItem = cursorRule.apply(cursorItem, maxSize);

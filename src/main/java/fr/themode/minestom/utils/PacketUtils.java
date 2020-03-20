@@ -15,10 +15,11 @@ public class PacketUtils {
         PacketWriter packetWriter = new PacketWriter(packet);
         serverPacket.write(packetWriter);
 
-        //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName());
-
         callback.accept(packet.prepend(p -> {
-            Utils.writeVarInt(packet, packet.getSize());
+            int size = packet.getSize();
+            Utils.writeVarInt(packet, size);
+
+            System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName() + " size: " + size);
         }));
     }
 

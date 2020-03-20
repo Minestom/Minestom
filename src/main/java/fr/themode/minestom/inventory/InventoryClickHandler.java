@@ -18,6 +18,8 @@ public interface InventoryClickHandler {
 
     void dropItemStack(Player player, int slot);
 
+    void dragging(Player player, int slot, int button);
+
     void doubleClick(Player player, int slot);
 
 }

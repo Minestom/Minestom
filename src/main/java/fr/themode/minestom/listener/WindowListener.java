@@ -58,6 +58,7 @@ public class WindowListener {
                 break;
             case 5:
                 // Dragging
+                clickHandler.dragging(player, slot, button);
                 break;
             case 6:
                 clickHandler.doubleClick(player, slot);

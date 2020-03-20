@@ -10,7 +10,7 @@ import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
 import fr.themode.minestom.net.packet.server.play.WindowItemsPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class PlayerInventory implements InventoryModifier, InventoryClickHandler {
 
@@ -286,6 +286,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         return windowItemsPacket;
     }
 
+    private Map<Player, Set<Integer>> leftDraggingMap = new HashMap<>();
+    private Map<Player, Set<Integer>> rightDraggingMap = new HashMap<>();
+
     @Override
     public void leftClick(Player player, int slot) {
         ItemStack cursorItem = getCursorItem();
@@ -323,7 +326,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         StackingRule cursorRule = cursorItem.getStackingRule();
         StackingRule clickedRule = clicked.getStackingRule();
 
-        if (cursorItem.isSimilar(clicked)) {
+        if (clickedRule.canBeStacked(clicked, cursorItem)) {
             resultCursor = cursorItem.clone();
             resultClicked = clicked.clone();
             int totalAmount = cursorItem.getAmount() + clicked.getAmount();
@@ -365,12 +368,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         }
         // End condition
 
-        /*if (!cursorItem.isAir()) {
-            if (slot == 0 || slot == 6 || slot == 7 || slot == 8) {
-                return; // Disable putting item on CRAFTING_RESULT and on helmet/chestplate/leggings/boots slots
-            }
-        }*/
-
         if (cursorItem.isAir() && clicked.isAir())
             return;
 
@@ -380,7 +377,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         StackingRule cursorRule = cursorItem.getStackingRule();
         StackingRule clickedRule = clicked.getStackingRule();
 
-        if (cursorItem.isSimilar(clicked)) {
+        if (clickedRule.canBeStacked(clicked, cursorItem)) {
             resultClicked = clicked.clone();
             int amount = clicked.getAmount() + 1;
             if (!clickedRule.canApply(resultClicked, amount)) {
@@ -391,22 +388,21 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 resultClicked = clickedRule.apply(resultClicked, amount);
             }
         } else {
-            // TODO complete replace setAmount for StackingRule
             if (cursorItem.isAir()) {
                 int amount = (int) Math.ceil((double) clicked.getAmount() / 2d);
                 resultCursor = clicked.clone();
-                resultCursor.setAmount((byte) amount);
+                resultCursor = cursorRule.apply(resultCursor, amount);
+
                 resultClicked = clicked.clone();
-                resultClicked.setAmount((byte) (clicked.getAmount() / 2));
+                resultClicked = clickedRule.apply(resultClicked, clicked.getAmount() / 2);
             } else {
                 if (clicked.isAir()) {
                     int amount = cursorItem.getAmount();
                     resultCursor = cursorItem.clone();
-                    resultCursor.setAmount((byte) (amount - 1));
-                    if (resultCursor.getAmount() < 1)
-                        resultCursor = ItemStack.AIR_ITEM;
+                    resultCursor = cursorRule.apply(resultCursor, amount - 1);
+
                     resultClicked = cursorItem.clone();
-                    resultClicked.setAmount((byte) 1);
+                    resultClicked = clickedRule.apply(resultClicked, 1);
                 } else {
                     resultCursor = clicked.clone();
                     resultClicked = cursorItem.clone();
@@ -419,32 +415,71 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
+    public void middleClick(Player player, int slot) {
+
+    }
+
+    @Override
+    public void dropOne(Player player, int slot) {
+
+    }
+
+    @Override
+    public void dropItemStack(Player player, int slot) {
+
+    }
+
+    @Override
     public void shiftClick(Player player, int slot) {
-        /*ItemStack clicked = getItemStack(slot, OFFSET);
+        ItemStack clicked = getItemStack(slot, OFFSET);
+        ItemStack cursorItem = getCursorItem(); // Not used
+
+        // Start condition
+        InventoryCondition inventoryCondition = getInventoryCondition();
+        if (inventoryCondition != null) {
+            InventoryConditionResult result = inventoryCondition.accept(slot, null, clicked, cursorItem);
+            cursorItem = result.getCursorItem();
+            clicked = result.getClickedItem();
+
+            if (result.isCancel()) {
+                setItemStack(slot, OFFSET, clicked);
+                setCursorItem(cursorItem);
+                // Refresh client slot
+                sendSlotRefresh((short) slot, clicked);
+                return;
+            }
+        }
+        // End condition
 
         if (clicked.isAir())
             return;
+
+        StackingRule clickedRule = clicked.getStackingRule();
 
         ItemStack resultClicked = clicked.clone();
         boolean filled = false;
         for (int i = 0; i < items.length; i++) {
             int index = i < 9 ? i + 9 : i - 9;
             ItemStack item = items[index];
+            StackingRule itemRule = item.getStackingRule();
             if (item.isSimilar(clicked)) {
                 int amount = item.getAmount();
-                if (amount == ITEM_MAX_SIZE)
+                if (!clickedRule.canApply(clicked, amount + 1))
                     continue;
                 int totalAmount = resultClicked.getAmount() + amount;
-                if (totalAmount > ITEM_MAX_SIZE) {
-                    item.setAmount((byte) ITEM_MAX_SIZE);
-                    setItemStack(index, item);
-                    resultClicked.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
+                if (!clickedRule.canApply(clicked, totalAmount)) {
+                    item = itemRule.apply(item, itemRule.getMaxSize());
+                    setItemStack(index, OFFSET, item);
+
+                    resultClicked = clickedRule.apply(resultClicked, totalAmount - clickedRule.getMaxSize());
                     filled = false;
                     continue;
                 } else {
-                    resultClicked.setAmount((byte) totalAmount);
+                    resultClicked = clickedRule.apply(resultClicked, totalAmount);
                     setItemStack(index, resultClicked);
-                    setItemStack(slot, OFFSET, ItemStack.AIR_ITEM);
+
+                    item = itemRule.apply(item, 0);
+                    setItemStack(slot, OFFSET, item);
                     filled = true;
                     break;
                 }
@@ -458,7 +493,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         }
         if (!filled) {
             setItemStack(slot, OFFSET, resultClicked);
-        }*/
+        }
     }
 
     @Override
@@ -466,8 +501,26 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         if (!getCursorItem().isAir())
             return;
 
+        ItemStack cursorItem = getCursorItem();
         ItemStack heldItem = getItemStack(key);
         ItemStack clicked = getItemStack(slot, OFFSET);
+
+        // Start condition
+        InventoryCondition inventoryCondition = getInventoryCondition();
+        if (inventoryCondition != null) {
+            InventoryConditionResult result = inventoryCondition.accept(slot, null, clicked, cursorItem);
+            cursorItem = result.getCursorItem();
+            clicked = result.getClickedItem();
+
+            if (result.isCancel()) {
+                setItemStack(slot, OFFSET, clicked);
+                setCursorItem(cursorItem);
+                // Refresh client slot
+                sendSlotRefresh((short) slot, clicked);
+                return;
+            }
+        }
+        // End condition
 
         ItemStack resultClicked;
         ItemStack resultHeld;
@@ -493,52 +546,152 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public void middleClick(Player player, int slot) {
+    public void dragging(Player player, int slot, int button) {
+        ItemStack cursorItem = getCursorItem();
+        ItemStack clicked = null;
+        if (slot != -999)
+            clicked = getItemStack(slot, OFFSET);
 
-    }
+        // Start condition
+        InventoryCondition inventoryCondition = getInventoryCondition();
+        if (inventoryCondition != null) {
+            InventoryConditionResult result = inventoryCondition.accept(slot, null, clicked, cursorItem);
+            cursorItem = result.getCursorItem();
+            clicked = result.getClickedItem();
 
-    @Override
-    public void dropOne(Player player, int slot) {
+            if (result.isCancel()) {
+                setItemStack(slot, OFFSET, clicked);
+                setCursorItem(cursorItem);
+                // Refresh client slot
+                sendSlotRefresh((short) slot, clicked);
+                return;
+            }
+        }
+        // End condition
 
-    }
+        StackingRule stackingRule = cursorItem.getStackingRule();
 
-    @Override
-    public void dropItemStack(Player player, int slot) {
+        if (slot == -999) {
+            // Start or end left/right drag
+            if (button == 0) {
+                // Start left
+                this.leftDraggingMap.put(player, new HashSet<>());
+            } else if (button == 4) {
+                // Start right
+                this.rightDraggingMap.put(player, new HashSet<>());
+            } else if (button == 2) {
+                // End left
+                if (!leftDraggingMap.containsKey(player))
+                    return;
+                Set<Integer> slots = leftDraggingMap.get(player);
+                int size = slots.size();
+                int cursorAmount = stackingRule.getAmount(cursorItem);
+                if (size > cursorAmount)
+                    return;
+                int slotSize = (int) ((float) cursorAmount / (float) size);
+
+                for (Integer s : slots) {
+                    ItemStack draggedItem = cursorItem.clone();
+                    draggedItem = stackingRule.apply(draggedItem, slotSize);
+                    setItemStack(s, OFFSET, draggedItem);
+                }
+                cursorItem = stackingRule.apply(cursorItem, cursorAmount - (slotSize * size));
+                setCursorItem(cursorItem);
+
+                leftDraggingMap.remove(player);
+            } else if (button == 6) {
+                // End right
+                if (!rightDraggingMap.containsKey(player))
+                    return;
+                Set<Integer> slots = rightDraggingMap.get(player);
+                int size = slots.size();
+                int cursorAmount = stackingRule.getAmount(cursorItem);
+                if (size > cursorAmount)
+                    return;
+                for (Integer s : slots) {
+                    ItemStack draggedItem = cursorItem.clone();
+                    draggedItem = stackingRule.apply(draggedItem, 1);
+                    setItemStack(s, OFFSET, draggedItem);
+                }
+                cursorItem = stackingRule.apply(cursorItem, cursorAmount - size);
+                setCursorItem(cursorItem);
+
+                rightDraggingMap.remove(player);
+
+            }
+        } else {
+            // Add slot
+            if (button == 1) {
+                // Add left slot
+                if (!leftDraggingMap.containsKey(player))
+                    return;
+                leftDraggingMap.get(player).add(slot);
+
+            } else if (button == 5) {
+                // Add right slot
+                if (!rightDraggingMap.containsKey(player))
+                    return;
+                rightDraggingMap.get(player).add(slot);
+            }
+        }
 
     }
 
     @Override
     public void doubleClick(Player player, int slot) {
-        /*ItemStack cursorItem = getCursorItem().clone();
+        ItemStack cursorItem = getCursorItem();
+        ItemStack clicked = getItemStack(slot, OFFSET);
+
+        // Start condition
+        InventoryCondition inventoryCondition = getInventoryCondition();
+        if (inventoryCondition != null) {
+            InventoryConditionResult result = inventoryCondition.accept(slot, null, clicked, cursorItem);
+            cursorItem = result.getCursorItem();
+            clicked = result.getClickedItem();
+
+            if (result.isCancel()) {
+                setItemStack(slot, OFFSET, clicked);
+                setCursorItem(cursorItem);
+                // Refresh client slot
+                sendSlotRefresh((short) slot, clicked);
+                return;
+            }
+        }
+        // End condition
+
         if (cursorItem.isAir())
             return;
 
+        StackingRule cursorRule = cursorItem.getStackingRule();
         int amount = cursorItem.getAmount();
 
-        if (amount == ITEM_MAX_SIZE)
+        if (!cursorRule.canApply(cursorItem, amount + 1))
             return;
 
         for (int i = 0; i < items.length; i++) {
             int index = i < 9 ? i + 9 : i - 9;
             if (index == slot)
                 continue;
-            if (amount == ITEM_MAX_SIZE)
-                break;
             ItemStack item = items[index];
-            if (cursorItem.isSimilar(item)) {
+            StackingRule itemRule = item.getStackingRule();
+            if (!cursorRule.canApply(cursorItem, amount + 1))
+                break;
+            if (cursorRule.canBeStacked(cursorItem, item)) {
                 int totalAmount = amount + item.getAmount();
-                if (totalAmount > ITEM_MAX_SIZE) {
-                    cursorItem.setAmount((byte) ITEM_MAX_SIZE);
-                    item.setAmount((byte) (totalAmount - ITEM_MAX_SIZE));
+                if (!cursorRule.canApply(cursorItem, totalAmount)) {
+                    cursorItem = cursorRule.apply(cursorItem, cursorRule.getMaxSize());
+
+                    item = itemRule.apply(item, totalAmount - itemRule.getMaxSize());
                     setItemStack(index, item);
                 } else {
-                    cursorItem.setAmount((byte) totalAmount);
-                    setItemStack(index, ItemStack.AIR_ITEM);
+                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
+                    item = itemRule.apply(item, 0);
+                    setItemStack(index, item);
                 }
                 amount = cursorItem.getAmount();
             }
         }
 
-        setCursorItem(cursorItem);*/
+        setCursorItem(cursorItem);
     }
 }

@@ -100,7 +100,7 @@ public class PlayerInit {
                     //itemEntity.remove();
                 }*/
 
-                ItemStack item = new ItemStack(1, (byte) 4);
+                ItemStack item = new ItemStack(1, (byte) 43);
                 item.setDisplayName("LE NOM PUTAIN");
                 //item.getLore().add("lol le lore");
                 player.getInventory().addItemStack(item);

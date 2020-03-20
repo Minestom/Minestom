@@ -10,6 +10,11 @@ public class VanillaStackingRule extends StackingRule {
     }
 
     @Override
+    public boolean canBeStacked(ItemStack item1, ItemStack item2) {
+        return item1.isSimilar(item2);
+    }
+
+    @Override
     public boolean canApply(ItemStack item, int newAmount) {
         return newAmount > 0 && newAmount <= getMaxSize();
     }

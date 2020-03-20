@@ -9,7 +9,12 @@ import java.util.ArrayList;
 public class ItemStack implements DataContainer {
 
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
-    private static StackingRule defaultStackingRule = new VanillaStackingRule(64);
+    private static StackingRule defaultStackingRule;
+
+    {
+        if (defaultStackingRule == null)
+            defaultStackingRule = new VanillaStackingRule(64);
+    }
 
     private Material material;
     private byte amount;

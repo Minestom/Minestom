@@ -35,12 +35,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO send encryption request OR directly login success
         UUID playerUuid = UUID.randomUUID();//UUID.fromString("OfflinePlayer:" + username);
+
         LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);//new LoginSuccessPacket(uuids.get(username), username);
         connection.sendPacket(successPacket);
 
         connection.setConnectionState(ConnectionState.PLAY);
         connectionManager.createPlayer(playerUuid, username, connection);
         Player player = connectionManager.getPlayer(connection);
+
         GameMode gameMode = GameMode.SURVIVAL;
         Dimension dimension = Dimension.OVERWORLD;
         LevelType levelType = LevelType.DEFAULT;

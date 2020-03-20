@@ -8,6 +8,8 @@ public abstract class StackingRule {
         this.maxSize = maxSize;
     }
 
+    public abstract boolean canBeStacked(ItemStack item1, ItemStack item2);
+
     public abstract boolean canApply(ItemStack item, int newAmount);
 
     public abstract ItemStack apply(ItemStack item, int newAmount);

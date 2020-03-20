@@ -22,7 +22,7 @@ public class ChatMessageListener {
 
             TextObject usernameText = TextBuilder.of(String.format("<%s>", username))
                     .color(ChatColor.WHITE)
-                    .hoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ChatColor.AQUA + "Its " + username))
+                    .hoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ChatColor.GRAY + "Its " + username))
                     .clickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + username + " "))
                     .append(" " + event.getMessage())
                     .build();
