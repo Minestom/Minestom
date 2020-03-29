@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlockBatch implements IBatch {
+public class BlockBatch implements InstanceBatch {
 
     private InstanceContainer instance;
 

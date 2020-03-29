@@ -3,6 +3,8 @@ package fr.themode.minestom.net.packet.client.login;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.PacketReader;
@@ -10,6 +12,7 @@ import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
 import fr.themode.minestom.net.packet.server.play.DeclareCommandsPacket;
+import fr.themode.minestom.net.packet.server.play.DeclareRecipesPacket;
 import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
 import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -111,6 +114,21 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
 
         connection.sendPacket(declareCommandsPacket);
+
+
+        {
+            DeclareRecipesPacket recipesPacket = new DeclareRecipesPacket();
+            DeclareRecipesPacket.Recipe recipe = new DeclareRecipesPacket.Recipe();
+            recipe.recipeId = "crafting_shapeless";
+            recipe.type = "crafting_shapeless";
+            recipe.group = "test group";
+            DeclareRecipesPacket.Ingredient ingredient = new DeclareRecipesPacket.Ingredient();
+            ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 1)};
+            recipe.ingredients = new DeclareRecipesPacket.Ingredient[]{ingredient};
+            recipe.result = new ItemStack(Material.STONE, (byte) 50);
+            recipesPacket.recipes = new DeclareRecipesPacket.Recipe[]{recipe};
+            connection.sendPacket(recipesPacket);
+        }
     }
 
     @Override

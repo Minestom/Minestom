@@ -52,6 +52,10 @@ public class BlockPosition {
         return new BlockPosition(x, y, z);
     }
 
+    public Position toPosition() {
+        return new Position(x, y, z);
+    }
+
     @Override
     public String toString() {
         return "BlockPosition[" + x + ":" + y + ":" + z + "]";

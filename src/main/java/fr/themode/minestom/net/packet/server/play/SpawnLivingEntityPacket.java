@@ -7,29 +7,37 @@ import fr.themode.minestom.utils.Position;
 
 import java.util.UUID;
 
-public class SpawnObjectPacket implements ServerPacket {
+public class SpawnLivingEntityPacket implements ServerPacket {
 
     public int entityId;
-    public UUID uuid;
-    public int type;
+    public UUID entityUuid;
+    public int entityType;
     public Position position;
-    public int data;
+    public float headPitch;
+    public short velocityX, velocityY, velocityZ;
 
     @Override
     public void write(PacketWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeUuid(uuid);
-        writer.writeVarInt(type);
+        writer.writeUuid(entityUuid);
+        writer.writeVarInt(entityType);
+
         writer.writeDouble(position.getX());
         writer.writeDouble(position.getY());
         writer.writeDouble(position.getZ());
-        writer.writeFloat(position.getYaw());
-        writer.writeFloat(position.getPitch());
-        writer.writeInt(data);
+
+        writer.writeByte((byte) (position.getYaw() * 256 / 360));
+        writer.writeByte((byte) (position.getPitch() * 256 / 360));
+        writer.writeByte((byte) (headPitch * 256 / 360));
+
+        writer.writeShort(velocityX);
+        writer.writeShort(velocityY);
+        writer.writeShort(velocityZ);
+
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.SPAWN_OBJECT;
+        return ServerPacketIdentifier.SPAWN_LIVING_ENTITY;
     }
 }

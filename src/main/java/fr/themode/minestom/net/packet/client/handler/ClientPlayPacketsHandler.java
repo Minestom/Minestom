@@ -14,7 +14,6 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x09, ClientClickWindowPacket.class);
         register(0x0A, ClientCloseWindow.class);
         register(0x0B, ClientPluginMessagePacket.class);
-        register(0x1C, ClientSteerVehiclePacket.class);
         register(0x0E, ClientUseEntityPacket.class);
         register(0x0F, ClientKeepAlivePacket.class);
 
@@ -25,6 +24,8 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x19, ClientPlayerAbilitiesPacket.class);
         register(0x1A, ClientPlayerDiggingPacket.class);
         register(0x1B, ClientEntityActionPacket.class);
+        register(0x1C, ClientSteerVehiclePacket.class);
+        register(0x1D, ClientRecipeBookData.class);
 
         register(0x23, ClientHeldItemChangePacket.class);
         register(0x26, ClientCreativeInventoryActionPacket.class);

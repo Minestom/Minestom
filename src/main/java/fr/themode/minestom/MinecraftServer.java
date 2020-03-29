@@ -6,7 +6,7 @@ import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.block.BlockManager;
-import fr.themode.minestom.listener.PacketListenerManager;
+import fr.themode.minestom.listener.manager.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.net.PacketProcessor;
@@ -35,6 +35,7 @@ public class MinecraftServer {
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / 20;
     public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
+
     // Networking
     private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;

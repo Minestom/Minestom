@@ -9,6 +9,7 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
 import fr.themode.minestom.net.packet.server.play.EntityAnimationPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
+import fr.themode.minestom.utils.Position;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -29,10 +30,14 @@ public abstract class LivingEntity extends Entity {
     private boolean activeHand;
     private boolean riptideSpinAttack;
 
-    public LivingEntity(int entityType) {
-        super(entityType);
+    public LivingEntity(int entityType, Position defaultPosition) {
+        super(entityType, defaultPosition);
         setupAttributes();
         setGravity(0.02f);
+    }
+
+    public LivingEntity(int entityType) {
+        this(entityType, new Position());
     }
 
     public abstract void kill();

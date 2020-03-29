@@ -11,7 +11,6 @@ import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.InventoryType;
-import fr.themode.minestom.inventory.rule.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
@@ -22,7 +21,7 @@ public class PlayerInit {
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
-        //instanceContainer = Main.getInstanceManager().createInstanceContainer(new File("C:\\Users\\themo\\OneDrive\\Bureau\\Minestom data"));
+        //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(new File("chunk_data"));
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer();
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
@@ -65,8 +64,7 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }
 
-                ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(player.getPosition());
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
 
             });
@@ -101,21 +99,19 @@ public class PlayerInit {
                 }*/
 
                 ItemStack item = new ItemStack(1, (byte) 43);
-                item.setDisplayName("LE NOM PUTAIN");
+                item.setDisplayName("LE NOM DE L'ITEM");
                 //item.getLore().add("lol le lore");
                 player.getInventory().addItemStack(item);
 
                 Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-                inventory.setInventoryCondition((slot, inventory1, clickedItem, cursorItem) -> {
-                    InventoryConditionResult result = new InventoryConditionResult(clickedItem, cursorItem);
-                    result.setCancel(false);
-                    return result;
+                inventory.setInventoryCondition((slot, inventory1, inventoryConditionResult) -> {
+                    inventoryConditionResult.setCancel(false);
                 });
                 inventory.setItemStack(0, item.clone());
 
                 player.openInventory(inventory);
 
-                //getInventory().addItemStack(new ItemStack(1, (byte) 100));
+                player.getInventory().addItemStack(new ItemStack(1, (byte) 100));
 
             /*TeamManager teamManager = Main.getTeamManager();
             Team team = teamManager.createTeam(getUsername());

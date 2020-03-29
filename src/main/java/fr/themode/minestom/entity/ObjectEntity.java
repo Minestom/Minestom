@@ -1,8 +1,7 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.net.packet.server.play.SpawnObjectPacket;
+import fr.themode.minestom.net.packet.server.play.SpawnEntityPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.EntityUtils;
 
 public abstract class ObjectEntity extends Entity {
 
@@ -16,13 +15,13 @@ public abstract class ObjectEntity extends Entity {
     public void addViewer(Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
 
-        SpawnObjectPacket spawnObjectPacket = new SpawnObjectPacket();
-        spawnObjectPacket.entityId = getEntityId();
-        spawnObjectPacket.uuid = getUuid();
-        spawnObjectPacket.type = getEntityType();
-        spawnObjectPacket.position = getPosition();
-        spawnObjectPacket.data = getObjectData();
-        playerConnection.sendPacket(spawnObjectPacket);
+        SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
+        spawnEntityPacket.entityId = getEntityId();
+        spawnEntityPacket.uuid = getUuid();
+        spawnEntityPacket.type = getEntityType();
+        spawnEntityPacket.position = getPosition();
+        spawnEntityPacket.data = getObjectData();
+        playerConnection.sendPacket(spawnEntityPacket);
         playerConnection.sendPacket(getMetadataPacket());
         super.addViewer(player); // Add player to viewers list and send velocity packet
     }
@@ -30,11 +29,6 @@ public abstract class ObjectEntity extends Entity {
     @Override
     public void removeViewer(Player player) {
         super.removeViewer(player);
-    }
-
-    @Override
-    public boolean isOnGround() {
-        return EntityUtils.isOnGround(this);
     }
 
 }

@@ -18,12 +18,20 @@ public class ChunkLoaderIO {
     }
 
     private static String getChunkFileName(int chunkX, int chunkZ) {
-        return "chunk." + chunkX + "." + chunkZ + ".data";
+        return "chunk_" + chunkX + "." + chunkZ + ".data";
     }
 
     protected void saveChunk(Chunk chunk, File folder, Runnable callback) {
         IOManager.submit(() -> {
             File chunkFile = getChunkFile(chunk.getChunkX(), chunk.getChunkZ(), folder);
+            if (!chunkFile.exists()) {
+                try {
+                    chunkFile.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             try (FileOutputStream fos = new FileOutputStream(chunkFile)) {
                 byte[] data = chunk.getSerializedData();
                 fos.write(CompressionUtils.getCompressedData(data));

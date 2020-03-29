@@ -15,7 +15,7 @@ public class EntityManager {
 
     private static InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
-    private UpdateType updateType = UpdateType.PER_CHUNK;
+    private UpdateType updateType = UpdateType.PER_INSTANCE;
     private Set<Instance> instances = instanceManager.getInstances();
 
     private ExecutorService entitiesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
@@ -39,6 +39,9 @@ public class EntityManager {
                 break;
             case PER_INSTANCE:
                 instanceUpdate(instances, time);
+                break;
+            case SINGLE_THREADED:
+                singleThreaded(instances, time);
                 break;
         }
 
@@ -141,6 +144,33 @@ public class EntityManager {
         }
     }
 
+    /**
+     * Single threaded update (like the notchian server)
+     *
+     * @param instances
+     * @param time
+     */
+    private void singleThreaded(Set<Instance> instances, long time) {
+        for (Instance instance : instances) {
+            Set<Player> players = instance.getPlayers();
+            Set<EntityCreature> creatures = instance.getCreatures();
+            Set<ObjectEntity> objects = instance.getObjectEntities();
+
+            if (!players.isEmpty() || !creatures.isEmpty() || !objects.isEmpty()) {
+                for (Player player : players) {
+                    player.tick(time);
+                }
+                for (EntityCreature creature : creatures) {
+                    creature.tick(time);
+                }
+                for (ObjectEntity objectEntity : objects) {
+                    objectEntity.tick(time);
+                }
+            }
+        }
+    }
+
+
     public UpdateType getUpdateType() {
         return updateType;
     }
@@ -156,6 +186,7 @@ public class EntityManager {
     public enum UpdateType {
         PER_CHUNK,
         PER_ENTITY_TYPE,
-        PER_INSTANCE;
+        PER_INSTANCE,
+        SINGLE_THREADED;
     }
 }

@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * Use chunk coordinate (0-16) instead of world's
  */
-public class ChunkBatch implements IBatch {
+public class ChunkBatch implements InstanceBatch {
 
     private InstanceContainer instance;
     private Chunk chunk;

@@ -2,7 +2,6 @@ package fr.themode.minestom.entity;
 
 import fr.themode.minestom.net.packet.server.play.SpawnExperienceOrbPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
-import fr.themode.minestom.utils.EntityUtils;
 
 public class ExperienceOrb extends Entity {
 
@@ -23,11 +22,6 @@ public class ExperienceOrb extends Entity {
     @Override
     public void spawn() {
 
-    }
-
-    @Override
-    public boolean isOnGround() {
-        return EntityUtils.isOnGround(this);
     }
 
     @Override

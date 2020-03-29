@@ -4,7 +4,7 @@ import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
-public class SpawnGlobalEntityPacket implements ServerPacket {
+public class SpawnWeatherEntityPacket implements ServerPacket {
 
     public int entityId;
     public byte type;
@@ -21,6 +21,6 @@ public class SpawnGlobalEntityPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.SPAWN_GLOBAL_ENTITY;
+        return ServerPacketIdentifier.SPAWN_WEATHER_ENTITY;
     }
 }

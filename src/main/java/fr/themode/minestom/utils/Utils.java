@@ -112,7 +112,7 @@ public class Utils {
             packet.putBoolean(false);
         } else {
             packet.putBoolean(true);
-            Utils.writeVarInt(packet, itemStack.getMaterial().getId());
+            Utils.writeVarInt(packet, itemStack.getMaterialId());
             packet.putByte(itemStack.getAmount());
 
             if (!itemStack.hasNbtTag()) {

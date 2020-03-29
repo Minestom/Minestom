@@ -2,6 +2,8 @@ package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.inventory.click.InventoryClickProcessor;
+import fr.themode.minestom.inventory.click.InventoryClickResult;
 import fr.themode.minestom.inventory.rule.InventoryCondition;
 import fr.themode.minestom.inventory.rule.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
@@ -31,6 +33,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
     private InventoryCondition inventoryCondition;
+    private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     public Inventory(InventoryType inventoryType, String title) {
         this.id = generateId();
@@ -154,150 +157,43 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public void leftClick(Player player, int slot) {
         PlayerInventory playerInventory = player.getInventory();
-        ItemStack cursorItem = getCursorItem(player);
+        ItemStack cursor = getCursorItem(player);
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = inventoryCondition.accept(slot, this, clicked, cursorItem);
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
 
-            if (result.isCancel()) {
-                System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
-                if (isInWindow) {
-                    setItemStack(slot, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                } else {
-                    playerInventory.setItemStack(slot, offset, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                }
-                // Refresh client window
-                player.getPlayerConnection().sendPacket(getWindowItemsPacket());
-                return;
-            }
-        }
-        // End condition
+        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), slot, clicked, cursor);
 
-        if (cursorItem.isAir() && clicked.isAir())
-            return;
-
-        ItemStack resultCursor;
-        ItemStack resultClicked;
-        StackingRule cursorRule = cursorItem.getStackingRule();
-        StackingRule clickedRule = clicked.getStackingRule();
-
-        if (cursorRule.canBeStacked(cursorItem, clicked)) {
-
-            resultCursor = cursorItem.clone();
-            resultClicked = clicked.clone();
-
-            int totalAmount = cursorRule.getAmount(cursorItem) + clickedRule.getAmount(clicked);
-
-            if (!clickedRule.canApply(resultClicked, totalAmount)) {
-                resultCursor = cursorRule.apply(resultCursor, totalAmount - cursorRule.getMaxSize());
-                resultClicked = clickedRule.apply(resultClicked, clickedRule.getMaxSize());
-            } else {
-                resultCursor = cursorRule.apply(resultCursor, 0);
-                resultClicked = clickedRule.apply(resultClicked, totalAmount);
-            }
-        } else {
-            resultCursor = clicked.clone();
-            resultClicked = cursorItem.clone();
-        }
+        if (clickResult.doRefresh())
+            player.getPlayerConnection().sendPacket(getWindowItemsPacket());
 
         if (isInWindow) {
-            setItemStack(slot, resultClicked);
-            setCursorPlayerItem(player, resultCursor);
+            setItemStack(slot, clickResult.getClicked());
+            setCursorPlayerItem(player, clickResult.getCursor());
         } else {
-            playerInventory.setItemStack(slot, offset, resultClicked);
-            setCursorPlayerItem(player, resultCursor);
+            playerInventory.setItemStack(slot, offset, clickResult.getClicked());
+            setCursorPlayerItem(player, clickResult.getCursor());
         }
     }
 
     @Override
     public void rightClick(Player player, int slot) {
         PlayerInventory playerInventory = player.getInventory();
-        ItemStack cursorItem = getCursorItem(player);
+        ItemStack cursor = getCursorItem(player);
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = inventoryCondition.accept(slot, this, clicked, cursorItem);
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
+        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), slot, clicked, cursor);
 
-            if (result.isCancel()) {
-                System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
-                if (isInWindow) {
-                    setItemStack(slot, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                } else {
-                    playerInventory.setItemStack(slot, offset, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                }
-                // Refresh client window
-                player.getPlayerConnection().sendPacket(getWindowItemsPacket());
-                return;
-            }
-        }
-        // End condition
-
-        if (cursorItem.isAir() && clicked.isAir())
-            return;
-
-        StackingRule cursorRule = cursorItem.getStackingRule();
-        StackingRule clickedRule = clicked.getStackingRule();
-
-        ItemStack resultCursor;
-        ItemStack resultClicked;
-
-        if (cursorRule.canBeStacked(cursorItem, clicked)) {
-            resultClicked = clicked.clone();
-            int amount = clickedRule.getAmount(clicked) + 1;
-
-            if (!cursorRule.canApply(cursorItem, amount)) {
-                return;
-            } else {
-                resultCursor = cursorItem.clone();
-                resultCursor = cursorRule.apply(resultCursor, cursorRule.getAmount(resultCursor) - 1);
-                resultClicked = clickedRule.apply(resultClicked, amount);
-            }
-        } else {
-            if (cursorItem.isAir()) {
-                int amount = (int) Math.ceil((double) clicked.getAmount() / 2d);
-
-                resultCursor = clicked.clone();
-                resultCursor = cursorRule.apply(resultCursor, amount);
-
-                resultClicked = clicked.clone();
-                resultClicked = clickedRule.apply(resultClicked, clicked.getAmount() / 2);
-            } else {
-                if (clicked.isAir()) {
-                    int amount = cursorItem.getAmount();
-
-                    resultCursor = cursorItem.clone();
-                    resultCursor = cursorRule.apply(resultCursor, amount - 1);
-
-                    resultClicked = cursorItem.clone();
-                    resultClicked = clickedRule.apply(resultClicked, 1);
-                } else {
-                    resultCursor = clicked.clone();
-                    resultClicked = cursorItem.clone();
-                }
-            }
-        }
+        if (clickResult.doRefresh())
+            player.getPlayerConnection().sendPacket(getWindowItemsPacket());
 
         if (isInWindow) {
-            setItemStack(slot, resultClicked);
-            setCursorPlayerItem(player, resultCursor);
+            setItemStack(slot, clickResult.getClicked());
+            setCursorPlayerItem(player, clickResult.getCursor());
         } else {
-            playerInventory.setItemStack(slot, offset, resultClicked);
-            setCursorPlayerItem(player, resultCursor);
+            playerInventory.setItemStack(slot, offset, clickResult.getClicked());
+            setCursorPlayerItem(player, clickResult.getCursor());
         }
     }
 
@@ -311,12 +207,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         // Start condition
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
-            InventoryConditionResult result = inventoryCondition.accept(slot, this, clicked, cursorItem);
+            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
+            inventoryCondition.accept(slot, null, result);
+
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();
 
             if (result.isCancel()) {
-                System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
+                //System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
                 if (isInWindow) {
                     setItemStack(slot, clicked);
                     setCursorPlayerItem(player, cursorItem);
@@ -412,61 +310,19 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         PlayerInventory playerInventory = player.getInventory();
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
-        ItemStack cursorItem = getCursorItem(player);
-
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = inventoryCondition.accept(slot, this, clicked, cursorItem);
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
-
-            if (result.isCancel()) {
-                System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
-                if (isInWindow) {
-                    setItemStack(slot, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                } else {
-                    playerInventory.setItemStack(slot, offset, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                }
-                // Refresh client window
-                player.getPlayerConnection().sendPacket(getWindowItemsPacket());
-                return;
-            }
-        }
-        // End condition
-
-        if (!cursorItem.isAir())
-            return;
-
         ItemStack heldItem = playerInventory.getItemStack(key);
 
-        ItemStack resultClicked;
-        ItemStack resultHeld;
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), slot, clicked, heldItem);
 
-        if (clicked.isAir()) {
-            // Set held item [key] to slot
-            resultClicked = ItemStack.AIR_ITEM;
-            resultHeld = clicked.clone();
-        } else {
-            if (heldItem.isAir()) {
-                // if held item [key] is air then set clicked to held
-                resultClicked = ItemStack.AIR_ITEM;
-                resultHeld = clicked.clone();
-            } else {
-                // Otherwise replace held item and held
-                resultClicked = heldItem.clone();
-                resultHeld = clicked.clone();
-            }
-        }
+        if (clickResult.doRefresh())
+            player.getPlayerConnection().sendPacket(getWindowItemsPacket());
 
         if (isInWindow) {
-            setItemStack(slot, resultClicked);
+            setItemStack(slot, clickResult.getClicked());
         } else {
-            playerInventory.setItemStack(slot, offset, resultClicked);
+            playerInventory.setItemStack(slot, offset, clickResult.getClicked());
         }
-        playerInventory.setItemStack(key, resultHeld);
+        playerInventory.setItemStack(key, clickResult.getCursor());
     }
 
     @Override
@@ -499,12 +355,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         // Start condition
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
-            InventoryConditionResult result = inventoryCondition.accept(slot, this, clicked, cursorItem);
+            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
+            inventoryCondition.accept(slot, null, result);
+
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();
 
             if (result.isCancel()) {
-                System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
+                //System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
                 if (isInWindow) {
                     setItemStack(slot, clicked);
                     setCursorPlayerItem(player, cursorItem);

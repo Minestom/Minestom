@@ -1,6 +1,7 @@
-package fr.themode.minestom.listener;
+package fr.themode.minestom.listener.manager;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.listener.*;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.client.play.*;
 
@@ -31,12 +32,13 @@ public class PacketListenerManager {
         addListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
         addListener(ClientStatusPacket.class, StatusListener::listener);
         addListener(ClientSettingsPacket.class, SettingsListener::listener);
+        addListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
         BiConsumer<T, Player> biConsumer = (BiConsumer<T, Player>) listeners.get(packet.getClass());
         if (biConsumer == null) {
-            // System.err.println("Packet " + packet.getClass() + " does not have any listener!");
+            System.err.println("Packet " + packet.getClass() + " does not have any listener!");
             return;
         }
         biConsumer.accept(packet, player);

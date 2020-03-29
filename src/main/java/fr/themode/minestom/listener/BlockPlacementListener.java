@@ -7,6 +7,7 @@ import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.item.Material;
 import fr.themode.minestom.item.StackingRule;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerBlockPlacementPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
@@ -26,7 +27,8 @@ public class BlockPlacementListener {
             return;
 
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
-        if (!usedItem.getMaterial().isBlock()) {
+        Material material = Material.fromId(usedItem.getMaterialId());
+        if (material != null && !material.isBlock()) {
             //instance.setBlock(blockPosition.clone().add(0, 1, 0), (short) 10);
             return;
         }

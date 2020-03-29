@@ -41,9 +41,9 @@ public class PacketProcessor {
     public void process(Client client, int id, int length, int offset) {
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(client, c -> new PlayerConnection(client));
         ConnectionState connectionState = playerConnection.getConnectionState();
-        /*if (!printBlackList.contains(id)) {
-            System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
-        }*/
+        //if (!printBlackList.contains(id)) {
+        //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
+        //}
 
         PacketReader packetReader = new PacketReader(client, length, offset);
 

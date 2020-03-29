@@ -4,45 +4,50 @@ import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.EntityType;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.entity.pathfinding.EntityPathFinder;
+import fr.themode.minestom.entity.vehicle.PlayerVehicleInformation;
+import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
-import net.tofweb.starlite.CellSpace;
-import net.tofweb.starlite.CostBlockManager;
-import net.tofweb.starlite.Path;
-import net.tofweb.starlite.Pathfinder;
 
-import java.util.Random;
+import java.util.LinkedList;
 
 public class ChickenCreature extends EntityCreature {
 
-    private Path path;
-    private int counter;
-    private Position target;
-    private long lastTeleport;
-    private long wait = 500;
+    private EntityPathFinder pathFinder = new EntityPathFinder(this);
+    private LinkedList<BlockPosition> blockPositions;
+    private Position targetPosition;
 
-    private float randomX = new Random().nextFloat();
-    private float randomZ = new Random().nextFloat();
+    public ChickenCreature(Position defaultPosition) {
+        super(EntityType.CHICKEN, defaultPosition);
+        setBoundingBox(0.4f, 0.7f, 0.4f);
+    }
 
     public ChickenCreature() {
-        super(EntityType.CHICKEN);
-        setBoundingBox(0.4f, 0.7f, 0.4f);
+        this(new Position());
+    }
+
+    @Override
+    public void spawn() {
+        //Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
+        //moveTo(player.getPosition().add(2, 0, 2));
     }
 
     @Override
     public void update() {
         super.update();
-        float speed = 0.025f;
+        float speed = 0.075f;
 
         if (hasPassenger()) {
             Entity passenger = getPassengers().iterator().next();
             if (passenger instanceof Player) {
                 Player player = (Player) passenger;
-                float sideways = player.getVehicleSideways();
-                float forward = player.getVehicleForward();
+                PlayerVehicleInformation vehicleInformation = player.getVehicleInformation();
+                float sideways = vehicleInformation.getSideways();
+                float forward = vehicleInformation.getForward();
 
-                boolean jump = player.isVehicleJump();
-                boolean unmount = player.isVehicleUnmount();
+                boolean jump = vehicleInformation.shouldJump();
+                boolean unmount = vehicleInformation.shouldUnmount();
 
                 if (jump && isOnGround()) {
                     setVelocity(new Vector(0, 6, 0), 500);
@@ -87,67 +92,37 @@ public class ChickenCreature extends EntityCreature {
                 move(x, 0, z, updateView);
             }
         } else {
-            move(randomX * speed, 0, randomZ * speed, true);
+            //move(randomX * speed, 0, randomZ * speed, true);
         }
 
-        /*if (path == null) {
-            System.out.println("FIND PATH");
-            Player player = Main.getConnectionManager().getPlayer("Raulnil");
-            if (player != null) {
-                refreshPath(player);
-                this.target = null;
-            }
-        }
-
-        if (target == null) {
-            Cell cell = path.pollFirst();
-            if (cell != null) {
-                this.target = new Position(cell.getX(), cell.getY(), cell.getZ());
-                System.out.println("NEW TARGET");
-            } else {
-                path = null;
-            }
-        }
-
-        if (path != null && target != null) {
-            if (path.isEmpty()) {
-                System.out.println("FINISHED PATH");
-                path = null;
-            } else {
-                float distance = getPosition().getDistance(target);
-                //System.out.println("DISTANCE: "+distance);
-                if (distance <= 1) {
-                    System.out.println("RESET TARGET");
-                    target = null;
+        if (blockPositions != null) {
+            if (targetPosition != null) {
+                float distance = getPosition().getDistance(targetPosition);
+                if (distance < 0.2f) {
+                    setNextPathPosition();
+                    System.out.println("END TARGET");
                 } else {
-                    //System.out.println("WALK");
-                    moveTowards(target, speed);
+                    moveTowards(targetPosition, speed);
+                    System.out.println("MOVE TOWARD " + targetPosition);
                 }
             }
-        }*/
+        }
     }
 
-    @Override
-    public void spawn() {
-        // setVelocity(new Vector(0, 1, 0), 3000);
+    private void setNextPathPosition() {
+        BlockPosition blockPosition = blockPositions.pollFirst();
+
+        if (blockPosition == null) {
+            this.blockPositions = null;
+            this.targetPosition = null;
+            return;
+        }
+
+        this.targetPosition = blockPosition.toPosition();
     }
 
-    private void refreshPath(Player target) {
-        long time = System.currentTimeMillis();
-        Position position = getPosition();
-        Position targetPosition = target.getPosition();
-        CellSpace space = new CellSpace();
-        space.setGoalCell((int) targetPosition.getX(), (int) targetPosition.getY(), (int) targetPosition.getZ());
-        space.setStartCell((int) position.getX(), (int) position.getY(), (int) position.getZ());
-
-        CostBlockManager blockManager = new CostBlockManager(space);
-        blockManager.blockCell(space.makeNewCell(6, 6, 3));
-        blockManager.blockCell(space.makeNewCell(6, 5, 4));
-
-        Pathfinder pathfinder = new Pathfinder(blockManager);
-
-        this.path = pathfinder.findPath();
-
-        System.out.println("PATH FINDING: " + (System.currentTimeMillis() - time) + " ms");
+    private void moveTo(Position position) {
+        this.blockPositions = pathFinder.getPath(position);
+        setNextPathPosition();
     }
 }

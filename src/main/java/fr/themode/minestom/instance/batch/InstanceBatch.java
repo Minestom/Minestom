@@ -6,7 +6,7 @@ import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.util.concurrent.ExecutorService;
 
-public interface IBatch extends BlockModifier {
+public interface InstanceBatch extends BlockModifier {
 
     ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_BATCH, "Ms-BlockBatchPool");
 

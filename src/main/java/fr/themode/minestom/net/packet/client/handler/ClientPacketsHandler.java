@@ -14,7 +14,7 @@ public class ClientPacketsHandler {
     }
 
     public ClientPacket getPacketInstance(int id) {
-        //System.out.println("RECEIVED PACKET 0x" + Integer.toHexString(id));
+        System.out.println("RECEIVED PACKET 0x" + Integer.toHexString(id));
         if (id > SIZE)
             throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
 

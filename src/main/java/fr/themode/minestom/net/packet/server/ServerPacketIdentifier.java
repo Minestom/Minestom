@@ -2,10 +2,10 @@ package fr.themode.minestom.net.packet.server;
 
 public class ServerPacketIdentifier {
 
-    public static final int SPAWN_OBJECT = 0x00;
+    public static final int SPAWN_ENTITY = 0x00;
     public static final int SPAWN_EXPERIENCE_ORB = 0x01;
-    public static final int SPAWN_GLOBAL_ENTITY = 0x02;
-    public static final int SPAWN_MOB = 0x03;
+    public static final int SPAWN_WEATHER_ENTITY = 0x02;
+    public static final int SPAWN_LIVING_ENTITY = 0x03;
     public static final int SPAWN_PAINTING = 0x04;
     public static final int SPAWN_PLAYER = 0x05;
     public static final int ENTITY_ANIMATION = 0x06;

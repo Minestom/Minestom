@@ -11,12 +11,13 @@ public class ItemStack implements DataContainer {
     public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 1);
     private static StackingRule defaultStackingRule;
 
+    private int materialId;
+
     {
         if (defaultStackingRule == null)
-            defaultStackingRule = new VanillaStackingRule(64);
+            defaultStackingRule = new VanillaStackingRule(127);
     }
 
-    private Material material;
     private byte amount;
     private short damage;
 
@@ -27,8 +28,8 @@ public class ItemStack implements DataContainer {
     private StackingRule stackingRule;
     private Data data;
 
-    public ItemStack(Material material, byte amount, short damage) {
-        this.material = material;
+    public ItemStack(int materialId, byte amount, short damage) {
+        this.materialId = materialId;
         this.amount = amount;
         this.damage = damage;
         this.lore = new ArrayList<>();
@@ -37,21 +38,25 @@ public class ItemStack implements DataContainer {
     }
 
     public ItemStack(int id, byte amount) {
-        this(Material.fromId(id), amount, (short) 0);
+        this(id, amount, (short) 0);
+    }
+
+    public ItemStack(Material material, byte amount) {
+        this(material.getId(), amount);
     }
 
     public boolean isAir() {
-        return material == Material.AIR;
+        return materialId == Material.AIR.getId();
     }
 
     /**
      * Do not take amount in consideration
      *
-     * @param itemStack
-     * @return
+     * @param itemStack The ItemStack to compare to
+     * @return true if both items are similar (without comparing amount)
      */
     public boolean isSimilar(ItemStack itemStack) {
-        return itemStack.getMaterial() == material &&
+        return itemStack.getMaterialId() == materialId &&
                 itemStack.getDisplayName() == displayName &&
                 itemStack.isUnbreakable() == unbreakable &&
                 itemStack.getDamage() == damage &&
@@ -67,8 +72,8 @@ public class ItemStack implements DataContainer {
         return damage;
     }
 
-    public Material getMaterial() {
-        return material;
+    public int getMaterialId() {
+        return materialId;
     }
 
     public void setAmount(byte amount) {
@@ -116,7 +121,7 @@ public class ItemStack implements DataContainer {
     }
 
     public ItemStack clone() {
-        ItemStack itemStack = new ItemStack(material, amount, damage);
+        ItemStack itemStack = new ItemStack(materialId, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
         itemStack.setLore(getLore());

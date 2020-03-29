@@ -87,16 +87,21 @@ public abstract class Entity implements Viewable, DataContainer {
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
-    public Entity(int entityType) {
+    public Entity(int entityType, Position defaultPosition) {
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
-        this.position = new Position();
+        this.position = defaultPosition.clone();
 
         setBoundingBox(0, 0, 0);
 
         entityById.put(id, this);
     }
+
+    public Entity(int entityType) {
+        this(entityType, new Position());
+    }
+
 
     public static Entity getEntity(int id) {
         return entityById.get(id);
@@ -111,7 +116,9 @@ public abstract class Entity implements Viewable, DataContainer {
     // Called when a new instance is set
     public abstract void spawn();
 
-    public abstract boolean isOnGround();
+    public boolean isOnGround() {
+        return EntityUtils.isOnGround(this);
+    }
 
     public void teleport(Position position, Runnable callback) {
         if (instance == null)
@@ -250,7 +257,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 }
             }
 
-
+            // Call the abstract update method
             update();
 
             // Scheduled synchronization
@@ -537,11 +544,11 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public boolean sameChunk(Position position) {
         Position pos = getPosition();
-        int chunkX1 = ChunkUtils.getChunkX((int) pos.getX());
-        int chunkZ1 = ChunkUtils.getChunkX((int) pos.getZ());
+        int chunkX1 = ChunkUtils.getChunkCoordinate((int) pos.getX());
+        int chunkZ1 = ChunkUtils.getChunkCoordinate((int) pos.getZ());
 
-        int chunkX2 = ChunkUtils.getChunkX((int) position.getX());
-        int chunkZ2 = ChunkUtils.getChunkX((int) position.getZ());
+        int chunkX2 = ChunkUtils.getChunkCoordinate((int) position.getX());
+        int chunkZ2 = ChunkUtils.getChunkCoordinate((int) position.getZ());
 
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }

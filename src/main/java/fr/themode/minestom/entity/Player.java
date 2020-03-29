@@ -7,6 +7,7 @@ import fr.themode.minestom.bossbar.BossBar;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
+import fr.themode.minestom.entity.vehicle.PlayerVehicleInformation;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
@@ -79,10 +80,7 @@ public class Player extends LivingEntity {
     private float fieldViewModifier = 0.1f;
 
     // Vehicle
-    private float sideways;
-    private float forward;
-    private boolean jump;
-    private boolean unmount;
+    private PlayerVehicleInformation vehicleInformation;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(100);
@@ -658,22 +656,6 @@ public class Player extends LivingEntity {
         return Collections.unmodifiableSet(bossBars);
     }
 
-    public float getVehicleSideways() {
-        return sideways;
-    }
-
-    public float getVehicleForward() {
-        return forward;
-    }
-
-    public boolean isVehicleJump() {
-        return jump;
-    }
-
-    public boolean isVehicleUnmount() {
-        return unmount;
-    }
-
     public void openInventory(Inventory inventory) {
         if (inventory == null)
             throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
@@ -798,6 +780,10 @@ public class Player extends LivingEntity {
         refreshAbilities();
     }
 
+    public PlayerVehicleInformation getVehicleInformation() {
+        return vehicleInformation;
+    }
+
     private void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
         playerAbilitiesPacket.invulnerable = invulnerable;
@@ -866,10 +852,7 @@ public class Player extends LivingEntity {
     }
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
-        this.sideways = sideways;
-        this.forward = forward;
-        this.jump = jump;
-        this.unmount = unmount;
+        this.vehicleInformation.refresh(sideways, forward, jump, unmount);
     }
 
     public int getChunkRange() {

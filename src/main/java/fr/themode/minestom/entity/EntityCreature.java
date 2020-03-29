@@ -4,14 +4,18 @@ import fr.themode.minestom.event.DeathEvent;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.ChunkUtils;
-import fr.themode.minestom.utils.EntityUtils;
 import fr.themode.minestom.utils.Position;
 
 // TODO pathfinding
 public abstract class EntityCreature extends LivingEntity {
 
+
+    public EntityCreature(EntityType entityType, Position defaultPosition) {
+        super(entityType.getId(), defaultPosition);
+    }
+
     public EntityCreature(EntityType entityType) {
-        super(entityType.getId());
+        this(entityType, new Position());
     }
 
     @Override
@@ -79,9 +83,9 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void kill() {
-        this.isDead = true;
-        triggerStatus((byte) 3);
-        scheduleRemove(1000); // Needed for proper death animation
+        this.isDead = true; // So the entity isn't killed over and over again
+        triggerStatus((byte) 3); // Start death animation status
+        scheduleRemove(1000); // Needed for proper death animation (wait for it to finish before destroying the entity)
         DeathEvent deathEvent = new DeathEvent();
         callEvent(DeathEvent.class, deathEvent);
     }
@@ -94,20 +98,15 @@ public abstract class EntityCreature extends LivingEntity {
         EntityPacket entityPacket = new EntityPacket();
         entityPacket.entityId = getEntityId();
 
-        SpawnMobPacket spawnMobPacket = new SpawnMobPacket();
-        spawnMobPacket.entityId = getEntityId();
-        spawnMobPacket.entityUuid = getUuid();
-        spawnMobPacket.entityType = getEntityType();
-        spawnMobPacket.position = getPosition();
-        spawnMobPacket.headPitch = 0;
+        SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
+        spawnLivingEntityPacket.entityId = getEntityId();
+        spawnLivingEntityPacket.entityUuid = getUuid();
+        spawnLivingEntityPacket.entityType = getEntityType();
+        spawnLivingEntityPacket.position = getPosition();
+        spawnLivingEntityPacket.headPitch = 0;
 
         playerConnection.sendPacket(entityPacket);
-        playerConnection.sendPacket(spawnMobPacket);
+        playerConnection.sendPacket(spawnLivingEntityPacket);
         playerConnection.sendPacket(getMetadataPacket());
-    }
-
-    @Override
-    public boolean isOnGround() {
-        return EntityUtils.isOnGround(this);
     }
 }
