@@ -153,9 +153,17 @@ public abstract class Instance implements BlockModifier, DataContainer {
         return chunk.getCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
+    public CustomBlock getCustomBlock(BlockPosition blockPosition) {
+        return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    }
+
     public Data getBlockData(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
         return chunk.getData((byte) (x % 16), (byte) y, (byte) (z % 16));
+    }
+
+    public Data getBlockData(BlockPosition blockPosition) {
+        return getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     public Chunk getChunkAt(double x, double z) {

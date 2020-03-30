@@ -22,6 +22,11 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
+    public void interact(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
+        player.sendMessage("INTERACT UPDATABLE");
+    }
+
+    @Override
     public UpdateOption getUpdateOption() {
         return UPDATE_OPTION;
     }

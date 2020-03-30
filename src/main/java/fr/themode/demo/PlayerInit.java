@@ -69,6 +69,10 @@ public class PlayerInit {
 
             });
 
+            player.setEventCallback(PlayerUseItemEvent.class, event -> {
+                System.out.println("CALLBACK EVENT");
+            });
+
             player.setEventCallback(PickupItemEvent.class, event -> {
                 event.setCancelled(!player.getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
             });

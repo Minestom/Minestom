@@ -44,15 +44,17 @@ public class InstanceManager {
             return;
 
         long time = System.currentTimeMillis();
-        blocksPool.execute(() -> {
-            for (Instance instance : instances) {
-                if (instance instanceof InstanceContainer) { // SharedInstance should be updated at the same time (verify?)
+        for (Instance instance : instances) {
+            if (instance instanceof InstanceContainer) { // SharedInstance should be updated at the same time (verify?)
+
+                blocksPool.execute(() -> {
                     for (Chunk chunk : instance.getChunks()) {
                         chunk.updateBlocks(time, instance);
                     }
-                }
+                });
+
             }
-        });
+        }
     }
 
     public Set<Instance> getInstances() {

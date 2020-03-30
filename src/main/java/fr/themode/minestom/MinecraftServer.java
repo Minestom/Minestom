@@ -180,9 +180,6 @@ public class MinecraftServer {
             long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
             sleepTime = Math.max(1, sleepTime);
 
-            //String perfMessage = "Online: " + getConnectionManager().getOnlinePlayers().size() + " Tick time: " + (TICK_MS - sleepTime) + " ms";
-            //getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(perfMessage));
-
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {

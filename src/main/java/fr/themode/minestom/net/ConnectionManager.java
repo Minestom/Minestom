@@ -6,6 +6,7 @@ import fr.themode.minestom.net.player.PlayerConnection;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class ConnectionManager {
 
@@ -28,6 +29,22 @@ public class ConnectionManager {
                 return player;
         }
         return null;
+    }
+
+    public void broadcastMessage(String message, Function<Player, Boolean> condition) {
+        if (condition == null) {
+            getOnlinePlayers().forEach(player -> player.sendMessage(message));
+        } else {
+            getOnlinePlayers().forEach(player -> {
+                boolean result = condition.apply(player);
+                if (result)
+                    player.sendMessage(message);
+            });
+        }
+    }
+
+    public void broadcastMessage(String message) {
+        broadcastMessage(message, null);
     }
 
     public Consumer<Player> getPlayerInitialization() {

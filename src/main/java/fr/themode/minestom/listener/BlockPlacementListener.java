@@ -1,10 +1,13 @@
 package fr.themode.minestom.listener;
 
+import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.event.PlayerBlockInteractEvent;
 import fr.themode.minestom.event.PlayerBlockPlaceEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.Material;
@@ -16,6 +19,8 @@ import fr.themode.minestom.utils.ChunkUtils;
 
 public class BlockPlacementListener {
 
+    private Instance instance;
+
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         PlayerInventory playerInventory = player.getInventory();
         Player.Hand hand = packet.hand;
@@ -25,6 +30,16 @@ public class BlockPlacementListener {
         Instance instance = player.getInstance();
         if (instance == null)
             return;
+
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(blockPosition, hand);
+        player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
+            CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+            if (customBlock != null) {
+                Data data = instance.getBlockData(blockPosition);
+                customBlock.interact(player, hand, blockPosition, data);
+            }
+        });
+
 
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
         Material material = Material.fromId(usedItem.getMaterialId());
