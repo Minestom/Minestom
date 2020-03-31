@@ -1,14 +1,23 @@
 package fr.themode.minestom.inventory.click;
 
+import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.inventory.rule.InventoryCondition;
 import fr.themode.minestom.inventory.rule.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.StackingRule;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class InventoryClickProcessor {
 
-    public InventoryClickResult leftClick(InventoryCondition inventoryCondition, int slot, ItemStack clicked, ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(inventoryCondition, slot, clicked, cursor);
+    // Dragging maps
+    private Map<Player, Set<Integer>> leftDraggingMap = new HashMap<>();
+    private Map<Player, Set<Integer>> rightDraggingMap = new HashMap<>();
+
+    public InventoryClickResult leftClick(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+        InventoryClickResult clickResult = startCondition(inventoryCondition, player, slot, clicked, cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;
@@ -50,8 +59,8 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    public InventoryClickResult rightClick(InventoryCondition inventoryCondition, int slot, ItemStack clicked, ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(inventoryCondition, slot, clicked, cursor);
+    public InventoryClickResult rightClick(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+        InventoryClickResult clickResult = startCondition(inventoryCondition, player, slot, clicked, cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;
@@ -107,8 +116,8 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    public InventoryClickResult changeHeld(InventoryCondition inventoryCondition, int slot, ItemStack clicked, ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(inventoryCondition, slot, clicked, cursor);
+    public InventoryClickResult changeHeld(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+        InventoryClickResult clickResult = startCondition(inventoryCondition, player, slot, clicked, cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;
@@ -147,11 +156,11 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    private InventoryClickResult startCondition(InventoryCondition inventoryCondition, int slot, ItemStack clicked, ItemStack cursor) {
+    private InventoryClickResult startCondition(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
         InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursor);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursor = result.getCursorItem();
             clicked = result.getClickedItem();

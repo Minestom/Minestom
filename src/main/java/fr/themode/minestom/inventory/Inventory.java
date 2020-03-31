@@ -162,7 +162,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -183,7 +183,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -208,7 +208,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();
@@ -312,7 +312,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
         ItemStack heldItem = playerInventory.getItemStack(key);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), slot, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), player, slot, clicked, heldItem);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -356,7 +356,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();

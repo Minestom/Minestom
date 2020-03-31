@@ -108,7 +108,7 @@ public class PlayerInit {
                 player.getInventory().addItemStack(item);
 
                 Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-                inventory.setInventoryCondition((slot, inventory1, inventoryConditionResult) -> {
+                inventory.setInventoryCondition((p, slot, inventoryConditionResult) -> {
                     inventoryConditionResult.setCancel(false);
                 });
                 inventory.setItemStack(0, item.clone());

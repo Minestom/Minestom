@@ -262,7 +262,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
@@ -276,7 +276,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
@@ -309,7 +309,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();
@@ -377,7 +377,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack heldItem = getItemStack(key);
         ItemStack clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), slot, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), player, slot, clicked, heldItem);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
@@ -397,7 +397,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();
@@ -427,18 +427,36 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 if (!leftDraggingMap.containsKey(player))
                     return;
                 Set<Integer> slots = leftDraggingMap.get(player);
-                int size = slots.size();
+                int slotCount = slots.size();
                 int cursorAmount = stackingRule.getAmount(cursorItem);
-                if (size > cursorAmount)
+                if (slotCount > cursorAmount)
                     return;
-                int slotSize = (int) ((float) cursorAmount / (float) size);
+                // Should be size of each defined slot (if not full)
+                int slotSize = (int) ((float) cursorAmount / (float) slotCount);
+                int finalCursorAmount = cursorAmount;
 
                 for (Integer s : slots) {
                     ItemStack draggedItem = cursorItem.clone();
-                    draggedItem = stackingRule.apply(draggedItem, slotSize);
-                    setItemStack(s, OFFSET, draggedItem);
+                    ItemStack slotItem = getItemStack(s, OFFSET);
+                    int maxSize = stackingRule.getMaxSize();
+                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
+                        int amount = slotItem.getAmount() + slotSize;
+                        if (stackingRule.canApply(slotItem, amount)) {
+                            slotItem = stackingRule.apply(slotItem, amount);
+                            finalCursorAmount -= slotSize;
+                        } else {
+                            int removedAmount = amount - maxSize;
+                            slotItem = stackingRule.apply(slotItem, maxSize);
+                            finalCursorAmount -= removedAmount;
+                        }
+                    } else if (slotItem.isAir()) {
+                        slotItem = stackingRule.apply(draggedItem, slotSize);
+                        finalCursorAmount -= slotSize;
+                    }
+
+                    setItemStack(s, OFFSET, slotItem);
                 }
-                cursorItem = stackingRule.apply(cursorItem, cursorAmount - (slotSize * size));
+                cursorItem = stackingRule.apply(cursorItem, finalCursorAmount);
                 setCursorItem(cursorItem);
 
                 leftDraggingMap.remove(player);
@@ -453,14 +471,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                     return;
                 for (Integer s : slots) {
                     ItemStack draggedItem = cursorItem.clone();
-                    ItemStack slotItem = getItemStack(s);
-                    if (draggedItem.isSimilar(slotItem)) {
+                    ItemStack slotItem = getItemStack(s, OFFSET);
+                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         int amount = slotItem.getAmount() + 1;
                         if (stackingRule.canApply(slotItem, amount)) {
                             slotItem = stackingRule.apply(slotItem, amount);
                             setItemStack(s, OFFSET, slotItem);
                         }
-                        System.out.println("TEST: " + s + ":" + OFFSET);
                     } else if (slotItem.isAir()) {
                         draggedItem = stackingRule.apply(draggedItem, 1);
                         setItemStack(s, OFFSET, draggedItem);
@@ -499,7 +516,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         InventoryCondition inventoryCondition = getInventoryCondition();
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(slot, null, result);
+            inventoryCondition.accept(player, slot, result);
 
             cursorItem = result.getCursorItem();
             clicked = result.getClickedItem();

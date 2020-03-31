@@ -70,20 +70,6 @@ public class EntityManager {
 
     }
 
-    private void waitingPlayersTick() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
-            final Player playerCache = waitingPlayer;
-            playersPool.execute(() -> {
-                PlayerLoginEvent loginEvent = new PlayerLoginEvent();
-                playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
-                Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
-
-                playerCache.setInstance(spawningInstance);
-            });
-        }
-    }
-
     /**
      * Update each entity type separately independently of their location
      *
@@ -170,6 +156,20 @@ public class EntityManager {
         }
     }
 
+    // Add connected clients after the handshake (used to free the networking threads)
+    private void waitingPlayersTick() {
+        Player waitingPlayer;
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+            final Player playerCache = waitingPlayer;
+            playersPool.execute(() -> {
+                PlayerLoginEvent loginEvent = new PlayerLoginEvent();
+                playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
+                Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
+
+                playerCache.setInstance(spawningInstance);
+            });
+        }
+    }
 
     public UpdateType getUpdateType() {
         return updateType;
