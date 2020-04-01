@@ -1,24 +1,25 @@
 package fr.themode.minestom.net.packet.client.login;
 
+import com.mojang.brigadier.CommandDispatcher;
 import fr.themode.minestom.MinecraftServer;
+import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.ClientPreplayPacket;
 import fr.themode.minestom.net.packet.server.login.JoinGamePacket;
 import fr.themode.minestom.net.packet.server.login.LoginSuccessPacket;
-import fr.themode.minestom.net.packet.server.play.DeclareCommandsPacket;
-import fr.themode.minestom.net.packet.server.play.DeclareRecipesPacket;
-import fr.themode.minestom.net.packet.server.play.PlayerInfoPacket;
-import fr.themode.minestom.net.packet.server.play.SpawnPositionPacket;
+import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.recipe.Recipe;
+import fr.themode.minestom.recipe.RecipeManager;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -95,6 +96,17 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         MinecraftServer.getEntityManager().addWaitingPlayer(player);
 
+
+        {
+            CommandManager commandManager = MinecraftServer.getCommandManager();
+            CommandDispatcher<Player> dispatcher = commandManager.getDispatcher();
+            String[] usages = dispatcher.getAllUsage(dispatcher.getRoot(), player, true);
+            for (String usage : usages) {
+                System.out.println("USAGE: " + usage);
+            }
+        }
+
+
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         argumentNode.flags = 0b1010;
@@ -117,17 +129,22 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
 
         {
-            DeclareRecipesPacket recipesPacket = new DeclareRecipesPacket();
-            DeclareRecipesPacket.Recipe recipe = new DeclareRecipesPacket.Recipe();
-            recipe.recipeId = "crafting_shapeless";
-            recipe.type = "crafting_shapeless";
-            recipe.group = "test group";
-            DeclareRecipesPacket.Ingredient ingredient = new DeclareRecipesPacket.Ingredient();
-            ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 1)};
-            recipe.ingredients = new DeclareRecipesPacket.Ingredient[]{ingredient};
-            recipe.result = new ItemStack(Material.STONE, (byte) 50);
-            recipesPacket.recipes = new DeclareRecipesPacket.Recipe[]{recipe};
-            connection.sendPacket(recipesPacket);
+            RecipeManager recipeManager = MinecraftServer.getRecipeManager();
+            DeclareRecipesPacket declareRecipesPacket = recipeManager.getDeclareRecipesPacket();
+
+            connection.sendPacket(declareRecipesPacket);
+
+            List<String> recipesIdentifier = new ArrayList<>();
+            for (Recipe recipe : recipeManager.getRecipes()) {
+                // TODO check condition
+                recipesIdentifier.add(recipe.getRecipeId());
+            }
+            String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);
+            UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
+            unlockRecipesPacket.mode = 0;
+            unlockRecipesPacket.recipesId = identifiers;
+            unlockRecipesPacket.initRecipesId = identifiers;
+            connection.sendPacket(unlockRecipesPacket);
         }
     }
 

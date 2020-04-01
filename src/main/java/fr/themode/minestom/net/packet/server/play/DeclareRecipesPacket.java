@@ -11,6 +11,8 @@ public class DeclareRecipesPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
+        if (recipes == null)
+            throw new NullPointerException("Recipes cannot be null!");
         writer.writeVarInt(recipes.length);
         for (Recipe recipe : recipes) {
             recipe.write(writer);
@@ -25,7 +27,7 @@ public class DeclareRecipesPacket implements ServerPacket {
     public static class Recipe {
 
         public String recipeId;
-        public String type;
+        public String recipeType;
 
         public String group;
 
@@ -54,10 +56,10 @@ public class DeclareRecipesPacket implements ServerPacket {
 
 
         private void write(PacketWriter writer) {
+            writer.writeSizedString(recipeType);
             writer.writeSizedString(recipeId);
-            writer.writeSizedString(type);
 
-            switch (type) {
+            switch (recipeType) {
                 case "crafting_shapeless":
                     writer.writeSizedString(group);
                     writer.writeVarInt(ingredients.length);

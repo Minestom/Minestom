@@ -26,7 +26,6 @@ public class ClientRecipeBookData extends ClientPlayPacket {
             switch (id) {
                 case 0:
                     reader.readSizedString((string, length) -> {
-                        System.out.println("test: " + string);
                         callback.run();
                     });
                     break;

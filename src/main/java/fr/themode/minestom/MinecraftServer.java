@@ -1,6 +1,7 @@
 package fr.themode.minestom;
 
 import com.github.simplenet.Server;
+import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
 import fr.themode.minestom.entity.Player;
@@ -14,6 +15,7 @@ import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.recipe.RecipeManager;
 import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.timer.SchedulerManager;
 import fr.themode.minestom.utils.Utils;
@@ -46,6 +48,8 @@ public class MinecraftServer {
     private static InstanceManager instanceManager;
     private static BlockManager blockManager;
     private static EntityManager entityManager;
+    private static CommandManager commandManager;
+    private static RecipeManager recipeManager;
     private static DataManager dataManager;
     private static TeamManager teamManager;
     private static SchedulerManager schedulerManager;
@@ -60,6 +64,8 @@ public class MinecraftServer {
         instanceManager = new InstanceManager();
         blockManager = new BlockManager();
         entityManager = new EntityManager();
+        commandManager = new CommandManager();
+        recipeManager = new RecipeManager();
         dataManager = new DataManager();
         teamManager = new TeamManager();
         schedulerManager = new SchedulerManager();
@@ -89,6 +95,14 @@ public class MinecraftServer {
 
     public static EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public static CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public static RecipeManager getRecipeManager() {
+        return recipeManager;
     }
 
     public static DataManager getDataManager() {
