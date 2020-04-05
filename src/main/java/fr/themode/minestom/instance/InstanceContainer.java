@@ -6,11 +6,13 @@ import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
+import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
+import fr.themode.minestom.utils.SerializerUtils;
 
 import java.io.File;
 import java.util.*;
@@ -41,10 +43,16 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
+
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId, data);
+
+            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+
+            callBlockDestroy(chunk, index, x, y, z);
+
+            chunk.UNSAFE_setBlock(index, blockId, data);
 
             // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
@@ -58,12 +66,32 @@ public class InstanceContainer extends Instance {
             byte chunkX = (byte) (x % 16);
             byte chunkY = (byte) y;
             byte chunkZ = (byte) (z % 16);
-            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId, data);
+            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+
+            callBlockDestroy(chunk, index, x, y, z);
+
+            chunk.UNSAFE_setCustomBlock(index, blockId, data);
             short id = BLOCK_MANAGER.getBlock(blockId).getType();
+
+            callBlockPlace(chunk, index, x, y, z);
 
             // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, id);
         }
+    }
+
+    private void callBlockDestroy(Chunk chunk, int index, int x, int y, int z) {
+        CustomBlock previousBlock = chunk.getCustomBlock(index);
+        if (previousBlock != null) {
+            Data previousData = chunk.getData(index);
+            previousBlock.onDestroy(this, new BlockPosition(x, y, z), previousData);
+        }
+    }
+
+    private void callBlockPlace(Chunk chunk, int index, int x, int y, int z) {
+        CustomBlock actualBlock = chunk.getCustomBlock(index);
+        Data previousData = chunk.getData(index);
+        actualBlock.onPlace(this, new BlockPosition(x, y, z), previousData);
     }
 
     @Override

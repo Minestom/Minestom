@@ -36,7 +36,7 @@ public class BlockPlacementListener {
             CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {
                 Data data = instance.getBlockData(blockPosition);
-                customBlock.interact(player, hand, blockPosition, data);
+                customBlock.onInteract(player, hand, blockPosition, data);
             }
         });
 

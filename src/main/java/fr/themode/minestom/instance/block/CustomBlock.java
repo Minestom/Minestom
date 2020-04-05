@@ -31,7 +31,11 @@ public abstract class CustomBlock {
         throw new UnsupportedOperationException("Update method not overridden");
     }
 
-    public abstract void interact(Player player, Player.Hand hand, BlockPosition blockPosition, Data data);
+    public abstract void onPlace(Instance instance, BlockPosition blockPosition, Data data);
+
+    public abstract void onDestroy(Instance instance, BlockPosition blockPosition, Data data);
+
+    public abstract void onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data);
 
     public abstract UpdateOption getUpdateOption();
 

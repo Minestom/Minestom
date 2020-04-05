@@ -9,6 +9,10 @@ public enum Attribute {
     ATTACK_DAMAGE("generic.attackDamage", 2, 2048),
     ATTACK_SPEED("generic.attackSpeed", 4, 1024),
     FLYING_SPEED("generic.flyingSpeed", 0.4f, 1024),
+    ARMOR("generic.armor", 0, 30),
+    ARMOR_TOUGHNESS("generic.armorToughness", 0, 20),
+    ATTACK_KNOCKBACK("generic.attackKnockback", 0, 5),
+    LUCK("generic.luck", 0, 1024),
     HORSE_JUMP_STRENGTH("horse.jumpStrength", 0.7f, 2),
     ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawnReinforcements", 0, 1);
 

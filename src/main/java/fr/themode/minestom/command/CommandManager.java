@@ -27,10 +27,12 @@ public class CommandManager {
 
     public void register(Command<Player> command) {
         this.dispatcher.register(command);
+        refreshPacket();
     }
 
     public void register(CommandProcessor commandProcessor) {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
+        refreshPacket();
     }
 
     public boolean execute(Player source, String command) {
@@ -69,6 +71,56 @@ public class CommandManager {
     }
 
     private void refreshPacket() {
+        List<String> commands = new ArrayList<>();
+        for (Command<Player> command : dispatcher.getCommands()) {
+            commands.add(command.getName());
+            for (String alias : command.getAliases()) {
+                commands.add(alias);
+            }
+        }
+        for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
+            commands.add(commandProcessor.getCommandName());
+        }
+
+
+        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
+        ArrayList<Integer> rootChildren = new ArrayList<>();
+
+        DeclareCommandsPacket.Node argNode = new DeclareCommandsPacket.Node();
+        argNode.flags = 0b10;
+        argNode.name = "arg";
+        argNode.parser = "brigadier:string";
+        argNode.properties = packetWriter -> {
+            packetWriter.writeVarInt(0);
+        };
+        int argOffset = nodes.size();
+        rootChildren.add(argOffset);
+        nodes.add(argNode);
+        argNode.children = new int[]{argOffset};
+
+        for (String commandName : commands) {
+
+            DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
+            literalNode.flags = 0b1;
+            literalNode.name = commandName;
+            literalNode.children = new int[]{argOffset};
+
+            rootChildren.add(nodes.size());
+            nodes.add(literalNode);
+
+        }
+
+        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
+        rootNode.flags = 0;
+        rootNode.children = ArrayUtils.toArray(rootChildren);
+
+        nodes.add(rootNode);
+
+        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[nodes.size()]);
+        declareCommandsPacket.rootIndex = nodes.size() - 1;
+    }
+
+    private void refreshPacket2() {
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         ArrayList<Integer> rootChildren = new ArrayList<>();

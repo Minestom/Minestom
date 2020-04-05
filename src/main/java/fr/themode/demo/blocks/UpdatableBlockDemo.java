@@ -22,8 +22,18 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
-    public void interact(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
-        player.sendMessage("INTERACT UPDATABLE");
+    public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
+        
+    }
+
+    @Override
+    public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
+
+    }
+
+    @Override
+    public void onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
+
     }
 
     @Override

@@ -3,6 +3,7 @@ package fr.themode.minestom.instance.batch;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.InstanceContainer;
+import fr.themode.minestom.utils.SerializerUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,10 +86,11 @@ public class BlockBatch implements InstanceBatch {
         private Data data;
 
         public void apply(Chunk chunk) {
+            int index = SerializerUtils.chunkCoordToIndex((byte) x, (byte) y, (byte) z);
             if (!isCustomBlock) {
-                chunk.UNSAFE_setBlock((byte) x, (byte) y, (byte) z, blockId, data);
+                chunk.UNSAFE_setBlock(index, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock((byte) x, (byte) y, (byte) z, blockId, data);
+                chunk.UNSAFE_setCustomBlock(index, blockId, data);
             }
         }
 

@@ -3,7 +3,6 @@ package fr.themode.demo;
 import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
-import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.GameMode;
@@ -68,15 +67,6 @@ public class PlayerInit {
                 ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
 
-            });
-
-            player.setEventCallback(PlayerChatEvent.class, event -> {
-                String message = event.getMessage();
-                System.out.println("Chat: " + message);
-                CommandManager commandManager = MinecraftServer.getCommandManager();
-                boolean result = commandManager.execute(event.getSender(), message);
-                if (!result)
-                    player.sendMessage("No command found");
             });
 
             player.setEventCallback(PickupItemEvent.class, event -> {

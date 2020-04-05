@@ -64,33 +64,33 @@ public class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId, Data data) {
-        setBlock(x, y, z, blockId, (short) 0, data, null);
+    public void UNSAFE_setBlock(int index, short blockId, Data data) {
+        setBlock(index, blockId, (short) 0, data, null);
     }
 
-    public void UNSAFE_setBlock(byte x, byte y, byte z, short blockId) {
-        UNSAFE_setBlock(x, y, z, blockId, null);
+    public void UNSAFE_setBlock(int index, short blockId) {
+        UNSAFE_setBlock(index, blockId, null);
     }
 
-    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId, Data data) {
+    public void UNSAFE_setCustomBlock(int index, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
-        setCustomBlock(x, y, z, customBlock, data);
+        setCustomBlock(index, customBlock, data);
     }
 
-    public void UNSAFE_setCustomBlock(byte x, byte y, byte z, short customBlockId) {
-        UNSAFE_setCustomBlock(x, y, z, customBlockId, null);
+    public void UNSAFE_setCustomBlock(int index, short customBlockId) {
+        UNSAFE_setCustomBlock(index, customBlockId, null);
     }
 
-    private void setCustomBlock(byte x, byte y, byte z, CustomBlock customBlock, Data data) {
+    private void setCustomBlock(int index, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(x, y, z, customBlock.getType(), customBlock.getId(), data, updateConsumer);
+        setBlock(index, customBlock.getType(), customBlock.getId(), data, updateConsumer);
     }
 
-    private void setBlock(byte x, byte y, byte z, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+    private void setBlock(int index, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
+
         if (blockType != 0
                 || (blockType == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
             int value = (blockType << 16 | customId & 0xFFFF); // Merge blockType and customId to one unique Integer (16/16 bits)
@@ -156,7 +156,7 @@ public class Chunk implements Viewable {
         return getCustomBlock(index);
     }
 
-    private CustomBlock getCustomBlock(int index) {
+    protected CustomBlock getCustomBlock(int index) {
         int value = getBlockValue(index);
         short id = (short) (value & 0xffff);
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
@@ -171,7 +171,7 @@ public class Chunk implements Viewable {
         return getData(index);
     }
 
-    private Data getData(int index) {
+    protected Data getData(int index) {
         return blocksData.get(index);
     }
 

@@ -90,9 +90,9 @@ public class Player extends LivingEntity {
 
         setBoundingBox(0.8f, 1.8f, 0.8f);
 
-        playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        // Some client update
+        getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
-
         refreshAbilities();
 
         this.settings = new PlayerSettings();
@@ -445,7 +445,7 @@ public class Player extends LivingEntity {
         });
     }
 
-    private void refreshHealth() {
+    protected void refreshHealth() {
         heal();
         this.food = 20;
         this.foodSaturation = 5;
@@ -780,7 +780,7 @@ public class Player extends LivingEntity {
         return vehicleInformation;
     }
 
-    private void refreshAbilities() {
+    protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
         playerAbilitiesPacket.invulnerable = invulnerable;
         playerAbilitiesPacket.flying = flying;
