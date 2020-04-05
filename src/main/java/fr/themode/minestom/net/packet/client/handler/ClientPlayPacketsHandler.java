@@ -21,6 +21,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x12, ClientPlayerPositionAndLookPacket.class);
         register(0x13, ClientPlayerLookPacket.class);
         register(0x14, ClientPlayerPacket.class);
+        register(0x18, ClientCraftRecipeRequest.class);
         register(0x19, ClientPlayerAbilitiesPacket.class);
         register(0x1A, ClientPlayerDiggingPacket.class);
         register(0x1B, ClientEntityActionPacket.class);

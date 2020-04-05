@@ -93,6 +93,8 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
 
+        refreshAbilities();
+
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
@@ -333,14 +335,8 @@ public class Player extends LivingEntity {
 
     @Override
     public void kill() {
-        this.isDead = true;
+        super.kill();
         refreshIsDead(true);
-        EntityStatusPacket entityStatusPacket = new EntityStatusPacket();
-        entityStatusPacket.entityId = getEntityId();
-        entityStatusPacket.status = 3; // Death sound/animation
-        sendPacketToViewers(entityStatusPacket);
-        DeathEvent deathEvent = new DeathEvent();
-        callEvent(DeathEvent.class, deathEvent);
     }
 
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {

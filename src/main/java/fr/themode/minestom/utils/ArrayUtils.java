@@ -1,5 +1,7 @@
 package fr.themode.minestom.utils;
 
+import java.util.ArrayList;
+
 public class ArrayUtils {
 
     public static byte[] concenateByteArrays(byte[]... arrays) {
@@ -49,6 +51,14 @@ public class ArrayUtils {
         int[] result = new int[counter];
         System.arraycopy(indexes, 0, result, 0, counter);
         return result;
+    }
+
+    public static int[] toArray(ArrayList<Integer> list) {
+        int[] array = new int[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
     }
 
 }

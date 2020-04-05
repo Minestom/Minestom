@@ -1,6 +1,5 @@
 package fr.themode.minestom.net.packet.client.login;
 
-import com.mojang.brigadier.CommandDispatcher;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.entity.GameMode;
@@ -74,8 +73,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO send server difficulty
 
-        // TODO player abilities
-
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
         spawnPositionPacket.x = 0;
@@ -99,33 +96,11 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         {
             CommandManager commandManager = MinecraftServer.getCommandManager();
-            CommandDispatcher<Player> dispatcher = commandManager.getDispatcher();
-            String[] usages = dispatcher.getAllUsage(dispatcher.getRoot(), player, true);
-            for (String usage : usages) {
-                System.out.println("USAGE: " + usage);
-            }
+            DeclareCommandsPacket declareCommandsPacket = commandManager.getDeclareCommandsPacket();
+
+            // FIXME
+            //connection.sendPacket(declareCommandsPacket);
         }
-
-
-        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
-        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-        argumentNode.flags = 0b1010;
-        argumentNode.children = new int[0];
-        argumentNode.name = "arg name";
-        argumentNode.parser = "minecraft:nbt_path";
-        DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-        literalNode.flags = 0b1;
-        literalNode.children = new int[]{2};
-        literalNode.name = "hey";
-        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
-        rootNode.flags = 0;
-        rootNode.children = new int[]{1};
-
-        declareCommandsPacket.nodes = new DeclareCommandsPacket.Node[]{rootNode, literalNode, argumentNode};
-        declareCommandsPacket.rootIndex = 0;
-
-
-        connection.sendPacket(declareCommandsPacket);
 
 
         {

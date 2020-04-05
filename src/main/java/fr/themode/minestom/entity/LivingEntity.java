@@ -3,6 +3,7 @@ package fr.themode.minestom.entity;
 import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
+import fr.themode.minestom.event.DeathEvent;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.item.ItemStack;
@@ -40,7 +41,14 @@ public abstract class LivingEntity extends Entity {
         this(entityType, new Position());
     }
 
-    public abstract void kill();
+    public void kill() {
+        System.out.println("KILL");
+        this.isDead = true; // So the entity isn't killed over and over again
+        setHealth(0);
+        triggerStatus((byte) 3); // Start death animation status
+        DeathEvent deathEvent = new DeathEvent();
+        callEvent(DeathEvent.class, deathEvent);
+    }
 
     @Override
     public void update() {
@@ -111,7 +119,7 @@ public abstract class LivingEntity extends Entity {
         health = Math.min(health, getMaxHealth());
 
         this.health = health;
-        if (this.health <= 0) {
+        if (this.health <= 0 && !isDead) {
             kill();
         }
     }

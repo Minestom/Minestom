@@ -3,6 +3,7 @@ package fr.themode.demo;
 import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
+import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.GameMode;
@@ -50,7 +51,7 @@ public class PlayerInit {
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);
                     velocity.setY(3.5f);
                     target.setVelocity(velocity, 150);
-                    target.damage(2);
+                    target.damage(1);
                     player.sendMessage("ATTACK");
                 }
             });
@@ -69,8 +70,13 @@ public class PlayerInit {
 
             });
 
-            player.setEventCallback(PlayerUseItemEvent.class, event -> {
-                System.out.println("CALLBACK EVENT");
+            player.setEventCallback(PlayerChatEvent.class, event -> {
+                String message = event.getMessage();
+                System.out.println("Chat: " + message);
+                CommandManager commandManager = MinecraftServer.getCommandManager();
+                boolean result = commandManager.execute(event.getSender(), message);
+                if (!result)
+                    player.sendMessage("No command found");
             });
 
             player.setEventCallback(PickupItemEvent.class, event -> {

@@ -1,6 +1,5 @@
 package fr.themode.minestom.entity;
 
-import fr.themode.minestom.event.DeathEvent;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -83,11 +82,10 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void kill() {
-        this.isDead = true; // So the entity isn't killed over and over again
-        triggerStatus((byte) 3); // Start death animation status
-        scheduleRemove(1000); // Needed for proper death animation (wait for it to finish before destroying the entity)
-        DeathEvent deathEvent = new DeathEvent();
-        callEvent(DeathEvent.class, deathEvent);
+        super.kill();
+
+        // Needed for proper death animation (wait for it to finish before destroying the entity)
+        scheduleRemove(1000);
     }
 
     @Override
