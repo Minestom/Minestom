@@ -3,6 +3,8 @@ Minestom is an alternative to the popular minecraft server API named Bukkit/Spig
 
 All planned features are listed on [trello](https://trello.com/b/4ysvj5hT/minestom)
 
+An example of how to use the Minestom library is available [here](src/main/java/fr/themode/demo)
+
 # Why Minestom?
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
 The goal is to offer more performance for those who need it, Minecraft being single-threaded is the most important problem for them.
