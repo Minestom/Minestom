@@ -3,8 +3,8 @@ package fr.themode.minestom.inventory;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
-import fr.themode.minestom.inventory.rule.InventoryCondition;
-import fr.themode.minestom.inventory.rule.InventoryConditionResult;
+import fr.themode.minestom.inventory.condition.InventoryCondition;
+import fr.themode.minestom.inventory.condition.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.StackingRule;
 import fr.themode.minestom.net.packet.server.play.EntityEquipmentPacket;
@@ -41,11 +41,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public ItemStack[] getItemStacks() {
         return Arrays.copyOf(items, items.length);
-    }
-
-    @Override
-    public void setInventoryRule() {
-
     }
 
     @Override
@@ -335,7 +330,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             int index = i < 9 ? i + 9 : i - 9;
             ItemStack item = items[index];
             StackingRule itemRule = item.getStackingRule();
-            if (item.isSimilar(clicked)) {
+            if (itemRule.canBeStacked(item, clicked)) {
                 int amount = item.getAmount();
                 if (!clickedRule.canApply(clicked, amount + 1))
                     continue;

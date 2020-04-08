@@ -94,7 +94,6 @@ public class CommandManager {
             packetWriter.writeVarInt(0);
         };
         int argOffset = nodes.size();
-        rootChildren.add(argOffset);
         nodes.add(argNode);
         argNode.children = new int[]{argOffset};
 

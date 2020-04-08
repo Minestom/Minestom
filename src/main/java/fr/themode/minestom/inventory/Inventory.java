@@ -4,8 +4,8 @@ import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
-import fr.themode.minestom.inventory.rule.InventoryCondition;
-import fr.themode.minestom.inventory.rule.InventoryConditionResult;
+import fr.themode.minestom.inventory.condition.InventoryCondition;
+import fr.themode.minestom.inventory.condition.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.StackingRule;
 import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
@@ -83,11 +83,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public ItemStack[] getItemStacks() {
         return Arrays.copyOf(itemStacks, itemStacks.length);
-    }
-
-    @Override
-    public void setInventoryRule() {
-
     }
 
     @Override

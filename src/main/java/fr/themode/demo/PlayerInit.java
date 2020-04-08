@@ -12,6 +12,7 @@ import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
 
@@ -36,7 +37,18 @@ public class PlayerInit {
     }
 
     public static void init() {
-        MinecraftServer.getConnectionManager().setPlayerInitialization(player -> {
+        ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+
+        connectionManager.setResponseDataConsumer(responseData -> {
+            responseData.setName("1.15.2");
+            responseData.setProtocol(578);
+            responseData.setMaxPlayer(100);
+            responseData.setOnline(0);
+            responseData.setDescription("test");
+            responseData.setFavicon("data:image/png;base64,<data>");
+        });
+
+        connectionManager.setPlayerInitialization(player -> {
             player.setEventCallback(AttackEvent.class, event -> {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {

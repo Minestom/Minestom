@@ -1,8 +1,8 @@
 package fr.themode.minestom.inventory.click;
 
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.inventory.rule.InventoryCondition;
-import fr.themode.minestom.inventory.rule.InventoryConditionResult;
+import fr.themode.minestom.inventory.condition.InventoryCondition;
+import fr.themode.minestom.inventory.condition.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.StackingRule;
 

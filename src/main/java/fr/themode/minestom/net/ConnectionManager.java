@@ -2,6 +2,7 @@ package fr.themode.minestom.net;
 
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.player.PlayerConnection;
+import fr.themode.minestom.ping.ResponseData;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -13,6 +14,7 @@ public class ConnectionManager {
     private Set<Player> players = new CopyOnWriteArraySet<>();
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
+    private Consumer<ResponseData> responseDataConsumer;
     private Consumer<Player> playerInitialization;
 
     public Player getPlayer(PlayerConnection connection) {
@@ -45,6 +47,14 @@ public class ConnectionManager {
 
     public void broadcastMessage(String message) {
         broadcastMessage(message, null);
+    }
+
+    public Consumer<ResponseData> getResponseDataConsumer() {
+        return responseDataConsumer;
+    }
+
+    public void setResponseDataConsumer(Consumer<ResponseData> responseDataConsumer) {
+        this.responseDataConsumer = responseDataConsumer;
     }
 
     public Consumer<Player> getPlayerInitialization() {

@@ -26,9 +26,11 @@ public class ResponsePacket implements ServerPacket {
             "    \"favicon\": \"data:image/png;base64,<data>\"\n" +
             "}";
 
+    public String jsonResponse;
+
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(JSON_EXAMPLE);
+        writer.writeSizedString(jsonResponse);
     }
 
     @Override

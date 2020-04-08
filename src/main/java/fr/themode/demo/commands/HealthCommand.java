@@ -42,7 +42,7 @@ public class HealthCommand extends Command<Player> {
     }
 
     private void modeCallback(Player player, String value, int error) {
-        System.out.println("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
+        player.sendMessage("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
     }
 
     private void valueCallback(Player player, String value, int error) {

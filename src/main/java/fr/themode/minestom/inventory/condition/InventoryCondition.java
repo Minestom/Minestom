@@ -1,4 +1,4 @@
-package fr.themode.minestom.inventory.rule;
+package fr.themode.minestom.inventory.condition;
 
 import fr.themode.minestom.entity.Player;
 

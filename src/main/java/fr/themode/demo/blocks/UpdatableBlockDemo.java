@@ -23,7 +23,7 @@ public class UpdatableBlockDemo extends CustomBlock {
 
     @Override
     public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
-        
+
     }
 
     @Override

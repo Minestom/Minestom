@@ -23,7 +23,7 @@ public abstract class LivingEntity extends Entity {
     private float health;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
-    private BoundingBox expandedBoundingBox = getBoundingBox();
+    private BoundingBox expandedBoundingBox;
 
     private float[] attributeValues = new float[Attribute.values().length];
 
@@ -41,17 +41,9 @@ public abstract class LivingEntity extends Entity {
         this(entityType, new Position());
     }
 
-    public void kill() {
-        System.out.println("KILL");
-        this.isDead = true; // So the entity isn't killed over and over again
-        setHealth(0);
-        triggerStatus((byte) 3); // Start death animation status
-        DeathEvent deathEvent = new DeathEvent();
-        callEvent(DeathEvent.class, deathEvent);
-    }
-
     @Override
     public void update() {
+        // Items picking
         if (canPickupItem) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
             Set<Entity> entities = instance.getChunkEntities(chunk);
@@ -101,6 +93,14 @@ public abstract class LivingEntity extends Entity {
 
             // TODO all remaining metadata
         };
+    }
+
+    public void kill() {
+        this.isDead = true; // So the entity isn't killed over and over again
+        setHealth(0);
+        triggerStatus((byte) 3); // Start death animation status
+        DeathEvent deathEvent = new DeathEvent();
+        callEvent(DeathEvent.class, deathEvent);
     }
 
     public void damage(float value) {

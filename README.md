@@ -18,7 +18,10 @@ Being able to create instances directly on the go is a must-have, according to u
 Instances also come with performance benefits, unlike some others which will be fully single-threaded or maybe using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more of CPU power.
 
 ## Blocks
-Minestom by default does not know what is stone block, not even a chest, you will have to tell him that it opens an inventory. Every "special blocks" (which aren't only visual) have to be registered, then they can be placed anywhere simply.
+Minestom by default does not know what is a chest, you will have to tell him that it opens an inventory. 
+Every "special blocks" (which aren't only visual) have to be registered, then they can be placed anywhere simply.
+
+However, all blocks are visually there, they just won't have interaction by default.
 
 ## Entities
 The terms "passive" or "aggressive" monsters do not exist, nobody forbid you from making a flying chicken rushing into any players coming too close, doing so with NMS is a real mess because of obfuscation and the large inheritance.

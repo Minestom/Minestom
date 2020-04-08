@@ -214,9 +214,14 @@ public abstract class Entity implements Viewable, DataContainer {
                     sendPacketToViewersAndSelf(getVelocityPacket());
                 } else {
                     final float tps = MinecraftServer.TICK_PER_SECOND;
-                    refreshPosition(position.getX() + velocity.getX() / tps, position.getY() + velocity.getY() / tps, position.getZ() + velocity.getZ() / tps);
+                    float newX = position.getX() + velocity.getX() / tps;
+                    float newY = position.getY() + velocity.getY() / tps;
+                    float newZ = position.getZ() + velocity.getZ() / tps;
+                    refreshPosition(newX, newY, newZ);
                     if (this instanceof ObjectEntity) {
-                        sendPacketToViewers(getVelocityPacket());
+                        // FIXME velocity/gravity
+                        //sendPacketToViewers(getVelocityPacket());
+                        teleport(getPosition());
                     } else if (this instanceof EntityCreature) {
                         teleport(getPosition());
                     }
