@@ -28,6 +28,7 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
     public static final int THREAD_COUNT_BLOCK_UPDATE = 2;
     public static final int THREAD_COUNT_ENTITIES = 2;
+    public static final int THREAD_COUNT_ENTITIES_PATHFINDING = 2;
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
     public static final int THREAD_COUNT_SCHEDULER = 2;
     // Config

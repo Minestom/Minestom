@@ -11,6 +11,7 @@ import fr.themode.minestom.event.CancellableEvent;
 import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.*;
@@ -87,11 +88,11 @@ public abstract class Entity implements Viewable, DataContainer {
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
-    public Entity(int entityType, Position defaultPosition) {
+    public Entity(int entityType, Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
-        this.position = defaultPosition.clone();
+        this.position = spawnPosition.clone();
 
         setBoundingBox(0, 0, 0);
 
@@ -217,6 +218,19 @@ public abstract class Entity implements Viewable, DataContainer {
                     float newX = position.getX() + velocity.getX() / tps;
                     float newY = position.getY() + velocity.getY() / tps;
                     float newZ = position.getZ() + velocity.getZ() / tps;
+
+                    BlockPosition xBlock = new BlockPosition(newX, position.getY(), position.getZ());
+                    BlockPosition yBlock = new BlockPosition(position.getX(), newY, position.getZ());
+                    BlockPosition zBlock = new BlockPosition(position.getX(), position.getY(), newZ);
+
+                    boolean xAir = getInstance().getBlockId(xBlock) == Material.AIR.getId();
+                    boolean yAir = getInstance().getBlockId(yBlock) == Material.AIR.getId();
+                    boolean zAir = getInstance().getBlockId(zBlock) == Material.AIR.getId();
+                    System.out.println(xAir + " : " + yAir + " : " + zAir);
+                    newX = xAir ? newX : boundingBox.intersect(xBlock) ? Math.round(position.getX()) : newX;
+                    newY = yAir ? newY : boundingBox.intersect(yBlock) ? Math.round(position.getY()) : newY;
+                    newZ = zAir ? newZ : boundingBox.intersect(zBlock) ? Math.round(position.getZ()) : newZ;
+
                     refreshPosition(newX, newY, newZ);
                     if (this instanceof ObjectEntity) {
                         // FIXME velocity/gravity
@@ -706,7 +720,7 @@ public abstract class Entity implements Viewable, DataContainer {
         SWIMMING,
         SPIN_ATTACK,
         SNEAKING,
-        DYING;
+        DYING
     }
 
     protected boolean shouldRemove() {

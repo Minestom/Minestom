@@ -52,11 +52,14 @@ public class PlayerInit {
             player.setEventCallback(AttackEvent.class, event -> {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
-                    ((EntityCreature) entity).damage(-1);
+                    EntityCreature creature = (EntityCreature) entity;
+                    creature.damage(-1);
                     Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                     velocity.setY(4f);
                     entity.setVelocity(velocity, 150);
                     player.sendMessage("You attacked an entity!");
+
+                    //creature.jump(1);
                 } else if (entity instanceof Player) {
                     Player target = (Player) entity;
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);

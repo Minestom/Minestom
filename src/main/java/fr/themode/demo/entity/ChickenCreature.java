@@ -4,19 +4,11 @@ import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.EntityType;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.entity.pathfinding.EntityPathFinder;
 import fr.themode.minestom.entity.vehicle.PlayerVehicleInformation;
-import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
 
-import java.util.LinkedList;
-
 public class ChickenCreature extends EntityCreature {
-
-    private EntityPathFinder pathFinder = new EntityPathFinder(this);
-    private LinkedList<BlockPosition> blockPositions;
-    private Position targetPosition;
 
     public ChickenCreature(Position defaultPosition) {
         super(EntityType.CHICKEN, defaultPosition);
@@ -29,8 +21,7 @@ public class ChickenCreature extends EntityCreature {
 
     @Override
     public void spawn() {
-        //Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
-        //moveTo(player.getPosition().add(2, 0, 2));
+
     }
 
     @Override
@@ -95,34 +86,7 @@ public class ChickenCreature extends EntityCreature {
             //move(randomX * speed, 0, randomZ * speed, true);
         }
 
-        if (blockPositions != null) {
-            if (targetPosition != null) {
-                float distance = getPosition().getDistance(targetPosition);
-                if (distance < 0.2f) {
-                    setNextPathPosition();
-                    System.out.println("END TARGET");
-                } else {
-                    moveTowards(targetPosition, speed);
-                    System.out.println("MOVE TOWARD " + targetPosition);
-                }
-            }
-        }
-    }
-
-    private void setNextPathPosition() {
-        BlockPosition blockPosition = blockPositions.pollFirst();
-
-        if (blockPosition == null) {
-            this.blockPositions = null;
-            this.targetPosition = null;
-            return;
-        }
-
-        this.targetPosition = blockPosition.toPosition();
-    }
-
-    private void moveTo(Position position) {
-        this.blockPositions = pathFinder.getPath(position);
-        setNextPathPosition();
+        //Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
+        //moveTo(player.getPosition().clone().add(2, 0, 2));
     }
 }

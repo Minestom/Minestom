@@ -44,10 +44,14 @@ public class BoundingBox {
         return checkX && checkY && checkZ;
     }
 
+    public boolean intersect(float x, float y, float z) {
+        return (x >= getMinX() && x <= getMaxX()) &&
+                (y >= getMinY() && y <= getMaxY()) &&
+                (z >= getMinZ() && z <= getMaxZ());
+    }
+
     public boolean intersect(Position position) {
-        return (position.getX() >= getMinX() && position.getX() <= getMaxX()) &&
-                (position.getY() >= getMinY() && position.getY() <= getMaxY()) &&
-                (position.getZ() >= getMinZ() && position.getZ() <= getMaxZ());
+        return intersect(position.getX(), position.getY(), position.getZ());
     }
 
     public BoundingBox expand(float x, float y, float z) {

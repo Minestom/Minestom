@@ -10,6 +10,12 @@ public class BlockPosition {
         this.z = z;
     }
 
+    public BlockPosition(float x, float y, float z) {
+        this.x = (int) x;
+        this.y = (int) y;
+        this.z = (int) z;
+    }
+
     public BlockPosition add(int x, int y, int z) {
         this.x += x;
         this.y += y;

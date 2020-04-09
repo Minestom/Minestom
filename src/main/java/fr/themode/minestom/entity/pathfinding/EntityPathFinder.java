@@ -1,13 +1,19 @@
 package fr.themode.minestom.entity.pathfinding;
 
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Position;
-import net.tofweb.starlite.*;
+import fr.themode.minestom.utils.thread.MinestomThread;
 
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public class EntityPathFinder {
+
+    private ExecutorService pathfindingPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES_PATHFINDING, "Ms-EntitiesPathFinding");
+
 
     private Entity entity;
 
@@ -15,43 +21,23 @@ public class EntityPathFinder {
         this.entity = entity;
     }
 
-    public LinkedList<BlockPosition> getPath2(Position target) {
-        BlockPosition entityPosition = entity.getPosition().toBlockPosition();
-        BlockPosition targetPosition = target.toBlockPosition();
+    public void getPath(Position target, Consumer<LinkedList<BlockPosition>> consumer) {
+        pathfindingPool.execute(() -> {
+            LinkedList<BlockPosition> blockPositions = new LinkedList<>();
 
-        LinkedList<BlockPosition> blockPositions = new LinkedList<>();
+            JPS jps = new JPS(entity.getInstance(), entity.getPosition(), target);
 
-        CellSpace cellSpace = new CellSpace();
-        cellSpace.setGoalCell(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
-        cellSpace.setStartCell(entityPosition.getX(), entityPosition.getY(), entityPosition.getZ());
+            boolean first = true;
+            for (Position position : jps.getPath()) {
+                if (first) {
+                    first = false;
+                    continue;
+                }
+                blockPositions.add(position.toBlockPosition());
+            }
 
-
-        CostBlockManager costBlockManager = new CostBlockManager(cellSpace);
-        // TODO add blocked cells
-
-
-        Pathfinder pathfinder = new Pathfinder(costBlockManager);
-
-        Path path = pathfinder.findPath();
-
-        for (Cell cell : path) {
-            blockPositions.add(new BlockPosition(cell.getX(), cell.getY(), cell.getZ()));
-        }
-
-        return blockPositions;
-    }
-
-    public LinkedList<BlockPosition> getPath(Position target) {
-        LinkedList<BlockPosition> blockPositions = new LinkedList<>();
-
-        JPS jps = new JPS(entity.getInstance(), entity.getPosition(), target);
-
-        for (Position position : jps.getPath()) {
-            blockPositions.add(position.toBlockPosition());
-        }
-
-        System.out.println("test: " + blockPositions.size());
-        return blockPositions;
+            consumer.accept(blockPositions);
+        });
     }
 
 }

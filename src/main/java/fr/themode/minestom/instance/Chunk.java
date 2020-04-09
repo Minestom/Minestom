@@ -163,7 +163,7 @@ public class Chunk implements Viewable {
     }
 
     private int getBlockValue(int index) {
-        return blocks.get(index);
+        return blocks.getOrDefault(index, 0);
     }
 
     public Data getData(byte x, byte y, byte z) {

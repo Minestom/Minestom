@@ -144,6 +144,10 @@ public abstract class Instance implements BlockModifier, DataContainer {
         return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
     }
 
+    public short getBlockId(float x, float y, float z) {
+        return getBlockId(Math.round(x), Math.round(y), Math.round(z));
+    }
+
     public short getBlockId(BlockPosition blockPosition) {
         return getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }

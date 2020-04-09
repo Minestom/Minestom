@@ -83,7 +83,7 @@ public class JPS {
         // returning if no path has been found
         if (!pathFound) {
             float duration = (System.nanoTime() - nsStart) / 1000000f;
-            System.out.println("TOOK " + duration + " ms not found!");
+            //System.out.println("TOOK " + duration + " ms not found!");
 
             return new Position[0];
         }
@@ -109,7 +109,7 @@ public class JPS {
 
         // outputting benchmark result
         float duration = (System.nanoTime() - nsStart) / 1000000f;
-        System.out.println("TOOK " + duration + " ms!");
+        //System.out.println("TOOK " + duration + " ms!");
 
         return Positions;
     }

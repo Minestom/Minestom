@@ -31,8 +31,8 @@ public abstract class LivingEntity extends Entity {
     private boolean activeHand;
     private boolean riptideSpinAttack;
 
-    public LivingEntity(int entityType, Position defaultPosition) {
-        super(entityType, defaultPosition);
+    public LivingEntity(int entityType, Position spawnPosition) {
+        super(entityType, spawnPosition);
         setupAttributes();
         setGravity(0.02f);
     }
