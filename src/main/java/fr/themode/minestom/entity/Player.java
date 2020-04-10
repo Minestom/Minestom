@@ -20,6 +20,8 @@ import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.scoreboard.BelowNameScoreboard;
 import fr.themode.minestom.scoreboard.Team;
+import fr.themode.minestom.sound.Sound;
+import fr.themode.minestom.sound.SoundCategory;
 import fr.themode.minestom.utils.ArrayUtils;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -365,10 +367,39 @@ public class Player extends LivingEntity {
         sendMessage(textObject.toJson());
     }
 
+    public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+        SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
+        soundEffectPacket.soundId = sound.getId();
+        soundEffectPacket.soundCategory = soundCategory;
+        soundEffectPacket.x = x;
+        soundEffectPacket.y = y;
+        soundEffectPacket.z = z;
+        soundEffectPacket.volume = volume;
+        soundEffectPacket.pitch = pitch;
+        playerConnection.sendPacket(soundEffectPacket);
+    }
+
+    public void stopSound() {
+        StopSoundPacket stopSoundPacket = new StopSoundPacket();
+        stopSoundPacket.flags = 0x00;
+        playerConnection.sendPacket(stopSoundPacket);
+    }
+
+    public void sendHeaderFooter(String header, String footer, char colorChar) {
+        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
+        playerListHeaderAndFooterPacket.emptyHeader = header == null;
+        playerListHeaderAndFooterPacket.emptyFooter = footer == null;
+
+        playerListHeaderAndFooterPacket.header = Chat.legacyText(header, colorChar).toJson().toString();
+        playerListHeaderAndFooterPacket.footer = Chat.legacyText(footer, colorChar).toJson().toString();
+
+        playerConnection.sendPacket(playerListHeaderAndFooterPacket);
+    }
+
     public void sendActionBarMessage(String message, char colorChar) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.legacyText(message, colorChar).toString();
+        titlePacket.actionBarText = Chat.legacyText(message, colorChar).toJson().toString();
         playerConnection.sendPacket(titlePacket);
     }
 

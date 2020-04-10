@@ -96,6 +96,8 @@ public class PlayerInit {
                 player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 66, 0));
 
+                player.sendHeaderFooter("Its the header", "Its the footer", '&');
+
             /*Random random = new Random();
             for (int i = 0; i < 50; i++) {
                 ChickenCreature chickenCreature = new ChickenCreature();
