@@ -7,6 +7,7 @@ import fr.themode.minestom.event.PlayerBlockInteractEvent;
 import fr.themode.minestom.event.PlayerBlockPlaceEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
@@ -60,7 +61,10 @@ public class BlockPlacementListener {
 
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled()) {
-                instance.setCustomBlock(blockPosition, "updatable"); // TODO set useItem's block instead
+                short id = (short) usedItem.getMaterialId();
+                System.out.println("id: " + id);
+                instance.setBlock(blockPosition, Block.REDSTONE_WIRE);
+                //instance.setCustomBlock(blockPosition, "updatable"); // TODO set useItem's block instead
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
 
                     StackingRule stackingRule = usedItem.getStackingRule();

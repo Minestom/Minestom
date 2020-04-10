@@ -16,6 +16,7 @@ import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.recipe.RecipeManager;
+import fr.themode.minestom.registry.RegistryMain;
 import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.timer.SchedulerManager;
 import fr.themode.minestom.utils.Utils;
@@ -72,6 +73,9 @@ public class MinecraftServer {
         schedulerManager = new SchedulerManager();
 
         server = new Server();
+
+        // Registry
+        RegistryMain.registerBlocks();
 
         minecraftServer = new MinecraftServer();
 

@@ -1,6 +1,5 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
@@ -79,8 +78,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
+                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                //chickenCreature.setInstance(player.getInstance());
 
             });
 
@@ -93,7 +92,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 66, 0));
 
             /*Random random = new Random();
