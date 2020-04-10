@@ -1,8 +1,8 @@
 package fr.themode.minestom.registry;
 
-public class RegistryItem {
+public class RegistryEntityType {
 
     protected String name;
-    protected short itemId;
+    protected int entityId;
 
 }

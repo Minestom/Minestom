@@ -1,5 +1,6 @@
 package fr.themode.demo;
 
+import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
@@ -78,8 +79,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }
 
-                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                //chickenCreature.setInstance(player.getInstance());
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                chickenCreature.setInstance(player.getInstance());
 
             });
 
@@ -112,7 +113,7 @@ public class PlayerInit {
                     //itemEntity.remove();
                 }*/
 
-                ItemStack item = new ItemStack(1, (byte) 43);
+                ItemStack item = new ItemStack((short) 1, (byte) 43);
                 item.setDisplayName("LE NOM DE L'ITEM");
                 //item.getLore().add("lol le lore");
                 player.getInventory().addItemStack(item);
@@ -125,7 +126,7 @@ public class PlayerInit {
 
                 player.openInventory(inventory);
 
-                player.getInventory().addItemStack(new ItemStack(1, (byte) 100));
+                player.getInventory().addItemStack(new ItemStack((short) 1, (byte) 100));
 
             /*TeamManager teamManager = Main.getTeamManager();
             Team team = teamManager.createTeam(getUsername());

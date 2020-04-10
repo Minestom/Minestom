@@ -76,6 +76,8 @@ public class MinecraftServer {
 
         // Registry
         RegistryMain.registerBlocks();
+        RegistryMain.registerItems();
+        RegistryMain.registerEntities();
 
         minecraftServer = new MinecraftServer();
 

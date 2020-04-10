@@ -9,7 +9,7 @@ import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.utils.buffer.BufferWrapper;
 import fr.themode.minestom.utils.consumer.StringConsumer;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -17,11 +17,7 @@ public class Utils {
 
     public static void writeString(Packet packet, String value) {
         byte[] bytes = new byte[0];
-        try {
-            bytes = value.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        bytes = value.getBytes(StandardCharsets.UTF_8);
         if (bytes.length > 32767) {
             System.out.println("String too big (was " + value.length() + " bytes encoded, max " + 32767 + ")");
         } else {
@@ -34,12 +30,7 @@ public class Utils {
         ConnectionUtils.readVarInt(client, length -> {
             int stringLength = Utils.lengthVarInt(length) + length;
             client.readBytes(length, bytes -> {
-                try {
-                    consumer.accept(new String(bytes, "UTF-8"), stringLength);
-                } catch (UnsupportedEncodingException e) {
-                    consumer.accept(null, stringLength);
-                    e.printStackTrace();
-                }
+                consumer.accept(new String(bytes, StandardCharsets.UTF_8), stringLength);
             });
         });
     }
@@ -48,12 +39,7 @@ public class Utils {
 
         client.readShort(length -> {
             client.readBytes(length, bytes -> {
-                try {
-                    consumer.accept(new String(bytes, "UTF-8"), length);
-                } catch (UnsupportedEncodingException e) {
-                    consumer.accept(null, length);
-                    e.printStackTrace();
-                }
+                consumer.accept(new String(bytes, StandardCharsets.UTF_8), length);
             });
         });
     }
@@ -184,7 +170,7 @@ public class Utils {
                 }
 
                 reader.readByte(count -> {
-                    ItemStack item = new ItemStack(id, count);
+                    ItemStack item = new ItemStack((short) id, count);
                     reader.readByte(nbt -> { // Should be compound start (0x0A) or 0 if there isn't NBT data
                         if (nbt == 0x00) {
                             consumer.accept(item);

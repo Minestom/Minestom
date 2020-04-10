@@ -8,10 +8,10 @@ import java.util.ArrayList;
 
 public class ItemStack implements DataContainer {
 
-    public static final ItemStack AIR_ITEM = new ItemStack(0, (byte) 0);
+    public static final ItemStack AIR_ITEM = new ItemStack((short) 0, (byte) 0);
     private static StackingRule defaultStackingRule;
 
-    private int materialId;
+    private short materialId;
 
     {
         if (defaultStackingRule == null)
@@ -28,7 +28,7 @@ public class ItemStack implements DataContainer {
     private StackingRule stackingRule;
     private Data data;
 
-    public ItemStack(int materialId, byte amount, short damage) {
+    public ItemStack(short materialId, byte amount, short damage) {
         this.materialId = materialId;
         this.amount = amount;
         this.damage = damage;
@@ -37,8 +37,8 @@ public class ItemStack implements DataContainer {
         this.stackingRule = defaultStackingRule;
     }
 
-    public ItemStack(int id, byte amount) {
-        this(id, amount, (short) 0);
+    public ItemStack(short materialId, byte amount) {
+        this(materialId, amount, (short) 0);
     }
 
     public ItemStack(Material material, byte amount) {
@@ -72,7 +72,7 @@ public class ItemStack implements DataContainer {
         return damage;
     }
 
-    public int getMaterialId() {
+    public short getMaterialId() {
         return materialId;
     }
 

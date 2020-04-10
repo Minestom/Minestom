@@ -83,7 +83,7 @@ public class Player extends LivingEntity {
     private PlayerVehicleInformation vehicleInformation;
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
-        super(100);
+        super(EntityType.PLAYER.getId());
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
@@ -872,13 +872,13 @@ public class Player extends LivingEntity {
 
     public enum MainHand {
         LEFT,
-        RIGHT;
+        RIGHT
     }
 
     public enum ChatMode {
         ENABLED,
         COMMANDS_ONLY,
-        HIDDEN;
+        HIDDEN
     }
 
     public class PlayerSettings {
