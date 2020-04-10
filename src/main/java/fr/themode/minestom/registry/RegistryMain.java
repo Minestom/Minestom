@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import fr.themode.minestom.entity.EntityType;
 import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.item.Material;
+import fr.themode.minestom.sound.Sound;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,14 +22,17 @@ public class RegistryMain {
     public static final String BLOCKS_PATH = "registry/blocks.json";
     public static final String ITEMS_PATH = "registry/registries.json";
     public static final String ENTITIES_PATH = "registry/registries.json";
+    public static final String SOUNDS_PATH = "registry/registries.json";
 
     public static void main(String[] args) {
         List<RegistryBlock> blocks = parseBlocks(BLOCKS_PATH);
         List<RegistryItem> items = parseItems(ITEMS_PATH);
         List<RegistryEntityType> entities = parseEntities(ENTITIES_PATH);
+        List<RegistrySound> sounds = parseSounds(SOUNDS_PATH);
         //writeBlocksClass(blocks);
         //writeItemsClass(items);
-        writeEntitiesClass(entities);
+        //writeEntitiesClass(entities);
+        writeSoundsClass(sounds);
     }
 
     public static void registerBlocks() {
@@ -45,7 +49,6 @@ public class RegistryMain {
                 block.addBlockAlternative(id, properties);
             }
         }
-
     }
 
     public static void registerItems() {
@@ -56,31 +59,33 @@ public class RegistryMain {
             try {
                 Block block = Block.valueOf(registryItem.name);
                 material.setIdentifier(registryItem.itemId, block);
-                //System.out.println("REGISTERS: "+material+" : "+block);
             } catch (IllegalArgumentException e) {
                 material.setIdentifier(registryItem.itemId, null);
             }
         }
-
     }
 
     public static void registerEntities() {
-        List<RegistryEntityType> registryEntityTypes = parseEntities(ITEMS_PATH);
+        List<RegistryEntityType> registryEntityTypes = parseEntities(ENTITIES_PATH);
+
         for (RegistryEntityType registryEntityType : registryEntityTypes) {
             EntityType entity = EntityType.valueOf(registryEntityType.name);
             entity.setIdentifier(registryEntityType.entityId);
         }
+    }
 
+    public static void registerSounds() {
+        List<RegistrySound> registrySounds = parseSounds(SOUNDS_PATH);
+
+        for (RegistrySound registrySound : registrySounds) {
+            Sound sound = Sound.valueOf(registrySound.name);
+            sound.setIdentifier(registrySound.id);
+        }
     }
 
     private static void writeBlocksClass(List<RegistryBlock> blocks) {
         for (RegistryBlock registryBlock : blocks) {
-            String line = "";
-            // Add block name as var name
-            String name = registryBlock.name.toUpperCase().replace("MINECRAFT:", "");
-            line += name;
-            line += ",";
-
+            String line = registryBlock.name + ",";
             System.out.println(line);
 
         }
@@ -96,6 +101,13 @@ public class RegistryMain {
     private static void writeEntitiesClass(List<RegistryEntityType> entities) {
         for (RegistryEntityType registryEntityType : entities) {
             String line = registryEntityType.name + ",";
+            System.out.println(line);
+        }
+    }
+
+    private static void writeSoundsClass(List<RegistrySound> sounds) {
+        for (RegistrySound registrySound : sounds) {
+            String line = registrySound.name + ",";
             System.out.println(line);
         }
     }
@@ -228,6 +240,36 @@ public class RegistryMain {
         }
 
         return registryEntityTypes;
+    }
+
+    private static List<RegistrySound> parseSounds(String path) {
+        List<RegistrySound> registrySounds = new ArrayList<>();
+
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
+
+        JsonObject itemsObject = obj.getAsJsonObject("minecraft:sound_event");
+        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
+
+        Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
+            RegistrySound registrySound = new RegistrySound();
+            registrySounds.add(registrySound);
+            String item = entryEntry.getKey();
+            String itemName = item.toUpperCase().replace("MINECRAFT:", "").replace(".", "_");
+            registrySound.name = itemName;
+            short id = entryEntry.getValue().getAsJsonObject().get("protocol_id").getAsShort();
+            registrySound.id = id;
+        }
+
+        return registrySounds;
     }
 
 }
