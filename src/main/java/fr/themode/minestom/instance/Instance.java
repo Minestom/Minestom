@@ -7,6 +7,7 @@ import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.entity.*;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
+import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.PacketWriterUtils;
@@ -40,6 +41,8 @@ public abstract class Instance implements BlockModifier, DataContainer {
     protected Instance(UUID uniqueId) {
         this.uniqueId = uniqueId;
     }
+
+    public abstract void refreshBlockId(int x, int y, int z, short blockId);
 
     // Used to call BlockBreakEvent and sending particle packet if true
     public abstract void breakBlock(Player player, BlockPosition blockPosition);
@@ -127,6 +130,10 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public Set<Entity> getChunkEntities(Chunk chunk) {
         return Collections.unmodifiableSet(getEntitiesInChunk(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ())));
+    }
+
+    public void refreshBlockId(int x, int y, int z, Block block) {
+        refreshBlockId(x, y, z, block.getBlockId());
     }
 
     public void loadChunk(int chunkX, int chunkZ) {

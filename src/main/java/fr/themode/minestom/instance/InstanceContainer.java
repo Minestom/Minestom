@@ -80,6 +80,22 @@ public class InstanceContainer extends Instance {
         }
     }
 
+    @Override
+    public void refreshBlockId(int x, int y, int z, short blockId) {
+        Chunk chunk = getChunkAt(x, z);
+        synchronized (chunk) {
+            byte chunkX = (byte) (x % 16);
+            byte chunkY = (byte) y;
+            byte chunkZ = (byte) (z % 16);
+            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+
+            chunk.refreshBlockValue(index, blockId);
+
+            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
+            sendBlockChange(chunk, x, y, z, blockId);
+        }
+    }
+
     private void callBlockDestroy(Chunk chunk, int index, int x, int y, int z) {
         CustomBlock previousBlock = chunk.getCustomBlock(index);
         if (previousBlock != null) {

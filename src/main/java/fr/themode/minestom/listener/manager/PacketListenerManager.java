@@ -34,6 +34,7 @@ public class PacketListenerManager {
         addListener(ClientSettingsPacket.class, SettingsListener::listener);
         addListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
         addListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
+        addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {

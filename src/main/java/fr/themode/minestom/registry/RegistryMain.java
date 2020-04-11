@@ -60,7 +60,14 @@ public class RegistryMain {
                 Block block = Block.valueOf(registryItem.name);
                 material.setIdentifier(registryItem.itemId, block);
             } catch (IllegalArgumentException e) {
-                material.setIdentifier(registryItem.itemId, null);
+                switch (material) {
+                    case REDSTONE:
+                        material.setIdentifier(registryItem.itemId, Block.REDSTONE_WIRE);
+                        break;
+                    default:
+                        material.setIdentifier(registryItem.itemId, null);
+                        break;
+                }
             }
         }
     }

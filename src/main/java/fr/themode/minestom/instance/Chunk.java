@@ -89,12 +89,11 @@ public class Chunk implements Viewable {
         setBlock(index, customBlock.getType(), customBlock.getId(), data, updateConsumer);
     }
 
-    private void setBlock(int index, short blockType, short customId, Data data, UpdateConsumer updateConsumer) {
+    private void setBlock(int index, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
 
-        if (blockType != 0
-                || (blockType == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
-            int value = (blockType << 16 | customId & 0xFFFF); // Merge blockType and customId to one unique Integer (16/16 bits)
-            this.blocks.put(index, value);
+        if (blockId != 0
+                || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
+            refreshBlockValue(index, blockId, customId);
         } else {
             // Block has been deleted, clear cache and return
 
@@ -127,7 +126,7 @@ public class Chunk implements Viewable {
             this.updatableBlocksLastUpdate.remove(index);
         }
 
-        if (isBlockEntity(blockType)) {
+        if (isBlockEntity(blockId)) {
             this.blockEntities.add(index);
         } else {
             this.blockEntities.remove(index);
@@ -160,6 +159,23 @@ public class Chunk implements Viewable {
         int value = getBlockValue(index);
         short id = (short) (value & 0xffff);
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
+    }
+
+    protected void refreshBlockValue(int index, short blockId, short customId) {
+        int value = createBlockValue(blockId, customId);
+        this.blocks.put(index, value);
+    }
+
+    protected void refreshBlockValue(int index, short blockId) {
+        CustomBlock customBlock = getCustomBlock(index);
+        short customBlockId = customBlock == null ? 0 : customBlock.getId();
+        refreshBlockValue(index, blockId, customBlockId);
+    }
+
+    public int createBlockValue(short blockId, short customId) {
+        // Merge blockType and customId to one unique Integer (16/16 bits)
+        int value = (blockId << 16 | customId & 0xFFFF);
+        return value;
     }
 
     private int getBlockValue(int index) {

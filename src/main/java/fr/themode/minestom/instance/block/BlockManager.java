@@ -1,5 +1,6 @@
 package fr.themode.minestom.instance.block;
 
+import fr.themode.minestom.instance.block.rule.BlockPlacementRule;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
@@ -11,11 +12,17 @@ public class BlockManager {
     private Short2ObjectMap<CustomBlock> blocksInternalId = new Short2ObjectOpenHashMap<>();
     private Map<String, CustomBlock> blocksId = new HashMap<>();
 
+    private Map<Block, BlockPlacementRule> placementRules = new HashMap<>();
+
     public void registerCustomBlock(CustomBlock customBlock) {
         String identifier = customBlock.getIdentifier();
         short id = customBlock.getId();
         this.blocksInternalId.put(id, customBlock);
         this.blocksId.put(identifier, customBlock);
+    }
+
+    public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
+        this.placementRules.put(blockPlacementRule.getBlock(), blockPlacementRule);
     }
 
     public CustomBlock getBlock(String identifier) {
