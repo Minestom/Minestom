@@ -7,6 +7,7 @@ import fr.themode.minestom.event.PlayerBlockBreakEvent;
 import fr.themode.minestom.instance.batch.BlockBatch;
 import fr.themode.minestom.instance.batch.ChunkBatch;
 import fr.themode.minestom.instance.block.CustomBlock;
+import fr.themode.minestom.instance.block.rule.BlockPlacementRule;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
@@ -52,7 +53,13 @@ public class InstanceContainer extends Instance {
 
             callBlockDestroy(chunk, index, x, y, z);
 
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+
+            blockId = executeBlockPlacementRule(blockId, blockPosition);
+
             chunk.UNSAFE_setBlock(index, blockId, data);
+
+            executeNeighboursBlockPlacementRule(blockId, blockPosition);
 
             // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
@@ -70,12 +77,18 @@ public class InstanceContainer extends Instance {
 
             callBlockDestroy(chunk, index, x, y, z);
 
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+
+            blockId = executeBlockPlacementRule(blockId, blockPosition);
+
             chunk.UNSAFE_setCustomBlock(index, blockId, data);
-            short id = BLOCK_MANAGER.getBlock(blockId).getType();
+
+            executeNeighboursBlockPlacementRule(blockId, blockPosition);
 
             callBlockPlace(chunk, index, x, y, z);
 
             // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
+            short id = BLOCK_MANAGER.getBlock(blockId).getType();
             sendBlockChange(chunk, x, y, z, id);
         }
     }
@@ -108,6 +121,38 @@ public class InstanceContainer extends Instance {
         CustomBlock actualBlock = chunk.getCustomBlock(index);
         Data previousData = chunk.getData(index);
         actualBlock.onPlace(this, new BlockPosition(x, y, z), previousData);
+    }
+
+    private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
+
+        BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
+        if (blockPlacementRule != null) {
+            return blockPlacementRule.blockRefresh(this, blockPosition);
+        }
+        return blockId;
+    }
+
+    private void executeNeighboursBlockPlacementRule(short blockId, BlockPosition blockPosition) {
+        for (int offsetX = -1; offsetX < 2; offsetX++) {
+            for (int offsetY = -1; offsetY < 2; offsetY++) {
+                for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
+                    if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
+                        continue;
+                    int neighborX = blockPosition.getX() + offsetX;
+                    int neighborY = blockPosition.getY() + offsetY;
+                    int neighborZ = blockPosition.getZ() + offsetZ;
+                    short neighborId = getBlockId(neighborX, neighborY, neighborZ);
+                    BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
+                    if (neighborBlockPlacementRule != null) {
+                        short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
+                                new BlockPosition(neighborX, neighborY, neighborZ));
+                        if (neighborId != newNeighborId) {
+                            refreshBlockId(neighborX, neighborY, neighborZ, newNeighborId);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

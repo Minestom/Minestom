@@ -90,7 +90,6 @@ public class Chunk implements Viewable {
     }
 
     private void setBlock(int index, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
-
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
             refreshBlockValue(index, blockId, customId);

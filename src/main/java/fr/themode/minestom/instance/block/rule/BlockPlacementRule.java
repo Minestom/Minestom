@@ -12,9 +12,7 @@ public abstract class BlockPlacementRule {
         this.block = block;
     }
 
-    public abstract void onPlace(Instance instance, BlockPosition blockPosition);
-
-    public abstract void onNeighborPlace(Instance instance, int offsetX, int offsetY, int offsetZ);
+    public abstract short blockRefresh(Instance instance, BlockPosition blockPosition);
 
     public Block getBlock() {
         return block;

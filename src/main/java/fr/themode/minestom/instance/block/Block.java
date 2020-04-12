@@ -1,5 +1,7 @@
 package fr.themode.minestom.instance.block;
 
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -688,6 +690,12 @@ public enum Block {
     HONEY_BLOCK,
     HONEYCOMB_BLOCK;
 
+    private static Short2ObjectOpenHashMap<Block> blocksMap = new Short2ObjectOpenHashMap<>();
+
+    public static Block getBlockFromId(short blockId) {
+        return blocksMap.getOrDefault(blockId, AIR);
+    }
+
     private short blockId;
     private List<BlockAlternative> blockAlternatives = new ArrayList<>();
 
@@ -697,6 +705,7 @@ public enum Block {
 
     public void addBlockAlternative(short id, String... properties) {
         this.blockAlternatives.add(new BlockAlternative(id, properties));
+        blocksMap.put(id, this);
     }
 
     public short withProperties(String... properties) {
@@ -705,8 +714,8 @@ public enum Block {
                 return blockAlternative.id;
             }
         }
-        // No id found
-        return 0;
+        // No id found, return default
+        return blockId;
     }
 
     public short getBlockId() {
@@ -733,6 +742,14 @@ public enum Block {
 
         public String[] getProperties() {
             return properties;
+        }
+
+        @Override
+        public String toString() {
+            return "BlockAlternative{" +
+                    "id=" + id +
+                    ", properties=" + Arrays.toString(properties) +
+                    '}';
         }
     }
 }

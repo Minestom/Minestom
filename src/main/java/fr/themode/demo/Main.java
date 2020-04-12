@@ -7,6 +7,7 @@ import fr.themode.demo.commands.SimpleCommand;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.instance.block.BlockManager;
+import fr.themode.minestom.instance.block.rule.vanilla.RedstonePlacementRule;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.packet.server.play.DeclareRecipesPacket;
@@ -22,6 +23,8 @@ public class Main {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
         blockManager.registerCustomBlock(new UpdatableBlockDemo());
+
+        blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new HealthCommand());
