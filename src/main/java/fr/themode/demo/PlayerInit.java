@@ -1,7 +1,10 @@
 package fr.themode.demo;
 
+import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
+import fr.themode.minestom.benchmark.BenchmarkManager;
+import fr.themode.minestom.benchmark.ThreadResult;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.GameMode;
@@ -12,8 +15,14 @@ import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionManager;
+import fr.themode.minestom.timer.TaskRunnable;
+import fr.themode.minestom.utils.MathUtils;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
+import fr.themode.minestom.utils.time.TimeUnit;
+import fr.themode.minestom.utils.time.UpdateOption;
+
+import java.util.Map;
 
 public class PlayerInit {
 
@@ -37,6 +46,33 @@ public class PlayerInit {
 
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+        BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
+
+        MinecraftServer.getSchedulerManager().addRepeatingTask(new TaskRunnable() {
+            @Override
+            public void run() {
+                long ramUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                ramUsage /= 1e6; // To MB
+
+                String benchmarkMessage = "";
+                for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
+                    String name = resultEntry.getKey();
+                    ThreadResult result = resultEntry.getValue();
+                    benchmarkMessage += name;
+                    benchmarkMessage += ": ";
+                    benchmarkMessage += MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
+                    benchmarkMessage += MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
+                    benchmarkMessage += MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+                    benchmarkMessage += "\n";
+                }
+                if (benchmarkMessage.length() > 0)
+                    System.out.println(benchmarkMessage);
+
+                for (Player player : connectionManager.getOnlinePlayers()) {
+                    player.sendHeaderFooter("RAM USAGE: " + ramUsage + " MB", "", '&');
+                }
+            }
+        }, new UpdateOption(5, TimeUnit.TICK));
 
         connectionManager.setResponseDataConsumer(responseData -> {
             responseData.setName("1.15.2");
@@ -78,8 +114,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }
 
-                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                //chickenCreature.setInstance(player.getInstance());
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                chickenCreature.setInstance(player.getInstance());
 
             });
 

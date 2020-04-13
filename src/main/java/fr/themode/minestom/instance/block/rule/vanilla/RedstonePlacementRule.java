@@ -56,6 +56,8 @@ public class RedstonePlacementRule extends BlockPlacementRule {
             north = "side";
         }
 
+        // TODO power
+
 
         return Block.REDSTONE_WIRE.withProperties(east, north, power, south, west);
     }

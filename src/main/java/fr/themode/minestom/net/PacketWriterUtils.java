@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 public class PacketWriterUtils {
 
-    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, "Ms-PacketWriterPool");
+    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, MinecraftServer.THREAD_NAME_PACKET_WRITER);
 
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<Packet> consumer) {
         batchesPool.execute(() -> {

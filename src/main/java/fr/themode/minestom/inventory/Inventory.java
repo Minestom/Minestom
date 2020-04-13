@@ -97,7 +97,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     public void update() {
         WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
-        getViewers().forEach(p -> p.getPlayerConnection().sendPacket(windowItemsPacket));
+        sendPacketToViewers(windowItemsPacket);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             setSlotPacket.windowId = 1;
             setSlotPacket.slot = (short) slot;
             setSlotPacket.itemStack = itemStack;
-            getViewers().forEach(player -> player.getPlayerConnection().sendPacket(setSlotPacket));
+            sendPacketToViewers(setSlotPacket);
         }
     }
 

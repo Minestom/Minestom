@@ -13,6 +13,8 @@ import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.packet.server.play.DeclareRecipesPacket;
 import fr.themode.minestom.recipe.RecipeManager;
 import fr.themode.minestom.recipe.ShapelessRecipe;
+import fr.themode.minestom.utils.time.TimeUnit;
+import fr.themode.minestom.utils.time.UpdateOption;
 
 
 public class Main {
@@ -38,6 +40,7 @@ public class Main {
         shapelessRecipe.addIngredient(ingredient);
         recipeManager.addRecipe(shapelessRecipe);
 
+        MinecraftServer.getBenchmarkManager().enable(new UpdateOption(2500, TimeUnit.MILLISECOND));
 
         PlayerInit.init();
 

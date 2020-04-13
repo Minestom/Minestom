@@ -18,8 +18,8 @@ public class EntityManager {
     private UpdateType updateType = UpdateType.PER_INSTANCE;
     private Set<Instance> instances = instanceManager.getInstances();
 
-    private ExecutorService entitiesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES, "Ms-EntitiesPool");
-    private ExecutorService playersPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PLAYERS_ENTITIES, "Ms-PlayersPool");
+    private ExecutorService entitiesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES, MinecraftServer.THREAD_NAME_ENTITIES);
+    private ExecutorService playersPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PLAYERS_ENTITIES, MinecraftServer.THREAD_NAME_PLAYERS_ENTITIES);
 
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
@@ -187,6 +187,6 @@ public class EntityManager {
         PER_CHUNK,
         PER_ENTITY_TYPE,
         PER_INSTANCE,
-        SINGLE_THREADED;
+        SINGLE_THREADED
     }
 }

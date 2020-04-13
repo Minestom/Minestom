@@ -59,9 +59,8 @@ public class InstanceContainer extends Instance {
 
             chunk.UNSAFE_setBlock(index, blockId, data);
 
-            executeNeighboursBlockPlacementRule(blockId, blockPosition);
+            executeNeighboursBlockPlacementRule(blockPosition);
 
-            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
         }
     }
@@ -83,11 +82,10 @@ public class InstanceContainer extends Instance {
 
             chunk.UNSAFE_setCustomBlock(index, blockId, data);
 
-            executeNeighboursBlockPlacementRule(blockId, blockPosition);
+            executeNeighboursBlockPlacementRule(blockPosition);
 
             callBlockPlace(chunk, index, x, y, z);
 
-            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             short id = BLOCK_MANAGER.getBlock(blockId).getType();
             sendBlockChange(chunk, x, y, z, id);
         }
@@ -132,7 +130,7 @@ public class InstanceContainer extends Instance {
         return blockId;
     }
 
-    private void executeNeighboursBlockPlacementRule(short blockId, BlockPosition blockPosition) {
+    private void executeNeighboursBlockPlacementRule(BlockPosition blockPosition) {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {

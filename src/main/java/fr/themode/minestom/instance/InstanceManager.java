@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 
 public class InstanceManager {
 
-    private ExecutorService blocksPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_UPDATE, "Ms-BlockUpdatePool");
+    private ExecutorService blocksPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_UPDATE, MinecraftServer.THREAD_NAME_BLOCK_UPDATE);
 
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
 

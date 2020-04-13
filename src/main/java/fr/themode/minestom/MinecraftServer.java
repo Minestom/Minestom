@@ -1,6 +1,7 @@
 package fr.themode.minestom;
 
 import com.github.simplenet.Server;
+import fr.themode.minestom.benchmark.BenchmarkManager;
 import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.data.DataManager;
 import fr.themode.minestom.entity.EntityManager;
@@ -23,15 +24,33 @@ import fr.themode.minestom.utils.Utils;
 
 public class MinecraftServer {
 
-    // Thread pools
+    // Threads
+    public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
+
+    public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
+
+    public static final String THREAD_NAME_IO = "Ms-IOPool";
     public static final int THREAD_COUNT_IO = 2;
+
+    public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
+
+    public static final String THREAD_NAME_BLOCK_UPDATE = "Ms-BlockUpdatePool";
     public static final int THREAD_COUNT_BLOCK_UPDATE = 2;
+
+    public static final String THREAD_NAME_ENTITIES = "Ms-EntitiesPool";
     public static final int THREAD_COUNT_ENTITIES = 2;
+
+    public static final String THREAD_NAME_ENTITIES_PATHFINDING = "Ms-EntitiesPathFinding";
     public static final int THREAD_COUNT_ENTITIES_PATHFINDING = 2;
+
+    public static final String THREAD_NAME_PLAYERS_ENTITIES = "Ms-PlayersPool";
     public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
-    public static final int THREAD_COUNT_SCHEDULER = 2;
+
+    public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
+    public static final int THREAD_COUNT_SCHEDULER = 1;
+
     // Config
     public static final int CHUNK_VIEW_DISTANCE = 5;
     public static final int ENTITY_VIEW_DISTANCE = 2;
@@ -55,6 +74,7 @@ public class MinecraftServer {
     private static DataManager dataManager;
     private static TeamManager teamManager;
     private static SchedulerManager schedulerManager;
+    private static BenchmarkManager benchmarkManager;
 
     private static MinecraftServer minecraftServer;
 
@@ -71,6 +91,7 @@ public class MinecraftServer {
         dataManager = new DataManager();
         teamManager = new TeamManager();
         schedulerManager = new SchedulerManager();
+        benchmarkManager = new BenchmarkManager();
 
         server = new Server();
 
@@ -123,6 +144,10 @@ public class MinecraftServer {
 
     public static SchedulerManager getSchedulerManager() {
         return schedulerManager;
+    }
+
+    public static BenchmarkManager getBenchmarkManager() {
+        return benchmarkManager;
     }
 
     public static ConnectionManager getConnectionManager() {
