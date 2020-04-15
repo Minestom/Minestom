@@ -74,6 +74,10 @@ public class BenchmarkManager {
         this.enabled = false;
     }
 
+    public long getUsedMemory() {
+        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+    }
+
     public Map<String, ThreadResult> getResultMap() {
         return Collections.unmodifiableMap(resultMap);
     }

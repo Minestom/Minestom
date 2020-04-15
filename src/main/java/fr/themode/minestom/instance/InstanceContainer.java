@@ -11,6 +11,8 @@ import fr.themode.minestom.instance.block.rule.BlockPlacementRule;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
+import fr.themode.minestom.particle.Particle;
+import fr.themode.minestom.particle.ParticleCreator;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.SerializerUtils;
@@ -165,23 +167,26 @@ public class InstanceContainer extends Instance {
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
-            // TODO blockbreak setBlock result
             int x = blockPosition.getX();
             int y = blockPosition.getY();
             int z = blockPosition.getZ();
-            setBlock(x, y, z, (short) 0);
-            ParticlePacket particlePacket = new ParticlePacket(); // TODO change to a proper particle API
-            particlePacket.particleId = 3; // Block particle
-            particlePacket.longDistance = false;
-            particlePacket.x = x + 0.5f;
-            particlePacket.y = y;
-            particlePacket.z = z + 0.5f;
-            particlePacket.offsetX = 0.4f;
-            particlePacket.offsetY = 0.5f;
-            particlePacket.offsetZ = 0.4f;
-            particlePacket.particleData = 0.3f;
-            particlePacket.particleCount = 125;
-            particlePacket.blockId = blockId;
+
+            // Break or change the broken block based on event result
+            short resultBlockId = blockBreakEvent.getResultBlock();
+            boolean custom = blockBreakEvent.isResultCustomBlock();
+            if (custom) {
+                setCustomBlock(x, y, z, resultBlockId);
+            } else {
+                setBlock(x, y, z, resultBlockId);
+            }
+
+            ParticlePacket particlePacket = ParticleCreator.createParticlePacket(Particle.BLOCK, false,
+                    x + 0.5f, y, z + 0.5f,
+                    0.4f, 0.5f, 0.4f,
+                    0.3f, 125, writer -> {
+                        writer.writeVarInt(blockId);
+                    });
+
             chunk.sendPacketToViewers(particlePacket);
         } else {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);

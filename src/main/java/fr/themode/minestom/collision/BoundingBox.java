@@ -25,7 +25,31 @@ public class BoundingBox {
                 (getMinZ() <= boundingBox.getMaxZ() && getMaxZ() >= boundingBox.getMinZ());
     }
 
+    // FIXME: seems to do not work properly
     public boolean intersect(BlockPosition blockPosition) {
+        final float x = 1.6f;
+        final float y = 1;
+        final float z = 1.6f;
+
+        float minX = blockPosition.getX() - (x / 2) + 0.5f;
+        float maxX = blockPosition.getX() + (x / 2) + 0.5f;
+
+        float minY = blockPosition.getY();
+        float maxY = blockPosition.getY() + y;
+
+        float minZ = blockPosition.getZ() - (z / 2) + 0.5f;
+        float maxZ = blockPosition.getZ() + (z / 2) + 0.5f;
+
+        if (getMinX() > maxX) return false;
+        if (getMaxX() < minX) return false;
+        if (getMinY() > maxY) return false;
+        if (getMaxY() < minY) return false;
+        if (getMinZ() > maxZ) return false;
+        return !(getMaxZ() < minZ);
+    }
+
+
+    /*public boolean intersect(BlockPosition blockPosition) {
         final float x = 1.6f;
         final float y = 1;
         final float z = 1.6f;
@@ -42,7 +66,7 @@ public class BoundingBox {
         boolean checkY = getMinY() + y < maxY && getMaxY() + y > minY;
         boolean checkZ = getMinZ() + z / 2 < maxZ && getMaxZ() - z / 2 > minZ;
         return checkX && checkY && checkZ;
-    }
+    }*/
 
     public boolean intersect(float x, float y, float z) {
         return (x >= getMinX() && x <= getMaxX()) &&

@@ -1,10 +1,8 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.benchmark.BenchmarkManager;
-import fr.themode.minestom.benchmark.ThreadResult;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.GameMode;
@@ -16,13 +14,12 @@ import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.timer.TaskRunnable;
-import fr.themode.minestom.utils.MathUtils;
 import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.utils.Vector;
 import fr.themode.minestom.utils.time.TimeUnit;
 import fr.themode.minestom.utils.time.UpdateOption;
 
-import java.util.Map;
+import java.util.UUID;
 
 public class PlayerInit {
 
@@ -51,10 +48,10 @@ public class PlayerInit {
         MinecraftServer.getSchedulerManager().addRepeatingTask(new TaskRunnable() {
             @Override
             public void run() {
-                long ramUsage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                ramUsage /= 1e6; // To MB
+                long ramUsage = benchmarkManager.getUsedMemory();
+                ramUsage /= 1e6; // bytes to MB
 
-                String benchmarkMessage = "";
+                /*String benchmarkMessage = "";
                 for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
                     String name = resultEntry.getKey();
                     ThreadResult result = resultEntry.getValue();
@@ -66,7 +63,7 @@ public class PlayerInit {
                     benchmarkMessage += "\n";
                 }
                 if (benchmarkMessage.length() > 0)
-                    System.out.println(benchmarkMessage);
+                    System.out.println(benchmarkMessage);*/
 
                 for (Player player : connectionManager.getOnlinePlayers()) {
                     player.sendHeaderFooter("RAM USAGE: " + ramUsage + " MB", "", '&');
@@ -74,12 +71,14 @@ public class PlayerInit {
             }
         }, new UpdateOption(5, TimeUnit.TICK));
 
-        connectionManager.setResponseDataConsumer(responseData -> {
+        connectionManager.setResponseDataConsumer((playerConnection, responseData) -> {
             responseData.setName("1.15.2");
             responseData.setProtocol(578);
             responseData.setMaxPlayer(100);
             responseData.setOnline(0);
-            responseData.setDescription("test");
+            responseData.addPlayer("A name", UUID.randomUUID());
+            responseData.addPlayer("Could be some message", UUID.randomUUID());
+            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
             responseData.setFavicon("data:image/png;base64,<data>");
         });
 
@@ -114,8 +113,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
+                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                //chickenCreature.setInstance(player.getInstance());
 
             });
 
@@ -128,7 +127,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 66, 0));
 
             /*Random random = new Random();
@@ -159,7 +158,7 @@ public class PlayerInit {
                 });
                 inventory.setItemStack(0, item.clone());
 
-                player.openInventory(inventory);
+                //player.openInventory(inventory);
 
                 player.getInventory().addItemStack(new ItemStack((short) 1, (byte) 100));
 

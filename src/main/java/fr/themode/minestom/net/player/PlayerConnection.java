@@ -6,6 +6,9 @@ import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.PacketUtils;
 
+import java.io.IOException;
+import java.net.SocketAddress;
+
 public class PlayerConnection {
 
     private Client client;
@@ -34,6 +37,15 @@ public class PlayerConnection {
 
     public void flush() {
         client.flush();
+    }
+
+    public SocketAddress getRemoteAddress() {
+        try {
+            return client.getChannel().getRemoteAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Client getClient() {

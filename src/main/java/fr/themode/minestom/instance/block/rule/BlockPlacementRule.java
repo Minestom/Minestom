@@ -6,15 +6,19 @@ import fr.themode.minestom.utils.BlockPosition;
 
 public abstract class BlockPlacementRule {
 
-    private Block block;
+    private short blockId;
+
+    public BlockPlacementRule(short blockId) {
+        this.blockId = blockId;
+    }
 
     public BlockPlacementRule(Block block) {
-        this.block = block;
+        this(block.getBlockId());
     }
 
     public abstract short blockRefresh(Instance instance, BlockPosition blockPosition);
 
-    public Block getBlock() {
-        return block;
+    public short getBlockId() {
+        return blockId;
     }
 }

@@ -226,10 +226,15 @@ public abstract class Entity implements Viewable, DataContainer {
                     boolean xAir = getInstance().getBlockId(xBlock) == Material.AIR.getId();
                     boolean yAir = getInstance().getBlockId(yBlock) == Material.AIR.getId();
                     boolean zAir = getInstance().getBlockId(zBlock) == Material.AIR.getId();
-                    System.out.println(xAir + " : " + yAir + " : " + zAir);
-                    newX = xAir ? newX : boundingBox.intersect(xBlock) ? Math.round(position.getX()) : newX;
-                    newY = yAir ? newY : boundingBox.intersect(yBlock) ? Math.round(position.getY()) : newY;
-                    newZ = zAir ? newZ : boundingBox.intersect(zBlock) ? Math.round(position.getZ()) : newZ;
+
+                    boolean xIntersect = boundingBox.intersect(xBlock);
+                    boolean yIntersect = boundingBox.intersect(yBlock);
+                    boolean zIntersect = boundingBox.intersect(zBlock);
+
+                    System.out.println(xIntersect + " : " + yIntersect + " : " + zIntersect);
+                    newX = xAir ? newX : xIntersect ? position.getX() : newX;
+                    newY = yAir ? newY : yIntersect ? position.getY() : newY;
+                    newZ = zAir ? newZ : zIntersect ? position.getZ() : newZ;
 
                     refreshPosition(newX, newY, newZ);
                     if (this instanceof ObjectEntity) {

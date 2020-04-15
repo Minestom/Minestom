@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import fr.themode.minestom.entity.EntityType;
 import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.item.Material;
+import fr.themode.minestom.particle.Particle;
 import fr.themode.minestom.sound.Sound;
 
 import java.io.BufferedReader;
@@ -23,16 +24,19 @@ public class RegistryMain {
     public static final String ITEMS_PATH = "registry/registries.json";
     public static final String ENTITIES_PATH = "registry/registries.json";
     public static final String SOUNDS_PATH = "registry/registries.json";
+    public static final String PARTICLES_PATH = "registry/registries.json";
 
     public static void main(String[] args) {
         List<RegistryBlock> blocks = parseBlocks(BLOCKS_PATH);
         List<RegistryItem> items = parseItems(ITEMS_PATH);
         List<RegistryEntityType> entities = parseEntities(ENTITIES_PATH);
         List<RegistrySound> sounds = parseSounds(SOUNDS_PATH);
+        List<RegistryParticle> particles = parseParticles(PARTICLES_PATH);
         //writeBlocksClass(blocks);
         //writeItemsClass(items);
         //writeEntitiesClass(entities);
-        writeSoundsClass(sounds);
+        //writeSoundsClass(sounds);
+        writeParticlesClass(particles);
     }
 
     public static void registerBlocks() {
@@ -90,6 +94,15 @@ public class RegistryMain {
         }
     }
 
+    public static void registerParticles() {
+        List<RegistryParticle> registryParticles = parseParticles(PARTICLES_PATH);
+
+        for (RegistryParticle registryParticle : registryParticles) {
+            Particle particle = Particle.valueOf(registryParticle.name);
+            particle.setIdentifier(registryParticle.id);
+        }
+    }
+
     private static void writeBlocksClass(List<RegistryBlock> blocks) {
         for (RegistryBlock registryBlock : blocks) {
             String line = registryBlock.name + ",";
@@ -115,6 +128,13 @@ public class RegistryMain {
     private static void writeSoundsClass(List<RegistrySound> sounds) {
         for (RegistrySound registrySound : sounds) {
             String line = registrySound.name + ",";
+            System.out.println(line);
+        }
+    }
+
+    private static void writeParticlesClass(List<RegistryParticle> particles) {
+        for (RegistryParticle registryParticle : particles) {
+            String line = registryParticle.name + ",";
             System.out.println(line);
         }
     }
@@ -277,6 +297,36 @@ public class RegistryMain {
         }
 
         return registrySounds;
+    }
+
+    private static List<RegistryParticle> parseParticles(String path) {
+        List<RegistryParticle> registryParticles = new ArrayList<>();
+
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
+
+        JsonObject itemsObject = obj.getAsJsonObject("minecraft:particle_type");
+        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
+
+        Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
+            RegistryParticle registryParticle = new RegistryParticle();
+            registryParticles.add(registryParticle);
+            String item = entryEntry.getKey();
+            String itemName = item.toUpperCase().replace("MINECRAFT:", "").replace(".", "_");
+            registryParticle.name = itemName;
+            short id = entryEntry.getValue().getAsJsonObject().get("protocol_id").getAsShort();
+            registryParticle.id = id;
+        }
+
+        return registryParticles;
     }
 
 }

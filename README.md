@@ -9,6 +9,8 @@ An example of how to use the Minestom library is available [here](src/main/java/
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
 The goal is to offer more performance for those who need it, Minecraft being single-threaded is the most important problem for them.
 
+In other words, it makes sense to use Minestom when it takes less time to implement everything you want than removing everything you don't need.
+
 # API features
 Even if we do not include anything by default in the game, we simplify the way you add them, here is a preview.
 

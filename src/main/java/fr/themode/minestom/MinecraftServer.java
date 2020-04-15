@@ -100,6 +100,7 @@ public class MinecraftServer {
         RegistryMain.registerItems();
         RegistryMain.registerEntities();
         RegistryMain.registerSounds();
+        RegistryMain.registerParticles();
 
         minecraftServer = new MinecraftServer();
 

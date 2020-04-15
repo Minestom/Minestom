@@ -13,6 +13,7 @@ public class NbtReaderUtils {
 
     public static void readItemStackNBT(PacketReader reader, Consumer<ItemStack> consumer, ItemStack item) {
         reader.readByte(typeId -> {
+            //System.out.println("DEBUG TYPE: " + typeId);
             switch (typeId) {
                 case 0x00: // TAG_End
                     // End of item NBT
@@ -36,6 +37,15 @@ public class NbtReaderUtils {
                     break;
                 case 0x03: // TAG_Int
                     reader.readShortSizedString((name, length) -> {
+
+                        // Damage
+                        if (name.equals("Damage")) {
+                            reader.readInteger(damage -> {
+                                //item.setDamage(damage);
+                                // TODO short vs int damage
+                                readItemStackNBT(reader, consumer, item);
+                            });
+                        }
 
                         // Unbreakable
                         if (name.equals("Unbreakable")) {
@@ -63,6 +73,14 @@ public class NbtReaderUtils {
 
                     break;
                 case 0x09: // TAG_List
+
+                    reader.readShortSizedString((name, length) -> {
+
+                        if (name.equals("StoredEnchantments")) {
+                            // TODO
+                        }
+
+                    });
 
                     break;
                 case 0x0A: // TAG_Compound

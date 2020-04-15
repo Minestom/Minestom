@@ -7,7 +7,6 @@ import fr.themode.minestom.utils.BlockPosition;
 
 public class RedstonePlacementRule extends BlockPlacementRule {
 
-
     public RedstonePlacementRule() {
         super(Block.REDSTONE_WIRE);
     }
@@ -17,6 +16,11 @@ public class RedstonePlacementRule extends BlockPlacementRule {
         int x = blockPosition.getX();
         int y = blockPosition.getY();
         int z = blockPosition.getZ();
+
+        if (isAir(instance, x, y - 1, z)) {
+            return Block.AIR.getBlockId();
+        }
+
 
         String east = "none";
         String north = "none";
@@ -65,6 +69,11 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     private boolean isRedstone(Instance instance, int x, int y, int z) {
         short blockId = instance.getBlockId(x, y, z);
         return Block.getBlockFromId(blockId) == Block.REDSTONE_WIRE;
+    }
+
+    private boolean isAir(Instance instance, int x, int y, int z) {
+        short blockId = instance.getBlockId(x, y, z);
+        return Block.getBlockFromId(blockId) == Block.AIR;
     }
 
 }

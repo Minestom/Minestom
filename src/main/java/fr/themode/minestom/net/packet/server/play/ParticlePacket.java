@@ -4,6 +4,8 @@ import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
 
+import java.util.function.Consumer;
+
 public class ParticlePacket implements ServerPacket {
 
     public int particleId;
@@ -13,7 +15,7 @@ public class ParticlePacket implements ServerPacket {
     public float particleData;
     public int particleCount;
 
-    public int blockId;
+    public Consumer<PacketWriter> dataConsumer;
 
     @Override
     public void write(PacketWriter writer) {
@@ -27,8 +29,10 @@ public class ParticlePacket implements ServerPacket {
         writer.writeFloat(offsetZ);
         writer.writeFloat(particleData);
         writer.writeInt(particleCount);
-        if (particleId == 3)
-            writer.writeVarInt(blockId);
+
+        if (dataConsumer != null) {
+            dataConsumer.accept(writer);
+        }
     }
 
     @Override

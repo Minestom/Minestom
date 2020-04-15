@@ -5,7 +5,8 @@ import fr.themode.minestom.net.packet.client.ClientPacket;
 
 public class ClientPacketsHandler {
 
-    private static final int SIZE = 0xFF;
+    // Max packet id
+    private static final int SIZE = 0x2E;
 
     private ConstructorAccess[] constructorAccesses = new ConstructorAccess[SIZE];
 

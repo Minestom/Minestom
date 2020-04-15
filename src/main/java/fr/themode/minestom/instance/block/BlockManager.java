@@ -12,7 +12,7 @@ public class BlockManager {
     private Short2ObjectMap<CustomBlock> blocksInternalId = new Short2ObjectOpenHashMap<>();
     private Map<String, CustomBlock> blocksId = new HashMap<>();
 
-    private Map<Block, BlockPlacementRule> placementRules = new HashMap<>();
+    private Short2ObjectOpenHashMap<BlockPlacementRule> placementRules = new Short2ObjectOpenHashMap<>();
 
     public void registerCustomBlock(CustomBlock customBlock) {
         String identifier = customBlock.getIdentifier();
@@ -22,12 +22,13 @@ public class BlockManager {
     }
 
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
-        this.placementRules.put(blockPlacementRule.getBlock(), blockPlacementRule);
+        this.placementRules.put(blockPlacementRule.getBlockId(), blockPlacementRule);
     }
 
     public BlockPlacementRule getBlockPlacementRule(short blockId) {
-        Block block = Block.getBlockFromId(blockId);
-        return this.placementRules.get(block);
+        Block block = Block.getBlockFromId(blockId); // Convert block alternative
+        blockId = block.getBlockId();
+        return this.placementRules.get(blockId);
     }
 
     public CustomBlock getBlock(String identifier) {
