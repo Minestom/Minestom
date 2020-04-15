@@ -71,7 +71,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         // TODO minecraft:brand plugin message
 
-        // TODO send server difficulty
+        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
+        serverDifficultyPacket.difficulty = MinecraftServer.getDifficulty();
+        serverDifficultyPacket.locked = true;
+        connection.sendPacket(serverDifficultyPacket);
 
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();

@@ -5,8 +5,8 @@ import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 
 public class ClientPluginMessagePacket extends ClientPlayPacket {
 
-    private String identifier;
-    private byte[] data;
+    public String identifier;
+    public byte[] data;
 
     @Override
     public void read(PacketReader reader, Runnable callback) {

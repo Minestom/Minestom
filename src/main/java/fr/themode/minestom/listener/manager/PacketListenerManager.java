@@ -35,6 +35,7 @@ public class PacketListenerManager {
         addListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
         addListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
         addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
+        addListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {

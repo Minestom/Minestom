@@ -15,12 +15,14 @@ import fr.themode.minestom.net.PacketProcessor;
 import fr.themode.minestom.net.packet.PacketReader;
 import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
 import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
+import fr.themode.minestom.net.packet.server.play.ServerDifficultyPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.recipe.RecipeManager;
 import fr.themode.minestom.registry.RegistryMain;
 import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.timer.SchedulerManager;
 import fr.themode.minestom.utils.Utils;
+import fr.themode.minestom.world.Difficulty;
 
 public class MinecraftServer {
 
@@ -60,12 +62,12 @@ public class MinecraftServer {
     public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
 
     // Networking
-    private static ConnectionManager connectionManager;
     private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
     private static Server server;
 
     // In-Game Manager
+    private static ConnectionManager connectionManager;
     private static InstanceManager instanceManager;
     private static BlockManager blockManager;
     private static EntityManager entityManager;
@@ -77,6 +79,9 @@ public class MinecraftServer {
     private static BenchmarkManager benchmarkManager;
 
     private static MinecraftServer minecraftServer;
+
+    // Data
+    private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
         connectionManager = new ConnectionManager();
@@ -105,6 +110,20 @@ public class MinecraftServer {
         minecraftServer = new MinecraftServer();
 
         return minecraftServer;
+    }
+
+    public static Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public static void setDifficulty(Difficulty difficulty) {
+        MinecraftServer.difficulty = difficulty;
+        for (Player player : connectionManager.getOnlinePlayers()) {
+            ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
+            serverDifficultyPacket.difficulty = difficulty;
+            serverDifficultyPacket.locked = true;
+            player.getPlayerConnection().sendPacket(serverDifficultyPacket);
+        }
     }
 
     public static PacketListenerManager getPacketListenerManager() {

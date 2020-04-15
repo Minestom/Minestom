@@ -12,7 +12,7 @@ public class ServerPacketIdentifier {
     public static final int STATISTICS = 0x07;
     public static final int ACKNOWLEDGE_PLAYER_DIGGING = 0x08;
     public static final int BLOCK_BREAK_ANIMATION = 0x09;
-    public static final int UPDATE_BLOCK_ENTITY = 0x0A;
+    public static final int BLOCK_ENTITY_DATA = 0x0A;
     public static final int BLOCK_ACTION = 0x0B;
     public static final int BLOCK_CHANGE = 0x0C;
     public static final int BOSS_BAR = 0x0D;
@@ -53,7 +53,7 @@ public class ServerPacketIdentifier {
     public static final int OPEN_SIGN_EDITOR = 0x30;
     public static final int CRAFT_RECIPE_RESPONSE = 0x31;
     public static final int PLAYER_ABILITIES = 0x32;
-    public static final int COMBAT_EVENT = 0x33;
+    public static final int COMBAT_EVENT = 0x33; // Do not seem to be used by the client
     public static final int PLAYER_INFO = 0x34;
     public static final int FACE_PLAYER = 0x35;
     public static final int PLAYER_POSITION_AND_LOOK = 0x36;
@@ -68,7 +68,7 @@ public class ServerPacketIdentifier {
     public static final int CAMERA = 0x3F;
     public static final int HELD_ITEM_CHANGE = 0x40;
     public static final int UPDATE_VIEW_POSITION = 0x41;
-    public static final int UPDATE_VIEW_DISTANCE = 0x42;
+    public static final int UPDATE_VIEW_DISTANCE = 0x42; // Not used by the dedicated server
     public static final int DISPLAY_SCOREBOARD = 0x43;
     public static final int ENTITY_METADATA = 0x44;
     public static final int ATTACH_ENTITY = 0x45;
