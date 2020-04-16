@@ -80,9 +80,9 @@ public class PacketWriter {
         }
     }
 
-    public void write(Consumer<Packet> consumer) {
+    public void write(Consumer<PacketWriter> consumer) {
         if (consumer != null)
-            consumer.accept(packet);
+            consumer.accept(this);
     }
 
     public void writeBufferAndFree(BufferWrapper buffer) {

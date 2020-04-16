@@ -1,12 +1,12 @@
 package fr.themode.minestom.entity;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.collision.BoundingBox;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.event.DeathEvent;
 import fr.themode.minestom.event.PickupItemEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.play.CollectItemPacket;
 import fr.themode.minestom.net.packet.server.play.EntityAnimationPacket;
 import fr.themode.minestom.net.packet.server.play.EntityPropertiesPacket;
@@ -76,11 +76,11 @@ public abstract class LivingEntity extends Entity {
     }
 
     @Override
-    public Consumer<Packet> getMetadataConsumer() {
+    public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
-            packet.putByte((byte) 7);
-            packet.putByte(METADATA_BYTE);
+            packet.writeByte((byte) 7);
+            packet.writeByte(METADATA_BYTE);
             byte activeHandValue = 0;
             if (isHandActive) {
                 activeHandValue += 1;
@@ -89,7 +89,7 @@ public abstract class LivingEntity extends Entity {
                 if (riptideSpinAttack)
                     activeHandValue += 4;
             }
-            packet.putByte(activeHandValue);
+            packet.writeByte(activeHandValue);
 
             // TODO all remaining metadata
         };

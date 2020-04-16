@@ -1,6 +1,5 @@
 package fr.themode.minestom.entity;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.collision.BoundingBox;
@@ -12,6 +11,7 @@ import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.item.Material;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.utils.*;
@@ -617,7 +617,7 @@ public abstract class Entity implements Viewable, DataContainer {
         return metaDataPacket;
     }
 
-    public Consumer<Packet> getMetadataConsumer() {
+    public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             fillMetadataIndex(packet, 0);
             fillMetadataIndex(packet, 1);
@@ -636,7 +636,7 @@ public abstract class Entity implements Viewable, DataContainer {
         sendPacketToViewersAndSelf(metaDataPacket);
     }
 
-    private void fillMetadataIndex(Packet packet, int index) {
+    private void fillMetadataIndex(PacketWriter packet, int index) {
         switch (index) {
             case 0:
                 fillStateMetadata(packet);
@@ -656,9 +656,9 @@ public abstract class Entity implements Viewable, DataContainer {
         }
     }
 
-    private void fillStateMetadata(Packet packet) {
-        packet.putByte((byte) 0);
-        packet.putByte(METADATA_BYTE);
+    private void fillStateMetadata(PacketWriter packet) {
+        packet.writeByte((byte) 0);
+        packet.writeByte(METADATA_BYTE);
         byte index0 = 0;
         if (onFire)
             index0 += 1;
@@ -676,31 +676,31 @@ public abstract class Entity implements Viewable, DataContainer {
             index0 += 64;
         if (usingElytra)
             index0 += 128;
-        packet.putByte(index0);
+        packet.writeByte(index0);
     }
 
-    private void fillAirTickMetaData(Packet packet) {
-        packet.putByte((byte) 1);
-        packet.putByte(METADATA_VARINT);
-        Utils.writeVarInt(packet, air);
+    private void fillAirTickMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 1);
+        packet.writeByte(METADATA_VARINT);
+        packet.writeVarInt(air);
     }
 
-    private void fillCustomNameMetaData(Packet packet) {
-        packet.putByte((byte) 2);
-        packet.putByte(METADATA_CHAT);
-        Utils.writeString(packet, customName);
+    private void fillCustomNameMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 2);
+        packet.writeByte(METADATA_CHAT);
+        packet.writeSizedString(customName);
     }
 
-    private void fillNoGravityMetaData(Packet packet) {
-        packet.putByte((byte) 5);
-        packet.putByte(METADATA_BOOLEAN);
-        packet.putBoolean(noGravity);
+    private void fillNoGravityMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 5);
+        packet.writeByte(METADATA_BOOLEAN);
+        packet.writeBoolean(noGravity);
     }
 
-    private void fillPoseMetaData(Packet packet) {
-        packet.putByte((byte) 6);
-        packet.putByte(METADATA_POSE);
-        Utils.writeVarInt(packet, pose.ordinal());
+    private void fillPoseMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 6);
+        packet.writeByte(METADATA_POSE);
+        packet.writeVarInt(pose.ordinal());
     }
 
     protected void sendSynchronization() {

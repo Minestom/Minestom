@@ -1,8 +1,7 @@
 package fr.themode.minestom.entity;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.utils.Utils;
+import fr.themode.minestom.net.packet.PacketWriter;
 
 import java.util.function.Consumer;
 
@@ -38,12 +37,12 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    public Consumer<Packet> getMetadataConsumer() {
+    public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
-            packet.putByte((byte) 7);
-            packet.putByte(METADATA_SLOT);
-            Utils.writeItemStack(packet, itemStack);
+            packet.writeByte((byte) 7);
+            packet.writeByte(METADATA_SLOT);
+            packet.writeItemStack(itemStack);
         };
     }
 

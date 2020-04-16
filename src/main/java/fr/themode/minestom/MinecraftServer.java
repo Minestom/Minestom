@@ -54,8 +54,8 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_SCHEDULER = 1;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 10;
-    public static final int ENTITY_VIEW_DISTANCE = 5;
+    public static final int CHUNK_VIEW_DISTANCE = 2;
+    public static final int ENTITY_VIEW_DISTANCE = 2;
     // Can be modified at performance cost when decreased
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / 20;

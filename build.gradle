@@ -24,6 +24,9 @@ dependencies {
 
     apt lombokDependency
 
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.48.Final'
+
     // https://mvnrepository.com/artifact/com.github.jhg023/SimpleNet
     implementation group: 'com.github.jhg023', name: 'SimpleNet', version: '1.6.5'
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
