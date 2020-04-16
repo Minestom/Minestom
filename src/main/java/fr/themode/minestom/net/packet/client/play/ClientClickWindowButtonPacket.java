@@ -9,11 +9,8 @@ public class ClientClickWindowButtonPacket extends ClientPlayPacket {
     public byte buttonId;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> windowId = value);
-        reader.readByte(value -> {
-            buttonId = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.windowId = reader.readByte();
+        this.buttonId = reader.readByte();
     }
 }

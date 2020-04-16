@@ -1,6 +1,5 @@
 package fr.themode.minestom.instance;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.data.Data;
@@ -14,6 +13,7 @@ import fr.themode.minestom.utils.PacketUtils;
 import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.time.CooldownUtils;
 import fr.themode.minestom.utils.time.UpdateOption;
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.*;
 
 import java.io.ByteArrayOutputStream;
@@ -56,7 +56,7 @@ public class Chunk implements Viewable {
 
     // Cache
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private Packet fullDataPacket;
+    private ByteBuf fullDataPacket;
 
     public Chunk(Biome biome, int chunkX, int chunkZ) {
         this.biome = biome;
@@ -234,7 +234,7 @@ public class Chunk implements Viewable {
         return chunkZ;
     }
 
-    public Packet getFullDataPacket() {
+    public ByteBuf getFullDataPacket() {
         return fullDataPacket;
     }
 
@@ -247,7 +247,7 @@ public class Chunk implements Viewable {
         return blockEntities;
     }
 
-    public void setFullDataPacket(Packet fullDataPacket) {
+    public void setFullDataPacket(ByteBuf fullDataPacket) {
         this.fullDataPacket = fullDataPacket;
         this.packetUpdated = true;
     }
@@ -302,9 +302,8 @@ public class Chunk implements Viewable {
 
     // Write the packet in the current thread
     public void refreshDataPacket() {
-        PacketUtils.writePacket(getFreshFullDataPacket(), packet -> {
-            setFullDataPacket(packet);
-        });
+        ByteBuf buffer = PacketUtils.writePacket(getFreshFullDataPacket());
+        setFullDataPacket(buffer);
     }
 
     @Override

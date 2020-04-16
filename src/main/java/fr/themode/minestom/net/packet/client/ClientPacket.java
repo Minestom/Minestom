@@ -4,6 +4,6 @@ import fr.themode.minestom.net.packet.PacketReader;
 
 public interface ClientPacket {
 
-    void read(PacketReader reader, Runnable callback);
+    void read(PacketReader reader);
 
 }

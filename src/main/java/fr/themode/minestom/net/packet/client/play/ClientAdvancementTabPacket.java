@@ -9,18 +9,12 @@ public class ClientAdvancementTabPacket extends ClientPlayPacket {
     public String tabIdentifier;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(i -> {
-            action = Action.values()[i];
-            if (action == Action.OPENED_TAB) {
-                reader.readSizedString((string, length) -> {
-                    tabIdentifier = string;
-                    callback.run();
-                });
-            } else {
-                callback.run();
-            }
-        });
+    public void read(PacketReader reader) {
+        this.action = Action.values()[reader.readVarInt()];
+
+        if (action == Action.OPENED_TAB) {
+            this.tabIdentifier = reader.readSizedString();
+        }
     }
 
     public enum Action {

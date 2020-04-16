@@ -612,7 +612,7 @@ public class Player extends LivingEntity {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = message;
         playerConnection.sendPacket(disconnectPacket);
-        playerConnection.getClient().close();
+        playerConnection.getChannel().close();
     }
 
     public LevelType getLevelType() {

@@ -10,12 +10,9 @@ public class ClientCraftRecipeRequest extends ClientPlayPacket {
     public boolean makeAll;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> windowId = value);
-        reader.readSizedString((string, length) -> recipe = string);
-        reader.readBoolean(value -> {
-            makeAll = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.windowId = reader.readByte();
+        this.recipe = reader.readSizedString();
+        this.makeAll = reader.readBoolean();
     }
 }

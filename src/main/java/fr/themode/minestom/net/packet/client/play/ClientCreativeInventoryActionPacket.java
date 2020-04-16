@@ -10,11 +10,8 @@ public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
     public ItemStack item;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readShort(value -> slot = value);
-        reader.readSlot(itemStack -> {
-            item = itemStack;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.slot = reader.readShort();
+        this.item = reader.readSlot();
     }
 }

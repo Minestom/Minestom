@@ -13,15 +13,12 @@ public class ClientUpdateSignPacket extends ClientPlayPacket {
     public String line4;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readBlockPosition(blockPosition1 -> blockPosition = blockPosition1);
-        reader.readSizedString((string, length) -> line1 = string);
-        reader.readSizedString((string, length) -> line2 = string);
-        reader.readSizedString((string, length) -> line3 = string);
-        reader.readSizedString((string, length) -> {
-            line4 = string;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.blockPosition = reader.readBlockPosition();
+        this.line1 = reader.readSizedString();
+        this.line2 = reader.readSizedString();
+        this.line3 = reader.readSizedString();
+        this.line4 = reader.readSizedString();
 
     }
 }

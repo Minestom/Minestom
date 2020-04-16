@@ -8,11 +8,8 @@ public class ClientResourcePackStatusPacket extends ClientPlayPacket {
     public Result result;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(i -> {
-            result = Result.values()[i];
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.result = Result.values()[reader.readVarInt()];
     }
 
     public enum Result {

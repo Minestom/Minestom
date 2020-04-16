@@ -1,6 +1,5 @@
 package fr.themode.minestom.instance;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
@@ -15,6 +14,7 @@ import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.Position;
+import io.netty.buffer.ByteBuf;
 
 import java.io.File;
 import java.util.*;
@@ -87,7 +87,7 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     //
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
-        Packet chunkData = chunk.getFullDataPacket();
+        ByteBuf chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
             player.getPlayerConnection().sendPacket(chunkData);
         });

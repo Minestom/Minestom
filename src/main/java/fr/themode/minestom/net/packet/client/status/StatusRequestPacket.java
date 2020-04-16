@@ -26,8 +26,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
+    public void read(PacketReader reader) {
         // Empty
-        callback.run();
     }
 }

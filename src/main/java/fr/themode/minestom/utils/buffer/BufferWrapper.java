@@ -38,6 +38,11 @@ public class BufferWrapper {
         size += Utils.lengthVarInt(n);
     }
 
+    public void putBytes(byte[] bytes) {
+        this.byteBuffer.put(bytes);
+        size += Byte.BYTES * bytes.length;
+    }
+
     public void free() {
         BufferUtils.giveBuffer(getByteBuffer());
     }

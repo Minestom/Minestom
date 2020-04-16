@@ -19,31 +19,23 @@ public class ClientRecipeBookData extends ClientPlayPacket {
     public boolean smokingRecipeFilterActive;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(id -> {
-            this.type = id;
+    public void read(PacketReader reader) {
+        this.type = reader.readVarInt();
 
-            switch (id) {
-                case 0:
-                    reader.readSizedString((string, length) -> {
-                        callback.run();
-                    });
-                    break;
-                case 1:
-                    reader.readBoolean(value -> craftingRecipeBookOpen = value);
-                    reader.readBoolean(value -> craftingRecipeFilterActive = value);
-                    reader.readBoolean(value -> smeltingRecipeBookOpen = value);
-                    reader.readBoolean(value -> smeltingRecipeFilterActive = value);
-                    reader.readBoolean(value -> blastingRecipeBookOpen = value);
-                    reader.readBoolean(value -> blastingRecipeFilterActive = value);
-                    reader.readBoolean(value -> smokingRecipeBookOpen = value);
-                    reader.readBoolean(value -> {
-                        smokingRecipeFilterActive = value;
-                        callback.run();
-                    });
-                    break;
-            }
-
-        });
+        switch (type) {
+            case 0:
+                this.recipeId = reader.readSizedString();
+                break;
+            case 1:
+                this.craftingRecipeBookOpen = reader.readBoolean();
+                this.craftingRecipeFilterActive = reader.readBoolean();
+                this.smeltingRecipeBookOpen = reader.readBoolean();
+                this.smeltingRecipeFilterActive = reader.readBoolean();
+                this.blastingRecipeBookOpen = reader.readBoolean();
+                this.blastingRecipeFilterActive = reader.readBoolean();
+                this.smokingRecipeBookOpen = reader.readBoolean();
+                this.smokingRecipeFilterActive = reader.readBoolean();
+                break;
+        }
     }
 }

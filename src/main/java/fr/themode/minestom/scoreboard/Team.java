@@ -1,10 +1,10 @@
 package fr.themode.minestom.scoreboard;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.chat.ChatColor;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.server.play.TeamsPacket;
 import fr.themode.minestom.utils.PacketUtils;
+import io.netty.buffer.ByteBuf;
 
 import java.util.Collections;
 import java.util.Set;
@@ -24,7 +24,7 @@ public class Team {
 
     private TeamsPacket teamsCreationPacket;
 
-    private Packet teamsDestroyPacket;
+    private ByteBuf teamsDestroyPacket;
 
     protected Team(String teamName) {
         this.teamName = teamName;
@@ -44,7 +44,7 @@ public class Team {
         TeamsPacket destroyPacket = new TeamsPacket();
         destroyPacket.teamName = teamName;
         destroyPacket.action = TeamsPacket.Action.REMOVE_TEAM;
-        PacketUtils.writePacket(destroyPacket, packet -> teamsDestroyPacket = packet); // Directly write packet since it will not change
+        teamsDestroyPacket = PacketUtils.writePacket(destroyPacket); // Directly write packet since it will not change
     }
 
     public void addPlayer(Player player) {
@@ -155,6 +155,7 @@ public class Team {
         updatePacket.teamColor = teamColor.getId();
         updatePacket.teamPrefix = prefix;
         updatePacket.teamSuffix = suffix;
-        PacketUtils.writePacket(updatePacket, packet -> players.forEach(p -> p.getPlayerConnection().sendPacket(packet)));
+        ByteBuf buffer = PacketUtils.writePacket(updatePacket);
+        players.forEach(p -> p.getPlayerConnection().sendPacket(buffer));
     }
 }

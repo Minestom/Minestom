@@ -10,7 +10,7 @@ public class ClientSpectatePacket extends ClientPlayPacket {
     public UUID targetUuid;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
+    public void read(PacketReader reader) {
         // TODO reader uuid
     }
 }

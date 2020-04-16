@@ -1,6 +1,5 @@
 package fr.themode.minestom.instance;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockBreakEvent;
@@ -16,6 +15,7 @@ import fr.themode.minestom.particle.ParticleCreator;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 import fr.themode.minestom.utils.SerializerUtils;
+import io.netty.buffer.ByteBuf;
 
 import java.io.File;
 import java.util.*;
@@ -207,7 +207,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Chunk chunk = getChunk(chunkX, chunkZ);
-        System.out.println("test load: " + chunk + " : " + hasEnabledAutoChunkLoad());
         if (chunk != null) {
             if (callback != null)
                 callback.accept(chunk);
@@ -300,7 +299,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunk(Player player, Chunk chunk) {
-        Packet data = chunk.getFullDataPacket();
+        ByteBuf data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), packet -> {
                 chunk.setFullDataPacket(packet);

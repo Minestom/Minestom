@@ -10,12 +10,9 @@ public class ClientPlayerAbilitiesPacket extends ClientPlayPacket {
     public float walkingSpeed;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> flags = value);
-        reader.readFloat(value -> flyingSpeed = value);
-        reader.readFloat(value -> {
-            walkingSpeed = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.flags = reader.readByte();
+        this.flyingSpeed = reader.readFloat();
+        this.walkingSpeed = reader.readFloat();
     }
 }

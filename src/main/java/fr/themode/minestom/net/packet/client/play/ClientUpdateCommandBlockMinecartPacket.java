@@ -10,12 +10,9 @@ public class ClientUpdateCommandBlockMinecartPacket extends ClientPlayPacket {
     public boolean trackOutput;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(i -> entityId = i);
-        reader.readSizedString((string, length) -> command = string);
-        reader.readBoolean(value -> {
-            trackOutput = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.entityId = reader.readVarInt();
+        this.command = reader.readSizedString();
+        this.trackOutput = reader.readBoolean();
     }
 }

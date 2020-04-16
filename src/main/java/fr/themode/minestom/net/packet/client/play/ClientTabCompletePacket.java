@@ -9,11 +9,8 @@ public class ClientTabCompletePacket extends ClientPlayPacket {
     public String text;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(i -> transactionId = i);
-        reader.readSizedString((string, length) -> {
-            text = string;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.transactionId = reader.readVarInt();
+        this.text = reader.readSizedString();
     }
 }

@@ -9,15 +9,12 @@ public class ClientVehicleMovePacket extends ClientPlayPacket {
     public float yaw, pitch;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readDouble(v -> x = v);
-        reader.readDouble(v -> y = v);
-        reader.readDouble(v -> z = v);
+    public void read(PacketReader reader) {
+        this.x = reader.readDouble();
+        this.y = reader.readDouble();
+        this.z = reader.readDouble();
 
-        reader.readFloat(value -> yaw = value);
-        reader.readFloat(value -> {
-            pitch = value;
-            callback.run();
-        });
+        this.yaw = reader.readFloat();
+        this.pitch = reader.readFloat();
     }
 }

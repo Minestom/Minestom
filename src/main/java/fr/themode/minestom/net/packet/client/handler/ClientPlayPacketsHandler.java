@@ -15,7 +15,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x09, ClientClickWindowPacket.class);
         register(0x0A, ClientCloseWindow.class);
         register(0x0B, ClientPluginMessagePacket.class);
-        register(0x0E, ClientUseEntityPacket.class);
+        register(0x0E, ClientInteractEntityPacket.class);
         register(0x0F, ClientKeepAlivePacket.class);
 
         // 0x10 packet not used server-side

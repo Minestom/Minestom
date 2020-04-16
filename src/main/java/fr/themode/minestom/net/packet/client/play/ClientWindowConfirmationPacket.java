@@ -10,12 +10,9 @@ public class ClientWindowConfirmationPacket extends ClientPlayPacket {
     public boolean accepted;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> windowId = value);
-        reader.readShort(value -> actionNumber = value);
-        reader.readBoolean(value -> {
-            accepted = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.windowId = reader.readByte();
+        this.actionNumber = reader.readShort();
+        this.accepted = reader.readBoolean();
     }
 }

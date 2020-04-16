@@ -10,18 +10,15 @@ public class HandshakePacket implements ClientPreplayPacket {
 
     private int protocolVersion;
     private String serverAddress;
-    private short serverPort;
+    private int serverPort;
     private int nextState;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(value -> protocolVersion = value);
-        reader.readSizedString(s -> serverAddress = s);
-        reader.readShort(value -> serverPort = value);
-        reader.readVarInt(value -> {
-            nextState = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.protocolVersion = reader.readVarInt();
+        this.serverAddress = reader.readSizedString();
+        this.serverPort = reader.readUnsignedShort();
+        this.nextState = reader.readVarInt();
     }
 
     @Override

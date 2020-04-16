@@ -8,10 +8,7 @@ public class ClientNameItemPacket extends ClientPlayPacket {
     public String itemName;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readSizedString((string, length) -> {
-            itemName = string;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.itemName = reader.readSizedString();
     }
 }

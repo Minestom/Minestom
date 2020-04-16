@@ -9,10 +9,7 @@ public class ClientAnimationPacket extends ClientPlayPacket {
     public Player.Hand hand;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(value -> {
-            this.hand = Player.Hand.values()[value];
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.hand = Player.Hand.values()[reader.readVarInt()];
     }
 }

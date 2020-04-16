@@ -9,13 +9,8 @@ public class ClientPluginMessagePacket extends ClientPlayPacket {
     public byte[] data;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readSizedString((s, l) -> {
-            identifier = s;
-            reader.getRemainingBytes(l, bytes -> {
-                data = bytes;
-                callback.run();
-            });
-        });
+    public void read(PacketReader reader) {
+        this.identifier = reader.readSizedString();
+        this.data = reader.getRemainingBytes();
     }
 }

@@ -9,11 +9,8 @@ public class ClientSteerBoatPacket extends ClientPlayPacket {
     public boolean rightPaddleTurning;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readBoolean(value -> leftPaddleTurning = value);
-        reader.readBoolean(value -> {
-            rightPaddleTurning = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.leftPaddleTurning = reader.readBoolean();
+        this.rightPaddleTurning = reader.readBoolean();
     }
 }

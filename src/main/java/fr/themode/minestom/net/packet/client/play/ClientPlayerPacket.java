@@ -8,10 +8,7 @@ public class ClientPlayerPacket extends ClientPlayPacket {
     public boolean onGround;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readBoolean(value -> {
-            onGround = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.onGround = reader.readBoolean();
     }
 }

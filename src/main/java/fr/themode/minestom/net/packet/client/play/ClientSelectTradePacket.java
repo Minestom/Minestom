@@ -8,10 +8,7 @@ public class ClientSelectTradePacket extends ClientPlayPacket {
     public int selectedSlot;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readVarInt(i -> {
-            selectedSlot = i;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.selectedSlot = reader.readVarInt();
     }
 }

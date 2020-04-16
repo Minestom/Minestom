@@ -1,6 +1,5 @@
 package fr.themode.minestom.net;
 
-import com.github.simplenet.Client;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.net.packet.PacketReader;
@@ -11,6 +10,8 @@ import fr.themode.minestom.net.packet.client.handler.ClientPlayPacketsHandler;
 import fr.themode.minestom.net.packet.client.handler.ClientStatusPacketsHandler;
 import fr.themode.minestom.net.packet.client.handshake.HandshakePacket;
 import fr.themode.minestom.net.player.PlayerConnection;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketProcessor {
 
-    private Map<Client, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
+    private Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
     private ConnectionManager connectionManager;
 
@@ -38,20 +39,21 @@ public class PacketProcessor {
 
     private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
-    public void process(Client client, int id, int length, int offset) {
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(client, c -> new PlayerConnection(client));
+    public void process(ChannelHandlerContext channel, ByteBuf buffer, int id, int length, int offset) {
+        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(channel, c -> new PlayerConnection(channel));
         ConnectionState connectionState = playerConnection.getConnectionState();
         //if (!printBlackList.contains(id)) {
-        //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
+        // System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         //}
 
-        PacketReader packetReader = new PacketReader(client, length, offset);
+        PacketReader packetReader = new PacketReader(buffer, length);
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (id == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(packetReader, () -> handshakePacket.process(playerConnection, connectionManager));
+                handshakePacket.read(packetReader);
+                handshakePacket.process(playerConnection, connectionManager);
             }
             return;
         }
@@ -60,15 +62,21 @@ public class PacketProcessor {
             case PLAY:
                 Player player = connectionManager.getPlayer(playerConnection);
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
-                playPacket.read(packetReader, () -> player.addPacketToQueue(playPacket));
+                playPacket.read(packetReader);
+
+                player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(id);
-                loginPacket.read(packetReader, () -> loginPacket.process(playerConnection, connectionManager));
+                loginPacket.read(packetReader);
+
+                loginPacket.process(playerConnection, connectionManager);
                 break;
             case STATUS:
                 ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(id);
-                statusPacket.read(packetReader, () -> statusPacket.process(playerConnection, connectionManager));
+                statusPacket.read(packetReader);
+
+                statusPacket.process(playerConnection, connectionManager);
                 break;
             case UNKNOWN:
                 // Ignore packet (unexpected)
@@ -76,15 +84,15 @@ public class PacketProcessor {
         }
     }
 
-    public PlayerConnection getPlayerConnection(Client client) {
-        return connectionPlayerConnectionMap.get(client);
+    public PlayerConnection getPlayerConnection(ChannelHandlerContext channel) {
+        return connectionPlayerConnectionMap.get(channel);
     }
 
-    public boolean hasPlayerConnection(Client client) {
-        return connectionPlayerConnectionMap.containsKey(client);
+    public boolean hasPlayerConnection(ChannelHandlerContext channel) {
+        return connectionPlayerConnectionMap.containsKey(channel);
     }
 
-    public void removePlayerConnection(Client client) {
-        connectionPlayerConnectionMap.remove(client);
+    public void removePlayerConnection(ChannelHandlerContext channel) {
+        connectionPlayerConnectionMap.remove(channel);
     }
 }

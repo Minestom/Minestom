@@ -1,26 +1,32 @@
 package fr.themode.minestom.utils;
 
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
-
-import java.util.function.Consumer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public class PacketUtils {
 
-    public static void writePacket(ServerPacket serverPacket, Consumer<Packet> callback) {
+    public static ByteBuf writePacket(ServerPacket serverPacket) {
         int id = serverPacket.getId();
-        Packet packet = Packet.builder();
-        Utils.writeVarInt(packet, id);
-        PacketWriter packetWriter = new PacketWriter(packet);
+        PacketWriter packetWriter = new PacketWriter();
+
+        packetWriter.writeVarInt(id);
+
         serverPacket.write(packetWriter);
 
-        callback.accept(packet.prepend(p -> {
-            int size = packet.getSize();
-            Utils.writeVarInt(packet, size);
+        byte[] bytes = packetWriter.toByteArray();
+        int length = bytes.length;
 
-            //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName() + " size: " + size);
-        }));
+        int varIntSize = Utils.lengthVarInt(length);
+
+        ByteBuf buffer = Unpooled.buffer(length + varIntSize);
+        Utils.writeVarIntBuf(buffer, length);
+        buffer.writeBytes(bytes);
+
+        //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName() + " size: " + length);
+
+        return Unpooled.copiedBuffer(buffer);
     }
 
 }

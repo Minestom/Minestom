@@ -1,47 +1,25 @@
 package fr.themode.minestom.utils;
 
-import com.github.simplenet.Client;
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.chat.Chat;
 import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.net.packet.PacketReader;
+import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.utils.buffer.BufferWrapper;
-import fr.themode.minestom.utils.consumer.StringConsumer;
+import io.netty.buffer.ByteBuf;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 public class Utils {
 
-    public static void writeString(Packet packet, String value) {
-        byte[] bytes = new byte[0];
-        bytes = value.getBytes(StandardCharsets.UTF_8);
-        if (bytes.length > 32767) {
-            System.out.println("String too big (was " + value.length() + " bytes encoded, max " + 32767 + ")");
-        } else {
-            writeVarInt(packet, bytes.length);
-            packet.putBytes(bytes);
-        }
-    }
-
-    public static void readStringVarIntSized(Client client, StringConsumer consumer) {
-        ConnectionUtils.readVarInt(client, length -> {
-            int stringLength = Utils.lengthVarInt(length) + length;
-            client.readBytes(length, bytes -> {
-                consumer.accept(new String(bytes, StandardCharsets.UTF_8), stringLength);
-            });
-        });
-    }
-
-    public static void readStringShortSized(Client client, StringConsumer consumer) {
-
-        client.readShort(length -> {
-            client.readBytes(length, bytes -> {
-                consumer.accept(new String(bytes, StandardCharsets.UTF_8), length);
-            });
-        });
+    public static void writeVarIntBuf(ByteBuf buffer, int value) {
+        do {
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+            buffer.writeByte(temp);
+        } while (value != 0);
     }
 
     public static void writeVarIntBuffer(BufferWrapper buffer, int value) {
@@ -55,14 +33,14 @@ public class Utils {
         } while (value != 0);
     }
 
-    public static void writeVarInt(Packet packet, int value) {
+    public static void writeVarInt(PacketWriter writer, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if (value != 0) {
                 temp |= 0b10000000;
             }
-            packet.putByte(temp);
+            writer.writeByte(temp);
         } while (value != 0);
     }
 
@@ -79,116 +57,121 @@ public class Utils {
         return i;
     }
 
-    public static void writePosition(Packet packet, int x, int y, int z) {
-        packet.putLong(SerializerUtils.positionToLong(x, y, z));
+    public static void writePosition(PacketWriter writer, int x, int y, int z) {
+        writer.writeLong(SerializerUtils.positionToLong(x, y, z));
     }
 
-    public static void writePosition(Packet packet, BlockPosition blockPosition) {
-        writePosition(packet, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    public static void writePosition(PacketWriter writer, BlockPosition blockPosition) {
+        writePosition(writer, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
-    public static void readPosition(Client client, Consumer<BlockPosition> consumer) {
-        client.readLong(value -> {
-            consumer.accept(SerializerUtils.longToBlockPosition(value));
-        });
+    public static int readVarInt(ByteBuf buffer) {
+        int numRead = 0;
+        int result = 0;
+        byte read;
+        do {
+            read = buffer.readByte();
+            int value = (read & 0b01111111);
+            result |= (value << (7 * numRead));
+
+            numRead++;
+            if (numRead > 5) {
+                throw new RuntimeException("VarInt is too big");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
     }
 
-    public static void writeItemStack(Packet packet, ItemStack itemStack) {
+    public static void writeItemStack(PacketWriter packet, ItemStack itemStack) {
         if (itemStack == null || itemStack.isAir()) {
-            packet.putBoolean(false);
+            packet.writeBoolean(false);
         } else {
-            packet.putBoolean(true);
+            packet.writeBoolean(true);
             Utils.writeVarInt(packet, itemStack.getMaterialId());
-            packet.putByte(itemStack.getAmount());
+            packet.writeByte(itemStack.getAmount());
 
             if (!itemStack.hasNbtTag()) {
-                packet.putByte((byte) 0x00); // No nbt
+                packet.writeByte((byte) 0x00); // No nbt
                 return;
             }
 
-            packet.putByte((byte) 0x0A); // Compound
-            packet.putShort((short) 0); // Empty compound name
+            packet.writeByte((byte) 0x0A); // Compound
+            packet.writeShort((short) 0); // Empty compound name
 
             // Unbreakable
             if (itemStack.isUnbreakable()) {
-                packet.putByte((byte) 0x03); // Integer
-                packet.putString("Unbreakable");
-                packet.putInt(1);
+                packet.writeByte((byte) 0x03); // Integer
+                packet.writeShortSizedString("Unbreakable");
+                packet.writeInt(1);
             }
 
             // Damage
-            packet.putByte((byte) 0x02);
-            packet.putString("Damage");
-            packet.putShort(itemStack.getDamage());
+            packet.writeByte((byte) 0x02);
+            packet.writeShortSizedString("Damage");
+            packet.writeShort(itemStack.getDamage());
 
             // Display
             boolean hasDisplayName = itemStack.hasDisplayName();
             boolean hasLore = itemStack.hasLore();
 
             if (hasDisplayName || hasLore) {
-                packet.putByte((byte) 0x0A); // Start display compound
-                packet.putString("display");
+                packet.writeByte((byte) 0x0A); // Start display compound
+                packet.writeShortSizedString("display");
 
                 if (hasDisplayName) {
-                    packet.putByte((byte) 0x08);
-                    packet.putString("Name");
-                    packet.putString(Chat.legacyTextString(itemStack.getDisplayName()));
+                    packet.writeByte((byte) 0x08);
+                    packet.writeShortSizedString("Name");
+                    packet.writeShortSizedString(Chat.legacyTextString(itemStack.getDisplayName()));
                 }
 
                 if (hasLore) {
                     ArrayList<String> lore = itemStack.getLore();
 
-                    packet.putByte((byte) 0x09);
-                    packet.putString("Lore");
-                    packet.putByte((byte) 0x08);
-                    packet.putInt(lore.size());
+                    packet.writeByte((byte) 0x09);
+                    packet.writeShortSizedString("Lore");
+                    packet.writeByte((byte) 0x08);
+                    packet.writeInt(lore.size());
                     for (String line : lore) {
-                        packet.putString(Chat.legacyTextString(line));
+                        packet.writeShortSizedString(Chat.legacyTextString(line));
                     }
                 }
 
-                packet.putByte((byte) 0); // End display compound
+                packet.writeByte((byte) 0); // End display compound
             }
             // End display
 
-            packet.putByte((byte) 0); // End nbt
+            packet.writeByte((byte) 0); // End nbt
         }
     }
 
-    public static void readItemStack(PacketReader reader, Consumer<ItemStack> consumer) {
-        reader.readBoolean(present -> {
-            if (!present) {
-                consumer.accept(ItemStack.AIR_ITEM); // Consume air item if empty
-                return;
-            }
+    public static ItemStack readItemStack(PacketReader reader) {
+        boolean present = reader.readBoolean();
 
-            reader.readVarInt(id -> {
+        if (!present) {
+            return ItemStack.AIR_ITEM;
+        }
 
-                if (id == -1) {
-                    // Drop mode
-                    consumer.accept(ItemStack.AIR_ITEM);
-                }
+        int id = reader.readVarInt();
+        if (id == -1) {
+            // Drop mode
+            return ItemStack.AIR_ITEM;
+        }
 
-                reader.readByte(count -> {
-                    ItemStack item = new ItemStack((short) id, count);
-                    reader.readByte(nbt -> { // Should be compound start (0x0A) or 0 if there isn't NBT data
-                        if (nbt == 0x00) {
-                            consumer.accept(item);
-                            return;
-                        } else if (nbt == 0x0A) {
-                            reader.readShort(compoundName -> { // Ignored, should be empty (main compound name)
-                                NbtReaderUtils.readItemStackNBT(reader, consumer, item);
-                            });
+        byte count = reader.readByte();
 
-                        }
-                    });
+        ItemStack item = new ItemStack((short) id, count);
 
-                });
+        byte nbt = reader.readByte(); // Should be compound start (0x0A) or 0 if there isn't NBT data
 
-            });
+        if (nbt == 0x00) {
+            return item;
+        } else if (nbt == 0x0A) {
+            short compoundName = reader.readShort(); // Ignored, should be empty (main compound name)
+            NbtReaderUtils.readItemStackNBT(reader, item);
+        }
 
-
-        });
+        return item;
     }
 
     public static void writeBlocks(BufferWrapper buffer, short[] blocksId, int bitsPerEntry) {

@@ -9,12 +9,9 @@ public class ClientPlayerLookPacket extends ClientPlayPacket {
     public boolean onGround;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readFloat(value -> yaw = value);
-        reader.readFloat(value -> pitch = value);
-        reader.readBoolean(value -> {
-            onGround = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.yaw = reader.readFloat();
+        this.pitch = reader.readFloat();
+        this.onGround = reader.readBoolean();
     }
 }

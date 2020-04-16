@@ -14,15 +14,12 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     public ItemStack item;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> windowId = value);
-        reader.readShort(value -> slot = value);
-        reader.readByte(value -> button = value);
-        reader.readShort(value -> actionNumber = value);
-        reader.readVarInt(value -> mode = value);
-        reader.readSlot(itemStack -> {
-            item = itemStack;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.windowId = reader.readByte();
+        this.slot = reader.readShort();
+        this.button = reader.readByte();
+        this.actionNumber = reader.readShort();
+        this.mode = reader.readVarInt();
+        this.item = reader.readSlot();
     }
 }

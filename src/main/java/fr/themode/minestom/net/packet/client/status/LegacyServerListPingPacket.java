@@ -15,10 +15,7 @@ public class LegacyServerListPingPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readByte(value -> {
-            payload = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.payload = reader.readByte();
     }
 }

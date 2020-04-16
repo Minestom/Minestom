@@ -1,55 +1,50 @@
 package fr.themode.minestom.net.player;
 
-import com.github.simplenet.Client;
-import com.github.simplenet.packet.Packet;
 import fr.themode.minestom.net.ConnectionState;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.utils.PacketUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 
-import java.io.IOException;
 import java.net.SocketAddress;
 
 public class PlayerConnection {
 
-    private Client client;
+    private ChannelHandlerContext channel;
     private ConnectionState connectionState;
     private boolean online;
 
-    public PlayerConnection(Client client) {
-        this.client = client;
+    public PlayerConnection(ChannelHandlerContext channel) {
+        this.channel = channel;
         this.connectionState = ConnectionState.UNKNOWN;
         this.online = true;
     }
 
-    public void sendPacket(Packet packet) {
-        if (isOnline())
-            packet.queueAndFlush(client);
+    public void sendPacket(ByteBuf buffer) {
+        channel.writeAndFlush(buffer.copy());
     }
 
-    public void writeUnencodedPacket(Packet packet) {
-        packet.queue(client);
+    public void writePacket(ByteBuf buffer) {
+        channel.write(buffer.copy());
     }
 
     public void sendPacket(ServerPacket serverPacket) {
-        if (isOnline())
-            PacketUtils.writePacket(serverPacket, packet -> sendPacket(packet));
-    }
-
-    public void flush() {
-        client.flush();
-    }
-
-    public SocketAddress getRemoteAddress() {
-        try {
-            return client.getChannel().getRemoteAddress();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        if (isOnline()) {
+            ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+            sendPacket(buffer);
         }
     }
 
-    public Client getClient() {
-        return client;
+    public void flush() {
+        channel.flush();
+    }
+
+    public SocketAddress getRemoteAddress() {
+        return channel.channel().remoteAddress();
+    }
+
+    public ChannelHandlerContext getChannel() {
+        return channel;
     }
 
     public boolean isOnline() {

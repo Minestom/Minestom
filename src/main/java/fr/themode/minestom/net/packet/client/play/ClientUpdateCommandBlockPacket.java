@@ -12,14 +12,11 @@ public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
     public byte flags;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readBlockPosition(blockPosition1 -> blockPosition = blockPosition1);
-        reader.readSizedString((string, length) -> command = string);
-        reader.readVarInt(i -> mode = Mode.values()[i]);
-        reader.readByte(value -> {
-            flags = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.blockPosition = reader.readBlockPosition();
+        this.command = reader.readSizedString();
+        this.mode = Mode.values()[reader.readVarInt()];
+        this.flags = reader.readByte();
     }
 
     public enum Mode {

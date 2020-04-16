@@ -1,6 +1,5 @@
 package fr.themode.minestom;
 
-import com.github.simplenet.Server;
 import fr.themode.minestom.benchmark.BenchmarkManager;
 import fr.themode.minestom.command.CommandManager;
 import fr.themode.minestom.data.DataManager;
@@ -10,24 +9,22 @@ import fr.themode.minestom.instance.InstanceManager;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.listener.manager.PacketListenerManager;
 import fr.themode.minestom.net.ConnectionManager;
-import fr.themode.minestom.net.ConnectionUtils;
 import fr.themode.minestom.net.PacketProcessor;
-import fr.themode.minestom.net.packet.PacketReader;
-import fr.themode.minestom.net.packet.client.status.LegacyServerListPingPacket;
-import fr.themode.minestom.net.packet.server.play.KeepAlivePacket;
+import fr.themode.minestom.net.netty.NettyServer;
 import fr.themode.minestom.net.packet.server.play.ServerDifficultyPacket;
-import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.recipe.RecipeManager;
 import fr.themode.minestom.registry.RegistryMain;
 import fr.themode.minestom.scoreboard.TeamManager;
 import fr.themode.minestom.timer.SchedulerManager;
-import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.world.Difficulty;
 
 public class MinecraftServer {
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
+
+    public static final String THREAD_NAME_MAIN_UPDATE = "Ms-MainUpdate";
+    public static final int THREAD_COUNT_MAIN_UPDATE = 1;
 
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
@@ -54,8 +51,8 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_SCHEDULER = 1;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 2;
-    public static final int ENTITY_VIEW_DISTANCE = 2;
+    public static final int CHUNK_VIEW_DISTANCE = 10;
+    public static final int ENTITY_VIEW_DISTANCE = 5;
     // Can be modified at performance cost when decreased
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / 20;
@@ -64,7 +61,7 @@ public class MinecraftServer {
     // Networking
     private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
-    private static Server server;
+    private static NettyServer nettyServer;
 
     // In-Game Manager
     private static ConnectionManager connectionManager;
@@ -78,6 +75,7 @@ public class MinecraftServer {
     private static SchedulerManager schedulerManager;
     private static BenchmarkManager benchmarkManager;
 
+    private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
 
     // Data
@@ -98,7 +96,9 @@ public class MinecraftServer {
         schedulerManager = new SchedulerManager();
         benchmarkManager = new BenchmarkManager();
 
-        server = new Server();
+        updateManager = new UpdateManager();
+
+        nettyServer = new NettyServer(packetProcessor);
 
         // Registry
         RegistryMain.registerBlocks();
@@ -130,8 +130,8 @@ public class MinecraftServer {
         return packetListenerManager;
     }
 
-    public static Server getServer() {
-        return server;
+    public static NettyServer getNettyServer() {
+        return nettyServer;
     }
 
     public static InstanceManager getInstanceManager() {
@@ -175,84 +175,8 @@ public class MinecraftServer {
     }
 
     public void start(String address, int port) {
-        initClients();
-        server.bind(address, port);
-        initUpdates();
-    }
-
-    private void initClients() {
-        server.onConnect(client -> {
-            System.out.println("CONNECTION");
-
-            client.preDisconnect(() -> {
-                System.out.println("DISCONNECTION");
-                PlayerConnection playerConnection = packetProcessor.getPlayerConnection(client);
-                if (playerConnection != null) {
-                    playerConnection.refreshOnline(false);
-                    Player player = connectionManager.getPlayer(playerConnection);
-                    if (player != null) {
-                        player.remove();
-
-                        connectionManager.removePlayer(playerConnection);
-                    }
-                    packetProcessor.removePlayerConnection(client);
-                }
-            });
-
-            ConnectionUtils.readVarIntAlways(client, length -> {
-                if (length == 0xFE) { // Legacy server ping
-                    LegacyServerListPingPacket legacyServerListPingPacket = new LegacyServerListPingPacket();
-                    legacyServerListPingPacket.read(new PacketReader(client, 0, 0), () -> {
-                        legacyServerListPingPacket.process(null, null);
-                    });
-                } else {
-                    final int varIntLength = Utils.lengthVarInt(length);
-                    ConnectionUtils.readVarInt(client, packetId -> {
-                        int offset = varIntLength + Utils.lengthVarInt(packetId);
-                        packetProcessor.process(client, packetId, length, offset);
-                    });
-                }
-            });
-        });
-    }
-
-    private void initUpdates() {
-        final long tickDistance = TICK_MS * 1000000;
-        long currentTime;
-        while (true) {
-            currentTime = System.nanoTime();
-
-            // Keep Alive Handling
-            for (Player player : getConnectionManager().getOnlinePlayers()) {
-                long time = currentTime / 1_000_000;
-                if (time - player.getLastKeepAlive() > 20000) {
-                    player.refreshKeepAlive(time);
-                    KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
-                    player.getPlayerConnection().sendPacket(keepAlivePacket);
-                }
-            }
-
-            // Entities update
-            entityManager.update();
-
-            // Blocks update
-            instanceManager.updateBlocks();
-
-            // Scheduler
-            schedulerManager.update();
-
-            // TODO miscellaneous update (scoreboard)
-
-            // Sleep until next tick
-            long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
-            sleepTime = Math.max(1, sleepTime);
-
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        updateManager.start();
+        nettyServer.start(address, port);
     }
 
 }

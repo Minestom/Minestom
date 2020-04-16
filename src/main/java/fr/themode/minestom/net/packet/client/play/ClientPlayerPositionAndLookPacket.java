@@ -10,15 +10,14 @@ public class ClientPlayerPositionAndLookPacket extends ClientPlayPacket {
     public boolean onGround;
 
     @Override
-    public void read(PacketReader reader, Runnable callback) {
-        reader.readDouble(value -> x = value);
-        reader.readDouble(value -> y = value);
-        reader.readDouble(value -> z = value);
-        reader.readFloat(value -> yaw = value);
-        reader.readFloat(value -> pitch = value);
-        reader.readBoolean(value -> {
-            onGround = value;
-            callback.run();
-        });
+    public void read(PacketReader reader) {
+        this.x = reader.readDouble();
+        this.y = reader.readDouble();
+        this.z = reader.readDouble();
+
+        this.yaw = reader.readFloat();
+        this.pitch = reader.readFloat();
+
+        this.onGround = reader.readBoolean();
     }
 }
