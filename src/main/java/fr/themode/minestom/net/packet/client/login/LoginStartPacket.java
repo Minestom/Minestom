@@ -46,6 +46,8 @@ public class LoginStartPacket implements ClientPreplayPacket {
         connectionManager.createPlayer(playerUuid, username, connection);
         Player player = connectionManager.getPlayer(connection);
 
+        MinecraftServer.getEntityManager().addWaitingPlayer(player);
+
         GameMode gameMode = GameMode.SURVIVAL;
         Dimension dimension = Dimension.OVERWORLD;
         LevelType levelType = LevelType.DEFAULT;
@@ -93,8 +95,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
         Consumer<Player> playerInitialization = MinecraftServer.getConnectionManager().getPlayerInitialization();
         if (playerInitialization != null)
             playerInitialization.accept(player);
-
-        MinecraftServer.getEntityManager().addWaitingPlayer(player);
 
 
         {

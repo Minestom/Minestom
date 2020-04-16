@@ -38,4 +38,7 @@ dependencies {
 
     compile 'com.github.TheMode:CommandBuilder:611d16a487'
 
+    // https://mvnrepository.com/artifact/javax.vecmath/vecmath
+    compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2' // Used for Fastnoise
+
 }

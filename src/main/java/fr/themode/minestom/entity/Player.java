@@ -319,7 +319,7 @@ public class Player extends LivingEntity {
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
-                    // This is the last chunk to be loaded, spawn player
+                    // This is the last chunk to be loaded , spawn player
                     super.setInstance(instance);
                     PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance);
                     callEvent(PlayerSpawnEvent.class, spawnEvent);
@@ -886,9 +886,9 @@ public class Player extends LivingEntity {
         int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
         int playerRange = getSettings().viewDistance;
         if (playerRange == 0) {
-            return serverRange; // Didn't receive settings packet yet
+            return serverRange; // Didn't receive settings packet yet (is the case on login)
         } else {
-            return playerRange < serverRange ? playerRange : serverRange;
+            return Math.min(playerRange, serverRange);
         }
     }
 
@@ -900,6 +900,8 @@ public class Player extends LivingEntity {
         MAIN,
         OFF
     }
+
+    // Settings enum
 
     public enum MainHand {
         LEFT,

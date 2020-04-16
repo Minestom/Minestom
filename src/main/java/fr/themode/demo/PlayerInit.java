@@ -1,6 +1,7 @@
 package fr.themode.demo;
 
 import fr.themode.demo.generator.ChunkGeneratorDemo;
+import fr.themode.demo.generator.NoiseTestGenerator;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.benchmark.BenchmarkManager;
 import fr.themode.minestom.entity.Entity;
@@ -27,18 +28,19 @@ public class PlayerInit {
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
+        NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(new File("chunk_data"));
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer();
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
+
+        // Load some chunks beforehand
         int loopStart = -2;
         int loopEnd = 2;
-        long time = System.currentTimeMillis();
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
             }
-        System.out.println("Time to load all chunks: " + (System.currentTimeMillis() - time) + " ms");
     }
 
     public static void init() {
@@ -127,8 +129,8 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 66, 0));
+                player.setGameMode(GameMode.CREATIVE);
+                player.teleport(new Position(0, 75, 0));
 
             /*Random random = new Random();
             for (int i = 0; i < 50; i++) {

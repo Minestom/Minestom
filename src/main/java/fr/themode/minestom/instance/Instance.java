@@ -141,9 +141,15 @@ public abstract class Instance implements BlockModifier, DataContainer {
     }
 
     public void loadChunk(Position position, Consumer<Chunk> callback) {
-        int chunkX = Math.floorDiv((int) position.getX(), 16);
-        int chunkZ = Math.floorDiv((int) position.getY(), 16);
+        int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
+        int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadChunk(chunkX, chunkZ, callback);
+    }
+
+    public void loadOptionalChunk(Position position, Consumer<Chunk> callback) {
+        int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
+        int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
     public short getBlockId(int x, int y, int z) {

@@ -35,7 +35,7 @@ public class InstanceContainer extends Instance {
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
 
-    private boolean autoChunkLoad;
+    private volatile boolean autoChunkLoad;
 
     protected InstanceContainer(UUID uniqueId, File folder) {
         super(uniqueId);
@@ -207,6 +207,7 @@ public class InstanceContainer extends Instance {
     @Override
     public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Chunk chunk = getChunk(chunkX, chunkZ);
+        System.out.println("test load: " + chunk + " : " + hasEnabledAutoChunkLoad());
         if (chunk != null) {
             if (callback != null)
                 callback.accept(chunk);
