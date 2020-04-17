@@ -24,7 +24,7 @@ public class MinecraftServer {
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
     public static final String THREAD_NAME_MAIN_UPDATE = "Ms-MainUpdate";
-    public static final int THREAD_COUNT_MAIN_UPDATE = 1;
+    public static final int THREAD_COUNT_MAIN_UPDATE = 1; // Keep it to 1
 
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;

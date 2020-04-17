@@ -2,6 +2,7 @@ package fr.themode.minestom.net.packet;
 
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.utils.BlockPosition;
+import fr.themode.minestom.utils.SerializerUtils;
 import fr.themode.minestom.utils.Utils;
 import fr.themode.minestom.utils.buffer.BufferWrapper;
 
@@ -145,11 +146,11 @@ public class PacketWriter {
     }
 
     public void writeBlockPosition(BlockPosition blockPosition) {
-        Utils.writePosition(this, blockPosition);
+        writeBlockPosition(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     public void writeBlockPosition(int x, int y, int z) {
-        Utils.writePosition(this, x, y, z);
+        writeLong(SerializerUtils.positionToLong(x, y, z));
     }
 
     public void writeItemStack(ItemStack itemStack) {

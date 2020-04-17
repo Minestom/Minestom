@@ -57,14 +57,6 @@ public class Utils {
         return i;
     }
 
-    public static void writePosition(PacketWriter writer, int x, int y, int z) {
-        writer.writeLong(SerializerUtils.positionToLong(x, y, z));
-    }
-
-    public static void writePosition(PacketWriter writer, BlockPosition blockPosition) {
-        writePosition(writer, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-    }
-
     public static int readVarInt(ByteBuf buffer) {
         int numRead = 0;
         int result = 0;
