@@ -7,8 +7,11 @@ import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.StackingRule;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class InventoryClickProcessor {
 
@@ -153,8 +156,109 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    private InventoryClickResult startCondition(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+    public InventoryClickResult dragging(InventoryCondition inventoryCondition, Player player,
+                                         int slot, int button,
+                                         ItemStack clicked, ItemStack cursor,
+                                         Function<Integer, ItemStack> itemGetter,
+                                         BiConsumer<Integer, ItemStack> itemSetter) {
         InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
+
+        StackingRule stackingRule = cursor.getStackingRule();
+
+        if (slot == -999) {
+            // Start or end left/right drag
+            if (button == 0) {
+                // Start left
+                this.leftDraggingMap.put(player, new HashSet<>());
+            } else if (button == 4) {
+                // Start right
+                this.rightDraggingMap.put(player, new HashSet<>());
+            } else if (button == 2) {
+                // End left
+                if (!leftDraggingMap.containsKey(player))
+                    return null;
+                Set<Integer> slots = leftDraggingMap.get(player);
+                int slotCount = slots.size();
+                int cursorAmount = stackingRule.getAmount(cursor);
+                if (slotCount > cursorAmount)
+                    return null;
+                // Should be size of each defined slot (if not full)
+                int slotSize = (int) ((float) cursorAmount / (float) slotCount);
+                int finalCursorAmount = cursorAmount;
+
+                for (Integer s : slots) {
+                    ItemStack draggedItem = cursor.clone();
+                    ItemStack slotItem = itemGetter.apply(s);
+                    int maxSize = stackingRule.getMaxSize();
+                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
+                        int amount = slotItem.getAmount() + slotSize;
+                        if (stackingRule.canApply(slotItem, amount)) {
+                            slotItem = stackingRule.apply(slotItem, amount);
+                            finalCursorAmount -= slotSize;
+                        } else {
+                            int removedAmount = amount - maxSize;
+                            slotItem = stackingRule.apply(slotItem, maxSize);
+                            finalCursorAmount -= removedAmount;
+                        }
+                    } else if (slotItem.isAir()) {
+                        slotItem = stackingRule.apply(draggedItem, slotSize);
+                        finalCursorAmount -= slotSize;
+                    }
+                    itemSetter.accept(s, slotItem);
+                }
+                cursor = stackingRule.apply(cursor, finalCursorAmount);
+                clickResult.setCursor(cursor);
+
+                leftDraggingMap.remove(player);
+            } else if (button == 6) {
+                // End right
+                if (!rightDraggingMap.containsKey(player))
+                    return null;
+                Set<Integer> slots = rightDraggingMap.get(player);
+                int size = slots.size();
+                int cursorAmount = stackingRule.getAmount(cursor);
+                if (size > cursorAmount)
+                    return null;
+                for (Integer s : slots) {
+                    ItemStack draggedItem = cursor.clone();
+                    ItemStack slotItem = itemGetter.apply(s);
+                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
+                        int amount = slotItem.getAmount() + 1;
+                        if (stackingRule.canApply(slotItem, amount)) {
+                            slotItem = stackingRule.apply(slotItem, amount);
+                            itemSetter.accept(s, slotItem);
+                        }
+                    } else if (slotItem.isAir()) {
+                        draggedItem = stackingRule.apply(draggedItem, 1);
+                        itemSetter.accept(s, draggedItem);
+                    }
+                }
+                cursor = stackingRule.apply(cursor, cursorAmount - size);
+                clickResult.setCursor(cursor);
+
+                rightDraggingMap.remove(player);
+
+            }
+        } else {
+            // Add slot
+            if (button == 1) {
+                // Add left slot
+                if (!leftDraggingMap.containsKey(player))
+                    return null;
+                leftDraggingMap.get(player).add(slot);
+
+            } else if (button == 5) {
+                // Add right slot
+                if (!rightDraggingMap.containsKey(player))
+                    return null;
+                rightDraggingMap.get(player).add(slot);
+            }
+        }
+
+        return clickResult;
+    }
+
+    private InventoryClickResult startCondition(InventoryClickResult clickResult, InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
         if (inventoryCondition != null) {
             InventoryConditionResult result = new InventoryConditionResult(clicked, cursor);
             inventoryCondition.accept(player, slot, result);
@@ -169,6 +273,11 @@ public class InventoryClickProcessor {
             }
         }
         return clickResult;
+    }
+
+    private InventoryClickResult startCondition(InventoryCondition inventoryCondition, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+        InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
+        return startCondition(clickResult, inventoryCondition, player, slot, clicked, cursor);
     }
 
 }

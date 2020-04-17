@@ -337,7 +337,36 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public void dragging(Player player, int slot, int button) {
+        PlayerInventory playerInventory = player.getInventory();
+        boolean isInWindow = isClickInWindow(slot);
+        ItemStack clicked = null;
+        ItemStack cursor = getCursorItem(player);
+        if (slot != -999)
+            clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
+        InventoryClickResult clickResult = clickProcessor.dragging(getInventoryCondition(), player,
+                slot, button,
+                clicked, cursor,
+
+                s -> isClickInWindow(s) ? getItemStack(s) : playerInventory.getItemStack(s, offset),
+
+                (s, item) -> {
+                    System.out.println("click window:" + isClickInWindow(s));
+                    if (isClickInWindow(s)) {
+                        setItemStack(s, item);
+                    } else {
+                        playerInventory.setItemStack(s, offset, item);
+                    }
+                });
+
+        if (clickResult == null)
+            return;
+
+        if (isInWindow) {
+            setCursorPlayerItem(player, clickResult.getCursor());
+        } else {
+            setCursorPlayerItem(player, clickResult.getCursor());
+        }
     }
 
     @Override

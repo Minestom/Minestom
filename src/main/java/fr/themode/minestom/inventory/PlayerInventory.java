@@ -12,7 +12,7 @@ import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
 import fr.themode.minestom.net.packet.server.play.WindowItemsPacket;
 import fr.themode.minestom.net.player.PlayerConnection;
 
-import java.util.*;
+import java.util.Arrays;
 
 import static fr.themode.minestom.utils.inventory.PlayerInventoryUtils.*;
 
@@ -249,9 +249,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         return windowItemsPacket;
     }
 
-    private Map<Player, Set<Integer>> leftDraggingMap = new HashMap<>();
-    private Map<Player, Set<Integer>> rightDraggingMap = new HashMap<>();
-
     @Override
     public void leftClick(Player player, int slot) {
         ItemStack cursor = getCursorItem();
@@ -383,123 +380,20 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public void dragging(Player player, int slot, int button) {
-        ItemStack cursorItem = getCursorItem();
+        ItemStack cursor = getCursorItem();
         ItemStack clicked = null;
         if (slot != -999)
             clicked = getItemStack(slot, OFFSET);
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(player, slot, result);
+        InventoryClickResult clickResult = clickProcessor.dragging(getInventoryCondition(), player,
+                slot, button,
+                clicked, cursor, s -> getItemStack(s, OFFSET),
+                (s, item) -> setItemStack(s, OFFSET, item));
 
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
+        if (clickResult == null)
+            return;
 
-            if (result.isCancel()) {
-                setItemStack(slot, OFFSET, clicked);
-                setCursorItem(cursorItem);
-                // Refresh client slot
-                sendSlotRefresh((short) slot, clicked);
-                return;
-            }
-        }
-        // End condition
-
-        StackingRule stackingRule = cursorItem.getStackingRule();
-
-        if (slot == -999) {
-            // Start or end left/right drag
-            if (button == 0) {
-                // Start left
-                this.leftDraggingMap.put(player, new HashSet<>());
-            } else if (button == 4) {
-                // Start right
-                this.rightDraggingMap.put(player, new HashSet<>());
-            } else if (button == 2) {
-                // End left
-                if (!leftDraggingMap.containsKey(player))
-                    return;
-                Set<Integer> slots = leftDraggingMap.get(player);
-                int slotCount = slots.size();
-                int cursorAmount = stackingRule.getAmount(cursorItem);
-                if (slotCount > cursorAmount)
-                    return;
-                // Should be size of each defined slot (if not full)
-                int slotSize = (int) ((float) cursorAmount / (float) slotCount);
-                int finalCursorAmount = cursorAmount;
-
-                for (Integer s : slots) {
-                    ItemStack draggedItem = cursorItem.clone();
-                    ItemStack slotItem = getItemStack(s, OFFSET);
-                    int maxSize = stackingRule.getMaxSize();
-                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
-                        int amount = slotItem.getAmount() + slotSize;
-                        if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
-                            finalCursorAmount -= slotSize;
-                        } else {
-                            int removedAmount = amount - maxSize;
-                            slotItem = stackingRule.apply(slotItem, maxSize);
-                            finalCursorAmount -= removedAmount;
-                        }
-                    } else if (slotItem.isAir()) {
-                        slotItem = stackingRule.apply(draggedItem, slotSize);
-                        finalCursorAmount -= slotSize;
-                    }
-
-                    setItemStack(s, OFFSET, slotItem);
-                }
-                cursorItem = stackingRule.apply(cursorItem, finalCursorAmount);
-                setCursorItem(cursorItem);
-
-                leftDraggingMap.remove(player);
-            } else if (button == 6) {
-                // End right
-                if (!rightDraggingMap.containsKey(player))
-                    return;
-                Set<Integer> slots = rightDraggingMap.get(player);
-                int size = slots.size();
-                int cursorAmount = stackingRule.getAmount(cursorItem);
-                if (size > cursorAmount)
-                    return;
-                for (Integer s : slots) {
-                    ItemStack draggedItem = cursorItem.clone();
-                    ItemStack slotItem = getItemStack(s, OFFSET);
-                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
-                        int amount = slotItem.getAmount() + 1;
-                        if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
-                            setItemStack(s, OFFSET, slotItem);
-                        }
-                    } else if (slotItem.isAir()) {
-                        draggedItem = stackingRule.apply(draggedItem, 1);
-                        setItemStack(s, OFFSET, draggedItem);
-                    }
-                }
-                cursorItem = stackingRule.apply(cursorItem, cursorAmount - size);
-                setCursorItem(cursorItem);
-
-                rightDraggingMap.remove(player);
-
-            }
-        } else {
-            // Add slot
-            if (button == 1) {
-                // Add left slot
-                if (!leftDraggingMap.containsKey(player))
-                    return;
-                leftDraggingMap.get(player).add(slot);
-
-            } else if (button == 5) {
-                // Add right slot
-                if (!rightDraggingMap.containsKey(player))
-                    return;
-                rightDraggingMap.get(player).add(slot);
-            }
-        }
-
+        setCursorItem(clickResult.getCursor());
     }
 
     @Override
