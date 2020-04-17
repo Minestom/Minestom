@@ -15,6 +15,7 @@ import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.InventoryType;
 import fr.themode.minestom.item.ItemStack;
+import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.timer.TaskRunnable;
 import fr.themode.minestom.utils.MathUtils;
@@ -61,11 +62,11 @@ public class PlayerInit {
                 for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
                     String name = resultEntry.getKey();
                     ThreadResult result = resultEntry.getValue();
-                    benchmarkMessage += name;
+                    benchmarkMessage += "&7" + name;
                     benchmarkMessage += ": ";
-                    benchmarkMessage += MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
-                    benchmarkMessage += MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
-                    benchmarkMessage += MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+                    benchmarkMessage += "&e" + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
+                    benchmarkMessage += "&c" + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
+                    benchmarkMessage += "&d" + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
                     benchmarkMessage += "\n";
                 }
                 // if (benchmarkMessage.length() > 0)
@@ -81,7 +82,7 @@ public class PlayerInit {
             responseData.setName("1.15.2");
             responseData.setProtocol(578);
             responseData.setMaxPlayer(100);
-            responseData.setOnline(0);
+            responseData.setOnline(connectionManager.getOnlinePlayers().size());
             responseData.addPlayer("A name", UUID.randomUUID());
             responseData.addPlayer("Could be some message", UUID.randomUUID());
             responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
@@ -167,6 +168,7 @@ public class PlayerInit {
                 player.openInventory(inventory);
 
                 player.getInventory().addItemStack(new ItemStack((short) 1, (byte) 100));
+                player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));
 
             /*TeamManager teamManager = Main.getTeamManager();
             Team team = teamManager.createTeam(getUsername());

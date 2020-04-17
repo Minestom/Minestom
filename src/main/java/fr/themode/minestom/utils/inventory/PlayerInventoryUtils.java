@@ -25,6 +25,14 @@ public class PlayerInventoryUtils {
                 return CRAFT_SLOT_3 + 1;
             case 4:
                 return CRAFT_SLOT_4 + 1;
+            case 5:
+                return HELMET_SLOT;
+            case 6:
+                return CHESTPLATE_SLOT;
+            case 7:
+                return LEGGINGS_SLOT;
+            case 8:
+                return BOOTS_SLOT;
         }
         //System.out.println("ENTRY: " + slot + " | " + offset);
         final int rowSize = 9;

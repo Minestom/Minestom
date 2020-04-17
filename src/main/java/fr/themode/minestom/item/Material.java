@@ -907,7 +907,7 @@ public enum Material {
     }
 
     public boolean isBlock() {
-        return block != null;
+        return block != null && this != AIR;
     }
 
     public Block getBlock() {

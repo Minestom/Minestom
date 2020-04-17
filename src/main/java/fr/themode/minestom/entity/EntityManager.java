@@ -171,12 +171,12 @@ public class EntityManager {
         }
     }
 
-    public UpdateType getUpdateType() {
-        return updateType;
-    }
-
     public void addWaitingPlayer(Player player) {
         this.waitingPlayers.add(player);
+    }
+
+    public UpdateType getUpdateType() {
+        return updateType;
     }
 
     public void setUpdateType(UpdateType updateType) {

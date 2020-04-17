@@ -58,7 +58,7 @@ public class BlockPlacementListener {
 
         blockPosition.add(offsetX, offsetY, offsetZ);
         boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby players
-        if (!intersectPlayer) {
+        if (material.isBlock() && !intersectPlayer) {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
             playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
@@ -78,12 +78,12 @@ public class BlockPlacementListener {
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
 
                     StackingRule stackingRule = usedItem.getStackingRule();
-                    stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
+                    ItemStack newUsedItem = stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
 
                     if (hand == Player.Hand.OFF) {
-                        playerInventory.setItemInOffHand(usedItem);
+                        playerInventory.setItemInOffHand(newUsedItem);
                     } else { // Main
-                        playerInventory.setItemInMainHand(usedItem);
+                        playerInventory.setItemInMainHand(newUsedItem);
                     }
                 }
             } else {
