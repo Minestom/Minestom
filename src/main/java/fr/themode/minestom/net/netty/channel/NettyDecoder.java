@@ -36,9 +36,11 @@ public class NettyDecoder extends ByteToMessageDecoder {
         } else {
             int readable = buffer.readableBytes();
             if (readable < packetLength) {
+                // Wait for bytes to arrive
                 bytesToRead = packetLength;
                 return;
             } else {
+                // There are enough bytes, read them
                 packetHandler.buffer = buffer.readBytes(packetLength);
                 bytesToRead = 0;
             }

@@ -128,9 +128,6 @@ public class InventoryClickProcessor {
             return clickResult;
         }
 
-        StackingRule cursorRule = cursor.getStackingRule();
-        StackingRule clickedRule = clicked.getStackingRule();
-
         ItemStack resultClicked;
         ItemStack resultHeld;
 

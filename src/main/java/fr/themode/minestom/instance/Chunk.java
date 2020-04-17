@@ -86,7 +86,7 @@ public class Chunk implements Viewable {
 
     private void setCustomBlock(int index, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(index, customBlock.getType(), customBlock.getId(), data, updateConsumer);
+        setBlock(index, customBlock.getBlockId(), customBlock.getId(), data, updateConsumer);
     }
 
     private void setBlock(int index, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {

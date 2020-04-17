@@ -16,6 +16,8 @@ public abstract class BlockPlacementRule {
         this(block.getBlockId());
     }
 
+    public abstract boolean canPlace(Instance instance, BlockPosition blockPosition);
+
     public abstract short blockRefresh(Instance instance, BlockPosition blockPosition);
 
     public short getBlockId() {

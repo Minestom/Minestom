@@ -22,6 +22,7 @@ import fr.themode.minestom.scoreboard.BelowNameScoreboard;
 import fr.themode.minestom.scoreboard.Team;
 import fr.themode.minestom.sound.Sound;
 import fr.themode.minestom.sound.SoundCategory;
+import fr.themode.minestom.stat.PlayerStatistic;
 import fr.themode.minestom.utils.ArrayUtils;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -29,9 +30,7 @@ import fr.themode.minestom.utils.Position;
 import fr.themode.minestom.world.Dimension;
 import fr.themode.minestom.world.LevelType;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -80,6 +79,9 @@ public class Player extends LivingEntity {
     private boolean instantBreak;
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
+
+    // Statistics
+    private Map<PlayerStatistic, Integer> statisticValueMap = new HashMap<>();
 
     // Vehicle
     private PlayerVehicleInformation vehicleInformation;
@@ -805,6 +807,10 @@ public class Player extends LivingEntity {
     public void setFieldViewModifier(float fieldViewModifier) {
         this.fieldViewModifier = fieldViewModifier;
         refreshAbilities();
+    }
+
+    public Map<PlayerStatistic, Integer> getStatisticValueMap() {
+        return statisticValueMap;
     }
 
     public PlayerVehicleInformation getVehicleInformation() {

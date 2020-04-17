@@ -16,12 +16,12 @@ public abstract class CustomBlock {
 
     private static final AtomicInteger idCounter = new AtomicInteger();
 
-    private short type;
+    private short blockId;
     private String identifier;
     private short id;
 
-    public CustomBlock(short type, String identifier) {
-        this.type = type;
+    public CustomBlock(short blockId, String identifier) {
+        this.blockId = blockId;
         this.identifier = identifier;
         this.id = (short) idCounter.incrementAndGet();
     }
@@ -52,8 +52,8 @@ public abstract class CustomBlock {
         return updateOption.getValue() > 0;
     }
 
-    public short getType() {
-        return type;
+    public short getBlockId() {
+        return blockId;
     }
 
     public String getIdentifier() {

@@ -31,6 +31,10 @@ public class BlockManager {
         return this.placementRules.get(blockId);
     }
 
+    public BlockPlacementRule getBlockPlacementRule(Block block) {
+        return getBlockPlacementRule(block.getBlockId());
+    }
+
     public CustomBlock getBlock(String identifier) {
         return blocksId.get(identifier);
     }

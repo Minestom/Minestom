@@ -3,6 +3,7 @@ package fr.themode.minestom.net.packet.server.play;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.ServerPacketIdentifier;
+import fr.themode.minestom.stat.StatisticCategory;
 
 public class StatisticsPacket implements ServerPacket {
 
@@ -21,27 +22,15 @@ public class StatisticsPacket implements ServerPacket {
         return ServerPacketIdentifier.STATISTICS;
     }
 
-    public enum StatisticCategory {
-        MINED,
-        CRAFTED,
-        USED,
-        BROKEN,
-        PICKED_UP,
-        DROPPED,
-        KILLED,
-        KILLED_BY,
-        CUSTOM
-    }
-
     public static class Statistic {
 
         public StatisticCategory category;
-        public int statisticIdentifier;
+        public int statisticId;
         public int value;
 
         private void write(PacketWriter writer) {
             writer.writeVarInt(category.ordinal());
-            writer.writeVarInt(statisticIdentifier);
+            writer.writeVarInt(statisticId);
             writer.writeVarInt(value);
         }
     }

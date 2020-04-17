@@ -9,6 +9,7 @@ import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.item.Material;
 import fr.themode.minestom.particle.Particle;
 import fr.themode.minestom.sound.Sound;
+import fr.themode.minestom.stat.StatisticType;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -25,6 +26,7 @@ public class RegistryMain {
     public static final String ENTITIES_PATH = "registry/registries.json";
     public static final String SOUNDS_PATH = "registry/registries.json";
     public static final String PARTICLES_PATH = "registry/registries.json";
+    public static final String STATS_PATH = "registry/registries.json";
 
     public static void main(String[] args) {
         List<RegistryBlock> blocks = parseBlocks(BLOCKS_PATH);
@@ -32,11 +34,12 @@ public class RegistryMain {
         List<RegistryEntityType> entities = parseEntities(ENTITIES_PATH);
         List<RegistrySound> sounds = parseSounds(SOUNDS_PATH);
         List<RegistryParticle> particles = parseParticles(PARTICLES_PATH);
+        List<RegistryStat> stats = parseStats(STATS_PATH);
         //writeBlocksClass(blocks);
         //writeItemsClass(items);
         //writeEntitiesClass(entities);
         //writeSoundsClass(sounds);
-        writeParticlesClass(particles);
+        writeStatsClass(stats);
     }
 
     public static void registerBlocks() {
@@ -103,6 +106,15 @@ public class RegistryMain {
         }
     }
 
+    public static void registerStats() {
+        List<RegistryStat> registryStats = parseStats(STATS_PATH);
+
+        for (RegistryStat registryStat : registryStats) {
+            StatisticType stat = StatisticType.valueOf(registryStat.name);
+            stat.setIdentifier(registryStat.id);
+        }
+    }
+
     private static void writeBlocksClass(List<RegistryBlock> blocks) {
         for (RegistryBlock registryBlock : blocks) {
             String line = registryBlock.name + ",";
@@ -135,6 +147,13 @@ public class RegistryMain {
     private static void writeParticlesClass(List<RegistryParticle> particles) {
         for (RegistryParticle registryParticle : particles) {
             String line = registryParticle.name + ",";
+            System.out.println(line);
+        }
+    }
+
+    private static void writeStatsClass(List<RegistryStat> stats) {
+        for (RegistryStat registryStat : stats) {
+            String line = registryStat.name + ",";
             System.out.println(line);
         }
     }
@@ -327,6 +346,36 @@ public class RegistryMain {
         }
 
         return registryParticles;
+    }
+
+    private static List<RegistryStat> parseStats(String path) {
+        List<RegistryStat> registryStats = new ArrayList<>();
+
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
+
+        JsonObject itemsObject = obj.getAsJsonObject("minecraft:custom_stat");
+        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
+
+        Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
+            RegistryStat registryStat = new RegistryStat();
+            registryStats.add(registryStat);
+            String item = entryEntry.getKey();
+            String itemName = item.toUpperCase().replace("MINECRAFT:", "").replace(".", "_");
+            registryStat.name = itemName;
+            short id = entryEntry.getValue().getAsJsonObject().get("protocol_id").getAsShort();
+            registryStat.id = id;
+        }
+
+        return registryStats;
     }
 
 }

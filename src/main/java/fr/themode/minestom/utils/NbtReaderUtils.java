@@ -70,6 +70,21 @@ public class NbtReaderUtils {
                 String listName = reader.readShortSizedString();
 
                 if (listName.equals("StoredEnchantments")) {
+                    boolean end = false;
+                    while (!end) {
+                        reader.readByte(); // Should be a compound (0x0A)
+                        int size = reader.readInteger();
+
+                        byte test = reader.readByte();
+                        String lvlName = reader.readShortSizedString();
+                        short lvl = reader.readShort();
+                        byte test2 = reader.readByte();
+                        String idName = reader.readShortSizedString();
+                        short id = reader.readShort();
+                        System.out.println("size: " + lvl + " : " + id);
+
+                        end = true;
+                    }
                     // TODO
                 }
 
@@ -112,7 +127,7 @@ public class NbtReaderUtils {
                 String listName = reader.readShortSizedString();
 
                 if (listName.equals("Lore")) {
-                    byte loreType = reader.readByte(); // Should always be 0x08 (TAG_String)
+                    reader.readByte(); // lore type, should always be 0x08 (TAG_String)
 
                     int size = reader.readInteger();
                     ArrayList<String> lore = new ArrayList<>(size);

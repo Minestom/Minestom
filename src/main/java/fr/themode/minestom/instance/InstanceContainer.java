@@ -88,7 +88,7 @@ public class InstanceContainer extends Instance {
 
             callBlockPlace(chunk, index, x, y, z);
 
-            short id = BLOCK_MANAGER.getBlock(blockId).getType();
+            short id = BLOCK_MANAGER.getBlock(blockId).getBlockId();
             sendBlockChange(chunk, x, y, z, id);
         }
     }

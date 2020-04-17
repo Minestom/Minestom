@@ -1,5 +1,6 @@
 package fr.themode.minestom.listener;
 
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
@@ -7,7 +8,10 @@ import fr.themode.minestom.event.PlayerBlockInteractEvent;
 import fr.themode.minestom.event.PlayerBlockPlaceEvent;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.block.Block;
+import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
+import fr.themode.minestom.instance.block.rule.BlockPlacementRule;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.item.Material;
@@ -58,8 +62,17 @@ public class BlockPlacementListener {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
             playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
+            // BlockPlacementRule check
+            Block block = material.getBlock();
+            BlockManager blockManager = MinecraftServer.getBlockManager();
+            BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
+            boolean canPlace = true;
+            if (blockPlacementRule != null) {
+                canPlace = blockPlacementRule.canPlace(instance, blockPosition);
+            }
+
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
-            if (!playerBlockPlaceEvent.isCancelled()) {
+            if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
                 instance.setBlock(blockPosition, material.getBlock());
                 //instance.setCustomBlock(blockPosition, "updatable");
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {

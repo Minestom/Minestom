@@ -10,6 +10,7 @@ import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.inventory.PlayerInventory;
 import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
+import fr.themode.minestom.net.packet.server.play.AcknowledgePlayerDiggingPacket;
 import fr.themode.minestom.net.packet.server.play.EntityEffectPacket;
 import fr.themode.minestom.net.packet.server.play.RemoveEntityEffectPacket;
 import fr.themode.minestom.utils.BlockPosition;
@@ -36,13 +37,16 @@ public class PlayerDiggingListener {
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
                                 player.refreshTargetBlock(customBlock, blockPosition);
-                                // TODO ACKNOWLEDGE
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                            } else {
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                             }
                             addEffect(player);
                         } else {
                             player.resetTargetBlock();
                             removeEffect(player);
-                            // TODO ACKNOWLEDGE
                         }
                     }
                 }
@@ -99,8 +103,8 @@ public class PlayerDiggingListener {
             itemEntity.setPickupDelay(500);
             itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
             itemEntity.setInstance(player.getInstance());
-            Vector velocity = player.getPosition().clone().getDirection().multiply(5);
-            itemEntity.setVelocity(velocity, 350);
+            Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+            itemEntity.setVelocity(velocity, 500);
         });
     }
 
@@ -119,6 +123,17 @@ public class PlayerDiggingListener {
         removeEntityEffectPacket.entityId = player.getEntityId();
         removeEntityEffectPacket.effectId = 4;
         player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
+    }
+
+    private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockId,
+                                              ClientPlayerDiggingPacket.Status status, boolean success) {
+        AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();
+        acknowledgePlayerDiggingPacket.blockPosition = blockPosition;
+        acknowledgePlayerDiggingPacket.blockStateId = blockId;
+        acknowledgePlayerDiggingPacket.status = status;
+        acknowledgePlayerDiggingPacket.successful = success;
+
+        player.getPlayerConnection().sendPacket(acknowledgePlayerDiggingPacket);
     }
 
 }

@@ -40,7 +40,7 @@ public class Main {
         shapelessRecipe.addIngredient(ingredient);
         recipeManager.addRecipe(shapelessRecipe);
 
-        MinecraftServer.getBenchmarkManager().enable(new UpdateOption(2500, TimeUnit.MILLISECOND));
+        MinecraftServer.getBenchmarkManager().enable(new UpdateOption(60 * 1000, TimeUnit.MILLISECOND));
 
         PlayerInit.init();
 

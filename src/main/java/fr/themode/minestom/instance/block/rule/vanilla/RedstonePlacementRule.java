@@ -12,6 +12,12 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
+    public boolean canPlace(Instance instance, BlockPosition blockPosition) {
+        // TODO check solid block
+        return true;
+    }
+
+    @Override
     public short blockRefresh(Instance instance, BlockPosition blockPosition) {
         int x = blockPosition.getX();
         int y = blockPosition.getY();

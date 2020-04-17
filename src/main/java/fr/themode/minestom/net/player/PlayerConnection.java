@@ -21,18 +21,18 @@ public class PlayerConnection {
     }
 
     public void sendPacket(ByteBuf buffer) {
-        channel.writeAndFlush(buffer.copy());
+        buffer.retain();
+        channel.writeAndFlush(buffer);
     }
 
     public void writePacket(ByteBuf buffer) {
-        channel.write(buffer.copy());
+        buffer.retain();
+        channel.write(buffer);
     }
 
     public void sendPacket(ServerPacket serverPacket) {
-        if (isOnline()) {
-            ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-            sendPacket(buffer);
-        }
+        ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+        sendPacket(buffer);
     }
 
     public void flush() {

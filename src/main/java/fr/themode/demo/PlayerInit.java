@@ -133,7 +133,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 75, 0));
 
             /*Random random = new Random();
