@@ -5,6 +5,7 @@ import fr.themode.minestom.entity.ItemEntity;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.ItemDropEvent;
 import fr.themode.minestom.event.PlayerStartDiggingEvent;
+import fr.themode.minestom.event.PlayerSwapItemEvent;
 import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.inventory.PlayerInventory;
@@ -88,8 +89,11 @@ public class PlayerDiggingListener {
                 PlayerInventory playerInventory = player.getInventory();
                 ItemStack mainHand = playerInventory.getItemInMainHand().clone();
                 ItemStack offHand = playerInventory.getItemInOffHand().clone();
-                playerInventory.setItemInMainHand(offHand);
-                playerInventory.setItemInOffHand(mainHand);
+                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(offHand, mainHand);
+                player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
+                    playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
+                    playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
+                });
                 break;
         }
     }

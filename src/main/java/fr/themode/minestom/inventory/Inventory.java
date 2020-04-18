@@ -162,8 +162,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
 
-        System.out.println("cancel:" + clickResult.isCancel());
-
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
             setCursorPlayerItem(player, clickResult.getCursor());

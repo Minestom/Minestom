@@ -66,14 +66,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             for (int i = 0; i < items.length - 10; i++) {
                 ItemStack item = items[i];
                 StackingRule itemStackingRule = item.getStackingRule();
-                if (item.isAir()) {
-                    setItemStack(i, itemStack);
-                    return true;
-                } else if (itemStack.isSimilar(item)) {
-                    int itemAmount = item.getAmount();
+                if (itemStackingRule.canBeStacked(itemStack, item)) {
+                    int itemAmount = itemStackingRule.getAmount(item);
                     if (itemAmount == stackingRule.getMaxSize())
                         continue;
-                    int totalAmount = itemStack.getAmount() + itemAmount;
+                    int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                    int totalAmount = itemStackAmount + itemAmount;
                     if (!stackingRule.canApply(itemStack, totalAmount)) {
                         item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
 
@@ -84,6 +82,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                         sendSlotRefresh((short) convertToPacketSlot(i), item);
                         return true;
                     }
+                } else if (item.isAir()) {
+                    setItemStack(i, itemStack);
+                    return true;
                 }
             }
         }

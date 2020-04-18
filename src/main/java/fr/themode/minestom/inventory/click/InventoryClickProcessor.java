@@ -274,6 +274,7 @@ public class InventoryClickProcessor {
             cursor = result.getCursorItem();
             clicked = result.getClickedItem();
 
+            clickResult.setCancel(result.isCancel());
             if (result.isCancel()) {
                 clickResult.setClicked(clicked);
                 clickResult.setCursor(cursor);
