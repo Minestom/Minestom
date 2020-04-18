@@ -57,7 +57,7 @@ public class BlockPlacementListener {
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby players
+        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby other players
         if (material.isBlock() && !intersectPlayer) {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
             playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);

@@ -189,6 +189,11 @@ public class InventoryClickProcessor {
                 for (Integer s : slots) {
                     ItemStack draggedItem = cursor.clone();
                     ItemStack slotItem = itemGetter.apply(s);
+
+                    clickResult = startCondition(clickResult, inventoryCondition, player, s, slotItem, cursor);
+                    if (clickResult.isCancel())
+                        continue;
+
                     int maxSize = stackingRule.getMaxSize();
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         int amount = slotItem.getAmount() + slotSize;
@@ -222,6 +227,9 @@ public class InventoryClickProcessor {
                 for (Integer s : slots) {
                     ItemStack draggedItem = cursor.clone();
                     ItemStack slotItem = itemGetter.apply(s);
+                    clickResult = startCondition(clickResult, inventoryCondition, player, s, slotItem, cursor);
+                    if (clickResult.isCancel())
+                        continue;
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         int amount = slotItem.getAmount() + 1;
                         if (stackingRule.canApply(slotItem, amount)) {

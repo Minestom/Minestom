@@ -3,7 +3,7 @@ package fr.themode.minestom.event;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.item.ItemStack;
 
-public class PlayerUseItemEvent extends Event {
+public class PlayerUseItemEvent extends CancellableEvent {
 
     private Player.Hand hand;
     private ItemStack itemStack;

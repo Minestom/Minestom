@@ -1,6 +1,7 @@
 package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.event.ArmorEquipEvent;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
 import fr.themode.minestom.inventory.condition.InventoryCondition;
@@ -181,22 +182,49 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
             itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
-            this.items[slot] = itemStack;
-            // System.out.println("INSERT: " + slot);
-            //sendSlotRefresh((short) slot, itemStack);
-            update();
+
+            EntityEquipmentPacket.Slot equipmentSlot;
+
             if (slot == player.getHeldSlot()) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+                equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
             } else if (slot == OFFHAND_SLOT) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+                equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
             } else if (slot == HELMET_SLOT) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+                equipmentSlot = EntityEquipmentPacket.Slot.HELMET;
+                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
             } else if (slot == CHESTPLATE_SLOT) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+                equipmentSlot = EntityEquipmentPacket.Slot.CHESTPLATE;
+                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
             } else if (slot == LEGGINGS_SLOT) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+                equipmentSlot = EntityEquipmentPacket.Slot.LEGGINGS;
+                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
             } else if (slot == BOOTS_SLOT) {
-                player.syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+                equipmentSlot = EntityEquipmentPacket.Slot.BOOTS;
+                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
+            } else {
+                equipmentSlot = null;
+            }
+
+            if (itemStack != null) {
+                this.items[slot] = itemStack;
+            }
+            //System.out.println("INSERT: " + slot);
+            //sendSlotRefresh((short) slot, itemStack);
+
+            // Refresh inventory items
+            update();
+
+            // Sync equipment
+            if (equipmentSlot != null) {
+                player.syncEquipment(equipmentSlot);
             }
         }
     }

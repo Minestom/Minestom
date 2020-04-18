@@ -914,6 +914,27 @@ public enum Material {
         return block;
     }
 
+    public boolean isHelmet() {
+        return toString().endsWith("HELMET");
+    }
+
+    public boolean isChestplate() {
+        return toString().endsWith("CHESTPLATE");
+    }
+
+    public boolean isLeggings() {
+        return toString().endsWith("LEGGINGS");
+    }
+
+    public boolean isBoots() {
+        return toString().endsWith("BOOTS");
+    }
+
+    public boolean isArmor() {
+        return isHelmet() || isChestplate() ||
+                isLeggings() || isBoots();
+    }
+
     public boolean isFood() {
         return false; // TODO
     }
