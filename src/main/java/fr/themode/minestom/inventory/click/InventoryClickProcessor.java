@@ -227,21 +227,25 @@ public class InventoryClickProcessor {
                 for (Integer s : slots) {
                     ItemStack draggedItem = cursor.clone();
                     ItemStack slotItem = itemGetter.apply(s);
+
                     clickResult = startCondition(clickResult, inventoryCondition, player, s, slotItem, cursor);
                     if (clickResult.isCancel())
                         continue;
+
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         int amount = slotItem.getAmount() + 1;
                         if (stackingRule.canApply(slotItem, amount)) {
                             slotItem = stackingRule.apply(slotItem, amount);
                             itemSetter.accept(s, slotItem);
+                            cursorAmount -= 1;
                         }
                     } else if (slotItem.isAir()) {
                         draggedItem = stackingRule.apply(draggedItem, 1);
                         itemSetter.accept(s, draggedItem);
+                        cursorAmount -= 1;
                     }
                 }
-                cursor = stackingRule.apply(cursor, cursorAmount - size);
+                cursor = stackingRule.apply(cursor, cursorAmount);
                 clickResult.setCursor(cursor);
 
                 rightDraggingMap.remove(player);
@@ -262,6 +266,62 @@ public class InventoryClickProcessor {
                 rightDraggingMap.get(player).add(slot);
             }
         }
+
+        return clickResult;
+    }
+
+    public InventoryClickResult doubleClick(InventoryCondition inventoryCondition, Player player, int slot,
+                                            ItemStack cursor, InventoryClickLoopHandler... loopHandlers) {
+        InventoryClickResult clickResult = new InventoryClickResult(ItemStack.AIR_ITEM, cursor);
+
+        if (clickResult.isCancel()) {
+            return clickResult;
+        }
+
+        if (cursor.isAir())
+            return null;
+
+        StackingRule cursorRule = cursor.getStackingRule();
+        int amount = cursorRule.getAmount(cursor);
+
+        if (!cursorRule.canApply(cursor, amount + 1))
+            return null;
+
+        for (InventoryClickLoopHandler loopHandler : loopHandlers) {
+            Function<Integer, Integer> indexModifier = loopHandler.getIndexModifier();
+            Function<Integer, ItemStack> itemGetter = loopHandler.getItemGetter();
+            BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
+
+            for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {
+                int index = indexModifier.apply(i);
+                if (index == slot)
+                    continue;
+
+                ItemStack item = itemGetter.apply(index);
+                StackingRule itemRule = item.getStackingRule();
+                if (!cursorRule.canApply(cursor, amount + 1))
+                    break;
+                if (cursorRule.canBeStacked(cursor, item)) {
+                    clickResult = startCondition(clickResult, inventoryCondition, player, index, item, cursor);
+                    if (clickResult.isCancel())
+                        continue;
+
+                    int totalAmount = amount + cursorRule.getAmount(item);
+                    if (!cursorRule.canApply(cursor, totalAmount)) {
+                        cursor = cursorRule.apply(cursor, cursorRule.getMaxSize());
+
+                        item = itemRule.apply(item, totalAmount - itemRule.getMaxSize());
+                    } else {
+                        cursor = cursorRule.apply(cursor, totalAmount);
+                        item = itemRule.apply(item, 0);
+                    }
+                    itemSetter.accept(index, item);
+                    amount = cursorRule.getAmount(cursor);
+                }
+            }
+        }
+
+        clickResult.setCursor(cursor);
 
         return clickResult;
     }

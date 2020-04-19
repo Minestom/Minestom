@@ -2,6 +2,7 @@ package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.ArmorEquipEvent;
+import fr.themode.minestom.inventory.click.InventoryClickLoopHandler;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
 import fr.themode.minestom.inventory.condition.InventoryCondition;
@@ -422,66 +423,28 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         if (clickResult == null)
             return;
 
+        if (clickResult.doRefresh())
+            update();
+
         setCursorItem(clickResult.getCursor());
     }
 
     @Override
     public void doubleClick(Player player, int slot) {
-        ItemStack cursorItem = getCursorItem();
-        ItemStack clicked = getItemStack(slot, OFFSET);
+        ItemStack cursor = getCursorItem();
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(player, slot, result);
+        InventoryClickResult clickResult = clickProcessor.doubleClick(getInventoryCondition(), player, slot, cursor,
+                new InventoryClickLoopHandler(0, items.length, 1,
+                        i -> i < 9 ? i + 9 : i - 9,
+                        index -> items[index],
+                        (index, itemStack) -> setItemStack(index, itemStack)));
 
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
-
-            if (result.isCancel()) {
-                setItemStack(slot, OFFSET, clicked);
-                setCursorItem(cursorItem);
-                // Refresh client slot
-                sendSlotRefresh((short) slot, clicked);
-                return;
-            }
-        }
-        // End condition
-
-        if (cursorItem.isAir())
+        if (clickResult == null)
             return;
 
-        StackingRule cursorRule = cursorItem.getStackingRule();
-        int amount = cursorItem.getAmount();
+        if (clickResult.doRefresh())
+            update();
 
-        if (!cursorRule.canApply(cursorItem, amount + 1))
-            return;
-
-        for (int i = 0; i < items.length; i++) {
-            int index = i < 9 ? i + 9 : i - 9;
-            if (index == slot)
-                continue;
-            ItemStack item = items[index];
-            StackingRule itemRule = item.getStackingRule();
-            if (!cursorRule.canApply(cursorItem, amount + 1))
-                break;
-            if (cursorRule.canBeStacked(cursorItem, item)) {
-                int totalAmount = amount + item.getAmount();
-                if (!cursorRule.canApply(cursorItem, totalAmount)) {
-                    cursorItem = cursorRule.apply(cursorItem, cursorRule.getMaxSize());
-
-                    item = itemRule.apply(item, totalAmount - itemRule.getMaxSize());
-                    setItemStack(index, item);
-                } else {
-                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
-                    item = itemRule.apply(item, 0);
-                    setItemStack(index, item);
-                }
-                amount = cursorItem.getAmount();
-            }
-        }
-
-        setCursorItem(cursorItem);
+        setCursorItem(clickResult.getCursor());
     }
 }

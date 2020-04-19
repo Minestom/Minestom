@@ -2,6 +2,7 @@ package fr.themode.minestom.inventory;
 
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.inventory.click.InventoryClickLoopHandler;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
 import fr.themode.minestom.inventory.condition.InventoryCondition;
@@ -372,109 +373,36 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public void doubleClick(Player player, int slot) {
         PlayerInventory playerInventory = player.getInventory();
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset); // Isn't used in the algorithm
-        ItemStack cursorItem = getCursorItem(player);
+        ItemStack cursor = getCursorItem(player);
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(player, slot, result);
 
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
+        InventoryClickResult clickResult = clickProcessor.doubleClick(getInventoryCondition(), player, slot, cursor,
+                // Start by looping through the opened inventory
+                new InventoryClickLoopHandler(0, itemStacks.length, 1,
+                        i -> i,
+                        index -> itemStacks[index],
+                        (index, itemStack) -> setItemStack(index, itemStack)),
+                // Looping through player inventory
+                new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE - 9, 1,
+                        i -> playerInventory.convertToPacketSlot(i),
+                        index -> playerInventory.getItemStack(index, offset),
+                        (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)),
+                // Player hotbar
+                new InventoryClickLoopHandler(0, 9, 1,
+                        i -> playerInventory.convertToPacketSlot(i),
+                        index -> playerInventory.getItemStack(index, offset),
+                        (index, itemStack) -> {
+                            playerInventory.setItemStack(index, offset, itemStack);
+                            System.out.println("try: " + index);
+                        }));
 
-            if (result.isCancel()) {
-                //System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
-                if (isInWindow) {
-                    setItemStack(slot, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                } else {
-                    playerInventory.setItemStack(slot, offset, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                }
-                // Refresh client window
-                player.getPlayerConnection().sendPacket(getWindowItemsPacket());
-                return;
-            }
-        }
-        // End condition
-
-        if (cursorItem.isAir())
+        if (clickResult == null)
             return;
 
-        int amount = cursorItem.getAmount();
+        if (clickResult.doRefresh())
+            update();
 
-        StackingRule cursorRule = cursorItem.getStackingRule();
-        int maxSize = cursorRule.getMaxSize();
-
-        if (amount == maxSize)
-            return;
-
-        // Start by looping through the opened inventory
-        for (int i = 0; i < itemStacks.length; i++) {
-            if (i == slot)
-                continue;
-            if (amount == maxSize)
-                break;
-            ItemStack item = itemStacks[i];
-            if (cursorRule.canBeStacked(cursorItem, item)) {
-                int totalAmount = amount + item.getAmount();
-                if (!cursorRule.canApply(cursorItem, totalAmount)) {
-                    cursorItem = cursorRule.apply(cursorItem, maxSize);
-                    item = cursorRule.apply(item, totalAmount - maxSize);
-                    setItemStack(i, item);
-                } else {
-                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
-                    setItemStack(i, ItemStack.AIR_ITEM);
-                }
-                amount = cursorItem.getAmount();
-            }
-        }
-
-        // Looping through player inventory
-        for (int i = 9; i < PlayerInventory.INVENTORY_SIZE - 9; i++) { // Inventory
-            if (playerInventory.convertToPacketSlot(i) == slot)
-                continue;
-            if (amount == maxSize)
-                break;
-            ItemStack item = playerInventory.getItemStack(i);
-            if (cursorRule.canBeStacked(cursorItem, item)) {
-                int totalAmount = amount + item.getAmount();
-                if (!cursorRule.canApply(cursorItem, totalAmount)) {
-                    cursorItem = cursorRule.apply(cursorItem, maxSize);
-                    item = cursorRule.apply(item, totalAmount - maxSize);
-                    playerInventory.setItemStack(i, offset, item);
-                } else {
-                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
-                    playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
-                }
-                amount = cursorItem.getAmount();
-            }
-        }
-
-        for (int i = 0; i < 9; i++) { // Hotbar
-            if (playerInventory.convertToPacketSlot(i) == slot)
-                continue;
-            if (amount == maxSize)
-                break;
-            ItemStack item = playerInventory.getItemStack(i);
-            if (cursorRule.canBeStacked(cursorItem, item)) {
-                int totalAmount = amount + item.getAmount();
-                if (!cursorRule.canApply(cursorItem, totalAmount)) {
-                    cursorItem = cursorRule.apply(cursorItem, maxSize);
-                    item = cursorRule.apply(item, totalAmount - maxSize);
-                    playerInventory.setItemStack(i, offset, item);
-                } else {
-                    cursorItem = cursorRule.apply(cursorItem, totalAmount);
-                    playerInventory.setItemStack(i, offset, ItemStack.AIR_ITEM);
-                }
-                amount = cursorItem.getAmount();
-            }
-        }
-
-        setCursorPlayerItem(player, cursorItem);
+        setCursorPlayerItem(player, clickResult.getCursor());
         playerInventory.update();
     }
 }
