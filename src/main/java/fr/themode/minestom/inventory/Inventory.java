@@ -6,9 +6,7 @@ import fr.themode.minestom.inventory.click.InventoryClickLoopHandler;
 import fr.themode.minestom.inventory.click.InventoryClickProcessor;
 import fr.themode.minestom.inventory.click.InventoryClickResult;
 import fr.themode.minestom.inventory.condition.InventoryCondition;
-import fr.themode.minestom.inventory.condition.InventoryConditionResult;
 import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.item.StackingRule;
 import fr.themode.minestom.net.packet.server.play.SetSlotPacket;
 import fr.themode.minestom.net.packet.server.play.WindowItemsPacket;
 
@@ -198,107 +196,36 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         PlayerInventory playerInventory = player.getInventory();
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
-        ItemStack cursorItem = getCursorItem(player); // Isn't used in the algorithm
+        ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
 
-        // Start condition
-        InventoryCondition inventoryCondition = getInventoryCondition();
-        if (inventoryCondition != null) {
-            InventoryConditionResult result = new InventoryConditionResult(clicked, cursorItem);
-            inventoryCondition.accept(player, slot, result);
 
-            cursorItem = result.getCursorItem();
-            clicked = result.getClickedItem();
+        InventoryClickResult clickResult;
 
-            if (result.isCancel()) {
-                //System.out.println(clicked.getMaterial() + " + " + cursorItem.getMaterial());
-                if (isInWindow) {
-                    setItemStack(slot, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                } else {
-                    playerInventory.setItemStack(slot, offset, clicked);
-                    setCursorPlayerItem(player, cursorItem);
-                }
-                // Refresh client window
-                player.getPlayerConnection().sendPacket(getWindowItemsPacket());
-                return;
-            }
+        if (isInWindow) {
+            clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
+                    // Player inventory loop
+                    new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
+                            i -> playerInventory.convertToPacketSlot(i),
+                            index -> playerInventory.getItemStack(index, offset),
+                            (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)));
+        } else {
+            clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
+                    // Window loop
+                    new InventoryClickLoopHandler(0, itemStacks.length, 1,
+                            i -> i,
+                            index -> itemStacks[index],
+                            (index, itemStack) -> setItemStack(index, itemStack)));
         }
-        // End condition
 
-        if (clicked.isAir())
+        if (clickResult == null)
             return;
 
-        ItemStack resultClicked = clicked.clone();
-        boolean filled = false;
+        if (clickResult.doRefresh())
+            update();
 
-        StackingRule clickedRule = clicked.getStackingRule();
-        int maxSize = clickedRule.getMaxSize();
-
-        if (!isInWindow) {
-            for (int i = 0; i < itemStacks.length; i++) {
-                ItemStack item = itemStacks[i];
-                if (clickedRule.canBeStacked(clicked, item)) {
-                    int amount = item.getAmount();
-                    if (amount == maxSize)
-                        continue;
-                    int totalAmount = resultClicked.getAmount() + amount;
-                    if (!clickedRule.canApply(clicked, totalAmount)) {
-                        item = clickedRule.apply(item, maxSize);
-                        setItemStack(i, item);
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount - maxSize);
-                        filled = false;
-                        continue;
-                    } else {
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount);
-                        setItemStack(i, resultClicked);
-                        playerInventory.setItemStack(slot, offset, ItemStack.AIR_ITEM);
-                        filled = true;
-                        break;
-                    }
-                } else if (item.isAir()) {
-                    // Switch
-                    setItemStack(i, resultClicked);
-                    playerInventory.setItemStack(slot, offset, ItemStack.AIR_ITEM);
-                    filled = true;
-                    break;
-                }
-            }
-            if (!filled) {
-                playerInventory.setItemStack(slot, offset, resultClicked);
-            }
-        } else {
-            for (int i = 44; i >= 0; i--) { // Hotbar
-                ItemStack item = playerInventory.getItemStack(i, offset);
-                if (clickedRule.canBeStacked(clicked, item)) {
-                    int amount = item.getAmount();
-                    if (amount == maxSize)
-                        continue;
-                    int totalAmount = resultClicked.getAmount() + amount;
-                    if (!clickedRule.canApply(clicked, totalAmount)) {
-                        item = clickedRule.apply(item, maxSize);
-                        playerInventory.setItemStack(i, offset, item);
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount - maxSize);
-                        filled = false;
-                        continue;
-                    } else {
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount);
-                        playerInventory.setItemStack(i, offset, resultClicked);
-                        setItemStack(slot, ItemStack.AIR_ITEM);
-                        filled = true;
-                        break;
-                    }
-                } else if (item.isAir()) {
-                    // Switch
-                    playerInventory.setItemStack(i, offset, resultClicked);
-                    setItemStack(slot, ItemStack.AIR_ITEM);
-                    filled = true;
-                    break;
-                }
-            }
-            if (!filled) { // Still not filled, inventory is full
-                setItemStack(slot, resultClicked);
-            }
-        }
+        setCursorPlayerItem(player, clickResult.getCursor());
+        playerInventory.update();
+        update();
     }
 
     @Override
@@ -352,7 +279,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 s -> isClickInWindow(s) ? getItemStack(s) : playerInventory.getItemStack(s, offset),
 
                 (s, item) -> {
-                    System.out.println("click window:" + isClickInWindow(s));
                     if (isClickInWindow(s)) {
                         setItemStack(s, item);
                     } else {
@@ -393,7 +319,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                         index -> playerInventory.getItemStack(index, offset),
                         (index, itemStack) -> {
                             playerInventory.setItemStack(index, offset, itemStack);
-                            System.out.println("try: " + index);
                         }));
 
         if (clickResult == null)

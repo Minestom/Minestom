@@ -25,27 +25,29 @@ public class BoundingBox {
                 (getMinZ() <= boundingBox.getMaxZ() && getMaxZ() >= boundingBox.getMinZ());
     }
 
-    // FIXME: seems to do not work properly
     public boolean intersect(BlockPosition blockPosition) {
-        final float x = 1.6f;
-        final float y = 1;
-        final float z = 1.6f;
 
-        float minX = blockPosition.getX() - (x / 2) + 0.5f;
-        float maxX = blockPosition.getX() + (x / 2) + 0.5f;
+        final float x = blockPosition.getX();
+        final float y = blockPosition.getY();
+        final float z = blockPosition.getZ();
 
-        float minY = blockPosition.getY();
-        float maxY = blockPosition.getY() + y;
+        final float offsetX = 1;
+        final float offsetZ = 1;
 
-        float minZ = blockPosition.getZ() - (z / 2) + 0.5f;
-        float maxZ = blockPosition.getZ() + (z / 2) + 0.5f;
+        float minX = x;
+        float maxX = x + offsetX;
 
-        if (getMinX() > maxX) return false;
-        if (getMaxX() < minX) return false;
-        if (getMinY() > maxY) return false;
-        if (getMaxY() < minY) return false;
-        if (getMinZ() > maxZ) return false;
-        return !(getMaxZ() < minZ);
+        float minY = y;
+        float maxY = y + 0.99999f;
+
+        float minZ = z;
+        float maxZ = z + offsetZ;
+
+        boolean checkX = getMinX() < maxX && getMaxX() > minX;
+        boolean checkY = getMinY() < maxY && getMaxY() > minY;
+        boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
+
+        return checkX && checkY && checkZ;
     }
 
 
@@ -53,18 +55,20 @@ public class BoundingBox {
         final float x = 1.6f;
         final float y = 1;
         final float z = 1.6f;
-        float minX = blockPosition.getX() - (x / 2) + 0.5f;
-        float maxX = blockPosition.getX() + (x / 2) + 0.5f;
+        float minX = blockPosition.getX();
+        float maxX = blockPosition.getX() +x;
 
         float minY = blockPosition.getY();
         float maxY = blockPosition.getY() + y;
 
-        float minZ = blockPosition.getZ() - (z / 2) + 0.5f;
-        float maxZ = blockPosition.getZ() + (z / 2) + 0.5f;
+        float minZ = blockPosition.getZ();
+        float maxZ = blockPosition.getZ() +z;
 
         boolean checkX = getMinX() + x / 2 < maxX && getMaxX() - x / 2 > minX;
         boolean checkY = getMinY() + y < maxY && getMaxY() + y > minY;
         boolean checkZ = getMinZ() + z / 2 < maxZ && getMaxZ() - z / 2 > minZ;
+
+        System.out.println("test: "+checkX+" : "+checkY+" : "+checkZ);
         return checkX && checkY && checkZ;
     }*/
 
@@ -80,6 +84,10 @@ public class BoundingBox {
 
     public BoundingBox expand(float x, float y, float z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
+    }
+
+    public BoundingBox contract(float x, float y, float z) {
+        return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
     public float getX() {
@@ -103,11 +111,11 @@ public class BoundingBox {
     }
 
     public float getMinY() {
-        return entity.getPosition().getY() - (y / 2);
+        return entity.getPosition().getY();
     }
 
     public float getMaxY() {
-        return entity.getPosition().getY() + (y / 2);
+        return entity.getPosition().getY() + y;
     }
 
     public float getMinZ() {
@@ -120,6 +128,13 @@ public class BoundingBox {
 
     @Override
     public String toString() {
-        return "BoundingBox[" + x + ":" + y + ":" + z + "]";
+        String result = "BoudingBox";
+        result += "\n";
+        result += "[" + getMinX() + " : " + getMaxX() + "]";
+        result += "\n";
+        result += "[" + getMinY() + " : " + getMaxY() + "]";
+        result += "\n";
+        result += "[" + getMinZ() + " : " + getMaxZ() + "]";
+        return result;
     }
 }

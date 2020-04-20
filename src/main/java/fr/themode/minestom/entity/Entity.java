@@ -232,6 +232,7 @@ public abstract class Entity implements Viewable, DataContainer {
                     boolean zIntersect = boundingBox.intersect(zBlock);
 
                     System.out.println(xIntersect + " : " + yIntersect + " : " + zIntersect);
+                    System.out.println(yBlock);
                     newX = xAir ? newX : xIntersect ? position.getX() : newX;
                     newY = yAir ? newY : yIntersect ? position.getY() : newY;
                     newZ = zAir ? newZ : zIntersect ? position.getZ() : newZ;

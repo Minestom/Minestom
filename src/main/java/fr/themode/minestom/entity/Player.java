@@ -14,6 +14,7 @@ import fr.themode.minestom.instance.Instance;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.inventory.Inventory;
 import fr.themode.minestom.inventory.PlayerInventory;
+import fr.themode.minestom.item.ItemStack;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.server.ServerPacket;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -92,7 +93,7 @@ public class Player extends LivingEntity {
         this.username = username;
         this.playerConnection = playerConnection;
 
-        setBoundingBox(0.8f, 1.8f, 0.8f);
+        setBoundingBox(0.6f, 1.8f, 0.6f);
 
         // Some client update
         getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
@@ -446,6 +447,12 @@ public class Player extends LivingEntity {
     public void setFoodSaturation(float foodSaturation) {
         this.foodSaturation = foodSaturation;
         sendUpdateHealthPacket();
+    }
+
+    public boolean dropItem(ItemStack item) {
+        ItemDropEvent itemDropEvent = new ItemDropEvent(item);
+        callEvent(ItemDropEvent.class, itemDropEvent);
+        return !itemDropEvent.isCancelled();
     }
 
     public void respawn() {

@@ -6,10 +6,7 @@ import fr.themode.demo.generator.NoiseTestGenerator;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.benchmark.BenchmarkManager;
 import fr.themode.minestom.benchmark.ThreadResult;
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.GameMode;
-import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.entity.*;
 import fr.themode.minestom.event.*;
 import fr.themode.minestom.instance.InstanceContainer;
 import fr.themode.minestom.inventory.Inventory;
@@ -115,10 +112,10 @@ public class PlayerInit {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
 
-                for (Player p : player.getInstance().getPlayers()) {
+                /*for (Player p : player.getInstance().getPlayers()) {
                     if (p != player)
                         p.teleport(player.getPosition());
-                }
+                }*/
 
                 ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
@@ -127,6 +124,17 @@ public class PlayerInit {
 
             player.setEventCallback(PickupItemEvent.class, event -> {
                 event.setCancelled(!player.getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
+            });
+
+            player.setEventCallback(ItemDropEvent.class, event -> {
+                ItemStack droppedItem = event.getItemStack();
+
+                ItemEntity itemEntity = new ItemEntity(droppedItem);
+                itemEntity.setPickupDelay(500);
+                itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
+                itemEntity.setInstance(player.getInstance());
+                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+                itemEntity.setVelocity(velocity, 500);
             });
 
             player.setEventCallback(PlayerLoginEvent.class, event -> {

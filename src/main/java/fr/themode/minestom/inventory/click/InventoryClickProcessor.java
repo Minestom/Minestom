@@ -156,6 +156,71 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
+    public InventoryClickResult shiftClick(InventoryCondition inventoryCondition, Player player, int slot,
+                                           ItemStack clicked, ItemStack cursor, InventoryClickLoopHandler... loopHandlers) {
+        InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
+
+        if (clickResult.isCancel()) {
+            return clickResult;
+        }
+
+        if (clicked.isAir())
+            return null;
+
+        StackingRule clickedRule = clicked.getStackingRule();
+
+        boolean filled = false;
+        ItemStack resultClicked = clicked.clone();
+
+        for (InventoryClickLoopHandler loopHandler : loopHandlers) {
+            Function<Integer, Integer> indexModifier = loopHandler.getIndexModifier();
+            Function<Integer, ItemStack> itemGetter = loopHandler.getItemGetter();
+            BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
+
+            for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {
+                int index = indexModifier.apply(i);
+                if (index == slot)
+                    continue;
+
+                ItemStack item = itemGetter.apply(index);
+                StackingRule itemRule = item.getStackingRule();
+                if (itemRule.canBeStacked(item, clicked)) {
+                    int amount = itemRule.getAmount(item);
+                    if (!clickedRule.canApply(clicked, amount + 1))
+                        continue;
+                    int totalAmount = clickedRule.getAmount(resultClicked) + amount;
+                    if (!clickedRule.canApply(clicked, totalAmount)) {
+                        item = itemRule.apply(item, itemRule.getMaxSize());
+                        itemSetter.accept(index, item);
+
+                        resultClicked = clickedRule.apply(resultClicked, totalAmount - clickedRule.getMaxSize());
+                        filled = false;
+                        continue;
+                    } else {
+                        resultClicked = clickedRule.apply(resultClicked, totalAmount);
+                        itemSetter.accept(index, resultClicked);
+
+                        item = itemRule.apply(item, 0);
+                        itemSetter.accept(slot, item);
+                        filled = true;
+                        break;
+                    }
+                } else if (item.isAir()) {
+                    // Switch
+                    itemSetter.accept(index, resultClicked);
+                    itemSetter.accept(slot, ItemStack.AIR_ITEM);
+                    filled = true;
+                    break;
+                }
+            }
+            if (!filled) {
+                itemSetter.accept(slot, resultClicked);
+            }
+        }
+
+        return clickResult;
+    }
+
     public InventoryClickResult dragging(InventoryCondition inventoryCondition, Player player,
                                          int slot, int button,
                                          ItemStack clicked, ItemStack cursor,

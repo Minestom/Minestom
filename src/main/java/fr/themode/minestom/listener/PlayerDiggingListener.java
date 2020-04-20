@@ -1,9 +1,7 @@
 package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.GameMode;
-import fr.themode.minestom.entity.ItemEntity;
 import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.event.ItemDropEvent;
 import fr.themode.minestom.event.PlayerStartDiggingEvent;
 import fr.themode.minestom.event.PlayerSwapItemEvent;
 import fr.themode.minestom.instance.Instance;
@@ -15,7 +13,6 @@ import fr.themode.minestom.net.packet.server.play.AcknowledgePlayerDiggingPacket
 import fr.themode.minestom.net.packet.server.play.EntityEffectPacket;
 import fr.themode.minestom.net.packet.server.play.RemoveEntityEffectPacket;
 import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.Vector;
 
 public class PlayerDiggingListener {
 
@@ -99,17 +96,9 @@ public class PlayerDiggingListener {
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {
-        ItemDropEvent itemDropEvent = new ItemDropEvent(droppedItem);
-        player.callCancellableEvent(ItemDropEvent.class, itemDropEvent, () -> {
+        if (player.dropItem(droppedItem)) {
             player.getInventory().setItemInMainHand(handItem);
-
-            ItemEntity itemEntity = new ItemEntity(droppedItem);
-            itemEntity.setPickupDelay(500);
-            itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
-            itemEntity.setInstance(player.getInstance());
-            Vector velocity = player.getPosition().clone().getDirection().multiply(6);
-            itemEntity.setVelocity(velocity, 500);
-        });
+        }
     }
 
     private static void addEffect(Player player) {

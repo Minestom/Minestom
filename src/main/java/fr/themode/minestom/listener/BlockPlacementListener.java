@@ -73,6 +73,7 @@ public class BlockPlacementListener {
 
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
+                player.sendMessage("PLACE BLOCK");
                 instance.setBlock(blockPosition, material.getBlock());
                 //instance.setCustomBlock(blockPosition, "updatable");
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
@@ -87,9 +88,14 @@ public class BlockPlacementListener {
                     }
                 }
             } else {
+                // Refresh chunk
                 Chunk chunk = instance.getChunkAt(blockPosition);
                 instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
             }
+        } else {
+            // Refresh chunk
+            Chunk chunk = instance.getChunkAt(blockPosition);
+            instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
         player.getInventory().refreshSlot(player.getHeldSlot());
     }
