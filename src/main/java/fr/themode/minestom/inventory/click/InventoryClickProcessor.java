@@ -185,6 +185,11 @@ public class InventoryClickProcessor {
                 ItemStack item = itemGetter.apply(index);
                 StackingRule itemRule = item.getStackingRule();
                 if (itemRule.canBeStacked(item, clicked)) {
+
+                    clickResult = startCondition(clickResult, inventoryCondition, player, index, item, cursor);
+                    if (clickResult.isCancel())
+                        continue;
+
                     int amount = itemRule.getAmount(item);
                     if (!clickedRule.canApply(clicked, amount + 1))
                         continue;
@@ -206,6 +211,11 @@ public class InventoryClickProcessor {
                         break;
                     }
                 } else if (item.isAir()) {
+
+                    clickResult = startCondition(clickResult, inventoryCondition, player, index, item, cursor);
+                    if (clickResult.isCancel())
+                        continue;
+
                     // Switch
                     itemSetter.accept(index, resultClicked);
                     itemSetter.accept(slot, ItemStack.AIR_ITEM);

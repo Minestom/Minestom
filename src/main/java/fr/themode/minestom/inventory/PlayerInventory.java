@@ -326,9 +326,16 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(slot, OFFSET);
 
+        boolean slotClick = convertToPacketSlot(slot) < 9;
         InventoryClickResult clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
                 new InventoryClickLoopHandler(0, items.length, 1,
-                        i -> i < 9 ? i + 9 : i - 9,
+                        i -> {
+                            if (slotClick) {
+                                return i < 9 ? i + 9 : i - 9;
+                            } else {
+                                return convertSlot(i, OFFSET);
+                            }
+                        },
                         index -> items[index],
                         (index, itemStack) -> setItemStack(index, OFFSET, itemStack)));
 

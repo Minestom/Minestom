@@ -206,15 +206,27 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                     // Player inventory loop
                     new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
                             i -> playerInventory.convertToPacketSlot(i),
-                            index -> playerInventory.getItemStack(index, offset),
-                            (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)));
+                            index -> isClickInWindow(index) ? getItemStack(index) : playerInventory.getItemStack(index, offset),
+                            (index, itemStack) -> {
+                                if (isClickInWindow(index)) {
+                                    setItemStack(index, itemStack);
+                                } else {
+                                    playerInventory.setItemStack(index, offset, itemStack);
+                                }
+                            }));
         } else {
             clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
                     // Window loop
                     new InventoryClickLoopHandler(0, itemStacks.length, 1,
                             i -> i,
-                            index -> itemStacks[index],
-                            (index, itemStack) -> setItemStack(index, itemStack)));
+                            index -> isClickInWindow(index) ? getItemStack(index) : playerInventory.getItemStack(index, offset),
+                            (index, itemStack) -> {
+                                if (isClickInWindow(index)) {
+                                    setItemStack(index, itemStack);
+                                } else {
+                                    playerInventory.setItemStack(index, offset, itemStack);
+                                }
+                            }));
         }
 
         if (clickResult == null)

@@ -50,28 +50,6 @@ public class BoundingBox {
         return checkX && checkY && checkZ;
     }
 
-
-    /*public boolean intersect(BlockPosition blockPosition) {
-        final float x = 1.6f;
-        final float y = 1;
-        final float z = 1.6f;
-        float minX = blockPosition.getX();
-        float maxX = blockPosition.getX() +x;
-
-        float minY = blockPosition.getY();
-        float maxY = blockPosition.getY() + y;
-
-        float minZ = blockPosition.getZ();
-        float maxZ = blockPosition.getZ() +z;
-
-        boolean checkX = getMinX() + x / 2 < maxX && getMaxX() - x / 2 > minX;
-        boolean checkY = getMinY() + y < maxY && getMaxY() + y > minY;
-        boolean checkZ = getMinZ() + z / 2 < maxZ && getMaxZ() - z / 2 > minZ;
-
-        System.out.println("test: "+checkX+" : "+checkY+" : "+checkZ);
-        return checkX && checkY && checkZ;
-    }*/
-
     public boolean intersect(float x, float y, float z) {
         return (x >= getMinX() && x <= getMaxX()) &&
                 (y >= getMinY() && y <= getMaxY()) &&
