@@ -53,6 +53,8 @@ public abstract class Instance implements BlockModifier, DataContainer {
     // Load only if auto chunk load is enabled
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
+    public abstract void unloadChunk(int chunkX, int chunkZ);
+
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     public abstract void saveChunkToFolder(Chunk chunk, Runnable callback);

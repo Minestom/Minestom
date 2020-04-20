@@ -10,6 +10,7 @@ import fr.themode.minestom.instance.block.rule.BlockPlacementRule;
 import fr.themode.minestom.net.PacketWriterUtils;
 import fr.themode.minestom.net.packet.server.play.BlockChangePacket;
 import fr.themode.minestom.net.packet.server.play.ParticlePacket;
+import fr.themode.minestom.net.packet.server.play.UnloadChunkPacket;
 import fr.themode.minestom.particle.Particle;
 import fr.themode.minestom.particle.ParticleCreator;
 import fr.themode.minestom.utils.BlockPosition;
@@ -217,6 +218,23 @@ public class InstanceContainer extends Instance {
                 callback.accept(null);
             }
         }
+    }
+
+    @Override
+    public void unloadChunk(int chunkX, int chunkZ) {
+        Chunk chunk = getChunk(chunkX, chunkZ);
+        long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+
+        UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+        unloadChunkPacket.chunkX = chunkX;
+        unloadChunkPacket.chunkZ = chunkZ;
+        chunk.sendPacketToViewers(unloadChunkPacket);
+
+        for (Player viewer : chunk.getViewers()) {
+            chunk.removeViewer(viewer);
+        }
+
+        this.chunks.remove(index);
     }
 
     @Override

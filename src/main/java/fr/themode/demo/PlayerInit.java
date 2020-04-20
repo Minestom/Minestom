@@ -103,7 +103,7 @@ public class PlayerInit {
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);
                     velocity.setY(3.5f);
                     target.setVelocity(velocity, 150);
-                    target.damage(1);
+                    target.damage(5);
                     player.sendMessage("ATTACK");
                 }
             });
@@ -142,7 +142,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 75, 0));
 
             /*Random random = new Random();

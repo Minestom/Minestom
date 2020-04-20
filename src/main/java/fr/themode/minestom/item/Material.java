@@ -936,7 +936,48 @@ public enum Material {
     }
 
     public boolean isFood() {
-        return false; // TODO
+        switch (this) {
+            case APPLE:
+            case MUSHROOM_STEW:
+            case BREAD:
+            case PORKCHOP:
+            case COOKED_PORKCHOP:
+            case GOLDEN_APPLE:
+            case ENCHANTED_GOLDEN_APPLE:
+            case COD:
+            case SALMON:
+            case TROPICAL_FISH:
+            case PUFFERFISH:
+            case COOKED_COD:
+            case COOKED_SALMON:
+            case CAKE:
+            case COOKIE:
+            case MELON_SLICE:
+            case DRIED_KELP:
+            case BEEF:
+            case COOKED_BEEF:
+            case CHICKEN:
+            case COOKED_CHICKEN:
+            case ROTTEN_FLESH:
+            case SPIDER_EYE:
+            case CARROT:
+            case POTATO:
+            case BAKED_POTATO:
+            case POISONOUS_POTATO:
+            case PUMPKIN_PIE:
+            case RABBIT:
+            case COOKED_RABBIT:
+            case RABBIT_STEW:
+            case MUTTON:
+            case COOKED_MUTTON:
+            case BEETROOT:
+            case BEETROOT_SOUP:
+            case SWEET_BERRIES:
+            case HONEY_BOTTLE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     public short getId() {

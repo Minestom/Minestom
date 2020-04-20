@@ -433,7 +433,7 @@ public abstract class Entity implements Viewable, DataContainer {
         EntityStatusPacket statusPacket = new EntityStatusPacket();
         statusPacket.entityId = getEntityId();
         statusPacket.status = status;
-        sendPacketToViewers(statusPacket);
+        sendPacketToViewersAndSelf(statusPacket);
     }
 
     public void setOnFire(boolean fire) {

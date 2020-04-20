@@ -1,6 +1,7 @@
 package fr.themode.minestom.listener;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.event.ArmAnimationEvent;
 import fr.themode.minestom.event.ArmorEquipEvent;
 import fr.themode.minestom.event.PlayerUseItemEvent;
 import fr.themode.minestom.inventory.PlayerInventory;
@@ -64,8 +65,27 @@ public class UseItemListener {
 
         // TODO check if item in main or off hand is food or item with animation (bow/crossbow/riptide)
         // TODO in material enum?
-        //player.refreshActiveHand(true, false, false);
-        //player.sendPacketToViewers(player.getMetadataPacket());
+        ArmAnimationEvent armAnimationEvent = null;
+        boolean offhand = hand == Player.Hand.OFF;
+        boolean riptideSpinAttack = false;
+
+        if (material == Material.BOW) {
+            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.BOW);
+        } else if (material == Material.CROSSBOW) {
+            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.CROSSBOW);
+        } else if (material == Material.SHIELD) {
+            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.SHIELD);
+        } else if (material == Material.TRIDENT) {
+            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.TRIDENT);
+        } else if (material.isFood()) {
+            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.EAT);
+        }
+
+        if (armAnimationEvent != null)
+            player.callCancellableEvent(ArmAnimationEvent.class, armAnimationEvent, () -> {
+                player.refreshActiveHand(true, offhand, riptideSpinAttack);
+                player.sendPacketToViewers(player.getMetadataPacket());
+            });
     }
 
 }

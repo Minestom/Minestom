@@ -96,9 +96,9 @@ public abstract class LivingEntity extends Entity {
     }
 
     public void kill() {
-        this.isDead = true; // So the entity isn't killed over and over again
-        setHealth(0);
+        refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
+        setHealth(0);
         DeathEvent deathEvent = new DeathEvent();
         callEvent(DeathEvent.class, deathEvent);
     }

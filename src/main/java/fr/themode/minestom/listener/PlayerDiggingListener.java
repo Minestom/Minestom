@@ -75,12 +75,12 @@ public class PlayerDiggingListener {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 handItem.setAmount((byte) (handItem.getAmount() - 1));
                 handItem = handItem.getAmount() <= 0 ? ItemStack.AIR_ITEM : handItem;
+
                 dropItem(player, droppedItemStack2, handItem);
                 break;
             case UPDATE_ITEM_STATE:
-                // TODO check if is updatable item
-                //player.refreshActiveHand(false, false, false);
-                //player.sendPacketToViewers(player.getMetadataPacket());
+                player.refreshActiveHand(false, false, false);
+                player.sendPacketToViewers(player.getMetadataPacket());
                 break;
             case SWAP_ITEM_HAND:
                 PlayerInventory playerInventory = player.getInventory();

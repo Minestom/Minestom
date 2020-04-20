@@ -338,12 +338,6 @@ public class Player extends LivingEntity {
         }
     }
 
-    @Override
-    public void kill() {
-        super.kill();
-        refreshIsDead(true);
-    }
-
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
         BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
         breakAnimationPacket.entityId = getEntityId() + 1;
