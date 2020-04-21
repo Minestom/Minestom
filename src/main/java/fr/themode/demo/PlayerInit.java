@@ -142,7 +142,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 75, 0));
 
             /*Random random = new Random();
@@ -168,7 +168,8 @@ public class PlayerInit {
                 player.getInventory().addItemStack(item);
 
                 Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-                inventory.setInventoryCondition((p, slot, inventoryConditionResult) -> {
+                inventory.setInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                    player.sendMessage("click type: " + clickType);
                     inventoryConditionResult.setCancel(false);
                 });
                 inventory.setItemStack(0, item.clone());

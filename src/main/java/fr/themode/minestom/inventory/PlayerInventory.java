@@ -312,13 +312,20 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public void dropOne(Player player, int slot) {
+    public void drop(Player player, int mode, int slot, int button) {
+        ItemStack cursor = getCursorItem();
+        ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
 
-    }
+        InventoryClickResult clickResult = clickProcessor.drop(getInventoryCondition(), player,
+                mode, slot, button, clicked, cursor);
 
-    @Override
-    public void dropItemStack(Player player, int slot) {
+        if (clickResult.doRefresh())
+            sendSlotRefresh((short) slot, clicked);
 
+        ItemStack resultClicked = clickResult.getClicked();
+        if (resultClicked != null)
+            setItemStack(slot, OFFSET, resultClicked);
+        setCursorItem(clickResult.getCursor());
     }
 
     @Override

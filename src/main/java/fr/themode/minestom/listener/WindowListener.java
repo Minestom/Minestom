@@ -24,7 +24,7 @@ public class WindowListener {
         short actionNumber = packet.actionNumber;
         int mode = packet.mode;
 
-        System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
+        // System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
 
         ConfirmTransactionPacket confirmTransactionPacket = new ConfirmTransactionPacket();
         confirmTransactionPacket.windowId = windowId;
@@ -35,12 +35,22 @@ public class WindowListener {
             case 0:
                 switch (button) {
                     case 0:
-                        // Left click
-                        clickHandler.leftClick(player, slot);
+                        if (slot != -999) {
+                            // Left click
+                            clickHandler.leftClick(player, slot);
+                        } else {
+                            // DROP
+                            clickHandler.drop(player, mode, slot, button);
+                        }
                         break;
                     case 1:
-                        // Right click
-                        clickHandler.rightClick(player, slot);
+                        if (slot != -999) {
+                            // Right click
+                            clickHandler.rightClick(player, slot);
+                        } else {
+                            // DROP
+                            clickHandler.drop(player, mode, slot, button);
+                        }
                         break;
                 }
                 break;
@@ -55,6 +65,7 @@ public class WindowListener {
                 break;
             case 4:
                 // Dropping functions
+                clickHandler.drop(player, mode, slot, button);
                 break;
             case 5:
                 // Dragging

@@ -322,6 +322,7 @@ public class Player extends LivingEntity {
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
+                    System.out.println("DEBUG CHUNK: " + chunk);
                     // This is the last chunk to be loaded , spawn player
                     super.setInstance(instance);
                     PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance);

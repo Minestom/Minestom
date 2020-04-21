@@ -2,6 +2,7 @@ package fr.themode.minestom.listener;
 
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.data.Data;
+import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.GameMode;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.event.PlayerBlockInteractEvent;
@@ -21,6 +22,8 @@ import fr.themode.minestom.net.packet.client.play.ClientPlayerDiggingPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
 
+import java.util.Set;
+
 public class BlockPlacementListener {
 
     private Instance instance;
@@ -35,6 +38,7 @@ public class BlockPlacementListener {
         if (instance == null)
             return;
 
+        // Interact at block
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(blockPosition, hand);
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
             CustomBlock customBlock = instance.getCustomBlock(blockPosition);
@@ -44,21 +48,32 @@ public class BlockPlacementListener {
             }
         });
 
-
+        // Check if item at hand is a block
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
         Material material = Material.fromId(usedItem.getMaterialId());
         if (material != null && !material.isBlock()) {
-            //instance.setBlock(blockPosition.clone().add(0, 1, 0), (short) 10);
             return;
         }
 
+        // Get the newly placed block position
         int offsetX = blockFace == ClientPlayerDiggingPacket.BlockFace.WEST ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.EAST ? 1 : 0;
         int offsetY = blockFace == ClientPlayerDiggingPacket.BlockFace.BOTTOM ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.TOP ? 1 : 0;
         int offsetZ = blockFace == ClientPlayerDiggingPacket.BlockFace.NORTH ? -1 : blockFace == ClientPlayerDiggingPacket.BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
-        boolean intersectPlayer = player.getBoundingBox().intersect(blockPosition); // TODO check if collide with nearby other players
-        if (material.isBlock() && !intersectPlayer) {
+
+        Chunk chunk = instance.getChunkAt(blockPosition);
+        Set<Entity> entities = instance.getChunkEntities(chunk);
+        boolean intersect = false;
+        for (Entity entity : entities) {
+            intersect = entity.getBoundingBox().intersect(blockPosition);
+            if (intersect)
+                break;
+        }
+
+        boolean refreshChunk = false;
+
+        if (material.isBlock() && !intersect) {
             PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
             playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
@@ -73,7 +88,6 @@ public class BlockPlacementListener {
 
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
-                player.sendMessage("PLACE BLOCK");
                 instance.setBlock(blockPosition, material.getBlock());
                 //instance.setCustomBlock(blockPosition, "updatable");
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
@@ -88,15 +102,17 @@ public class BlockPlacementListener {
                     }
                 }
             } else {
-                // Refresh chunk
-                Chunk chunk = instance.getChunkAt(blockPosition);
-                instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
+                refreshChunk = true;
             }
         } else {
-            // Refresh chunk
-            Chunk chunk = instance.getChunkAt(blockPosition);
+            refreshChunk = true;
+        }
+
+        // Refresh chunk section if needed
+        if (refreshChunk) {
             instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
+
         player.getInventory().refreshSlot(player.getHeldSlot());
     }
 

@@ -14,9 +14,7 @@ public interface InventoryClickHandler {
 
     void middleClick(Player player, int slot);
 
-    void dropOne(Player player, int slot);
-
-    void dropItemStack(Player player, int slot);
+    void drop(Player player, int mode, int slot, int button);
 
     void dragging(Player player, int slot, int button);
 

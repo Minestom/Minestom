@@ -63,8 +63,6 @@ public class UseItemListener {
             }
         }
 
-        // TODO check if item in main or off hand is food or item with animation (bow/crossbow/riptide)
-        // TODO in material enum?
         ArmAnimationEvent armAnimationEvent = null;
         boolean offhand = hand == Player.Hand.OFF;
         boolean riptideSpinAttack = false;
