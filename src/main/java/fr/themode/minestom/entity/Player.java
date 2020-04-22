@@ -93,7 +93,7 @@ public class Player extends LivingEntity {
         this.username = username;
         this.playerConnection = playerConnection;
 
-        setBoundingBox(0.6f, 1.8f, 0.6f);
+        setBoundingBox(0.69f, 1.8f, 0.69f);
 
         // Some client update
         getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
