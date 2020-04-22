@@ -26,7 +26,7 @@ public class BlockManager {
     }
 
     public BlockPlacementRule getBlockPlacementRule(short blockId) {
-        Block block = Block.getBlockFromId(blockId); // Convert block alternative
+        Block block = Block.getFromId(blockId); // Convert block alternative
         blockId = block.getBlockId();
         return this.placementRules.get(blockId);
     }
