@@ -2,22 +2,6 @@ package fr.themode.minestom.utils;
 
 public class SerializerUtils {
 
-    public static byte[] intToBytes(int value) {
-        byte[] result = new byte[4];
-        result[0] = (byte) (value >> 24);
-        result[1] = (byte) (value >> 16);
-        result[2] = (byte) (value >> 8);
-        result[3] = (byte) (value >> 0);
-        return result;
-    }
-
-    public static int bytesToInt(byte[] value) {
-        return ((value[0] & 0xFF) << 24) |
-                ((value[1] & 0xFF) << 16) |
-                ((value[2] & 0xFF) << 8) |
-                ((value[3] & 0xFF) << 0);
-    }
-
     public static int chunkCoordToIndex(byte x, byte y, byte z) {
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;

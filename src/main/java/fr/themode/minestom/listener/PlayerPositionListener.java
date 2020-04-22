@@ -7,6 +7,9 @@ import fr.themode.minestom.net.packet.client.play.ClientPlayerPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerPositionAndLookPacket;
 import fr.themode.minestom.net.packet.client.play.ClientPlayerPositionPacket;
 import fr.themode.minestom.utils.ChunkUtils;
+import fr.themode.minestom.utils.Position;
+
+import java.util.function.Consumer;
 
 public class PlayerPositionListener {
 
@@ -15,17 +18,29 @@ public class PlayerPositionListener {
     }
 
     public static void playerLookListener(ClientPlayerLookPacket packet, Player player) {
-        player.refreshView(packet.yaw, packet.pitch);
-        player.refreshOnGround(packet.onGround);
-        // TODO move event?
+        Position playerPosition = player.getPosition();
+        float x = playerPosition.getX();
+        float y = playerPosition.getY();
+        float z = playerPosition.getZ();
+        float yaw = packet.yaw;
+        float pitch = packet.pitch;
+        processMovement(player, x, y, z, yaw, pitch, (position) -> {
+            player.refreshPosition(position.getX(), position.getY(), position.getZ());
+            player.refreshView(position.getYaw(), position.getPitch());
+            player.refreshOnGround(packet.onGround);
+        });
     }
 
     public static void playerPositionListener(ClientPlayerPositionPacket packet, Player player) {
+        Position playerPosition = player.getPosition();
         float x = (float) packet.x;
         float y = (float) packet.y;
         float z = (float) packet.z;
-        processMovement(player, x, y, z, () -> {
-            player.refreshPosition(x, y, z);
+        float yaw = playerPosition.getYaw();
+        float pitch = playerPosition.getPitch();
+        processMovement(player, x, y, z, yaw, pitch, (position) -> {
+            player.refreshPosition(position.getX(), position.getY(), position.getZ());
+            player.refreshView(position.getYaw(), position.getPitch());
             player.refreshOnGround(packet.onGround);
         });
     }
@@ -34,24 +49,28 @@ public class PlayerPositionListener {
         float x = (float) packet.x;
         float y = (float) packet.y;
         float z = (float) packet.z;
-        processMovement(player, x, y, z, () -> {
-            player.refreshPosition(x, y, z);
-            player.refreshView(packet.yaw, packet.pitch);
+        float yaw = packet.yaw;
+        float pitch = packet.pitch;
+        processMovement(player, x, y, z, yaw, pitch, (position) -> {
+            player.refreshPosition(position.getX(), position.getY(), position.getZ());
+            player.refreshView(position.getYaw(), position.getPitch());
             player.refreshOnGround(packet.onGround);
         });
     }
 
-    private static void processMovement(Player player, float x, float y, float z, Runnable runnable) {
+    private static void processMovement(Player player, float x, float y, float z,
+                                        float yaw, float pitch, Consumer<Position> consumer) {
+
         boolean chunkTest = ChunkUtils.isChunkUnloaded(player.getInstance(), x, z);
         if (chunkTest) {
             player.teleport(player.getPosition());
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(x, y, z);
+        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(x, y, z, yaw, pitch);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
         if (!playerMoveEvent.isCancelled()) {
-            runnable.run();
+            consumer.accept(playerMoveEvent.getNewPosition());
         } else {
             player.teleport(player.getPosition());
         }
