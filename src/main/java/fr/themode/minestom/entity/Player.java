@@ -604,7 +604,8 @@ public class Player extends LivingEntity {
         if (dimension == null)
             throw new IllegalArgumentException("Dimension cannot be null!");
         if (dimension.equals(getDimension()))
-            return;
+            throw new IllegalArgumentException("The dimension need to be different than the current one!");
+
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimension = dimension;
         respawnPacket.gameMode = gameMode;

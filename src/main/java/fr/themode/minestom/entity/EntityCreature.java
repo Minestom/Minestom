@@ -33,7 +33,6 @@ public abstract class EntityCreature extends LivingEntity {
                     setNextPathPosition();
                     //System.out.println("END TARGET");
                 } else {
-                    // TODO jump support
                     moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
                     //System.out.println("MOVE TOWARD " + targetPosition);
                 }
@@ -123,8 +122,8 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 6, 0);
-        setVelocity(velocity, 250);
+        Vector velocity = new Vector(0, height * 8, 0);
+        setVelocity(velocity, 350);
     }
 
     public void moveTo(Position position) {
@@ -151,5 +150,8 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         this.targetPosition = blockPosition.toPosition().subtract(0.5f, 0, 0.5f);
+        // FIXME: jump support
+        //if(blockPosition.getY() > getPosition().getY())
+        //  jump(1);
     }
 }

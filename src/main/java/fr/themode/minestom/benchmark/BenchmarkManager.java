@@ -9,7 +9,6 @@ import java.lang.management.ThreadMXBean;
 import java.util.*;
 
 import static fr.themode.minestom.MinecraftServer.*;
-import static org.junit.Assert.assertTrue;
 
 public class BenchmarkManager {
 
@@ -19,12 +18,8 @@ public class BenchmarkManager {
             THREAD_NAME_PLAYERS_ENTITIES, THREAD_NAME_SCHEDULER);
 
     static {
-        assertTrue(threadMXBean.isThreadCpuTimeSupported());
-        assertTrue(threadMXBean.isCurrentThreadCpuTimeSupported());
-
         threadMXBean.setThreadContentionMonitoringEnabled(true);
         threadMXBean.setThreadCpuTimeEnabled(true);
-        assertTrue(threadMXBean.isThreadCpuTimeEnabled());
     }
 
     private Map<Long, Long> lastCpuTimeMap = new HashMap<>();
@@ -72,6 +67,10 @@ public class BenchmarkManager {
     public void disable() {
         this.stop = true;
         this.enabled = false;
+    }
+
+    public void addThreadMonitor(String threadName) {
+        threads.add(threadName);
     }
 
     public long getUsedMemory() {

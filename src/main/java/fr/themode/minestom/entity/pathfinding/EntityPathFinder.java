@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class EntityPathFinder {
 
-    private ExecutorService pathfindingPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES_PATHFINDING, MinecraftServer.THREAD_NAME_ENTITIES_PATHFINDING);
+    private static ExecutorService pathfindingPool = new MinestomThread(MinecraftServer.THREAD_COUNT_ENTITIES_PATHFINDING, MinecraftServer.THREAD_NAME_ENTITIES_PATHFINDING);
 
 
     private Entity entity;

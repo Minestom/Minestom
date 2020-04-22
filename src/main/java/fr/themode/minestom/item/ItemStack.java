@@ -76,6 +76,10 @@ public class ItemStack implements DataContainer {
         return materialId;
     }
 
+    public Material getMaterial() {
+        return Material.fromId(getMaterialId());
+    }
+
     public void setAmount(byte amount) {
         this.amount = amount;
     }

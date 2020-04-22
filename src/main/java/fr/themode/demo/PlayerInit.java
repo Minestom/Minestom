@@ -1,6 +1,5 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import fr.themode.minestom.MinecraftServer;
@@ -117,8 +116,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
+                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                //chickenCreature.setInstance(player.getInstance());
 
             });
 

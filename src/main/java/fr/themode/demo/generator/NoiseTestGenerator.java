@@ -11,7 +11,6 @@ public class NoiseTestGenerator extends ChunkGenerator {
 
     private Random random = new Random();
     private FastNoise fastNoise = new FastNoise();
-    private int totalChunk = 15;
 
     {
         fastNoise.SetNoiseType(FastNoise.NoiseType.Simplex);
