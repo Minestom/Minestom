@@ -692,7 +692,7 @@ public enum Block {
 
     private static Short2ObjectOpenHashMap<Block> blocksMap = new Short2ObjectOpenHashMap<>();
 
-    public static Block getFromId(short blockId) {
+    public static Block fromId(short blockId) {
         return blocksMap.getOrDefault(blockId, AIR);
     }
 

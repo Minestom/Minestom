@@ -140,7 +140,7 @@ public class Position {
     }
 
     public BlockPosition toBlockPosition() {
-        return new BlockPosition((int) Math.ceil(x), (int) Math.ceil(y), (int) Math.ceil(z));
+        return new BlockPosition(x, y, z);
     }
 
     @Override

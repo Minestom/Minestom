@@ -4,6 +4,7 @@ import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.block.Block;
 
 public class EntityUtils {
 
@@ -31,10 +32,15 @@ public class EntityUtils {
         Instance instance = entity.getInstance();
         if (instance == null)
             return false;
-        Position position = entity.getPosition();
+
+        Position entityPosition = entity.getPosition();
+
+        BlockPosition blockPosition = entityPosition.toBlockPosition();
+        blockPosition = blockPosition.subtract(0, 1, 0);
         try {
-            short blockId = instance.getBlockId(position.toBlockPosition().subtract(0, 1, 0));
-            return blockId != 0;
+            short blockId = instance.getBlockId(blockPosition);
+            Block block = Block.fromId(blockId);
+            return block.isSolid();
         } catch (NullPointerException e) {
             // Probably an entity at the border of an unloaded chunk
             return false;

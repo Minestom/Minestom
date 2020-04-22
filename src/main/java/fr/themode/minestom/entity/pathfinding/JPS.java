@@ -1,6 +1,7 @@
 package fr.themode.minestom.entity.pathfinding;
 
 import fr.themode.minestom.instance.Instance;
+import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.Position;
 
@@ -132,7 +133,7 @@ public class JPS {
         //if(loc.getBlock().getType().isSolid())
         //return true;
         short blockId = instance.getBlockId(loc.toBlockPosition());
-        return blockId != 0;
+        return Block.fromId(blockId).isSolid();
     }
 
     // ---

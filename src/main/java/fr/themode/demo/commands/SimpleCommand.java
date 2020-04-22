@@ -19,7 +19,7 @@ public class SimpleCommand implements CommandProcessor {
         for (EntityCreature entity : player.getInstance().getCreatures()) {
             if (entity instanceof ChickenCreature) {
                 ChickenCreature chickenCreature = (ChickenCreature) entity;
-                chickenCreature.moveTo(player.getPosition());
+                chickenCreature.moveTo(player.getPosition().clone());
                 player.sendMessage("CHICKEN GO");
             }
         }

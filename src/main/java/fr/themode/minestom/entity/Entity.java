@@ -241,25 +241,33 @@ public abstract class Entity implements Viewable, DataContainer {
             // Gravity
             if (!(this instanceof Player) && !noGravity && gravityDragPerTick != 0) { // Players do manage gravity client-side
                 Position position = getPosition();
+                //System.out.println("on ground: "+isOnGround());
                 if (!isOnGround()) {
                     float strength = gravityDragPerTick * gravityTickCounter;
 
                     int firstBlock = 0;
                     for (int y = (int) position.getY(); y > 0; y--) {
-                        short blockId = instance.getBlockId((int) position.getX(), y, (int) position.getZ());
+                        BlockPosition blockPosition = new BlockPosition(position.getX(), y + 1, position.getZ());
+                        short blockId = instance.getBlockId(blockPosition);
+                        //if (y == 70)
+                        //   System.out.println("id: " + blockId);
                         if (blockId != 0) {
                             firstBlock = y;
+                            //System.out.println("first block: " + y);
                             break;
                         }
                     }
 
                     float newY = position.getY() - strength;
+                    //System.out.println("REFRESH Y " + newY);
                     newY = Math.max(newY, firstBlock);
                     refreshPosition(position.getX(), newY, position.getZ());
                     gravityTickCounter++;
                     if (isOnGround()) { // Round Y axis when gravity movement is done
+                        //System.out.println("ROUND " + position.getY());
                         refreshPosition(position.getX(), Math.round(position.getY()), position.getZ());
                         gravityTickCounter = 0;
+                        // System.out.println("recheck: " + isOnGround() + " : " + getPosition());
                     }
 
                     if (this instanceof EntityCreature) {

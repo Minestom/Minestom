@@ -30,7 +30,8 @@ public abstract class EntityCreature extends LivingEntity {
         if (blockPositions != null) {
             if (targetPosition != null) {
                 float distance = getPosition().getDistance(targetPosition);
-                if (distance < 0.2f) {
+                //System.out.println("test: "+distance);
+                if (distance < 0.7f) {
                     setNextPathPosition();
                     //System.out.println("END TARGET");
                 } else {
@@ -130,12 +131,17 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 8, 0);
-        setVelocity(velocity, 350);
+        Vector velocity = new Vector(0, height * 7, 0);
+        setVelocity(velocity, 200);
     }
 
     public void moveTo(Position position) {
         pathFinder.getPath(position, blockPositions -> {
+            if (blockPositions.isEmpty()) {
+                // Didn't find path
+                System.out.println("NOT FOUND");
+                return;
+            }
             this.blockPositions = blockPositions;
             setNextPathPosition();
         });
@@ -157,9 +163,9 @@ public abstract class EntityCreature extends LivingEntity {
             return;
         }
 
-        this.targetPosition = blockPosition.toPosition().subtract(0.5f, 0, 0.5f);
+        this.targetPosition = blockPosition.toPosition();//.add(0.5f, 0, 0.5f);
         // FIXME: jump support
-        //if(blockPosition.getY() > getPosition().getY())
-        //  jump(1);
+        if (blockPosition.getY() > getPosition().getY())
+            jump(1);
     }
 }

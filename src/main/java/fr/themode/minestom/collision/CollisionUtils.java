@@ -18,13 +18,13 @@ public class CollisionUtils {
         float targetZ = targetPosition.getZ();
 
 
-        BlockPosition xBlock = new BlockPosition(targetX, currentY, currentZ);
-        BlockPosition yBlock = new BlockPosition(currentX, targetY, currentZ);
-        BlockPosition zBlock = new BlockPosition(currentX, currentY, targetZ);
+        BlockPosition xBlock = new BlockPosition(targetX, (int) currentY, currentZ);
+        BlockPosition yBlock = new BlockPosition(currentX, (int) targetY, currentZ);
+        BlockPosition zBlock = new BlockPosition(currentX, (int) currentY, targetZ);
 
-        boolean xAir = !Block.getFromId(instance.getBlockId(xBlock)).isSolid();
-        boolean yAir = !Block.getFromId(instance.getBlockId(yBlock)).isSolid();
-        boolean zAir = !Block.getFromId(instance.getBlockId(zBlock)).isSolid();
+        boolean xAir = !Block.fromId(instance.getBlockId(xBlock)).isSolid();
+        boolean yAir = !Block.fromId(instance.getBlockId(yBlock)).isSolid();
+        boolean zAir = !Block.fromId(instance.getBlockId(zBlock)).isSolid();
 
         boolean xIntersect = boundingBox.intersect(xBlock);
         boolean yIntersect = boundingBox.intersect(yBlock);
