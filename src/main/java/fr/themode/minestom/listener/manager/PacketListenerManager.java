@@ -47,7 +47,7 @@ public class PacketListenerManager {
         if (packetConsumer != null) {
             boolean cancel = packetConsumer.accept(player, packet);
             if (cancel)
-                return;
+                return; // Listening cancelled
         }
 
         BiConsumer<T, Player> biConsumer = (BiConsumer<T, Player>) listeners.get(packet.getClass());

@@ -3,6 +3,7 @@ package fr.themode.minestom.entity;
 import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.collision.BoundingBox;
+import fr.themode.minestom.collision.CollisionUtils;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.data.DataContainer;
 import fr.themode.minestom.event.Callback;
@@ -10,7 +11,6 @@ import fr.themode.minestom.event.CancellableEvent;
 import fr.themode.minestom.event.Event;
 import fr.themode.minestom.instance.Chunk;
 import fr.themode.minestom.instance.Instance;
-import fr.themode.minestom.item.Material;
 import fr.themode.minestom.net.packet.PacketWriter;
 import fr.themode.minestom.net.packet.server.play.*;
 import fr.themode.minestom.net.player.PlayerConnection;
@@ -219,23 +219,11 @@ public abstract class Entity implements Viewable, DataContainer {
                     float newY = position.getY() + velocity.getY() / tps;
                     float newZ = position.getZ() + velocity.getZ() / tps;
 
-                    BlockPosition xBlock = new BlockPosition(newX, position.getY(), position.getZ());
-                    BlockPosition yBlock = new BlockPosition(position.getX(), newY, position.getZ());
-                    BlockPosition zBlock = new BlockPosition(position.getX(), position.getY(), newZ);
+                    Position newPosition = new Position(newX, newY, newZ);
 
-                    boolean xAir = getInstance().getBlockId(xBlock) == Material.AIR.getId();
-                    boolean yAir = getInstance().getBlockId(yBlock) == Material.AIR.getId();
-                    boolean zAir = getInstance().getBlockId(zBlock) == Material.AIR.getId();
+                    newPosition = CollisionUtils.entity(getInstance(), getBoundingBox(), getPosition(), newPosition);
 
-                    boolean xIntersect = boundingBox.intersect(xBlock);
-                    boolean yIntersect = boundingBox.intersect(yBlock);
-                    boolean zIntersect = boundingBox.intersect(zBlock);
-
-                    newX = xAir ? newX : xIntersect ? position.getX() : newX;
-                    newY = yAir ? newY : yIntersect ? position.getY() : newY;
-                    newZ = zAir ? newZ : zIntersect ? position.getZ() : newZ;
-
-                    refreshPosition(newX, newY, newZ);
+                    refreshPosition(newPosition);
                     if (this instanceof ObjectEntity) {
                         // FIXME velocity/gravity
                         //sendPacketToViewers(getVelocityPacket());

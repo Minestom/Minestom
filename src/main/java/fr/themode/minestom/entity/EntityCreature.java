@@ -1,5 +1,6 @@
 package fr.themode.minestom.entity;
 
+import fr.themode.minestom.collision.CollisionUtils;
 import fr.themode.minestom.entity.pathfinding.EntityPathFinder;
 import fr.themode.minestom.entity.property.Attribute;
 import fr.themode.minestom.net.packet.server.play.*;
@@ -46,6 +47,13 @@ public abstract class EntityCreature extends LivingEntity {
         float newX = position.getX() + x;
         float newY = position.getY() + y;
         float newZ = position.getZ() + z;
+        Position newPosition = new Position(newX, newY, newZ);
+        // Calculate collisions boxes
+        newPosition = CollisionUtils.entity(getInstance(), getBoundingBox(), position, newPosition);
+        // Refresh target position
+        newX = newPosition.getX();
+        newY = newPosition.getY();
+        newZ = newPosition.getZ();
 
         // Creatures cannot move in unload chunk
         if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))

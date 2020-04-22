@@ -1,6 +1,5 @@
 package fr.themode.demo.entity;
 
-import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Entity;
 import fr.themode.minestom.entity.EntityCreature;
 import fr.themode.minestom.entity.EntityType;
@@ -84,10 +83,10 @@ public class ChickenCreature extends EntityCreature {
                 move(x, 0, z, updateView);
             }
         } else {
-            //move(randomX * speed, 0, randomZ * speed, true);
+            //move(0.5f * speed, 0, 0.5f * speed, true);
         }
 
-        Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
-        moveTo(player.getPosition().clone());
+        //Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
+        //moveTo(player.getPosition().clone());
     }
 }

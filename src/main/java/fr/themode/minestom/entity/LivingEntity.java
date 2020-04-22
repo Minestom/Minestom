@@ -28,7 +28,7 @@ public abstract class LivingEntity extends Entity {
     private float[] attributeValues = new float[Attribute.values().length];
 
     private boolean isHandActive;
-    private boolean activeHand;
+    private boolean offHand;
     private boolean riptideSpinAttack;
 
     public LivingEntity(int entityType, Position spawnPosition) {
@@ -84,7 +84,7 @@ public abstract class LivingEntity extends Entity {
             byte activeHandValue = 0;
             if (isHandActive) {
                 activeHandValue += 1;
-                if (activeHand)
+                if (offHand)
                     activeHandValue += 2;
                 if (riptideSpinAttack)
                     activeHandValue += 4;
@@ -160,7 +160,7 @@ public abstract class LivingEntity extends Entity {
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
         this.isHandActive = isHandActive;
-        this.activeHand = offHand;
+        this.offHand = offHand;
         this.riptideSpinAttack = riptideSpinAttack;
     }
 
