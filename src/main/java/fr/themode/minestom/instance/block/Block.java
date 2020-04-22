@@ -1255,6 +1255,16 @@ public enum Block {
         }
     }
 
+    public boolean isLiquid() {
+        switch (this) {
+            case WATER:
+            case LAVA:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public List<BlockAlternative> getBlockAlternatives() {
         return Collections.unmodifiableList(blockAlternatives);
     }
