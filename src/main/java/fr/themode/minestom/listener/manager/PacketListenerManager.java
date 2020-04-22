@@ -1,7 +1,9 @@
 package fr.themode.minestom.listener.manager;
 
+import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.entity.Player;
 import fr.themode.minestom.listener.*;
+import fr.themode.minestom.net.ConnectionManager;
 import fr.themode.minestom.net.packet.client.ClientPlayPacket;
 import fr.themode.minestom.net.packet.client.play.*;
 
@@ -10,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 public class PacketListenerManager {
+
+    private static ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
     private Map<Class<? extends ClientPlayPacket>, BiConsumer<? extends ClientPlayPacket, Player>> listeners = new ConcurrentHashMap<>();
 
@@ -39,6 +43,13 @@ public class PacketListenerManager {
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
+        PacketConsumer packetConsumer = connectionManager.getPacketConsumer();
+        if (packetConsumer != null) {
+            boolean cancel = packetConsumer.accept(player, packet);
+            if (cancel)
+                return;
+        }
+
         BiConsumer<T, Player> biConsumer = (BiConsumer<T, Player>) listeners.get(packet.getClass());
         if (biConsumer == null) {
             System.err.println("Packet " + packet.getClass() + " does not have any listener!");

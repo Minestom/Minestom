@@ -85,6 +85,11 @@ public class PlayerInit {
             responseData.setFavicon("data:image/png;base64,<data>");
         });
 
+        connectionManager.setPacketConsumer((player, packet) -> {
+            // Listen to all received packet
+            return false;
+        });
+
         connectionManager.setPlayerInitialization(player -> {
             player.setEventCallback(AttackEvent.class, event -> {
                 Entity entity = event.getTarget();

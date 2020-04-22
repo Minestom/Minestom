@@ -1,6 +1,7 @@
 package fr.themode.minestom.net;
 
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.listener.manager.PacketConsumer;
 import fr.themode.minestom.net.player.PlayerConnection;
 import fr.themode.minestom.ping.ResponseDataConsumer;
 
@@ -15,6 +16,7 @@ public class ConnectionManager {
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     private ResponseDataConsumer responseDataConsumer;
+    private PacketConsumer packetConsumer;
     private Consumer<Player> playerInitialization;
 
     public Player getPlayer(PlayerConnection connection) {
@@ -55,6 +57,14 @@ public class ConnectionManager {
 
     public void setResponseDataConsumer(ResponseDataConsumer responseDataConsumer) {
         this.responseDataConsumer = responseDataConsumer;
+    }
+
+    public PacketConsumer getPacketConsumer() {
+        return packetConsumer;
+    }
+
+    public void setPacketConsumer(PacketConsumer packetConsumer) {
+        this.packetConsumer = packetConsumer;
     }
 
     public Consumer<Player> getPlayerInitialization() {
