@@ -20,10 +20,8 @@ public interface DataContainer {
     default void saveData(File file, Runnable callback) {
         IOManager.submit(() -> {
             Data data = getData();
-            if (data == null) {
-                // TODO error trying to save null data
-                return;
-            }
+            if (data == null)
+                throw new NullPointerException("You cannot save null data!");
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 byte[] serializedData = data.getSerializedData();

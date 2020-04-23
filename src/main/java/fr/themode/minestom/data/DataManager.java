@@ -22,6 +22,8 @@ public class DataManager {
         registerType(Double.class, new DoubleData());
 
         registerType(String.class, new StringData());
+
+        registerType(Data.class, new DataData());
     }
 
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {

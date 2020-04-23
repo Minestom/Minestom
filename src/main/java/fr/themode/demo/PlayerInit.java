@@ -143,7 +143,6 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerLoginEvent.class, event -> {
-                System.out.println("event:  " + instanceContainer.hashCode());
                 event.setSpawningInstance(instanceContainer);
             });
 

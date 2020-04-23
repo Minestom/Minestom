@@ -10,6 +10,7 @@ import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.net.PacketWriterUtils;
+import fr.themode.minestom.net.packet.server.play.BlockActionPacket;
 import fr.themode.minestom.net.packet.server.play.ChunkDataPacket;
 import fr.themode.minestom.utils.BlockPosition;
 import fr.themode.minestom.utils.ChunkUtils;
@@ -174,6 +175,19 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public CustomBlock getCustomBlock(BlockPosition blockPosition) {
         return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    }
+
+    public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
+        short blockId = getBlockId(blockPosition);
+
+        BlockActionPacket blockActionPacket = new BlockActionPacket();
+        blockActionPacket.blockPosition = blockPosition;
+        blockActionPacket.actionId = actionId;
+        blockActionPacket.actionParam = actionParam;
+        blockActionPacket.blockId = blockId; // FIXME: block id and not block state?
+
+        Chunk chunk = getChunkAt(blockPosition);
+        chunk.sendPacketToViewers(blockActionPacket);
     }
 
     public Data getBlockData(int x, int y, int z) {

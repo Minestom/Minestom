@@ -57,6 +57,7 @@ public class PacketReader {
         ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
+        buf.release();
         return new String(bytes);
     }
 
@@ -65,6 +66,7 @@ public class PacketReader {
         ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
+        buf.release();
         return new String(bytes);
     }
 
@@ -72,6 +74,7 @@ public class PacketReader {
         ByteBuf buf = buffer.readBytes(buffer.readableBytes());
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
+        buf.release();
         return bytes;
     }
 
