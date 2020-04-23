@@ -32,16 +32,16 @@ public class EntityManager {
         // Update entities
         switch (updateType) {
             case PER_CHUNK:
-                chunkUpdate(instances, time);
+                chunkUpdate(time);
                 break;
             case PER_ENTITY_TYPE:
-                entityTypeUpdate(instances, time);
+                entityTypeUpdate(time);
                 break;
             case PER_INSTANCE:
-                instanceUpdate(instances, time);
+                instanceUpdate(time);
                 break;
             case SINGLE_THREADED:
-                singleThreaded(instances, time);
+                singleThreaded(time);
                 break;
         }
 
@@ -52,9 +52,8 @@ public class EntityManager {
      *
      * @param time
      */
-    private void chunkUpdate(Set<Instance> instances, long time) {
-        // TODO optimize for when there are too many entities on one chunk
-        for (Instance instance : instanceManager.getInstances()) {
+    private void chunkUpdate(long time) {
+        for (Instance instance : instances) {
             for (Chunk chunk : instance.getChunks()) {
                 Set<Entity> entities = instance.getChunkEntities(chunk);
 
@@ -75,8 +74,8 @@ public class EntityManager {
      *
      * @param time
      */
-    private void entityTypeUpdate(Set<Instance> instances, long time) {
-        for (Instance instance : instanceManager.getInstances()) {
+    private void entityTypeUpdate(long time) {
+        for (Instance instance : instances) {
             Set<Player> players = instance.getPlayers();
             Set<EntityCreature> creatures = instance.getCreatures();
             Set<ObjectEntity> objects = instance.getObjectEntities();
@@ -105,10 +104,9 @@ public class EntityManager {
     /**
      * Each instance get its pool, should suppress most of the problems related to thread-safety
      *
-     * @param instances
      * @param time
      */
-    private void instanceUpdate(Set<Instance> instances, long time) {
+    private void instanceUpdate(long time) {
         for (Instance instance : instances) {
             Set<Player> players = instance.getPlayers();
             Set<EntityCreature> creatures = instance.getCreatures();
@@ -133,10 +131,9 @@ public class EntityManager {
     /**
      * Single threaded update (like the notchian server)
      *
-     * @param instances
      * @param time
      */
-    private void singleThreaded(Set<Instance> instances, long time) {
+    private void singleThreaded(long time) {
         for (Instance instance : instances) {
             Set<Player> players = instance.getPlayers();
             Set<EntityCreature> creatures = instance.getCreatures();
@@ -164,7 +161,9 @@ public class EntityManager {
             playersPool.execute(() -> {
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
-                Instance spawningInstance = loginEvent.getSpawningInstance() == null ? instanceManager.createInstanceContainer() : loginEvent.getSpawningInstance();
+                Instance spawningInstance = loginEvent.getSpawningInstance();
+                if (spawningInstance == null)
+                    throw new NullPointerException("You need to specify a spawning instance in the PlayerLoginEvent");
 
                 playerCache.setInstance(spawningInstance);
             });

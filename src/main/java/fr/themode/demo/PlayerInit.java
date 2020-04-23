@@ -26,7 +26,7 @@ import java.util.UUID;
 
 public class PlayerInit {
 
-    private static InstanceContainer instanceContainer;
+    private static volatile InstanceContainer instanceContainer;
 
     static {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
@@ -143,6 +143,7 @@ public class PlayerInit {
             });
 
             player.setEventCallback(PlayerLoginEvent.class, event -> {
+                System.out.println("event:  " + instanceContainer.hashCode());
                 event.setSpawningInstance(instanceContainer);
             });
 
