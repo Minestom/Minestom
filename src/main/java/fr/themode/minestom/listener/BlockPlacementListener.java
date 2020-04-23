@@ -89,7 +89,6 @@ public class BlockPlacementListener {
             player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
             if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
                 instance.setBlock(blockPosition, material.getBlock());
-                //instance.setCustomBlock(blockPosition, "updatable");
                 if (playerBlockPlaceEvent.doesConsumeBlock()) {
 
                     StackingRule stackingRule = usedItem.getStackingRule();

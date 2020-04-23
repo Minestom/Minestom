@@ -4,6 +4,7 @@ import fr.themode.minestom.MinecraftServer;
 import fr.themode.minestom.Viewable;
 import fr.themode.minestom.data.Data;
 import fr.themode.minestom.entity.Player;
+import fr.themode.minestom.instance.block.Block;
 import fr.themode.minestom.instance.block.BlockManager;
 import fr.themode.minestom.instance.block.CustomBlock;
 import fr.themode.minestom.instance.block.UpdateConsumer;
@@ -239,8 +240,8 @@ public class Chunk implements Viewable {
     }
 
     private boolean isBlockEntity(short blockId) {
-        // TODO complete
-        return blockId == 2033;
+        Block block = Block.fromId(blockId);
+        return block.isBlockEntity();
     }
 
     public Set<Integer> getBlockEntities() {

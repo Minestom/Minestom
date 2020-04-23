@@ -1265,6 +1265,76 @@ public enum Block {
         }
     }
 
+    public boolean isBlockEntity() {
+        switch (this) {
+            case SPAWNER:
+            case COMMAND_BLOCK:
+            case BEACON:
+            case CREEPER_HEAD:
+            case CREEPER_WALL_HEAD:
+            case DRAGON_HEAD:
+            case DRAGON_WALL_HEAD:
+            case PLAYER_HEAD:
+            case PLAYER_WALL_HEAD:
+            case ZOMBIE_HEAD:
+            case ZOMBIE_WALL_HEAD:
+            case CONDUIT:
+            case BLACK_BANNER:
+            case BLACK_WALL_BANNER:
+            case BLUE_BANNER:
+            case BLUE_WALL_BANNER:
+            case BROWN_BANNER:
+            case BROWN_WALL_BANNER:
+            case CYAN_BANNER:
+            case PURPLE_BANNER:
+            case GREEN_BANNER:
+            case RED_BANNER:
+            case WHITE_WALL_BANNER:
+            case ORANGE_WALL_BANNER:
+            case MAGENTA_WALL_BANNER:
+            case LIGHT_BLUE_WALL_BANNER:
+            case YELLOW_WALL_BANNER:
+            case LIME_WALL_BANNER:
+            case PINK_WALL_BANNER:
+            case GRAY_WALL_BANNER:
+            case LIGHT_GRAY_WALL_BANNER:
+            case CYAN_WALL_BANNER:
+            case PURPLE_WALL_BANNER:
+            case GREEN_WALL_BANNER:
+            case RED_WALL_BANNER:
+            case STRUCTURE_BLOCK:
+            case END_GATEWAY:
+            case OAK_SIGN:
+            case SPRUCE_SIGN:
+            case BIRCH_SIGN:
+            case ACACIA_SIGN:
+            case JUNGLE_SIGN:
+            case DARK_OAK_SIGN:
+            case BLACK_BED:
+            case WHITE_BED:
+            case ORANGE_BED:
+            case MAGENTA_BED:
+            case LIGHT_BLUE_BED:
+            case YELLOW_BED:
+            case LIME_BED:
+            case PINK_BED:
+            case GRAY_BED:
+            case LIGHT_GRAY_BED:
+            case CYAN_BED:
+            case PURPLE_BED:
+            case BLUE_BED:
+            case BROWN_BED:
+            case GREEN_BED:
+            case RED_BED:
+            case JIGSAW:
+            case CAMPFIRE:
+            case BEEHIVE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public List<BlockAlternative> getBlockAlternatives() {
         return Collections.unmodifiableList(blockAlternatives);
     }
