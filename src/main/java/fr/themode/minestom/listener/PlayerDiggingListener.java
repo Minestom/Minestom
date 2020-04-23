@@ -66,7 +66,7 @@ public class PlayerDiggingListener {
                 break;
             case DROP_ITEM_STACK:
                 ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
-                dropItem(player, droppedItemStack, ItemStack.AIR_ITEM);
+                dropItem(player, droppedItemStack, ItemStack.getAirItem());
                 break;
             case DROP_ITEM:
                 ItemStack droppedItemStack2 = player.getInventory().getItemInMainHand().clone();
@@ -74,7 +74,7 @@ public class PlayerDiggingListener {
 
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 handItem.setAmount((byte) (handItem.getAmount() - 1));
-                handItem = handItem.getAmount() <= 0 ? ItemStack.AIR_ITEM : handItem;
+                handItem = handItem.getAmount() <= 0 ? ItemStack.getAirItem() : handItem;
 
                 dropItem(player, droppedItemStack2, handItem);
                 break;

@@ -42,9 +42,9 @@ public class UseItemListener {
             ItemStack armorItem = armorEquipEvent.getArmorItem();
 
             if (hand == Player.Hand.MAIN) {
-                playerInventory.setItemInMainHand(ItemStack.AIR_ITEM);
+                playerInventory.setItemInMainHand(ItemStack.getAirItem());
             } else {
-                playerInventory.setItemInOffHand(ItemStack.AIR_ITEM);
+                playerInventory.setItemInOffHand(ItemStack.getAirItem());
             }
 
             switch (armorSlot) {

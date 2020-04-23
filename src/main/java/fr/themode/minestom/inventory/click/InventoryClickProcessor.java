@@ -136,12 +136,12 @@ public class InventoryClickProcessor {
 
         if (clicked.isAir()) {
             // Set held item [key] to slot
-            resultClicked = ItemStack.AIR_ITEM;
+            resultClicked = ItemStack.getAirItem();
             resultHeld = clicked.clone();
         } else {
             if (cursor.isAir()) {
                 // if held item [key] is air then set clicked to held
-                resultClicked = ItemStack.AIR_ITEM;
+                resultClicked = ItemStack.getAirItem();
                 resultHeld = clicked.clone();
             } else {
                 // Otherwise replace held item and held
@@ -218,7 +218,7 @@ public class InventoryClickProcessor {
 
                     // Switch
                     itemSetter.accept(index, resultClicked);
-                    itemSetter.accept(slot, ItemStack.AIR_ITEM);
+                    itemSetter.accept(slot, ItemStack.getAirItem());
                     filled = true;
                     break;
                 }
@@ -347,7 +347,7 @@ public class InventoryClickProcessor {
 
     public InventoryClickResult doubleClick(InventoryCondition inventoryCondition, Player player, int slot,
                                             ItemStack cursor, InventoryClickLoopHandler... loopHandlers) {
-        InventoryClickResult clickResult = new InventoryClickResult(ItemStack.AIR_ITEM, cursor);
+        InventoryClickResult clickResult = new InventoryClickResult(ItemStack.getAirItem(), cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;

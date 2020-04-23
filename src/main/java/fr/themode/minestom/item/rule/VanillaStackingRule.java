@@ -22,7 +22,7 @@ public class VanillaStackingRule extends StackingRule {
     @Override
     public ItemStack apply(ItemStack item, int newAmount) {
         if (newAmount <= 0)
-            return ItemStack.AIR_ITEM;
+            return ItemStack.getAirItem();
 
         item.setAmount((byte) newAmount);
         return item;

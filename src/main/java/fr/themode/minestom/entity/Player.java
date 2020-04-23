@@ -82,10 +82,10 @@ public class Player extends LivingEntity {
     private float fieldViewModifier = 0.1f;
 
     // Statistics
-    private Map<PlayerStatistic, Integer> statisticValueMap = new HashMap<>();
+    private Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
 
     // Vehicle
-    private PlayerVehicleInformation vehicleInformation;
+    private PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER.getId());

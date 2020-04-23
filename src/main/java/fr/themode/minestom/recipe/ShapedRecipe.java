@@ -12,7 +12,7 @@ public class ShapedRecipe extends Recipe {
 
     private List<DeclareRecipesPacket.Ingredient> ingredients = new ArrayList<>();
 
-    private ItemStack result = ItemStack.AIR_ITEM;
+    private ItemStack result = ItemStack.getAirItem();
 
     public ShapedRecipe(String recipeId, String group, int width, int height) {
         super(RecipeType.SHAPED, recipeId);

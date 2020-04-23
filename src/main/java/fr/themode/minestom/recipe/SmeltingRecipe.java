@@ -7,7 +7,7 @@ public class SmeltingRecipe extends Recipe {
 
     private DeclareRecipesPacket.Ingredient ingredient;
 
-    private ItemStack result = ItemStack.AIR_ITEM;
+    private ItemStack result = ItemStack.getAirItem();
 
     private float experience;
 

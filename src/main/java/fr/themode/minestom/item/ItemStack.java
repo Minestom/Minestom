@@ -8,7 +8,10 @@ import java.util.ArrayList;
 
 public class ItemStack implements DataContainer {
 
-    public static final ItemStack AIR_ITEM = new ItemStack((short) 0, (byte) 0);
+    public static ItemStack getAirItem() {
+        return new ItemStack((short) 0, (byte) 0);
+    }
+
     private static StackingRule defaultStackingRule;
 
     private short materialId;

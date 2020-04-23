@@ -141,13 +141,13 @@ public class Utils {
         boolean present = reader.readBoolean();
 
         if (!present) {
-            return ItemStack.AIR_ITEM;
+            return ItemStack.getAirItem();
         }
 
         int id = reader.readVarInt();
         if (id == -1) {
             // Drop mode
-            return ItemStack.AIR_ITEM;
+            return ItemStack.getAirItem();
         }
 
         byte count = reader.readByte();

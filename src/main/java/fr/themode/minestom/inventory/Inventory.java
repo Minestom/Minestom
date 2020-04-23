@@ -42,7 +42,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.offset = inventoryType.getAdditionalSlot();
 
         this.itemStacks = new ItemStack[inventoryType.getAdditionalSlot()];
-        Arrays.fill(itemStacks, ItemStack.AIR_ITEM);
+
+        for (int i = 0; i < itemStacks.length; i++) {
+            itemStacks[i] = ItemStack.getAirItem();
+        }
     }
 
     private static int generateId() {
@@ -117,12 +120,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     public ItemStack getCursorItem(Player player) {
-        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR_ITEM);
+        return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
     }
 
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
-            itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
+            itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
             this.itemStacks[slot] = itemStack;
             SetSlotPacket setSlotPacket = new SetSlotPacket();
             setSlotPacket.windowId = 1;

@@ -23,7 +23,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     private Player player;
     private ItemStack[] items = new ItemStack[INVENTORY_SIZE];
-    private ItemStack cursorItem = ItemStack.AIR_ITEM;
+    private ItemStack cursorItem = ItemStack.getAirItem();
 
     private InventoryCondition inventoryCondition;
     private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
@@ -31,7 +31,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public PlayerInventory(Player player) {
         this.player = player;
 
-        Arrays.fill(items, ItemStack.AIR_ITEM);
+        for (int i = 0; i < items.length; i++) {
+            items[i] = ItemStack.getAirItem();
+        }
     }
 
     @Override
@@ -176,13 +178,14 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 return getLeggings();
             case BOOTS:
                 return getBoots();
+            default:
+                throw new NullPointerException("Equipment slot cannot be null");
         }
-        return ItemStack.AIR_ITEM;
     }
 
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
-            itemStack = itemStack == null ? ItemStack.AIR_ITEM : itemStack;
+            itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
 
             EntityEquipmentPacket.Slot equipmentSlot;
 

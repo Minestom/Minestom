@@ -247,7 +247,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
                     int firstBlock = 0;
                     for (int y = (int) position.getY(); y > 0; y--) {
-                        BlockPosition blockPosition = new BlockPosition(position.getX(), y + 1, position.getZ());
+                        BlockPosition blockPosition = new BlockPosition(position.getX(), y, position.getZ());
                         short blockId = instance.getBlockId(blockPosition);
                         //if (y == 70)
                         //   System.out.println("id: " + blockId);

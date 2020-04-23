@@ -10,7 +10,7 @@ public class ShapelessRecipe extends Recipe {
 
     private List<DeclareRecipesPacket.Ingredient> ingredients = new ArrayList<>();
 
-    private ItemStack result = ItemStack.AIR_ITEM;
+    private ItemStack result = ItemStack.getAirItem();
 
     public ShapelessRecipe(String recipeId, String group) {
         super(RecipeType.SHAPELESS, recipeId);

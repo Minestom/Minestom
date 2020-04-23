@@ -139,7 +139,7 @@ public abstract class EntityCreature extends LivingEntity {
         pathFinder.getPath(position, blockPositions -> {
             if (blockPositions.isEmpty()) {
                 // Didn't find path
-                System.out.println("NOT FOUND");
+                System.out.println("PATH NOT FOUND");
                 return;
             }
             this.blockPositions = blockPositions;
