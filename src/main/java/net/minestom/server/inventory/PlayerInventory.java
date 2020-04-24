@@ -99,7 +99,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setItemInMainHand(ItemStack itemStack) {
         safeItemInsert(player.getHeldSlot(), itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
     }
 
     public ItemStack getItemInOffHand() {
@@ -108,7 +107,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setItemInOffHand(ItemStack itemStack) {
         safeItemInsert(OFFHAND_SLOT, itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
     }
 
     public ItemStack getHelmet() {
@@ -117,7 +115,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setHelmet(ItemStack itemStack) {
         safeItemInsert(HELMET_SLOT, itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.HELMET);
     }
 
     public ItemStack getChestplate() {
@@ -126,7 +123,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setChestplate(ItemStack itemStack) {
         safeItemInsert(CHESTPLATE_SLOT, itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
     }
 
     public ItemStack getLeggings() {
@@ -135,7 +131,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setLeggings(ItemStack itemStack) {
         safeItemInsert(LEGGINGS_SLOT, itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
     }
 
     public ItemStack getBoots() {
@@ -144,7 +139,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public void setBoots(ItemStack itemStack) {
         safeItemInsert(BOOTS_SLOT, itemStack);
-        player.syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
     public void update() {
