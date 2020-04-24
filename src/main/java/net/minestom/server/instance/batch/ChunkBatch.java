@@ -67,8 +67,10 @@ public class ChunkBatch implements InstanceBatch {
                 data.apply(chunk);
             }
 
-            chunk.refreshDataPacket();
-            instance.sendChunkUpdate(chunk);
+            chunk.refreshDataPacket(() -> {
+                instance.sendChunkUpdate(chunk);
+            });
+
             if (callback != null)
                 callback.accept(chunk);
         }

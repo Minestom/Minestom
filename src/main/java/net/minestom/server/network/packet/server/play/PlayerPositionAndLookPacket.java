@@ -17,8 +17,10 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
         writer.writeDouble(position.getX());
         writer.writeDouble(position.getY());
         writer.writeDouble(position.getZ());
+
         writer.writeFloat(position.getYaw());
         writer.writeFloat(position.getPitch());
+
         writer.writeByte(flags);
         writer.writeVarInt(teleportId);
     }

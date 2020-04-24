@@ -10,6 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
@@ -305,6 +306,14 @@ public class Chunk implements Viewable {
     public void refreshDataPacket() {
         ByteBuf buffer = PacketUtils.writePacket(getFreshFullDataPacket());
         setFullDataPacket(buffer);
+    }
+
+    // Write the pakcet in the writer thread pools
+    public void refreshDataPacket(Runnable runnable) {
+        PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), buf -> {
+            setFullDataPacket(buf);
+            runnable.run();
+        });
     }
 
     @Override

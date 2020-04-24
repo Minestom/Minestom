@@ -66,13 +66,17 @@ public class BlockBatch implements InstanceBatch {
                     for (BlockData data : dataList) {
                         data.apply(chunk);
                     }
-                    chunk.refreshDataPacket();
-                    instance.sendChunkUpdate(chunk);
+
+                    chunk.refreshDataPacket(() -> {
+                        instance.sendChunkUpdate(chunk);
+                    });
+
                     if (isLast) {
                         // data.clear();
                         if (callback != null)
                             callback.run();
                     }
+
                 }
             });
         }
