@@ -72,7 +72,6 @@ public class BlockBatch implements InstanceBatch {
                     });
 
                     if (isLast) {
-                        // data.clear();
                         if (callback != null)
                             callback.run();
                     }

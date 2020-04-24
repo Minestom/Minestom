@@ -980,6 +980,18 @@ public enum Material {
         }
     }
 
+    public boolean hasState() {
+        switch (this) {
+            case BOW:
+            case TRIDENT:
+            case CROSSBOW:
+            case SHIELD:
+                return true;
+        }
+
+        return isFood();
+    }
+
     public short getId() {
         return materialId;
     }

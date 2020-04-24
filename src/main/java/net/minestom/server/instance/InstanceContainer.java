@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
@@ -37,7 +36,7 @@ public class InstanceContainer extends Instance {
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
 
-    private AtomicBoolean autoChunkLoad = new AtomicBoolean(false);
+    private boolean autoChunkLoad;
 
     protected InstanceContainer(UUID uniqueId, File folder) {
         super(uniqueId);
@@ -331,12 +330,12 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void enableAutoChunkLoad(boolean enable) {
-        this.autoChunkLoad.set(enable);
+        this.autoChunkLoad = enable;
     }
 
     @Override
     public boolean hasEnabledAutoChunkLoad() {
-        return autoChunkLoad.get();
+        return autoChunkLoad;
     }
 
     protected void addSharedInstance(SharedInstance sharedInstance) {

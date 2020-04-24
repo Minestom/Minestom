@@ -19,7 +19,10 @@ public class ChunkBatch implements InstanceBatch {
     private InstanceContainer instance;
     private Chunk chunk;
 
-    private List<BlockData> dataList = Collections.synchronizedList(new ArrayList<>());
+    // Give it the max capacity by default (avoid resizing)
+    private List<BlockData> dataList =
+            Collections.synchronizedList(new ArrayList<>(
+                    Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z));
 
     public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
