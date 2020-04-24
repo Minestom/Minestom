@@ -3,7 +3,7 @@ plugins {
     id 'net.ltgt.apt' version '0.10'
 }
 
-group 'fr.themode.minestom'
+group 'net.minestom.server'
 version '1.0'
 
 sourceCompatibility = 1.11

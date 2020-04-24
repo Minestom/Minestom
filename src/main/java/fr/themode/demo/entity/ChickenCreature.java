@@ -1,12 +1,12 @@
 package fr.themode.demo.entity;
 
-import fr.themode.minestom.entity.Entity;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.EntityType;
-import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.entity.vehicle.PlayerVehicleInformation;
-import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Vector;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.utils.Position;
+import net.minestom.server.utils.Vector;
 
 public class ChickenCreature extends EntityCreature {
 

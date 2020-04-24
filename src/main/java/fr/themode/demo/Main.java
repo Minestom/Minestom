@@ -4,17 +4,17 @@ import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
 import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
-import fr.themode.minestom.MinecraftServer;
-import fr.themode.minestom.command.CommandManager;
-import fr.themode.minestom.instance.block.BlockManager;
-import fr.themode.minestom.instance.block.rule.vanilla.RedstonePlacementRule;
-import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.item.Material;
-import fr.themode.minestom.net.packet.server.play.DeclareRecipesPacket;
-import fr.themode.minestom.recipe.RecipeManager;
-import fr.themode.minestom.recipe.ShapelessRecipe;
-import fr.themode.minestom.utils.time.TimeUnit;
-import fr.themode.minestom.utils.time.UpdateOption;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
+import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
+import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.recipe.ShapelessRecipe;
+import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 
 
 public class Main {

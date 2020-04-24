@@ -5,7 +5,7 @@ import fr.themode.command.Command;
 import fr.themode.command.arguments.Argument;
 import fr.themode.command.arguments.ArgumentType;
 import fr.themode.command.arguments.number.ArgumentNumber;
-import fr.themode.minestom.entity.Player;
+import net.minestom.server.entity.Player;
 
 public class HealthCommand extends Command<Player> {
 

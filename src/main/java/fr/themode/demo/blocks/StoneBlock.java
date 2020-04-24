@@ -1,11 +1,11 @@
 package fr.themode.demo.blocks;
 
-import fr.themode.minestom.data.Data;
-import fr.themode.minestom.entity.Player;
-import fr.themode.minestom.instance.Instance;
-import fr.themode.minestom.instance.block.CustomBlock;
-import fr.themode.minestom.utils.BlockPosition;
-import fr.themode.minestom.utils.time.UpdateOption;
+import net.minestom.server.data.Data;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.time.UpdateOption;
 
 public class StoneBlock extends CustomBlock {
 

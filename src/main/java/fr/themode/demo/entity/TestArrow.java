@@ -1,8 +1,8 @@
 package fr.themode.demo.entity;
 
-import fr.themode.minestom.entity.EntityType;
-import fr.themode.minestom.entity.LivingEntity;
-import fr.themode.minestom.entity.ObjectEntity;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.ObjectEntity;
 
 public class TestArrow extends ObjectEntity {
 

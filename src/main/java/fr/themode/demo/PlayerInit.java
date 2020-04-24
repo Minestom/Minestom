@@ -3,23 +3,23 @@ package fr.themode.demo;
 import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
-import fr.themode.minestom.MinecraftServer;
-import fr.themode.minestom.benchmark.BenchmarkManager;
-import fr.themode.minestom.benchmark.ThreadResult;
-import fr.themode.minestom.entity.*;
-import fr.themode.minestom.event.*;
-import fr.themode.minestom.instance.InstanceContainer;
-import fr.themode.minestom.inventory.Inventory;
-import fr.themode.minestom.inventory.InventoryType;
-import fr.themode.minestom.item.ItemStack;
-import fr.themode.minestom.item.Material;
-import fr.themode.minestom.net.ConnectionManager;
-import fr.themode.minestom.timer.TaskRunnable;
-import fr.themode.minestom.utils.MathUtils;
-import fr.themode.minestom.utils.Position;
-import fr.themode.minestom.utils.Vector;
-import fr.themode.minestom.utils.time.TimeUnit;
-import fr.themode.minestom.utils.time.UpdateOption;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.benchmark.BenchmarkManager;
+import net.minestom.server.benchmark.ThreadResult;
+import net.minestom.server.entity.*;
+import net.minestom.server.event.*;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.timer.TaskRunnable;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
+import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.Map;
 import java.util.UUID;
@@ -88,6 +88,7 @@ public class PlayerInit {
 
         connectionManager.setPacketConsumer((player, packet) -> {
             // Listen to all received packet
+            // Returning true means cancelling the packet
             return false;
         });
 
@@ -150,26 +151,9 @@ public class PlayerInit {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 75, 0));
 
-            /*Random random = new Random();
-            for (int i = 0; i < 50; i++) {
-                ChickenCreature chickenCreature = new ChickenCreature();
-                chickenCreature.refreshPosition(random.nextInt(100), 65, random.nextInt(100));
-                chickenCreature.setInstance(getInstance());
-            }*/
-                //chickenCreature.addPassenger(this);
-
-            /*for (int ix = 0; ix < 4; ix++)
-                for (int iz = 0; iz < 4; iz++) {
-                    ItemEntity itemEntity = new ItemEntity(new ItemStack(1, (byte) 32));
-                    itemEntity.refreshPosition(ix, 68, iz);
-                    //itemEntity.setNoGravity(true);
-                    itemEntity.setInstance(getInstance());
-                    //itemEntity.remove();
-                }*/
-
                 ItemStack item = new ItemStack((short) 1, (byte) 43);
-                item.setDisplayName("LE NOM DE L'ITEM");
-                //item.getLore().add("lol le lore");
+                item.setDisplayName("Item name");
+                item.getLore().add("a lore line");
                 player.getInventory().addItemStack(item);
 
                 Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");

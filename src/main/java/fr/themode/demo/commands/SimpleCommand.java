@@ -1,9 +1,9 @@
 package fr.themode.demo.commands;
 
 import fr.themode.demo.entity.ChickenCreature;
-import fr.themode.minestom.command.CommandProcessor;
-import fr.themode.minestom.entity.EntityCreature;
-import fr.themode.minestom.entity.Player;
+import net.minestom.server.command.CommandProcessor;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.Player;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
