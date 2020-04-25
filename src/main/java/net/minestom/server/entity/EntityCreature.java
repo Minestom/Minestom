@@ -136,8 +136,8 @@ public abstract class EntityCreature extends LivingEntity {
         setVelocity(velocity, 200);
     }
 
-    public void setPathTo(Position position, Consumer<Boolean> resultConsumer) {
-        pathFinder.getPath(position, blockPositions -> {
+    public void setPathTo(Position position, int maxCheck, Consumer<Boolean> resultConsumer) {
+        pathFinder.getPath(position, maxCheck, blockPositions -> {
             if (blockPositions == null || blockPositions.isEmpty()) {
                 // Didn't find path
                 if (resultConsumer != null)
@@ -154,8 +154,12 @@ public abstract class EntityCreature extends LivingEntity {
         });
     }
 
+    public void setPathTo(Position position, int maxCheck) {
+        setPathTo(position, maxCheck, null);
+    }
+
     public void setPathTo(Position position) {
-        setPathTo(position, null);
+        setPathTo(position, 1000, null);
     }
 
     public void moveTowards(Position direction, float speed) {

@@ -22,13 +22,13 @@ public class EntityPathFinder {
         this.entity = entity;
     }
 
-    public void getPath(Position target, Consumer<LinkedList<BlockPosition>> consumer) {
+    public void getPath(Position target, int maxCheck, Consumer<LinkedList<BlockPosition>> consumer) {
         pathfindingPool.execute(() -> {
             Instance instance = entity.getInstance();
             BlockPosition start = entity.getPosition().toBlockPosition();
             BlockPosition end = target.toBlockPosition();
 
-            consumer.accept(AStarPathfinder.getPath(instance, start, end, 100));
+            consumer.accept(AStarPathfinder.getPath(instance, start, end, maxCheck));
         });
     }
 
