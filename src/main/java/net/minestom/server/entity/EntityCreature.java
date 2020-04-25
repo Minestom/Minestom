@@ -131,13 +131,13 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 7, 0);
+        Vector velocity = new Vector(0, height * 10, 0);
         setVelocity(velocity, 200);
     }
 
-    public void moveTo(Position position) {
+    public void setPathTo(Position position) {
         pathFinder.getPath(position, blockPositions -> {
-            if (blockPositions.isEmpty()) {
+            if (blockPositions == null || blockPositions.isEmpty()) {
                 // Didn't find path
                 System.out.println("PATH NOT FOUND");
                 return;

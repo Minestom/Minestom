@@ -2,6 +2,7 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.thread.MinestomThread;
@@ -23,20 +24,11 @@ public class EntityPathFinder {
 
     public void getPath(Position target, Consumer<LinkedList<BlockPosition>> consumer) {
         pathfindingPool.execute(() -> {
-            LinkedList<BlockPosition> blockPositions = new LinkedList<>();
+            Instance instance = entity.getInstance();
+            BlockPosition start = entity.getPosition().toBlockPosition();
+            BlockPosition end = target.toBlockPosition();
 
-            JPS jps = new JPS(entity.getInstance(), entity.getPosition(), target);
-
-            boolean first = true;
-            for (Position position : jps.getPath()) {
-                if (first) {
-                    first = false;
-                    continue;
-                }
-                blockPositions.add(position.toBlockPosition());
-            }
-
-            consumer.accept(blockPositions);
+            consumer.accept(AStarPathfinder.getPath(instance, start, end, 100));
         });
     }
 

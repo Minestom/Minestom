@@ -722,6 +722,10 @@ public enum Block {
         return blockId;
     }
 
+    public boolean isAir() {
+        return this == AIR;
+    }
+
     public boolean isSolid() {
         if (blockId == 0) {
             return false;
