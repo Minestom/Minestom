@@ -8,12 +8,17 @@ import net.minestom.server.instance.Instance;
 public class SimpleCommand implements CommandProcessor {
     @Override
     public String getCommandName() {
-        return "test";
+        return "follow";
+    }
+
+    @Override
+    public String[] getAliases() {
+        return new String[0];
     }
 
     @Override
     public boolean process(Player player, String command, String[] args) {
-        player.sendMessage("You tried the sample command!");
+        player.sendMessage("Everyone come at you!");
 
         Instance instance = player.getInstance();
 

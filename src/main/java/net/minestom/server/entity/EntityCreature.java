@@ -11,6 +11,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 public abstract class EntityCreature extends LivingEntity {
 
@@ -135,16 +136,26 @@ public abstract class EntityCreature extends LivingEntity {
         setVelocity(velocity, 200);
     }
 
-    public void setPathTo(Position position) {
+    public void setPathTo(Position position, Consumer<Boolean> resultConsumer) {
         pathFinder.getPath(position, blockPositions -> {
             if (blockPositions == null || blockPositions.isEmpty()) {
                 // Didn't find path
-                System.out.println("PATH NOT FOUND");
+                if (resultConsumer != null)
+                    resultConsumer.accept(false);
                 return;
             }
+            blockPositions.pollFirst(); // Remove first entry (where the entity is)
+
             this.blockPositions = blockPositions;
             setNextPathPosition();
+
+            if (resultConsumer != null)
+                resultConsumer.accept(true);
         });
+    }
+
+    public void setPathTo(Position position) {
+        setPathTo(position, null);
     }
 
     public void moveTowards(Position direction, float speed) {

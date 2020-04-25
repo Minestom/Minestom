@@ -80,6 +80,12 @@ public class CommandManager {
         }
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
             commands.add(commandProcessor.getCommandName());
+            String[] aliases = commandProcessor.getAliases();
+            if (aliases == null || aliases.length == 0)
+                continue;
+            for (String alias : aliases) {
+                commands.add(alias);
+            }
         }
 
 

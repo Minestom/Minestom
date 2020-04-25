@@ -6,5 +6,7 @@ public interface CommandProcessor {
 
     String getCommandName();
 
+    String[] getAliases();
+
     boolean process(Player player, String command, String[] args);
 }
