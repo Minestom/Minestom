@@ -56,6 +56,12 @@ public class BlockPosition {
         this.z = z;
     }
 
+    public int getDistance(BlockPosition blockPosition) {
+        return Math.abs(getX() - blockPosition.getX()) +
+                Math.abs(getY() - blockPosition.getY()) +
+                Math.abs(getZ() - blockPosition.getZ());
+    }
+
     public BlockPosition clone() {
         return new BlockPosition(x, y, z);
     }

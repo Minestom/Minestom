@@ -62,43 +62,51 @@ public class BlockPlacementListener {
 
         blockPosition.add(offsetX, offsetY, offsetZ);
 
-        Chunk chunk = instance.getChunkAt(blockPosition);
-        Set<Entity> entities = instance.getChunkEntities(chunk);
-        boolean intersect = false;
-        for (Entity entity : entities) {
-            intersect = entity.getBoundingBox().intersect(blockPosition);
-            if (intersect)
-                break;
-        }
 
+        Chunk chunk = instance.getChunkAt(blockPosition);
         boolean refreshChunk = false;
 
-        if (material.isBlock() && !intersect) {
-            PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
-            playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
-
-            // BlockPlacementRule check
+        if (material.isBlock()) {
             Block block = material.getBlock();
-            BlockManager blockManager = MinecraftServer.getBlockManager();
-            BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
-            boolean canPlace = true;
-            if (blockPlacementRule != null) {
-                canPlace = blockPlacementRule.canPlace(instance, blockPosition);
+
+            Set<Entity> entities = instance.getChunkEntities(chunk);
+            boolean intersect = false;
+            if (block.isSolid()) {
+                for (Entity entity : entities) {
+                    intersect = entity.getBoundingBox().intersect(blockPosition);
+                    if (intersect)
+                        break;
+                }
             }
 
-            player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
-            if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
-                instance.setBlock(blockPosition, material.getBlock());
-                if (playerBlockPlaceEvent.doesConsumeBlock()) {
+            if (!intersect) {
+                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
+                playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
-                    StackingRule stackingRule = usedItem.getStackingRule();
-                    ItemStack newUsedItem = stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
+                // BlockPlacementRule check
+                BlockManager blockManager = MinecraftServer.getBlockManager();
+                BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
+                boolean canPlace = true;
+                if (blockPlacementRule != null) {
+                    canPlace = blockPlacementRule.canPlace(instance, blockPosition);
+                }
 
-                    if (hand == Player.Hand.OFF) {
-                        playerInventory.setItemInOffHand(newUsedItem);
-                    } else { // Main
-                        playerInventory.setItemInMainHand(newUsedItem);
+                player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
+                if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
+                    instance.setBlock(blockPosition, material.getBlock());
+                    if (playerBlockPlaceEvent.doesConsumeBlock()) {
+
+                        StackingRule stackingRule = usedItem.getStackingRule();
+                        ItemStack newUsedItem = stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
+
+                        if (hand == Player.Hand.OFF) {
+                            playerInventory.setItemInOffHand(newUsedItem);
+                        } else { // Main
+                            playerInventory.setItemInMainHand(newUsedItem);
+                        }
                     }
+                } else {
+                    refreshChunk = true;
                 }
             } else {
                 refreshChunk = true;

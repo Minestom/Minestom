@@ -1335,6 +1335,20 @@ public enum Block {
         }
     }
 
+    public boolean isSign() {
+        switch (this) {
+            case OAK_SIGN:
+            case SPRUCE_SIGN:
+            case BIRCH_SIGN:
+            case ACACIA_SIGN:
+            case JUNGLE_SIGN:
+            case DARK_OAK_SIGN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public List<BlockAlternative> getBlockAlternatives() {
         return Collections.unmodifiableList(blockAlternatives);
     }

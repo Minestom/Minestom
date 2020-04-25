@@ -102,8 +102,6 @@ public class PlayerInit {
                     velocity.setY(4f);
                     entity.setVelocity(velocity, 150);
                     player.sendMessage("You attacked an entity!");
-
-                    //creature.jump(1);
                 } else if (entity instanceof Player) {
                     Player target = (Player) entity;
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);

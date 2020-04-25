@@ -28,7 +28,6 @@ public class ItemEntity extends ObjectEntity {
     @Override
     public void spawn() {
         this.spawnTime = System.currentTimeMillis();
-        // setVelocity(new Vector(0, 1, 0), 5000);
     }
 
     @Override
