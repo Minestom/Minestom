@@ -342,6 +342,12 @@ public class Chunk implements Viewable {
     }
 
     private int getBlockIndex(int x, int y, int z) {
+        x = x % 16;
+        z = z % 16;
+
+        x = x < 0 ? Chunk.CHUNK_SIZE_X + x : x;
+        z = z < 0 ? Chunk.CHUNK_SIZE_Z + z : z;
+
         int index = (((y * 16) + x) * 16) + z;
         return index;
     }

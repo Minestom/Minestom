@@ -52,9 +52,6 @@ public class InstanceContainer extends Instance {
             int chunkY = y;
             int chunkZ = z % 16;
 
-            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
-            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
-
             int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
 
             callBlockDestroy(chunk, index, x, y, z);
@@ -63,7 +60,7 @@ public class InstanceContainer extends Instance {
 
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
-            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId, data);
+            chunk.UNSAFE_setBlock(x, y, z, blockId, data);
 
             executeNeighboursBlockPlacementRule(blockPosition);
 
@@ -79,9 +76,6 @@ public class InstanceContainer extends Instance {
             int chunkX = x % 16;
             int chunkY = y;
             int chunkZ = z % 16;
-
-            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
-            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
 
             int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
 
@@ -106,16 +100,8 @@ public class InstanceContainer extends Instance {
     public void refreshBlockId(int x, int y, int z, short blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            int chunkX = x % 16;
-            int chunkY = y;
-            int chunkZ = z % 16;
+            chunk.refreshBlockValue(x, y, z, blockId);
 
-            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
-            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
-
-            chunk.refreshBlockValue(chunkX, chunkY, chunkZ, blockId);
-
-            // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
         }
     }
@@ -174,10 +160,7 @@ public class InstanceContainer extends Instance {
         int blockY = blockPosition.getY();
         int blockZ = blockPosition.getZ();
 
-        blockX = ChunkUtils.refreshChunkXZ(blockX);
-        blockZ = ChunkUtils.refreshChunkXZ(blockZ);
-
-        short blockId = chunk.getBlockId((byte) (blockX % 16), blockY, (byte) (blockZ % 16));
+        short blockId = chunk.getBlockId(blockX, blockY, blockZ);
         if (blockId == 0) {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
             return;
