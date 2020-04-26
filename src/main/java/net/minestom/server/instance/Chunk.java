@@ -70,20 +70,12 @@ public class Chunk implements Viewable {
         setBlock(x, y, z, blockId, (short) 0, data, null);
     }
 
-    public void UNSAFE_setBlock(int x, int y, int z, short blockId) {
-        UNSAFE_setBlock(x, y, z, blockId, null);
-    }
-
     public void UNSAFE_setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getBlock(customBlockId);
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
         setCustomBlock(x, y, z, customBlock, data);
-    }
-
-    public void UNSAFE_setCustomBlock(int x, int y, int z, short customBlockId) {
-        UNSAFE_setCustomBlock(x, y, z, customBlockId, null);
     }
 
     private void setCustomBlock(int x, int y, int z, CustomBlock customBlock, Data data) {
@@ -159,7 +151,7 @@ public class Chunk implements Viewable {
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
         short id = customBlocksId[getBlockIndex(x, y, z)];
-        return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
+        return id != 0 ? BLOCK_MANAGER.getCustomBlock(id) : null;
     }
 
     protected CustomBlock getCustomBlock(int index) {
@@ -168,8 +160,10 @@ public class Chunk implements Viewable {
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
-        this.blocksId[getBlockIndex(x, y, z)] = blockId;
-        this.customBlocksId[getBlockIndex(x, y, z)] = customId;
+        int blockIndex = getBlockIndex(x, y, z);
+
+        this.blocksId[blockIndex] = blockId;
+        this.customBlocksId[blockIndex] = customId;
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId) {

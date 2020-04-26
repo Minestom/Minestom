@@ -141,6 +141,10 @@ public class PlayerInit {
                 itemEntity.setVelocity(velocity, 500);
             });
 
+            player.setEventCallback(PlayerDisconnectEvent.class, event -> {
+                System.out.println("DISCONNECTION " + player.getUsername());
+            });
+
             player.setEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
             });

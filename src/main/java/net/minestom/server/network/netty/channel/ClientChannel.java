@@ -56,7 +56,6 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        System.out.println("DISCONNECTION");
         PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
         if (playerConnection != null) {
             playerConnection.refreshOnline(false);

@@ -14,7 +14,7 @@ public interface BlockModifier {
 
     void setBlock(int x, int y, int z, short blockId, Data data);
 
-    void setCustomBlock(int x, int y, int z, short blockId, Data data);
+    void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
 
     default void setBlock(int x, int y, int z, short blockId) {
         setBlock(x, y, z, blockId, null);
@@ -24,8 +24,8 @@ public interface BlockModifier {
         setBlock(x, y, z, block.getBlockId(), null);
     }
 
-    default void setCustomBlock(int x, int y, int z, short blockId) {
-        setCustomBlock(x, y, z, blockId, null);
+    default void setCustomBlock(int x, int y, int z, short customBlockId) {
+        setCustomBlock(x, y, z, customBlockId, null);
     }
 
     default void setBlock(BlockPosition blockPosition, Block block) {
@@ -45,21 +45,21 @@ public interface BlockModifier {
         setBlock(position.toBlockPosition(), blockId);
     }
 
-    default void setCustomBlock(int x, int y, int z, String blockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getBlock(blockId);
+    default void setCustomBlock(int x, int y, int z, String customBlockId, Data data) {
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setCustomBlock(x, y, z, customBlock.getId(), data);
     }
 
-    default void setCustomBlock(int x, int y, int z, String blockId) {
-        setCustomBlock(x, y, z, blockId, null);
+    default void setCustomBlock(int x, int y, int z, String customBlockId) {
+        setCustomBlock(x, y, z, customBlockId, null);
     }
 
-    default void setCustomBlock(BlockPosition blockPosition, String blockId) {
-        setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockId);
+    default void setCustomBlock(BlockPosition blockPosition, String customBlockId) {
+        setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), customBlockId);
     }
 
-    default void setCustomBlock(Position position, String blockId) {
-        setCustomBlock(position.toBlockPosition(), blockId);
+    default void setCustomBlock(Position position, String customBlockId) {
+        setCustomBlock(position.toBlockPosition(), customBlockId);
     }
 
 }

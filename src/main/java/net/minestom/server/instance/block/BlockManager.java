@@ -9,16 +9,16 @@ import java.util.Map;
 
 public class BlockManager {
 
-    private Short2ObjectMap<CustomBlock> blocksInternalId = new Short2ObjectOpenHashMap<>();
-    private Map<String, CustomBlock> blocksId = new HashMap<>();
+    private Short2ObjectMap<CustomBlock> customBlocksInternalId = new Short2ObjectOpenHashMap<>();
+    private Map<String, CustomBlock> customBlocksId = new HashMap<>();
 
     private Short2ObjectOpenHashMap<BlockPlacementRule> placementRules = new Short2ObjectOpenHashMap<>();
 
     public void registerCustomBlock(CustomBlock customBlock) {
         String identifier = customBlock.getIdentifier();
         short id = customBlock.getId();
-        this.blocksInternalId.put(id, customBlock);
-        this.blocksId.put(identifier, customBlock);
+        this.customBlocksInternalId.put(id, customBlock);
+        this.customBlocksId.put(identifier, customBlock);
     }
 
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
@@ -35,12 +35,12 @@ public class BlockManager {
         return getBlockPlacementRule(block.getBlockId());
     }
 
-    public CustomBlock getBlock(String identifier) {
-        return blocksId.get(identifier);
+    public CustomBlock getCustomBlock(String identifier) {
+        return customBlocksId.get(identifier);
     }
 
-    public CustomBlock getBlock(short id) {
-        return blocksInternalId.get(id);
+    public CustomBlock getCustomBlock(short id) {
+        return customBlocksInternalId.get(id);
     }
 
 }

@@ -44,47 +44,48 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
-        Chunk chunk = getChunkAt(x, z);
-        synchronized (chunk) {
-
-            int index = SerializerUtils.coordToChunkIndex(x, y, z);
-
-            callBlockDestroy(chunk, index, x, y, z);
-
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
-
-            blockId = executeBlockPlacementRule(blockId, blockPosition);
-
-            chunk.UNSAFE_setBlock(x, y, z, blockId, data);
-
-            executeNeighboursBlockPlacementRule(blockPosition);
-
-            sendBlockChange(chunk, x, y, z, blockId);
-        }
+    public void setBlock(int x, int y, int z, short blockId, Data data) {
+        setBlock(x, y, z, blockId, (short) 0, data);
     }
 
     @Override
-    public synchronized void setCustomBlock(int x, int y, int z, short blockId, Data data) {
+    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+        short blockId = BLOCK_MANAGER.getCustomBlock(customBlockId).getBlockId();
+        setBlock(x, y, z, blockId, customBlockId, data);
+    }
+
+    private synchronized void setBlock(int x, int y, int z, short blockId, short customBlockId, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            int index = SerializerUtils.coordToChunkIndex(x, y, z);
+            boolean isCustomBlock = customBlockId != 0;
 
-            callBlockDestroy(chunk, index, x, y, z);
+            int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
             BlockPosition blockPosition = new BlockPosition(x, y, z);
 
+            // Call the destroy listener if previous block was a custom block
+            callBlockDestroy(chunk, index, blockPosition);
+
+            // Change id based on neighbors
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
-            chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
+            // Set the block
+            if (isCustomBlock) {
+                chunk.UNSAFE_setCustomBlock(x, y, z, customBlockId, data);
+            } else {
+                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
+            }
 
+            // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
 
-            callBlockPlace(chunk, index, x, y, z);
+            // Call the place listener for custom block
+            if (isCustomBlock)
+                callBlockPlace(chunk, index, blockPosition);
 
-            short id = BLOCK_MANAGER.getBlock(blockId).getBlockId();
-            sendBlockChange(chunk, x, y, z, id);
+            // Refresh player chunk block
+            sendBlockChange(chunk, blockPosition, blockId);
         }
     }
 
@@ -94,22 +95,23 @@ public class InstanceContainer extends Instance {
         synchronized (chunk) {
             chunk.refreshBlockValue(x, y, z, blockId);
 
-            sendBlockChange(chunk, x, y, z, blockId);
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+            sendBlockChange(chunk, blockPosition, blockId);
         }
     }
 
-    private void callBlockDestroy(Chunk chunk, int index, int x, int y, int z) {
+    private void callBlockDestroy(Chunk chunk, int index, BlockPosition blockPosition) {
         CustomBlock previousBlock = chunk.getCustomBlock(index);
         if (previousBlock != null) {
             Data previousData = chunk.getData(index);
-            previousBlock.onDestroy(this, new BlockPosition(x, y, z), previousData);
+            previousBlock.onDestroy(this, blockPosition, previousData);
         }
     }
 
-    private void callBlockPlace(Chunk chunk, int index, int x, int y, int z) {
+    private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
         CustomBlock actualBlock = chunk.getCustomBlock(index);
         Data previousData = chunk.getData(index);
-        actualBlock.onPlace(this, new BlockPosition(x, y, z), previousData);
+        actualBlock.onPlace(this, blockPosition, previousData);
     }
 
     private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
@@ -148,22 +150,19 @@ public class InstanceContainer extends Instance {
     public void breakBlock(Player player, BlockPosition blockPosition) {
         Chunk chunk = getChunkAt(blockPosition);
 
-        int blockX = blockPosition.getX();
-        int blockY = blockPosition.getY();
-        int blockZ = blockPosition.getZ();
+        int x = blockPosition.getX();
+        int y = blockPosition.getY();
+        int z = blockPosition.getZ();
 
-        short blockId = chunk.getBlockId(blockX, blockY, blockZ);
+        short blockId = chunk.getBlockId(x, y, z);
         if (blockId == 0) {
-            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(y), player);
             return;
         }
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         if (!blockBreakEvent.isCancelled()) {
-            int x = blockPosition.getX();
-            int y = blockPosition.getY();
-            int z = blockPosition.getZ();
 
             // Break or change the broken block based on event result
             short resultBlockId = blockBreakEvent.getResultBlock();
@@ -355,9 +354,9 @@ public class InstanceContainer extends Instance {
         this.folder = folder;
     }
 
-    private void sendBlockChange(Chunk chunk, int x, int y, int z, short blockId) {
+    private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockId) {
         BlockChangePacket blockChangePacket = new BlockChangePacket();
-        blockChangePacket.blockPosition = new BlockPosition(x, y, z);
+        blockChangePacket.blockPosition = blockPosition;
         blockChangePacket.blockId = blockId;
         chunk.sendPacketToViewers(blockChangePacket);
     }
