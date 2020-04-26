@@ -21,6 +21,7 @@ public class AStarPathfinder {
     public static LinkedList<BlockPosition> getPath(Instance instance,
                                                     BlockPosition start, BlockPosition end,
                                                     int maxCheck) {
+        long time = System.nanoTime();
         List<Node> open = new ArrayList<>();
         List<Node> closed = new ArrayList<>();
 
@@ -37,6 +38,7 @@ public class AStarPathfinder {
             closed.add(current);
 
             if (isTargetNode(end, current)) {
+                System.out.println("found in: " + (System.nanoTime() - time) + " ns");
                 return buildPath(current);
             }
 

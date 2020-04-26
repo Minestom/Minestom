@@ -106,10 +106,12 @@ public class InstanceContainer extends Instance {
     public void refreshBlockId(int x, int y, int z, short blockId) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            byte chunkX = (byte) (x % 16);
-            byte chunkY = (byte) y;
-            byte chunkZ = (byte) (z % 16);
-            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+            int chunkX = x % 16;
+            int chunkY = y;
+            int chunkZ = z % 16;
+
+            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
+            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
 
             chunk.refreshBlockValue(chunkX, chunkY, chunkZ, blockId);
 

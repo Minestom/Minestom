@@ -37,9 +37,9 @@ public class Chunk implements Viewable {
     private Biome biome;
     private int chunkX, chunkZ;
 
-    // blocks id based on coord
-    private short[][][] blocksId = new short[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
-    private short[][][] customBlocksId = new short[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
+    // blocks id based on coord, see Chunk#getBlockIndex
+    private short[] blocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    private short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coord
@@ -98,7 +98,7 @@ public class Chunk implements Viewable {
         } else {
             // Block has been deleted, clear cache and return
 
-            this.blocksId[x][y][z] = 0; // Set to air
+            this.blocksId[getBlockIndex(x, y, z)] = 0; // Set to air
             //this.blocks.remove(index);
 
             this.blocksData.remove(index);
@@ -147,17 +147,17 @@ public class Chunk implements Viewable {
     }
 
     public short getBlockId(int x, int y, int z) {
-        short id = blocksId[x][y][z];
+        short id = blocksId[getBlockIndex(x, y, z)];
         return id;
     }
 
     public short getCustomBlockId(int x, int y, int z) {
-        short id = customBlocksId[x][y][z];
+        short id = customBlocksId[getBlockIndex(x, y, z)];
         return id;
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
-        short id = customBlocksId[x][y][z];
+        short id = customBlocksId[getBlockIndex(x, y, z)];
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
     }
 
@@ -167,8 +167,8 @@ public class Chunk implements Viewable {
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
-        this.blocksId[x][y][z] = blockId;
-        this.customBlocksId[x][y][z] = customId;
+        this.blocksId[getBlockIndex(x, y, z)] = blockId;
+        this.customBlocksId[getBlockIndex(x, y, z)] = customId;
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId) {
@@ -339,5 +339,10 @@ public class Chunk implements Viewable {
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
+    }
+
+    private int getBlockIndex(int x, int y, int z) {
+        int index = (((y * 16) + x) * 16) + z;
+        return index;
     }
 }
