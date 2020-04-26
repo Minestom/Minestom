@@ -12,6 +12,7 @@ import java.util.List;
 public class AStarPathfinder {
 
     // TODO ladder, jump, etc...
+    // TODO include BoundingBox support
 
     private boolean canClimbLadder;
     private boolean canSwim;

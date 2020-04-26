@@ -157,7 +157,12 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public short getBlockId(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
-        return chunk.getBlockId((byte) (x % 16), (byte) y, (byte) (z % 16));
+        x = x % 16;
+        z = z % 16;
+
+        x = ChunkUtils.refreshChunkXZ(x);
+        z = ChunkUtils.refreshChunkXZ(z);
+        return chunk.getBlockId(x, y, z);
     }
 
     public short getBlockId(float x, float y, float z) {
@@ -170,7 +175,12 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
-        return chunk.getCustomBlock((byte) (x % 16), (byte) y, (byte) (z % 16));
+        x = x % 16;
+        z = z % 16;
+
+        x = ChunkUtils.refreshChunkXZ(x);
+        z = ChunkUtils.refreshChunkXZ(z);
+        return chunk.getCustomBlock(x, y, z);
     }
 
     public CustomBlock getCustomBlock(BlockPosition blockPosition) {
@@ -192,7 +202,12 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public Data getBlockData(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
-        return chunk.getData((byte) (x % 16), (byte) y, (byte) (z % 16));
+        x = x % 16;
+        z = z % 16;
+
+        x = ChunkUtils.refreshChunkXZ(x);
+        z = ChunkUtils.refreshChunkXZ(z);
+        return chunk.getData((byte) x, (byte) y, (byte) z);
     }
 
     public Data getBlockData(BlockPosition blockPosition) {

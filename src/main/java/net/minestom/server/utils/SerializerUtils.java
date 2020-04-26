@@ -18,7 +18,7 @@ public class SerializerUtils {
                 ((value[3] & 0xFF) << 0);
     }
 
-    public static int chunkCoordToIndex(byte x, byte y, byte z) {
+    public static int chunkCoordToIndex(int x, int y, int z) {
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;

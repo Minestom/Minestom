@@ -4,7 +4,6 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.utils.SerializerUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,15 +30,15 @@ public class ChunkBatch implements InstanceBatch {
 
     @Override
     public void setBlock(int x, int y, int z, short blockId, Data data) {
-        addBlockData((byte) x, (byte) y, (byte) z, false, blockId, data);
+        addBlockData((byte) x, y, (byte) z, false, blockId, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        addBlockData((byte) x, (byte) y, (byte) z, true, blockId, data);
+        addBlockData((byte) x, y, (byte) z, true, blockId, data);
     }
 
-    private void addBlockData(byte x, byte y, byte z, boolean customBlock, short blockId, Data data) {
+    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockId, Data data) {
         BlockData blockData = new BlockData();
         blockData.x = x;
         blockData.y = y;
@@ -81,17 +80,16 @@ public class ChunkBatch implements InstanceBatch {
 
     private class BlockData {
 
-        private byte x, y, z;
+        private int x, y, z;
         private boolean isCustomBlock;
         private short blockId;
         private Data data;
 
         public void apply(Chunk chunk) {
-            int index = SerializerUtils.chunkCoordToIndex(x, y, z);
             if (!isCustomBlock) {
-                chunk.UNSAFE_setBlock(index, blockId, data);
+                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(index, blockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
             }
         }
 

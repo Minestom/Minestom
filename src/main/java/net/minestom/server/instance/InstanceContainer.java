@@ -48,9 +48,12 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            byte chunkX = (byte) (x % 16);
-            byte chunkY = (byte) y;
-            byte chunkZ = (byte) (z % 16);
+            int chunkX = x % 16;
+            int chunkY = y;
+            int chunkZ = z % 16;
+
+            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
+            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
 
             int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
 
@@ -60,7 +63,7 @@ public class InstanceContainer extends Instance {
 
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
-            chunk.UNSAFE_setBlock(index, blockId, data);
+            chunk.UNSAFE_setBlock(chunkX, chunkY, chunkZ, blockId, data);
 
             executeNeighboursBlockPlacementRule(blockPosition);
 
@@ -72,9 +75,14 @@ public class InstanceContainer extends Instance {
     public synchronized void setCustomBlock(int x, int y, int z, short blockId, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
-            byte chunkX = (byte) (x % 16);
-            byte chunkY = (byte) y;
-            byte chunkZ = (byte) (z % 16);
+
+            int chunkX = x % 16;
+            int chunkY = y;
+            int chunkZ = z % 16;
+
+            chunkX = ChunkUtils.refreshChunkXZ(chunkX);
+            chunkZ = ChunkUtils.refreshChunkXZ(chunkZ);
+
             int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
 
             callBlockDestroy(chunk, index, x, y, z);
@@ -83,7 +91,7 @@ public class InstanceContainer extends Instance {
 
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
-            chunk.UNSAFE_setCustomBlock(index, blockId, data);
+            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId, data);
 
             executeNeighboursBlockPlacementRule(blockPosition);
 
@@ -103,7 +111,7 @@ public class InstanceContainer extends Instance {
             byte chunkZ = (byte) (z % 16);
             int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
 
-            chunk.refreshBlockValue(index, blockId);
+            chunk.refreshBlockValue(chunkX, chunkY, chunkZ, blockId);
 
             // TODO instead of sending a block change packet each time, cache changed blocks and flush them every tick with a MultiBlockChangePacket
             sendBlockChange(chunk, x, y, z, blockId);
@@ -159,7 +167,15 @@ public class InstanceContainer extends Instance {
     @Override
     public void breakBlock(Player player, BlockPosition blockPosition) {
         Chunk chunk = getChunkAt(blockPosition);
-        short blockId = chunk.getBlockId((byte) (blockPosition.getX() % 16), (byte) blockPosition.getY(), (byte) (blockPosition.getZ() % 16));
+
+        int blockX = blockPosition.getX();
+        int blockY = blockPosition.getY();
+        int blockZ = blockPosition.getZ();
+
+        blockX = ChunkUtils.refreshChunkXZ(blockX);
+        blockZ = ChunkUtils.refreshChunkXZ(blockZ);
+
+        short blockId = chunk.getBlockId((byte) (blockX % 16), blockY, (byte) (blockZ % 16));
         if (blockId == 0) {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
             return;

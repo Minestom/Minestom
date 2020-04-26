@@ -26,8 +26,6 @@ import java.util.Set;
 
 public class BlockPlacementListener {
 
-    private Instance instance;
-
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         PlayerInventory playerInventory = player.getInventory();
         Player.Hand hand = packet.hand;

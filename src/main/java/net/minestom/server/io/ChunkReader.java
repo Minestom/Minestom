@@ -6,7 +6,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.CompressionUtils;
-import net.minestom.server.utils.SerializerUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -29,7 +28,10 @@ public class ChunkReader {
             chunkBatch = instance.createChunkBatch(chunk);
 
             while (true) {
-                int index = stream.readInt();
+                int x = stream.readInt();
+                int y = stream.readInt();
+                int z = stream.readInt();
+
                 boolean isCustomBlock = stream.readBoolean();
                 short blockId = stream.readShort();
                 boolean hasData = stream.readBoolean();
@@ -42,10 +44,6 @@ public class ChunkReader {
                     data = DataReader.readData(dataArray, false);
                 }
 
-                byte[] chunkPos = SerializerUtils.indexToChunkPosition(index);
-                byte x = chunkPos[0];
-                byte y = chunkPos[1];
-                byte z = chunkPos[2];
                 if (isCustomBlock) {
                     chunkBatch.setCustomBlock(x, y, z, blockId, data);
                 } else {

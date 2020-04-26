@@ -24,7 +24,7 @@ public class ChunkDataPacket implements ServerPacket {
     public Chunk chunk;
     public int[] sections;
 
-    private static final int CHUNK_SECTION_COUNT = 16;
+    private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int BITS_PER_ENTRY = 14;
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
@@ -36,7 +36,7 @@ public class ChunkDataPacket implements ServerPacket {
 
         int mask = 0;
         BufferWrapper blocks = BufferUtils.getBuffer(MAX_BUFFER_SIZE);
-        for (int i = 0; i < CHUNK_SECTION_COUNT; i++) {
+        for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
             if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 short[] section = getSection(chunk, i);
                 if (section != null) { // section contains at least one block
@@ -109,14 +109,13 @@ public class ChunkDataPacket implements ServerPacket {
         }
     }
 
-    private short[] getSection(Chunk chunk, int section) {
+    private short[] getSection(Chunk chunk, byte section) {
         short[] blocks = new short[16 * 16 * 16];
         boolean empty = true;
-
         for (byte y = 0; y < 16; y++) {
             for (byte x = 0; x < 16; x++) {
                 for (byte z = 0; z < 16; z++) {
-                    short blockId = chunk.getBlockId(x, (byte) (y + 16 * section), z);
+                    short blockId = chunk.getBlockId(x, (y + 16 * section), z);
                     if (blockId != 0)
                         empty = false;
 

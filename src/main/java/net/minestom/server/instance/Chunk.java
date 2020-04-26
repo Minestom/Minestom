@@ -37,9 +37,9 @@ public class Chunk implements Viewable {
     private Biome biome;
     private int chunkX, chunkZ;
 
-    // Int represent the chunk coord of the block
-    // value is: 2 bytes -> blockId | 2 bytes -> customBlockId (filled with 0 if isn't)
-    private Int2IntMap blocks = new Int2IntOpenHashMap(16 * 16 * 16); // Start with the size of a full chunk section
+    // blocks id based on coord
+    private short[][][] blocksId = new short[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
+    private short[][][] customBlocksId = new short[CHUNK_SIZE_X][CHUNK_SIZE_Y][CHUNK_SIZE_Z];
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coord
@@ -65,39 +65,41 @@ public class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    public void UNSAFE_setBlock(int index, short blockId, Data data) {
-        setBlock(index, blockId, (short) 0, data, null);
+    public void UNSAFE_setBlock(int x, int y, int z, short blockId, Data data) {
+        setBlock(x, y, z, blockId, (short) 0, data, null);
     }
 
-    public void UNSAFE_setBlock(int index, short blockId) {
-        UNSAFE_setBlock(index, blockId, null);
+    public void UNSAFE_setBlock(int x, int y, int z, short blockId) {
+        UNSAFE_setBlock(x, y, z, blockId, null);
     }
 
-    public void UNSAFE_setCustomBlock(int index, short customBlockId, Data data) {
+    public void UNSAFE_setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
-        setCustomBlock(index, customBlock, data);
+        setCustomBlock(x, y, z, customBlock, data);
     }
 
-    public void UNSAFE_setCustomBlock(int index, short customBlockId) {
-        UNSAFE_setCustomBlock(index, customBlockId, null);
+    public void UNSAFE_setCustomBlock(int x, int y, int z, short customBlockId) {
+        UNSAFE_setCustomBlock(x, y, z, customBlockId, null);
     }
 
-    private void setCustomBlock(int index, CustomBlock customBlock, Data data) {
+    private void setCustomBlock(int x, int y, int z, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(index, customBlock.getBlockId(), customBlock.getId(), data, updateConsumer);
+        setBlock(x, y, z, customBlock.getBlockId(), customBlock.getId(), data, updateConsumer);
     }
 
-    private void setBlock(int index, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
+    private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
+        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
-            refreshBlockValue(index, blockId, customId);
+            refreshBlockValue(x, y, z, blockId, customId);
         } else {
             // Block has been deleted, clear cache and return
 
-            this.blocks.remove(index);
+            this.blocksId[x][y][z] = 0; // Set to air
+            //this.blocks.remove(index);
 
             this.blocksData.remove(index);
 
@@ -135,7 +137,7 @@ public class Chunk implements Viewable {
         this.packetUpdated = false;
     }
 
-    public void setBlockData(byte x, byte y, byte z, Data data) {
+    public void setBlockData(int x, int y, int z, Data data) {
         int index = SerializerUtils.chunkCoordToIndex(x, y, z);
         if (data != null) {
             this.blocksData.put(index, data);
@@ -144,42 +146,35 @@ public class Chunk implements Viewable {
         }
     }
 
-    public short getBlockId(byte x, byte y, byte z) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        int value = getBlockValue(index);
-        return (short) (value >>> 16);
+    public short getBlockId(int x, int y, int z) {
+        short id = blocksId[x][y][z];
+        return id;
     }
 
-    public CustomBlock getCustomBlock(byte x, byte y, byte z) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
-        return getCustomBlock(index);
+    public short getCustomBlockId(int x, int y, int z) {
+        short id = customBlocksId[x][y][z];
+        return id;
     }
 
-    protected CustomBlock getCustomBlock(int index) {
-        int value = getBlockValue(index);
-        short id = (short) (value & 0xffff);
+    public CustomBlock getCustomBlock(int x, int y, int z) {
+        short id = customBlocksId[x][y][z];
         return id != 0 ? BLOCK_MANAGER.getBlock(id) : null;
     }
 
-    protected void refreshBlockValue(int index, short blockId, short customId) {
-        int value = createBlockValue(blockId, customId);
-        this.blocks.put(index, value);
+    protected CustomBlock getCustomBlock(int index) {
+        byte[] pos = SerializerUtils.indexToChunkPosition(index);
+        return getCustomBlock(pos[0], pos[1], pos[2]);
     }
 
-    protected void refreshBlockValue(int index, short blockId) {
-        CustomBlock customBlock = getCustomBlock(index);
+    protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
+        this.blocksId[x][y][z] = blockId;
+        this.customBlocksId[x][y][z] = customId;
+    }
+
+    protected void refreshBlockValue(int x, int y, int z, short blockId) {
+        CustomBlock customBlock = getCustomBlock(x, y, z);
         short customBlockId = customBlock == null ? 0 : customBlock.getId();
-        refreshBlockValue(index, blockId, customBlockId);
-    }
-
-    public int createBlockValue(short blockId, short customId) {
-        // Merge blockType and customId to one unique Integer (16/16 bits)
-        int value = (blockId << 16 | customId & 0xFFFF);
-        return value;
-    }
-
-    private int getBlockValue(int index) {
-        return blocks.getOrDefault(index, 0);
+        refreshBlockValue(x, y, z, blockId, customBlockId);
     }
 
     public Data getData(byte x, byte y, byte z) {
@@ -258,29 +253,38 @@ public class Chunk implements Viewable {
         DataOutputStream dos = new DataOutputStream(output);
         dos.writeByte(biome.getId());
 
-        for (Int2IntMap.Entry entry : blocks.int2IntEntrySet()) {
-            int index = entry.getIntKey();
-            int value = entry.getIntValue();
+        for (byte x = 0; x < CHUNK_SIZE_X; x++) {
+            for (short y = 0; y < CHUNK_SIZE_Y; y++) {
+                for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
+                    int index = SerializerUtils.chunkCoordToIndex(x, y, z);
 
-            short blockId = (short) (value >>> 16);
-            short customBlockId = (short) (value & 0xffff);
-            boolean isCustomBlock = customBlockId != 0;
-            short id = isCustomBlock ? customBlockId : blockId;
+                    short blockId = getBlockId(x, y, z);
+                    short customBlockId = getCustomBlockId(x, y, z);
+                    boolean isCustomBlock = customBlockId != 0;
+                    short id = isCustomBlock ? customBlockId : blockId;
 
-            Data data = blocksData.get(index);
-            boolean hasData = data != null;
+                    if (id == 0)
+                        continue;
 
-            dos.writeInt(index); // Chunk coord
-            dos.writeBoolean(isCustomBlock); // Determine the type of the ID
-            dos.writeShort(id);
+                    Data data = blocksData.get(index);
+                    boolean hasData = data != null;
 
-            dos.writeBoolean(hasData);
-            if (hasData) {
-                byte[] d = data.getSerializedData();
-                dos.writeInt(d.length);
-                dos.write(d);
+                    // Chunk coord
+                    dos.writeInt(x);
+                    dos.writeInt(y);
+                    dos.writeInt(z);
+
+                    dos.writeBoolean(isCustomBlock); // Determine the type of the ID
+                    dos.writeShort(id);
+
+                    dos.writeBoolean(hasData);
+                    if (hasData) {
+                        byte[] d = data.getSerializedData();
+                        dos.writeInt(d.length);
+                        dos.write(d);
+                    }
+                }
             }
-
         }
 
         byte[] result = output.toByteArray();

@@ -3,7 +3,6 @@ package net.minestom.server.instance.batch;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.utils.SerializerUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,11 +88,10 @@ public class BlockBatch implements InstanceBatch {
         private Data data;
 
         public void apply(Chunk chunk) {
-            int index = SerializerUtils.chunkCoordToIndex((byte) x, (byte) y, (byte) z);
             if (!isCustomBlock) {
-                chunk.UNSAFE_setBlock(index, blockId, data);
+                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(index, blockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
             }
         }
 

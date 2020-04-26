@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 
 public class ChunkUtils {
@@ -10,6 +11,11 @@ public class ChunkUtils {
 
     public static int getChunkCoordinate(int xz) {
         return Math.floorDiv(xz, 16);
+    }
+
+    public static int refreshChunkXZ(int xz) {
+        /// suppose CHUNK_SIZE_X == CHUNK_SIZE_Z
+        return xz = xz < 0 ? Chunk.CHUNK_SIZE_X + xz : xz;
     }
 
     public static long getChunkIndex(int chunkX, int chunkZ) {
