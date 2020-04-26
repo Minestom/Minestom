@@ -1,15 +1,19 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 
 public class ChunkUtils {
 
     public static boolean isChunkUnloaded(Instance instance, float x, float z) {
-        return instance.getChunk((int) Math.floor(x / 16), (int) Math.floor(z / 16)) == null;
+        int chunkX = getChunkCoordinate((int) x);
+        int chunkZ = getChunkCoordinate((int) z);
+        return instance.getChunk(chunkX, chunkZ) == null;
     }
 
     public static int getChunkCoordinate(int xz) {
-        return Math.floorDiv(xz, 16);
+        // Assume Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z
+        return Math.floorDiv(xz, Chunk.CHUNK_SIZE_X);
     }
 
     public static long getChunkIndex(int chunkX, int chunkZ) {
@@ -23,7 +27,7 @@ public class ChunkUtils {
     }
 
     public static int getSectionAt(int y) {
-        return y / 16;
+        return y / Chunk.CHUNK_SECTION_SIZE;
     }
 
     public static long[] getChunksInRange(final Position position, int range) {
@@ -33,8 +37,8 @@ public class ChunkUtils {
         int counter = 0;
         for (int x = startLoop; x < endLoop; x++) {
             for (int z = startLoop; z < endLoop; z++) {
-                int chunkX = getChunkCoordinate((int) (position.getX() + 16 * x));
-                int chunkZ = getChunkCoordinate((int) (position.getZ() + 16 * z));
+                int chunkX = getChunkCoordinate((int) (position.getX() + Chunk.CHUNK_SIZE_X * x));
+                int chunkZ = getChunkCoordinate((int) (position.getZ() + Chunk.CHUNK_SIZE_Z * z));
                 visibleChunks[counter] = getChunkIndex(chunkX, chunkZ);
                 counter++;
             }

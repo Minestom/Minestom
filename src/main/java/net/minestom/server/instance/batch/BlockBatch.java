@@ -41,9 +41,9 @@ public class BlockBatch implements InstanceBatch {
             blocksData = new ArrayList<>();
 
         BlockData blockData = new BlockData();
-        blockData.x = x % 16;
+        blockData.x = x;
         blockData.y = y;
-        blockData.z = z % 16;
+        blockData.z = z;
         blockData.isCustomBlock = customBlock;
         blockData.blockId = blockId;
         blockData.data = data;

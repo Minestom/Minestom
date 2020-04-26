@@ -48,11 +48,7 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            int chunkX = x % 16;
-            int chunkY = y;
-            int chunkZ = z % 16;
-
-            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+            int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
             callBlockDestroy(chunk, index, x, y, z);
 
@@ -73,11 +69,7 @@ public class InstanceContainer extends Instance {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            int chunkX = x % 16;
-            int chunkY = y;
-            int chunkZ = z % 16;
-
-            int index = SerializerUtils.chunkCoordToIndex(chunkX, chunkY, chunkZ);
+            int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
             callBlockDestroy(chunk, index, x, y, z);
 
@@ -85,7 +77,7 @@ public class InstanceContainer extends Instance {
 
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
-            chunk.UNSAFE_setCustomBlock(chunkX, chunkY, chunkZ, blockId, data);
+            chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
 
             executeNeighboursBlockPlacementRule(blockPosition);
 

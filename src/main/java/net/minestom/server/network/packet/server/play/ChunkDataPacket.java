@@ -110,12 +110,12 @@ public class ChunkDataPacket implements ServerPacket {
     }
 
     private short[] getSection(Chunk chunk, byte section) {
-        short[] blocks = new short[16 * 16 * 16];
+        short[] blocks = new short[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
         boolean empty = true;
-        for (byte y = 0; y < 16; y++) {
-            for (byte x = 0; x < 16; x++) {
-                for (byte z = 0; z < 16; z++) {
-                    short blockId = chunk.getBlockId(x, (y + 16 * section), z);
+        for (byte y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+            for (byte x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                for (byte z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                    short blockId = chunk.getBlockId(x, (y + Chunk.CHUNK_SECTION_SIZE * section), z);
                     if (blockId != 0)
                         empty = false;
 

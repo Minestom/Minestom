@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.chat.Chat;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
@@ -174,10 +175,10 @@ public class Utils {
 
         buffer.putShort(count);
         buffer.putByte((byte) bitsPerEntry);
-        int[] blocksData = new int[16 * 16 * 16];
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
+        int[] blocksData = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
+        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                     int sectionIndex = (((y * 16) + x) * 16) + z;
                     int index = y << 8 | z << 4 | x;
                     blocksData[index] = blocksId[sectionIndex];

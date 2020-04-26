@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.instance.Chunk;
+
 public class SerializerUtils {
 
     public static byte[] intToBytes(int value) {
@@ -18,7 +20,9 @@ public class SerializerUtils {
                 ((value[3] & 0xFF) << 0);
     }
 
-    public static int chunkCoordToIndex(int x, int y, int z) {
+    public static int coordToChunkIndex(int x, int y, int z) {
+        x = x % Chunk.CHUNK_SIZE_X;
+        z = z % Chunk.CHUNK_SIZE_Z;
         short index = (short) (x & 0x000F);
         index |= (y << 4) & 0x0FF0;
         index |= (z << 12) & 0xF000;

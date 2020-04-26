@@ -1,6 +1,7 @@
 package fr.themode.demo.generator;
 
 import net.minestom.server.instance.Biome;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.noise.FastNoise;
@@ -19,9 +20,9 @@ public class NoiseTestGenerator extends ChunkGenerator {
 
     @Override
     public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
-        for (byte x = 0; x < 16; x++)
-            for (byte z = 0; z < 16; z++) {
-                float height = fastNoise.GetSimplex(x + 16 * chunkX, z + 16 * chunkZ) * 135;
+        for (byte x = 0; x < Chunk.CHUNK_SIZE_X; x++)
+            for (byte z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                float height = fastNoise.GetSimplex(x + Chunk.CHUNK_SIZE_X * chunkX, z + Chunk.CHUNK_SIZE_Z * chunkZ) * 135;
                 height = Math.max(height, 70);
                 for (byte y = 0; y < height; y++) {
                     if (random.nextInt(100) > 10) {

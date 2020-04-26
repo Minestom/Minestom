@@ -33,6 +33,7 @@ public class Chunk implements Viewable {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Y = 256;
     public static final int CHUNK_SIZE_Z = 16;
+    public static final int CHUNK_SECTION_SIZE = 16;
 
     private Biome biome;
     private int chunkX, chunkZ;
@@ -91,7 +92,7 @@ public class Chunk implements Viewable {
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        int index = SerializerUtils.coordToChunkIndex(x, y, z);
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
             refreshBlockValue(x, y, z, blockId, customId);
@@ -138,7 +139,7 @@ public class Chunk implements Viewable {
     }
 
     public void setBlockData(int x, int y, int z, Data data) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        int index = SerializerUtils.coordToChunkIndex(x, y, z);
         if (data != null) {
             this.blocksData.put(index, data);
         } else {
@@ -178,7 +179,7 @@ public class Chunk implements Viewable {
     }
 
     public Data getData(byte x, byte y, byte z) {
-        int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+        int index = SerializerUtils.coordToChunkIndex(x, y, z);
         return getData(index);
     }
 
@@ -256,7 +257,7 @@ public class Chunk implements Viewable {
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (short y = 0; y < CHUNK_SIZE_Y; y++) {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int index = SerializerUtils.chunkCoordToIndex(x, y, z);
+                    int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
                     short blockId = getBlockId(x, y, z);
                     short customBlockId = getCustomBlockId(x, y, z);
@@ -342,8 +343,8 @@ public class Chunk implements Viewable {
     }
 
     private int getBlockIndex(int x, int y, int z) {
-        x = x % 16;
-        z = z % 16;
+        x = x % Chunk.CHUNK_SIZE_X;
+        z = z % Chunk.CHUNK_SIZE_Z;
 
         x = x < 0 ? Chunk.CHUNK_SIZE_X + x : x;
         z = z < 0 ? Chunk.CHUNK_SIZE_Z + z : z;
