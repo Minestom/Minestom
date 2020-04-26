@@ -43,7 +43,6 @@ public class Chunk implements Viewable {
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coord
-    // FIXME: shouldn't take Data object (too much memory overhead)
     private Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
 
     // Contains CustomBlocks' index which are updatable

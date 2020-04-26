@@ -28,4 +28,9 @@ public class SimpleCommand implements CommandProcessor {
 
         return true;
     }
+
+    @Override
+    public boolean hasAccess(Player player) {
+        return true;
+    }
 }

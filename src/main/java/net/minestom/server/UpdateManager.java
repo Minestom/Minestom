@@ -30,8 +30,8 @@ public class UpdateManager {
 
                 // Keep Alive Handling
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    long time = currentTime / 1_000_000;
-                    if (time - player.getLastKeepAlive() > 20000) {
+                    long time = System.currentTimeMillis();
+                    if (time - player.getLastKeepAlive() > 10000) {
                         player.refreshKeepAlive(time);
                         KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);

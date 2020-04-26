@@ -13,12 +13,13 @@ public class AStarPathfinder {
 
     // TODO ladder, jump, etc...
 
-    private boolean climbLadder;
+    private boolean canClimbLadder;
+    private boolean canSwim;
+    private boolean canJump;
 
     public static LinkedList<BlockPosition> getPath(Instance instance,
                                                     BlockPosition start, BlockPosition end,
                                                     int maxCheck) {
-        long time = System.nanoTime();
         List<Node> open = new ArrayList<>();
         List<Node> closed = new ArrayList<>();
 
@@ -35,7 +36,6 @@ public class AStarPathfinder {
             closed.add(current);
 
             if (isTargetNode(end, current)) {
-                //System.out.println("FOUND, RETURN: " + (System.nanoTime() - time));
                 return buildPath(current);
             }
 

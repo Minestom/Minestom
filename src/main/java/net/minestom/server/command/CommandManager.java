@@ -2,11 +2,7 @@ package net.minestom.server.command;
 
 import fr.themode.command.Command;
 import fr.themode.command.CommandDispatcher;
-import fr.themode.command.CommandSyntax;
-import fr.themode.command.arguments.*;
-import fr.themode.command.arguments.number.ArgumentDouble;
-import fr.themode.command.arguments.number.ArgumentFloat;
-import fr.themode.command.arguments.number.ArgumentInteger;
+import fr.themode.command.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
@@ -23,16 +19,12 @@ public class CommandManager {
     private CommandDispatcher<Player> dispatcher = new CommandDispatcher<>();
     private Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
-    private DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
-
     public void register(Command<Player> command) {
         this.dispatcher.register(command);
-        refreshPacket();
     }
 
     public void register(CommandProcessor commandProcessor) {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
-        refreshPacket();
     }
 
     public boolean execute(Player source, String command) {
@@ -66,19 +58,33 @@ public class CommandManager {
         this.commandPrefix = commandPrefix;
     }
 
-    public DeclareCommandsPacket getDeclareCommandsPacket() {
-        return declareCommandsPacket;
+    public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
+        return buildPacket(player);
     }
 
-    private void refreshPacket() {
+    private DeclareCommandsPacket buildPacket(Player player) {
+        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
+
         List<String> commands = new ArrayList<>();
         for (Command<Player> command : dispatcher.getCommands()) {
+            CommandCondition<Player> commandCondition = command.getCondition();
+            if (commandCondition != null) {
+                // Do not show command if return false
+                if (!commandCondition.apply(player)) {
+                    continue;
+                }
+            }
             commands.add(command.getName());
             for (String alias : command.getAliases()) {
                 commands.add(alias);
             }
         }
+
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
+            // Do not show command if return false
+            if (!commandProcessor.hasAccess(player))
+                continue;
+
             commands.add(commandProcessor.getCommandName());
             String[] aliases = commandProcessor.getAliases();
             if (aliases == null || aliases.length == 0)
@@ -123,9 +129,11 @@ public class CommandManager {
 
         declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[nodes.size()]);
         declareCommandsPacket.rootIndex = nodes.size() - 1;
+
+        return declareCommandsPacket;
     }
 
-    private void refreshPacket2() {
+    /*private void refreshPacket2() {
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         ArrayList<Integer> rootChildren = new ArrayList<>();
@@ -223,5 +231,5 @@ public class CommandManager {
         }
 
         return argumentNode;
-    }
+    }*/
 }

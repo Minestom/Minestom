@@ -9,7 +9,12 @@ public class KeepAliveListener {
     public static void listener(ClientKeepAlivePacket packet, Player player) {
         if (packet.id != player.getLastKeepAlive()) {
             player.kick(ChatColor.RED + "Bad Keep Alive packet");
+            return;
         }
+
+        // Update latency
+        int latency = (int) (System.currentTimeMillis() - packet.id);
+        player.refreshLatency(latency);
     }
 
 }

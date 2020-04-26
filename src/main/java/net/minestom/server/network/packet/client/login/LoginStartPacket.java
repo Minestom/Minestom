@@ -99,7 +99,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         {
             CommandManager commandManager = MinecraftServer.getCommandManager();
-            DeclareCommandsPacket declareCommandsPacket = commandManager.getDeclareCommandsPacket();
+            DeclareCommandsPacket declareCommandsPacket = commandManager.createDeclareCommandsPacket(player);
 
             connection.sendPacket(declareCommandsPacket);
         }

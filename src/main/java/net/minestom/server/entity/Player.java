@@ -45,6 +45,8 @@ public class Player extends LivingEntity {
     private PlayerConnection playerConnection;
     private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
 
+    private int latency;
+
     private Dimension dimension;
     private GameMode gameMode;
     private LevelType levelType;
@@ -590,6 +592,10 @@ public class Player extends LivingEntity {
         return inventory;
     }
 
+    public int getLatency() {
+        return latency;
+    }
+
     public Dimension getDimension() {
         return dimension;
     }
@@ -832,6 +838,13 @@ public class Player extends LivingEntity {
 
     public void addPacketToQueue(ClientPlayPacket packet) {
         this.packets.add(packet);
+    }
+
+    public void refreshLatency(int latency) {
+        this.latency = latency;
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
+        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
+        sendPacketToViewersAndSelf(playerInfoPacket);
     }
 
     public void refreshDimension(Dimension dimension) {
