@@ -1,6 +1,8 @@
 package net.minestom.server.recipe;
 
-public class Recipe {
+import net.minestom.server.entity.Player;
+
+public abstract class Recipe {
 
     protected RecipeType recipeType;
     protected String recipeId;
@@ -10,6 +12,8 @@ public class Recipe {
         this.recipeType = recipeType;
         this.recipeId = recipeId;
     }
+
+    public abstract boolean shouldShow(Player player);
 
     public String getGroup() {
         return group;

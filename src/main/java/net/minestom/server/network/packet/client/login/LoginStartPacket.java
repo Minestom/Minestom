@@ -113,7 +113,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
             List<String> recipesIdentifier = new ArrayList<>();
             for (Recipe recipe : recipeManager.getRecipes()) {
-                // TODO check condition
+                if (!recipe.shouldShow(player))
+                    continue;
+
                 recipesIdentifier.add(recipe.getRecipeId());
             }
             String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);

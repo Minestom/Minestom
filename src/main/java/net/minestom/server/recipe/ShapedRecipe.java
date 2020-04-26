@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapedRecipe extends Recipe {
+public abstract class ShapedRecipe extends Recipe {
 
     private int width, height;
 

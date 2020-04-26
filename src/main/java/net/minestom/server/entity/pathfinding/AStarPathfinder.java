@@ -30,16 +30,12 @@ public class AStarPathfinder {
         int checkCount = 0;
 
         while (!open.isEmpty()) {
-            checkCount++;
-            if (checkCount >= maxCheck)
-                break;
-
             Node current = getCurrentNode(open);
             open.remove(current);
             closed.add(current);
 
             if (isTargetNode(end, current)) {
-                System.out.println("FOUND, RETURN: " + (System.nanoTime() - time));
+                //System.out.println("FOUND, RETURN: " + (System.nanoTime() - time));
                 return buildPath(current);
             }
 
@@ -59,6 +55,10 @@ public class AStarPathfinder {
                 }
             }
 
+            // To do not check the whole world
+            checkCount++;
+            if (checkCount >= maxCheck)
+                break;
         }
 
         return null;

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapelessRecipe extends Recipe {
+public abstract class ShapelessRecipe extends Recipe {
 
     private List<DeclareRecipesPacket.Ingredient> ingredients = new ArrayList<>();
 

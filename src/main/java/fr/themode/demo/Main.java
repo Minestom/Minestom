@@ -6,6 +6,7 @@ import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.item.ItemStack;
@@ -33,7 +34,12 @@ public class Main {
         commandManager.register(new SimpleCommand());
 
         RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-        ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname");
+        ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
+            @Override
+            public boolean shouldShow(Player player) {
+                return true;
+            }
+        };
         shapelessRecipe.setResult(new ItemStack(Material.STONE, (byte) 1));
         DeclareRecipesPacket.Ingredient ingredient = new DeclareRecipesPacket.Ingredient();
         ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 3)};

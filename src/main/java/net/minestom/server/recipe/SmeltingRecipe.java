@@ -3,7 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 
-public class SmeltingRecipe extends Recipe {
+public abstract class SmeltingRecipe extends Recipe {
 
     private DeclareRecipesPacket.Ingredient ingredient;
 
