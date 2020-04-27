@@ -20,7 +20,7 @@ public class GamemodeCommand extends Command<Player> {
 
         setDefaultExecutor(this::usage);
 
-        Argument player = ArgumentType.String("player");
+        Argument player = ArgumentType.Word("player");
 
         GameMode[] gameModes = GameMode.values();
         String[] names = new String[gameModes.length];
@@ -44,27 +44,27 @@ public class GamemodeCommand extends Command<Player> {
         GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
         assert mode != null; // mode is not supposed to be null, because gamemodeName will be valid
         player.setGameMode(mode);
-        player.sendMessage("You are now playing in "+gamemodeName);
+        player.sendMessage("You are now playing in " + gamemodeName);
 
         System.out.println("hello");
     }
 
     private void executeOnOther(Player player, Arguments arguments) {
         String gamemodeName = arguments.getWord("mode");
-        String targetName = arguments.getString("player");
+        String targetName = arguments.getWord("player");
         GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
         assert mode != null; // mode is not supposed to be null, because gamemodeName will be valid
-        Optional<Player> target = player.getInstance().getPlayers().stream().filter(p -> p.getUsername().equals(targetName)).findFirst();
-        if(target.isPresent()) {
+        Optional<Player> target = player.getInstance().getPlayers().stream().filter(p -> p.getUsername().equalsIgnoreCase(targetName)).findFirst();
+        if (target.isPresent()) {
             target.get().setGameMode(mode);
-            target.get().sendMessage("You are now playing in "+gamemodeName);
+            target.get().sendMessage("You are now playing in " + gamemodeName);
         } else {
-            player.sendMessage("'"+targetName+"' is not a valid player name.");
+            player.sendMessage("'" + targetName + "' is not a valid player name.");
         }
     }
 
     private void gameModeCallback(Player player, String gamemode, int error) {
-        player.sendMessage("'"+gamemode+"' is not a valid gamemode!");
+        player.sendMessage("'" + gamemode + "' is not a valid gamemode!");
     }
 
     private boolean isAllowed(Player player) {
