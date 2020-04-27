@@ -16,7 +16,7 @@ public class BlockManager {
 
     public void registerCustomBlock(CustomBlock customBlock) {
         String identifier = customBlock.getIdentifier();
-        short id = customBlock.getId();
+        short id = customBlock.getCustomBlockId();
         this.customBlocksInternalId.put(id, customBlock);
         this.customBlocksId.put(identifier, customBlock);
     }

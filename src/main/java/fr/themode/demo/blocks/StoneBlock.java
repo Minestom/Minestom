@@ -37,4 +37,9 @@ public class StoneBlock extends CustomBlock {
     public int getBreakDelay(Player player) {
         return 750;
     }
+
+    @Override
+    public short getCustomBlockId() {
+        return 2;
+    }
 }

@@ -80,7 +80,7 @@ public class Chunk implements Viewable {
 
     private void setCustomBlock(int x, int y, int z, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(x, y, z, customBlock.getBlockId(), customBlock.getId(), data, updateConsumer);
+        setBlock(x, y, z, customBlock.getBlockId(), customBlock.getCustomBlockId(), data, updateConsumer);
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
@@ -183,7 +183,7 @@ public class Chunk implements Viewable {
 
     protected void refreshBlockValue(int x, int y, int z, short blockId) {
         CustomBlock customBlock = getCustomBlock(x, y, z);
-        short customBlockId = customBlock == null ? 0 : customBlock.getId();
+        short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
         refreshBlockValue(x, y, z, blockId, customBlockId);
     }
 

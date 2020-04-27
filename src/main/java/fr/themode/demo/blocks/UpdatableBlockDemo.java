@@ -45,4 +45,9 @@ public class UpdatableBlockDemo extends CustomBlock {
     public int getBreakDelay(Player player) {
         return 500;
     }
+
+    @Override
+    public short getCustomBlockId() {
+        return 1;
+    }
 }

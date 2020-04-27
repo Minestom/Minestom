@@ -47,7 +47,7 @@ public interface BlockModifier {
 
     default void setCustomBlock(int x, int y, int z, String customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        setCustomBlock(x, y, z, customBlock.getId(), data);
+        setCustomBlock(x, y, z, customBlock.getCustomBlockId(), data);
     }
 
     default void setCustomBlock(int x, int y, int z, String customBlockId) {
