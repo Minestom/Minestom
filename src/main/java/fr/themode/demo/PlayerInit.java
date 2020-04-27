@@ -87,14 +87,14 @@ public class PlayerInit {
             responseData.setFavicon("data:image/png;base64,<data>");
         });
 
-        connectionManager.setPacketConsumer((player, packet) -> {
+        connectionManager.addPacketConsumer((player, packet) -> {
             // Listen to all received packet
             // Returning true means cancelling the packet
             return false;
         });
 
-        connectionManager.setPlayerInitialization(player -> {
-            player.setEventCallback(AttackEvent.class, event -> {
+        connectionManager.addPlayerInitialization(player -> {
+            player.addEventCallback(AttackEvent.class, event -> {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
@@ -113,7 +113,7 @@ public class PlayerInit {
                 }
             });
 
-            player.setEventCallback(PlayerBlockPlaceEvent.class, event -> {
+            player.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
 
@@ -127,11 +127,11 @@ public class PlayerInit {
 
             });
 
-            player.setEventCallback(PickupItemEvent.class, event -> {
+            player.addEventCallback(PickupItemEvent.class, event -> {
                 event.setCancelled(!player.getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
             });
 
-            player.setEventCallback(ItemDropEvent.class, event -> {
+            player.addEventCallback(ItemDropEvent.class, event -> {
                 ItemStack droppedItem = event.getItemStack();
 
                 ItemEntity itemEntity = new ItemEntity(droppedItem);
@@ -142,15 +142,15 @@ public class PlayerInit {
                 itemEntity.setVelocity(velocity, 500);
             });
 
-            player.setEventCallback(PlayerDisconnectEvent.class, event -> {
+            player.addEventCallback(PlayerDisconnectEvent.class, event -> {
                 System.out.println("DISCONNECTION " + player.getUsername());
             });
 
-            player.setEventCallback(PlayerLoginEvent.class, event -> {
+            player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
             });
 
-            player.setEventCallback(PlayerSpawnEvent.class, event -> {
+            player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 75, 0));
 

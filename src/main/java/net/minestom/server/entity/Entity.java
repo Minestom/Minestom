@@ -6,21 +6,20 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.event.Callback;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
+import net.minestom.server.event.EventCallback;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -65,7 +64,7 @@ public abstract class Entity implements Viewable, DataContainer {
     private long scheduledRemoveTime;
     private int entityType;
     private long lastUpdate;
-    private Map<Class<? extends Event>, Callback> eventCallbacks = new ConcurrentHashMap<>();
+    private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
     protected long velocityTime; // Reset velocity to 0 after countdown
 
     // Synchronization
@@ -263,7 +262,7 @@ public abstract class Entity implements Viewable, DataContainer {
                     float newY = position.getY() - strength;
                     //System.out.println("REFRESH Y " + newY);
                     // allow entities to go below the world
-                    if(foundBlock) {
+                    if (foundBlock) {
                         newY = Math.max(newY, firstBlock);
                     }
                     refreshPosition(position.getX(), newY, position.getZ());
@@ -303,23 +302,26 @@ public abstract class Entity implements Viewable, DataContainer {
      */
     protected void handleVoid() {
         // Kill if in void
-        if(getInstance().isInVoid(this.position)) {
+        if (getInstance().isInVoid(this.position)) {
             remove();
         }
     }
 
-    public <E extends Event> void setEventCallback(Class<E> eventClass, Callback<E> callback) {
-        this.eventCallbacks.put(eventClass, callback);
+    public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+        List<EventCallback> callbacks = getEventCallbacks(eventClass);
+        callbacks.add(eventCallback);
+        this.eventCallbacks.put(eventClass, callbacks);
     }
 
-    public <E extends Event> Callback<E> getEventCallback(Class<E> eventClass) {
-        return this.eventCallbacks.get(eventClass);
+    public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
+        return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
     }
 
     public <E extends Event> void callEvent(Class<E> eventClass, E event) {
-        Callback<E> callback = getEventCallback(eventClass);
-        if (callback != null)
-            getEventCallback(eventClass).run(event);
+        List<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
+        for (EventCallback<E> eventCallback : eventCallbacks) {
+            eventCallback.run(event);
+        }
     }
 
     public <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable runnable) {

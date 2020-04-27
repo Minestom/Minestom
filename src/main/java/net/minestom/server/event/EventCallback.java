@@ -1,6 +1,6 @@
 package net.minestom.server.event;
 
-public interface Callback<E extends Event> {
+public interface EventCallback<E extends Event> {
 
     void run(E event);
 

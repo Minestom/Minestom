@@ -6,6 +6,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseDataConsumer;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -16,8 +17,8 @@ public class ConnectionManager {
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     private ResponseDataConsumer responseDataConsumer;
-    private PacketConsumer packetConsumer;
-    private Consumer<Player> playerInitialization;
+    private List<PacketConsumer> packetConsumers = new CopyOnWriteArrayList<>();
+    private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     public Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
@@ -59,20 +60,20 @@ public class ConnectionManager {
         this.responseDataConsumer = responseDataConsumer;
     }
 
-    public PacketConsumer getPacketConsumer() {
-        return packetConsumer;
+    public List<PacketConsumer> getPacketConsumers() {
+        return Collections.unmodifiableList(packetConsumers);
     }
 
-    public void setPacketConsumer(PacketConsumer packetConsumer) {
-        this.packetConsumer = packetConsumer;
+    public void addPacketConsumer(PacketConsumer packetConsumer) {
+        this.packetConsumers.add(packetConsumer);
     }
 
-    public Consumer<Player> getPlayerInitialization() {
-        return playerInitialization;
+    public List<Consumer<Player>> getPlayerInitializations() {
+        return Collections.unmodifiableList(playerInitializations);
     }
 
-    public void setPlayerInitialization(Consumer<Player> playerInitialization) {
-        this.playerInitialization = playerInitialization;
+    public void addPlayerInitialization(Consumer<Player> playerInitialization) {
+        this.playerInitializations.add(playerInitialization);
     }
 
     // Is only used at LoginStartPacket#process

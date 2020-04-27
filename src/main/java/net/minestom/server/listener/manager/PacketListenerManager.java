@@ -43,12 +43,13 @@ public class PacketListenerManager {
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
-        PacketConsumer packetConsumer = connectionManager.getPacketConsumer();
-        if (packetConsumer != null) {
-            boolean cancel = packetConsumer.accept(player, packet);
-            if (cancel)
-                return; // Listening cancelled
+
+        boolean cancel = false;
+        for (PacketConsumer packetConsumer : connectionManager.getPacketConsumers()) {
+            cancel = packetConsumer.accept(player, packet);
         }
+        if (cancel)
+            return;
 
         BiConsumer<T, Player> biConsumer = (BiConsumer<T, Player>) listeners.get(packet.getClass());
         if (biConsumer == null) {

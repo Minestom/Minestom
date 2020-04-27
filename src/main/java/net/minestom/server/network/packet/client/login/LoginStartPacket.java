@@ -92,9 +92,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         playerInfoPacket.playerInfos.add(addPlayer);
         connection.sendPacket(playerInfoPacket);
 
-        Consumer<Player> playerInitialization = MinecraftServer.getConnectionManager().getPlayerInitialization();
-        if (playerInitialization != null)
+        for (Consumer<Player> playerInitialization : connectionManager.getPlayerInitializations()) {
             playerInitialization.accept(player);
+        }
 
 
         {
