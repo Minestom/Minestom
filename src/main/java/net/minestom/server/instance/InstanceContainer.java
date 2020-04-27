@@ -17,6 +17,7 @@ import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.SerializerUtils;
+import net.minestom.server.world.Dimension;
 
 import java.io.File;
 import java.util.*;
@@ -38,8 +39,8 @@ public class InstanceContainer extends Instance {
 
     private boolean autoChunkLoad;
 
-    protected InstanceContainer(UUID uniqueId, File folder) {
-        super(uniqueId);
+    protected InstanceContainer(UUID uniqueId, Dimension dimension, File folder) {
+        super(uniqueId, dimension);
         this.folder = folder;
     }
 

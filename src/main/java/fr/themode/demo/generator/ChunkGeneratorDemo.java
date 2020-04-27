@@ -20,7 +20,7 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
                     if (random.nextInt(100) > 10) {
                         batch.setCustomBlock(x, y, z, "custom_block");
                     } else {
-                        batch.setBlock(x, y, z, Block.COMMAND_BLOCK);
+                        batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
                     }
                 }
             }

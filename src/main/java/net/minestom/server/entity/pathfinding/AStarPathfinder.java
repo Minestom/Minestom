@@ -113,7 +113,7 @@ public class AStarPathfinder {
         Block targetBlock = Block.fromId(instance.getBlockId(target));
         Block belowBlock = Block.fromId(instance.getBlockId(target.clone().add(0, -1, 0)));
 
-        boolean result = targetBlock.isAir() && belowBlock.isSolid();
+        boolean result = !targetBlock.isSolid() && belowBlock.isSolid();
         return result;
     }
 
@@ -138,7 +138,6 @@ public class AStarPathfinder {
     private static boolean isShorter(Node neighbor, Node current) {
         return getTentativeGScore(neighbor, current) < neighbor.g;
     }
-
     private static LinkedList<BlockPosition> buildPath(Node finalNode) {
         LinkedList<BlockPosition> result = new LinkedList<>();
         Node cache = finalNode;
@@ -146,25 +145,26 @@ public class AStarPathfinder {
             result.add(cache.blockPosition);
             cache = cache.parent;
         }
+        // Make the list start->end
         Collections.reverse(result);
         return result;
     }
 
     private static class Node {
-        public int g, h, f;
+        public int g, f;
         public Node parent;
         private int x, y, z;
         private BlockPosition blockPosition;
 
-        public Node(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.blockPosition = new BlockPosition(x, y, z);
+        public Node(BlockPosition blockPosition) {
+            this.x = blockPosition.getX();
+            this.y = blockPosition.getY();
+            this.z = blockPosition.getZ();
+            this.blockPosition = blockPosition.clone();
         }
 
         public static Node fromBlockPosition(BlockPosition blockPosition) {
-            Node node = new Node(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+            Node node = new Node(blockPosition);
             return node;
         }
 
