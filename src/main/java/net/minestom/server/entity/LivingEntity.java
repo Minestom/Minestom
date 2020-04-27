@@ -105,9 +105,14 @@ public abstract class LivingEntity extends Entity {
         callEvent(DeathEvent.class, deathEvent);
     }
 
-    public void damage(DamageType type, float value) {
+    /**
+     * @param type  the damage type
+     * @param value the amount of damage
+     * @return true if damage has been applied, false if it didn't
+     */
+    public boolean damage(DamageType type, float value) {
         if (isImmune(type)) {
-            return;
+            return false;
         }
 
         EntityDamageEvent entityDamageEvent = new EntityDamageEvent(type, value);
@@ -120,6 +125,8 @@ public abstract class LivingEntity extends Entity {
             sendPacketToViewersAndSelf(entityAnimationPacket);
             setHealth(getHealth() - damage);
         });
+
+        return !entityDamageEvent.isCancelled();
     }
 
     /**

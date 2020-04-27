@@ -116,11 +116,12 @@ public class Player extends LivingEntity {
     }
 
     @Override
-    public void damage(DamageType type, float value) {
-        if (!isImmune(type)) {
+    public boolean damage(DamageType type, float value) {
+        boolean result = super.damage(type, value);
+        if (result) {
             lastDamageSource = type;
         }
-        super.damage(type, value);
+        return result;
     }
 
     @Override
