@@ -20,6 +20,10 @@ public abstract class CustomBlock {
         this.identifier = identifier;
     }
 
+    public CustomBlock(Block block, String identifier) {
+        this(block.getBlockId(), identifier);
+    }
+
     // TODO add another object parameter which will offer a lot of integrated features (like break animation, id change etc...)
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
         throw new UnsupportedOperationException("Update method not overridden");

@@ -3,6 +3,7 @@ package fr.themode.demo.blocks;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.UpdateOption;
@@ -10,7 +11,7 @@ import net.minestom.server.utils.time.UpdateOption;
 public class StoneBlock extends CustomBlock {
 
     public StoneBlock() {
-        super((short) 1, "custom_block");
+        super(Block.STONE, "custom_block");
     }
 
     @Override
