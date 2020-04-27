@@ -15,7 +15,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         ResponseDataConsumer consumer = MinecraftServer.getConnectionManager().getResponseDataConsumer();
         ResponseData responseData = new ResponseData();
-        if (responseData == null)
+        if (consumer == null)
             throw new NullPointerException("You need to register a ResponseDataConsumer");
         consumer.accept(connection, responseData);
 
