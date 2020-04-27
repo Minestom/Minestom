@@ -117,7 +117,7 @@ public class Player extends LivingEntity {
 
     @Override
     public void damage(DamageType type, float value) {
-        if(!isImmune(type)) {
+        if (!isImmune(type)) {
             lastDamageSource = type;
         }
         super.damage(type, value);
@@ -245,10 +245,10 @@ public class Player extends LivingEntity {
 
     @Override
     public void kill() {
-        if(!isDead()) {
+        if (!isDead()) {
             // send death message to player
             TextObject deathMessage;
-            if(lastDamageSource != null) {
+            if (lastDamageSource != null) {
                 deathMessage = lastDamageSource.buildDeathMessage();
             } else { // may happen if killed by the server without applying damage
                 deathMessage = TextBuilder.of("Killed by poor programming.").build();
@@ -258,10 +258,10 @@ public class Player extends LivingEntity {
 
             // send death message to chat
             TextObject chatMessage;
-            if(lastDamageSource != null) {
+            if (lastDamageSource != null) {
                 chatMessage = lastDamageSource.buildChatMessage(this);
             } else { // may happen if killed by the server without applying damage
-                chatMessage = TextBuilder.of(getUsername()+" was killed by poor programming.").build();
+                chatMessage = TextBuilder.of(getUsername() + " was killed by poor programming.").build();
             }
             MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
                 player.sendMessage(chatMessage);
@@ -455,7 +455,7 @@ public class Player extends LivingEntity {
 
     @Override
     public boolean isImmune(DamageType type) {
-        if(getGameMode().canTakeDamage()) {
+        if (getGameMode().canTakeDamage()) {
             return type != DamageType.VOID;
         }
         return super.isImmune(type);
@@ -659,6 +659,7 @@ public class Player extends LivingEntity {
 
     /**
      * Returns true iff this player is in creative. Used for code readability
+     *
      * @return
      */
     public boolean isCreative() {

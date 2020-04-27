@@ -4,6 +4,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.DeathEvent;
+import net.minestom.server.event.EntityDamageEvent;
 import net.minestom.server.event.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.ItemStack;
@@ -105,18 +106,25 @@ public abstract class LivingEntity extends Entity {
     }
 
     public void damage(DamageType type, float value) {
-        if(isImmune(type)) {
+        if (isImmune(type)) {
             return;
         }
-        EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
-        entityAnimationPacket.entityId = getEntityId();
-        entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
-        sendPacketToViewersAndSelf(entityAnimationPacket);
-        setHealth(getHealth() - value);
+
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(type, value);
+        callCancellableEvent(EntityDamageEvent.class, entityDamageEvent, () -> {
+            float damage = entityDamageEvent.getDamage();
+
+            EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
+            entityAnimationPacket.entityId = getEntityId();
+            entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
+            sendPacketToViewersAndSelf(entityAnimationPacket);
+            setHealth(getHealth() - damage);
+        });
     }
 
     /**
      * Is this entity immune to the given type of damage?
+     *
      * @param type the type of damage
      * @return true iff this entity is immune to the given type of damage
      */
@@ -212,7 +220,7 @@ public abstract class LivingEntity extends Entity {
     @Override
     protected void handleVoid() {
         // Kill if in void
-        if(getInstance().isInVoid(this.position)) {
+        if (getInstance().isInVoid(this.position)) {
             damage(DamageType.VOID, 10f);
         }
     }

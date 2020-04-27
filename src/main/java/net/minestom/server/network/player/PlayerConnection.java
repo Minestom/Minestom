@@ -33,6 +33,7 @@ public class PlayerConnection {
     public void sendPacket(ServerPacket serverPacket) {
         ByteBuf buffer = PacketUtils.writePacket(serverPacket);
         sendPacket(buffer);
+        buffer.release();
     }
 
     public void flush() {
