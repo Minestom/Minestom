@@ -1,11 +1,13 @@
 package net.minestom.server.entity;
 
+import club.thectm.minecraft.text.TextBuilder;
 import club.thectm.minecraft.text.TextObject;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.*;
@@ -75,6 +77,11 @@ public class Player extends LivingEntity {
     private Team team;
     private BelowNameScoreboard belowNameScoreboard;
 
+    /**
+     * Last damage source to hit this player, used to display the death message.
+     */
+    private DamageType lastDamageSource;
+
     // Abilities
     private boolean invulnerable;
     private boolean flying;
@@ -106,6 +113,14 @@ public class Player extends LivingEntity {
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
+    }
+
+    @Override
+    public void damage(DamageType type, float value) {
+        if(!isImmune(type)) {
+            lastDamageSource = type;
+        }
+        super.damage(type, value);
     }
 
     @Override
@@ -226,6 +241,33 @@ public class Player extends LivingEntity {
             }
         }
 
+    }
+
+    @Override
+    public void kill() {
+        if(!isDead()) {
+            // send death message to player
+            TextObject deathMessage;
+            if(lastDamageSource != null) {
+                deathMessage = lastDamageSource.buildDeathMessage();
+            } else { // may happen if killed by the server without applying damage
+                deathMessage = TextBuilder.of("Killed by poor programming.").build();
+            }
+            CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathMessage);
+            playerConnection.sendPacket(deathPacket);
+
+            // send death message to chat
+            TextObject chatMessage;
+            if(lastDamageSource != null) {
+                chatMessage = lastDamageSource.buildChatMessage(this);
+            } else { // may happen if killed by the server without applying damage
+                chatMessage = TextBuilder.of(getUsername()+" was killed by poor programming.").build();
+            }
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
+                player.sendMessage(chatMessage);
+            });
+        }
+        super.kill();
     }
 
     @Override
@@ -412,11 +454,11 @@ public class Player extends LivingEntity {
     }
 
     @Override
-    public void damage(float value) {
-        if (getGameMode() == GameMode.CREATIVE)
-            return;
-
-        super.damage(value);
+    public boolean isImmune(DamageType type) {
+        if(getGameMode().canTakeDamage()) {
+            return type != DamageType.VOID;
+        }
+        return super.isImmune(type);
     }
 
     @Override
@@ -456,6 +498,11 @@ public class Player extends LivingEntity {
         return !itemDropEvent.isCancelled();
     }
 
+    public Position getRespawnPoint() {
+        // TODO: Custom
+        return new Position(0f, 70f, 0f);
+    }
+
     public void respawn() {
         if (!isDead())
             return;
@@ -466,7 +513,7 @@ public class Player extends LivingEntity {
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
         getPlayerConnection().sendPacket(respawnPacket);
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getPosition());
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getRespawnPoint());
         callEvent(PlayerRespawnEvent.class, respawnEvent);
         refreshIsDead(false);
 
@@ -608,6 +655,14 @@ public class Player extends LivingEntity {
 
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    /**
+     * Returns true iff this player is in creative. Used for code readability
+     * @return
+     */
+    public boolean isCreative() {
+        return gameMode == GameMode.CREATIVE;
     }
 
     // Require sending chunk data after

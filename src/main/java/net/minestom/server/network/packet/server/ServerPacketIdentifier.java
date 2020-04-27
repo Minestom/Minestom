@@ -53,7 +53,7 @@ public class ServerPacketIdentifier {
     public static final int OPEN_SIGN_EDITOR = 0x30;
     public static final int CRAFT_RECIPE_RESPONSE = 0x31;
     public static final int PLAYER_ABILITIES = 0x32;
-    public static final int COMBAT_EVENT = 0x33; // Do not seem to be used by the client
+    public static final int COMBAT_EVENT = 0x33;
     public static final int PLAYER_INFO = 0x34;
     public static final int FACE_PLAYER = 0x35;
     public static final int PLAYER_POSITION_AND_LOOK = 0x36;

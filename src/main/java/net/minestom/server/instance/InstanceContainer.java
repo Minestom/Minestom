@@ -16,6 +16,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.world.Dimension;
 
@@ -329,6 +330,12 @@ public class InstanceContainer extends Instance {
     @Override
     public boolean hasEnabledAutoChunkLoad() {
         return autoChunkLoad;
+    }
+
+    @Override
+    public boolean isInVoid(Position position) {
+        // TODO: customizable
+        return position.getY() < -64;
     }
 
     protected void addSharedInstance(SharedInstance sharedInstance) {
