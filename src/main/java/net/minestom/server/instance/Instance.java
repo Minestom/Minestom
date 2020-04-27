@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.world.Dimension;
 
 import java.io.File;
 import java.util.*;
@@ -28,6 +29,8 @@ public abstract class Instance implements BlockModifier, DataContainer {
     protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
+    private Dimension dimension;
+
     // Entities present in this instance
     protected Set<Player> players = new CopyOnWriteArraySet<>();
     protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
@@ -39,8 +42,9 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     private Data data;
 
-    protected Instance(UUID uniqueId) {
+    protected Instance(UUID uniqueId, Dimension dimension) {
         this.uniqueId = uniqueId;
+        this.dimension = dimension;
     }
 
     public abstract void refreshBlockId(int x, int y, int z, short blockId);
@@ -122,6 +126,11 @@ public abstract class Instance implements BlockModifier, DataContainer {
         return chunkDataPacket;
     }
     //
+
+
+    public Dimension getDimension() {
+        return dimension;
+    }
 
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);

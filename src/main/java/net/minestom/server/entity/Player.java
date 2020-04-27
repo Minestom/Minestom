@@ -350,6 +350,12 @@ public class Player extends LivingEntity {
         }
         viewableChunks.clear();
 
+        if (this.instance != null) {
+            Dimension instanceDimension = instance.getDimension();
+            if (dimension != instanceDimension)
+                sendDimension(instanceDimension);
+        }
+
         long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
         int length = visibleChunks.length;
 
@@ -659,7 +665,8 @@ public class Player extends LivingEntity {
         return gameMode == GameMode.CREATIVE;
     }
 
-    public void setDimension(Dimension dimension) {
+    // Require sending chunk data after
+    public void sendDimension(Dimension dimension) {
         if (dimension == null)
             throw new IllegalArgumentException("Dimension cannot be null!");
         if (dimension.equals(getDimension()))
