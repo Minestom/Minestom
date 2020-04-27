@@ -88,6 +88,14 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public abstract boolean hasEnabledAutoChunkLoad();
 
+    /**
+     * Determines whether a position in the void. If true, entities should take damage and die.
+     * Always returning false allow entities to survive in the void
+     * @param position the position in the world
+     * @return true iif position is inside the void
+     */
+    public abstract boolean isInVoid(Position position);
+
     //
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
         ByteBuf chunkData = chunk.getFullDataPacket();

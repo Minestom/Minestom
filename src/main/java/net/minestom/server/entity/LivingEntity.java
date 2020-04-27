@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.DeathEvent;
 import net.minestom.server.event.PickupItemEvent;
@@ -103,12 +104,24 @@ public abstract class LivingEntity extends Entity {
         callEvent(DeathEvent.class, deathEvent);
     }
 
-    public void damage(float value) {
+    public void damage(DamageType type, float value) {
+        if(isImmune(type)) {
+            return;
+        }
         EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
         entityAnimationPacket.entityId = getEntityId();
         entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
         sendPacketToViewersAndSelf(entityAnimationPacket);
         setHealth(getHealth() - value);
+    }
+
+    /**
+     * Is this entity immune to the given type of damage?
+     * @param type the type of damage
+     * @return true iff this entity is immune to the given type of damage
+     */
+    public boolean isImmune(DamageType type) {
+        return false;
     }
 
     public float getHealth() {
@@ -193,6 +206,14 @@ public abstract class LivingEntity extends Entity {
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
             setAttribute(attribute, attribute.getDefaultValue());
+        }
+    }
+
+    @Override
+    protected void handleVoid() {
+        // Kill if in void
+        if(getInstance().isInVoid(this.position)) {
+            damage(DamageType.VOID, 10f);
         }
     }
 }

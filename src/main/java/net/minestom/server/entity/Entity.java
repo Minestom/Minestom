@@ -245,6 +245,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 if (!isOnGround()) {
                     float strength = gravityDragPerTick * gravityTickCounter;
 
+                    boolean foundBlock = false;
                     int firstBlock = 0;
                     for (int y = (int) position.getY(); y > 0; y--) {
                         BlockPosition blockPosition = new BlockPosition(position.getX(), y, position.getZ());
@@ -253,6 +254,7 @@ public abstract class Entity implements Viewable, DataContainer {
                         //   System.out.println("id: " + blockId);
                         if (blockId != 0) {
                             firstBlock = y;
+                            foundBlock = true;
                             //System.out.println("first block: " + y);
                             break;
                         }
@@ -260,7 +262,10 @@ public abstract class Entity implements Viewable, DataContainer {
 
                     float newY = position.getY() - strength;
                     //System.out.println("REFRESH Y " + newY);
-                    newY = Math.max(newY, firstBlock);
+                    // allow entities to go below the world
+                    if(foundBlock) {
+                        newY = Math.max(newY, firstBlock);
+                    }
                     refreshPosition(position.getX(), newY, position.getZ());
                     gravityTickCounter++;
                     if (isOnGround()) { // Round Y axis when gravity movement is done
@@ -276,6 +281,8 @@ public abstract class Entity implements Viewable, DataContainer {
                 }
             }
 
+            handleVoid();
+
             // Call the abstract update method
             update();
 
@@ -287,6 +294,16 @@ public abstract class Entity implements Viewable, DataContainer {
         }
 
         if (shouldRemove()) {
+            remove();
+        }
+    }
+
+    /**
+     * How does this entity handle being in the void?
+     */
+    protected void handleVoid() {
+        // Kill if in void
+        if(getInstance().isInVoid(this.position)) {
             remove();
         }
     }

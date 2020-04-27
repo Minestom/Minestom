@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.Position;
 
 import java.io.File;
 import java.util.Collection;
@@ -131,6 +132,11 @@ public class SharedInstance extends Instance {
     @Override
     public boolean hasEnabledAutoChunkLoad() {
         return instanceContainer.hasEnabledAutoChunkLoad();
+    }
+
+    @Override
+    public boolean isInVoid(Position position) {
+        return instanceContainer.isInVoid(position);
     }
 
     @Override

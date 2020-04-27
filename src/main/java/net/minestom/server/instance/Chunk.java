@@ -140,17 +140,29 @@ public class Chunk implements Viewable {
     }
 
     public short getBlockId(int x, int y, int z) {
-        short id = blocksId[getBlockIndex(x, y, z)];
+        int index = getBlockIndex(x, y, z);
+        if(index < 0 || index >= blocksId.length) {
+            return 0; // TODO: custom invalid block
+        }
+        short id = blocksId[index];
         return id;
     }
 
     public short getCustomBlockId(int x, int y, int z) {
-        short id = customBlocksId[getBlockIndex(x, y, z)];
+        int index = getBlockIndex(x, y, z);
+        if(index < 0 || index >= blocksId.length) {
+            return 0; // TODO: custom invalid block
+        }
+        short id = customBlocksId[index];
         return id;
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
-        short id = customBlocksId[getBlockIndex(x, y, z)];
+        int index = getBlockIndex(x, y, z);
+        if(index < 0 || index >= blocksId.length) {
+            return null; // TODO: custom invalid block
+        }
+        short id = customBlocksId[index];
         return id != 0 ? BLOCK_MANAGER.getCustomBlock(id) : null;
     }
 
@@ -161,6 +173,9 @@ public class Chunk implements Viewable {
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
         int blockIndex = getBlockIndex(x, y, z);
+        if(blockIndex < 0 || blockIndex >= blocksId.length) {
+            return;
+        }
 
         this.blocksId[blockIndex] = blockId;
         this.customBlocksId[blockIndex] = customId;

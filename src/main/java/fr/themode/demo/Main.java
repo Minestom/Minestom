@@ -2,6 +2,7 @@ package fr.themode.demo;
 
 import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
+import fr.themode.demo.commands.GamemodeCommand;
 import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
 import net.minestom.server.MinecraftServer;
@@ -32,6 +33,7 @@ public class Main {
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
+        commandManager.register(new GamemodeCommand());
 
         RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {

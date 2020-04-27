@@ -7,6 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.*;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.inventory.Inventory;
@@ -97,7 +98,7 @@ public class PlayerInit {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
-                    creature.damage(-1);
+                    creature.damage(DamageType.fromPlayer(player), -1);
                     Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                     velocity.setY(4f);
                     entity.setVelocity(velocity, 150);
@@ -107,7 +108,7 @@ public class PlayerInit {
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);
                     velocity.setY(3.5f);
                     target.setVelocity(velocity, 150);
-                    target.damage(5);
+                    target.damage(DamageType.fromPlayer(player), 5);
                     player.sendMessage("ATTACK");
                 }
             });
