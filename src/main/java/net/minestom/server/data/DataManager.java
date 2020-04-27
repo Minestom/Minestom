@@ -23,7 +23,7 @@ public class DataManager {
 
         registerType(String.class, new StringData());
 
-        registerType(Data.class, new DataData());
+        registerType(SerializableData.class, new SerializableDataData());
     }
 
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {

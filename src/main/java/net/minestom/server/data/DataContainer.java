@@ -22,9 +22,12 @@ public interface DataContainer {
             Data data = getData();
             if (data == null)
                 throw new NullPointerException("You cannot save null data!");
+            if (!(data instanceof SerializableData))
+                throw new IllegalArgumentException("Only SerializableData can be serialized");
+            SerializableData serializableData = (SerializableData) data;
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
-                byte[] serializedData = data.getSerializedData();
+                byte[] serializedData = serializableData.getSerializedData();
                 fos.write(CompressionUtils.getCompressedData(serializedData));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -59,7 +62,7 @@ public interface DataContainer {
                 return;
             }
 
-            Data data = DataReader.readData(array, true);
+            SerializableData data = DataReader.readData(array, true);
 
             setData(data);
             if (callback != null)

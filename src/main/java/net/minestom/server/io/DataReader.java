@@ -1,8 +1,8 @@
 package net.minestom.server.io;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
 import net.minestom.server.data.DataManager;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.utils.CompressionUtils;
 
 import java.io.ByteArrayInputStream;
@@ -13,12 +13,12 @@ public class DataReader {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
-    public static Data readData(byte[] b, boolean shouldDecompress) {
+    public static SerializableData readData(byte[] b, boolean shouldDecompress) {
         b = shouldDecompress ? CompressionUtils.getDecompressedData(b) : b;
 
         DataInputStream stream = new DataInputStream(new ByteArrayInputStream(b));
 
-        Data data = new Data();
+        SerializableData data = new SerializableData();
         try {
             while (true) {
                 short typeLength = stream.readShort();

@@ -1,15 +1,16 @@
 package net.minestom.server.data.type;
 
-import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.io.DataReader;
 
 import java.io.IOException;
 
 // Pretty weird name huh?
-public class DataData extends DataType<Data> {
+public class SerializableDataData extends DataType<SerializableData> {
+
     @Override
-    public byte[] encode(Data value) {
+    public byte[] encode(SerializableData value) {
         try {
             return value.getSerializedData();
         } catch (IOException e) {
@@ -19,7 +20,7 @@ public class DataData extends DataType<Data> {
     }
 
     @Override
-    public Data decode(byte[] value) {
+    public SerializableData decode(byte[] value) {
         return DataReader.readData(value, false);
     }
 }

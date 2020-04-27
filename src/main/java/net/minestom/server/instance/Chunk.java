@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
@@ -141,7 +142,7 @@ public class Chunk implements Viewable {
 
     public short getBlockId(int x, int y, int z) {
         int index = getBlockIndex(x, y, z);
-        if(index < 0 || index >= blocksId.length) {
+        if (index < 0 || index >= blocksId.length) {
             return 0; // TODO: custom invalid block
         }
         short id = blocksId[index];
@@ -150,7 +151,7 @@ public class Chunk implements Viewable {
 
     public short getCustomBlockId(int x, int y, int z) {
         int index = getBlockIndex(x, y, z);
-        if(index < 0 || index >= blocksId.length) {
+        if (index < 0 || index >= blocksId.length) {
             return 0; // TODO: custom invalid block
         }
         short id = customBlocksId[index];
@@ -159,7 +160,7 @@ public class Chunk implements Viewable {
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
         int index = getBlockIndex(x, y, z);
-        if(index < 0 || index >= blocksId.length) {
+        if (index < 0 || index >= blocksId.length) {
             return null; // TODO: custom invalid block
         }
         short id = customBlocksId[index];
@@ -173,7 +174,7 @@ public class Chunk implements Viewable {
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
         int blockIndex = getBlockIndex(x, y, z);
-        if(blockIndex < 0 || blockIndex >= blocksId.length) {
+        if (blockIndex < 0 || blockIndex >= blocksId.length) {
             return;
         }
 
@@ -287,11 +288,13 @@ public class Chunk implements Viewable {
                     dos.writeBoolean(isCustomBlock); // Determine the type of the ID
                     dos.writeShort(id);
 
-                    dos.writeBoolean(hasData);
-                    if (hasData) {
-                        byte[] d = data.getSerializedData();
-                        dos.writeInt(d.length);
-                        dos.write(d);
+                    if (data instanceof SerializableData) {
+                        dos.writeBoolean(hasData);
+                        if (hasData) {
+                            byte[] d = ((SerializableData) data).getSerializedData();
+                            dos.writeInt(d.length);
+                            dos.write(d);
+                        }
                     }
                 }
             }
