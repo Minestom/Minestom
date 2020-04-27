@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import club.thectm.minecraft.text.TextBuilder;
 import club.thectm.minecraft.text.TextObject;
 import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
@@ -76,6 +77,11 @@ public class Player extends LivingEntity {
     private Team team;
     private BelowNameScoreboard belowNameScoreboard;
 
+    /**
+     * Last damage source to hit this player, used to display the death message.
+     */
+    private DamageType lastDamageSource;
+
     // Abilities
     private boolean invulnerable;
     private boolean flying;
@@ -107,6 +113,14 @@ public class Player extends LivingEntity {
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
+    }
+
+    @Override
+    public void damage(DamageType type, float value) {
+        if(!isImmune(type)) {
+            lastDamageSource = type;
+        }
+        super.damage(type, value);
     }
 
     @Override
@@ -227,6 +241,33 @@ public class Player extends LivingEntity {
             }
         }
 
+    }
+
+    @Override
+    public void kill() {
+        if(!isDead()) {
+            // send death message to player
+            TextObject deathMessage;
+            if(lastDamageSource != null) {
+                deathMessage = lastDamageSource.buildDeathMessage();
+            } else { // may happen if killed by the server without applying damage
+                deathMessage = TextBuilder.of("Killed by poor programming.").build();
+            }
+            CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathMessage);
+            playerConnection.sendPacket(deathPacket);
+
+            // send death message to chat
+            TextObject chatMessage;
+            if(lastDamageSource != null) {
+                chatMessage = lastDamageSource.buildChatMessage(this);
+            } else { // may happen if killed by the server without applying damage
+                chatMessage = TextBuilder.of(getUsername()+" was killed by poor programming.").build();
+            }
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
+                player.sendMessage(chatMessage);
+            });
+        }
+        super.kill();
     }
 
     @Override
