@@ -187,4 +187,13 @@ public class MinecraftServer {
         nettyServer.start(address, port);
     }
 
+    /**
+     * Stops this server properly (saves if needed, kicking players, etc.)
+     */
+    public static void stopCleanly() {
+        updateManager.stop();
+        nettyServer.stop();
+        schedulerManager.shutdown();
+    }
+
 }

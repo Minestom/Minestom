@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 public class UpdateManager {
 
     private ExecutorService mainUpdate = new MinestomThread(MinecraftServer.THREAD_COUNT_MAIN_UPDATE, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
+    private boolean stopRequested;
 
 
     public void start() {
@@ -25,7 +26,7 @@ public class UpdateManager {
 
             final long tickDistance = MinecraftServer.TICK_MS * 1000000;
             long currentTime;
-            while (true) {
+            while (!stopRequested) {
                 currentTime = System.nanoTime();
 
                 // Keep Alive Handling
@@ -63,4 +64,7 @@ public class UpdateManager {
         });
     }
 
+    public void stop() {
+        stopRequested = true;
+    }
 }

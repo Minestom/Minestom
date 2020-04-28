@@ -1,5 +1,6 @@
 package fr.themode.demo.commands;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
@@ -25,6 +26,8 @@ public class SimpleCommand implements CommandProcessor {
         for (EntityCreature creature : instance.getCreatures()) {
             creature.setPathTo(player.getPosition());
         }
+
+        MinecraftServer.stopCleanly();
 
 
         return true;

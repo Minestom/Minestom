@@ -1,6 +1,7 @@
 package net.minestom.server.network.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
@@ -61,5 +62,13 @@ public class NettyServer {
 
     public int getPort() {
         return port;
+    }
+
+    public void stop() {
+        try {
+            group.shutdownGracefully().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

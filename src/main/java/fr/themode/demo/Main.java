@@ -15,6 +15,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.recipe.ShapelessRecipe;
+import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 
@@ -49,6 +50,13 @@ public class Main {
         recipeManager.addRecipe(shapelessRecipe);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
+
+        MinecraftServer.getSchedulerManager().addShutdownTask(new TaskRunnable() {
+            @Override
+            public void run() {
+                System.out.println("Good night");
+            }
+        });
 
         PlayerInit.init();
 

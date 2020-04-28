@@ -13,8 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SchedulerManager {
 
     private static final AtomicInteger COUNTER = new AtomicInteger();
+    private static final AtomicInteger SHUTDOWN_COUNTER = new AtomicInteger();
     private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
     private List<Task> tasks = new CopyOnWriteArrayList<>();
+    private List<Task> shutdownTasks = new CopyOnWriteArrayList<>();
 
     public int addTask(TaskRunnable runnable, UpdateOption updateOption, int maxCallCount) {
         int id = COUNTER.incrementAndGet();
@@ -32,6 +34,29 @@ public class SchedulerManager {
 
     public int addDelayedTask(TaskRunnable runnable, UpdateOption updateOption) {
         return addTask(runnable, updateOption, 1);
+    }
+
+    /**
+     * Adds a task to run when the server shutdowns
+     * @param runnable the task to perform
+     * @return
+     */
+    public int addShutdownTask(TaskRunnable runnable) {
+        int id = SHUTDOWN_COUNTER.incrementAndGet();
+        runnable.setId(id);
+
+        Task task = new Task(runnable, null, 1);
+        this.shutdownTasks.add(task);
+
+        return id;
+    }
+
+    public void shutdown() {
+        batchesPool.execute(() -> {
+            for (Task task : shutdownTasks) {
+                task.getRunnable().run();
+            }
+        });
     }
 
     public void removeTask(int taskId) {
