@@ -39,7 +39,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 
-    compile 'com.github.TheMode:CommandBuilder:a5f9d78a66'
+    compile 'com.github.TheMode:CommandBuilder:f893cfbfe4'
 
     // https://mvnrepository.com/artifact/javax.vecmath/vecmath
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2' // Used for Fastnoise
