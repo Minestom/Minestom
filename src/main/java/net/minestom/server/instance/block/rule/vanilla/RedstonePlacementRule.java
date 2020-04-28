@@ -69,7 +69,8 @@ public class RedstonePlacementRule extends BlockPlacementRule {
         // TODO power
 
 
-        return Block.REDSTONE_WIRE.withProperties(east, north, power, south, west);
+        return Block.REDSTONE_WIRE.withProperties("east=" + east, "north=" + north,
+                "power=" + power, "south=" + south, "west=" + west);
     }
 
     private boolean isRedstone(Instance instance, int x, int y, int z) {

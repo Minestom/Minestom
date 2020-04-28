@@ -8,7 +8,7 @@ import net.minestom.server.utils.time.UpdateOption;
 
 /**
  * TODO
- * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (cumulation)
+ * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (accumulation)
  */
 public abstract class CustomBlock {
 
@@ -24,9 +24,12 @@ public abstract class CustomBlock {
         this(block.getBlockId(), identifier);
     }
 
-    // TODO add another object parameter which will offer a lot of integrated features (like break animation, id change etc...)
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
         throw new UnsupportedOperationException("Update method not overridden");
+    }
+
+    public UpdateOption getUpdateOption() {
+        return null;
     }
 
     public abstract void onPlace(Instance instance, BlockPosition blockPosition, Data data);
@@ -36,15 +39,14 @@ public abstract class CustomBlock {
     /**
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
      * menu, this prevents the player from placing a block when opening it for instance)
-     * @param player the player interacting
-     * @param hand the hand used to interact
+     *
+     * @param player        the player interacting
+     * @param hand          the hand used to interact
      * @param blockPosition the position of this block
-     * @param data the data at this position
+     * @param data          the data at this position
      * @return true if this block blocks normal item use, false otherwise
      */
     public abstract boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data);
-
-    public abstract UpdateOption getUpdateOption();
 
     /**
      * This id can be serialized in chunk file, meaning no duplicate should exist

@@ -38,6 +38,7 @@ public class SchedulerManager {
 
     /**
      * Adds a task to run when the server shutdowns
+     *
      * @param runnable the task to perform
      * @return
      */
