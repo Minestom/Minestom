@@ -352,4 +352,5 @@ public abstract class Instance implements BlockModifier, DataContainer {
         Set<Entity> entities = chunkEntities.get(index);
         return entities != null ? entities : new CopyOnWriteArraySet<>();
     }
+
 }

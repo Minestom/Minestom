@@ -4,6 +4,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.CustomBlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,21 +31,28 @@ public class ChunkBatch implements InstanceBatch {
 
     @Override
     public void setBlock(int x, int y, int z, short blockId, Data data) {
-        addBlockData((byte) x, y, (byte) z, false, blockId, data);
+        addBlockData((byte) x, y, (byte) z, false, blockId, (short) 0, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        addBlockData((byte) x, y, (byte) z, true, blockId, data);
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
+        addBlockData((byte) x, y, (byte) z, true, customBlock.getBlockId(), blockId, data);
     }
 
-    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockId, Data data) {
+    @Override
+    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+        addBlockData((byte) x, y, (byte) z, true, blockId, customBlockId, data);
+    }
+
+    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockId, short customBlockId, Data data) {
         BlockData blockData = new BlockData();
         blockData.x = x;
         blockData.y = y;
         blockData.z = z;
-        blockData.isCustomBlock = customBlock;
+        blockData.hasCustomBlock = customBlock;
         blockData.blockId = blockId;
+        blockData.customBlockId = customBlockId;
         blockData.data = data;
 
         this.dataList.add(blockData);
@@ -81,15 +89,16 @@ public class ChunkBatch implements InstanceBatch {
     private class BlockData {
 
         private int x, y, z;
-        private boolean isCustomBlock;
+        private boolean hasCustomBlock;
         private short blockId;
+        private short customBlockId;
         private Data data;
 
         public void apply(Chunk chunk) {
-            if (!isCustomBlock) {
+            if (!hasCustomBlock) {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlockId, data);
             }
         }
 

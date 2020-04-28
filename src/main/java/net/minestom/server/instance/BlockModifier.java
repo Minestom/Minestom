@@ -16,6 +16,12 @@ public interface BlockModifier {
 
     void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
 
+    void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data);
+
+    default void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId) {
+        setSeparateBlocks(x, y, z, blockId, customBlockId, null);
+    }
+
     default void setBlock(int x, int y, int z, short blockId) {
         setBlock(x, y, z, blockId, null);
     }

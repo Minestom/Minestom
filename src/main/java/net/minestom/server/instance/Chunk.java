@@ -71,17 +71,17 @@ public class Chunk implements Viewable {
         setBlock(x, y, z, blockId, (short) 0, data, null);
     }
 
-    public void UNSAFE_setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+    public void UNSAFE_setCustomBlock(int x, int y, int z, short visualBlockId, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         if (customBlock == null)
             throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
 
-        UNSAFE_setCustomBlock(x, y, z, customBlock, data);
+        UNSAFE_setCustomBlock(x, y, z, visualBlockId, customBlock, data);
     }
 
-    protected void UNSAFE_setCustomBlock(int x, int y, int z, CustomBlock customBlock, Data data) {
+    protected void UNSAFE_setCustomBlock(int x, int y, int z, short visualBlockId, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(x, y, z, customBlock.getBlockId(), customBlock.getCustomBlockId(), data, updateConsumer);
+        setBlock(x, y, z, visualBlockId, customBlock.getCustomBlockId(), data, updateConsumer);
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {

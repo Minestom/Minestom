@@ -149,6 +149,11 @@ public class SharedInstance extends Instance {
         instanceContainer.setBlock(x, y, z, customBlockId, data);
     }
 
+    @Override
+    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+        instanceContainer.setSeparateBlocks(x, y, z, blockId, customBlockId, data);
+    }
+
     public InstanceContainer getInstanceContainer() {
         return instanceContainer;
     }

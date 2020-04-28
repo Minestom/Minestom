@@ -53,7 +53,13 @@ public class InstanceContainer extends Instance {
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        setBlock(x, y, z, (short) 0, customBlock, data);
+        setBlock(x, y, z, customBlock.getBlockId(), customBlock, data);
+    }
+
+    @Override
+    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        setBlock(x, y, z, blockId, customBlock, data);
     }
 
     private synchronized void setBlock(int x, int y, int z, short blockId, CustomBlock customBlock, Data data) {
@@ -61,7 +67,6 @@ public class InstanceContainer extends Instance {
         synchronized (chunk) {
 
             boolean isCustomBlock = customBlock != null;
-            blockId = isCustomBlock ? customBlock.getBlockId() : blockId;
 
             int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
@@ -76,7 +81,7 @@ public class InstanceContainer extends Instance {
             // Set the block
             if (isCustomBlock) {
                 data = customBlock.createData(this, blockPosition, data);
-                chunk.UNSAFE_setCustomBlock(x, y, z, customBlock, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlock, data);
             } else {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             }

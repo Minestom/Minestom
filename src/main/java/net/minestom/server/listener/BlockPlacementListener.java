@@ -100,8 +100,7 @@ public class BlockPlacementListener {
                 if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
                     short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                     if(customBlockId != 0) {
-                        instance.setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getCustomBlockId());
-                        instance.refreshBlockId(blockPosition, playerBlockPlaceEvent.getBlockId());
+                        instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId(), playerBlockPlaceEvent.getCustomBlockId());
                     } else {
                         instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());
                     }

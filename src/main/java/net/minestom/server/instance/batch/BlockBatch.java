@@ -3,6 +3,7 @@ package net.minestom.server.instance.batch;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.CustomBlock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class BlockBatch implements InstanceBatch {
     public void setBlock(int x, int y, int z, short blockId, Data data) {
         synchronized (this) {
             Chunk chunk = this.instance.getChunkAt(x, z);
-            addBlockData(chunk, x, y, z, false, blockId, data);
+            addBlockData(chunk, x, y, z, false, blockId, (short) 0, data);
         }
     }
 
@@ -31,11 +32,20 @@ public class BlockBatch implements InstanceBatch {
     public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
         synchronized (this) {
             Chunk chunk = this.instance.getChunkAt(x, z);
-            addBlockData(chunk, x, y, z, true, blockId, data);
+            CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
+            addBlockData(chunk, x, y, z, true, customBlock.getBlockId(), blockId, data);
         }
     }
 
-    private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockId, Data data) {
+    @Override
+    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+        synchronized (this) {
+            Chunk chunk = this.instance.getChunkAt(x, z);
+            addBlockData(chunk, x, y, z, true, blockId, customBlockId, data);
+        }
+    }
+
+    private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockId, short customBlockId, Data data) {
         List<BlockData> blocksData = this.data.get(chunk);
         if (blocksData == null)
             blocksData = new ArrayList<>();
@@ -44,8 +54,9 @@ public class BlockBatch implements InstanceBatch {
         blockData.x = x;
         blockData.y = y;
         blockData.z = z;
-        blockData.isCustomBlock = customBlock;
+        blockData.hasCustomBlock = customBlock;
         blockData.blockId = blockId;
+        blockData.customBlockId = customBlockId;
         blockData.data = data;
 
         blocksData.add(blockData);
@@ -83,15 +94,16 @@ public class BlockBatch implements InstanceBatch {
     private class BlockData {
 
         private int x, y, z;
-        private boolean isCustomBlock;
+        private boolean hasCustomBlock;
         private short blockId;
+        private short customBlockId;
         private Data data;
 
         public void apply(Chunk chunk) {
-            if (!isCustomBlock) {
+            if (!hasCustomBlock) {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlockId, data);
             }
         }
 
