@@ -25,8 +25,8 @@ public class StoneBlock extends CustomBlock {
     }
 
     @Override
-    public void onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
-
+    public boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
+        return false;
     }
 
     @Override

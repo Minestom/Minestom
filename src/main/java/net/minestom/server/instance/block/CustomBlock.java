@@ -33,7 +33,16 @@ public abstract class CustomBlock {
 
     public abstract void onDestroy(Instance instance, BlockPosition blockPosition, Data data);
 
-    public abstract void onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data);
+    /**
+     * Handles interactions with this block. Can also block normal item use (containers should block when opening the
+     * menu, this prevents the player from placing a block when opening it for instance)
+     * @param player the player interacting
+     * @param hand the hand used to interact
+     * @param blockPosition the position of this block
+     * @param data the data at this position
+     * @return true if this block blocks normal item use, false otherwise
+     */
+    public abstract boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data);
 
     public abstract UpdateOption getUpdateOption();
 
