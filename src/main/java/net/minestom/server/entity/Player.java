@@ -7,6 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -424,6 +425,24 @@ public class Player extends LivingEntity {
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);
+    }
+
+    /**
+     * Plays a given effect at the given position for this player
+     * @param effect the effect to play
+     * @param x x position of the effect
+     * @param y y position of the effect
+     * @param z z position of the effect
+     * @param data data for the effect
+     * @param disableRelativeVolume disable volume scaling based on distance
+     */
+    public void playEffect(Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
+        EffectPacket packet = new EffectPacket();
+        packet.effectId = effect.getId();
+        packet.position = new BlockPosition(x, y, z);
+        packet.data = data;
+        packet.disableRelativeVolume = disableRelativeVolume;
+        playerConnection.sendPacket(packet);
     }
 
     public void stopSound() {
