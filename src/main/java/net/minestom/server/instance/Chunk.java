@@ -182,6 +182,15 @@ public class Chunk implements Viewable {
         this.customBlocksId[blockIndex] = customId;
     }
 
+    protected void refreshBlockId(int x, int y, int z, short blockId) {
+        int blockIndex = getBlockIndex(x, y, z);
+        if (blockIndex < 0 || blockIndex >= blocksId.length) {
+            return;
+        }
+
+        this.blocksId[blockIndex] = blockId;
+    }
+
     protected void refreshBlockValue(int x, int y, int z, short blockId) {
         CustomBlock customBlock = getCustomBlock(x, y, z);
         short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();

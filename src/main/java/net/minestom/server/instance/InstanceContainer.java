@@ -97,7 +97,7 @@ public class InstanceContainer extends Instance {
     public void refreshBlockId(BlockPosition blockPosition, short blockId) {
         Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
         synchronized (chunk) {
-            chunk.refreshBlockValue(blockPosition.getX(), blockPosition.getY(),
+            chunk.refreshBlockId(blockPosition.getX(), blockPosition.getY(),
                     blockPosition.getZ(), blockId);
 
             sendBlockChange(chunk, blockPosition, blockId);
