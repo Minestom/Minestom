@@ -704,10 +704,6 @@ public enum Block {
         return blocksAlternativesMap.get(blockId);
     }
 
-    public static void registerBlockAlternative(BlockAlternative blockAlternative) {
-        blocksAlternativesMap.put(blockAlternative.id, blockAlternative);
-    }
-
     private short blockId;
     private List<BlockAlternative> blockAlternatives = new ArrayList<>();
 
@@ -718,6 +714,7 @@ public enum Block {
     public void addBlockAlternative(BlockAlternative blockAlternative) {
         this.blockAlternatives.add(blockAlternative);
         blocksMap.put(blockAlternative.id, this);
+        blocksAlternativesMap.put(blockAlternative.id, blockAlternative);
     }
 
     public short withProperties(String... properties) {

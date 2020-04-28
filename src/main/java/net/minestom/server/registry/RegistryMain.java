@@ -56,8 +56,6 @@ public class RegistryMain {
                 Block.BlockAlternative blockAlternative = new Block.BlockAlternative(id, properties);
 
                 block.addBlockAlternative(blockAlternative);
-
-                Block.registerBlockAlternative(blockAlternative);
             }
         }
     }
