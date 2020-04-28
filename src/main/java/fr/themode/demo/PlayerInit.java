@@ -122,6 +122,14 @@ public class PlayerInit {
 
             });
 
+            player.addEventCallback(PlayerBlockInteractEvent.class, event -> {
+                if (event.getHand() != Player.Hand.MAIN)
+                    return;
+
+                short blockId = player.getInstance().getBlockId(event.getBlockPosition());
+                player.sendMessage("block alternative id: " + Block.getBlockAlternative(blockId).getId());
+            });
+
             player.addEventCallback(PickupItemEvent.class, event -> {
                 event.setCancelled(!player.getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
             });
@@ -163,7 +171,7 @@ public class PlayerInit {
 
                 player.openInventory(inventory);
 
-                player.getInventory().addItemStack(new ItemStack((short) 1, (byte) 100));
+                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
                 player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));
 
             /*TeamManager teamManager = Main.getTeamManager();

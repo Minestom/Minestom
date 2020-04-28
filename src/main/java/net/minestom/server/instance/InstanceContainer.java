@@ -84,22 +84,22 @@ public class InstanceContainer extends Instance {
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
 
+            // Refresh player chunk block
+            sendBlockChange(chunk, blockPosition, blockId);
+
             // Call the place listener for custom block
             if (isCustomBlock)
                 callBlockPlace(chunk, index, blockPosition);
-
-            // Refresh player chunk block
-            sendBlockChange(chunk, blockPosition, blockId);
         }
     }
 
     @Override
-    public void refreshBlockId(int x, int y, int z, short blockId) {
-        Chunk chunk = getChunkAt(x, z);
+    public void refreshBlockId(BlockPosition blockPosition, short blockId) {
+        Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
         synchronized (chunk) {
-            chunk.refreshBlockValue(x, y, z, blockId);
+            chunk.refreshBlockValue(blockPosition.getX(), blockPosition.getY(),
+                    blockPosition.getZ(), blockId);
 
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
             sendBlockChange(chunk, blockPosition, blockId);
         }
     }

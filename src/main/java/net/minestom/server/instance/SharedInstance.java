@@ -25,8 +25,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void refreshBlockId(int x, int y, int z, short blockId) {
-        instanceContainer.refreshBlockId(x, y, z, blockId);
+    public void refreshBlockId(BlockPosition blockPosition, short blockId) {
+        instanceContainer.refreshBlockId(blockPosition, blockId);
     }
 
     @Override

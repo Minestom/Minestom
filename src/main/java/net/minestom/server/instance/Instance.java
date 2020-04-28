@@ -47,7 +47,7 @@ public abstract class Instance implements BlockModifier, DataContainer {
         this.dimension = dimension;
     }
 
-    public abstract void refreshBlockId(int x, int y, int z, short blockId);
+    public abstract void refreshBlockId(BlockPosition blockPosition, short blockId);
 
     // Used to call BlockBreakEvent and sending particle packet if true
     public abstract void breakBlock(Player player, BlockPosition blockPosition);
@@ -153,8 +153,16 @@ public abstract class Instance implements BlockModifier, DataContainer {
         return Collections.unmodifiableSet(getEntitiesInChunk(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ())));
     }
 
+    public void refreshBlockId(int x, int y, int z, short blockId) {
+        refreshBlockId(new BlockPosition(x, y, z), blockId);
+    }
+
     public void refreshBlockId(int x, int y, int z, Block block) {
         refreshBlockId(x, y, z, block.getBlockId());
+    }
+
+    public void refreshBlockId(BlockPosition blockPosition, Block block) {
+        refreshBlockId(blockPosition, block.getBlockId());
     }
 
     public void loadChunk(int chunkX, int chunkZ) {

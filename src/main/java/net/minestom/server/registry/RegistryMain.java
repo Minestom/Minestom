@@ -53,7 +53,11 @@ public class RegistryMain {
             for (RegistryBlock.BlockState blockState : registryBlock.states) {
                 short id = blockState.id;
                 String[] properties = blockState.propertiesValues.toArray(new String[blockState.propertiesValues.size()]);
-                block.addBlockAlternative(id, properties);
+                Block.BlockAlternative blockAlternative = new Block.BlockAlternative(id, properties);
+
+                block.addBlockAlternative(blockAlternative);
+
+                Block.registerBlockAlternative(blockAlternative);
             }
         }
     }

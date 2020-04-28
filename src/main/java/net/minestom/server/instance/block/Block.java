@@ -690,10 +690,22 @@ public enum Block {
     HONEY_BLOCK,
     HONEYCOMB_BLOCK;
 
+    // Used to get a Block from any block alternatives id
     private static Short2ObjectOpenHashMap<Block> blocksMap = new Short2ObjectOpenHashMap<>();
+
+    // Used to retrieve the appropriate BlockAlternative from any block id
+    private static Short2ObjectOpenHashMap<BlockAlternative> blocksAlternativesMap = new Short2ObjectOpenHashMap<>();
 
     public static Block fromId(short blockId) {
         return blocksMap.getOrDefault(blockId, AIR);
+    }
+
+    public static BlockAlternative getBlockAlternative(short blockId) {
+        return blocksAlternativesMap.get(blockId);
+    }
+
+    public static void registerBlockAlternative(BlockAlternative blockAlternative) {
+        blocksAlternativesMap.put(blockAlternative.id, blockAlternative);
     }
 
     private short blockId;
@@ -703,9 +715,9 @@ public enum Block {
         this.blockId = blockId;
     }
 
-    public void addBlockAlternative(short id, String... properties) {
-        this.blockAlternatives.add(new BlockAlternative(id, properties));
-        blocksMap.put(id, this);
+    public void addBlockAlternative(BlockAlternative blockAlternative) {
+        this.blockAlternatives.add(blockAlternative);
+        blocksMap.put(blockAlternative.id, this);
     }
 
     public short withProperties(String... properties) {
@@ -1362,7 +1374,7 @@ public enum Block {
         private short id;
         private String[] properties;
 
-        protected BlockAlternative(short id, String... properties) {
+        public BlockAlternative(short id, String... properties) {
             this.id = id;
             this.properties = properties;
         }

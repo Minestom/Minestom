@@ -6,7 +6,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.time.UpdateOption;
 
 public class StoneBlock extends CustomBlock {
 
@@ -17,6 +16,7 @@ public class StoneBlock extends CustomBlock {
     @Override
     public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
         System.out.println("PLACED");
+        instance.refreshBlockId(blockPosition, Block.LAVA);
     }
 
     @Override
@@ -27,11 +27,6 @@ public class StoneBlock extends CustomBlock {
     @Override
     public boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
         return false;
-    }
-
-    @Override
-    public UpdateOption getUpdateOption() {
-        return null;
     }
 
     @Override
