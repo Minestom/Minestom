@@ -65,4 +65,16 @@ public abstract class CustomBlock {
     public String getIdentifier() {
         return identifier;
     }
+
+    /**
+     * Initialises data for this block
+     * @param x X position of the block
+     * @param y Y position of the block
+     * @param z Z position of the block
+     * @param data data given to 'setBlock', can be null
+     * @return Data for this block. Can be null, 'data', or a new object
+     */
+    public Data createData(int x, int y, int z, Data data) {
+        return data;
+    }
 }
