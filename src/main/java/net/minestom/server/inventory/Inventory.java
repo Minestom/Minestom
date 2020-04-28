@@ -20,7 +20,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     private static volatile byte lastInventoryId;
 
-    private int id;
+    private byte id;
     private InventoryType inventoryType;
     private String title;
 
@@ -66,7 +66,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return title;
     }
 
-    public int getWindowId() {
+    public byte getWindowId() {
         return id;
     }
 
@@ -134,7 +134,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
             this.itemStacks[slot] = itemStack;
             SetSlotPacket setSlotPacket = new SetSlotPacket();
-            setSlotPacket.windowId = 1;
+            setSlotPacket.windowId = getWindowId();
             setSlotPacket.slot = (short) slot;
             setSlotPacket.itemStack = itemStack;
             sendPacketToViewers(setSlotPacket);

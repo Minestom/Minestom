@@ -1,5 +1,6 @@
 package net.minestom.server.data;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.PrimitiveConversion;
 
@@ -11,10 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SerializableData extends Data {
 
+    private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
+
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     @Override
     public <T> void set(String key, T value, Class<T> type) {
+        if (DATA_MANAGER.getDataType(type) == null) {
+            throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
+        }
+
         super.set(key, value, type);
         this.dataType.put(key, type);
     }
