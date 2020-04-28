@@ -3,6 +3,8 @@ package net.minestom.server.data.type;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.io.DataReader;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 import java.io.IOException;
 
@@ -10,9 +12,9 @@ import java.io.IOException;
 public class SerializableDataData extends DataType<SerializableData> {
 
     @Override
-    public byte[] encode(SerializableData value) {
+    public void encode(PacketWriter packetWriter, SerializableData value) {
         try {
-            return value.getSerializedData();
+            packetWriter.writeBytes(value.getSerializedData());
         } catch (IOException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("error while writing the data");
@@ -20,7 +22,7 @@ public class SerializableDataData extends DataType<SerializableData> {
     }
 
     @Override
-    public SerializableData decode(byte[] value) {
+    public SerializableData decode(PacketReader packetReader, byte[] value) {
         return DataReader.readData(value, false);
     }
 }

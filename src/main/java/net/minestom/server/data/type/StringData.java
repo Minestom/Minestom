@@ -1,16 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class StringData extends DataType<String> {
 
     @Override
-    public byte[] encode(String value) {
-        return value.getBytes();
+    public void encode(PacketWriter packetWriter, String value) {
+        packetWriter.writeSizedString(value);
     }
 
     @Override
-    public String decode(byte[] value) {
-        return new String(value);
+    public String decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readSizedString();
     }
 }

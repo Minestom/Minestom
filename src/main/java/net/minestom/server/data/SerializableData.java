@@ -1,5 +1,6 @@
 package net.minestom.server.data;
 
+import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.PrimitiveConversion;
 
 import java.io.ByteArrayOutputStream;
@@ -43,7 +44,9 @@ public class SerializableData extends Data {
             dos.writeShort(encodedName.length);
             dos.write(encodedName);
 
-            byte[] encodedValue = dataType.encode(value); // Data
+            PacketWriter packetWriter = new PacketWriter();
+            dataType.encode(packetWriter, value); // Encode
+            byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
             dos.writeInt(encodedValue.length);
             dos.write(encodedValue);
         }

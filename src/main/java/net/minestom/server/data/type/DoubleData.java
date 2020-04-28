@@ -1,23 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-
-import java.nio.ByteBuffer;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class DoubleData extends DataType<Double> {
 
     @Override
-    public byte[] encode(Double value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
-        buffer.putDouble(value);
-        return buffer.array();
+    public void encode(PacketWriter packetWriter, Double value) {
+        packetWriter.writeDouble(value);
     }
 
     @Override
-    public Double decode(byte[] value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
-        buffer.put(value);
-        buffer.flip();
-        return buffer.getDouble();
+    public Double decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readDouble();
     }
 }

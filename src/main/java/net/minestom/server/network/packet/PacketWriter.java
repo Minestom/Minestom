@@ -38,6 +38,14 @@ public class PacketWriter {
         }
     }
 
+    public void writeChar(char s) {
+        try {
+            data.writeChar(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeShort(short s) {
         try {
             data.writeShort(s);

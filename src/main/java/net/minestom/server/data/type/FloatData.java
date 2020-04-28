@@ -1,23 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-
-import java.nio.ByteBuffer;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class FloatData extends DataType<Float> {
 
     @Override
-    public byte[] encode(Float value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Float.BYTES);
-        buffer.putFloat(value);
-        return buffer.array();
+    public void encode(PacketWriter packetWriter, Float value) {
+        packetWriter.writeFloat(value);
     }
 
     @Override
-    public Float decode(byte[] value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Float.BYTES);
-        buffer.put(value);
-        buffer.flip();
-        return buffer.getFloat();
+    public Float decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readFloat();
     }
 }

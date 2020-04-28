@@ -30,6 +30,10 @@ public class PacketReader {
         return buffer.readShort();
     }
 
+    public char readChar() {
+        return buffer.readChar();
+    }
+
     public int readUnsignedShort() {
         return buffer.readUnsignedShort();
     }

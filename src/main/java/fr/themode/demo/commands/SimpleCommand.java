@@ -1,11 +1,9 @@
 package fr.themode.demo.commands;
 
-import fr.themode.demo.generator.ChunkGeneratorDemo;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.world.Dimension;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -24,15 +22,10 @@ public class SimpleCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
-        /*for (EntityCreature creature : instance.getCreatures()) {
+        for (EntityCreature creature : instance.getCreatures()) {
             creature.setPathTo(player.getPosition());
-        }*/
+        }
 
-        Instance inst = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.NETHER);
-        inst.enableAutoChunkLoad(true);
-        inst.setChunkGenerator(new ChunkGeneratorDemo());
-
-        player.setInstance(inst);
 
         return true;
     }

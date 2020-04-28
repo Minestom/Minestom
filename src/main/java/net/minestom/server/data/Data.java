@@ -11,9 +11,13 @@ public class Data {
     protected ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
 
     public <T> void set(String key, T value, Class<T> type) {
-        if (DATA_MANAGER.getDataType(type) == null) {
-            throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
+        // Type registering is only relevant if data should be serialized
+        if (this instanceof SerializableData) {
+            if (DATA_MANAGER.getDataType(type) == null) {
+                throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
+            }
         }
+
         this.data.put(key, value);
     }
 

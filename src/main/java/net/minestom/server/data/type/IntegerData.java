@@ -1,23 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-
-import java.nio.ByteBuffer;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class IntegerData extends DataType<Integer> {
 
     @Override
-    public byte[] encode(Integer value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.putInt(value);
-        return buffer.array();
+    public void encode(PacketWriter packetWriter, Integer value) {
+        packetWriter.writeVarInt(value);
     }
 
     @Override
-    public Integer decode(byte[] value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
-        buffer.put(value);
-        buffer.flip();
-        return buffer.getInt();
+    public Integer decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readVarInt();
     }
 }

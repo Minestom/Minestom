@@ -1,8 +1,11 @@
 package net.minestom.server.io;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.utils.CompressionUtils;
 
 import java.io.ByteArrayInputStream;
@@ -45,7 +48,9 @@ public class DataReader {
                 Class type = Class.forName(new String(typeCache));
 
                 String name = new String(nameCache);
-                Object value = DATA_MANAGER.getDataType(type).decode(valueCache);
+                ByteBuf buffer = Unpooled.wrappedBuffer(valueCache);
+                PacketReader packetReader = new PacketReader(buffer);
+                Object value = DATA_MANAGER.getDataType(type).decode(packetReader, valueCache);
 
                 data.set(name, value, type);
             }

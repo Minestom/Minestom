@@ -2,6 +2,7 @@ package net.minestom.server.data;
 
 import net.minestom.server.data.type.CharacterData;
 import net.minestom.server.data.type.*;
+import net.minestom.server.data.type.array.ItemStackArrayData;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.PrimitiveConversion;
 
@@ -27,6 +28,7 @@ public class DataManager {
         registerType(SerializableData.class, new SerializableDataData());
 
         registerType(ItemStack.class, new ItemStackData());
+        registerType(ItemStack[].class, new ItemStackArrayData());
     }
 
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {

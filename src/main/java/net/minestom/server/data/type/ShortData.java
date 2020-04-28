@@ -1,23 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-
-import java.nio.ByteBuffer;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class ShortData extends DataType<Short> {
 
     @Override
-    public byte[] encode(Short value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
-        buffer.putShort(value);
-        return buffer.array();
+    public void encode(PacketWriter packetWriter, Short value) {
+        packetWriter.writeShort(value);
     }
 
     @Override
-    public Short decode(byte[] value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
-        buffer.put(value);
-        buffer.flip();
-        return buffer.getShort();
+    public Short decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readShort();
     }
 }

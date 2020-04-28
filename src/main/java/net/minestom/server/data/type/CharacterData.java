@@ -1,23 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-
-import java.nio.ByteBuffer;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class CharacterData extends DataType<Character> {
 
     @Override
-    public byte[] encode(Character value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Character.BYTES);
-        buffer.putChar(value);
-        return buffer.array();
+    public void encode(PacketWriter packetWriter, Character value) {
+        packetWriter.writeChar(value);
     }
 
     @Override
-    public Character decode(byte[] value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Character.BYTES);
-        buffer.put(value);
-        buffer.flip();
-        return buffer.getChar();
+    public Character decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readChar();
     }
 }

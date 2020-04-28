@@ -1,15 +1,17 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 
 public class BooleanData extends DataType<Boolean> {
     @Override
-    public byte[] encode(Boolean value) {
-        return new byte[]{(byte) (value.booleanValue() ? 1 : 0)};
+    public void encode(PacketWriter packetWriter, Boolean value) {
+        packetWriter.writeBoolean(value);
     }
 
     @Override
-    public Boolean decode(byte[] value) {
-        return value[0] == 1;
+    public Boolean decode(PacketReader packetReader, byte[] value) {
+        return packetReader.readBoolean();
     }
 }
