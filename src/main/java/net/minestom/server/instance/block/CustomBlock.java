@@ -68,13 +68,12 @@ public abstract class CustomBlock {
 
     /**
      * Initialises data for this block
-     * @param x X position of the block
-     * @param y Y position of the block
-     * @param z Z position of the block
-     * @param data data given to 'setBlock', can be null
+     *
+     * @param blockPosition the position of the targeted block
+     * @param data          data given to 'setBlock', can be null
      * @return Data for this block. Can be null, 'data', or a new object
      */
-    public Data createData(int x, int y, int z, Data data) {
+    public Data createData(BlockPosition blockPosition, Data data) {
         return data;
     }
 }

@@ -74,7 +74,7 @@ public class InstanceContainer extends Instance {
 
             // Set the block
             if (isCustomBlock) {
-                data = BLOCK_MANAGER.getCustomBlock(customBlockId).createData(x, y, z, data);
+                data = BLOCK_MANAGER.getCustomBlock(customBlockId).createData(blockPosition, data);
                 chunk.UNSAFE_setCustomBlock(x, y, z, customBlockId, data);
             } else {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, data);

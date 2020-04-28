@@ -78,7 +78,7 @@ public class BlockPlacementListener {
             }
 
             if (!intersect) {
-                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(material.getBlock().getBlockId(), (short)0, blockPosition, packet.hand);
+                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(block.getBlockId(), (short) 0, blockPosition, packet.hand);
                 playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                 // BlockPlacementRule check
