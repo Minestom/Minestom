@@ -18,7 +18,7 @@ public class ItemStackData extends DataType<ItemStack> {
 
     @Override
     public ItemStack decode(byte[] value) {
-        ByteBuf buffer = Unpooled.buffer(value.length);
+        ByteBuf buffer = Unpooled.wrappedBuffer(value);
         ItemStack itemStack = Utils.readItemStack(new PacketReader(buffer));
         return itemStack;
     }
