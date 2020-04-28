@@ -15,6 +15,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -75,17 +76,6 @@ public class PlayerInit {
                 }
             }
         }, new UpdateOption(5, TimeUnit.TICK));
-
-        connectionManager.setResponseDataConsumer((playerConnection, responseData) -> {
-            responseData.setName("1.15.2");
-            responseData.setProtocol(578);
-            responseData.setMaxPlayer(100);
-            responseData.setOnline(connectionManager.getOnlinePlayers().size());
-            responseData.addPlayer("A name", UUID.randomUUID());
-            responseData.addPlayer("Could be some message", UUID.randomUUID());
-            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
-            responseData.setFavicon("data:image/png;base64,<data>");
-        });
 
         connectionManager.addPacketConsumer((player, packet) -> {
             // Listen to all received packet
@@ -193,6 +183,19 @@ public class PlayerInit {
             belowNameScoreboard.updateScore(this, 50);*/
             });
         });
+    }
+
+    public static ResponseDataConsumer getResponseDataConsumer() {
+        return (playerConnection, responseData) -> {
+            responseData.setName("1.15.2");
+            responseData.setProtocol(578);
+            responseData.setMaxPlayer(100);
+            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+            responseData.addPlayer("A name", UUID.randomUUID());
+            responseData.addPlayer("Could be some message", UUID.randomUUID());
+            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
+            responseData.setFavicon("data:image/png;base64,<data>");
+        };
     }
 
 }

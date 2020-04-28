@@ -12,6 +12,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.RegistryMain;
 import net.minestom.server.scoreboard.TeamManager;
@@ -79,6 +80,7 @@ public class MinecraftServer {
     private static MinecraftServer minecraftServer;
 
     // Data
+    private static ResponseDataConsumer responseDataConsumer;
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
@@ -175,7 +177,12 @@ public class MinecraftServer {
         return connectionManager;
     }
 
-    public void start(String address, int port) {
+    public static ResponseDataConsumer getResponseDataConsumer() {
+        return responseDataConsumer;
+    }
+
+    public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+        MinecraftServer.responseDataConsumer = responseDataConsumer;
         updateManager.start();
         nettyServer.start(address, port);
     }

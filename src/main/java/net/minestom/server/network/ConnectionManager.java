@@ -3,7 +3,6 @@ package net.minestom.server.network;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.ResponseDataConsumer;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -16,7 +15,6 @@ public class ConnectionManager {
     private Set<Player> players = new CopyOnWriteArraySet<>();
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
-    private ResponseDataConsumer responseDataConsumer;
     private List<PacketConsumer> packetConsumers = new CopyOnWriteArrayList<>();
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
@@ -50,14 +48,6 @@ public class ConnectionManager {
 
     public void broadcastMessage(String message) {
         broadcastMessage(message, null);
-    }
-
-    public ResponseDataConsumer getResponseDataConsumer() {
-        return responseDataConsumer;
-    }
-
-    public void setResponseDataConsumer(ResponseDataConsumer responseDataConsumer) {
-        this.responseDataConsumer = responseDataConsumer;
     }
 
     public List<PacketConsumer> getPacketConsumers() {

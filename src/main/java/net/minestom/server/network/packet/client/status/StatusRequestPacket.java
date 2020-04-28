@@ -13,7 +13,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
-        ResponseDataConsumer consumer = MinecraftServer.getConnectionManager().getResponseDataConsumer();
+        ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
         ResponseData responseData = new ResponseData();
         if (consumer == null)
             throw new NullPointerException("You need to register a ResponseDataConsumer");

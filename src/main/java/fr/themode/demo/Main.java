@@ -52,7 +52,7 @@ public class Main {
 
         PlayerInit.init();
 
-        minecraftServer.start("localhost", 55555);
+        minecraftServer.start("localhost", 55555, PlayerInit.getResponseDataConsumer());
     }
 
 }
