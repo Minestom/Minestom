@@ -101,6 +101,7 @@ public class BlockPlacementListener {
                     short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                     if(customBlockId != 0) {
                         instance.setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getCustomBlockId());
+                        instance.refreshBlockId(blockPosition, playerBlockPlaceEvent.getBlockId());
                     } else {
                         instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());
                     }
