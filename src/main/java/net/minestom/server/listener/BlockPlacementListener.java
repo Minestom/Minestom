@@ -42,9 +42,16 @@ public class BlockPlacementListener {
             CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {
                 Data data = instance.getBlockData(blockPosition);
-                customBlock.onInteract(player, hand, blockPosition, data);
+                boolean blocksItem = customBlock.onInteract(player, hand, blockPosition, data);
+                if(blocksItem) {
+                    playerBlockInteractEvent.setBlockingItemUse(true);
+                }
             }
         });
+
+        if(playerBlockInteractEvent.isBlockingItemUse()) {
+            return;
+        }
 
         // Check if item at hand is a block
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
