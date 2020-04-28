@@ -14,10 +14,7 @@ import net.minestom.server.stat.StatisticType;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RegistryMain {
 
@@ -205,7 +202,7 @@ public class RegistryMain {
                     if (statePropertiesObject != null) {
                         Set<Map.Entry<String, JsonElement>> statePropertiesEntries = statePropertiesObject.entrySet();//will return members of your object
                         for (Map.Entry<String, JsonElement> propertyEntry : statePropertiesEntries) {
-                            String propertyValue = propertyEntry.getValue().getAsString();
+                            String propertyValue = propertyEntry.getKey()+"="+propertyEntry.getValue().getAsString();
 
                             blockState.propertiesValues.add(propertyValue);
                         }

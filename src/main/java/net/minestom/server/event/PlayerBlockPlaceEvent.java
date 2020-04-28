@@ -5,6 +5,7 @@ import net.minestom.server.utils.BlockPosition;
 
 public class PlayerBlockPlaceEvent extends CancellableEvent {
 
+    private final Player player;
     private short blockId;
     private short customBlockId;
     private BlockPosition blockPosition;
@@ -12,7 +13,8 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     private boolean consumeBlock;
 
-    public PlayerBlockPlaceEvent(short blockId, short customBlockId, BlockPosition blockPosition, Player.Hand hand) {
+    public PlayerBlockPlaceEvent(Player player, short blockId, short customBlockId, BlockPosition blockPosition, Player.Hand hand) {
+        this.player = player;
         this.blockId = blockId;
         this.customBlockId = customBlockId;
         this.blockPosition = blockPosition;
@@ -34,6 +36,10 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     public short getBlockId() {
         return blockId;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public BlockPosition getBlockPosition() {

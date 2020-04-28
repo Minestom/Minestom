@@ -1,10 +1,10 @@
 package fr.themode.demo.commands;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.MathUtils;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -27,7 +27,7 @@ public class SimpleCommand implements CommandProcessor {
             creature.setPathTo(player.getPosition());
         }
 
-        MinecraftServer.stopCleanly();
+        player.sendMessage("Direction: "+ MathUtils.getHorizontalDirection(player.getPosition().getYaw()));
 
 
         return true;
