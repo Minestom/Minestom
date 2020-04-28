@@ -6,11 +6,11 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class CloseWindowPacket implements ServerPacket {
 
-    public int windowId;
+    public byte windowId;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeVarInt(windowId);
+        writer.writeByte(windowId);
     }
 
     @Override

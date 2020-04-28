@@ -4,15 +4,15 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
-public class ConfirmTransactionPacket implements ServerPacket {
+public class WindowConfirmationPacket implements ServerPacket {
 
-    public int windowId;
+    public byte windowId;
     public short actionNumber;
     public boolean accepted;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeVarInt(windowId);
+        writer.writeByte(windowId);
         writer.writeShort(actionNumber);
         writer.writeBoolean(accepted);
     }

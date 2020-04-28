@@ -15,15 +15,16 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
 
-    private static AtomicInteger lastInventoryId = new AtomicInteger();
+    private static volatile byte lastInventoryId;
 
     private int id;
     private InventoryType inventoryType;
     private String title;
+
+    private int size;
 
     private int offset;
 
@@ -39,17 +40,22 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.inventoryType = inventoryType;
         this.title = title;
 
-        this.offset = inventoryType.getAdditionalSlot();
+        this.size = inventoryType.getAdditionalSlot();
 
-        this.itemStacks = new ItemStack[inventoryType.getAdditionalSlot()];
+        this.offset = size;
 
-        for (int i = 0; i < itemStacks.length; i++) {
+        this.itemStacks = new ItemStack[size];
+
+        for (int i = 0; i < size; i++) {
             itemStacks[i] = ItemStack.getAirItem();
         }
     }
 
-    private static int generateId() {
-        return lastInventoryId.incrementAndGet();
+    private static byte generateId() {
+        byte newInventoryId = ++lastInventoryId;
+        if (newInventoryId < 0)
+            newInventoryId = 1;
+        return newInventoryId;
     }
 
     public InventoryType getInventoryType() {

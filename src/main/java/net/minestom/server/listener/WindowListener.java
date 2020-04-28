@@ -7,8 +7,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindow;
-import net.minestom.server.network.packet.server.play.ConfirmTransactionPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 
 public class WindowListener {
 
@@ -26,10 +26,10 @@ public class WindowListener {
 
         // System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
 
-        ConfirmTransactionPacket confirmTransactionPacket = new ConfirmTransactionPacket();
-        confirmTransactionPacket.windowId = windowId;
-        confirmTransactionPacket.actionNumber = actionNumber;
-        confirmTransactionPacket.accepted = true; // Change depending on output
+        WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
+        windowConfirmationPacket.windowId = windowId;
+        windowConfirmationPacket.actionNumber = actionNumber;
+        windowConfirmationPacket.accepted = true; // Change depending on output
 
         switch (mode) {
             case 0:
@@ -83,7 +83,7 @@ public class WindowListener {
         setSlotPacket.itemStack = cursorItem;
 
         player.getPlayerConnection().sendPacket(setSlotPacket);
-        player.getPlayerConnection().sendPacket(confirmTransactionPacket);
+        player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
     public static void closeWindowListener(ClientCloseWindow packet, Player player) {

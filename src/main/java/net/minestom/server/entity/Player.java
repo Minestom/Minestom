@@ -799,7 +799,7 @@ public class Player extends LivingEntity {
         if (openInventory == null) {
             closeWindowPacket.windowId = 0;
         } else {
-            closeWindowPacket.windowId = openInventory.getWindowId();
+            closeWindowPacket.windowId = (byte) openInventory.getInventoryType().getWindowType();
             openInventory.removeViewer(this);
             refreshOpenInventory(null);
         }
