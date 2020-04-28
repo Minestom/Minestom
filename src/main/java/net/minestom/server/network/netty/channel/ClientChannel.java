@@ -35,7 +35,7 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
 
         if (packetLength == 0xFE) { // Legacy server ping
             LegacyServerListPingPacket legacyServerListPingPacket = new LegacyServerListPingPacket();
-            legacyServerListPingPacket.read(new PacketReader(buffer, 0));
+            legacyServerListPingPacket.read(new PacketReader(buffer));
             legacyServerListPingPacket.process(null, null);
             return;
         }
@@ -44,7 +44,7 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
         int packetId = Utils.readVarInt(buffer);
 
         int offset = varIntLength + Utils.lengthVarInt(packetId);
-        packetProcessor.process(ctx, buffer, packetId, packetLength, offset);
+        packetProcessor.process(ctx, buffer, packetId, offset);
 
         buffer.release();
     }

@@ -39,14 +39,14 @@ public class PacketProcessor {
 
     private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
-    public void process(ChannelHandlerContext channel, ByteBuf buffer, int id, int length, int offset) {
+    public void process(ChannelHandlerContext channel, ByteBuf buffer, int id, int offset) {
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(channel, c -> new PlayerConnection(channel));
         ConnectionState connectionState = playerConnection.getConnectionState();
         //if (!printBlackList.contains(id)) {
         //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         //}
 
-        PacketReader packetReader = new PacketReader(buffer, length);
+        PacketReader packetReader = new PacketReader(buffer);
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet

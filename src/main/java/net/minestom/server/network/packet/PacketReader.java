@@ -9,11 +9,9 @@ import net.minestom.server.utils.Utils;
 public class PacketReader {
 
     private ByteBuf buffer;
-    private int length;
 
-    public PacketReader(ByteBuf buffer, int length) {
+    public PacketReader(ByteBuf buffer) {
         this.buffer = buffer;
-        this.length = length;
     }
 
     public int readVarInt() {
@@ -89,9 +87,5 @@ public class PacketReader {
 
     public ByteBuf getBuffer() {
         return buffer;
-    }
-
-    public int getPacketLength() {
-        return length;
     }
 }

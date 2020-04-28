@@ -2,6 +2,7 @@ package net.minestom.server.data;
 
 import net.minestom.server.data.type.CharacterData;
 import net.minestom.server.data.type.*;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.PrimitiveConversion;
 
 import java.util.HashMap;
@@ -24,6 +25,8 @@ public class DataManager {
         registerType(String.class, new StringData());
 
         registerType(SerializableData.class, new SerializableDataData());
+
+        registerType(ItemStack.class, new ItemStackData());
     }
 
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {
