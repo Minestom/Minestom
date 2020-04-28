@@ -8,23 +8,22 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.utils.CompressionUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-
 public class DataReader {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
-    public static SerializableData readData(byte[] b, boolean shouldDecompress) {
-        b = shouldDecompress ? CompressionUtils.getDecompressedData(b) : b;
+    public static SerializableData readCompressedData(byte[] b) {
+        b = CompressionUtils.getDecompressedData(b);
 
-        DataInputStream stream = new DataInputStream(new ByteArrayInputStream(b));
+        return readData(Unpooled.wrappedBuffer(b));
+    }
 
+    // Only uncompressed
+    public static SerializableData readData(ByteBuf buffer) {
         SerializableData data = new SerializableData();
         try {
             while (true) {
-                short typeLength = stream.readShort();
+                short typeLength = buffer.readShort();
 
                 if (typeLength == 0xff) {
                     // End of data
@@ -33,29 +32,26 @@ public class DataReader {
 
                 byte[] typeCache = new byte[typeLength];
                 for (int i = 0; i < typeLength; i++) {
-                    typeCache[i] = stream.readByte();
+                    typeCache[i] = buffer.readByte();
                 }
 
-                short nameLength = stream.readShort();
+                String className = new String(typeCache);
+                Class type = Class.forName(className);
+
+                short nameLength = buffer.readShort();
                 byte[] nameCache = new byte[nameLength];
                 for (int i = 0; i < nameLength; i++) {
-                    nameCache[i] = stream.readByte();
+                    nameCache[i] = buffer.readByte();
                 }
 
-                int valueLength = stream.readInt();
-                byte[] valueCache = stream.readNBytes(valueLength);
-
-                Class type = Class.forName(new String(typeCache));
+                ByteBuf valueCache = buffer.readBytes(buffer.readInt());
 
                 String name = new String(nameCache);
-                ByteBuf buffer = Unpooled.wrappedBuffer(valueCache);
-                PacketReader packetReader = new PacketReader(buffer);
-                Object value = DATA_MANAGER.getDataType(type).decode(packetReader, valueCache);
+                PacketReader packetReader = new PacketReader(valueCache);
+                Object value = DATA_MANAGER.getDataType(type).decode(packetReader);
 
                 data.set(name, value, type);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

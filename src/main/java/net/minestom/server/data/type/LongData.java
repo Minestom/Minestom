@@ -11,7 +11,7 @@ public class LongData extends DataType<Long> {
     }
 
     @Override
-    public Long decode(PacketReader packetReader, byte[] value) {
+    public Long decode(PacketReader packetReader) {
         return packetReader.readLong();
     }
 }

@@ -12,7 +12,7 @@ public class ItemStackData extends DataType<ItemStack> {
     }
 
     @Override
-    public ItemStack decode(PacketReader packetReader, byte[] value) {
+    public ItemStack decode(PacketReader packetReader) {
         return packetReader.readSlot();
     }
 }

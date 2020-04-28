@@ -12,7 +12,7 @@ public class ShortData extends DataType<Short> {
     }
 
     @Override
-    public Short decode(PacketReader packetReader, byte[] value) {
+    public Short decode(PacketReader packetReader) {
         return packetReader.readShort();
     }
 }

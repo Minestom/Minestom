@@ -12,7 +12,7 @@ public class StringData extends DataType<String> {
     }
 
     @Override
-    public String decode(PacketReader packetReader, byte[] value) {
+    public String decode(PacketReader packetReader) {
         return packetReader.readSizedString();
     }
 }

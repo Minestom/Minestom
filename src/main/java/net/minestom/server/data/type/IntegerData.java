@@ -12,7 +12,7 @@ public class IntegerData extends DataType<Integer> {
     }
 
     @Override
-    public Integer decode(PacketReader packetReader, byte[] value) {
+    public Integer decode(PacketReader packetReader) {
         return packetReader.readVarInt();
     }
 }

@@ -11,7 +11,7 @@ public class BooleanData extends DataType<Boolean> {
     }
 
     @Override
-    public Boolean decode(PacketReader packetReader, byte[] value) {
+    public Boolean decode(PacketReader packetReader) {
         return packetReader.readBoolean();
     }
 }

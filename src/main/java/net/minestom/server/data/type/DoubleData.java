@@ -12,7 +12,7 @@ public class DoubleData extends DataType<Double> {
     }
 
     @Override
-    public Double decode(PacketReader packetReader, byte[] value) {
+    public Double decode(PacketReader packetReader) {
         return packetReader.readDouble();
     }
 }

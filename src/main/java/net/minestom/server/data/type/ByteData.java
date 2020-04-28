@@ -11,7 +11,7 @@ public class ByteData extends DataType<Byte> {
     }
 
     @Override
-    public Byte decode(PacketReader packetReader, byte[] value) {
+    public Byte decode(PacketReader packetReader) {
         return packetReader.readByte();
     }
 }

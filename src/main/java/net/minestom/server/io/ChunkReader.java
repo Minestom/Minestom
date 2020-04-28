@@ -1,5 +1,6 @@
 package net.minestom.server.io;
 
+import io.netty.buffer.Unpooled;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.Chunk;
@@ -41,7 +42,7 @@ public class ChunkReader {
                 if (hasData) {
                     int dataLength = stream.readInt();
                     byte[] dataArray = stream.readNBytes(dataLength);
-                    data = DataReader.readData(dataArray, false);
+                    data = DataReader.readData(Unpooled.wrappedBuffer(dataArray));
                 }
 
                 if (isCustomBlock) {

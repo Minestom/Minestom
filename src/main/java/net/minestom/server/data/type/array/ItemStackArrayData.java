@@ -18,7 +18,7 @@ public class ItemStackArrayData extends DataType<ItemStack[]> {
     }
 
     @Override
-    public ItemStack[] decode(PacketReader packetReader, byte[] value) {
+    public ItemStack[] decode(PacketReader packetReader) {
         List<ItemStack> items = new ArrayList<>();
         int size = packetReader.readVarInt();
         for (int i = 0; i < size; i++) {

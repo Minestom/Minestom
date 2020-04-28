@@ -288,13 +288,12 @@ public class Chunk implements Viewable {
                     dos.writeBoolean(isCustomBlock); // Determine the type of the ID
                     dos.writeShort(id);
 
-                    if (data instanceof SerializableData) {
-                        dos.writeBoolean(hasData);
-                        if (hasData) {
-                            byte[] d = ((SerializableData) data).getSerializedData();
-                            dos.writeInt(d.length);
-                            dos.write(d);
-                        }
+                    hasData = (data != null && (data instanceof SerializableData)) && hasData;
+                    dos.writeBoolean(hasData);
+                    if (hasData) {
+                        byte[] d = ((SerializableData) data).getSerializedData();
+                        dos.writeInt(d.length);
+                        dos.write(d);
                     }
                 }
             }

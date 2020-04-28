@@ -62,7 +62,7 @@ public interface DataContainer {
                 return;
             }
 
-            SerializableData data = DataReader.readData(array, true);
+            SerializableData data = DataReader.readCompressedData(array);
 
             setData(data);
             if (callback != null)

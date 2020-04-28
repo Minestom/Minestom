@@ -7,6 +7,6 @@ public abstract class DataType<T> {
 
     public abstract void encode(PacketWriter packetWriter, T value);
 
-    public abstract T decode(PacketReader packetReader, byte[] value);
+    public abstract T decode(PacketReader packetReader);
 
 }

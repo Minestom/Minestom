@@ -26,6 +26,10 @@ public class InstanceManager {
         return instance;
     }
 
+    public InstanceContainer createInstanceContainer(File file) {
+        return createInstanceContainer(Dimension.OVERWORLD, file);
+    }
+
     public InstanceContainer createInstanceContainer(Dimension dimension) {
         return createInstanceContainer(dimension, null);
     }

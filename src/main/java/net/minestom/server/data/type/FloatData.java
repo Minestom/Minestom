@@ -12,7 +12,7 @@ public class FloatData extends DataType<Float> {
     }
 
     @Override
-    public Float decode(PacketReader packetReader, byte[] value) {
+    public Float decode(PacketReader packetReader) {
         return packetReader.readFloat();
     }
 }

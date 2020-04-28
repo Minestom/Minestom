@@ -22,7 +22,7 @@ public class SerializableDataData extends DataType<SerializableData> {
     }
 
     @Override
-    public SerializableData decode(PacketReader packetReader, byte[] value) {
-        return DataReader.readData(value, false);
+    public SerializableData decode(PacketReader packetReader) {
+        return DataReader.readData(packetReader.getBuffer());
     }
 }

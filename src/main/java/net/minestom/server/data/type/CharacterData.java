@@ -12,7 +12,7 @@ public class CharacterData extends DataType<Character> {
     }
 
     @Override
-    public Character decode(PacketReader packetReader, byte[] value) {
+    public Character decode(PacketReader packetReader) {
         return packetReader.readChar();
     }
 }
