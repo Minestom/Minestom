@@ -47,20 +47,21 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void setBlock(int x, int y, int z, short blockId, Data data) {
-        setBlock(x, y, z, blockId, (short) 0, data);
+        setBlock(x, y, z, blockId, null, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        short blockId = BLOCK_MANAGER.getCustomBlock(customBlockId).getBlockId();
-        setBlock(x, y, z, blockId, customBlockId, data);
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        setBlock(x, y, z, (short) 0, customBlock, data);
     }
 
-    private synchronized void setBlock(int x, int y, int z, short blockId, short customBlockId, Data data) {
+    private synchronized void setBlock(int x, int y, int z, short blockId, CustomBlock customBlock, Data data) {
         Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            boolean isCustomBlock = customBlockId != 0;
+            boolean isCustomBlock = customBlock != null;
+            blockId = isCustomBlock ? customBlock.getBlockId() : blockId;
 
             int index = SerializerUtils.coordToChunkIndex(x, y, z);
 
@@ -74,8 +75,8 @@ public class InstanceContainer extends Instance {
 
             // Set the block
             if (isCustomBlock) {
-                data = BLOCK_MANAGER.getCustomBlock(customBlockId).createData(blockPosition, data);
-                chunk.UNSAFE_setCustomBlock(x, y, z, customBlockId, data);
+                data = customBlock.createData(blockPosition, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, customBlock, data);
             } else {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, data);
             }
