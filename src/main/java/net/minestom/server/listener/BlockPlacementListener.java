@@ -78,7 +78,7 @@ public class BlockPlacementListener {
             }
 
             if (!intersect) {
-                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent((short) 10, blockPosition, packet.hand);
+                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(material.getBlock().getBlockId(), (short)0, blockPosition, packet.hand);
                 playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                 // BlockPlacementRule check
@@ -91,7 +91,12 @@ public class BlockPlacementListener {
 
                 player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
                 if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
-                    instance.setBlock(blockPosition, material.getBlock());
+                    short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
+                    if(customBlockId != 0) {
+                        instance.setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getCustomBlockId());
+                    } else {
+                        instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());
+                    }
                     if (playerBlockPlaceEvent.doesConsumeBlock()) {
 
                         StackingRule stackingRule = usedItem.getStackingRule();

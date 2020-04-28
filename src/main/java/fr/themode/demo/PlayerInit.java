@@ -10,6 +10,7 @@ import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.*;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -106,6 +107,10 @@ public class PlayerInit {
             player.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
+
+                if(event.getBlockId() == Block.STONE.getBlockId()) {
+                    event.setCustomBlockId((short) 2); // custom stone block
+                }
 
                 /*for (Player p : player.getInstance().getPlayers()) {
                     if (p != player)
