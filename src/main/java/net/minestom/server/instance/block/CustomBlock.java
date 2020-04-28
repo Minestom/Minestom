@@ -63,7 +63,7 @@ public abstract class CustomBlock {
      * @param player the player who is trying to break the block
      * @return the time in ms to break it
      */
-    public abstract int getBreakDelay(Player player);
+    public abstract int getBreakDelay(Player player, BlockPosition position);
 
     public boolean hasUpdate() {
         UpdateOption updateOption = getUpdateOption();
@@ -88,7 +88,7 @@ public abstract class CustomBlock {
      * @param data          data given to 'setBlock', can be null
      * @return Data for this block. Can be null, 'data', or a new object
      */
-    public Data createData(BlockPosition blockPosition, Data data) {
+    public Data createData(Instance instance, BlockPosition blockPosition, Data data) {
         return data;
     }
 }

@@ -43,7 +43,7 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
-    public int getBreakDelay(Player player) {
+    public int getBreakDelay(Player player, BlockPosition position) {
         return 500;
     }
 

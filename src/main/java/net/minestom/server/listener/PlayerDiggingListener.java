@@ -37,7 +37,7 @@ public class PlayerDiggingListener {
                     if (instance != null) {
                         CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
-                            int breakTime = customBlock.getBreakDelay(player);
+                            int breakTime = customBlock.getBreakDelay(player, blockPosition);
                             if (breakTime >= 0) {
                                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
                                 player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
