@@ -108,7 +108,7 @@ public class PlayerInit {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
 
-                if(event.getBlockId() == Block.STONE.getBlockId()) {
+                if (event.getBlockId() == Block.STONE.getBlockId()) {
                     event.setCustomBlockId((short) 2); // custom stone block
                 }
 

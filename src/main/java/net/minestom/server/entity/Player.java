@@ -73,6 +73,7 @@ public class Player extends LivingEntity {
     private BlockPosition targetBlockPosition;
     private long targetBlockTime;
     private byte targetLastStage;
+    private int timeBreak;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
     private Team team;
@@ -141,7 +142,6 @@ public class Player extends LivingEntity {
 
         // Target block stage
         if (targetCustomBlock != null) {
-            int timeBreak = targetCustomBlock.getBreakDelay(this);
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
             byte stage = (byte) (since / (timeBreak / animationCount));
@@ -429,11 +429,12 @@ public class Player extends LivingEntity {
 
     /**
      * Plays a given effect at the given position for this player
-     * @param effect the effect to play
-     * @param x x position of the effect
-     * @param y y position of the effect
-     * @param z z position of the effect
-     * @param data data for the effect
+     *
+     * @param effect                the effect to play
+     * @param x                     x position of the effect
+     * @param y                     y position of the effect
+     * @param z                     z position of the effect
+     * @param data                  data for the effect
      * @param disableRelativeVolume disable volume scaling based on distance
      */
     public void playEffect(Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
@@ -959,10 +960,11 @@ public class Player extends LivingEntity {
         this.openInventory = openInventory;
     }
 
-    public void refreshTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition) {
+    public void refreshTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
         this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
+        this.timeBreak = breakTime;
     }
 
     public void resetTargetBlock() {

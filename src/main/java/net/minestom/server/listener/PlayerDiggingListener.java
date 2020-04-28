@@ -37,17 +37,23 @@ public class PlayerDiggingListener {
                     if (instance != null) {
                         CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
-                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
-                            player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
-                            if (!playerStartDiggingEvent.isCancelled()) {
-                                player.refreshTargetBlock(customBlock, blockPosition);
-                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                            int breakTime = customBlock.getBreakDelay(player);
+                            if (breakTime >= 0) {
+                                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
+                                player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                                if (!playerStartDiggingEvent.isCancelled()) {
+                                    player.refreshTargetBlock(customBlock, blockPosition, breakTime);
+                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                                } else {
+                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+                                }
+                                addEffect(player);
                             } else {
-                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+                                player.resetTargetBlock();
+                                removeEffect(player);
                             }
-                            addEffect(player);
                         } else {
                             player.resetTargetBlock();
                             removeEffect(player);
@@ -96,7 +102,7 @@ public class PlayerDiggingListener {
 
                 ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(updatedItem);
                 player.callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
-                
+
                 player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffhand, false);
                 player.sendPacketToViewers(player.getMetadataPacket());
                 break;

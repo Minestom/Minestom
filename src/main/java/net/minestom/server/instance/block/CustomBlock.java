@@ -45,8 +45,12 @@ public abstract class CustomBlock {
      */
     public abstract short getCustomBlockId();
 
-    /*
-      Time in ms
+    /**
+     * Called at digging start to check for custom breaking time
+     * Can be set to < 0 to be cancelled, in this case vanilla time will be used
+     *
+     * @param player the player who is trying to break the block
+     * @return the time in ms to break it
      */
     public abstract int getBreakDelay(Player player);
 
