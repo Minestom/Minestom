@@ -3,6 +3,7 @@ package net.minestom.server.inventory.type;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.potion.PotionType;
 
 public class BeaconInventory extends Inventory {
 
@@ -14,12 +15,12 @@ public class BeaconInventory extends Inventory {
         sendProperty(InventoryProperty.BEACON_POWER_LEVEL, powerLevel);
     }
 
-    public void setFirstPotionEffect(short firstPotionEffect) {
-        sendProperty(InventoryProperty.BEACON_FIRST_POTION, firstPotionEffect);
+    public void setFirstPotionEffect(PotionType firstPotionEffect) {
+        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.getId());
     }
 
-    public void setSecondPotionEffect(short secondPotionEffect) {
-        sendProperty(InventoryProperty.BEACON_SECOND_POTION, secondPotionEffect);
+    public void setSecondPotionEffect(PotionType secondPotionEffect) {
+        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.getId());
     }
 
 }

@@ -6,8 +6,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.stat.StatisticType;
 
@@ -35,11 +37,15 @@ public class RegistryMain {
         List<RegistrySound> sounds = parseSounds(SOUNDS_PATH);
         List<RegistryParticle> particles = parseParticles(PARTICLES_PATH);
         List<RegistryStat> stats = parseStats(STATS_PATH);
+        List<RegistryEnchantment> enchantments = parseEnchantments(STATS_PATH);
+        List<RegistryPotion> potions = parsePotions(STATS_PATH);
         //writeBlocksClass(blocks);
         //writeItemsClass(items);
         //writeEntitiesClass(entities);
         //writeSoundsClass(sounds);
-        writeStatsClass(stats);
+        //writeStatsClass(stats);
+        //writeEnchantmentsClass(enchantments);
+        writePotionsClass(potions);
     }
 
     public static void registerBlocks() {
@@ -117,6 +123,24 @@ public class RegistryMain {
         }
     }
 
+    public static void registerEnchantments() {
+        List<RegistryEnchantment> enchantments = parseEnchantments(STATS_PATH);
+
+        for (RegistryEnchantment registryEnchantment : enchantments) {
+            Enchantment enchantment = Enchantment.valueOf(registryEnchantment.name);
+            enchantment.setIdentifier(registryEnchantment.id);
+        }
+    }
+
+    public static void registerPotions() {
+        List<RegistryPotion> potions = parsePotions(STATS_PATH);
+
+        for (RegistryPotion registryPotion : potions) {
+            PotionType potionType = PotionType.valueOf(registryPotion.name);
+            potionType.setIdentifier(registryPotion.id);
+        }
+    }
+
     private static void writeBlocksClass(List<RegistryBlock> blocks) {
         for (RegistryBlock registryBlock : blocks) {
             String line = registryBlock.name + ",";
@@ -156,6 +180,20 @@ public class RegistryMain {
     private static void writeStatsClass(List<RegistryStat> stats) {
         for (RegistryStat registryStat : stats) {
             String line = registryStat.name + ",";
+            System.out.println(line);
+        }
+    }
+
+    private static void writeEnchantmentsClass(List<RegistryEnchantment> enchantments) {
+        for (RegistryEnchantment registryEnchantment : enchantments) {
+            String line = registryEnchantment.name + ",";
+            System.out.println(line);
+        }
+    }
+
+    private static void writePotionsClass(List<RegistryPotion> potions) {
+        for (RegistryPotion registryPotion : potions) {
+            String line = registryPotion.name + ",";
             System.out.println(line);
         }
     }
@@ -231,20 +269,8 @@ public class RegistryMain {
     }
 
     private static List<RegistryItem> parseItems(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:item");
         List<RegistryItem> registryItems = new ArrayList<>();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-
-        JsonObject itemsObject = obj.getAsJsonObject("minecraft:item");
-        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
 
         Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
@@ -261,20 +287,8 @@ public class RegistryMain {
     }
 
     private static List<RegistryEntityType> parseEntities(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:entity_type");
         List<RegistryEntityType> registryEntityTypes = new ArrayList<>();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-
-        JsonObject itemsObject = obj.getAsJsonObject("minecraft:entity_type");
-        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
 
         Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
@@ -291,20 +305,8 @@ public class RegistryMain {
     }
 
     private static List<RegistrySound> parseSounds(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:sound_event");
         List<RegistrySound> registrySounds = new ArrayList<>();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-
-        JsonObject itemsObject = obj.getAsJsonObject("minecraft:sound_event");
-        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
 
         Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
@@ -321,20 +323,8 @@ public class RegistryMain {
     }
 
     private static List<RegistryParticle> parseParticles(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:particle_type");
         List<RegistryParticle> registryParticles = new ArrayList<>();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-
-        JsonObject itemsObject = obj.getAsJsonObject("minecraft:particle_type");
-        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
 
         Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
@@ -351,20 +341,8 @@ public class RegistryMain {
     }
 
     private static List<RegistryStat> parseStats(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:custom_stat");
         List<RegistryStat> registryStats = new ArrayList<>();
-
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Gson gson = new Gson();
-        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-
-        JsonObject itemsObject = obj.getAsJsonObject("minecraft:custom_stat");
-        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
 
         Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
         for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
@@ -378,6 +356,61 @@ public class RegistryMain {
         }
 
         return registryStats;
+    }
+
+    private static List<RegistryEnchantment> parseEnchantments(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:enchantment");
+        List<RegistryEnchantment> registryEnchantments = new ArrayList<>();
+
+        Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
+            RegistryEnchantment registryEnchantment = new RegistryEnchantment();
+            registryEnchantments.add(registryEnchantment);
+            String item = entryEntry.getKey();
+            String itemName = item.toUpperCase().replace("MINECRAFT:", "").replace(".", "_");
+            registryEnchantment.name = itemName;
+            short id = entryEntry.getValue().getAsJsonObject().get("protocol_id").getAsShort();
+            registryEnchantment.id = id;
+        }
+
+        return registryEnchantments;
+    }
+
+    private static List<RegistryPotion> parsePotions(String path) {
+        JsonObject entriesObject = parse(path, "minecraft:potion");
+        List<RegistryPotion> registryPotions = new ArrayList<>();
+
+        Set<Map.Entry<String, JsonElement>> entriesEntries = entriesObject.entrySet();//will return members of your object
+        for (Map.Entry<String, JsonElement> entryEntry : entriesEntries) {
+            RegistryPotion registryPotion = new RegistryPotion();
+            registryPotions.add(registryPotion);
+            String item = entryEntry.getKey();
+            String itemName = item.toUpperCase().replace("MINECRAFT:", "").replace(".", "_");
+            registryPotion.name = itemName;
+            short id = entryEntry.getValue().getAsJsonObject().get("protocol_id").getAsShort();
+            registryPotion.id = id;
+        }
+
+        return registryPotions;
+    }
+
+    private static JsonObject parse(String path, String key) {
+        List<RegistryStat> registryStats = new ArrayList<>();
+
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Gson gson = new Gson();
+        JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
+
+        JsonObject itemsObject = obj.getAsJsonObject(key);
+        JsonObject entriesObject = itemsObject.getAsJsonObject("entries");
+
+        return entriesObject;
     }
 
 }

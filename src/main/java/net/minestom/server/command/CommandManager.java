@@ -4,6 +4,7 @@ import fr.themode.command.Command;
 import fr.themode.command.CommandDispatcher;
 import fr.themode.command.condition.CommandCondition;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 
@@ -32,6 +33,14 @@ public class CommandManager {
             throw new NullPointerException("Source cannot be null");
         if (command == null)
             throw new NullPointerException("Command string cannot be null");
+
+        PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(source, command);
+        source.callEvent(PlayerCommandEvent.class, playerCommandEvent);
+
+        if (playerCommandEvent.isCancelled())
+            return false;
+
+        command = playerCommandEvent.getCommand();
 
         try {
             this.dispatcher.execute(source, command);
