@@ -155,16 +155,17 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 75, 0));
 
                 ItemStack item = new ItemStack(Material.STONE, (byte) 43);
                 item.setDisplayName("Item name");
                 item.getLore().add("a lore line");
+                //item.setEnchantment(Enchantment.SHARPNESS, 2);
                 player.getInventory().addItemStack(item);
 
                 Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-                inventory.setInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     player.sendMessage("click type: " + clickType);
                     inventoryConditionResult.setCancel(false);
                 });

@@ -13,8 +13,10 @@ import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
@@ -33,7 +35,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
-    private InventoryCondition inventoryCondition;
+    private List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
     private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     public Inventory(InventoryType inventoryType, String title) {
@@ -95,13 +97,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public InventoryCondition getInventoryCondition() {
-        return inventoryCondition;
+    public List<InventoryCondition> getInventoryConditions() {
+        return inventoryConditions;
     }
 
     @Override
-    public void setInventoryCondition(InventoryCondition inventoryCondition) {
-        this.inventoryCondition = inventoryCondition;
+    public void addInventoryCondition(InventoryCondition inventoryCondition) {
+        this.inventoryConditions.add(inventoryCondition);
     }
 
     public void update() {
@@ -174,7 +176,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryCondition(), player, slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryConditions(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -195,7 +197,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryCondition(), player, slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryConditions(), player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -220,7 +222,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         InventoryClickResult clickResult;
 
         if (isInWindow) {
-            clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
+            clickResult = clickProcessor.shiftClick(getInventoryConditions(), player, slot, clicked, cursor,
                     // Player inventory loop
                     new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
                             i -> playerInventory.convertToPacketSlot(i),
@@ -233,7 +235,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                                 }
                             }));
         } else {
-            clickResult = clickProcessor.shiftClick(getInventoryCondition(), player, slot, clicked, cursor,
+            clickResult = clickProcessor.shiftClick(getInventoryConditions(), player, slot, clicked, cursor,
                     // Window loop
                     new InventoryClickLoopHandler(0, itemStacks.length, 1,
                             i -> i,
@@ -265,7 +267,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
         ItemStack heldItem = playerInventory.getItemStack(key);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryCondition(), player, slot, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, clicked, heldItem);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -291,7 +293,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 null : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset));
         ItemStack cursor = getCursorItem(player);
 
-        InventoryClickResult clickResult = clickProcessor.drop(getInventoryCondition(), player,
+        InventoryClickResult clickResult = clickProcessor.drop(getInventoryConditions(), player,
                 mode, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh())
@@ -319,7 +321,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (slot != -999)
             clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.dragging(getInventoryCondition(), player,
+        InventoryClickResult clickResult = clickProcessor.dragging(getInventoryConditions(), player,
                 slot, button,
                 clicked, cursor,
 
@@ -349,7 +351,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack cursor = getCursorItem(player);
 
 
-        InventoryClickResult clickResult = clickProcessor.doubleClick(getInventoryCondition(), player, slot, cursor,
+        InventoryClickResult clickResult = clickProcessor.doubleClick(getInventoryConditions(), player, slot, cursor,
                 // Start by looping through the opened inventory
                 new InventoryClickLoopHandler(0, itemStacks.length, 1,
                         i -> i,

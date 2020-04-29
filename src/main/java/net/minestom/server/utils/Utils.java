@@ -138,10 +138,8 @@ public class Utils {
 
             // FIXME: Enchantment
             {
-                System.out.println("ENCODAGE");
                 Map<Enchantment, Integer> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
-                    System.out.println("write enchant");
                     packet.writeByte((byte) 0x09); // list
                     packet.writeShortSizedString("StoredEnchantments");
 

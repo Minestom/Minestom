@@ -3,6 +3,8 @@ package net.minestom.server.inventory;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 
+import java.util.List;
+
 public interface InventoryModifier {
 
     void setItemStack(int slot, ItemStack itemStack);
@@ -13,7 +15,7 @@ public interface InventoryModifier {
 
     ItemStack[] getItemStacks();
 
-    InventoryCondition getInventoryCondition();
+    List<InventoryCondition> getInventoryConditions();
 
-    void setInventoryCondition(InventoryCondition inventoryCondition);
+    void addInventoryCondition(InventoryCondition inventoryCondition);
 }

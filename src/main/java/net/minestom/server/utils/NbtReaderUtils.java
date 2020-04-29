@@ -91,6 +91,7 @@ public class NbtReaderUtils {
                     }
 
                     reader.readByte();
+                    readItemStackNBT(reader, item);
                 }
 
                 break;
