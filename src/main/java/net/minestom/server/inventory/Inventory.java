@@ -9,6 +9,7 @@ import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -147,6 +148,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         windowItemsPacket.count = (short) itemStacks.length;
         windowItemsPacket.items = itemStacks;
         return windowItemsPacket;
+    }
+
+    protected void sendProperty(InventoryProperty property, short value) {
+        WindowPropertyPacket windowPropertyPacket = new WindowPropertyPacket();
+        windowPropertyPacket.windowId = getWindowId();
+        windowPropertyPacket.property = property.getProperty();
+        windowPropertyPacket.value = value;
+        sendPacketToViewers(windowPropertyPacket);
     }
 
     private void setCursorPlayerItem(Player player, ItemStack itemStack) {

@@ -127,6 +127,7 @@ public class PlayerInit {
                     return;
 
                 short blockId = player.getInstance().getBlockId(event.getBlockPosition());
+                player.sendMessage("id: " + blockId);
                 player.sendMessage("block alternative id: " + Block.getBlockAlternative(blockId).getId());
             });
 
@@ -154,10 +155,10 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 75, 0));
 
-                ItemStack item = new ItemStack((short) 1, (byte) 43);
+                ItemStack item = new ItemStack(Material.STONE, (byte) 43);
                 item.setDisplayName("Item name");
                 item.getLore().add("a lore line");
                 player.getInventory().addItemStack(item);

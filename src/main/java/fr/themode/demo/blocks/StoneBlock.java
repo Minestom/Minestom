@@ -16,7 +16,6 @@ public class StoneBlock extends CustomBlock {
     @Override
     public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
         System.out.println("PLACED");
-        instance.refreshBlockId(blockPosition, Block.LAVA);
     }
 
     @Override
