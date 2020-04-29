@@ -4,11 +4,12 @@ public class PlayerInventoryUtils {
 
     public static final int OFFSET = 9;
 
-    public static final int CRAFT_SLOT_1 = 36;
-    public static final int CRAFT_SLOT_2 = 37;
-    public static final int CRAFT_SLOT_3 = 38;
-    public static final int CRAFT_SLOT_4 = 39;
-    public static final int CRAFT_RESULT = 40;
+    public static final int CRAFT_RESULT = 36;
+    public static final int CRAFT_SLOT_1 = 37;
+    public static final int CRAFT_SLOT_2 = 38;
+    public static final int CRAFT_SLOT_3 = 39;
+    public static final int CRAFT_SLOT_4 = 40;
+
     public static final int HELMET_SLOT = 41;
     public static final int CHESTPLATE_SLOT = 42;
     public static final int LEGGINGS_SLOT = 43;
@@ -17,14 +18,16 @@ public class PlayerInventoryUtils {
 
     public static int convertSlot(int slot, int offset) {
         switch (slot) {
+            case 0:
+                return CRAFT_RESULT;
             case 1:
-                return CRAFT_SLOT_1 + 1;
+                return CRAFT_SLOT_1;
             case 2:
-                return CRAFT_SLOT_2 + 1;
+                return CRAFT_SLOT_2;
             case 3:
-                return CRAFT_SLOT_3 + 1;
+                return CRAFT_SLOT_3;
             case 4:
-                return CRAFT_SLOT_4 + 1;
+                return CRAFT_SLOT_4;
             case 5:
                 return HELMET_SLOT;
             case 6:

@@ -242,7 +242,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             slot = slot + 36;
         } else if (slot > 8 && slot < 36) { // Inventory 9-35
             slot = slot;
-        } else if (slot >= CRAFT_SLOT_1 && slot <= CRAFT_RESULT) { // Crafting 36-40
+        } else if (slot >= CRAFT_RESULT && slot <= CRAFT_SLOT_4) { // Crafting 36-40
             slot = slot - 36;
         } else if (slot >= HELMET_SLOT && slot <= BOOTS_SLOT) { // Armor 41-44
             slot = slot - 36;
