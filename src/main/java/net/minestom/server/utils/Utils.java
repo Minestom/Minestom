@@ -3,12 +3,14 @@ package net.minestom.server.utils;
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.buffer.BufferWrapper;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Utils {
 
@@ -133,6 +135,38 @@ public class Utils {
                 packet.writeByte((byte) 0); // End display compound
             }
             // End display
+
+            // FIXME: Enchantment
+            {
+                System.out.println("ENCODAGE");
+                Map<Enchantment, Integer> enchantmentMap = itemStack.getEnchantmentMap();
+                if (!enchantmentMap.isEmpty()) {
+                    System.out.println("write enchant");
+                    packet.writeByte((byte) 0x09); // list
+                    packet.writeShortSizedString("StoredEnchantments");
+
+                    packet.writeByte((byte) 0x0A); // Compound
+                    packet.writeInt(enchantmentMap.size()); // Map size
+
+                    for (Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
+                        Enchantment enchantment = entry.getKey();
+                        int level = entry.getValue();
+
+                        packet.writeByte((byte) 0x02);
+                        packet.writeShortSizedString("lvl");
+                        packet.writeShort((short) level);
+
+                        packet.writeByte((byte) 0x08);
+                        packet.writeShortSizedString("id");
+                        packet.writeShort((short) enchantment.getId());
+
+                    }
+
+                    //packet.writeByte((byte) 0); // End enchantment compound
+
+                }
+            }
+            // End enchantment
 
             packet.writeByte((byte) 0); // End nbt
         }

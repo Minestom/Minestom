@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 import club.thectm.minecraft.text.LegacyText;
 import club.thectm.minecraft.text.TextObject;
 import com.google.gson.JsonParser;
+import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
 
@@ -70,22 +71,26 @@ public class NbtReaderUtils {
                 String listName = reader.readShortSizedString();
 
                 if (listName.equals("StoredEnchantments")) {
-                    boolean end = false;
-                    while (!end) {
-                        reader.readByte(); // Should be a compound (0x0A)
-                        int size = reader.readInteger();
+                    reader.readByte(); // Should be a compound (0x0A)
+                    int size = reader.readInteger();
 
+                    for (int ench = 0; ench < size; ench++) {
                         byte test = reader.readByte();
                         String lvlName = reader.readShortSizedString();
                         short lvl = reader.readShort();
+
                         byte test2 = reader.readByte();
                         String idName = reader.readShortSizedString();
-                        short id = reader.readShort();
+                        int id = reader.readVarInt();
+                        System.out.println("byte: " + test + " : " + test2);
+                        System.out.println("string: " + lvlName + " : " + idName);
                         System.out.println("size: " + lvl + " : " + id);
 
-                        end = true;
+                        System.out.println("add= " + Enchantment.fromId(id) + " : " + lvl);
+                        item.setEnchantment(Enchantment.fromId(id), lvl);
                     }
-                    // TODO
+
+                    reader.readByte();
                 }
 
                 break;

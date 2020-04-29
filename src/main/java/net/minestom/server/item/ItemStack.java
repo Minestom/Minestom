@@ -5,6 +5,9 @@ import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.rule.VanillaStackingRule;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemStack implements DataContainer {
 
@@ -28,6 +31,8 @@ public class ItemStack implements DataContainer {
     private boolean unbreakable;
     private ArrayList<String> lore;
 
+    private Map<Enchantment, Integer> enchantmentMap;
+
     private StackingRule stackingRule;
     private Data data;
 
@@ -36,6 +41,8 @@ public class ItemStack implements DataContainer {
         this.amount = amount;
         this.damage = damage;
         this.lore = new ArrayList<>();
+
+        this.enchantmentMap = new HashMap<>();
 
         this.stackingRule = defaultStackingRule;
     }
@@ -63,6 +70,7 @@ public class ItemStack implements DataContainer {
                 itemStack.getDisplayName() == displayName &&
                 itemStack.isUnbreakable() == unbreakable &&
                 itemStack.getDamage() == damage &&
+                itemStack.enchantmentMap.equals(enchantmentMap) &&
                 itemStack.getStackingRule() == stackingRule &&
                 itemStack.getData() == data;
     }
@@ -115,6 +123,27 @@ public class ItemStack implements DataContainer {
         return lore != null && !lore.isEmpty();
     }
 
+    public Map<Enchantment, Integer> getEnchantmentMap() {
+        return Collections.unmodifiableMap(enchantmentMap);
+    }
+
+    public void setEnchantment(Enchantment enchantment, int level) {
+        if (level < 1) {
+            removeEnchantment(enchantment);
+            return;
+        }
+
+        this.enchantmentMap.put(enchantment, level);
+    }
+
+    public void removeEnchantment(Enchantment enchantment) {
+        this.enchantmentMap.remove(enchantment);
+    }
+
+    public int getEnchantmentLevel(Enchantment enchantment) {
+        return this.enchantmentMap.getOrDefault(enchantment, 0);
+    }
+
     public boolean isUnbreakable() {
         return unbreakable;
     }
@@ -133,6 +162,9 @@ public class ItemStack implements DataContainer {
         itemStack.setUnbreakable(unbreakable);
         itemStack.setLore(getLore());
         itemStack.setStackingRule(getStackingRule());
+
+        itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
+
         Data data = getData();
         if (data != null)
             itemStack.setData(data.clone());

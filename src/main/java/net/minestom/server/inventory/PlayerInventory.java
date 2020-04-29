@@ -214,8 +214,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             if (itemStack != null) {
                 this.items[slot] = itemStack;
             }
-            //System.out.println("INSERT: " + slot);
-            //sendSlotRefresh((short) slot, itemStack);
 
             // Refresh inventory items
             update();

@@ -14,8 +14,9 @@ public class CreativeInventoryActionListener {
             return;
         ItemStack item = packet.item;
         short slot = packet.slot;
+        slot = (short) PlayerInventoryUtils.convertSlot(slot, PlayerInventoryUtils.OFFSET);
         PlayerInventory inventory = player.getInventory();
-        inventory.setItemStack(PlayerInventoryUtils.convertSlot(slot, PlayerInventoryUtils.OFFSET), item);
+        inventory.setItemStack(slot, item);
 
     }
 
