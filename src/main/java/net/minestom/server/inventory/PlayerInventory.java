@@ -55,7 +55,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public void addInventoryCondition(InventoryCondition inventoryCondition) {
-        this.inventoryConditions.add(inventoryCondition);
+        InventoryCondition condition = (p, slot, clickType, inventoryConditionResult) -> {
+            slot = convertSlot(slot, OFFSET);
+            inventoryCondition.accept(p, slot, clickType, inventoryConditionResult);
+        };
+
+        this.inventoryConditions.add(condition);
     }
 
     @Override
@@ -360,7 +365,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack heldItem = getItemStack(key);
         ItemStack clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, key, clicked, heldItem);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);

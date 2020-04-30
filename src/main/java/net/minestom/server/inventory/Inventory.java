@@ -267,7 +267,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
         ItemStack heldItem = playerInventory.getItemStack(key);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, key, clicked, heldItem);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());

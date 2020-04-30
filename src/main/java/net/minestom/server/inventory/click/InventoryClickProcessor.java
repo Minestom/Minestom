@@ -116,9 +116,14 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    public InventoryClickResult changeHeld(List<InventoryCondition> inventoryConditions, Player player, int slot, ItemStack clicked, ItemStack cursor) {
+    public InventoryClickResult changeHeld(List<InventoryCondition> inventoryConditions, Player player, int slot, int key, ItemStack clicked, ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(inventoryConditions, player, slot, ClickType.CHANGE_HELD, clicked, cursor);
 
+        if (clickResult.isCancel()) {
+            return clickResult;
+        }
+
+        clickResult = startCondition(clickResult, inventoryConditions, player, key, ClickType.CHANGE_HELD, clicked, cursor);
         if (clickResult.isCancel()) {
             return clickResult;
         }
