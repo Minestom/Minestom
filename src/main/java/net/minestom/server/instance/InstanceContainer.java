@@ -154,6 +154,18 @@ public class InstanceContainer extends Instance {
                             refreshBlockId(neighborX, neighborY, neighborZ, newNeighborId);
                         }
                     }
+
+                    // Update neighbors
+                    CustomBlock customBlock = getCustomBlock(neighborX, neighborY, neighborZ);
+                    if(customBlock != null) {
+                        boolean directNeighbor = false; // only if directly connected to neighbor (no diagonals)
+                        if(offsetX != 0 ^ offsetZ != 0) {
+                            directNeighbor = offsetY == 0;
+                        } else if(offsetX == 0 && offsetZ == 0) {
+                            directNeighbor = true;
+                        }
+                        customBlock.updateFromNeighbor(this, new BlockPosition(neighborX, neighborY, neighborZ), blockPosition, directNeighbor);
+                    }
                 }
             }
         }

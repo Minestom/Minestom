@@ -15,12 +15,19 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
-        System.out.println("PLACED");
+        System.out.println("PLACED at "+blockPosition);
     }
 
     @Override
     public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
 
+    }
+
+    @Override
+    public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
+        if(directNeighbor) {
+            System.out.println("Block at "+thisPosition+" has been updated by neighbor at "+neighborPosition);
+        }
     }
 
     @Override

@@ -91,4 +91,17 @@ public abstract class CustomBlock {
     public Data createData(Instance instance, BlockPosition blockPosition, Data data) {
         return data;
     }
+
+    /**
+     * Update this block from a neighbor. By default calls 'update' if directNeighbor is true
+     * @param instance current instance
+     * @param thisPosition this block's position
+     * @param neighborPosition the neighboring block which triggered the update
+     * @param directNeighbor is the neighbor directly connected to this block? (No diagonals)
+     */
+    public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
+        if(directNeighbor) {
+            update(instance, thisPosition, instance.getBlockData(thisPosition));
+        }
+    }
 }

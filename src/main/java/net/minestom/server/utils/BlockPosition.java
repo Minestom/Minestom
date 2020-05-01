@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+// TODO: pool block positions?
 public class BlockPosition {
 
     private int x, y, z;
