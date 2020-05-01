@@ -274,6 +274,8 @@ public abstract class Instance implements BlockModifier, DataContainer {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
 
+        entity.setInstance(this);
+
         long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
         boolean isPlayer = entity instanceof Player;
 
