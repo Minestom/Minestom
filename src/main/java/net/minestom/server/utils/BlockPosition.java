@@ -14,9 +14,9 @@ public class BlockPosition {
     public BlockPosition(float x, float y, float z) {
         final int castedY = (int) y;
 
-        this.x = (int) (x < 0 ? x - 1 : x);
+        this.x = (int) Math.floor(x);
         this.y = (y == castedY) ? castedY : castedY + 1;
-        this.z = (int) (z < 0 ? z - 1 : z);
+        this.z = (int) Math.floor(z);
     }
 
     public BlockPosition add(int x, int y, int z) {

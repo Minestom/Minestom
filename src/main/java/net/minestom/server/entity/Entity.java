@@ -582,11 +582,11 @@ public abstract class Entity implements Viewable, DataContainer {
 
     public boolean sameChunk(Position position) {
         Position pos = getPosition();
-        int chunkX1 = ChunkUtils.getChunkCoordinate((int) pos.getX());
-        int chunkZ1 = ChunkUtils.getChunkCoordinate((int) pos.getZ());
+        int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
+        int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getZ()));
 
-        int chunkX2 = ChunkUtils.getChunkCoordinate((int) position.getX());
-        int chunkZ2 = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
+        int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
 
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }

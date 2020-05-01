@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.PacketWriterUtils;
@@ -118,6 +119,7 @@ public class InstanceContainer extends Instance {
         if (previousBlock != null) {
             Data previousData = chunk.getData(index);
             previousBlock.onDestroy(this, blockPosition, previousData);
+            chunk.UNSAFE_setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), Block.AIR.getBlockId(), (short) 0, null);
         }
     }
 
