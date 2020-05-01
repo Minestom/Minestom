@@ -410,7 +410,7 @@ public class InstanceContainer extends Instance {
                 if(currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
                     return;
                 }
-                currentBlock.update(instance, position, getBlockData(position));
+                currentBlock.scheduledUpdate(instance, position, getBlockData(position));
             }
         }, new UpdateOption(time, unit));
     }

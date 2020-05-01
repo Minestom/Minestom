@@ -104,4 +104,14 @@ public abstract class CustomBlock {
             update(instance, thisPosition, instance.getBlockData(thisPosition));
         }
     }
+
+    /**
+     * Called when a scheduled update on this block happens. By default, calls 'update'
+     * @param instance
+     * @param position
+     * @param blockData
+     */
+    public void scheduledUpdate(Instance instance, BlockPosition position, Data blockData) {
+        update(instance, position, blockData);
+    }
 }
