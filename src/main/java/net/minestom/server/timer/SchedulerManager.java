@@ -23,6 +23,7 @@ public class SchedulerManager {
         runnable.setId(id);
 
         Task task = new Task(runnable, updateOption, maxCallCount);
+        task.refreshLastUpdateTime(System.currentTimeMillis());
         this.tasks.add(task);
 
         return id;
