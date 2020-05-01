@@ -84,6 +84,17 @@ public class Chunk implements Viewable {
         setBlock(x, y, z, visualBlockId, customBlock.getCustomBlockId(), data, updateConsumer);
     }
 
+    public void UNSAFE_removeCustomBlock(int x, int y, int z) {
+        this.customBlocksId[getBlockIndex(x, y, z)] = 0; // Set to none
+        int index = SerializerUtils.coordToChunkIndex(x, y, z);
+        this.blocksData.remove(index);
+
+        this.updatableBlocks.remove(index);
+        this.updatableBlocksLastUpdate.remove(index);
+
+        this.blockEntities.remove(index);
+    }
+
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
         int index = SerializerUtils.coordToChunkIndex(x, y, z);
         if (blockId != 0

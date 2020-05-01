@@ -119,7 +119,7 @@ public class InstanceContainer extends Instance {
         if (previousBlock != null) {
             Data previousData = chunk.getData(index);
             previousBlock.onDestroy(this, blockPosition, previousData);
-            chunk.UNSAFE_setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), Block.AIR.getBlockId(), (short) 0, null);
+            chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
         }
     }
 
