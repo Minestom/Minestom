@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import io.netty.buffer.ByteBuf;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerBlockBreakEvent;
@@ -14,10 +15,13 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.SerializerUtils;
+import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
 import java.io.File;
@@ -376,4 +380,24 @@ public class InstanceContainer extends Instance {
         chunk.sendPacketToViewers(blockChangePacket);
     }
 
+    @Override
+    public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
+        Instance instance = this;
+        CustomBlock toUpdate = getCustomBlock(position);
+        if(toUpdate == null) {
+            return;
+        }
+        MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
+            @Override
+            public void run() {
+                CustomBlock currentBlock = instance.getCustomBlock(position);
+                if(currentBlock == null)
+                    return;
+                if(currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
+                    return;
+                }
+                currentBlock.update(instance, position, getBlockData(position));
+            }
+        }, new UpdateOption(time, unit));
+    }
 }

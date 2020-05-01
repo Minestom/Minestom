@@ -6,6 +6,7 @@ import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.io.File;
 import java.util.Collection;
@@ -152,6 +153,11 @@ public class SharedInstance extends Instance {
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
         instanceContainer.setSeparateBlocks(x, y, z, blockId, customBlockId, data);
+    }
+
+    @Override
+    public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
+        instanceContainer.scheduleUpdate(time, unit, position);
     }
 
     public InstanceContainer getInstanceContainer() {

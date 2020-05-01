@@ -16,6 +16,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.Dimension;
 
 import java.io.File;
@@ -352,5 +353,15 @@ public abstract class Instance implements BlockModifier, DataContainer {
         Set<Entity> entities = chunkEntities.get(index);
         return entities != null ? entities : new CopyOnWriteArraySet<>();
     }
+
+    /**
+     * Schedule a block update at a given position.
+     * Does nothing if no custom block is present at 'position'.
+     * Cancelled if the block changes between this call and the actual update
+     * @param time in how long this update must be performed?
+     * @param unit in what unit is the time expressed
+     * @param position the location of the block to update
+     */
+    public abstract void scheduleUpdate(int time, TimeUnit unit, BlockPosition position);
 
 }
