@@ -23,12 +23,12 @@ import java.util.Set;
 
 public class RegistryMain {
 
-    public static final String BLOCKS_PATH = "registry/blocks.json";
-    public static final String ITEMS_PATH = "registry/registries.json";
-    public static final String ENTITIES_PATH = "registry/registries.json";
-    public static final String SOUNDS_PATH = "registry/registries.json";
-    public static final String PARTICLES_PATH = "registry/registries.json";
-    public static final String STATS_PATH = "registry/registries.json";
+    public static final String BLOCKS_PATH = "minecraft_data/reports/blocks.json";
+    public static final String ITEMS_PATH = "minecraft_data/reports/registries.json";
+    public static final String ENTITIES_PATH = "minecraft_data/reports/registries.json";
+    public static final String SOUNDS_PATH = "minecraft_data/reports/registries.json";
+    public static final String PARTICLES_PATH = "minecraft_data/reports/registries.json";
+    public static final String STATS_PATH = "minecraft_data/reports/registries.json";
 
     public static void main(String[] args) {
         List<RegistryBlock> blocks = parseBlocks(BLOCKS_PATH);
