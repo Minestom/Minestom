@@ -68,6 +68,8 @@ public class ChunkBatch implements InstanceBatch {
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
             singleThreadFlush(hasPopulator ? null : callback);
 
+            clearData(); // So the populators won't place those blocks again
+
             if (populators != null && !populators.isEmpty()) {
                 Iterator<ChunkPopulator> populatorIterator = populators.iterator();
                 while (populatorIterator.hasNext()) {
@@ -76,6 +78,7 @@ public class ChunkBatch implements InstanceBatch {
                 }
                 singleThreadFlush(callback);
             }
+            clearData(); // Clear populators blocks
         });
     }
 
