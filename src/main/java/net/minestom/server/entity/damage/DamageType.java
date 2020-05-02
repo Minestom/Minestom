@@ -10,8 +10,8 @@ import net.minestom.server.entity.Player;
  */
 public class DamageType {
 
-    public static final DamageType VOID = new DamageType("void");
-    public static final DamageType GRAVITY = new DamageType("gravity");
+    public static final DamageType VOID = new DamageType("attack.outOfWorld");
+    public static final DamageType GRAVITY = new DamageType("attack.fall");
     private final String identifier;
 
     public DamageType(String identifier) {
@@ -27,14 +27,14 @@ public class DamageType {
     }
 
     public TextObject buildChatMessage(Player killed) {
-        return TextBuilder.of(killed.getUsername() + " was killed by damage of type " + identifier).build();
+        return TextBuilder.ofTranslation("death."+identifier, TextBuilder.of(killed.getUsername()).build()).build();
     }
 
     public static DamageType fromPlayer(Player player) {
         return new EntityDamage(player);
     }
 
-    public TextObject buildDeathMessage() {
-        return TextBuilder.of("Killed by damage of type " + identifier).build();
+    public TextObject buildDeathScreenMessage(Player killed) {
+        return buildChatMessage(killed);
     }
 }

@@ -251,7 +251,7 @@ public class Player extends LivingEntity {
             // send death message to player
             TextObject deathMessage;
             if (lastDamageSource != null) {
-                deathMessage = lastDamageSource.buildDeathMessage();
+                deathMessage = lastDamageSource.buildDeathScreenMessage(this);
             } else { // may happen if killed by the server without applying damage
                 deathMessage = TextBuilder.of("Killed by poor programming.").build();
             }
