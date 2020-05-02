@@ -179,7 +179,7 @@ public class Chunk implements Viewable {
     }
 
     protected CustomBlock getCustomBlock(int index) {
-        byte[] pos = SerializerUtils.indexToChunkPosition(index);
+        int[] pos = SerializerUtils.indexToChunkPosition(index);
         return getCustomBlock(pos[0], pos[1], pos[2]);
     }
 
@@ -237,10 +237,10 @@ public class Chunk implements Viewable {
 
                 this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
-                byte[] blockPos = SerializerUtils.indexToChunkPosition(index);
-                byte x = blockPos[0];
-                byte y = blockPos[1];
-                byte z = blockPos[2];
+                int[] blockPos = SerializerUtils.indexToChunkPosition(index);
+                int x = blockPos[0];
+                int y = blockPos[1];
+                int z = blockPos[2];
 
                 BlockPosition blockPosition = new BlockPosition(x + 16 * chunkX, y, z + 16 * chunkZ);
                 Data data = getData(index);

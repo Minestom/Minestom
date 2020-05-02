@@ -29,18 +29,16 @@ public class SerializerUtils {
         return index & 0xffff;
     }
 
-    public static byte[] indexToChunkPosition(int index) {
-        byte z = (byte) (index >> 12 & 0xF);
-        byte y = (byte) (index >> 4 & 0xFF);
-        byte x = (byte) (index >> 0 & 0xF);
-        return new byte[]{x, y, z};
+    public static int[] indexToChunkPosition(int index) {
+        int z = (byte) (index >> 12 & 0xF);
+        int y = (index >>> 4 & 0xFF);
+        int x = (byte) (index >> 0 & 0xF);
+        return new int[]{x, y, z};
     }
 
     public static BlockPosition indexToChunkBlockPosition(int index) {
-        byte z = (byte) (index >> 12 & 0xF);
-        byte y = (byte) (index >> 4 & 0xFF);
-        byte x = (byte) (index >> 0 & 0xF);
-        return new BlockPosition(x, y, z);
+        int[] pos = indexToChunkPosition(index);
+        return new BlockPosition(pos[0], pos[1], pos[2]);
     }
 
     public static long positionToLong(int x, int y, int z) {
