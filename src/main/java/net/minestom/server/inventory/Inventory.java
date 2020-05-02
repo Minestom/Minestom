@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -176,7 +177,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(getInventoryConditions(), player, slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.leftClick(this, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -188,6 +189,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
             setCursorPlayerItem(player, clickResult.getCursor());
         }
+
+        if (!clickResult.isCancel())
+            callClickEvent(player, this, slot, ClickType.LEFT_CLICK, clicked, cursor);
     }
 
     @Override
@@ -197,7 +201,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(getInventoryConditions(), player, slot, clicked, cursor);
+        InventoryClickResult clickResult = clickProcessor.rightClick(this, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -209,6 +213,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
             setCursorPlayerItem(player, clickResult.getCursor());
         }
+
+        if (!clickResult.isCancel())
+            callClickEvent(player, this, slot, ClickType.RIGHT_CLICK, clicked, cursor);
     }
 
     @Override
@@ -222,7 +229,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         InventoryClickResult clickResult;
 
         if (isInWindow) {
-            clickResult = clickProcessor.shiftClick(getInventoryConditions(), player, slot, clicked, cursor,
+            clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
                     // Player inventory loop
                     new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
                             i -> playerInventory.convertToPacketSlot(i),
@@ -235,7 +242,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                                 }
                             }));
         } else {
-            clickResult = clickProcessor.shiftClick(getInventoryConditions(), player, slot, clicked, cursor,
+            clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
                     // Window loop
                     new InventoryClickLoopHandler(0, itemStacks.length, 1,
                             i -> i,
@@ -267,7 +274,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
         ItemStack heldItem = playerInventory.getItemStack(key);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(getInventoryConditions(), player, slot, key, clicked, heldItem);
+        InventoryClickResult clickResult = clickProcessor.changeHeld(this, player, slot, key, clicked, heldItem);
 
         if (clickResult.doRefresh())
             player.getPlayerConnection().sendPacket(getWindowItemsPacket());
@@ -278,6 +285,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
         }
         playerInventory.setItemStack(key, clickResult.getCursor());
+
+        if (!clickResult.isCancel())
+            callClickEvent(player, this, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
     }
 
     @Override
@@ -293,7 +303,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 null : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset));
         ItemStack cursor = getCursorItem(player);
 
-        InventoryClickResult clickResult = clickProcessor.drop(getInventoryConditions(), player,
+        InventoryClickResult clickResult = clickProcessor.drop(this, player,
                 mode, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh())
@@ -321,7 +331,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (slot != -999)
             clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.dragging(getInventoryConditions(), player,
+        InventoryClickResult clickResult = clickProcessor.dragging(this, player,
                 slot, button,
                 clicked, cursor,
 
@@ -351,7 +361,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         ItemStack cursor = getCursorItem(player);
 
 
-        InventoryClickResult clickResult = clickProcessor.doubleClick(getInventoryConditions(), player, slot, cursor,
+        InventoryClickResult clickResult = clickProcessor.doubleClick(this, player, slot, cursor,
                 // Start by looping through the opened inventory
                 new InventoryClickLoopHandler(0, itemStacks.length, 1,
                         i -> i,
