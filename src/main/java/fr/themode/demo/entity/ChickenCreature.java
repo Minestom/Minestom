@@ -41,7 +41,7 @@ public class ChickenCreature extends EntityCreature {
                 boolean unmount = vehicleInformation.shouldUnmount();
 
                 if (jump && isOnGround()) {
-                    setVelocity(new Vector(0, 6, 0), 500);
+                    setVelocity(new Vector(0, 6, 0));
                 }
 
                 boolean updateView = forward > 0;

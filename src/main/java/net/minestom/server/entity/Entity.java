@@ -65,7 +65,7 @@ public abstract class Entity implements Viewable, DataContainer {
     private int entityType;
     private long lastUpdate;
     private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    protected long velocityTime; // Reset velocity to 0 after countdown
+    protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
 
     // Synchronization
     private long synchronizationDelay = 1500; // In ms
@@ -86,6 +86,8 @@ public abstract class Entity implements Viewable, DataContainer {
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
+    private long velocityUpdatePeriod;
+    protected boolean onGround;
 
     public Entity(int entityType, Position spawnPosition) {
         this.id = generateId();
@@ -96,6 +98,7 @@ public abstract class Entity implements Viewable, DataContainer {
         setBoundingBox(0, 0, 0);
 
         entityById.put(id, this);
+        setVelocityUpdatePeriod(5);
     }
 
     public Entity(int entityType) {
@@ -117,7 +120,32 @@ public abstract class Entity implements Viewable, DataContainer {
     public abstract void spawn();
 
     public boolean isOnGround() {
-        return EntityUtils.isOnGround(this);
+        return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
+    }
+
+    /**
+     * Checks if now is a good time to send a velocity update packet
+     * @return
+     * @param time
+     */
+    protected boolean shouldSendVelocityUpdate(long time) {
+        return (time-lastVelocityUpdateTime) >= velocityUpdatePeriod;
+    }
+
+    /**
+     * Gets the period, in ms, between two velocity update packets
+     * @return period, in ms, between two velocity update packets
+     */
+    public long getVelocityUpdatePeriod() {
+        return velocityUpdatePeriod;
+    }
+
+    /**
+     * Sets the period, in ms, between two velocity update packets
+     * @param velocityUpdatePeriod period, in ms, between two velocity update packets
+     */
+    public void setVelocityUpdatePeriod(long velocityUpdatePeriod) {
+        this.velocityUpdatePeriod = velocityUpdatePeriod;
     }
 
     public void teleport(Position position, Runnable callback) {
@@ -209,74 +237,43 @@ public abstract class Entity implements Viewable, DataContainer {
             this.lastUpdate = time;
 
             // Velocity
-            if (velocityTime != 0) {
-                if (this instanceof Player) {
-                    sendPacketToViewersAndSelf(getVelocityPacket());
+            if (!(this instanceof Player)) {
+                final float tps = MinecraftServer.TICK_PER_SECOND;
+                float newX = position.getX() + velocity.getX() / tps;
+                float newY = position.getY() + velocity.getY() / tps;
+                float newZ = position.getZ() + velocity.getZ() / tps;
+
+                Position newPosition = new Position(newX, newY, newZ);
+
+                if (!(this instanceof Player) && !noGravity) { // players handle gravity by themselves
+                    velocity.setY(velocity.getY() - gravityDragPerTick*tps);
+                }
+
+                Position newPositionOut = new Position();
+                Vector newVelocityOut = new Vector();
+                Vector deltaPos = new Vector(
+                        getVelocity().getX() / tps,
+                        getVelocity().getY() / tps,
+                        getVelocity().getZ() / tps
+                );
+                onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+
+                refreshPosition(newPosition);
+                velocity.copy(newVelocityOut);
+
+                float drag;
+                if(onGround) {
+                    drag = 0.5f; // ground drag
                 } else {
-                    final float tps = MinecraftServer.TICK_PER_SECOND;
-                    float newX = position.getX() + velocity.getX() / tps;
-                    float newY = position.getY() + velocity.getY() / tps;
-                    float newZ = position.getZ() + velocity.getZ() / tps;
-
-                    Position newPosition = new Position(newX, newY, newZ);
-
-                    newPosition = CollisionUtils.entity(getInstance(), getBoundingBox(), getPosition(), newPosition);
-
-                    refreshPosition(newPosition);
-                    if (this instanceof ObjectEntity) {
-                        // FIXME velocity/gravity
-                        //sendPacketToViewers(getVelocityPacket());
-                        teleport(getPosition());
-                    } else if (this instanceof EntityCreature) {
-                        teleport(getPosition());
-                    }
+                    drag = 0.98f; // air drag
                 }
-                if (time >= velocityTime) {
-                    sendSynchronization(); // Send synchronization after velocity ended
-                    resetVelocity();
-                }
-            }
+                velocity.multiply(drag);
 
-            // Gravity
-            if (!(this instanceof Player) && !noGravity && gravityDragPerTick != 0) { // Players do manage gravity client-side
-                Position position = getPosition();
-                //System.out.println("on ground: "+isOnGround());
-                if (!isOnGround()) {
-                    float strength = gravityDragPerTick * gravityTickCounter;
 
-                    boolean foundBlock = false;
-                    int firstBlock = 0;
-                    for (int y = (int) position.getY(); y > 0; y--) {
-                        BlockPosition blockPosition = new BlockPosition(position.getX(), y, position.getZ());
-                        short blockId = instance.getBlockId(blockPosition);
-                        //if (y == 70)
-                        //   System.out.println("id: " + blockId);
-                        if (blockId != 0) {
-                            firstBlock = y;
-                            foundBlock = true;
-                            //System.out.println("first block: " + y);
-                            break;
-                        }
-                    }
-
-                    float newY = position.getY() - strength;
-                    //System.out.println("REFRESH Y " + newY);
-                    // allow entities to go below the world
-                    if (foundBlock) {
-                        newY = Math.max(newY, firstBlock);
-                    }
-                    refreshPosition(position.getX(), newY, position.getZ());
-                    gravityTickCounter++;
-                    if (isOnGround()) { // Round Y axis when gravity movement is done
-                        //System.out.println("ROUND " + position.getY());
-                        refreshPosition(position.getX(), Math.round(position.getY()), position.getZ());
-                        gravityTickCounter = 0;
-                        // System.out.println("recheck: " + isOnGround() + " : " + getPosition());
-                    }
-
-                    if (this instanceof EntityCreature) {
-                        teleport(getPosition());
-                    }
+                sendSynchronization();
+                if (shouldSendVelocityUpdate(time)) {
+                    sendPacketToViewers(getVelocityPacket());
+                    lastVelocityUpdateTime = time;
                 }
             }
 
@@ -377,14 +374,8 @@ public abstract class Entity implements Viewable, DataContainer {
         return velocity;
     }
 
-    public void setVelocity(Vector velocity, long velocityTime) {
-        this.velocity = velocity;
-        this.velocityTime = System.currentTimeMillis() + velocityTime;
-    }
-
-    public void resetVelocity() {
-        this.velocity = new Vector();
-        this.velocityTime = 0;
+    public void setVelocity(Vector velocity) {
+        this.velocity.copy(velocity);
     }
 
     public void setGravity(float gravityDragPerTick) {

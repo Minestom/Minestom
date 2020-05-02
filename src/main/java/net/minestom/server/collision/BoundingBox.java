@@ -8,6 +8,7 @@ import net.minestom.server.utils.Position;
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public class BoundingBox {
+// TODO:
 
     private Entity entity;
     private float x, y, z;
@@ -68,15 +69,15 @@ public class BoundingBox {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
-    public float getX() {
+    public float getWidth() {
         return x;
     }
 
-    public float getY() {
+    public float getHeight() {
         return y;
     }
 
-    public float getZ() {
+    public float getDepth() {
         return z;
     }
 

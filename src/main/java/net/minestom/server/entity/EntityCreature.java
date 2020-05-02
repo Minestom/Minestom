@@ -49,9 +49,9 @@ public abstract class EntityCreature extends LivingEntity {
         float newX = position.getX() + x;
         float newY = position.getY() + y;
         float newZ = position.getZ() + z;
-        Position newPosition = new Position(newX, newY, newZ);
+        Position newPosition = new Position();
         // Calculate collisions boxes
-        newPosition = CollisionUtils.entity(getInstance(), getBoundingBox(), position, newPosition);
+        onGround = CollisionUtils.handlePhysics(this, new Vector(x, y, z), newPosition, new Vector());
         // Refresh target position
         newX = newPosition.getX();
         newY = newPosition.getY();
@@ -133,7 +133,7 @@ public abstract class EntityCreature extends LivingEntity {
     public void jump(float height) {
         // FIXME magic value
         Vector velocity = new Vector(0, height * 10, 0);
-        setVelocity(velocity, 200);
+        setVelocity(velocity);
     }
 
     public void setPathTo(Position position, int maxCheck, Consumer<Boolean> resultConsumer) {

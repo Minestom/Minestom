@@ -92,13 +92,13 @@ public class PlayerInit {
                     creature.damage(DamageType.fromPlayer(player), -1);
                     Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                     velocity.setY(4f);
-                    entity.setVelocity(velocity, 150);
+                    entity.setVelocity(velocity);
                     player.sendMessage("You attacked an entity!");
                 } else if (entity instanceof Player) {
                     Player target = (Player) entity;
                     Vector velocity = player.getPosition().clone().getDirection().multiply(4);
                     velocity.setY(3.5f);
-                    target.setVelocity(velocity, 150);
+                    target.setVelocity(velocity);
                     target.damage(DamageType.fromPlayer(player), 5);
                     player.sendMessage("ATTACK");
                 }
@@ -143,7 +143,7 @@ public class PlayerInit {
                 itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
                 itemEntity.setInstance(player.getInstance());
                 Vector velocity = player.getPosition().clone().getDirection().multiply(6);
-                itemEntity.setVelocity(velocity, 500);
+                itemEntity.setVelocity(velocity);
             });
 
             player.addEventCallback(PlayerDisconnectEvent.class, event -> {

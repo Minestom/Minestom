@@ -35,6 +35,7 @@ public class EntityUtils {
 
         Position entityPosition = entity.getPosition();
 
+        // TODO: check entire bounding box
         BlockPosition blockPosition = entityPosition.toBlockPosition();
         blockPosition = blockPosition.subtract(0, 1, 0);
         try {
