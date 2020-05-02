@@ -36,6 +36,9 @@ dependencies {
     compile 'com.github.TheMode:CommandBuilder:f893cfbfe4'
     compile 'com.github.Minestom:minecraft-text:69fd808e92'
 
+    // https://jitpack.io/#Articdive/Jnoise/1.0-SNAPSHOT
+    compile 'com.github.Articdive:Jnoise:1.0-SNAPSHOT'
+
     // https://mvnrepository.com/artifact/javax.vecmath/vecmath
     compile group: 'javax.vecmath', name: 'vecmath', version: '1.5.2' // Used for Fastnoise
 
