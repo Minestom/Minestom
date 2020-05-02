@@ -3,9 +3,11 @@ package fr.themode.demo.generator;
 import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
+import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 
+import java.util.List;
 import java.util.Random;
 
 public class ChunkGeneratorDemo extends ChunkGenerator {
@@ -29,5 +31,10 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
     @Override
     public Biome getBiome(int chunkX, int chunkZ) {
         return Biome.PLAINS;
+    }
+
+    @Override
+    public List<ChunkPopulator> getPopulators() {
+        return null;
     }
 }

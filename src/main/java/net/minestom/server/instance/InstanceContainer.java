@@ -7,7 +7,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.PacketWriterUtils;
@@ -159,11 +158,11 @@ public class InstanceContainer extends Instance {
 
                     // Update neighbors
                     CustomBlock customBlock = getCustomBlock(neighborX, neighborY, neighborZ);
-                    if(customBlock != null) {
+                    if (customBlock != null) {
                         boolean directNeighbor = false; // only if directly connected to neighbor (no diagonals)
-                        if(offsetX != 0 ^ offsetZ != 0) {
+                        if (offsetX != 0 ^ offsetZ != 0) {
                             directNeighbor = offsetY == 0;
-                        } else if(offsetX == 0 && offsetZ == 0) {
+                        } else if (offsetX == 0 && offsetZ == 0) {
                             directNeighbor = true;
                         }
                         customBlock.updateFromNeighbor(this, new BlockPosition(neighborX, neighborY, neighborZ), blockPosition, directNeighbor);
@@ -316,6 +315,7 @@ public class InstanceContainer extends Instance {
         cacheChunk(chunk);
         if (chunkGenerator != null) {
             ChunkBatch chunkBatch = createChunkBatch(chunk);
+
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         }
     }
@@ -398,16 +398,16 @@ public class InstanceContainer extends Instance {
     public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
         Instance instance = this;
         CustomBlock toUpdate = getCustomBlock(position);
-        if(toUpdate == null) {
+        if (toUpdate == null) {
             return;
         }
         MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
             @Override
             public void run() {
                 CustomBlock currentBlock = instance.getCustomBlock(position);
-                if(currentBlock == null)
+                if (currentBlock == null)
                     return;
-                if(currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
+                if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
                     return;
                 }
                 currentBlock.scheduledUpdate(instance, position, getBlockData(position));

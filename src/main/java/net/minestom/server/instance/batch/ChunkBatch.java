@@ -3,11 +3,13 @@ package net.minestom.server.instance.batch;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
+import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -60,8 +62,20 @@ public class ChunkBatch implements InstanceBatch {
 
     public void flushChunkGenerator(ChunkGenerator chunkGenerator, Consumer<Chunk> callback) {
         batchesPool.execute(() -> {
+            List<ChunkPopulator> populators = chunkGenerator.getPopulators();
+            boolean hasPopulator = populators != null && populators.isEmpty();
+
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
-            singleThreadFlush(callback);
+            singleThreadFlush(hasPopulator ? null : callback);
+
+            if (populators != null && !populators.isEmpty()) {
+                Iterator<ChunkPopulator> populatorIterator = populators.iterator();
+                while (populatorIterator.hasNext()) {
+                    ChunkPopulator chunkPopulator = populatorIterator.next();
+                    chunkPopulator.populateChunk(this, chunk.getChunkX(), chunk.getChunkZ());
+                }
+                singleThreadFlush(callback);
+            }
         });
     }
 
@@ -69,6 +83,10 @@ public class ChunkBatch implements InstanceBatch {
         batchesPool.execute(() -> {
             singleThreadFlush(callback);
         });
+    }
+
+    public void clearData() {
+        dataList.clear();
     }
 
     private void singleThreadFlush(Consumer<Chunk> callback) {
