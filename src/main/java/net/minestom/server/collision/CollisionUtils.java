@@ -135,7 +135,7 @@ public class CollisionUtils {
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
-            if (!block.isAir()) {
+            if (block.isSolid()) {
                 corner.subtract(axis.getX()*amount, axis.getY()*amount, axis.getZ()*amount);
 
                 if (Math.abs(axis.getX()) > 10e-16) {
