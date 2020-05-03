@@ -1,9 +1,33 @@
-# About Minestom
-Minestom is an alternative to the popular minecraft server API named Bukkit/Spigot. The main difference is that our implementation of Notchian server does not contain any features by default! However, we have a complete API which allows you to make anything possible with current spigot's plugins.
+# Minestom
+![banner](banner.png)
 
-All planned features are listed on [trello](https://trello.com/b/4ysvj5hT/minestom)
+[![license](https://img.shields.io/github/license/Minestom/Minestom.svg)](../LICENSE)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)  
+[![discord-banner](https://discordapp.com/api/guilds/706185253441634317/widget.png?style=banner2)](https://discord.gg/pkFRvqB)
 
-An example of how to use the Minestom library is available [here](src/main/java/fr/themode/demo)
+Minestom is an alternative to the popular Minecraft server API called Bukkit.
+
+
+The main difference is that our implementation of the Notchian server does not contain any features by default!
+However, we have a complete API which allows you to make anything possible with current spigot plugins.
+
+# Table of contents
+- [Install](#install)
+- [Usage](#usage)
+- [Why Minestom?](#why-minestom)
+- [Advantages & Disadvantages](#advantages-and-disadvantages)
+- [API](#api)
+- [Contributing](#contributing)
+- [License](#license)
+
+# Install
+Minestom is similar to Bukkit in the fact that it is not a standlone program, it must be expanded upon.
+It is the base for interfacing between the server and client.
+Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
+
+# Usage
+An example of how to use the Minestom library is available [here](src/main/java/fr/themode/demo).  
+You can also check out the vanilla implementation of Minestom [here](https://github.com/Minestom/VanillaReimplementation).
 
 # Why Minestom?
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
@@ -11,7 +35,26 @@ The goal is to offer more performance for those who need it, Minecraft being sin
 
 In other words, it makes sense to use Minestom when it takes less time to implement everything you want than removing everything you don't need.
 
-# API features
+# Advantages and Disadvantages
+Minestom isn't perfect, our choices make it much better for some cases, worse for some others.
+
+## Advantages
+* Remove the overhead of vanilla features
+* Multi-threaded (Chunks & Entities)
+* 100% Thread-Safe
+* Instance system which is much more scalable than worlds
+* Open-source
+* Modern API
+* No more disgusting NMS
+
+## Disadvantages
+* Does not work with Bukkit/Spigot plugins
+* Does not work with older clients
+* Bad for those who want a vanilla experience
+* Longer to develop something playable
+* Multi-threaded environments are prone to complications
+
+# API
 Even if we do not include anything by default in the game, we simplify the way you add them, here is a preview.
 
 ## Instances
@@ -36,21 +79,11 @@ It is a field where Minecraft evolved a lot, inventories are now used a lot as c
 ## Commands
 Commands are the simplest way of communication between clients and server. Since 1.13 Minecraft has incorporated a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
 
-# Pros & Cons
-Minestom isn't perfect, our choices make it much better for some cases, worse for some others.
+# Contributing
+See [the contributing file](CONTRIBUTING.md)!  
+All planned features are listed on [Trello](https://trello.com/b/4ysvj5hT/minestom)
 
-## Pros
-* Remove the overhead of vanilla features
-* Multi-threaded (Chunks & Entities)
-* 100% Thread-Safe
-* Instance system which is much more scalable than worlds
-* Open-source
-* Modern API
-* No more disgusting NMS
+# License
+This project is licensed under the [Apache License Version 2.0](../LICENSE).
 
-## Cons
-* Does not work with bukkit plugins
-* Does not work with older clients
-* Bad for those who want vanilla experience
-* Longer to obtain something playable
-* Multi-threaded environments are prone to complications
+
