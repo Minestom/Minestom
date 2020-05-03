@@ -291,10 +291,8 @@ public class Chunk implements Viewable {
 
                     short blockId = getBlockId(x, y, z);
                     short customBlockId = getCustomBlockId(x, y, z);
-                    boolean isCustomBlock = customBlockId != 0;
-                    short id = isCustomBlock ? customBlockId : blockId;
 
-                    if (id == 0)
+                    if (blockId == 0 && customBlockId == 0)
                         continue;
 
                     Data data = blocksData.get(index);
@@ -305,8 +303,8 @@ public class Chunk implements Viewable {
                     dos.writeInt(y);
                     dos.writeInt(z);
 
-                    dos.writeBoolean(isCustomBlock); // Determine the type of the ID
-                    dos.writeShort(id);
+                    dos.writeShort(blockId);
+                    dos.writeShort(customBlockId);
 
                     hasData = (data != null && (data instanceof SerializableData)) && hasData;
                     dos.writeBoolean(hasData);

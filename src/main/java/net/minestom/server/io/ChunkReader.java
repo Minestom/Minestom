@@ -33,8 +33,9 @@ public class ChunkReader {
                 int y = stream.readInt();
                 int z = stream.readInt();
 
-                boolean isCustomBlock = stream.readBoolean();
                 short blockId = stream.readShort();
+                short customBlockId = stream.readShort();
+
                 boolean hasData = stream.readBoolean();
                 Data data = null;
 
@@ -45,8 +46,8 @@ public class ChunkReader {
                     data = DataReader.readData(Unpooled.wrappedBuffer(dataArray));
                 }
 
-                if (isCustomBlock) {
-                    chunkBatch.setCustomBlock(x, y, z, blockId, data);
+                if (customBlockId != 0) {
+                    chunkBatch.setSeparateBlocks(x, y, z, blockId, customBlockId, data);
                 } else {
                     chunkBatch.setBlock(x, y, z, blockId, data);
                 }
