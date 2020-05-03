@@ -25,6 +25,13 @@ public class Vector implements Cloneable {
         return this;
     }
 
+    public Vector add(float x, float y, float z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
     /**
      * Subtracts a vector from this one.
      *
@@ -35,6 +42,13 @@ public class Vector implements Cloneable {
         x -= vec.x;
         y -= vec.y;
         z -= vec.z;
+        return this;
+    }
+
+    public Vector subtract(float x, float y, float z) {
+        this.x -= x;
+        this.y -= y;
+        this.z -= z;
         return this;
     }
 
@@ -206,11 +220,7 @@ public class Vector implements Cloneable {
      */
     @Override
     public Vector clone() {
-        try {
-            return (Vector) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new Error(e);
-        }
+        return new Vector(x, y, z);
     }
 
     public float getX() {

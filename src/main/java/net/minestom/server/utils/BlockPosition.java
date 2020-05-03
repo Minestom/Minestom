@@ -19,6 +19,10 @@ public class BlockPosition {
         this.z = (int) Math.floor(z);
     }
 
+    public BlockPosition(Vector position) {
+        this(position.getX(), position.getY(), position.getZ());
+    }
+
     public BlockPosition add(int x, int y, int z) {
         this.x += x;
         this.y += y;

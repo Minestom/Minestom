@@ -249,17 +249,17 @@ public abstract class Entity implements Viewable, DataContainer {
                     velocity.setY(velocity.getY() - gravityDragPerTick*tps);
                 }
 
-                Position newPositionOut = new Position();
                 Vector newVelocityOut = new Vector();
                 Vector deltaPos = new Vector(
-                        getVelocity().getX() / tps,
-                        getVelocity().getY() / tps,
-                        getVelocity().getZ() / tps
+                        getVelocity().getX()/tps,
+                        getVelocity().getY()/tps,
+                        getVelocity().getZ()/tps
                 );
                 onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
                 refreshPosition(newPosition);
                 velocity.copy(newVelocityOut);
+                velocity.multiply(tps);
 
                 float drag;
                 if(onGround) {
@@ -267,7 +267,8 @@ public abstract class Entity implements Viewable, DataContainer {
                 } else {
                     drag = 0.98f; // air drag
                 }
-                velocity.multiply(drag);
+                velocity.setX(velocity.getX() * drag);
+                velocity.setZ(velocity.getZ() * drag);
 
 
                 sendSynchronization();
