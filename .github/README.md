@@ -26,7 +26,7 @@ It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
 # Usage
-An example of how to use the Minestom library is available [here](src/main/java/fr/themode/demo).  
+An example of how to use the Minestom library is available [here](https://github.com/Minestom/Minestom/tree/master/src/main/java/fr/themode/demo).  
 You can also check out the vanilla implementation of Minestom [here](https://github.com/Minestom/VanillaReimplementation).
 
 # Why Minestom?
