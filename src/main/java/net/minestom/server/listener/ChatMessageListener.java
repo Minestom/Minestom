@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class ChatMessageListener {
 
     public static void listener(ClientChatMessagePacket packet, Player player) {
-        String message = PlainComponentSerializer.INSTANCE.serialize(Chat.toLegacyText(packet.message));
+        String message = PlainComponentSerializer.INSTANCE.serialize(Chat.fromLegacyText(packet.message));
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         String cmdPrefix = commandManager.getCommandPrefix();

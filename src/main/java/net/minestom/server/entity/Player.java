@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import com.google.gson.JsonObject;
 import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
@@ -398,20 +397,19 @@ public class Player extends LivingEntity {
 
     // Use legacy color formatting
     public void sendMessage(String message) {
-        sendMessage(Chat.toLegacyText(message));
+        sendMessage(Chat.fromLegacyText(message));
     }
 
     public void sendMessage(String message, char colorChar) {
-        sendMessage(Chat.toLegacyText(message, colorChar));
-    }
-
-    public void sendMessage(JsonObject jsonObject) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(jsonObject.toString(), ChatMessagePacket.Position.CHAT);
-        playerConnection.sendPacket(chatMessagePacket);
+        sendMessage(Chat.fromLegacyText(message, colorChar));
     }
 
     public void sendMessage(TextComponent textObject) {
-        sendMessage(Chat.toJsonString(textObject));
+        sendMessageJson(Chat.toJsonString(textObject));
+    }
+
+    private void sendMessageJson(String json) {
+        playerConnection.sendPacket(new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT));
     }
 
     public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
@@ -456,8 +454,8 @@ public class Player extends LivingEntity {
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
 
-        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.toLegacyText(header, colorChar));
-        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.toLegacyText(footer, colorChar));
+        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.fromLegacyText(header, colorChar));
+        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.fromLegacyText(footer, colorChar));
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
@@ -465,7 +463,7 @@ public class Player extends LivingEntity {
     public void sendActionBarMessage(String message, char colorChar) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.toJsonString(Chat.toLegacyText(message, colorChar));
+        titlePacket.actionBarText = Chat.toJsonString(Chat.fromLegacyText(message, colorChar));
         playerConnection.sendPacket(titlePacket);
     }
 

@@ -25,11 +25,11 @@ public class Chat {
         return LegacyComponentSerializer.legacyLinking().serialize(component);
     }
 
-    public static TextComponent toLegacyText(String text, char colorChar) {
+    public static TextComponent fromLegacyText(String text, char colorChar) {
         return LegacyComponentSerializer.legacyLinking().deserialize(text, colorChar);
     }
 
-    public static TextComponent toLegacyText(String text) {
-        return toLegacyText(text, COLOR_CHAR);
+    public static TextComponent fromLegacyText(String text) {
+        return fromLegacyText(text, COLOR_CHAR);
     }
 }
