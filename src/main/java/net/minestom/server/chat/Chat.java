@@ -4,7 +4,6 @@ import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.text.serializer.plain.PlainComponentSerializer;
 
 /**
  * Thank for the minecraft-text library made by rbrick:
@@ -26,23 +25,11 @@ public class Chat {
         return LegacyComponentSerializer.legacyLinking().serialize(component);
     }
 
-    public static TextComponent legacyText(String text, char colorChar) {
+    public static TextComponent toLegacyText(String text, char colorChar) {
         return LegacyComponentSerializer.legacyLinking().deserialize(text, colorChar);
     }
 
-    public static TextComponent legacyText(String text) {
-        return legacyText(text, COLOR_CHAR);
+    public static TextComponent toLegacyText(String text) {
+        return toLegacyText(text, COLOR_CHAR);
     }
-
-    public static String legacyTextString(String text) {
-        // TODO: Find out where this is used and ensure this is correct
-        return GsonComponentSerializer.INSTANCE.serialize(legacyText(text, COLOR_CHAR));
-    }
-
-    public static String uncoloredLegacyText(String text) {
-        // TODO: Find out where this is used and ensure this is correct
-        // TODO: Improve this, I'm not sure the old method is correct
-        return PlainComponentSerializer.INSTANCE.serialize(legacyText(text));
-    }
-
 }

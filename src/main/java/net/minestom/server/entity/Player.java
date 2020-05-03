@@ -398,11 +398,11 @@ public class Player extends LivingEntity {
 
     // Use legacy color formatting
     public void sendMessage(String message) {
-        sendMessage(Chat.legacyText(message));
+        sendMessage(Chat.toLegacyText(message));
     }
 
     public void sendMessage(String message, char colorChar) {
-        sendMessage(Chat.legacyText(message, colorChar));
+        sendMessage(Chat.toLegacyText(message, colorChar));
     }
 
     public void sendMessage(JsonObject jsonObject) {
@@ -456,8 +456,8 @@ public class Player extends LivingEntity {
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
 
-        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.legacyText(header, colorChar));
-        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.legacyText(footer, colorChar));
+        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.toLegacyText(header, colorChar));
+        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.toLegacyText(footer, colorChar));
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
@@ -465,7 +465,7 @@ public class Player extends LivingEntity {
     public void sendActionBarMessage(String message, char colorChar) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.toJsonString(Chat.legacyText(message, colorChar));
+        titlePacket.actionBarText = Chat.toJsonString(Chat.toLegacyText(message, colorChar));
         playerConnection.sendPacket(titlePacket);
     }
 

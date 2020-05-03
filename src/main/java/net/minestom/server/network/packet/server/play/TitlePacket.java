@@ -25,13 +25,13 @@ public class TitlePacket implements ServerPacket {
 
         switch (action) {
             case SET_TITLE:
-                writer.writeSizedString(Chat.legacyTextString(titleText));
+                writer.writeSizedString(titleText);
                 break;
             case SET_SUBTITLE:
-                writer.writeSizedString(Chat.legacyTextString(subtitleText));
+                writer.writeSizedString(subtitleText);
                 break;
             case SET_ACTION_BAR:
-                writer.writeSizedString(Chat.legacyTextString(actionBarText));
+                writer.writeSizedString(actionBarText);
                 break;
             case SET_TIMES_AND_DISPLAY:
                 writer.writeInt(fadeIn);

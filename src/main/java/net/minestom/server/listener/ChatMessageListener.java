@@ -4,6 +4,7 @@ import net.kyori.text.TextComponent;
 import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
 import net.kyori.text.format.TextColor;
+import net.kyori.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.command.CommandManager;
@@ -17,7 +18,7 @@ import java.util.function.Function;
 public class ChatMessageListener {
 
     public static void listener(ClientChatMessagePacket packet, Player player) {
-        String message = Chat.uncoloredLegacyText(packet.message);
+        String message = PlainComponentSerializer.INSTANCE.serialize(Chat.toLegacyText(packet.message));
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         String cmdPrefix = commandManager.getCommandPrefix();
