@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
@@ -247,7 +248,7 @@ public class Player extends LivingEntity {
     public void kill() {
         if (!isDead()) {
             // send death message to player
-            TextComponent deathMessage;
+            Component deathMessage;
             if (lastDamageSource != null) {
                 deathMessage = lastDamageSource.buildDeathScreenMessage(this);
             } else { // may happen if killed by the server without applying damage
@@ -257,7 +258,7 @@ public class Player extends LivingEntity {
             playerConnection.sendPacket(deathPacket);
 
             // send death message to chat
-            TextComponent chatMessage;
+            Component chatMessage;
             if (lastDamageSource != null) {
                 chatMessage = lastDamageSource.buildChatMessage(this);
             } else { // may happen if killed by the server without applying damage
@@ -404,7 +405,7 @@ public class Player extends LivingEntity {
         sendMessage(Chat.fromLegacyText(message, colorChar));
     }
 
-    public void sendMessage(TextComponent textObject) {
+    public void sendMessage(Component textObject) {
         sendMessageJson(Chat.toJsonString(textObject));
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.entity.Entity;
@@ -20,7 +21,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private TextComponent deathMessage;
+    private Component deathMessage;
 
     private CombatEventPacket() {}
 
@@ -38,7 +39,7 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
-    public static CombatEventPacket death(Player player, Optional<Entity> killer, TextComponent message) {
+    public static CombatEventPacket death(Player player, Optional<Entity> killer, Component message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();

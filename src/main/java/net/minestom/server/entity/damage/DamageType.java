@@ -1,5 +1,6 @@
 package net.minestom.server.entity.damage;
 
+import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.kyori.text.TranslatableComponent;
 import net.minestom.server.entity.Entity;
@@ -26,15 +27,15 @@ public class DamageType {
         return new EntityProjectileDamage(shooter, projectile);
     }
 
-    public TextComponent buildChatMessage(Player killed) {
-        return TextComponent.builder().append(TranslatableComponent.of("death."+identifier)).append(killed.getUsername()).build();
+    public Component buildChatMessage(Player killed) {
+        return TranslatableComponent.of("death."+identifier, TextComponent.of(killed.getUsername()));
     }
 
     public static DamageType fromPlayer(Player player) {
         return new EntityDamage(player);
     }
 
-    public TextComponent buildDeathScreenMessage(Player killed) {
+    public Component buildDeathScreenMessage(Player killed) {
         return buildChatMessage(killed);
     }
 }
