@@ -1,8 +1,7 @@
 package net.minestom.server.entity;
 
-import club.thectm.minecraft.text.TextBuilder;
-import club.thectm.minecraft.text.TextObject;
 import com.google.gson.JsonObject;
+import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
@@ -249,21 +248,21 @@ public class Player extends LivingEntity {
     public void kill() {
         if (!isDead()) {
             // send death message to player
-            TextObject deathMessage;
+            TextComponent deathMessage;
             if (lastDamageSource != null) {
                 deathMessage = lastDamageSource.buildDeathScreenMessage(this);
             } else { // may happen if killed by the server without applying damage
-                deathMessage = TextBuilder.of("Killed by poor programming.").build();
+                deathMessage = TextComponent.of("Killed by poor programming.");
             }
             CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathMessage);
             playerConnection.sendPacket(deathPacket);
 
             // send death message to chat
-            TextObject chatMessage;
+            TextComponent chatMessage;
             if (lastDamageSource != null) {
                 chatMessage = lastDamageSource.buildChatMessage(this);
             } else { // may happen if killed by the server without applying damage
-                chatMessage = TextBuilder.of(getUsername() + " was killed by poor programming.").build();
+                chatMessage = TextComponent.of(getUsername() + " was killed by poor programming.");
             }
             MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
                 player.sendMessage(chatMessage);
@@ -411,8 +410,8 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(chatMessagePacket);
     }
 
-    public void sendMessage(TextObject textObject) {
-        sendMessage(textObject.toJson());
+    public void sendMessage(TextComponent textObject) {
+        sendMessage(Chat.toJsonString(textObject));
     }
 
     public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
@@ -457,8 +456,8 @@ public class Player extends LivingEntity {
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
 
-        playerListHeaderAndFooterPacket.header = Chat.legacyText(header, colorChar).toJson().toString();
-        playerListHeaderAndFooterPacket.footer = Chat.legacyText(footer, colorChar).toJson().toString();
+        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.legacyText(header, colorChar));
+        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.legacyText(footer, colorChar));
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
@@ -466,7 +465,7 @@ public class Player extends LivingEntity {
     public void sendActionBarMessage(String message, char colorChar) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.legacyText(message, colorChar).toJson().toString();
+        titlePacket.actionBarText = Chat.toJsonString(Chat.legacyText(message, colorChar));
         playerConnection.sendPacket(titlePacket);
     }
 
