@@ -90,14 +90,18 @@ public class CollisionUtils {
         for (int i = 0; i < Math.abs(blockLength); i++) {
             if (!stepOnce(instance, axis, sign, cornersCopy, cornerPositions)) {
                 collisionFound = true;
-                break; // return early to avoid adding errors on other corners.
+            }
+            if(collisionFound) {
+                break;
             }
         }
 
         // add remainingLength
-        Vector direction = new Vector();
-        direction.copy(axis);
-        collisionFound |= !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
+        if(!collisionFound) {
+            Vector direction = new Vector();
+            direction.copy(axis);
+            collisionFound |= !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
+        }
 
         // find the corner which moved the least
         float smallestDisplacement = Float.POSITIVE_INFINITY;
