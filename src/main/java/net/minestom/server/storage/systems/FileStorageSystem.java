@@ -7,6 +7,10 @@ import org.rocksdb.RocksDBException;
 
 import java.util.function.Consumer;
 
+/**
+ * A storage system which is local using OS files system
+ * It does make use of the RocksDB library
+ */
 public class FileStorageSystem implements StorageSystem {
 
     static {

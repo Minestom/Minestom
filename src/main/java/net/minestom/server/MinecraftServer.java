@@ -209,6 +209,7 @@ public class MinecraftServer {
         updateManager.stop();
         nettyServer.stop();
         schedulerManager.shutdown();
+        storageManager.getLoadedFolders().forEach(storageFolder -> storageFolder.close());
     }
 
 }

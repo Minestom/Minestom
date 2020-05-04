@@ -42,7 +42,17 @@ public class StorageFolder {
         this.storageSystem.close();
     }
 
-    public void getAndCacheData(String key, DataContainer dataContainer, Runnable callback) {
+    public synchronized void getAndCacheData(String key, DataContainer dataContainer, Runnable callback) {
+
+        // Keep giving the same SerializableData if already loaded
+        if (cachedData.containsKey(key)) {
+            dataContainer.setData(cachedData.get(key));
+            if (callback != null)
+                callback.run();
+            return;
+        }
+
+        // Load it from the storage system
         get(key, bytes -> {
             SerializableData data;
 
@@ -53,6 +63,8 @@ public class StorageFolder {
             }
 
             dataContainer.setData(data);
+
+            this.cachedData.put(key, data);
 
             if (callback != null)
                 callback.run();

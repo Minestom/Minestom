@@ -52,7 +52,7 @@ public class Main {
         recipeManager.addRecipe(shapelessRecipe);
 
         StorageManager storageManager = MinecraftServer.getStorageManager();
-        StorageManager.defineStorageSystem(FileStorageSystem::new);
+        storageManager.defineStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 
