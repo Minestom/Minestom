@@ -20,7 +20,12 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
-
+        BlockPosition above = blockPosition.clone().add(0, 1, 0);
+        CustomBlock blockAbove = instance.getCustomBlock(above);
+        if(blockAbove == this) {
+            instance.setBlock(above, Block.AIR);
+            instance.setBlock(blockPosition, Block.AIR); // this should NOT create a stack overflow simply because we are trying to remove this same block
+        }
     }
 
     @Override

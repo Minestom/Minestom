@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.PacketWriterUtils;
@@ -28,6 +29,9 @@ import net.minestom.server.world.Dimension;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
 /**
@@ -41,6 +45,9 @@ public class InstanceContainer extends Instance {
 
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
+
+    private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
+    private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
 
     private boolean autoChunkLoad;
 
@@ -76,6 +83,13 @@ public class InstanceContainer extends Instance {
 
             BlockPosition blockPosition = new BlockPosition(x, y, z);
 
+            if(isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
+                // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
+                // This can happen with nether portals which break the entire frame when a portal block is broken
+                return;
+            }
+            setAlreadyChanged(blockPosition, blockId);
+
             // Call the destroy listener if previous block was a custom block
             callBlockDestroy(chunk, index, blockPosition);
 
@@ -100,6 +114,23 @@ public class InstanceContainer extends Instance {
             if (isCustomBlock)
                 callBlockPlace(chunk, index, blockPosition);
         }
+    }
+
+    private void setAlreadyChanged(BlockPosition blockPosition, short blockId) {
+        currentlyChangingBlocks.put(blockPosition, Block.fromId(blockId));
+    }
+
+    /**
+     * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace
+     * @param blockPosition
+     * @param blockId
+     * @return
+     */
+    private boolean isAlreadyChanged(BlockPosition blockPosition, short blockId) {
+        Block changedBlock = currentlyChangingBlocks.get(blockPosition);
+        if(changedBlock == null)
+            return false;
+        return changedBlock.getBlockId() == blockId;
     }
 
     @Override
@@ -415,5 +446,14 @@ public class InstanceContainer extends Instance {
                 currentBlock.scheduledUpdate(instance, position, getBlockData(position));
             }
         }, new UpdateOption(time, unit));
+    }
+
+    @Override
+    public void tick(long time) {
+        super.tick(time);
+        Lock wrlock = changingBlockLock.writeLock();
+        wrlock.lock();
+        currentlyChangingBlocks.clear();
+        wrlock.unlock();
     }
 }

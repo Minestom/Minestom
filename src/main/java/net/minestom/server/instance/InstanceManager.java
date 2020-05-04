@@ -54,6 +54,7 @@ public class InstanceManager {
             if (instance instanceof InstanceContainer) { // SharedInstance should be updated at the same time (verify?)
 
                 blocksPool.execute(() -> {
+                    instance.tick(time);
                     for (Chunk chunk : instance.getChunks()) {
                         chunk.updateBlocks(time, instance);
                     }

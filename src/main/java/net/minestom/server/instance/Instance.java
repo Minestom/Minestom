@@ -365,4 +365,10 @@ public abstract class Instance implements BlockModifier, DataContainer {
      */
     public abstract void scheduleUpdate(int time, TimeUnit unit, BlockPosition position);
 
+    /**
+     * Performs a single tick in the instance.
+     * By default, does nothing
+     * @param time the current time
+     */
+    public void tick(long time) { }
 }
