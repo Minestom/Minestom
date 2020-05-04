@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.Chat;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
