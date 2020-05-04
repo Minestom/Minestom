@@ -117,7 +117,7 @@ public class Utils {
                 if (hasDisplayName) {
                     packet.writeByte((byte) 0x08);
                     packet.writeShortSizedString("Name");
-                    packet.writeShortSizedString(itemStack.getDisplayName());
+                    packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName())));
                 }
 
                 if (hasLore) {
@@ -128,7 +128,7 @@ public class Utils {
                     packet.writeByte((byte) 0x08);
                     packet.writeInt(lore.size());
                     for (String line : lore) {
-                        packet.writeShortSizedString(line);
+                        packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(line)));
                     }
                 }
 

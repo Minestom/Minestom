@@ -120,7 +120,11 @@ public class NbtReaderUtils {
                 String stringName = reader.readShortSizedString();
 
                 if (stringName.equals("Name")) {
-                    item.setDisplayName(reader.readShortSizedString());
+                    String jsonDisplayName = reader.readShortSizedString();
+                    Component textObject = Chat.fromJsonString(jsonDisplayName);
+                    String displayName = Chat.toLegacyText(textObject);
+
+                    item.setDisplayName(displayName);
                     readItemStackDisplayNBT(reader, item);
                 }
                 break;
@@ -134,7 +138,11 @@ public class NbtReaderUtils {
                     int size = reader.readInteger();
                     ArrayList<String> lore = new ArrayList<>(size);
                     for (int i = 0; i < size; i++) {
-                        lore.add(reader.readShortSizedString());
+                        String string = reader.readShortSizedString();
+                        Component textObject = Chat.fromJsonString(string);
+                        String line = Chat.toLegacyText(textObject);
+
+                        lore.add(line);
                         if (lore.size() == size) {
                             item.setLore(lore);
                         }
