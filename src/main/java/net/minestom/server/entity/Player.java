@@ -461,11 +461,57 @@ public class Player extends LivingEntity {
         sendHeaderFooter(Chat.fromLegacyText(header, colorChar), Chat.fromLegacyText(footer, colorChar));
     }
 
-    public void sendActionBarMessage(Component message) {
+    private void sendTitle(Component title, TitlePacket.Action action) {
         TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.toJsonString(message);
+        titlePacket.action = action;
+
+        switch (action) {
+            case SET_TITLE:
+                titlePacket.titleText = Chat.toJsonString(title);
+                break;
+            case SET_SUBTITLE:
+                titlePacket.subtitleText = Chat.toJsonString(title);
+                break;
+            case SET_ACTION_BAR:
+                titlePacket.actionBarText = Chat.toJsonString(title);
+            default:
+                throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
+        }
+
         playerConnection.sendPacket(titlePacket);
+    }
+
+    public void sendTitleSubtitleMessage(Component title, Component subtitle) {
+        sendTitle(title, TitlePacket.Action.SET_TITLE);
+        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+    }
+
+    public void sendTitleMessage(Component title) {
+        sendTitle(title, TitlePacket.Action.SET_TITLE);
+    }
+
+    public void sendTitleMessage(String title, char colorChar) {
+        sendTitleMessage(Chat.fromLegacyText(title, colorChar));
+    }
+
+    public void sendTitleMessage(String title) {
+        sendTitleMessage(title, Chat.COLOR_CHAR);
+    }
+
+    public void sendSubtitleMessage(Component subtitle) {
+        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+    }
+
+    public void sendSubtitleMessage(String subtitle, char colorChar) {
+        sendSubtitleMessage(Chat.fromLegacyText(subtitle, colorChar));
+    }
+
+    public void sendSubtitleMessage(String subtitle) {
+        sendSubtitleMessage(subtitle, Chat.COLOR_CHAR);
+    }
+
+    public void sendActionBarMessage(Component actionBar) {
+        sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
     }
 
     public void sendActionBarMessage(String message, char colorChar) {
