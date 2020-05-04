@@ -406,10 +406,7 @@ public class Player extends LivingEntity {
     }
 
     public void sendMessage(Component textObject) {
-        sendMessageJson(Chat.toJsonString(textObject));
-    }
-
-    private void sendMessageJson(String json) {
+        String json = Chat.toJsonString(textObject);
         playerConnection.sendPacket(new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT));
     }
 
@@ -450,22 +447,29 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(stopSoundPacket);
     }
 
-    public void sendHeaderFooter(String header, String footer, char colorChar) {
+    public void sendHeaderFooter(Component header, Component footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
-
-        playerListHeaderAndFooterPacket.header = Chat.toJsonString(Chat.fromLegacyText(header, colorChar));
-        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(Chat.fromLegacyText(footer, colorChar));
+        playerListHeaderAndFooterPacket.header = Chat.toJsonString(header);
+        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(footer);
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
 
-    public void sendActionBarMessage(String message, char colorChar) {
+    public void sendHeaderFooter(String header, String footer, char colorChar) {
+        sendHeaderFooter(Chat.fromLegacyText(header, colorChar), Chat.fromLegacyText(footer, colorChar));
+    }
+
+    public void sendActionBarMessage(Component message) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.toJsonString(Chat.fromLegacyText(message, colorChar));
+        titlePacket.actionBarText = Chat.toJsonString(message);
         playerConnection.sendPacket(titlePacket);
+    }
+
+    public void sendActionBarMessage(String message, char colorChar) {
+        sendActionBarMessage(Chat.fromLegacyText(message, colorChar));
     }
 
     public void sendActionBarMessage(String message) {
