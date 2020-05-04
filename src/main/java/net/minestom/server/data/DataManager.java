@@ -2,7 +2,7 @@ package net.minestom.server.data;
 
 import net.minestom.server.data.type.CharacterData;
 import net.minestom.server.data.type.*;
-import net.minestom.server.data.type.array.ItemStackArrayData;
+import net.minestom.server.data.type.array.*;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.PrimitiveConversion;
@@ -16,15 +16,31 @@ public class DataManager {
 
     {
         registerType(Byte.class, new ByteData());
+        registerType(byte[].class, new ByteArrayData());
+
         registerType(Boolean.class, new BooleanData());
+        registerType(boolean[].class, new BooleanArrayData());
+
         registerType(Character.class, new CharacterData());
+        registerType(char[].class, new CharacterArrayData());
+
         registerType(Short.class, new ShortData());
+        registerType(short[].class, new ShortArrayData());
+
         registerType(Integer.class, new IntegerData());
+        registerType(int[].class, new IntegerArrayData());
+
         registerType(Long.class, new LongData());
+        registerType(long[].class, new LongArrayData());
+
         registerType(Float.class, new FloatData());
+        registerType(float[].class, new FloatArrayData());
+
         registerType(Double.class, new DoubleData());
+        registerType(double[].class, new DoubleArrayData());
 
         registerType(String.class, new StringData());
+        registerType(String[].class, new StringArrayData());
 
         registerType(SerializableData.class, new SerializableDataData());
 
