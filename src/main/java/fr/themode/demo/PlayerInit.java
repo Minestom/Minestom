@@ -18,7 +18,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.storage.StorageFolder;
-import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -34,7 +33,7 @@ public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
 
     static {
-        StorageFolder storageFolder = StorageManager.getFolder("chunk_data");
+        StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("chunk_data");
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
