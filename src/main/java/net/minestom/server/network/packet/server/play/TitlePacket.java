@@ -25,13 +25,13 @@ public class TitlePacket implements ServerPacket {
 
         switch (action) {
             case SET_TITLE:
-                writer.writeSizedString(titleText);
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(titleText)));
                 break;
             case SET_SUBTITLE:
-                writer.writeSizedString(subtitleText);
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(subtitleText)));
                 break;
             case SET_ACTION_BAR:
-                writer.writeSizedString(actionBarText);
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(actionBarText)));
                 break;
             case SET_TIMES_AND_DISPLAY:
                 writer.writeInt(fadeIn);

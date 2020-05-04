@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.Chat;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -91,8 +92,8 @@ public class AdvancementsPacket implements ServerPacket {
         public float y;
 
         private void write(PacketWriter writer) {
-            writer.writeSizedString(title);
-            writer.writeSizedString(description);
+            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
+            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
             writer.writeItemStack(icon);
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);

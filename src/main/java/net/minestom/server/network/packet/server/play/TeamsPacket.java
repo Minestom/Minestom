@@ -27,13 +27,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(teamDisplayName);
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamDisplayName)));
                 writer.writeByte(friendlyFlags);
                 writer.writeSizedString(nameTagVisibility.getIdentifier());
                 writer.writeSizedString(collisionRule.getIdentifier());
                 writer.writeVarInt(teamColor);
-                writer.writeSizedString(teamPrefix);
-                writer.writeSizedString(teamSuffix);
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamPrefix)));
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamSuffix)));
                 break;
             case REMOVE_TEAM:
 
