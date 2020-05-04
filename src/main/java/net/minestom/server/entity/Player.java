@@ -703,11 +703,15 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(respawnPacket);
     }
 
-    public void kick(String message) {
+    public void kick(Component message) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = message;
+        disconnectPacket.message = Chat.toJsonString(message);
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.getChannel().close();
+    }
+
+    public void kick(String message) {
+        kick(Chat.fromLegacyText(message));
     }
 
     public LevelType getLevelType() {

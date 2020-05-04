@@ -11,7 +11,7 @@ public class DisconnectPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(message)));
+        writer.writeSizedString(message);
     }
 
     @Override
