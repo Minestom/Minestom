@@ -7,6 +7,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerBlockInteractEvent;
 import net.minestom.server.event.PlayerBlockPlaceEvent;
+import net.minestom.server.event.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -56,7 +57,7 @@ public class BlockPlacementListener {
         // Check if item at hand is a block
         ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
         Material material = Material.fromId(usedItem.getMaterialId());
-        if (material != null && !material.isBlock()) {
+        if(material == Material.AIR) {
             return;
         }
 
@@ -122,6 +123,8 @@ public class BlockPlacementListener {
                 refreshChunk = true;
             }
         } else {
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(hand, usedItem, blockPosition, blockFace.toDirection());
+            player.callEvent(PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;
         }
 

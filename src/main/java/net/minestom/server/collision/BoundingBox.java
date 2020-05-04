@@ -3,6 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.Vector;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
@@ -103,6 +104,60 @@ public class BoundingBox {
 
     public float getMaxZ() {
         return entity.getPosition().getZ() + (z / 2);
+    }
+
+    public Vector[] getBottomFace() {
+        return new Vector[] {
+                new Vector(getMinX(), getMinY(), getMinZ()),
+                new Vector(getMaxX(), getMinY(), getMinZ()),
+                new Vector(getMaxX(), getMinY(), getMaxZ()),
+                new Vector(getMinX(), getMinY(), getMaxZ()),
+        };
+    }
+
+    public Vector[] getTopFace() {
+        return new Vector[] {
+                new Vector(getMinX(), getMaxY(), getMinZ()),
+                new Vector(getMaxX(), getMaxY(), getMinZ()),
+                new Vector(getMaxX(), getMaxY(), getMaxZ()),
+                new Vector(getMinX(), getMaxY(), getMaxZ()),
+        };
+    }
+
+    public Vector[] getLeftFace() {
+        return new Vector[] {
+                new Vector(getMinX(), getMinY(), getMinZ()),
+                new Vector(getMinX(), getMaxY(), getMinZ()),
+                new Vector(getMinX(), getMaxY(), getMaxZ()),
+                new Vector(getMinX(), getMinY(), getMaxZ()),
+        };
+    }
+
+    public Vector[] getRightFace() {
+        return new Vector[] {
+                new Vector(getMaxX(), getMinY(), getMinZ()),
+                new Vector(getMaxX(), getMaxY(), getMinZ()),
+                new Vector(getMaxX(), getMaxY(), getMaxZ()),
+                new Vector(getMaxX(), getMinY(), getMaxZ()),
+        };
+    }
+
+    public Vector[] getFrontFace() {
+        return new Vector[] {
+                new Vector(getMinX(), getMinY(), getMinZ()),
+                new Vector(getMaxX(), getMinY(), getMinZ()),
+                new Vector(getMaxX(), getMaxY(), getMinZ()),
+                new Vector(getMinX(), getMaxY(), getMinZ()),
+        };
+    }
+
+    public Vector[] getBackFace() {
+        return new Vector[] {
+                new Vector(getMinX(), getMinY(), getMaxZ()),
+                new Vector(getMaxX(), getMinY(), getMaxZ()),
+                new Vector(getMaxX(), getMaxY(), getMaxZ()),
+                new Vector(getMinX(), getMaxY(), getMaxZ()),
+        };
     }
 
     @Override

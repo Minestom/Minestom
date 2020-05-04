@@ -143,6 +143,10 @@ public class Position {
         return new BlockPosition(x, y, z);
     }
 
+    public Vector toVector() {
+        return new Vector(x, y, z);
+    }
+
     @Override
     public String toString() {
         return "Position[" + x + ":" + y + ":" + z + "] (" + yaw + "/" + pitch + ")";

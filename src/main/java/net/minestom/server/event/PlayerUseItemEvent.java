@@ -3,6 +3,9 @@ package net.minestom.server.event;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 
+/**
+ * Event when an item is used without clicking a block
+ */
 public class PlayerUseItemEvent extends CancellableEvent {
 
     private Player.Hand hand;

@@ -196,6 +196,15 @@ public class PlayerInit {
             BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
+
+                player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
+                    player.sendMessage("Using item in air: "+useEvent.getItemStack().getMaterial());
+                });
+
+                player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
+                    player.sendMessage("Main item: "+player.getInventory().getItemInMainHand().getMaterial());
+                    player.sendMessage("Using item on block: "+useEvent.getItemStack().getMaterial()+" at "+useEvent.getPosition()+" on face "+useEvent.getBlockFace());
+                });
             });
         });
     }

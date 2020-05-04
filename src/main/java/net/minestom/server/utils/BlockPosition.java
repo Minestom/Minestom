@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import java.util.Objects;
+
 // TODO: pool block positions?
 public class BlockPosition {
 
@@ -17,6 +19,10 @@ public class BlockPosition {
         this.x = (int) Math.floor(x);
         this.y = (y == castedY) ? castedY : castedY + 1;
         this.z = (int) Math.floor(z);
+    }
+
+    public BlockPosition(Vector position) {
+        this(position.getX(), position.getY(), position.getZ());
     }
 
     public BlockPosition add(int x, int y, int z) {
@@ -69,6 +75,21 @@ public class BlockPosition {
 
     public Position toPosition() {
         return new Position(x, y, z);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlockPosition that = (BlockPosition) o;
+        return x == that.x &&
+                y == that.y &&
+                z == that.z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 
     @Override
