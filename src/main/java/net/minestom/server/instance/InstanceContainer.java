@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
@@ -24,7 +25,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  */
 public class InstanceContainer extends Instance {
 
-    private File folder;
+    private StorageFolder storageFolder;
 
     private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
@@ -44,9 +44,9 @@ public class InstanceContainer extends Instance {
 
     private boolean autoChunkLoad;
 
-    protected InstanceContainer(UUID uniqueId, Dimension dimension, File folder) {
+    protected InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
         super(uniqueId, dimension);
-        this.folder = folder;
+        this.storageFolder = storageFolder;
     }
 
     @Override
@@ -261,20 +261,20 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void saveChunkToFolder(Chunk chunk, Runnable callback) {
-        CHUNK_LOADER_IO.saveChunk(chunk, getFolder(), callback);
+    public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
+        CHUNK_LOADER_IO.saveChunk(chunk, getStorageFolder(), callback);
     }
 
     @Override
-    public void saveChunksToFolder(Runnable callback) {
-        if (folder == null)
+    public void saveChunksToStorageFolder(Runnable callback) {
+        if (storageFolder == null)
             throw new UnsupportedOperationException("You cannot save an instance without setting a folder.");
 
         Iterator<Chunk> chunks = getChunks().iterator();
         while (chunks.hasNext()) {
             Chunk chunk = chunks.next();
             boolean isLast = !chunks.hasNext();
-            saveChunkToFolder(chunk, isLast ? callback : null);
+            saveChunkToStorageFolder(chunk, isLast ? callback : null);
         }
     }
 
@@ -295,9 +295,9 @@ public class InstanceContainer extends Instance {
 
     @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        if (folder != null) {
+        if (storageFolder != null) {
             // Load from file if possible
-            CHUNK_LOADER_IO.loadChunk(chunkX, chunkZ, this, chunk -> {
+            CHUNK_LOADER_IO.loadChunk(this, chunkX, chunkZ, getStorageFolder(), chunk -> {
                 cacheChunk(chunk);
                 if (callback != null)
                     callback.accept(chunk);
@@ -379,12 +379,14 @@ public class InstanceContainer extends Instance {
         return Collections.unmodifiableCollection(chunks.values());
     }
 
-    public File getFolder() {
-        return folder;
+    @Override
+    public StorageFolder getStorageFolder() {
+        return storageFolder;
     }
 
-    public void setFolder(File folder) {
-        this.folder = folder;
+    @Override
+    public void setStorageFolder(StorageFolder storageFolder) {
+        this.storageFolder = storageFolder;
     }
 
     private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockId) {

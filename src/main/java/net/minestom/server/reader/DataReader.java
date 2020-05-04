@@ -1,24 +1,15 @@
-package net.minestom.server.io;
+package net.minestom.server.reader;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.utils.CompressionUtils;
 
 public class DataReader {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
-    public static SerializableData readCompressedData(byte[] b) {
-        b = CompressionUtils.getDecompressedData(b);
-
-        return readData(Unpooled.wrappedBuffer(b));
-    }
-
-    // Only uncompressed
     public static SerializableData readData(ByteBuf buffer) {
         SerializableData data = new SerializableData();
         try {

@@ -15,6 +15,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.recipe.ShapelessRecipe;
+import net.minestom.server.storage.StorageManager;
+import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -48,6 +50,9 @@ public class Main {
         ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 3)};
         shapelessRecipe.addIngredient(ingredient);
         recipeManager.addRecipe(shapelessRecipe);
+
+        StorageManager storageManager = MinecraftServer.getStorageManager();
+        StorageManager.defineStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 

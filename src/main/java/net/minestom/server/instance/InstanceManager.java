@@ -1,10 +1,10 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.world.Dimension;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,17 +17,14 @@ public class InstanceManager {
 
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
 
-    public InstanceContainer createInstanceContainer(Dimension dimension, File folder) {
-        if (folder != null && !folder.exists())
-            folder.mkdir();
-
-        InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimension, folder);
+    public InstanceContainer createInstanceContainer(Dimension dimension, StorageFolder storageFolder) {
+        InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimension, storageFolder);
         this.instances.add(instance);
         return instance;
     }
 
-    public InstanceContainer createInstanceContainer(File file) {
-        return createInstanceContainer(Dimension.OVERWORLD, file);
+    public InstanceContainer createInstanceContainer(StorageFolder storageFolder) {
+        return createInstanceContainer(Dimension.OVERWORLD, storageFolder);
     }
 
     public InstanceContainer createInstanceContainer(Dimension dimension) {

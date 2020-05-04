@@ -13,13 +13,13 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.Dimension;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 
 public abstract class Instance implements BlockModifier, DataContainer {
 
-    protected static final ChunkLoaderIO CHUNK_LOADER_IO = new ChunkLoaderIO();
+    protected static final ChunkLoader CHUNK_LOADER_IO = new ChunkLoader();
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private Dimension dimension;
@@ -63,9 +63,9 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
-    public abstract void saveChunkToFolder(Chunk chunk, Runnable callback);
+    public abstract void saveChunkToStorageFolder(Chunk chunk, Runnable callback);
 
-    public abstract void saveChunksToFolder(Runnable callback);
+    public abstract void saveChunksToStorageFolder(Runnable callback);
 
     public abstract BlockBatch createBlockBatch();
 
@@ -75,9 +75,9 @@ public abstract class Instance implements BlockModifier, DataContainer {
 
     public abstract Collection<Chunk> getChunks();
 
-    public abstract File getFolder();
+    public abstract StorageFolder getStorageFolder();
 
-    public abstract void setFolder(File folder);
+    public abstract void setStorageFolder(StorageFolder storageFolder);
 
     public abstract void sendChunkUpdate(Player player, Chunk chunk);
 
@@ -244,12 +244,12 @@ public abstract class Instance implements BlockModifier, DataContainer {
         return getChunkAt(position.getX(), position.getZ());
     }
 
-    public void saveChunkToFolder(Chunk chunk) {
-        saveChunkToFolder(chunk, null);
+    public void saveChunkToStorageFolder(Chunk chunk) {
+        saveChunkToStorageFolder(chunk, null);
     }
 
-    public void saveChunksToFolder() {
-        saveChunksToFolder(null);
+    public void saveChunksToStorageFolder() {
+        saveChunksToStorageFolder(null);
     }
 
     public UUID getUniqueId() {
@@ -358,8 +358,9 @@ public abstract class Instance implements BlockModifier, DataContainer {
      * Schedule a block update at a given position.
      * Does nothing if no custom block is present at 'position'.
      * Cancelled if the block changes between this call and the actual update
-     * @param time in how long this update must be performed?
-     * @param unit in what unit is the time expressed
+     *
+     * @param time     in how long this update must be performed?
+     * @param unit     in what unit is the time expressed
      * @param position the location of the block to update
      */
     public abstract void scheduleUpdate(int time, TimeUnit unit, BlockPosition position);

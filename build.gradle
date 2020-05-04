@@ -27,7 +27,6 @@ dependencies {
     api group: 'it.unimi.dsi', name: 'fastutil', version: '8.3.0'
 
     api 'com.github.Querz:NBT:4.1'
-    api 'com.github.luben:zstd-jni:1.4.3-1'
     api 'com.esotericsoftware:reflectasm:1.11.9'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
@@ -39,7 +38,7 @@ dependencies {
     // https://jitpack.io/#Articdive/Jnoise/1.0-SNAPSHOT
     api 'com.github.Articdive:Jnoise:1.0-SNAPSHOT'
 
-    // https://mvnrepository.com/artifact/javax.vecmath/vecmath
-    api group: 'javax.vecmath', name: 'vecmath', version: '1.5.2' // Used for Fastnoise
+    // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
+    api group: 'org.rocksdb', name: 'rocksdbjni', version: '6.8.1'
 
 }

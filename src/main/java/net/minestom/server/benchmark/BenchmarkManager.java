@@ -13,7 +13,7 @@ import static net.minestom.server.MinecraftServer.*;
 public class BenchmarkManager {
 
     public static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-    private static List<String> threads = Arrays.asList(THREAD_NAME_MAIN_UPDATE, THREAD_NAME_PACKET_WRITER, THREAD_NAME_IO,
+    private static List<String> threads = Arrays.asList(THREAD_NAME_MAIN_UPDATE, THREAD_NAME_PACKET_WRITER,
             THREAD_NAME_BLOCK_BATCH, THREAD_NAME_BLOCK_UPDATE, THREAD_NAME_ENTITIES, THREAD_NAME_ENTITIES_PATHFINDING,
             THREAD_NAME_PLAYERS_ENTITIES, THREAD_NAME_SCHEDULER);
 

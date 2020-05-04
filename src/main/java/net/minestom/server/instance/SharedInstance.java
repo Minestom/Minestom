@@ -4,11 +4,11 @@ import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -56,13 +56,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveChunkToFolder(Chunk chunk, Runnable callback) {
-        instanceContainer.saveChunkToFolder(chunk, callback);
+    public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
+        instanceContainer.saveChunkToStorageFolder(chunk, callback);
     }
 
     @Override
-    public void saveChunksToFolder(Runnable callback) {
-        instanceContainer.saveChunksToFolder(callback);
+    public void saveChunksToStorageFolder(Runnable callback) {
+        instanceContainer.saveChunksToStorageFolder(callback);
     }
 
     @Override
@@ -86,13 +86,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public File getFolder() {
-        return instanceContainer.getFolder();
+    public StorageFolder getStorageFolder() {
+        return instanceContainer.getStorageFolder();
     }
 
     @Override
-    public void setFolder(File folder) {
-        instanceContainer.setFolder(folder);
+    public void setStorageFolder(StorageFolder storageFolder) {
+        instanceContainer.setStorageFolder(storageFolder);
     }
 
     @Override

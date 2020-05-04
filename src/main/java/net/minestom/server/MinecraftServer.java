@@ -17,6 +17,7 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.RegistryMain;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.Difficulty;
 
@@ -32,9 +33,6 @@ public class MinecraftServer {
 
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
-
-    public static final String THREAD_NAME_IO = "Ms-IOPool";
-    public static final int THREAD_COUNT_IO = 2;
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
@@ -74,6 +72,7 @@ public class MinecraftServer {
     private static EntityManager entityManager;
     private static CommandManager commandManager;
     private static RecipeManager recipeManager;
+    private static StorageManager storageManager;
     private static DataManager dataManager;
     private static TeamManager teamManager;
     private static SchedulerManager schedulerManager;
@@ -96,6 +95,7 @@ public class MinecraftServer {
         entityManager = new EntityManager();
         commandManager = new CommandManager();
         recipeManager = new RecipeManager();
+        storageManager = new StorageManager();
         dataManager = new DataManager();
         teamManager = new TeamManager();
         schedulerManager = new SchedulerManager();
@@ -166,6 +166,10 @@ public class MinecraftServer {
 
     public static RecipeManager getRecipeManager() {
         return recipeManager;
+    }
+
+    public static StorageManager getStorageManager() {
+        return storageManager;
     }
 
     public static DataManager getDataManager() {

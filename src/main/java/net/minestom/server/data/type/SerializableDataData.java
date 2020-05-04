@@ -2,9 +2,9 @@ package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.io.DataReader;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.reader.DataReader;
 
 import java.io.IOException;
 

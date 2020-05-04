@@ -1,4 +1,4 @@
-package net.minestom.server.io;
+package net.minestom.server.reader;
 
 import io.netty.buffer.Unpooled;
 import net.minestom.server.data.Data;
@@ -6,7 +6,6 @@ import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.ChunkBatch;
-import net.minestom.server.utils.CompressionUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -16,9 +15,7 @@ import java.util.function.Consumer;
 
 public class ChunkReader {
 
-    public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, boolean shouldDecompress, Consumer<Chunk> callback) {
-        b = shouldDecompress ? CompressionUtils.getDecompressedData(b) : b;
-
+    public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
         DataInputStream stream = new DataInputStream(new ByteArrayInputStream(b));
 
         ChunkBatch chunkBatch = null;

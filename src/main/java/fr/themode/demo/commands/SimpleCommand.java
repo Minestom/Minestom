@@ -23,12 +23,24 @@ public class SimpleCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
+        instance.saveChunksToStorageFolder();
+
         for (EntityCreature creature : instance.getCreatures()) {
             creature.setPathTo(player.getPosition());
         }
 
-        player.sendMessage("Direction: "+ MathUtils.getHorizontalDirection(player.getPosition().getYaw()));
+        /*StorageManager storageManager = MinecraftServer.getStorageManager();
 
+        StorageFolder storageFolder = storageManager.getFolder("player_data");
+
+        // Load a data directly into a DataContainer
+        // The StorageFolder keeps track of the returned data and automatically save it with the #save method
+        storageFolder.getAndCacheData("held_data", player.getInventory().getItemInMainHand());
+
+        storageFolder.saveCachedData();*/
+
+
+        player.sendMessage("Direction: " + MathUtils.getHorizontalDirection(player.getPosition().getYaw()));
 
         return true;
     }
