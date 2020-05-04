@@ -42,33 +42,71 @@ public class StorageFolder {
         this.storageSystem.close();
     }
 
-    public synchronized void getAndCacheData(String key, DataContainer dataContainer, Runnable callback) {
+    public void getAndCloneData(String key, DataContainer dataContainer, Runnable callback) {
+        synchronized (cachedData) {
 
-        // Keep giving the same SerializableData if already loaded
-        if (cachedData.containsKey(key)) {
-            dataContainer.setData(cachedData.get(key));
-            if (callback != null)
-                callback.run();
-            return;
-        }
-
-        // Load it from the storage system
-        get(key, bytes -> {
-            SerializableData data;
-
-            if (bytes != null) {
-                data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
-            } else {
-                data = new SerializableData();
+            // Copy data from the cachedMap
+            if (cachedData.containsKey(key)) {
+                SerializableData data = cachedData.get(key);
+                dataContainer.setData(data.clone());
+                if (callback != null)
+                    callback.run();
+                return;
             }
 
-            dataContainer.setData(data);
+            // Load it from the storage system
+            get(key, bytes -> {
+                SerializableData data;
 
-            this.cachedData.put(key, data);
+                if (bytes != null) {
+                    data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+                } else {
+                    data = new SerializableData();
+                }
 
-            if (callback != null)
-                callback.run();
-        });
+                dataContainer.setData(data);
+
+                if (callback != null)
+                    callback.run();
+            });
+
+        }
+    }
+
+    public void getAndCloneData(String key, DataContainer dataContainer) {
+        getAndCloneData(key, dataContainer, null);
+    }
+
+    public void getAndCacheData(String key, DataContainer dataContainer, Runnable callback) {
+        synchronized (cachedData) {
+
+            // Give the cached SerializableData if already loaded
+            if (cachedData.containsKey(key)) {
+                dataContainer.setData(cachedData.get(key));
+                if (callback != null)
+                    callback.run();
+                return;
+            }
+
+            // Load it from the storage system and cache it
+            get(key, bytes -> {
+                SerializableData data;
+
+                if (bytes != null) {
+                    data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+                } else {
+                    data = new SerializableData();
+                }
+
+                dataContainer.setData(data);
+
+                this.cachedData.put(key, data);
+
+                if (callback != null)
+                    callback.run();
+            });
+
+        }
     }
 
     public void getAndCacheData(String key, DataContainer dataContainer) {
@@ -77,11 +115,13 @@ public class StorageFolder {
 
     public void saveCachedData() {
         try {
-            for (Map.Entry<String, SerializableData> entry : cachedData.entrySet()) {
-                String key = entry.getKey();
-                SerializableData data = entry.getValue();
+            synchronized (cachedData) {
+                for (Map.Entry<String, SerializableData> entry : cachedData.entrySet()) {
+                    String key = entry.getKey();
+                    SerializableData data = entry.getValue();
 
-                set(key, data.getSerializedData());
+                    set(key, data.getSerializedData());
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
