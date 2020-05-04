@@ -41,8 +41,8 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.vecmath/vecmath
     api group: 'javax.vecmath', name: 'vecmath', version: '1.5.2' // Used for Fastnoise
 
-    compile 'net.kyori:text-api:3.0.3'
-    compile 'net.kyori:text-serializer-legacy:3.0.3'
-    compile 'net.kyori:text-serializer-gson:3.0.3'
-    compile 'net.kyori:text-serializer-plain:3.0.3'
+    api 'net.kyori:text-api:3.0.3'
+    api 'net.kyori:text-serializer-legacy:3.0.3'
+    api 'net.kyori:text-serializer-gson:3.0.3'
+    api 'net.kyori:text-serializer-plain:3.0.3'
 }
