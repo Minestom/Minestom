@@ -12,6 +12,7 @@ public class DamageType {
 
     public static final DamageType VOID = new DamageType("attack.outOfWorld");
     public static final DamageType GRAVITY = new DamageType("attack.fall");
+    public static final DamageType ON_FIRE = new DamageType("attack.onFire");
     private final String identifier;
 
     public DamageType(String identifier) {

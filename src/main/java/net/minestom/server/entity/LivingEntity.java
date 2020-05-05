@@ -13,6 +13,7 @@ import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -32,6 +33,7 @@ public abstract class LivingEntity extends Entity {
     private boolean isHandActive;
     private boolean offHand;
     private boolean riptideSpinAttack;
+    private long fireExtinguishTime;
 
     public LivingEntity(int entityType, Position spawnPosition) {
         super(entityType, spawnPosition);
@@ -45,6 +47,12 @@ public abstract class LivingEntity extends Entity {
 
     @Override
     public void update() {
+        if(isOnFire()) {
+            if(System.currentTimeMillis() > fireExtinguishTime) {
+                setOnFire(false);
+            }
+        }
+
         // Items picking
         if (canPickupItem) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
@@ -103,6 +111,25 @@ public abstract class LivingEntity extends Entity {
         setHealth(0);
         DeathEvent deathEvent = new DeathEvent();
         callEvent(DeathEvent.class, deathEvent);
+    }
+
+    /**
+     * Sets fire to this entity for a given duration
+     * @param duration duration in ticks of the effect
+     */
+    public void setFireForDuration(int duration) {
+        setOnFire(true);
+        setFireForDuration(duration, TimeUnit.TICK);
+    }
+
+    /**
+     * Sets fire to this entity for a given duration
+     * @param duration duration of the effet
+     * @param unit unit used to express the duration
+     */
+    public void setFireForDuration(int duration, TimeUnit unit) {
+        setOnFire(true);
+        fireExtinguishTime = System.currentTimeMillis()+unit.toMilliseconds(duration);
     }
 
     /**

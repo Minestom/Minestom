@@ -5,6 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.time.TimeUnit;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -20,6 +21,7 @@ public class SimpleCommand implements CommandProcessor {
     @Override
     public boolean process(Player player, String command, String[] args) {
         player.sendMessage("Everyone come at you!");
+        player.setFireForDuration(1000, TimeUnit.MILLISECOND);
 
         Instance instance = player.getInstance();
 
@@ -28,6 +30,7 @@ public class SimpleCommand implements CommandProcessor {
         for (EntityCreature creature : instance.getCreatures()) {
             creature.setPathTo(player.getPosition());
         }
+
 
         /*StorageManager storageManager = MinecraftServer.getStorageManager();
 
