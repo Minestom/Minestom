@@ -20,7 +20,6 @@ import net.minestom.server.utils.BlockPosition;
 public class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
-        System.out.println(">> "+packet.status.name());
         ClientPlayerDiggingPacket.Status status = packet.status;
         BlockPosition blockPosition = packet.blockPosition;
 

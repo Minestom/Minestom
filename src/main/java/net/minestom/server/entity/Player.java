@@ -528,6 +528,8 @@ public class Player extends LivingEntity {
         if (!isDead())
             return;
 
+        setFireForDuration(0);
+        setOnFire(false);
         refreshHealth();
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimension = getDimension();
