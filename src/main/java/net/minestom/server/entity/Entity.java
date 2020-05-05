@@ -7,11 +7,11 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.EntitySpawnEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
@@ -127,15 +127,17 @@ public abstract class Entity implements Viewable, DataContainer {
 
     /**
      * Checks if now is a good time to send a velocity update packet
-     * @return
+     *
      * @param time
+     * @return
      */
     protected boolean shouldSendVelocityUpdate(long time) {
-        return (time-lastVelocityUpdateTime) >= velocityUpdatePeriod;
+        return (time - lastVelocityUpdateTime) >= velocityUpdatePeriod;
     }
 
     /**
      * Gets the period, in ms, between two velocity update packets
+     *
      * @return period, in ms, between two velocity update packets
      */
     public long getVelocityUpdatePeriod() {
@@ -144,6 +146,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     /**
      * Sets the period, in ms, between two velocity update packets
+     *
      * @param velocityUpdatePeriod period, in ms, between two velocity update packets
      */
     public void setVelocityUpdatePeriod(long velocityUpdatePeriod) {
@@ -248,14 +251,14 @@ public abstract class Entity implements Viewable, DataContainer {
                 Position newPosition = new Position(newX, newY, newZ);
 
                 if (!(this instanceof Player) && !noGravity) { // players handle gravity by themselves
-                    velocity.setY(velocity.getY() - gravityDragPerTick*tps);
+                    velocity.setY(velocity.getY() - gravityDragPerTick * tps);
                 }
 
                 Vector newVelocityOut = new Vector();
                 Vector deltaPos = new Vector(
-                        getVelocity().getX()/tps,
-                        getVelocity().getY()/tps,
-                        getVelocity().getZ()/tps
+                        getVelocity().getX() / tps,
+                        getVelocity().getY() / tps,
+                        getVelocity().getZ() / tps
                 );
                 onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
@@ -264,7 +267,7 @@ public abstract class Entity implements Viewable, DataContainer {
                 velocity.multiply(tps);
 
                 float drag;
-                if(onGround) {
+                if (onGround) {
                     drag = 0.5f; // ground drag
                 } else {
                     drag = 0.98f; // air drag
@@ -287,17 +290,17 @@ public abstract class Entity implements Viewable, DataContainer {
             int maxY = (int) Math.ceil(boundingBox.getMaxY());
             int minZ = (int) Math.floor(boundingBox.getMinZ());
             int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
-            BlockPosition tmpPosition = new BlockPosition(0,0,0); // allow reuse
+            BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
                         CustomBlock customBlock = instance.getCustomBlock(x, y, z);
-                        if(customBlock != null) {
+                        if (customBlock != null) {
                             tmpPosition.setX(x);
                             tmpPosition.setY(y);
                             tmpPosition.setZ(z);
                             // checks that we are actually in the block, and not just here because of a rounding error
-                            if(boundingBox.intersect(tmpPosition)) {
+                            if (boundingBox.intersect(tmpPosition)) {
                                 // TODO: replace with check with custom block bounding box
                                 customBlock.handleContact(instance, tmpPosition, this);
                             }
@@ -397,6 +400,8 @@ public abstract class Entity implements Viewable, DataContainer {
         this.instance = instance;
         instance.addEntity(this);
         spawn();
+        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(instance);
+        callEvent(EntitySpawnEvent.class, entitySpawnEvent);
     }
 
     public Vector getVelocity() {

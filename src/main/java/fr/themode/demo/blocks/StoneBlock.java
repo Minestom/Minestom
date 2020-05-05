@@ -15,14 +15,14 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
-        System.out.println("PLACED at "+blockPosition);
+
     }
 
     @Override
     public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
         BlockPosition above = blockPosition.clone().add(0, 1, 0);
         CustomBlock blockAbove = instance.getCustomBlock(above);
-        if(blockAbove == this) {
+        if (blockAbove == this) {
             instance.setBlock(above, Block.AIR);
             instance.setBlock(blockPosition, Block.AIR); // this should NOT create a stack overflow simply because we are trying to remove this same block
         }
@@ -30,9 +30,7 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
-        if(directNeighbor) {
-            System.out.println("Block at "+thisPosition+" has been updated by neighbor at "+neighborPosition);
-        }
+
     }
 
     @Override

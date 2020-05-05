@@ -15,7 +15,7 @@ public class StorageManager {
     public StorageFolder getFolder(String folderName) {
         if (storageSystemSupplier == null)
             throw new NullPointerException("You need to define a storage system before using the Storage API");
-        
+
         StorageSystem storageSystem = storageSystemSupplier.get();
         return folderMap.computeIfAbsent(folderName, s -> new StorageFolder(storageSystem, folderName));
     }

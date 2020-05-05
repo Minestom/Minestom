@@ -5,6 +5,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.DeathEvent;
 import net.minestom.server.event.EntityDamageEvent;
+import net.minestom.server.event.EntityFireEvent;
 import net.minestom.server.event.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.ItemStack;
@@ -64,11 +65,11 @@ public abstract class LivingEntity extends Entity {
 
     @Override
     public void update() {
-        if(isOnFire()) {
-            if(System.currentTimeMillis() > fireExtinguishTime) {
+        if (isOnFire()) {
+            if (System.currentTimeMillis() > fireExtinguishTime) {
                 setOnFire(false);
             } else {
-                if(System.currentTimeMillis() - lastFireDamageTime > fireDamagePeriod) {
+                if (System.currentTimeMillis() - lastFireDamageTime > fireDamagePeriod) {
                     damage(DamageType.ON_FIRE, 1.0f);
                     lastFireDamageTime = System.currentTimeMillis();
                 }
@@ -137,21 +138,26 @@ public abstract class LivingEntity extends Entity {
 
     /**
      * Sets fire to this entity for a given duration
+     *
      * @param duration duration in ticks of the effect
      */
     public void setFireForDuration(int duration) {
-        setOnFire(true);
         setFireForDuration(duration, TimeUnit.TICK);
     }
 
     /**
      * Sets fire to this entity for a given duration
+     *
      * @param duration duration of the effet
-     * @param unit unit used to express the duration
+     * @param unit     unit used to express the duration
      */
     public void setFireForDuration(int duration, TimeUnit unit) {
-        setOnFire(true);
-        fireExtinguishTime = System.currentTimeMillis()+unit.toMilliseconds(duration);
+        EntityFireEvent entityFireEvent = new EntityFireEvent(duration, unit);
+        callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
+            long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
+            setOnFire(true);
+            fireExtinguishTime = System.currentTimeMillis() + fireTime;
+        });
     }
 
     /**
@@ -176,9 +182,9 @@ public abstract class LivingEntity extends Entity {
 
             // play damage sound
             Sound sound = type.getSound(this);
-            if(sound != null) {
+            if (sound != null) {
                 SoundCategory soundCategory;
-                if(this instanceof Player) {
+                if (this instanceof Player) {
                     soundCategory = SoundCategory.PLAYERS;
                 } else {
                     // TODO: separate living entity categories
