@@ -114,6 +114,9 @@ public class PlayerInit {
                 if (event.getBlockId() == Block.STONE.getBlockId()) {
                     event.setCustomBlockId((short) 2); // custom stone block
                 }
+                if (event.getBlockId() == Block.TORCH.getBlockId()) {
+                    event.setCustomBlockId((short) 3); // custom torch block
+                }
 
                 /*for (Player p : player.getInstance().getPlayers()) {
                     if (p != player)

@@ -6,6 +6,7 @@ import net.minestom.server.event.ItemUpdateStateEvent;
 import net.minestom.server.event.PlayerStartDiggingEvent;
 import net.minestom.server.event.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -19,6 +20,7 @@ import net.minestom.server.utils.BlockPosition;
 public class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
+        System.out.println(">> "+packet.status.name());
         ClientPlayerDiggingPacket.Status status = packet.status;
         BlockPosition blockPosition = packet.blockPosition;
 
@@ -51,8 +53,16 @@ public class PlayerDiggingListener {
                                 }
                                 addEffect(player);
                             } else {
-                                player.resetTargetBlock();
-                                removeEffect(player);
+                                if(Block.fromId(instance.getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ())).breaksInstantaneously()) {
+                                    if (player.getCustomBlockTarget() != null) {
+                                        player.resetTargetBlock();
+                                        removeEffect(player);
+                                    }
+                                    instance.breakBlock(player, blockPosition);
+                                } else {
+                                    player.resetTargetBlock();
+                                    removeEffect(player);
+                                }
                             }
                         } else {
                             player.resetTargetBlock();

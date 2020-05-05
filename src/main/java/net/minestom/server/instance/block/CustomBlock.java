@@ -1,10 +1,12 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.data.Data;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.UpdateOption;
+import net.querz.nbt.CompoundTag;
 
 /**
  * TODO
@@ -73,6 +75,15 @@ public abstract class CustomBlock {
         return updateOption.getValue() > 0;
     }
 
+
+    /**
+     * Defines custom behaviour for entities touching this block.
+     * @param instance
+     * @param position the position at which the block is
+     * @param touching the entity currently touching the block
+     */
+    public void handleContact(Instance instance, BlockPosition position, Entity touching) {}
+
     public short getBlockId() {
         return blockId;
     }
@@ -100,7 +111,7 @@ public abstract class CustomBlock {
      * @param directNeighbor is the neighbor directly connected to this block? (No diagonals)
      */
     public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
-        if(directNeighbor) {
+        if(directNeighbor && hasUpdate()) {
             update(instance, thisPosition, instance.getBlockData(thisPosition));
         }
     }
@@ -114,4 +125,12 @@ public abstract class CustomBlock {
     public void scheduledUpdate(Instance instance, BlockPosition position, Data blockData) {
         update(instance, position, blockData);
     }
+
+    /**
+     * Allows custom block to write block entity data to a given NBT compound
+     * @param instance instance of which the block lives
+     * @param position position of the block
+     * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
+     */
+    public void writeBlockEntity(Instance instance, BlockPosition position, Data blockData, CompoundTag nbt) {}
 }

@@ -476,7 +476,7 @@ public class Player extends LivingEntity {
 
     @Override
     public boolean isImmune(DamageType type) {
-        if (getGameMode().canTakeDamage()) {
+        if (!getGameMode().canTakeDamage()) {
             return type != DamageType.VOID;
         }
         return super.isImmune(type);

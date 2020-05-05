@@ -1362,6 +1362,208 @@ public enum Block {
         }
     }
 
+    public boolean breaksInstantaneously() {
+        // from https://minecraft.gamepedia.com/Breaking#Instant_breaking
+        switch (this) {
+            // circuits
+            case COMPARATOR:
+            case REPEATER:
+            case REDSTONE_TORCH:
+            case REDSTONE_WIRE:
+            case TRIPWIRE:
+            case TRIPWIRE_HOOK:
+
+            // other
+            case FIRE:
+            case INFESTED_STONE:
+            case TNT:
+            case TORCH:
+            case SCAFFOLDING:
+            case SLIME_BLOCK:
+            case HONEY_BLOCK:
+
+            // plants
+            case BEETROOTS:
+            case CARROTS:
+            case DEAD_BUSH:
+            case FERN:
+            case KELP:
+            case LILY_PAD:
+            case MELON_STEM:
+            case ATTACHED_MELON_STEM:
+            case NETHER_WART:
+            case POTATOES:
+            case PUMPKIN_STEM:
+            case ATTACHED_PUMPKIN_STEM:
+            case SEAGRASS:
+            case TALL_SEAGRASS:
+            case SEA_PICKLE:
+            case SUGAR_CANE:
+            case TALL_GRASS:
+            case WHEAT:
+                return true;
+
+            default:
+                return isFlowerPot() || isSapling() || isCoral() || isFlower() || isMushroom();
+        }
+    }
+
+    public boolean isCoral() {
+        switch (this) {
+            case DEAD_TUBE_CORAL_BLOCK:
+            case DEAD_BRAIN_CORAL_BLOCK:
+            case DEAD_BUBBLE_CORAL_BLOCK:
+            case DEAD_FIRE_CORAL_BLOCK:
+            case DEAD_HORN_CORAL_BLOCK:
+            case TUBE_CORAL_BLOCK:
+            case BRAIN_CORAL_BLOCK:
+            case BUBBLE_CORAL_BLOCK:
+            case FIRE_CORAL_BLOCK:
+            case HORN_CORAL_BLOCK:
+            case DEAD_TUBE_CORAL:
+            case DEAD_BRAIN_CORAL:
+            case DEAD_BUBBLE_CORAL:
+            case DEAD_FIRE_CORAL:
+            case DEAD_HORN_CORAL:
+            case TUBE_CORAL:
+            case BRAIN_CORAL:
+            case BUBBLE_CORAL:
+            case FIRE_CORAL:
+            case HORN_CORAL:
+            case DEAD_TUBE_CORAL_FAN:
+            case DEAD_BRAIN_CORAL_FAN:
+            case DEAD_BUBBLE_CORAL_FAN:
+            case DEAD_FIRE_CORAL_FAN:
+            case DEAD_HORN_CORAL_FAN:
+            case TUBE_CORAL_FAN:
+            case BRAIN_CORAL_FAN:
+            case BUBBLE_CORAL_FAN:
+            case FIRE_CORAL_FAN:
+            case HORN_CORAL_FAN:
+            case DEAD_TUBE_CORAL_WALL_FAN:
+            case DEAD_BRAIN_CORAL_WALL_FAN:
+            case DEAD_BUBBLE_CORAL_WALL_FAN:
+            case DEAD_FIRE_CORAL_WALL_FAN:
+            case DEAD_HORN_CORAL_WALL_FAN:
+            case TUBE_CORAL_WALL_FAN:
+            case BRAIN_CORAL_WALL_FAN:
+            case BUBBLE_CORAL_WALL_FAN:
+            case FIRE_CORAL_WALL_FAN:
+            case HORN_CORAL_WALL_FAN:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    public boolean isFlower() {
+        switch (this) {
+            case ALLIUM:
+            case AZURE_BLUET:
+            case BLUE_ORCHID:
+            case CORNFLOWER:
+            case DANDELION:
+            case LILY_OF_THE_VALLEY:
+            case ORANGE_TULIP:
+            case OXEYE_DAISY:
+            case PINK_TULIP:
+            case POPPY:
+            case RED_TULIP:
+            case WHITE_TULIP:
+            case WITHER_ROSE:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    public boolean isMushroom() {
+        switch (this) {
+            case POTTED_SPRUCE_SAPLING:
+            case POTTED_BIRCH_SAPLING:
+            case POTTED_JUNGLE_SAPLING:
+            case POTTED_ACACIA_SAPLING:
+            case POTTED_OAK_SAPLING:
+            case POTTED_DARK_OAK_SAPLING:
+            case POTTED_ALLIUM:
+            case POTTED_AZURE_BLUET:
+            case POTTED_BAMBOO:
+            case POTTED_BLUE_ORCHID:
+            case POTTED_BROWN_MUSHROOM:
+            case POTTED_CACTUS:
+            case POTTED_CORNFLOWER:
+            case POTTED_DANDELION:
+            case POTTED_DEAD_BUSH:
+            case POTTED_FERN:
+            case POTTED_LILY_OF_THE_VALLEY:
+            case POTTED_ORANGE_TULIP:
+            case POTTED_OXEYE_DAISY:
+            case POTTED_PINK_TULIP:
+            case POTTED_POPPY:
+            case POTTED_RED_MUSHROOM:
+            case POTTED_RED_TULIP:
+            case POTTED_WHITE_TULIP:
+            case POTTED_WITHER_ROSE:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    public boolean isFlowerPot() {
+        switch (this) {
+            case POTTED_SPRUCE_SAPLING:
+            case POTTED_BIRCH_SAPLING:
+            case POTTED_JUNGLE_SAPLING:
+            case POTTED_ACACIA_SAPLING:
+            case POTTED_OAK_SAPLING:
+            case POTTED_DARK_OAK_SAPLING:
+            case POTTED_ALLIUM:
+            case POTTED_AZURE_BLUET:
+            case POTTED_BAMBOO:
+            case POTTED_BLUE_ORCHID:
+            case POTTED_BROWN_MUSHROOM:
+            case POTTED_CACTUS:
+            case POTTED_CORNFLOWER:
+            case POTTED_DANDELION:
+            case POTTED_DEAD_BUSH:
+            case POTTED_FERN:
+            case POTTED_LILY_OF_THE_VALLEY:
+            case POTTED_ORANGE_TULIP:
+            case POTTED_OXEYE_DAISY:
+            case POTTED_PINK_TULIP:
+            case POTTED_POPPY:
+            case POTTED_RED_MUSHROOM:
+            case POTTED_RED_TULIP:
+            case POTTED_WHITE_TULIP:
+            case POTTED_WITHER_ROSE:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+
+    public boolean isSapling() {
+        switch (this) {
+            case SPRUCE_SAPLING:
+            case BIRCH_SAPLING:
+            case JUNGLE_SAPLING:
+            case ACACIA_SAPLING:
+            case BAMBOO_SAPLING:
+            case OAK_SAPLING:
+            case DARK_OAK_SAPLING:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
     public List<BlockAlternative> getBlockAlternatives() {
         return Collections.unmodifiableList(blockAlternatives);
     }

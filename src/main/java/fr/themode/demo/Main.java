@@ -1,6 +1,7 @@
 package fr.themode.demo;
 
 import fr.themode.demo.blocks.StoneBlock;
+import fr.themode.demo.blocks.BurningTorchBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
 import fr.themode.demo.commands.GamemodeCommand;
 import fr.themode.demo.commands.HealthCommand;
@@ -30,6 +31,7 @@ public class Main {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
         blockManager.registerCustomBlock(new UpdatableBlockDemo());
+        blockManager.registerCustomBlock(new BurningTorchBlock());
 
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
