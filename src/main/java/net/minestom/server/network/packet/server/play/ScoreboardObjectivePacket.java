@@ -18,7 +18,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeSizedString(Chat.legacyTextString(objectiveValue));
+            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(objectiveValue)));
             writer.writeVarInt(type);
         }
     }

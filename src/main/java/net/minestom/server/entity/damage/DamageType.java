@@ -1,7 +1,8 @@
 package net.minestom.server.entity.damage;
 
-import club.thectm.minecraft.text.TextBuilder;
-import club.thectm.minecraft.text.TextObject;
+import net.kyori.text.Component;
+import net.kyori.text.TextComponent;
+import net.kyori.text.TranslatableComponent;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -34,15 +35,15 @@ public class DamageType {
         return new EntityProjectileDamage(shooter, projectile);
     }
 
-    public TextObject buildChatMessage(Player killed) {
-        return TextBuilder.ofTranslation("death."+identifier, TextBuilder.of(killed.getUsername()).build()).build();
+    public Component buildChatMessage(Player killed) {
+        return TranslatableComponent.of("death."+identifier, TextComponent.of(killed.getUsername()));
     }
 
     public static DamageType fromPlayer(Player player) {
         return new EntityDamage(player);
     }
 
-    public TextObject buildDeathScreenMessage(Player killed) {
+    public Component buildDeathScreenMessage(Player killed) {
         return buildChatMessage(killed);
     }
 

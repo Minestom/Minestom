@@ -1,8 +1,7 @@
 package net.minestom.server.entity;
 
-import club.thectm.minecraft.text.TextBuilder;
-import club.thectm.minecraft.text.TextObject;
-import com.google.gson.JsonObject;
+import net.kyori.text.Component;
+import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
@@ -249,21 +248,21 @@ public class Player extends LivingEntity {
     public void kill() {
         if (!isDead()) {
             // send death message to player
-            TextObject deathMessage;
+            Component deathMessage;
             if (lastDamageSource != null) {
                 deathMessage = lastDamageSource.buildDeathScreenMessage(this);
             } else { // may happen if killed by the server without applying damage
-                deathMessage = TextBuilder.of("Killed by poor programming.").build();
+                deathMessage = TextComponent.of("Killed by poor programming.");
             }
             CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathMessage);
             playerConnection.sendPacket(deathPacket);
 
             // send death message to chat
-            TextObject chatMessage;
+            Component chatMessage;
             if (lastDamageSource != null) {
                 chatMessage = lastDamageSource.buildChatMessage(this);
             } else { // may happen if killed by the server without applying damage
-                chatMessage = TextBuilder.of(getUsername() + " was killed by poor programming.").build();
+                chatMessage = TextComponent.of(getUsername() + " was killed by poor programming.");
             }
             MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
                 player.sendMessage(chatMessage);
@@ -399,20 +398,16 @@ public class Player extends LivingEntity {
 
     // Use legacy color formatting
     public void sendMessage(String message) {
-        sendMessage(Chat.legacyText(message));
+        sendMessage(Chat.fromLegacyText(message));
     }
 
     public void sendMessage(String message, char colorChar) {
-        sendMessage(Chat.legacyText(message, colorChar));
+        sendMessage(Chat.fromLegacyText(message, colorChar));
     }
 
-    public void sendMessage(JsonObject jsonObject) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(jsonObject.toString(), ChatMessagePacket.Position.CHAT);
-        playerConnection.sendPacket(chatMessagePacket);
-    }
-
-    public void sendMessage(TextObject textObject) {
-        sendMessage(textObject.toJson());
+    public void sendMessage(Component textObject) {
+        String json = Chat.toJsonString(textObject);
+        playerConnection.sendPacket(new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT));
     }
 
     public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
@@ -452,22 +447,75 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(stopSoundPacket);
     }
 
-    public void sendHeaderFooter(String header, String footer, char colorChar) {
+    public void sendHeaderFooter(Component header, Component footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
-
-        playerListHeaderAndFooterPacket.header = Chat.legacyText(header, colorChar).toJson().toString();
-        playerListHeaderAndFooterPacket.footer = Chat.legacyText(footer, colorChar).toJson().toString();
+        playerListHeaderAndFooterPacket.header = Chat.toJsonString(header);
+        playerListHeaderAndFooterPacket.footer = Chat.toJsonString(footer);
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
 
-    public void sendActionBarMessage(String message, char colorChar) {
+    public void sendHeaderFooter(String header, String footer, char colorChar) {
+        sendHeaderFooter(Chat.fromLegacyText(header, colorChar), Chat.fromLegacyText(footer, colorChar));
+    }
+
+    private void sendTitle(Component title, TitlePacket.Action action) {
         TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.SET_ACTION_BAR;
-        titlePacket.actionBarText = Chat.legacyText(message, colorChar).toJson().toString();
+        titlePacket.action = action;
+
+        switch (action) {
+            case SET_TITLE:
+                titlePacket.titleText = Chat.toJsonString(title);
+                break;
+            case SET_SUBTITLE:
+                titlePacket.subtitleText = Chat.toJsonString(title);
+                break;
+            case SET_ACTION_BAR:
+                titlePacket.actionBarText = Chat.toJsonString(title);
+            default:
+                throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
+        }
+
         playerConnection.sendPacket(titlePacket);
+    }
+
+    public void sendTitleSubtitleMessage(Component title, Component subtitle) {
+        sendTitle(title, TitlePacket.Action.SET_TITLE);
+        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+    }
+
+    public void sendTitleMessage(Component title) {
+        sendTitle(title, TitlePacket.Action.SET_TITLE);
+    }
+
+    public void sendTitleMessage(String title, char colorChar) {
+        sendTitleMessage(Chat.fromLegacyText(title, colorChar));
+    }
+
+    public void sendTitleMessage(String title) {
+        sendTitleMessage(title, Chat.COLOR_CHAR);
+    }
+
+    public void sendSubtitleMessage(Component subtitle) {
+        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+    }
+
+    public void sendSubtitleMessage(String subtitle, char colorChar) {
+        sendSubtitleMessage(Chat.fromLegacyText(subtitle, colorChar));
+    }
+
+    public void sendSubtitleMessage(String subtitle) {
+        sendSubtitleMessage(subtitle, Chat.COLOR_CHAR);
+    }
+
+    public void sendActionBarMessage(Component actionBar) {
+        sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
+    }
+
+    public void sendActionBarMessage(String message, char colorChar) {
+        sendActionBarMessage(Chat.fromLegacyText(message, colorChar));
     }
 
     public void sendActionBarMessage(String message) {
@@ -703,11 +751,15 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(respawnPacket);
     }
 
-    public void kick(String message) {
+    public void kick(Component message) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = message;
+        disconnectPacket.message = Chat.toJsonString(message);
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.getChannel().close();
+    }
+
+    public void kick(String message) {
+        kick(Chat.fromLegacyText(message));
     }
 
     public LevelType getLevelType() {

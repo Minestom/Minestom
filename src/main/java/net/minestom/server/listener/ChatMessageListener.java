@@ -1,6 +1,10 @@
 package net.minestom.server.listener;
 
-import club.thectm.minecraft.text.*;
+import net.kyori.text.TextComponent;
+import net.kyori.text.event.ClickEvent;
+import net.kyori.text.event.HoverEvent;
+import net.kyori.text.format.TextColor;
+import net.kyori.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.command.CommandManager;
@@ -14,7 +18,7 @@ import java.util.function.Function;
 public class ChatMessageListener {
 
     public static void listener(ClientChatMessagePacket packet, Player player) {
-        String message = Chat.uncoloredLegacyText(packet.message);
+        String message = PlainComponentSerializer.INSTANCE.serialize(Chat.fromLegacyText(packet.message));
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         String cmdPrefix = commandManager.getCommandPrefix();
@@ -38,12 +42,11 @@ public class ChatMessageListener {
         playerChatEvent.setChatFormat((event) -> {
             String username = player.getUsername();
 
-            TextObject usernameText = TextBuilder.of(String.format("<%s>", username))
-                    .color(ChatColor.WHITE)
-                    .hoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, ChatColor.GRAY + "Its " + username))
-                    .clickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + username + " "))
-                    .append(" " + event.getMessage())
-                    .build();
+            TextComponent usernameText = TextComponent.of(String.format("<%s>", username))
+                    .color(TextColor.WHITE)
+                    .hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of("Its " + username).color(TextColor.GRAY)))
+                    .clickEvent(ClickEvent.of(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + username + " "))
+                    .append(TextComponent.of(" " + event.getMessage()));
 
             return usernameText;
         });
@@ -51,11 +54,11 @@ public class ChatMessageListener {
         // Call the event
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
 
-            Function<PlayerChatEvent, TextObject> formatFunction = playerChatEvent.getChatFormatFunction();
+            Function<PlayerChatEvent, TextComponent> formatFunction = playerChatEvent.getChatFormatFunction();
             if (formatFunction == null)
                 throw new NullPointerException("PlayerChatEvent#chatFormat cannot be null!");
 
-            TextObject textObject = formatFunction.apply(playerChatEvent);
+            TextComponent textObject = formatFunction.apply(playerChatEvent);
 
             for (Player recipient : playerChatEvent.getRecipients()) {
                 recipient.sendMessage(textObject);

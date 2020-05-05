@@ -92,8 +92,8 @@ public class AdvancementsPacket implements ServerPacket {
         public float y;
 
         private void write(PacketWriter writer) {
-            writer.writeSizedString(Chat.legacyTextString(title));
-            writer.writeSizedString(Chat.legacyTextString(description));
+            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
+            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
             writer.writeItemStack(icon);
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);

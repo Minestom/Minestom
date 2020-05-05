@@ -28,7 +28,7 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(Chat.legacyTextString(title));
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
                 writer.writeFloat(health);
                 writer.writeVarInt(color.ordinal());
                 writer.writeVarInt(division.ordinal());
@@ -41,7 +41,7 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(Chat.legacyTextString(title));
+                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(title)));
                 break;
             case UPDATE_STYLE:
                 writer.writeVarInt(color.ordinal());

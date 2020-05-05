@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
-import club.thectm.minecraft.text.TextObject;
+import net.kyori.text.Component;
+import net.kyori.text.TextComponent;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -20,7 +21,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private TextObject deathMessage;
+    private Component deathMessage;
 
     private CombatEventPacket() {}
 
@@ -38,7 +39,7 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
-    public static CombatEventPacket death(Player player, Optional<Entity> killer, TextObject message) {
+    public static CombatEventPacket death(Player player, Optional<Entity> killer, Component message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();
@@ -63,7 +64,7 @@ public class CombatEventPacket implements ServerPacket {
             case DEATH:
                 writer.writeVarInt(playerID);
                 writer.writeInt(opponent);
-                writer.writeSizedString(deathMessage.toJson().toString());
+                writer.writeSizedString(Chat.toJsonString(deathMessage));
                 break;
         }
     }

@@ -1,7 +1,7 @@
 package net.minestom.server.scoreboard;
 
 import io.netty.buffer.ByteBuf;
-import net.minestom.server.chat.ChatColor;
+import net.kyori.text.format.TextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -17,7 +17,7 @@ public class Team {
     private byte friendlyFlags = 0x00;
     private TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.ALWAYS;
     private TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-    private ChatColor teamColor = ChatColor.WHITE;
+    private TextColor teamColor = TextColor.WHITE;
     private String prefix = "", suffix = "";
     private String[] entities = new String[0];
     private Set<Player> players = new CopyOnWriteArraySet<>();
@@ -36,7 +36,7 @@ public class Team {
         teamsCreationPacket.friendlyFlags = friendlyFlags;
         teamsCreationPacket.nameTagVisibility = nameTagVisibility;
         teamsCreationPacket.collisionRule = collisionRule;
-        teamsCreationPacket.teamColor = teamColor.getId();
+        teamsCreationPacket.teamColor = teamColor.ordinal();
         teamsCreationPacket.teamPrefix = prefix;
         teamsCreationPacket.teamSuffix = suffix;
         teamsCreationPacket.entities = entities;
@@ -107,9 +107,9 @@ public class Team {
         sendUpdatePacket();
     }
 
-    public void setTeamColor(ChatColor teamColor) {
+    public void setTeamColor(TextColor teamColor) {
         this.teamColor = teamColor;
-        this.teamsCreationPacket.teamColor = teamColor.getId();
+        this.teamsCreationPacket.teamColor = teamColor.ordinal();
         sendUpdatePacket();
     }
 
@@ -152,7 +152,7 @@ public class Team {
         updatePacket.friendlyFlags = friendlyFlags;
         updatePacket.nameTagVisibility = nameTagVisibility;
         updatePacket.collisionRule = collisionRule;
-        updatePacket.teamColor = teamColor.getId();
+        updatePacket.teamColor = teamColor.ordinal();
         updatePacket.teamPrefix = prefix;
         updatePacket.teamSuffix = suffix;
         ByteBuf buffer = PacketUtils.writePacket(updatePacket);

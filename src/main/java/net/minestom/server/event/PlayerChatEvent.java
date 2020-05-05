@@ -1,6 +1,6 @@
 package net.minestom.server.event;
 
-import club.thectm.minecraft.text.TextObject;
+import net.kyori.text.TextComponent;
 import net.minestom.server.entity.Player;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class PlayerChatEvent extends CancellableEvent {
     private Player sender;
     private Collection<Player> recipients;
     private String message;
-    private Function<PlayerChatEvent, TextObject> chatFormat;
+    private Function<PlayerChatEvent, TextComponent> chatFormat;
 
     public PlayerChatEvent(Player sender, Collection<Player> recipients, String message) {
         this.sender = sender;
@@ -20,7 +20,7 @@ public class PlayerChatEvent extends CancellableEvent {
         this.message = message;
     }
 
-    public void setChatFormat(Function<PlayerChatEvent, TextObject> chatFormat) {
+    public void setChatFormat(Function<PlayerChatEvent, TextComponent> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -40,7 +40,7 @@ public class PlayerChatEvent extends CancellableEvent {
         this.message = message;
     }
 
-    public Function<PlayerChatEvent, TextObject> getChatFormatFunction() {
+    public Function<PlayerChatEvent, TextComponent> getChatFormatFunction() {
         return chatFormat;
     }
 }

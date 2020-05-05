@@ -1,8 +1,7 @@
 package net.minestom.server.utils;
 
-import club.thectm.minecraft.text.LegacyText;
-import club.thectm.minecraft.text.TextObject;
-import com.google.gson.JsonParser;
+import net.kyori.text.Component;
+import net.minestom.server.chat.Chat;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
@@ -122,8 +121,9 @@ public class NbtReaderUtils {
 
                 if (stringName.equals("Name")) {
                     String jsonDisplayName = reader.readShortSizedString();
-                    TextObject textObject = TextObject.fromJson(new JsonParser().parse(jsonDisplayName).getAsJsonObject());
-                    String displayName = LegacyText.toLegacy(textObject);
+                    Component textObject = Chat.fromJsonString(jsonDisplayName);
+                    String displayName = Chat.toLegacyText(textObject);
+
                     item.setDisplayName(displayName);
                     readItemStackDisplayNBT(reader, item);
                 }
@@ -139,9 +139,9 @@ public class NbtReaderUtils {
                     ArrayList<String> lore = new ArrayList<>(size);
                     for (int i = 0; i < size; i++) {
                         String string = reader.readShortSizedString();
+                        Component textObject = Chat.fromJsonString(string);
+                        String line = Chat.toLegacyText(textObject);
 
-                        TextObject textObject = TextObject.fromJson(new JsonParser().parse(string).getAsJsonObject());
-                        String line = LegacyText.toLegacy(textObject);
                         lore.add(line);
                         if (lore.size() == size) {
                             item.setLore(lore);
