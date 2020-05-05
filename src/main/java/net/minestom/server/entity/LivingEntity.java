@@ -12,6 +12,9 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
+import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -33,7 +36,21 @@ public abstract class LivingEntity extends Entity {
     private boolean isHandActive;
     private boolean offHand;
     private boolean riptideSpinAttack;
+
+    /**
+     * Time at which this entity must be extinguished
+     */
     private long fireExtinguishTime;
+
+    /**
+     * Last time the fire damage was applied
+     */
+    private long lastFireDamageTime;
+
+    /**
+     * Period, in ms, between two fire damage applications
+     */
+    private long fireDamagePeriod = 1000L;
 
     public LivingEntity(int entityType, Position spawnPosition) {
         super(entityType, spawnPosition);
@@ -50,6 +67,11 @@ public abstract class LivingEntity extends Entity {
         if(isOnFire()) {
             if(System.currentTimeMillis() > fireExtinguishTime) {
                 setOnFire(false);
+            } else {
+                if(System.currentTimeMillis() - lastFireDamageTime > fireDamagePeriod) {
+                    damage(DamageType.ON_FIRE, 1.0f);
+                    lastFireDamageTime = System.currentTimeMillis();
+                }
             }
         }
 
@@ -151,6 +173,21 @@ public abstract class LivingEntity extends Entity {
             entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
             sendPacketToViewersAndSelf(entityAnimationPacket);
             setHealth(getHealth() - damage);
+
+            // play damage sound
+            Sound sound = type.getSound(this);
+            if(sound != null) {
+                SoundCategory soundCategory;
+                if(this instanceof Player) {
+                    soundCategory = SoundCategory.PLAYERS;
+                } else {
+                    // TODO: separate living entity categories
+                    soundCategory = SoundCategory.HOSTILE;
+                }
+
+                SoundEffectPacket damageSoundPacket = SoundEffectPacket.create(soundCategory, sound, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 1.0f, 1.0f);
+                sendPacketToViewersAndSelf(damageSoundPacket);
+            }
         });
 
         return !entityDamageEvent.isCancelled();
@@ -257,5 +294,13 @@ public abstract class LivingEntity extends Entity {
         if (getInstance().isInVoid(this.position)) {
             damage(DamageType.VOID, 10f);
         }
+    }
+
+    public long getFireDamagePeriod() {
+        return fireDamagePeriod;
+    }
+
+    public void setFireDamagePeriod(long fireDamagePeriod) {
+        this.fireDamagePeriod = fireDamagePeriod;
     }
 }

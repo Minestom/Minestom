@@ -419,9 +419,9 @@ public class Player extends LivingEntity {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundCategory = soundCategory;
-        soundEffectPacket.x = x;
-        soundEffectPacket.y = y;
-        soundEffectPacket.z = z;
+        soundEffectPacket.x = x*8;
+        soundEffectPacket.y = y*8;
+        soundEffectPacket.z = z*8;
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);

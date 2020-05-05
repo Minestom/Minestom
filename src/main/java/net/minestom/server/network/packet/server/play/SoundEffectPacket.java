@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 
 public class SoundEffectPacket implements ServerPacket {
@@ -12,6 +13,19 @@ public class SoundEffectPacket implements ServerPacket {
     public int x, y, z;
     public float volume;
     public float pitch;
+
+    public static SoundEffectPacket create(SoundCategory category, Sound sound, float x, float y, float z, float volume, float pitch) {
+        SoundEffectPacket packet = new SoundEffectPacket();
+        packet.soundId = sound.getId();
+        packet.soundCategory = category;
+        // *8 converts to fixed-point representation with 3 bits for fractional part
+        packet.x = (int) (x * 8);
+        packet.y = (int) (y * 8);
+        packet.z = (int) (z * 8);
+        packet.volume = volume;
+        packet.pitch = pitch;
+        return packet;
+    }
 
     @Override
     public void write(PacketWriter writer) {
