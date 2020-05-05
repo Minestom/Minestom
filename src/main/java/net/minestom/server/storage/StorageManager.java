@@ -8,25 +8,47 @@ import java.util.function.Supplier;
 
 public class StorageManager {
 
-    private Supplier<StorageSystem> storageSystemSupplier = null;
+    private Supplier<StorageSystem> defaultStorageSystemSupplier = null;
 
+    // Folder path -> storage folder object
     private Map<String, StorageFolder> folderMap = new HashMap<>();
 
-    public StorageFolder getFolder(String folderName) {
-        if (storageSystemSupplier == null)
-            throw new NullPointerException("You need to define a storage system before using the Storage API");
+    /**
+     * Used to get an access to the specified folder
+     * WARNING: a storage folder needs to be created with an unique storage system linked
+     * you cannot open the save folder with two or more different StorageSystem implementation
+     *
+     * @param folderPath    the path to the folder
+     * @param storageSystem the storage system used in the specified folder
+     * @return the specified storage folder
+     */
+    public StorageFolder getFolder(String folderPath, StorageSystem storageSystem) {
+        return folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath));
+    }
 
-        StorageSystem storageSystem = storageSystemSupplier.get();
-        return folderMap.computeIfAbsent(folderName, s -> new StorageFolder(storageSystem, folderName));
+    /**
+     * Used to get an access to the specified folder
+     * The default StorageSystem provider will be used
+     *
+     * @param folderPath the path to the folder
+     * @return the specified storage default with the default
+     * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
+     */
+    public StorageFolder getFolder(String folderPath) {
+        if (defaultStorageSystemSupplier == null)
+            throw new NullPointerException("You need to either define a default storage system or specify your storage system for this specific folder");
+
+        StorageSystem storageSystem = defaultStorageSystemSupplier.get();
+        return getFolder(folderPath, storageSystem);
     }
 
     public Collection<StorageFolder> getLoadedFolders() {
         return Collections.unmodifiableCollection(folderMap.values());
     }
 
-    public void defineStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
-        if (this.storageSystemSupplier != null)
-            System.out.println("WARNING: the current StorageSystem is being changed, could lead to issue!");
-        this.storageSystemSupplier = storageSystemSupplier;
+    public void defineDefaultStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
+        if (this.defaultStorageSystemSupplier != null)
+            System.out.println("WARNING: the default StorageSystem is being changed, could lead to issue!");
+        this.defaultStorageSystemSupplier = storageSystemSupplier;
     }
 }
