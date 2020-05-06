@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
 import net.minestom.server.entity.property.Attribute;
+import net.minestom.server.event.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -170,7 +171,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setHelmet(ItemStack itemStack) {
-        this.helmet = itemStack;
+        this.helmet = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
         syncEquipment(EntityEquipmentPacket.Slot.HELMET);
     }
 
@@ -181,7 +182,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setChestplate(ItemStack itemStack) {
-        this.chestplate = itemStack;
+        this.chestplate = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
         syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
     }
 
@@ -192,7 +193,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setLeggings(ItemStack itemStack) {
-        this.leggings = itemStack;
+        this.leggings = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
         syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
     }
 
@@ -203,7 +204,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setBoots(ItemStack itemStack) {
-        this.boots = itemStack;
+        this.boots = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
         syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
@@ -259,5 +260,11 @@ public abstract class EntityCreature extends LivingEntity {
         // FIXME: jump support
         if (blockPosition.getY() > getPosition().getY())
             jump(1);
+    }
+
+    private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
+        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, armorSlot);
+        callEvent(ArmorEquipEvent.class, armorEquipEvent);
+        return armorEquipEvent.getArmorItem();
     }
 }

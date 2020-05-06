@@ -189,7 +189,18 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             } else if (slot == OFFHAND_SLOT) {
                 equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
             } else {
-                ArmorEquipEvent armorEquipEvent = getArmorEquipEventPacket(slot, itemStack);
+                ArmorEquipEvent armorEquipEvent = null;
+
+                if (slot == HELMET_SLOT) {
+                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+                } else if (slot == CHESTPLATE_SLOT) {
+                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+                } else if (slot == LEGGINGS_SLOT) {
+                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+                } else if (slot == BOOTS_SLOT) {
+                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+                }
+
                 if (armorEquipEvent != null) {
                     equipmentSlot = armorEquipEvent.getArmorSlot().toEquipmentPacketSlot();
                     player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
