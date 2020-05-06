@@ -193,6 +193,7 @@ public abstract class Entity implements Viewable, DataContainer {
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getPassengersPacket());
+        playerConnection.sendPacket(getMetadataPacket());
     }
 
     @Override

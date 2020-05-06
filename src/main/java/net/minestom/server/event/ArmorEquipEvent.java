@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 
 public class ArmorEquipEvent extends Event {
 
@@ -28,6 +29,21 @@ public class ArmorEquipEvent extends Event {
         HELMET,
         CHESTPLATE,
         LEGGINGS,
-        BOOTS
+        BOOTS;
+
+        public EntityEquipmentPacket.Slot toEquipmentPacketSlot() {
+            switch (this) {
+                case HELMET:
+                    return EntityEquipmentPacket.Slot.HELMET;
+                case CHESTPLATE:
+                    return EntityEquipmentPacket.Slot.CHESTPLATE;
+                case LEGGINGS:
+                    return EntityEquipmentPacket.Slot.LEGGINGS;
+                case BOOTS:
+                    return EntityEquipmentPacket.Slot.BOOTS;
+                default:
+                    return null;
+            }
+        }
     }
 }

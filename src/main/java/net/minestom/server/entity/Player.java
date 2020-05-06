@@ -313,11 +313,6 @@ public class Player extends LivingEntity {
 
         viewerConnection.sendPacket(pInfoPacket);
         viewerConnection.sendPacket(spawnPlayerPacket);
-        viewerConnection.sendPacket(getMetadataPacket());
-
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            viewerConnection.sendPacket(getEquipmentPacket(slot));
-        }
 
         // Team
         if (team != null)
@@ -414,9 +409,9 @@ public class Player extends LivingEntity {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundCategory = soundCategory;
-        soundEffectPacket.x = x*8;
-        soundEffectPacket.y = y*8;
-        soundEffectPacket.z = z*8;
+        soundEffectPacket.x = x * 8;
+        soundEffectPacket.y = y * 8;
+        soundEffectPacket.z = z * 8;
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);
@@ -869,24 +864,6 @@ public class Player extends LivingEntity {
         this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
 
-    public void syncEquipment(EntityEquipmentPacket.Slot slot) {
-        sendPacketToViewers(getEquipmentPacket(slot));
-    }
-
-    public void syncEquipments() {
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            syncEquipment(slot);
-        }
-    }
-
-    protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = getEntityId();
-        equipmentPacket.slot = slot;
-        equipmentPacket.itemStack = inventory.getEquipment(slot);
-        return equipmentPacket;
-    }
-
     public void updateViewPosition(Chunk chunk) {
         UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
         playerConnection.sendPacket(updateViewPositionPacket);
@@ -1053,6 +1030,66 @@ public class Player extends LivingEntity {
 
     public long getLastKeepAlive() {
         return lastKeepAlive;
+    }
+
+    @Override
+    public ItemStack getItemInMainHand() {
+        return inventory.getItemInMainHand();
+    }
+
+    @Override
+    public void setItemInMainHand(ItemStack itemStack) {
+        inventory.setItemInMainHand(itemStack);
+    }
+
+    @Override
+    public ItemStack getItemInOffHand() {
+        return inventory.getItemInOffHand();
+    }
+
+    @Override
+    public void setItemInOffHand(ItemStack itemStack) {
+        inventory.setItemInOffHand(itemStack);
+    }
+
+    @Override
+    public ItemStack getHelmet() {
+        return inventory.getHelmet();
+    }
+
+    @Override
+    public void setHelmet(ItemStack itemStack) {
+        inventory.setHelmet(itemStack);
+    }
+
+    @Override
+    public ItemStack getChestplate() {
+        return inventory.getChestplate();
+    }
+
+    @Override
+    public void setChestplate(ItemStack itemStack) {
+        inventory.setChestplate(itemStack);
+    }
+
+    @Override
+    public ItemStack getLeggings() {
+        return inventory.getLeggings();
+    }
+
+    @Override
+    public void setLeggings(ItemStack itemStack) {
+        inventory.setLeggings(itemStack);
+    }
+
+    @Override
+    public ItemStack getBoots() {
+        return inventory.getBoots();
+    }
+
+    @Override
+    public void setBoots(ItemStack itemStack) {
+        inventory.setBoots(itemStack);
     }
 
     public enum Hand {

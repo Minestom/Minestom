@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
 import net.minestom.server.entity.property.Attribute;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.BlockPosition;
@@ -18,6 +19,16 @@ public abstract class EntityCreature extends LivingEntity {
     private EntityPathFinder pathFinder = new EntityPathFinder(this);
     private LinkedList<BlockPosition> blockPositions;
     private Position targetPosition;
+
+    // Equipments
+    private ItemStack mainHandItem;
+    private ItemStack offHandItem;
+
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+
 
     public EntityCreature(EntityType entityType, Position spawnPosition) {
         super(entityType.getId(), spawnPosition);
@@ -128,6 +139,72 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnLivingEntityPacket);
         playerConnection.sendPacket(getMetadataPacket());
+    }
+
+    @Override
+    public ItemStack getItemInMainHand() {
+        return mainHandItem;
+    }
+
+    @Override
+    public void setItemInMainHand(ItemStack itemStack) {
+        this.mainHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+    }
+
+    @Override
+    public ItemStack getItemInOffHand() {
+        return offHandItem;
+    }
+
+    @Override
+    public void setItemInOffHand(ItemStack itemStack) {
+        this.offHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+    }
+
+    @Override
+    public ItemStack getHelmet() {
+        return helmet;
+    }
+
+    @Override
+    public void setHelmet(ItemStack itemStack) {
+        this.helmet = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+    }
+
+    @Override
+    public ItemStack getChestplate() {
+        return chestplate;
+    }
+
+    @Override
+    public void setChestplate(ItemStack itemStack) {
+        this.chestplate = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+    }
+
+    @Override
+    public ItemStack getLeggings() {
+        return leggings;
+    }
+
+    @Override
+    public void setLeggings(ItemStack itemStack) {
+        this.leggings = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+    }
+
+    @Override
+    public ItemStack getBoots() {
+        return boots;
+    }
+
+    @Override
+    public void setBoots(ItemStack itemStack) {
+        this.boots = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
     public void jump(float height) {

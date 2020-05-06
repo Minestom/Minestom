@@ -1,7 +1,7 @@
 package fr.themode.demo;
 
-import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.BurningTorchBlock;
+import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
 import fr.themode.demo.commands.GamemodeCommand;
 import fr.themode.demo.commands.HealthCommand;
@@ -54,7 +54,7 @@ public class Main {
         recipeManager.addRecipe(shapelessRecipe);
 
         StorageManager storageManager = MinecraftServer.getStorageManager();
-        storageManager.defineStorageSystem(FileStorageSystem::new);
+        storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 

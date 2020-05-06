@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
-public class PlayerInventory implements InventoryModifier, InventoryClickHandler {
+public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler {
 
     public static final int INVENTORY_SIZE = 46;
 
@@ -101,50 +101,62 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         return false;
     }
 
+    @Override
     public ItemStack getItemInMainHand() {
         return getItemStack(player.getHeldSlot());
     }
 
+    @Override
     public void setItemInMainHand(ItemStack itemStack) {
         safeItemInsert(player.getHeldSlot(), itemStack);
     }
 
+    @Override
     public ItemStack getItemInOffHand() {
         return getItemStack(OFFHAND_SLOT);
     }
 
+    @Override
     public void setItemInOffHand(ItemStack itemStack) {
         safeItemInsert(OFFHAND_SLOT, itemStack);
     }
 
+    @Override
     public ItemStack getHelmet() {
         return getItemStack(HELMET_SLOT);
     }
 
+    @Override
     public void setHelmet(ItemStack itemStack) {
         safeItemInsert(HELMET_SLOT, itemStack);
     }
 
+    @Override
     public ItemStack getChestplate() {
         return getItemStack(CHESTPLATE_SLOT);
     }
 
+    @Override
     public void setChestplate(ItemStack itemStack) {
         safeItemInsert(CHESTPLATE_SLOT, itemStack);
     }
 
+    @Override
     public ItemStack getLeggings() {
         return getItemStack(LEGGINGS_SLOT);
     }
 
+    @Override
     public void setLeggings(ItemStack itemStack) {
         safeItemInsert(LEGGINGS_SLOT, itemStack);
     }
 
+    @Override
     public ItemStack getBoots() {
         return getItemStack(BOOTS_SLOT);
     }
 
+    @Override
     public void setBoots(ItemStack itemStack) {
         safeItemInsert(BOOTS_SLOT, itemStack);
     }
@@ -166,25 +178,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         this.cursorItem = cursorItem;
     }
 
-    public ItemStack getEquipment(EntityEquipmentPacket.Slot slot) {
-        switch (slot) {
-            case MAIN_HAND:
-                return getItemInMainHand();
-            case OFF_HAND:
-                return getItemInOffHand();
-            case HELMET:
-                return getHelmet();
-            case CHESTPLATE:
-                return getChestplate();
-            case LEGGINGS:
-                return getLeggings();
-            case BOOTS:
-                return getBoots();
-            default:
-                throw new NullPointerException("Equipment slot cannot be null");
-        }
-    }
-
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
             itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
@@ -195,28 +188,15 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
             } else if (slot == OFFHAND_SLOT) {
                 equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
-            } else if (slot == HELMET_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.HELMET;
-                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
-            } else if (slot == CHESTPLATE_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.CHESTPLATE;
-                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
-            } else if (slot == LEGGINGS_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.LEGGINGS;
-                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
-            } else if (slot == BOOTS_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.BOOTS;
-                ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
             } else {
-                equipmentSlot = null;
+                ArmorEquipEvent armorEquipEvent = getArmorEquipEventPacket(slot, itemStack);
+                if (armorEquipEvent != null) {
+                    equipmentSlot = armorEquipEvent.getArmorSlot().toEquipmentPacketSlot();
+                    player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                    itemStack = armorEquipEvent.getArmorItem();
+                } else {
+                    equipmentSlot = null;
+                }
             }
 
             if (itemStack != null) {

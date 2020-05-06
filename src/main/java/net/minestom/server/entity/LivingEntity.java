@@ -8,12 +8,10 @@ import net.minestom.server.event.EntityDamageEvent;
 import net.minestom.server.event.EntityFireEvent;
 import net.minestom.server.event.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
@@ -22,7 +20,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public abstract class LivingEntity extends Entity {
+public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     protected boolean canPickupItem;
     protected boolean isDead;
@@ -77,7 +75,7 @@ public abstract class LivingEntity extends Entity {
         }
 
         // Items picking
-        if (canPickupItem) {
+        if (canPickupItem()) {
             Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
             Set<Entity> entities = instance.getChunkEntities(chunk);
             BoundingBox livingBoundingBox = expandedBoundingBox;
@@ -126,6 +124,14 @@ public abstract class LivingEntity extends Entity {
 
             // TODO all remaining metadata
         };
+    }
+
+    @Override
+    public void addViewer(Player player) {
+        super.addViewer(player);
+
+        // Equipments synchronization
+        syncEquipments();
     }
 
     public void kill() {
@@ -236,6 +242,33 @@ public abstract class LivingEntity extends Entity {
 
     public float getAttributeValue(Attribute attribute) {
         return this.attributeValues[attribute.ordinal()];
+    }
+
+    // Equipments
+    public void syncEquipments() {
+        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
+            syncEquipment(slot);
+        }
+    }
+
+    public void syncEquipment(EntityEquipmentPacket.Slot slot) {
+        EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+        if (entityEquipmentPacket == null)
+            return;
+
+        sendPacketToViewers(entityEquipmentPacket);
+    }
+
+    protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
+        ItemStack itemStack = getEquipment(slot);
+        if (itemStack == null)
+            return null;
+
+        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
+        equipmentPacket.entityId = getEntityId();
+        equipmentPacket.slot = slot;
+        equipmentPacket.itemStack = itemStack;
+        return equipmentPacket;
     }
 
     public boolean isDead() {
