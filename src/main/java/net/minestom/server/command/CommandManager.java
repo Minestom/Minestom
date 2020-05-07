@@ -4,7 +4,7 @@ import fr.themode.command.Command;
 import fr.themode.command.CommandDispatcher;
 import fr.themode.command.condition.CommandCondition;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerCommandEvent;
+import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 

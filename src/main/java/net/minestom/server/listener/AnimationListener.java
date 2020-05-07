@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.AnimationEvent;
+import net.minestom.server.event.animation.AnimationEvent;
 import net.minestom.server.network.packet.client.play.ClientAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 

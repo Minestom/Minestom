@@ -2,9 +2,9 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.ItemUpdateStateEvent;
-import net.minestom.server.event.PlayerStartDiggingEvent;
-import net.minestom.server.event.PlayerSwapItemEvent;
+import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.player.PlayerStartDiggingEvent;
+import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;

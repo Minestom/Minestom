@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;

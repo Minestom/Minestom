@@ -9,8 +9,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerChatEvent;
-import net.minestom.server.event.PlayerCommandEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 
 import java.util.function.Function;

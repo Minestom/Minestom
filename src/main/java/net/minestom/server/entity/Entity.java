@@ -7,7 +7,7 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.EntitySpawnEvent;
+import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.instance.Chunk;

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;

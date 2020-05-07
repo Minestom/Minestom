@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerMoveEvent;
+import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.network.packet.client.play.ClientPlayerLookPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndLookPacket;

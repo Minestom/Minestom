@@ -1,7 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.ArmorEquipEvent;
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickProcessor;

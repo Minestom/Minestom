@@ -3,8 +3,8 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.AttackEvent;
-import net.minestom.server.event.PlayerInteractEvent;
+import net.minestom.server.event.entity.AttackEvent;
+import net.minestom.server.event.player.PlayerInteractEvent;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
 public class UseEntityListener {

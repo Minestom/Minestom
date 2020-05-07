@@ -1,8 +1,8 @@
 package net.minestom.server.inventory.click;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.InventoryClickEvent;
-import net.minestom.server.event.InventoryPreClickEvent;
+import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;

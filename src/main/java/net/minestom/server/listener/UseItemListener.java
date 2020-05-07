@@ -1,9 +1,9 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.ArmAnimationEvent;
-import net.minestom.server.event.ArmorEquipEvent;
-import net.minestom.server.event.PlayerUseItemEvent;
+import net.minestom.server.event.animation.ArmAnimationEvent;
+import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;

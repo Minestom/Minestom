@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.InventoryCloseEvent;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryClickHandler;
 import net.minestom.server.inventory.PlayerInventory;

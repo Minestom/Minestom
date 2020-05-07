@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
 import net.minestom.server.entity.property.Attribute;
-import net.minestom.server.event.ArmorEquipEvent;
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
