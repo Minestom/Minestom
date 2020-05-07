@@ -10,6 +10,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -88,8 +89,14 @@ public abstract class Entity implements Viewable, DataContainer {
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
+
+
     private long velocityUpdatePeriod;
     protected boolean onGround;
+
+    // Tick related
+    private long ticks;
+    private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
     public Entity(int entityType, Position spawnPosition) {
         this.id = generateId();
@@ -315,6 +322,9 @@ public abstract class Entity implements Viewable, DataContainer {
             // Call the abstract update method
             update();
 
+            ticks++;
+            callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+
             // Scheduled synchronization
             if (time - lastSynchronizationTime >= synchronizationDelay) {
                 lastSynchronizationTime = time;
@@ -325,6 +335,14 @@ public abstract class Entity implements Viewable, DataContainer {
         if (shouldRemove()) {
             remove();
         }
+    }
+
+    /**
+     * Returns the number of ticks this entity has been active for
+     * @return
+     */
+    public long getAliveTicks() {
+        return ticks;
     }
 
     /**
