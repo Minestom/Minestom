@@ -57,6 +57,7 @@ public class Player extends LivingEntity {
     private Dimension dimension;
     private GameMode gameMode;
     private LevelType levelType;
+    private int teleportId = 0;
 
     protected boolean onGround;
 
@@ -590,19 +591,20 @@ public class Player extends LivingEntity {
         refreshIsDead(false);
 
         // Runnable called when teleportation is successfull (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), () -> {
-            getInventory().update();
+        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+    }
 
-            SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-            spawnPlayerPacket.entityId = getEntityId();
-            spawnPlayerPacket.playerUuid = getUuid();
-            spawnPlayerPacket.position = getPosition();
-            sendPacketToViewers(spawnPlayerPacket);
-            playerConnection.sendPacket(getPropertiesPacket());
-            sendUpdateHealthPacket();
-            syncEquipments();
+    public void refreshAfterTeleport() {
+        getInventory().update();
 
-        });
+        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
+        spawnPlayerPacket.entityId = getEntityId();
+        spawnPlayerPacket.playerUuid = getUuid();
+        spawnPlayerPacket.position = getPosition();
+        sendPacketToViewers(spawnPlayerPacket);
+        playerConnection.sendPacket(getPropertiesPacket());
+        sendUpdateHealthPacket();
+        syncEquipments();
     }
 
     protected void refreshHealth() {
@@ -880,7 +882,7 @@ public class Player extends LivingEntity {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position;
         positionAndLookPacket.flags = 0x00;
-        positionAndLookPacket.teleportId = 67;
+        positionAndLookPacket.teleportId = teleportId++;
         playerConnection.sendPacket(positionAndLookPacket);
     }
 
