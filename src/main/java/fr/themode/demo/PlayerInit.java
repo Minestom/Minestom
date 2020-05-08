@@ -167,6 +167,11 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
+
+                player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                    player.sendMessage("CLICK PLAYER INVENTORY");
+                    System.out.println("slot player: " + slot);
+                });
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
@@ -186,11 +191,6 @@ public class PlayerInit {
                     inventoryConditionResult.setCancel(false);
                 });
                 inventory.setItemStack(0, item.clone());
-
-                player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-                    player.sendMessage("CLICK PLAYER INVENTORY");
-                    System.out.println("slot player: " + slot);
-                });
 
                 player.openInventory(inventory);
 
@@ -218,15 +218,17 @@ public class PlayerInit {
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
 
-                player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
-                    player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
-                });
-
-                player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
-                    player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
-                    player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
-                });
             });
+
+            player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
+                player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
+            });
+
+            player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
+                player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
+                player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
+            });
+
         });
     }
 

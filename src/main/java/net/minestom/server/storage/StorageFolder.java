@@ -67,7 +67,7 @@ public class StorageFolder {
 
         ByteBuf buffer = Unpooled.wrappedBuffer(get(key));
         PacketReader packetReader = new PacketReader(buffer);
-        T value = DATA_MANAGER.getDataType(type).decode(packetReader);
+        T value = dataType.decode(packetReader);
         return value;
     }
 
