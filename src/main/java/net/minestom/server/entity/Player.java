@@ -346,6 +346,7 @@ public class Player extends LivingEntity {
         if (this.instance == instance)
             throw new IllegalArgumentException("Instance should be different than the current one");
 
+        boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
         for (Chunk viewableChunk : viewableChunks) {
             viewableChunk.removeViewer(this);
         }
@@ -374,7 +375,7 @@ public class Player extends LivingEntity {
                 if (isLast) {
                     // This is the last chunk to be loaded , spawn player
                     super.setInstance(instance);
-                    PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance);
+                    PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance, firstSpawn);
                     callEvent(PlayerSpawnEvent.class, spawnEvent);
                     updateViewPosition(chunk);
                 } else {
