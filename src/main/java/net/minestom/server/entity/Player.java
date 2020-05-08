@@ -371,6 +371,7 @@ public class Player extends LivingEntity {
                 if (chunk != null) {
                     viewableChunks.add(chunk);
                     chunk.addViewer(this);
+                    instance.sendChunk(this, chunk);
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
