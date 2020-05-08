@@ -6,11 +6,11 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
+import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -27,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public abstract class Entity implements Viewable, DataContainer {
+public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     private static Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static AtomicInteger lastEntityId = new AtomicInteger();
@@ -339,6 +339,7 @@ public abstract class Entity implements Viewable, DataContainer {
 
     /**
      * Returns the number of ticks this entity has been active for
+     *
      * @return
      */
     public long getAliveTicks() {
@@ -355,28 +356,16 @@ public abstract class Entity implements Viewable, DataContainer {
         }
     }
 
+    @Override
     public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.add(eventCallback);
         this.eventCallbacks.put(eventClass, callbacks);
     }
 
+    @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
-    }
-
-    public <E extends Event> void callEvent(Class<E> eventClass, E event) {
-        List<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
-        for (EventCallback<E> eventCallback : eventCallbacks) {
-            eventCallback.run(event);
-        }
-    }
-
-    public <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable runnable) {
-        callEvent(eventClass, event);
-        if (!event.isCancelled()) {
-            runnable.run();
-        }
     }
 
     public int getEntityId() {

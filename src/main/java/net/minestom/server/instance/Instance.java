@@ -5,11 +5,11 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.*;
-import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.AddEntityToInstanceEvent;
 import net.minestom.server.event.entity.RemoveEntityFromInstanceEvent;
+import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-public abstract class Instance implements BlockModifier, DataContainer {
+public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
 
     protected static final ChunkLoader CHUNK_LOADER_IO = new ChunkLoader();
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -274,28 +274,16 @@ public abstract class Instance implements BlockModifier, DataContainer {
         this.data = data;
     }
 
+    @Override
     public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.add(eventCallback);
         this.eventCallbacks.put(eventClass, callbacks);
     }
 
+    @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
-    }
-
-    public <E extends Event> void callEvent(Class<E> eventClass, E event) {
-        List<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
-        for (EventCallback<E> eventCallback : eventCallbacks) {
-            eventCallback.run(event);
-        }
-    }
-
-    public <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable runnable) {
-        callEvent(eventClass, event);
-        if (!event.isCancelled()) {
-            runnable.run();
-        }
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
@@ -406,7 +394,9 @@ public abstract class Instance implements BlockModifier, DataContainer {
     /**
      * Performs a single tick in the instance.
      * By default, does nothing
+     *
      * @param time the current time
      */
-    public void tick(long time) { }
+    public void tick(long time) {
+    }
 }
