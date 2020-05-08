@@ -3,6 +3,7 @@ package fr.themode.demo;
 import fr.themode.demo.blocks.BurningTorchBlock;
 import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
+import fr.themode.demo.commands.DimensionCommand;
 import fr.themode.demo.commands.GamemodeCommand;
 import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
@@ -39,6 +40,7 @@ public class Main {
         commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
         commandManager.register(new GamemodeCommand());
+        commandManager.register(new DimensionCommand());
 
         RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {

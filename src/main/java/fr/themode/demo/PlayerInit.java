@@ -26,6 +26,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.world.Dimension;
 
 import java.util.Map;
 import java.util.UUID;
@@ -33,15 +34,20 @@ import java.util.UUID;
 public class PlayerInit {
 
     private static volatile InstanceContainer instanceContainer;
+    private static volatile InstanceContainer netherTest;
 
     static {
         //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("chunk_data");
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer();
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
+
+        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.NETHER);
+        netherTest.enableAutoChunkLoad(true);
+        netherTest.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         int loopStart = -2;
@@ -49,6 +55,7 @@ public class PlayerInit {
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
+                netherTest.loadChunk(x, z);
             }
     }
 

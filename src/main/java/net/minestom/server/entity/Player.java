@@ -744,6 +744,7 @@ public class Player extends LivingEntity {
         if (dimension.equals(getDimension()))
             throw new IllegalArgumentException("The dimension need to be different than the current one!");
 
+        refreshDimension(dimension);
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimension = dimension;
         respawnPacket.gameMode = gameMode;
