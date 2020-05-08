@@ -8,7 +8,12 @@ public abstract class ChunkGenerator {
 
     public abstract void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ);
 
-    public abstract Biome getBiome(int chunkX, int chunkZ);
+    /**
+     * @param biomes the array to fill
+     * @param chunkX
+     * @param chunkZ
+     */
+    public abstract void fillBiomes(Biome[] biomes, int chunkX, int chunkZ);
 
     public abstract List<ChunkPopulator> getPopulators();
 

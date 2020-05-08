@@ -34,8 +34,11 @@ public class NoiseTestGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Biome getBiome(int chunkX, int chunkZ) {
-        return Biome.PLAINS;
+    public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+        for (int i = 0; i < biomes.length; i++) {
+            boolean pair = i % 2 == 0;
+            biomes[i] = pair ? Biome.PLAINS : Biome.BEACH;
+        }
     }
 
     @Override

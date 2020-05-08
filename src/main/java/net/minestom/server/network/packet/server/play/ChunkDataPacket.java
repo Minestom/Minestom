@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -78,9 +79,9 @@ public class ChunkDataPacket implements ServerPacket {
 
         // Biome data
         if (fullChunk) {
-            for (int z = 0; z < 1024; z++) {
-                // TODO proper chunk section biome
-                writer.writeInt(chunk.getBiome().getId());
+            Biome[] biomes = chunk.getBiomes();
+            for (int i = 0; i < biomes.length; i++) {
+                writer.writeInt(biomes[i].getId());
             }
         }
 

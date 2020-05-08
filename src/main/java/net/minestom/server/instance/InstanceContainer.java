@@ -83,7 +83,7 @@ public class InstanceContainer extends Instance {
 
             BlockPosition blockPosition = new BlockPosition(x, y, z);
 
-            if(isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
+            if (isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
                 return;
@@ -122,13 +122,14 @@ public class InstanceContainer extends Instance {
 
     /**
      * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace
+     *
      * @param blockPosition
      * @param blockId
      * @return
      */
     private boolean isAlreadyChanged(BlockPosition blockPosition, short blockId) {
         Block changedBlock = currentlyChangingBlocks.get(blockPosition);
-        if(changedBlock == null)
+        if (changedBlock == null)
             return false;
         return changedBlock.getBlockId() == blockId;
     }
@@ -341,8 +342,14 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        Biome biome = chunkGenerator != null ? chunkGenerator.getBiome(chunkX, chunkZ) : Biome.VOID;
-        Chunk chunk = new Chunk(biome, chunkX, chunkZ);
+        Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
+        if (chunkGenerator == null) {
+            Arrays.fill(biomes, Biome.VOID);
+        } else {
+            chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
+        }
+
+        Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
         cacheChunk(chunk);
         if (chunkGenerator != null) {
             ChunkBatch chunkBatch = createChunkBatch(chunk);

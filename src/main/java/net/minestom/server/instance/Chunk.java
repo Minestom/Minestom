@@ -36,7 +36,9 @@ public class Chunk implements Viewable {
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
 
-    private Biome biome;
+    public static final int BIOME_COUNT = 1024; // 4x4x4 blocks
+
+    private Biome[] biomes;
     private int chunkX, chunkZ;
 
     // blocks id based on coord, see Chunk#getBlockIndex
@@ -61,8 +63,8 @@ public class Chunk implements Viewable {
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private ByteBuf fullDataPacket;
 
-    public Chunk(Biome biome, int chunkX, int chunkZ) {
-        this.biome = biome;
+    public Chunk(Biome[] biomes, int chunkX, int chunkZ) {
+        this.biomes = biomes;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }
@@ -249,8 +251,8 @@ public class Chunk implements Viewable {
         }
     }
 
-    public Biome getBiome() {
-        return biome;
+    public Biome[] getBiomes() {
+        return biomes;
     }
 
     public int getChunkX() {
@@ -282,7 +284,10 @@ public class Chunk implements Viewable {
     protected byte[] getSerializedData() throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(output);
-        dos.writeByte(biome.getId());
+
+        for (int i = 0; i < BIOME_COUNT; i++) {
+            dos.writeByte(biomes[i].getId());
+        }
 
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (short y = 0; y < CHUNK_SIZE_Y; y++) {
@@ -341,7 +346,7 @@ public class Chunk implements Viewable {
         setFullDataPacket(buffer);
     }
 
-    // Write the pakcet in the writer thread pools
+    // Write the packet in the writer thread pools
     public void refreshDataPacket(Runnable runnable) {
         PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), buf -> {
             setFullDataPacket(buf);

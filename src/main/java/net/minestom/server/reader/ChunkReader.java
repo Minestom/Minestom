@@ -20,8 +20,13 @@ public class ChunkReader {
 
         ChunkBatch chunkBatch = null;
         try {
-            Biome biome = Biome.fromId(stream.readByte());
-            Chunk chunk = new Chunk(biome, chunkX, chunkZ);
+
+            Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
+            for (int i = 0; i < biomes.length; i++) {
+                biomes[i] = Biome.fromId(stream.readByte());
+            }
+
+            Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
 
             chunkBatch = instance.createChunkBatch(chunk);
 

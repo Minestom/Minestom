@@ -7,6 +7,7 @@ import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -29,8 +30,8 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
     }
 
     @Override
-    public Biome getBiome(int chunkX, int chunkZ) {
-        return Biome.PLAINS;
+    public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+        Arrays.fill(biomes, Biome.PLAINS);
     }
 
     @Override
