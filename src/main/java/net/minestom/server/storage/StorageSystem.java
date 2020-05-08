@@ -1,12 +1,10 @@
 package net.minestom.server.storage;
 
-import java.util.function.Consumer;
-
 public interface StorageSystem {
 
     void open(String folderName);
 
-    void get(String key, Consumer<byte[]> callback);
+    byte[] get(String key);
 
     void set(String key, byte[] data);
 

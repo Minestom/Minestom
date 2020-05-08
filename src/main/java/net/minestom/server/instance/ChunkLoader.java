@@ -28,17 +28,15 @@ public class ChunkLoader {
     }
 
     protected void loadChunk(Instance instance, int chunkX, int chunkZ, StorageFolder storageFolder, Consumer<Chunk> callback) {
-        storageFolder.get(getChunkKey(chunkX, chunkZ), bytes -> {
+        byte[] bytes = storageFolder.get(getChunkKey(chunkX, chunkZ));
 
-            if (bytes == null) {
-                // Not found, create a new chunk
-                instance.createChunk(chunkX, chunkZ, callback);
-            } else {
-                // Found, load from result bytes
-                ChunkReader.readChunk(bytes, instance, chunkX, chunkZ, callback);
-            }
-
-        });
+        if (bytes == null) {
+            // Not found, create a new chunk
+            instance.createChunk(chunkX, chunkZ, callback);
+        } else {
+            // Found, load from result bytes
+            ChunkReader.readChunk(bytes, instance, chunkX, chunkZ, callback);
+        }
     }
 
 

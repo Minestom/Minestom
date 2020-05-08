@@ -1,16 +1,23 @@
 package net.minestom.server.storage;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.data.DataManager;
+import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.reader.DataReader;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class StorageFolder {
+
+    private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     private StorageSystem storageSystem;
     private String folderPath;
@@ -26,8 +33,8 @@ public class StorageFolder {
         this.storageSystem.open(folderPath);
     }
 
-    public void get(String key, Consumer<byte[]> callback) {
-        this.storageSystem.get(key, callback);
+    public byte[] get(String key) {
+        return storageSystem.get(key);
     }
 
     public void set(String key, byte[] data) {
@@ -42,75 +49,77 @@ public class StorageFolder {
         this.storageSystem.close();
     }
 
-    public void getAndCloneData(String key, DataContainer dataContainer, Runnable callback) {
+    public <T> void set(String key, T object, Class<T> type) {
+        DataType<T> dataType = DATA_MANAGER.getDataType(type);
+        if (dataType == null)
+            throw new NullPointerException("You can only save registered DataType type!");
+        PacketWriter packetWriter = new PacketWriter();
+        dataType.encode(packetWriter, object); // Encode
+        byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
+
+        set(key, encodedValue);
+    }
+
+    public <T> T get(String key, Class<T> type) {
+        DataType<T> dataType = DATA_MANAGER.getDataType(type);
+        if (dataType == null)
+            throw new NullPointerException("You can only save registered DataType type!");
+
+        ByteBuf buffer = Unpooled.wrappedBuffer(get(key));
+        PacketReader packetReader = new PacketReader(buffer);
+        T value = DATA_MANAGER.getDataType(type).decode(packetReader);
+        return value;
+    }
+
+    public void getAndCloneData(String key, DataContainer dataContainer) {
         synchronized (cachedData) {
 
             // Copy data from the cachedMap
             if (cachedData.containsKey(key)) {
                 SerializableData data = cachedData.get(key);
                 dataContainer.setData(data.clone());
-                if (callback != null)
-                    callback.run();
                 return;
             }
 
             // Load it from the storage system
-            get(key, bytes -> {
-                SerializableData data;
+            byte[] bytes = get(key);
+            SerializableData data;
 
-                if (bytes != null) {
-                    data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
-                } else {
-                    data = new SerializableData();
-                }
-
-                dataContainer.setData(data);
-
-                if (callback != null)
-                    callback.run();
-            });
-
-        }
-    }
-
-    public void getAndCloneData(String key, DataContainer dataContainer) {
-        getAndCloneData(key, dataContainer, null);
-    }
-
-    public void getAndCacheData(String key, DataContainer dataContainer, Runnable callback) {
-        synchronized (cachedData) {
-
-            // Give the cached SerializableData if already loaded
-            if (cachedData.containsKey(key)) {
-                dataContainer.setData(cachedData.get(key));
-                if (callback != null)
-                    callback.run();
-                return;
+            if (bytes != null) {
+                data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+            } else {
+                data = new SerializableData();
             }
 
-            // Load it from the storage system and cache it
-            get(key, bytes -> {
-                SerializableData data;
-
-                if (bytes != null) {
-                    data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
-                } else {
-                    data = new SerializableData();
-                }
-
-                dataContainer.setData(data);
-
-                this.cachedData.put(key, data);
-
-                if (callback != null)
-                    callback.run();
-            });
+            dataContainer.setData(data);
 
         }
     }
 
     public void getAndCacheData(String key, DataContainer dataContainer) {
-        getAndCacheData(key, dataContainer, null);
+        synchronized (cachedData) {
+
+            // Give the cached SerializableData if already loaded
+            if (cachedData.containsKey(key)) {
+                dataContainer.setData(cachedData.get(key));
+                return;
+            }
+
+            // Load it from the storage system and cache it
+            byte[] bytes = get(key);
+            SerializableData data;
+
+            if (bytes != null) {
+                data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+            } else {
+                data = new SerializableData();
+            }
+
+            dataContainer.setData(data);
+
+            this.cachedData.put(key, data);
+
+        }
     }
 
     public void saveCachedData() {

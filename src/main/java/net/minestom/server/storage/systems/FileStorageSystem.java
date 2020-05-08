@@ -5,8 +5,6 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 
-import java.util.function.Consumer;
-
 /**
  * A storage system which is local using OS files system
  * It does make use of the RocksDB library
@@ -31,12 +29,13 @@ public class FileStorageSystem implements StorageSystem {
     }
 
     @Override
-    public void get(String key, Consumer<byte[]> callback) {
+    public byte[] get(String key) {
         try {
             byte[] result = this.rocksDB.get(getKey(key));
-            callback.accept(result);
+            return result;
         } catch (RocksDBException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
