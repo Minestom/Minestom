@@ -12,10 +12,7 @@ import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerRespawnEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.event.player.PlayerTickEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -663,6 +660,9 @@ public class Player extends LivingEntity {
             Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
             if (chunk != null)
                 chunk.removeViewer(this);
+
+            PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(this, chunk);
+            callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
         }
 
         updateViewPosition(newChunk);

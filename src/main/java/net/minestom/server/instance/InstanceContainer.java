@@ -5,6 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
@@ -271,8 +272,10 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void unloadChunk(int chunkX, int chunkZ) {
-        Chunk chunk = getChunk(chunkX, chunkZ);
+    public void unloadChunk(Chunk chunk) {
+        int chunkX = chunk.getChunkX();
+        int chunkZ = chunk.getChunkZ();
+
         long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
 
         UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
@@ -282,6 +285,9 @@ public class InstanceContainer extends Instance {
 
         for (Player viewer : chunk.getViewers()) {
             chunk.removeViewer(viewer);
+
+            PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(viewer, chunk);
+            viewer.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
         }
 
         this.chunks.remove(index);

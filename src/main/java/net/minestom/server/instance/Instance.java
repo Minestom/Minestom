@@ -67,7 +67,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     // Load only if auto chunk load is enabled
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
-    public abstract void unloadChunk(int chunkX, int chunkZ);
+    public abstract void unloadChunk(Chunk chunk);
 
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
@@ -188,6 +188,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);
+    }
+
+    public void unloadChunk(int chunkX, int chunkZ) {
+        unloadChunk(getChunk(chunkX, chunkZ));
     }
 
     public short getBlockId(int x, int y, int z) {

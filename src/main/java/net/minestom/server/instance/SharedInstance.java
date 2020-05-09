@@ -46,8 +46,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void unloadChunk(int chunkX, int chunkZ) {
-        instanceContainer.unloadChunk(chunkX, chunkZ);
+    public void unloadChunk(Chunk chunk) {
+        instanceContainer.unloadChunk(chunk);
     }
 
     @Override

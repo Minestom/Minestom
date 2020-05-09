@@ -9,6 +9,7 @@ import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -35,10 +36,7 @@ public class NoiseTestGenerator extends ChunkGenerator {
 
     @Override
     public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
-        for (int i = 0; i < biomes.length; i++) {
-            boolean pair = i % 2 == 0;
-            biomes[i] = pair ? Biome.PLAINS : Biome.BEACH;
-        }
+        Arrays.fill(biomes, Biome.PLAINS);
     }
 
     @Override
