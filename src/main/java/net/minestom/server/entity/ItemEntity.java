@@ -14,6 +14,7 @@ public class ItemEntity extends ObjectEntity {
     private ItemStack itemStack;
 
     private boolean pickable = true;
+    private boolean mergeable = true;
 
     private long spawnTime;
     private long pickupDelay;
@@ -27,49 +28,51 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void update() {
-        Chunk chunk = instance.getChunkAt(getPosition());
-        Set<Entity> entities = instance.getChunkEntities(chunk);
-        for (Entity entity : entities) {
-            if (entity instanceof ItemEntity) {
+        if (isMergeable() && isPickable()) {
+            Chunk chunk = instance.getChunkAt(getPosition());
+            Set<Entity> entities = instance.getChunkEntities(chunk);
+            for (Entity entity : entities) {
+                if (entity instanceof ItemEntity) {
 
-                // Do not merge with itself
-                if (entity == this)
-                    continue;
+                    // Do not merge with itself
+                    if (entity == this)
+                        continue;
 
-                ItemEntity itemEntity = (ItemEntity) entity;
-                if (!itemEntity.isPickable())
-                    continue;
+                    ItemEntity itemEntity = (ItemEntity) entity;
+                    if (!itemEntity.isPickable() || !itemEntity.isMergeable())
+                        continue;
 
-                // Too far, do not merge
-                if (getDistance(itemEntity) > 1)
-                    continue;
+                    // Too far, do not merge
+                    if (getDistance(itemEntity) > 1)
+                        continue;
 
-                synchronized (this) {
-                    synchronized (itemEntity) {
-                        ItemStack itemStackEntity = itemEntity.getItemStack();
+                    synchronized (this) {
+                        synchronized (itemEntity) {
+                            ItemStack itemStackEntity = itemEntity.getItemStack();
 
-                        StackingRule stackingRule = itemStack.getStackingRule();
-                        boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+                            StackingRule stackingRule = itemStack.getStackingRule();
+                            boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
 
-                        if (!canStack)
-                            continue;
+                            if (!canStack)
+                                continue;
 
-                        int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
-                        boolean canApply = stackingRule.canApply(itemStack, totalAmount);
+                            int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
+                            boolean canApply = stackingRule.canApply(itemStack, totalAmount);
 
-                        if (!canApply)
-                            continue;
+                            if (!canApply)
+                                continue;
 
-                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
-                        callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
-                            ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
-                            setItemStack(result);
-                            itemEntity.remove();
-                        });
+                            EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
+                            callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
+                                ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
+                                setItemStack(result);
+                                itemEntity.remove();
+                            });
 
+                        }
                     }
-                }
 
+                }
             }
         }
     }
@@ -123,6 +126,14 @@ public class ItemEntity extends ObjectEntity {
 
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
+    }
+
+    public boolean isMergeable() {
+        return mergeable;
+    }
+
+    public void setMergeable(boolean mergeable) {
+        this.mergeable = mergeable;
     }
 
     public long getPickupDelay() {
