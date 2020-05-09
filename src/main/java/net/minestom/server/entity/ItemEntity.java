@@ -1,13 +1,18 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.event.entity.EntityItemMergeEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.PacketWriter;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ItemEntity extends ObjectEntity {
 
     private ItemStack itemStack;
+
     private boolean pickable = true;
 
     private long spawnTime;
@@ -22,7 +27,51 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void update() {
+        Chunk chunk = instance.getChunkAt(getPosition());
+        Set<Entity> entities = instance.getChunkEntities(chunk);
+        for (Entity entity : entities) {
+            if (entity instanceof ItemEntity) {
 
+                // Do not merge with itself
+                if (entity == this)
+                    continue;
+
+                ItemEntity itemEntity = (ItemEntity) entity;
+                if (!itemEntity.isPickable())
+                    continue;
+
+                // Too far, do not merge
+                if (getDistance(itemEntity) > 1)
+                    continue;
+
+                synchronized (this) {
+                    synchronized (itemEntity) {
+                        ItemStack itemStackEntity = itemEntity.getItemStack();
+
+                        StackingRule stackingRule = itemStack.getStackingRule();
+                        boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+
+                        if (!canStack)
+                            continue;
+
+                        int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
+                        boolean canApply = stackingRule.canApply(itemStack, totalAmount);
+
+                        if (!canApply)
+                            continue;
+
+                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
+                        callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
+                            ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
+                            setItemStack(result);
+                            itemEntity.remove();
+                        });
+
+                    }
+                }
+
+            }
+        }
     }
 
     @Override
@@ -39,10 +88,19 @@ public class ItemEntity extends ObjectEntity {
     public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
+            fillMetadataIndex(packet, 7);
+        };
+    }
+
+    @Override
+    protected void fillMetadataIndex(PacketWriter packet, int index) {
+        super.fillMetadataIndex(packet, index);
+        if (index == 7) {
             packet.writeByte((byte) 7);
             packet.writeByte(METADATA_SLOT);
             packet.writeItemStack(itemStack);
-        };
+        }
+
     }
 
     @Override

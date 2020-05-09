@@ -690,7 +690,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendPacketToViewersAndSelf(metaDataPacket);
     }
 
-    private void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(PacketWriter packet, int index) {
         switch (index) {
             case 0:
                 fillStateMetadata(packet);
