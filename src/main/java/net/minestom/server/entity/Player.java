@@ -289,6 +289,7 @@ public class Player extends LivingEntity {
 
     @Override
     public void remove() {
+        super.remove();
         clearBossBars();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
@@ -296,7 +297,6 @@ public class Player extends LivingEntity {
         this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
         resetTargetBlock();
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
-        super.remove();
     }
 
     @Override

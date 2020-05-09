@@ -366,7 +366,7 @@ public class Chunk implements Viewable {
     public void addViewer(Player player) {
         this.viewers.add(player);
 
-        PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, this);
+        PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
     }
 
@@ -375,7 +375,7 @@ public class Chunk implements Viewable {
     public void removeViewer(Player player) {
         this.viewers.remove(player);
 
-        PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, this);
+        PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
     }
 

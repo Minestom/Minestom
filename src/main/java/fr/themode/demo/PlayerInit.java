@@ -13,6 +13,7 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
@@ -231,8 +232,13 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
-                Chunk chunk = event.getChunk();
-                
+                Instance instance = player.getInstance();
+
+                Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
+
+                if (chunk == null)
+                    return;
+
                 // Unload the chunk (save memory) if it has no remaining viewer
                 if (chunk.getViewers().isEmpty()) {
                     player.getInstance().unloadChunk(chunk);

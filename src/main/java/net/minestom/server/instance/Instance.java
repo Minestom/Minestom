@@ -333,7 +333,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
             entity.getViewers().forEach(p -> entity.removeViewer(p)); // Remove this entity from players viewable list and send delete entities packet
 
-
             Chunk chunk = getChunkAt(entity.getPosition());
             removeEntityFromChunk(entity, chunk);
         });
@@ -345,6 +344,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
             this.chunkEntities.put(chunkIndex, entities);
+
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
@@ -367,6 +367,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             } else {
                 this.chunkEntities.put(chunkIndex, entities);
             }
+
             if (entity instanceof Player) {
                 this.players.remove(entity);
             } else if (entity instanceof EntityCreature) {
@@ -380,8 +381,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     private Set<Entity> getEntitiesInChunk(long index) {
-        Set<Entity> entities = chunkEntities.get(index);
-        return entities != null ? entities : new CopyOnWriteArraySet<>();
+        Set<Entity> entities = chunkEntities.getOrDefault(index, new CopyOnWriteArraySet<>());
+        return entities;
     }
 
     /**

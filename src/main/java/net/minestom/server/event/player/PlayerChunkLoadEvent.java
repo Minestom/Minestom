@@ -2,24 +2,27 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
-import net.minestom.server.instance.Chunk;
 
 public class PlayerChunkLoadEvent extends Event {
 
     private Player player;
-    private Chunk chunk;
+    private int chunkX, chunkZ;
 
-    public PlayerChunkLoadEvent(Player player, Chunk chunk) {
+    public PlayerChunkLoadEvent(Player player, int chunkX, int chunkZ) {
         this.player = player;
-        this.chunk = chunk;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
     }
 
     public Player getPlayer() {
         return player;
     }
 
-    public Chunk getChunk() {
-        return chunk;
+    public int getChunkX() {
+        return chunkX;
     }
 
+    public int getChunkZ() {
+        return chunkZ;
+    }
 }
