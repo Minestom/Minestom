@@ -7,6 +7,8 @@ import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerChunkLoadEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -363,12 +365,18 @@ public class Chunk implements Viewable {
     @Override
     public void addViewer(Player player) {
         this.viewers.add(player);
+
+        PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, this);
+        player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
     }
 
     // UNSAFE
     @Override
     public void removeViewer(Player player) {
         this.viewers.remove(player);
+
+        PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, this);
+        player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
     }
 
     @Override

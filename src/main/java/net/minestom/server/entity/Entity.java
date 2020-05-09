@@ -246,7 +246,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         if (shouldRemove()) {
             remove();
             return;
-        } else if (shouldUpdate(time)) {
+        }
+
+        if (ChunkUtils.isChunkUnloaded(getInstance(), getPosition().getX(), getPosition().getZ())) {
+            // No update for entities in unloaded chunk
+            return;
+        }
+
+        if (shouldUpdate(time)) {
             this.lastUpdate = time;
 
             // Velocity
