@@ -45,8 +45,6 @@ public class GamemodeCommand extends Command<Player> {
         assert mode != null; // mode is not supposed to be null, because gamemodeName will be valid
         player.setGameMode(mode);
         player.sendMessage("You are now playing in " + gamemodeName);
-
-        System.out.println("hello");
     }
 
     private void executeOnOther(Player player, Arguments arguments) {

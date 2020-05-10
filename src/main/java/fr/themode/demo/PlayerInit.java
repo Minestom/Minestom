@@ -250,14 +250,11 @@ public class PlayerInit {
 
     public static ResponseDataConsumer getResponseDataConsumer() {
         return (playerConnection, responseData) -> {
-            responseData.setName("1.15.2");
-            responseData.setProtocol(578);
             responseData.setMaxPlayer(100);
             responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
             responseData.addPlayer("A name", UUID.randomUUID());
             responseData.addPlayer("Could be some message", UUID.randomUUID());
             responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
-            responseData.setFavicon("data:image/png;base64,<data>");
         };
     }
 

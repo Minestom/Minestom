@@ -29,6 +29,8 @@ import java.io.IOException;
 public class MinecraftServer {
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
+    public static final int PROTOCOL_VERSION = 578;
+
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
@@ -205,6 +207,10 @@ public class MinecraftServer {
         updateManager.start();
         nettyServer.start(address, port);
         LOGGER.info("Minestom server started successfully.");
+    }
+
+    public void start(String address, int port) {
+        start(address, port, null);
     }
 
     /**

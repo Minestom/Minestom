@@ -15,9 +15,17 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
         ResponseData responseData = new ResponseData();
-        if (consumer == null)
-            throw new NullPointerException("You need to register a ResponseDataConsumer");
-        consumer.accept(connection, responseData);
+
+        // Fill default params
+        responseData.setName("1.15.2");
+        responseData.setProtocol(MinecraftServer.PROTOCOL_VERSION);
+        responseData.setMaxPlayer(0);
+        responseData.setOnline(0);
+        responseData.setDescription("Minestom Server");
+        responseData.setFavicon("data:image/png;base64,<data>");
+
+        if (consumer != null)
+            consumer.accept(connection, responseData);
 
         ResponsePacket responsePacket = new ResponsePacket();
         responsePacket.jsonResponse = responseData.build().toString();
