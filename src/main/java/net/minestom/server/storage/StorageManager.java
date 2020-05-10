@@ -1,5 +1,8 @@
 package net.minestom.server.storage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,6 +10,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class StorageManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageManager.class);
 
     private Supplier<StorageSystem> defaultStorageSystemSupplier = null;
 
@@ -47,8 +51,9 @@ public class StorageManager {
     }
 
     public void defineDefaultStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
-        if (this.defaultStorageSystemSupplier != null)
-            System.out.println("WARNING: the default StorageSystem is being changed, could lead to issue!");
+        if (this.defaultStorageSystemSupplier != null) {
+            LOGGER.error("The default storage-system has been changed. This could lead to issues!");
+        }
         this.defaultStorageSystemSupplier = storageSystemSupplier;
     }
 }

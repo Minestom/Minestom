@@ -17,13 +17,17 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.RegistryMain;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.Difficulty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class MinecraftServer {
+    private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -109,8 +113,7 @@ public class MinecraftServer {
         try {
             ResourceGatherer.ensureResourcesArePresent(null); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
-            System.err.println("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.");
-            e.printStackTrace();
+            LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
         RegistryMain.registerBlocks();
         RegistryMain.registerItems();
@@ -197,19 +200,23 @@ public class MinecraftServer {
     }
 
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+        LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
         updateManager.start();
         nettyServer.start(address, port);
+        LOGGER.info("Minestom server started successfully.");
     }
 
     /**
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
+        LOGGER.info("Stopping Minestom server.");
         updateManager.stop();
         nettyServer.stop();
         schedulerManager.shutdown();
-        storageManager.getLoadedFolders().forEach(storageFolder -> storageFolder.close());
+        storageManager.getLoadedFolders().forEach(StorageFolder::close);
+        LOGGER.info("Minestom server stopped successfully.");
     }
 
 }
