@@ -1,20 +1,28 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.stream.Collectors;
 
 /**
  * Responsible for making sure Minestom has the necessary files to run (notably registry files)
  */
 public class ResourceGatherer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceGatherer.class);
 
     public static final File DATA_FOLDER = new File("./minecraft_data/");
     private static final File TMP_FOLDER = new File("./.minestom_tmp/");
@@ -28,35 +36,35 @@ public class ResourceGatherer {
         if(DATA_FOLDER.exists()) {
             return;
         }
-        System.out.println(DATA_FOLDER +" folder does not exist. Minestom will now generate the necessary files.");
+        LOGGER.info(DATA_FOLDER +" folder does not exist. Minestom will now generate the necessary files.");
 
         if(!TMP_FOLDER.exists() && !TMP_FOLDER.mkdirs()) {
             throw new IOException("Failed to create tmp folder.");
         }
 
         final String version = "1.15.2"; // TODO: Do not hardcode
-
-        System.out.println("Starting download of Minecraft server jar for version "+version+" from Mojang servers...");
+    
+        LOGGER.info("Starting download of Minecraft server jar for version " + version + " from Mojang servers...");
         File minecraftFolder = getMinecraftFolder(minecraftFolderOverride);
         if(!minecraftFolder.exists()) {
             throw new IOException("Could not find Minecraft installation folder, attempted location "+minecraftFolder+". If this location is not the correct one, please supply the correct one as argument of ResourceGatherer#ensureResourcesArePresent");
         }
         File serverJar = downloadServerJar(minecraftFolder, version);
-        System.out.println("Download complete.");
+        LOGGER.info("Download complete.");
 
         runDataGenerator(serverJar);
 
         moveAndCleanup(version);
-        System.out.println("Resource gathering done!");
+        LOGGER.info("Resource gathering done!");
     }
 
     private static void moveAndCleanup(String version) throws IOException {
         Path dataFolderPath = DATA_FOLDER.toPath();
         Path tmpFolderPath = TMP_FOLDER.toPath();
         Path generatedFolder = tmpFolderPath.resolve("generated");
-        System.out.println("Data generator successful, removing server jar");
-        Files.delete(tmpFolderPath.resolve("server_"+version+".jar"));
-        System.out.println("Removal successful, now moving data to "+DATA_FOLDER);
+        LOGGER.info("Data generator successful, removing server jar");
+        Files.delete(tmpFolderPath.resolve("server_" + version + ".jar"));
+        LOGGER.info("Removal successful, now moving data to " + DATA_FOLDER);
         Files.walkFileTree(tmpFolderPath, new SimpleFileVisitor<>() {
 
             @Override
@@ -64,7 +72,7 @@ public class ResourceGatherer {
                 Path relativePath = generatedFolder.relativize(dir);
                 if(dir.startsWith(generatedFolder)) { // don't copy logs
                     Path resolvedPath = dataFolderPath.resolve(relativePath);
-                    System.out.println("> Creating sub-folder "+relativePath);
+                    LOGGER.info("> Creating sub-folder " + relativePath);
                     Files.createDirectories(resolvedPath);
                 }
                 return FileVisitResult.CONTINUE;
@@ -72,7 +80,7 @@ public class ResourceGatherer {
 
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                System.out.println("> Deleting folder "+dir);
+                LOGGER.info("> Deleting folder " + dir);
                 Files.delete(dir);
                 return FileVisitResult.CONTINUE;
             }
@@ -82,10 +90,10 @@ public class ResourceGatherer {
                 Path relativePath = generatedFolder.relativize(file);
                 if(file.startsWith(generatedFolder)) { // don't copy logs
                     Path resolvedPath = dataFolderPath.resolve(relativePath);
-                    System.out.println("> Moving "+relativePath);
+                    LOGGER.info("> Moving " + relativePath);
                     Files.move(file, resolvedPath);
                 } else {
-                    System.out.println("> Deleting "+relativePath);
+                    LOGGER.info("> Deleting " + relativePath);
                     Files.delete(file);
                 }
                 return FileVisitResult.CONTINUE;
@@ -96,11 +104,16 @@ public class ResourceGatherer {
     private static void runDataGenerator(File serverJar) throws IOException {
         ProcessBuilder dataGenerator = new ProcessBuilder("java", "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
         dataGenerator.directory(TMP_FOLDER);
-        dataGenerator.inheritIO();
-        System.out.println("Now running data generator with options '--dev', '--server', '--all'");
-        System.out.println("Executing: "+dataGenerator.command().stream().collect(Collectors.joining(" ")));
-        System.out.println("Minestom will now wait for it to finish, here's its output:");
+        LOGGER.info("Now running data generator with options '--dev', '--server', '--all'");
+        LOGGER.info("Executing: " + String.join(" ", dataGenerator.command()));
+        LOGGER.info("Minestom will now wait for it to finish, here's its output:");
+        LOGGER.info("");
         Process dataGeneratorProcess = dataGenerator.start();
+        new BufferedReader(
+                new InputStreamReader(dataGeneratorProcess.getInputStream())
+        ).lines().forEach(LOGGER::info);
+        LOGGER.info("");
+    
         try {
             int resultCode = dataGeneratorProcess.waitFor();
             if(resultCode != 0) {
@@ -128,8 +141,8 @@ public class ResourceGatherer {
             VersionInfo versionInfo = gson.fromJson(fileReader, VersionInfo.class);
             VersionInfo.DownloadObject serverJarInfo = versionInfo.getDownloadableFiles().get("server");
             String downloadURL = serverJarInfo.getUrl();
-
-            System.out.println("Found URL, starting download from "+downloadURL+"...");
+    
+            LOGGER.info("Found URL, starting download from " + downloadURL + "...");
             return download(version, downloadURL);
         }
     }
