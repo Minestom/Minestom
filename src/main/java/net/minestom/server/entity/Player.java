@@ -10,6 +10,7 @@ import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
@@ -873,21 +874,35 @@ public class Player extends LivingEntity {
         return Collections.unmodifiableSet(bossBars);
     }
 
-    public void openInventory(Inventory inventory) {
+    /**
+     * Open the specified Inventory
+     *
+     * @param inventory the inventory to open
+     * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
+     */
+    public boolean openInventory(Inventory inventory) {
         if (inventory == null)
             throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
 
-        if (getOpenInventory() != null) {
-            getOpenInventory().removeViewer(this);
-        }
+        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(this, inventory);
 
-        OpenWindowPacket openWindowPacket = new OpenWindowPacket();
-        openWindowPacket.windowId = inventory.getWindowId();
-        openWindowPacket.windowType = inventory.getInventoryType().getWindowType();
-        openWindowPacket.title = inventory.getTitle();
-        playerConnection.sendPacket(openWindowPacket);
-        inventory.addViewer(this);
-        refreshOpenInventory(inventory);
+        callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
+
+            if (getOpenInventory() != null) {
+                closeInventory();
+            }
+
+            OpenWindowPacket openWindowPacket = new OpenWindowPacket();
+            openWindowPacket.windowId = inventory.getWindowId();
+            openWindowPacket.windowType = inventory.getInventoryType().getWindowType();
+            openWindowPacket.title = inventory.getTitle();
+            playerConnection.sendPacket(openWindowPacket);
+            inventory.addViewer(this);
+            refreshOpenInventory(inventory);
+
+        });
+
+        return !inventoryOpenEvent.isCancelled();
     }
 
     public void closeInventory() {
