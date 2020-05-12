@@ -74,7 +74,8 @@ public class Player extends LivingEntity {
     private int food;
     private float foodSaturation;
     private long startEatingTime;
-    private long eatingTime = 1000L;
+    private long defaultEatingTime = 1000L;
+    private long eatingTime;
     private boolean isEating;
 
     // CustomBlock break delay
@@ -594,13 +595,17 @@ public class Player extends LivingEntity {
         return isEating;
     }
 
+    public long getDefaultEatingTime() {
+        return defaultEatingTime;
+    }
+
     /**
-     * Used to change the eating time animation
+     * Used to change the default eating time animation
      *
-     * @param eatingTime the eating time in milliseconds
+     * @param defaultEatingTime the default eating time in milliseconds
      */
-    public void setEatingTime(long eatingTime) {
-        this.eatingTime = eatingTime;
+    public void setDefaultEatingTime(long defaultEatingTime) {
+        this.defaultEatingTime = defaultEatingTime;
     }
 
     public boolean dropItem(ItemStack item) {
@@ -892,13 +897,15 @@ public class Player extends LivingEntity {
                 closeInventory();
             }
 
+            Inventory newInventory = inventoryOpenEvent.getInventory();
+
             OpenWindowPacket openWindowPacket = new OpenWindowPacket();
-            openWindowPacket.windowId = inventory.getWindowId();
-            openWindowPacket.windowType = inventory.getInventoryType().getWindowType();
-            openWindowPacket.title = inventory.getTitle();
+            openWindowPacket.windowId = newInventory.getWindowId();
+            openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();
+            openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
-            inventory.addViewer(this);
-            refreshOpenInventory(inventory);
+            newInventory.addViewer(this);
+            refreshOpenInventory(newInventory);
 
         });
 
@@ -1056,13 +1063,18 @@ public class Player extends LivingEntity {
         this.openInventory = openInventory;
     }
 
-    public void refreshEating(boolean isEating) {
+    public void refreshEating(boolean isEating, long eatingTime) {
         this.isEating = isEating;
         if (isEating) {
             this.startEatingTime = System.currentTimeMillis();
+            this.eatingTime = eatingTime;
         } else {
             this.startEatingTime = 0;
         }
+    }
+
+    public void refreshEating(boolean isEating) {
+        refreshEating(isEating, defaultEatingTime);
     }
 
     public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {

@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.animation.ArmAnimationEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -77,7 +78,12 @@ public class UseItemListener {
             armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.TRIDENT);
         } else if (material.isFood()) {
             armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.EAT);
-            player.refreshEating(true);
+
+            // Eating code, contains the eating time customisation
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, player.getDefaultEatingTime());
+            player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> {
+                player.refreshEating(true, playerPreEatEvent.getEatingTime());
+            });
         }
 
         if (armAnimationEvent != null)

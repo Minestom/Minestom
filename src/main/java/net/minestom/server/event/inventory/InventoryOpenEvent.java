@@ -21,4 +21,11 @@ public class InventoryOpenEvent extends CancellableEvent {
     public Inventory getInventory() {
         return inventory;
     }
+
+    public void setInventory(Inventory inventory) {
+        if (inventory == null)
+            throw new NullPointerException("Inventory cannot be null!");
+
+        this.inventory = inventory;
+    }
 }

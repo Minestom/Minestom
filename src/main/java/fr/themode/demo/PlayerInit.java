@@ -236,6 +236,12 @@ public class PlayerInit {
                 System.out.println("ITEM UPDATE STATE");
             });
 
+            player.addEventCallback(PlayerPreEatEvent.class, event -> {
+                ItemStack itemStack = event.getFoodItem();
+                Material material = itemStack.getMaterial();
+                event.setEatingTime(material == Material.PORKCHOP ? 100 : 1000);
+            });
+
             player.addEventCallback(PlayerEatEvent.class, event -> {
                 System.out.println("PLAYER EAT EVENT");
             });
