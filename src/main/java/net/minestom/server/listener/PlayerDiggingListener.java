@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
@@ -52,7 +51,7 @@ public class PlayerDiggingListener {
                                 }
                                 addEffect(player);
                             } else {
-                                if(Block.fromId(instance.getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ())).breaksInstantaneously()) {
+                                if (Block.fromId(instance.getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ())).breaksInstantaneously()) {
                                     if (player.getCustomBlockTarget() != null) {
                                         player.resetTargetBlock();
                                         removeEffect(player);
@@ -100,20 +99,18 @@ public class PlayerDiggingListener {
                 dropItem(player, droppedItemStack2, handItem);
                 break;
             case UPDATE_ITEM_STATE:
-                Material mainHandMat = Material.fromId(mainHand.getMaterialId());
-                Material offHandMat = Material.fromId(offHand.getMaterialId());
-                boolean isOffhand = offHandMat.hasState();
+                player.refreshEating(false);
+                ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(false);
 
-                ItemStack updatedItem = isOffhand ? offHand :
-                        mainHandMat.hasState() ? mainHand : null;
-                if (updatedItem == null) // No item with state, cancel
-                    return;
+                if (itemUpdateStateEvent == null) {
+                    player.refreshActiveHand(true, false, false);
+                    player.sendPacketToViewers(player.getMetadataPacket());
+                } else {
+                    boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                    player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
+                    player.sendPacketToViewers(player.getMetadataPacket());
+                }
 
-                ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(updatedItem);
-                player.callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
-
-                player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffhand, false);
-                player.sendPacketToViewers(player.getMetadataPacket());
                 break;
             case SWAP_ITEM_HAND:
                 PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(offHand.clone(), mainHand.clone());

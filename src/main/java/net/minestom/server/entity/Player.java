@@ -11,17 +11,16 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerRespawnEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.event.player.PlayerTickEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -73,12 +72,16 @@ public class Player extends LivingEntity {
 
     private int food;
     private float foodSaturation;
+    private long startEatingTime;
+    private long eatingTime = 1000L;
+    private boolean isEating;
 
+    // CustomBlock break delay
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
     private long targetBlockTime;
     private byte targetLastStage;
-    private int timeBreak;
+    private int blockBreakTime;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
     private Team team;
@@ -149,7 +152,7 @@ public class Player extends LivingEntity {
         if (targetCustomBlock != null) {
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
-            byte stage = (byte) (since / (timeBreak / animationCount));
+            byte stage = (byte) (since / (blockBreakTime / animationCount));
             if (stage != targetLastStage) {
                 sendBlockBreakAnimation(targetBlockPosition, stage);
             }
@@ -178,6 +181,24 @@ public class Player extends LivingEntity {
                             entity.remove();
                         });
                     }
+                }
+            }
+        }
+
+        // Eating animation
+        if (isEating()) {
+            if (System.currentTimeMillis() - startEatingTime >= eatingTime) {
+                refreshEating(false);
+
+                triggerStatus((byte) 9); // Mark item use as finished
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+
+                ItemStack foodItem = itemUpdateStateEvent.getItemStack();
+                boolean isFood = foodItem.getMaterial().isFood();
+
+                if (isFood) {
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(foodItem);
+                    callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
             }
         }
@@ -562,6 +583,19 @@ public class Player extends LivingEntity {
     public void setFoodSaturation(float foodSaturation) {
         this.foodSaturation = foodSaturation;
         sendUpdateHealthPacket();
+    }
+
+    public boolean isEating() {
+        return isEating;
+    }
+
+    /**
+     * Used to change the eating time animation
+     *
+     * @param eatingTime the eating time in milliseconds
+     */
+    public void setEatingTime(long eatingTime) {
+        this.eatingTime = eatingTime;
     }
 
     public boolean dropItem(ItemStack item) {
@@ -995,17 +1029,50 @@ public class Player extends LivingEntity {
     public void refreshHeldSlot(short slot) {
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+
+        refreshEating(false);
     }
 
     public void refreshOpenInventory(Inventory openInventory) {
         this.openInventory = openInventory;
     }
 
+    public void refreshEating(boolean isEating) {
+        this.isEating = isEating;
+        if (isEating) {
+            this.startEatingTime = System.currentTimeMillis();
+        } else {
+            this.startEatingTime = 0;
+        }
+    }
+
+    public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
+        Material mainHandMat = Material.fromId(getItemInMainHand().getMaterialId());
+        Material offHandMat = Material.fromId(getItemInOffHand().getMaterialId());
+        boolean isOffhand = offHandMat.hasState();
+
+        ItemStack updatedItem = isOffhand ? getItemInOffHand() :
+                mainHandMat.hasState() ? getItemInMainHand() : null;
+        if (updatedItem == null) // No item with state, cancel
+            return null;
+
+        boolean isFood = updatedItem.getMaterial().isFood();
+
+        if (isFood && !allowFood)
+            return null;
+
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(updatedItem,
+                isOffhand ? Hand.OFF : Hand.MAIN);
+        callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
+
+        return itemUpdateStateEvent;
+    }
+
     public void refreshTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
         this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
-        this.timeBreak = breakTime;
+        this.blockBreakTime = breakTime;
     }
 
     public void resetTargetBlock() {

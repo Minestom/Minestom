@@ -10,6 +10,7 @@ import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.AttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
+import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
@@ -177,7 +178,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 75, 0));
 
                 ItemStack item = new ItemStack(Material.STONE, (byte) 43);
@@ -229,6 +230,14 @@ public class PlayerInit {
             player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
                 player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
                 player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
+            });
+
+            player.addEventCallback(ItemUpdateStateEvent.class, event -> {
+                System.out.println("ITEM UPDATE STATE");
+            });
+
+            player.addEventCallback(PlayerEatEvent.class, event -> {
+                System.out.println("PLAYER EAT EVENT");
             });
 
             player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {

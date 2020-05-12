@@ -77,6 +77,7 @@ public class UseItemListener {
             armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.TRIDENT);
         } else if (material.isFood()) {
             armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.EAT);
+            player.refreshEating(true);
         }
 
         if (armAnimationEvent != null)

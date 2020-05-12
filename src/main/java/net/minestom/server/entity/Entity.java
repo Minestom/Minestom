@@ -55,7 +55,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
     protected float gravityDragPerTick;
-    private int gravityTickCounter;
 
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
