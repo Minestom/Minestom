@@ -104,11 +104,9 @@ public class PlayerDiggingListener {
 
                 if (itemUpdateStateEvent == null) {
                     player.refreshActiveHand(true, false, false);
-                    player.sendPacketToViewers(player.getMetadataPacket());
                 } else {
                     boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
                     player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
-                    player.sendPacketToViewers(player.getMetadataPacket());
                 }
 
                 break;

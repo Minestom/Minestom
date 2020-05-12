@@ -193,6 +193,10 @@ public class Player extends LivingEntity {
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
 
+                // Refresh hand
+                boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                refreshActiveHand(false, isOffHand, false);
+
                 ItemStack foodItem = itemUpdateStateEvent.getItemStack();
                 boolean isFood = foodItem.getMaterial().isFood();
 

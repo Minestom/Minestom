@@ -301,6 +301,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         this.isHandActive = isHandActive;
         this.offHand = offHand;
         this.riptideSpinAttack = riptideSpinAttack;
+
+        sendPacketToViewers(getMetadataPacket());
     }
 
     public void refreshIsDead(boolean isDead) {
