@@ -171,6 +171,8 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
 
+                player.setPermissionLevel(4);
+
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     player.sendMessage("CLICK PLAYER INVENTORY");
                     System.out.println("slot player: " + slot);

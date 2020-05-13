@@ -94,6 +94,10 @@ public class Player extends LivingEntity {
      */
     private DamageType lastDamageSource;
 
+    private int permissionLevel;
+
+    private boolean reducedDebugScreenInformation;
+
     // Abilities
     private boolean invulnerable;
     private boolean flying;
@@ -945,6 +949,33 @@ public class Player extends LivingEntity {
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId++;
         playerConnection.sendPacket(positionAndLookPacket);
+    }
+
+    public int getPermissionLevel() {
+        return permissionLevel;
+    }
+
+    public void setPermissionLevel(int permissionLevel) {
+        if (permissionLevel < 0 || permissionLevel > 4)
+            throw new IllegalArgumentException("permissionLevel has to be between 0 and 4");
+
+        this.permissionLevel = permissionLevel;
+
+        // Magic values: https://wiki.vg/Entity_statuses#Player
+        byte permissionLevelStatus = (byte) (24 + permissionLevel);
+        triggerStatus(permissionLevelStatus);
+    }
+
+    public void setReducedDebugScreenInformation(boolean reduced) {
+        this.reducedDebugScreenInformation = reduced;
+
+        // Magic values: https://wiki.vg/Entity_statuses#Player
+        byte debugScreenStatus = (byte) (reduced ? 22 : 23);
+        triggerStatus(debugScreenStatus);
+    }
+
+    public boolean hasReducedDebugScreenInformation() {
+        return reducedDebugScreenInformation;
     }
 
     public boolean isInvulnerable() {
