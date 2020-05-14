@@ -50,6 +50,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private UUID uniqueId;
 
     private Data data;
+    private ExplosionSupplier explosionSupplier;
 
     protected Instance(UUID uniqueId, Dimension dimension) {
         this.uniqueId = uniqueId;
@@ -403,5 +404,50 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the current time
      */
     public void tick(long time) {
+    }
+
+    /**
+     * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
+     * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     * @param centerX
+     * @param centerY
+     * @param centerZ
+     * @param strength
+     */
+    public void explode(float centerX, float centerY, float centerZ, float strength) {
+        explode(centerX, centerY, centerZ, strength, null);
+    }
+
+    /**
+     * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
+     * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     * @param centerX
+     * @param centerY
+     * @param centerZ
+     * @param strength
+     * @param additionalData data to pass to the explosion supplier
+     */
+    public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
+        ExplosionSupplier explosionSupplier = getExplosionSupplier();
+        if(explosionSupplier == null)
+            throw new IllegalStateException("Tried to create an explosion with no explosion supplier");
+        Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
+        explosion.apply(this);
+    }
+
+    /**
+     * Return the registered explosion supplier, or null if none was provided
+     * @return
+     */
+    public ExplosionSupplier getExplosionSupplier() {
+        return explosionSupplier;
+    }
+
+    /**
+     * Registers the explosion supplier to use in this instance
+     * @param supplier
+     */
+    public void setExplosionSupplier(ExplosionSupplier supplier) {
+        this.explosionSupplier = supplier;
     }
 }
