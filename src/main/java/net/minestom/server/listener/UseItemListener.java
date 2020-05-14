@@ -38,7 +38,7 @@ public class UseItemListener {
             } else {
                 armorSlot = ArmorEquipEvent.ArmorSlot.BOOTS;
             }
-            ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, armorSlot);
+            ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, itemStack, armorSlot);
             player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
             ItemStack armorItem = armorEquipEvent.getArmorItem();
 

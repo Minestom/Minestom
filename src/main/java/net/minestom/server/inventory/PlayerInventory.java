@@ -192,13 +192,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 ArmorEquipEvent armorEquipEvent = null;
 
                 if (slot == HELMET_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
                 } else if (slot == CHESTPLATE_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
                 } else if (slot == LEGGINGS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
                 } else if (slot == BOOTS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
                 }
 
                 if (armorEquipEvent != null) {

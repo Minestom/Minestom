@@ -263,7 +263,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
-        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(itemStack, armorSlot);
+        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
         callEvent(ArmorEquipEvent.class, armorEquipEvent);
         return armorEquipEvent.getArmorItem();
     }
