@@ -3,8 +3,8 @@ package net.minestom.server.entity;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
-import net.minestom.server.event.entity.DeathEvent;
 import net.minestom.server.event.entity.EntityDamageEvent;
+import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
@@ -146,8 +146,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
         setHealth(0);
-        DeathEvent deathEvent = new DeathEvent();
-        callEvent(DeathEvent.class, deathEvent);
+        EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
+        callEvent(EntityDeathEvent.class, entityDeathEvent);
     }
 
     /**
@@ -166,7 +166,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param unit     unit used to express the duration
      */
     public void setFireForDuration(int duration, TimeUnit unit) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(duration, unit);
+        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
         callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
             long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
             setOnFire(true);

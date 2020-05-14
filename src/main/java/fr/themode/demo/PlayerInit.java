@@ -8,7 +8,7 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.event.entity.AttackEvent;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -100,7 +100,7 @@ public class PlayerInit {
 
         connectionManager.addPlayerInitialization(player -> {
 
-            player.addEventCallback(AttackEvent.class, event -> {
+            player.addEventCallback(EntityAttackEvent.class, event -> {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;

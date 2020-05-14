@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 public class AnimationListener {
 
     public static void animationListener(ClientAnimationPacket packet, Player player) {
-        AnimationEvent animationEvent = new AnimationEvent(packet.hand);
+        AnimationEvent animationEvent = new AnimationEvent(player, packet.hand);
         player.callCancellableEvent(AnimationEvent.class, animationEvent, () -> {
             EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
             entityAnimationPacket.entityId = player.getEntityId();

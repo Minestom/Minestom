@@ -3,7 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.entity.AttackEvent;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerInteractEvent;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
@@ -18,8 +18,8 @@ public class UseEntityListener {
             if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
                 return;
 
-            AttackEvent attackEvent = new AttackEvent(entity);
-            player.callEvent(AttackEvent.class, attackEvent);
+            EntityAttackEvent entityAttackEvent = new EntityAttackEvent(player, entity);
+            player.callEvent(EntityAttackEvent.class, entityAttackEvent);
         } else if (type == ClientInteractEntityPacket.Type.INTERACT) {
             PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(entity, packet.hand);
             player.callEvent(PlayerInteractEvent.class, playerInteractEvent);

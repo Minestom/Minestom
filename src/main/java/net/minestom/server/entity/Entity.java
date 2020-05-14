@@ -10,6 +10,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
+import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -423,7 +424,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void setVelocity(Vector velocity) {
-        this.velocity.copy(velocity);
+        EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
+        callCancellableEvent(EntityVelocityEvent.class, entityVelocityEvent, () -> {
+            this.velocity.copy(entityVelocityEvent.getVelocity());
+        });
     }
 
     public void setGravity(float gravityDragPerTick) {

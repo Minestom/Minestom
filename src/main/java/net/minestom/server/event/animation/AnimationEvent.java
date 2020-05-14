@@ -5,10 +5,16 @@ import net.minestom.server.event.CancellableEvent;
 
 public class AnimationEvent extends CancellableEvent {
 
+    private Player player;
     private Player.Hand hand;
 
-    public AnimationEvent(Player.Hand hand) {
+    public AnimationEvent(Player player, Player.Hand hand) {
+        this.player = player;
         this.hand = hand;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public Player.Hand getHand() {
