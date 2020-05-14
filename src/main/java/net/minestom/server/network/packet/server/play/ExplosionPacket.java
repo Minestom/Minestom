@@ -17,7 +17,7 @@ public class ExplosionPacket implements ServerPacket {
         writer.writeFloat(y);
         writer.writeFloat(z);
         writer.writeFloat(radius);
-        writer.writeInt(records.length);
+        writer.writeInt(records.length/3); // each record is 3 bytes long
         for (byte record : records)
             writer.writeByte(record);
         writer.writeFloat(playerMotionX);
