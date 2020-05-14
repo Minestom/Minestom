@@ -73,5 +73,9 @@ public abstract class Explosion {
             packet.records[i*3+1] = y;
             packet.records[i*3+2] = z;
         }
+
+        instance.getPlayers().forEach(player -> {
+            player.sendPacketToViewersAndSelf(packet);
+        });
     }
 }
