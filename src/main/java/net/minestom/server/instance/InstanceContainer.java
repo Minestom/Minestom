@@ -287,6 +287,7 @@ public class InstanceContainer extends Instance {
         }
 
         this.chunks.remove(index);
+        chunk.unload();
     }
 
     @Override

@@ -62,6 +62,7 @@ public class Chunk implements Viewable {
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
     // Cache
+    private boolean loaded = true;
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private ByteBuf fullDataPacket;
 
@@ -356,6 +357,16 @@ public class Chunk implements Viewable {
         });
     }
 
+    /**
+     * Used to verify if the chunk should still be kept in memory
+     * having the chunk unloaded means no data is contained in it (blocks, data, etc...)
+     *
+     * @return true if the chunk is loaded
+     */
+    public boolean isLoaded() {
+        return loaded;
+    }
+
     @Override
     public String toString() {
         return "Chunk[" + chunkX + ":" + chunkZ + "]";
@@ -382,6 +393,22 @@ public class Chunk implements Viewable {
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
+    }
+
+    /**
+     * Used to prevent major memory leak when unloading chunks
+     */
+    protected void unload() {
+        this.loaded = false;
+
+        this.biomes = null;
+        this.blocksId = null;
+        this.customBlocksId = null;
+        this.blocksData.clear();
+        this.updatableBlocks.clear();
+        this.updatableBlocksLastUpdate.clear();
+        this.blockEntities.clear();
+        this.viewers.clear();
     }
 
     private int getBlockIndex(int x, int y, int z) {
