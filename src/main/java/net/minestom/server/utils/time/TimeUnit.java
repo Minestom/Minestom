@@ -6,7 +6,7 @@ public enum TimeUnit {
 
     TICK, MILLISECOND;
 
-    public long toMilliseconds(int value) {
+    public long toMilliseconds(long value) {
         switch (this) {
             case TICK:
                 return MinecraftServer.TICK_MS * value;

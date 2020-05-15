@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-// TODO update tick
 public class Sidebar implements Viewable {
 
     private static final AtomicInteger counter = new AtomicInteger();
@@ -73,20 +72,18 @@ public class Sidebar implements Viewable {
     }
 
     public void updateLineContent(String id, String content) {
-        for (ScoreboardLine line : lines) {
-            if (line.id.equals(id)) {
-                line.refreshContent(content);
-                sendPacketToViewers(line.sidebarTeam.updatePrefix(content));
-            }
+        ScoreboardLine scoreboardLine = getLine(id);
+        if (scoreboardLine != null) {
+            scoreboardLine.refreshContent(content);
+            sendPacketToViewers(scoreboardLine.sidebarTeam.updatePrefix(content));
         }
     }
 
     public void updateLineScore(String id, int score) {
-        for (ScoreboardLine line : lines) {
-            if (line.id.equals(id)) {
-                line.line = score;
-                sendPacketToViewers(line.getLineScoreUpdatePacket(objectiveName, score));
-            }
+        ScoreboardLine scoreboardLine = getLine(id);
+        if (scoreboardLine != null) {
+            scoreboardLine.line = score;
+            sendPacketToViewers(scoreboardLine.getLineScoreUpdatePacket(objectiveName, score));
         }
     }
 

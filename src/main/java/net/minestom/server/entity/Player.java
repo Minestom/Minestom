@@ -31,10 +31,7 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.ChunkUtils;
-import net.minestom.server.utils.Position;
+import net.minestom.server.utils.*;
 import net.minestom.server.world.Dimension;
 import net.minestom.server.world.LevelType;
 
@@ -70,6 +67,8 @@ public class Player extends LivingEntity {
     private PlayerInventory inventory;
     private short heldSlot;
     private Inventory openInventory;
+
+    private Position respawnPoint;
 
     private int food;
     private float foodSaturation;
@@ -119,6 +118,8 @@ public class Player extends LivingEntity {
         this.playerConnection = playerConnection;
 
         setBoundingBox(0.69f, 1.8f, 0.69f);
+
+        setRespawnPoint(new Position(0, 0, 0));
 
         // Some client update
         getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
@@ -618,9 +619,23 @@ public class Player extends LivingEntity {
         return !itemDropEvent.isCancelled();
     }
 
+    /**
+     * Used to retrieve the default spawn point
+     * can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}
+     *
+     * @return the default respawn point
+     */
     public Position getRespawnPoint() {
-        // TODO: Custom
-        return new Position(0f, 70f, 0f);
+        return respawnPoint;
+    }
+
+    /**
+     * Change the default spawn point
+     *
+     * @param respawnPoint
+     */
+    public void setRespawnPoint(Position respawnPoint) {
+        this.respawnPoint = respawnPoint;
     }
 
     public void respawn() {
@@ -671,7 +686,7 @@ public class Player extends LivingEntity {
     }
 
     public void setExp(float exp) {
-        if (exp < 0 || exp > 1)
+        if (!MathUtils.isBetween(exp, 0, 1))
             throw new IllegalArgumentException("Exp should be between 0 and 1");
         this.exp = exp;
         sendExperienceUpdatePacket();
@@ -884,7 +899,7 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * Open the specified Inventory
+     * Open the specified Inventory, close the previous inventory if existing
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
@@ -916,6 +931,10 @@ public class Player extends LivingEntity {
         return !inventoryOpenEvent.isCancelled();
     }
 
+    /**
+     * Close the current inventory if there is any
+     * It closes the player inventory if {@link #getOpenInventory()} returns null
+     */
     public void closeInventory() {
         Inventory openInventory = getOpenInventory();
         CloseWindowPacket closeWindowPacket = new CloseWindowPacket();
@@ -956,7 +975,7 @@ public class Player extends LivingEntity {
     }
 
     public void setPermissionLevel(int permissionLevel) {
-        if (permissionLevel < 0 || permissionLevel > 4)
+        if (!MathUtils.isBetween(permissionLevel, 0, 4))
             throw new IllegalArgumentException("permissionLevel has to be between 0 and 4");
 
         this.permissionLevel = permissionLevel;
@@ -1032,6 +1051,12 @@ public class Player extends LivingEntity {
         refreshAbilities();
     }
 
+    /**
+     * This is the map used to send the statistic packet
+     * It is possible to add/remove/change statistic value directly into it
+     *
+     * @return the modifiable statistic map
+     */
     public Map<PlayerStatistic, Integer> getStatisticValueMap() {
         return statisticValueMap;
     }
@@ -1052,6 +1077,13 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(playerAbilitiesPacket);
     }
 
+    /**
+     * All packets in the queue are executed in the {@link #update()} method
+     * It is used internally to add all received packet from the client
+     * Could be used to "simulate" a received packet, but to use at your own risk
+     *
+     * @param packet the packet to add in the queue
+     */
     public void addPacketToQueue(ClientPlayPacket packet) {
         this.packets.add(packet);
     }

@@ -8,7 +8,9 @@ public class ChunkUtils {
     public static boolean isChunkUnloaded(Instance instance, float x, float z) {
         int chunkX = getChunkCoordinate((int) x);
         int chunkZ = getChunkCoordinate((int) z);
-        return instance.getChunk(chunkX, chunkZ) == null;
+
+        Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        return chunk == null || !chunk.isLoaded();
     }
 
     public static int getChunkCoordinate(int xz) {

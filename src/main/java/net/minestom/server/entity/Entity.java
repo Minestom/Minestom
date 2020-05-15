@@ -8,6 +8,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.entity.EntityVelocityEvent;
@@ -20,6 +21,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,18 +116,26 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this(entityType, new Position());
     }
 
-
+    /**
+     * @param id the entity unique id ({@link #getEntityId()})
+     * @return the entity having the specified id, null if not found
+     */
     public static Entity getEntity(int id) {
-        return entityById.get(id);
+        return entityById.getOrDefault(id, null);
     }
 
     private static int generateId() {
         return lastEntityId.incrementAndGet();
     }
 
+    /**
+     * Called each tick
+     */
     public abstract void update();
 
-    // Called when a new instance is set
+    /**
+     * Called when a new instance is set
+     */
     public abstract void spawn();
 
     public boolean isOnGround() {
@@ -375,6 +385,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
     }
 
+    /**
+     * Each entity has an unique id which will change after a restart
+     * All entities can be retrieved by calling {@link Entity#getEntity(int)}
+     *
+     * @return the unique entity id
+     */
     public int getEntityId() {
         return id;
     }
@@ -619,10 +635,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendMetadataIndex(0);
     }
 
+    /**
+     * @return the current position of the entity
+     */
     public Position getPosition() {
         return position;
     }
 
+    /**
+     * @param position the checked position chunk
+     * @return true if the entity is in the same chunk as {@code position}
+     */
     public boolean sameChunk(Position position) {
         Position pos = getPosition();
         int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
@@ -638,6 +661,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return sameChunk(entity.getPosition());
     }
 
+    /**
+     * Remove the entity from the server immediately
+     * WARNING: this do not trigger the {@link EntityDeathEvent} event
+     */
     public void remove() {
         this.shouldRemove = true;
         entityById.remove(id);
@@ -645,7 +672,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             instance.removeEntity(this);
     }
 
-    public void scheduleRemove(long delay) {
+    /**
+     * Trigger {@link #remove()} after the specified time
+     *
+     * @param delay
+     * @param timeUnit to determine the delay unit
+     */
+    public void scheduleRemove(long delay, TimeUnit timeUnit) {
+        delay = timeUnit.toMilliseconds(delay);
+
         if (delay == 0) { // Cancel the scheduled remove
             this.scheduledRemoveTime = 0;
             return;
@@ -653,6 +688,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.scheduledRemoveTime = System.currentTimeMillis() + delay;
     }
 
+    /**
+     * @return true if {@link #scheduleRemove(long, TimeUnit)} has been called, false otherwise
+     */
     public boolean isRemoveScheduled() {
         return scheduledRemoveTime != 0;
     }
@@ -667,6 +705,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return velocityPacket;
     }
 
+    /**
+     * Used to sync entities together, and sent when adding viewers
+     *
+     * @return The {@link EntityMetaDataPacket} related to this entity
+     */
     public EntityMetaDataPacket getMetadataPacket() {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
@@ -674,6 +717,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return metaDataPacket;
     }
 
+    /**
+     * Should be override when wanting to add a new metadata index
+     *
+     * @return The consumer used to write {@link EntityMetaDataPacket} in {@link #getMetadataPacket()}
+     */
     public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             fillMetadataIndex(packet, 0);
@@ -683,6 +731,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         };
     }
 
+    /**
+     * Send a {@link EntityMetaDataPacket} containing only the specified index
+     * The index is wrote using {@link #fillMetadataIndex(PacketWriter, int)}
+     *
+     * @param index
+     */
     protected void sendMetadataIndex(int index) {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
@@ -693,6 +747,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendPacketToViewersAndSelf(metaDataPacket);
     }
 
+    /**
+     * Used to fill/write a specific metadata index
+     * The proper use to add a new metadata index is to override this and add your case
+     * Then you can also override {@link #getMetadataConsumer()} and fill your newly added index
+     *
+     * @param packet the packet writer
+     * @param index  the index to fill/write
+     */
     protected void fillMetadataIndex(PacketWriter packet, int index) {
         switch (index) {
             case 0:

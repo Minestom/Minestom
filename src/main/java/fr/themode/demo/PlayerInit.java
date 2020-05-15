@@ -177,6 +177,13 @@ public class PlayerInit {
                     player.sendMessage("CLICK PLAYER INVENTORY");
                     System.out.println("slot player: " + slot);
                 });
+
+                /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
+                for (int i = 0; i < 15; i++) {
+                    scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
+                }
+                scoreboard.addViewer(player);
+                scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");*/
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
@@ -212,17 +219,14 @@ public class PlayerInit {
             setAttribute(Attribute.MAX_HEALTH, 10);
             heal();
 
-            Sidebar scoreboard = new Sidebar("Scoreboard Title");
-            for (int i = 0; i < 15; i++) {
-                scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
-            }
-            scoreboard.addViewer(this);
-            scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
-
             BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
 
+            });
+
+            player.addEventCallback(PlayerRespawnEvent.class, event -> {
+                event.setRespawnPosition(new Position(0f, 70f, 0f));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

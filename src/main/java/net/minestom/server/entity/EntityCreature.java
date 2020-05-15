@@ -11,6 +11,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -119,7 +120,7 @@ public abstract class EntityCreature extends LivingEntity {
         super.kill();
 
         // Needed for proper death animation (wait for it to finish before destroying the entity)
-        scheduleRemove(1000);
+        scheduleRemove(1000, TimeUnit.MILLISECOND);
     }
 
     @Override

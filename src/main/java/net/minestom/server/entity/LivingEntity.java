@@ -142,6 +142,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         syncEquipments();
     }
 
+    /**
+     * Kill the entity, trigger the {@link EntityDeathEvent} event
+     */
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status

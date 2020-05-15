@@ -259,13 +259,17 @@ public class InstanceContainer extends Instance {
     public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
+            // Chunk already loaded
             if (callback != null)
                 callback.accept(chunk);
         } else {
             if (hasEnabledAutoChunkLoad()) {
+                // Load chunk from StorageFolder or with ChunkGenerator
                 retrieveChunk(chunkX, chunkZ, callback);
             } else {
-                callback.accept(null);
+                // Chunk not loaded, return null
+                if (callback != null)
+                    callback.accept(null);
             }
         }
     }
