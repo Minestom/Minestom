@@ -21,9 +21,11 @@ import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.world.Difficulty;
+import org.comroid.commandline.CommandLineArgs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MinecraftServer {
@@ -91,7 +93,11 @@ public class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static Difficulty difficulty = Difficulty.NORMAL;
 
-    public static MinecraftServer init() {
+    // Command Line Arguments
+    public static CommandLineArgs commandLineArgs;
+
+    public static MinecraftServer init(CommandLineArgs args) {
+        commandLineArgs = args;
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
@@ -113,7 +119,10 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent(null); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent(
+                    commandLineArgs.wrap("version").orElse("1.15.2"),
+                    new File(commandLineArgs.get("resources"))
+            );
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }

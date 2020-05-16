@@ -22,12 +22,15 @@ import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import org.comroid.commandline.CommandLineArgs;
 
 
 public class Main {
 
-    public static void main(String[] args) {
-        MinecraftServer minecraftServer = MinecraftServer.init();
+    public static void main(String[] pArgs) {
+        final CommandLineArgs args = CommandLineArgs.parse(pArgs);
+
+        MinecraftServer minecraftServer = MinecraftServer.iRnit(args);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());

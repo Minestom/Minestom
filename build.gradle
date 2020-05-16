@@ -13,7 +13,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
@@ -50,4 +49,6 @@ dependencies {
     api 'net.kyori:text-serializer-legacy:3.0.3'
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'
+
+    api 'com.github.comroid-git.common-util:commandline:009870593d'
 }

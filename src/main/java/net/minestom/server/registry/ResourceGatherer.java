@@ -32,7 +32,7 @@ public class ResourceGatherer {
      * If it is not, download the minecraft server jar, run the data generator and extract the wanted files
      * If it is already present, directly return
      */
-    public static void ensureResourcesArePresent(File minecraftFolderOverride) throws IOException {
+    public static void ensureResourcesArePresent(final String version, File minecraftFolderOverride) throws IOException {
         if(DATA_FOLDER.exists()) {
             return;
         }
@@ -41,8 +41,6 @@ public class ResourceGatherer {
         if(!TMP_FOLDER.exists() && !TMP_FOLDER.mkdirs()) {
             throw new IOException("Failed to create tmp folder.");
         }
-
-        final String version = "1.15.2"; // TODO: Do not hardcode
     
         LOGGER.info("Starting download of Minecraft server jar for version " + version + " from Mojang servers...");
         File minecraftFolder = getMinecraftFolder(minecraftFolderOverride);
