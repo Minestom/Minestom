@@ -53,6 +53,7 @@ public class StorageFolder {
         DataType<T> dataType = DATA_MANAGER.getDataType(type);
         if (dataType == null)
             throw new NullPointerException("You can only save registered DataType type!");
+
         PacketWriter packetWriter = new PacketWriter();
         dataType.encode(packetWriter, object); // Encode
         byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
@@ -65,10 +66,19 @@ public class StorageFolder {
         if (dataType == null)
             throw new NullPointerException("You can only save registered DataType type!");
 
-        ByteBuf buffer = Unpooled.wrappedBuffer(get(key));
+        byte[] data = get(key);
+        if (data == null)
+            return null;
+
+        ByteBuf buffer = Unpooled.wrappedBuffer(data);
         PacketReader packetReader = new PacketReader(buffer);
         T value = dataType.decode(packetReader);
         return value;
+    }
+
+    public <T> T getOrDefault(String key, Class<T> type, T defaultValue) {
+        T value;
+        return (value = get(key, type)) != null ? value : defaultValue;
     }
 
     public void getAndCloneData(String key, DataContainer dataContainer) {

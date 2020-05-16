@@ -52,7 +52,7 @@ public class StorageManager {
 
     public void defineDefaultStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
         if (this.defaultStorageSystemSupplier != null) {
-            LOGGER.error("The default storage-system has been changed. This could lead to issues!");
+            LOGGER.warn("The default storage-system has been changed. This could lead to issues!");
         }
         this.defaultStorageSystemSupplier = storageSystemSupplier;
     }
