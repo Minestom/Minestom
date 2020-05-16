@@ -23,6 +23,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -178,12 +179,14 @@ public class PlayerInit {
                     System.out.println("slot player: " + slot);
                 });
 
-                /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
+                Sidebar scoreboard = new Sidebar("Scoreboard Title");
                 for (int i = 0; i < 15; i++) {
                     scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
                 }
                 scoreboard.addViewer(player);
-                scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");*/
+                scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
+
+                scoreboard.setTitle("test");
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {

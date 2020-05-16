@@ -46,6 +46,18 @@ public class Sidebar implements Viewable {
         }
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+
+        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
+        scoreboardObjectivePacket.objectiveName = objectiveName;
+        scoreboardObjectivePacket.mode = 2; // Update display text
+        scoreboardObjectivePacket.objectiveValue = title;
+        scoreboardObjectivePacket.type = 0;
+
+        sendPacketToViewers(scoreboardObjectivePacket);
+    }
+
     public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
             if (lines.size() >= MAX_LINES_COUNT)
