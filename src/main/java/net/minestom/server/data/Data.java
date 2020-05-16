@@ -1,5 +1,7 @@
 package net.minestom.server.data;
 
+import java.util.Collections;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Data {
@@ -16,6 +18,21 @@ public class Data {
 
     public <T> T getOrDefault(String key, T defaultValue) {
         return (T) data.getOrDefault(key, defaultValue);
+    }
+
+    /**
+     * @param key
+     * @return true if the data contains the key, false otherwise
+     */
+    public boolean hasKey(String key) {
+        return data.containsKey(key);
+    }
+
+    /**
+     * @return an unmodifiable set containing all keys
+     */
+    public Set<String> getKeys() {
+        return Collections.unmodifiableSet(data.keySet());
     }
 
     public Data clone() {
