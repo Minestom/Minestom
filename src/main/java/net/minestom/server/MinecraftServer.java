@@ -121,7 +121,7 @@ public class MinecraftServer {
         try {
             ResourceGatherer.ensureResourcesArePresent(
                     commandLineArgs.wrap("version").orElse("1.15.2"),
-                    new File(commandLineArgs.get("resources"))
+                    commandLineArgs.wrap("resources").map(File::new).orElse(null)
             );
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);

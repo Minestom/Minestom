@@ -30,7 +30,7 @@ public class Main {
     public static void main(String[] pArgs) {
         final CommandLineArgs args = CommandLineArgs.parse(pArgs);
 
-        MinecraftServer minecraftServer = MinecraftServer.iRnit(args);
+        MinecraftServer minecraftServer = MinecraftServer.init(args);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
