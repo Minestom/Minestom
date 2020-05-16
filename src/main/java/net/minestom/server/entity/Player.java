@@ -404,6 +404,7 @@ public class Player extends LivingEntity {
                     viewableChunks.add(chunk);
                     chunk.addViewer(this);
                     instance.sendChunk(this, chunk);
+                    updateViewPosition(chunk);
                 }
                 boolean isLast = counter.get() == length - 1;
                 if (isLast) {
@@ -411,7 +412,6 @@ public class Player extends LivingEntity {
                     super.setInstance(instance);
                     PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance, firstSpawn);
                     callEvent(PlayerSpawnEvent.class, spawnEvent);
-                    updateViewPosition(chunk);
                 } else {
                     // Increment the counter of current loaded chunks
                     counter.incrementAndGet();
@@ -736,15 +736,16 @@ public class Player extends LivingEntity {
             int index = newChunks[i];
             int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
+                if (isFar && isLast) {
+                    updatePlayerPosition();
+                }
+
                 if (chunk == null) {
                     return; // Cannot load chunk (auto load is not enabled)
                 }
                 this.viewableChunks.add(chunk);
                 chunk.addViewer(this);
                 instance.sendChunk(this, chunk);
-                if (isFar && isLast) {
-                    updatePlayerPosition();
-                }
             });
         }
     }

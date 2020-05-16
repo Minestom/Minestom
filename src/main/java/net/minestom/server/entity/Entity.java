@@ -258,7 +258,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
-        if (ChunkUtils.isChunkUnloaded(getInstance(), getPosition().getX(), getPosition().getZ())) {
+        boolean chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ());
+        if (chunkUnloaded) {
             // No update for entities in unloaded chunk
             return;
         }
@@ -274,6 +275,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 float newZ = position.getZ() + velocity.getZ() / tps;
 
                 Position newPosition = new Position(newX, newY, newZ);
+
+                chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, newX, newZ);
+                if (chunkUnloaded)
+                    return;
 
                 if (!(this instanceof Player) && !noGravity) { // players handle gravity by themselves
                     velocity.setY(velocity.getY() - gravityDragPerTick * tps);
@@ -319,6 +324,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
+                        chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, x, z);
+                        if (chunkUnloaded)
+                            continue;
                         CustomBlock customBlock = instance.getCustomBlock(x, y, z);
                         if (customBlock != null) {
                             tmpPosition.setX(x);

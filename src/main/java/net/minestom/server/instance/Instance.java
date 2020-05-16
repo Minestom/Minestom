@@ -409,6 +409,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     *
      * @param centerX
      * @param centerY
      * @param centerZ
@@ -421,6 +422,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     *
      * @param centerX
      * @param centerY
      * @param centerZ
@@ -429,7 +431,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
         ExplosionSupplier explosionSupplier = getExplosionSupplier();
-        if(explosionSupplier == null)
+        if (explosionSupplier == null)
             throw new IllegalStateException("Tried to create an explosion with no explosion supplier");
         Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
         explosion.apply(this);
@@ -437,6 +439,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Return the registered explosion supplier, or null if none was provided
+     *
      * @return
      */
     public ExplosionSupplier getExplosionSupplier() {
@@ -445,6 +448,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Registers the explosion supplier to use in this instance
+     *
      * @param supplier
      */
     public void setExplosionSupplier(ExplosionSupplier supplier) {
