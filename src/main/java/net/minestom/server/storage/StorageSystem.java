@@ -3,11 +3,17 @@ package net.minestom.server.storage;
 public interface StorageSystem {
 
     /**
-     * Called when a foler is opened with this StorageSystem
-     *
-     * @param folderName the name of the folder
+     * @param folderPath
+     * @return true if the folder exists, false otherwise
      */
-    void open(String folderName);
+    boolean exists(String folderPath);
+
+    /**
+     * Called when a folder is opened with this StorageSystem
+     *
+     * @param folderPath the name of the folder
+     */
+    void open(String folderPath);
 
     /**
      * @param key

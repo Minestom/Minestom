@@ -5,6 +5,8 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 
+import java.io.File;
+
 /**
  * A storage system which is local using OS files system
  * It does make use of the RocksDB library
@@ -18,11 +20,16 @@ public class FileStorageSystem implements StorageSystem {
     private RocksDB rocksDB;
 
     @Override
-    public void open(String folderName) {
+    public boolean exists(String folderPath) {
+        return new File(folderPath).exists();
+    }
+
+    @Override
+    public void open(String folderPath) {
         Options options = new Options().setCreateIfMissing(true);
 
         try {
-            this.rocksDB = RocksDB.open(options, folderName);
+            this.rocksDB = RocksDB.open(options, folderPath);
         } catch (RocksDBException e) {
             e.printStackTrace();
         }

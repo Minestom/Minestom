@@ -27,7 +27,9 @@ public class StorageManager {
      * @return the specified storage folder
      */
     public StorageFolder getFolder(String folderPath, StorageSystem storageSystem) {
-        return folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath));
+        StorageFolder storageFolder =
+                folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath));
+        return storageFolder;
     }
 
     /**
@@ -46,6 +48,32 @@ public class StorageManager {
         return getFolder(folderPath, storageSystem);
     }
 
+    /**
+     * Used to know if the specified folder already exist or not
+     *
+     * @param folderPath
+     * @param storageSystem
+     * @return true if the folder exists, false otherwise
+     */
+    public boolean folderExists(String folderPath, StorageSystem storageSystem) {
+        return storageSystem.exists(folderPath);
+    }
+
+    /**
+     * Call {@link #folderExists(String, StorageSystem)} with the default StorageSystem
+     *
+     * @param folderPath
+     * @return
+     */
+    public boolean folderExists(String folderPath) {
+        return folderExists(folderPath, defaultStorageSystemSupplier.get());
+    }
+
+    /**
+     * Get all folders which have been loaded by {@link #getFolder(String)} or {@link #getFolder(String, StorageSystem)}
+     *
+     * @return an unmodifiable list of all the loaded StorageFolder
+     */
     public Collection<StorageFolder> getLoadedFolders() {
         return Collections.unmodifiableCollection(folderMap.values());
     }

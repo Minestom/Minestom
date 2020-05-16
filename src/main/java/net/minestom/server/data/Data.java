@@ -35,6 +35,13 @@ public class Data {
         return Collections.unmodifiableSet(data.keySet());
     }
 
+    /**
+     * @return true if the data does not contain anything, false otherwise
+     */
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
     public Data clone() {
         Data data = new Data();
         data.data = new ConcurrentHashMap<>(this.data);
