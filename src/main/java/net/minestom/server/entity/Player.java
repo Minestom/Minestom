@@ -942,12 +942,25 @@ public class Player extends LivingEntity {
      */
     public void closeInventory() {
         Inventory openInventory = getOpenInventory();
+
+        // Drop cursor item when closing inventory
+        ItemStack cursorItem;
+        if (openInventory == null) {
+            cursorItem = getInventory().getCursorItem();
+            getInventory().setCursorItem(ItemStack.getAirItem());
+        } else {
+            cursorItem = openInventory.getCursorItem(this);
+        }
+        if (!cursorItem.isAir()) {
+            dropItem(cursorItem);
+        }
+
         CloseWindowPacket closeWindowPacket = new CloseWindowPacket();
         if (openInventory == null) {
             closeWindowPacket.windowId = 0;
         } else {
             closeWindowPacket.windowId = openInventory.getWindowId();
-            openInventory.removeViewer(this);
+            openInventory.removeViewer(this); // Clear cache
             refreshOpenInventory(null);
         }
         playerConnection.sendPacket(closeWindowPacket);

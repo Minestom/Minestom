@@ -532,4 +532,9 @@ public class InventoryClickProcessor {
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
     }
 
+    public void clearCache(Player player) {
+        this.leftDraggingMap.remove(player);
+        this.rightDraggingMap.remove(player);
+    }
+
 }

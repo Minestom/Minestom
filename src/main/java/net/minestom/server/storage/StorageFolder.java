@@ -153,18 +153,20 @@ public class StorageFolder {
      * @param key the specified cached data key
      */
     public void saveAndRemoveCachedData(String key) {
-        SerializableData serializableData = cachedData.get(key);
-        if (serializableData == null)
-            return;
+        synchronized (cachedData) {
+            SerializableData serializableData = cachedData.get(key);
+            if (serializableData == null)
+                return;
 
-        try {
-            set(key, serializableData.getSerializedData());
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                set(key, serializableData.getSerializedData());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Remove from map
+            this.cachedData.remove(key);
         }
-
-        // Remove from map
-        this.cachedData.remove(key);
     }
 
     /**

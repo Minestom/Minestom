@@ -127,6 +127,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public void removeViewer(Player player) {
         this.viewers.remove(player);
+        this.cursorPlayersItem.remove(player);
+        this.clickProcessor.clearCache(player);
     }
 
     public ItemStack getCursorItem(Player player) {
