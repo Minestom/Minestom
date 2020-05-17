@@ -20,7 +20,7 @@ public class SharedInstance extends Instance {
 
     private InstanceContainer instanceContainer;
 
-    protected SharedInstance(UUID uniqueId, InstanceContainer instanceContainer) {
+    public SharedInstance(UUID uniqueId, InstanceContainer instanceContainer) {
         super(uniqueId, instanceContainer.getDimension());
         this.instanceContainer = instanceContainer;
     }

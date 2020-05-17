@@ -52,7 +52,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private Data data;
     private ExplosionSupplier explosionSupplier;
 
-    protected Instance(UUID uniqueId, Dimension dimension) {
+    public Instance(UUID uniqueId, Dimension dimension) {
         this.uniqueId = uniqueId;
         this.dimension = dimension;
     }

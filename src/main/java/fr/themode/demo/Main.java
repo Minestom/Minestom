@@ -9,14 +9,8 @@ import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
-import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.recipe.ShapelessRecipe;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.timer.TaskRunnable;
@@ -42,7 +36,7 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
 
-        RecipeManager recipeManager = MinecraftServer.getRecipeManager();
+        /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
             @Override
             public boolean shouldShow(Player player) {
@@ -53,7 +47,7 @@ public class Main {
         DeclareRecipesPacket.Ingredient ingredient = new DeclareRecipesPacket.Ingredient();
         ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 3)};
         shapelessRecipe.addIngredient(ingredient);
-        recipeManager.addRecipe(shapelessRecipe);
+        recipeManager.addRecipe(shapelessRecipe);*/
 
         StorageManager storageManager = MinecraftServer.getStorageManager();
         storageManager.defineDefaultStorageSystem(FileStorageSystem::new);

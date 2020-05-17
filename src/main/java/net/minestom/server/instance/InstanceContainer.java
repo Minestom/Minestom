@@ -51,7 +51,7 @@ public class InstanceContainer extends Instance {
 
     private boolean autoChunkLoad;
 
-    protected InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
+    public InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
         super(uniqueId, dimension);
         this.storageFolder = storageFolder;
     }

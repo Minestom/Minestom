@@ -108,8 +108,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
         {
             RecipeManager recipeManager = MinecraftServer.getRecipeManager();
             DeclareRecipesPacket declareRecipesPacket = recipeManager.getDeclareRecipesPacket();
-
-            connection.sendPacket(declareRecipesPacket);
+            if (declareRecipesPacket.recipes != null) {
+                connection.sendPacket(declareRecipesPacket);
+            }
 
             List<String> recipesIdentifier = new ArrayList<>();
             for (Recipe recipe : recipeManager.getRecipes()) {
@@ -118,12 +119,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
                 recipesIdentifier.add(recipe.getRecipeId());
             }
-            String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);
-            UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
-            unlockRecipesPacket.mode = 0;
-            unlockRecipesPacket.recipesId = identifiers;
-            unlockRecipesPacket.initRecipesId = identifiers;
-            connection.sendPacket(unlockRecipesPacket);
+            if (!recipesIdentifier.isEmpty()) {
+                String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);
+                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
+                unlockRecipesPacket.mode = 0;
+                unlockRecipesPacket.recipesId = identifiers;
+                unlockRecipesPacket.initRecipesId = identifiers;
+                connection.sendPacket(unlockRecipesPacket);
+            }
         }
     }
 
