@@ -81,6 +81,12 @@ public class StorageFolder {
         return (value = get(key, type)) != null ? value : defaultValue;
     }
 
+    /**
+     * Get an unique {@link SerializableData} which is cloned if cached or retrieved with the default {@link StorageSystem}
+     *
+     * @param key           the key of the data
+     * @param dataContainer the {@link DataContainer} which will contain the new data
+     */
     public void getAndCloneData(String key, DataContainer dataContainer) {
         synchronized (cachedData) {
 
@@ -106,6 +112,15 @@ public class StorageFolder {
         }
     }
 
+    /**
+     * Get a shared {@link SerializableData} if already in memory or retrieve it from the default {@link StorageSystem} and save it in cache
+     * for further request.
+     * Those cached data can be saved using {@link #saveCachedData()} or individually with {@link #saveCachedData(String)}
+     * It is also possible to save an individual data and remove it directly with {@link #saveAndRemoveCachedData(String)}
+     *
+     * @param key           the key of the data
+     * @param dataContainer the {@link DataContainer} which will contain the new data
+     */
     public void getAndCacheData(String key, DataContainer dataContainer) {
         synchronized (cachedData) {
 
@@ -132,6 +147,29 @@ public class StorageFolder {
         }
     }
 
+    /**
+     * Save a specified cached data and remove it from memory
+     *
+     * @param key the specified cached data key
+     */
+    public void saveAndRemoveCachedData(String key) {
+        SerializableData serializableData = cachedData.get(key);
+        if (serializableData == null)
+            return;
+
+        try {
+            set(key, serializableData.getSerializedData());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Remove from map
+        this.cachedData.remove(key);
+    }
+
+    /**
+     * Save the whole cached data
+     */
     public void saveCachedData() {
         try {
             synchronized (cachedData) {
@@ -141,6 +179,22 @@ public class StorageFolder {
 
                     set(key, data.getSerializedData());
                 }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Save an unique cached data
+     *
+     * @param key the data key
+     */
+    public void saveCachedData(String key) {
+        try {
+            synchronized (cachedData) {
+                SerializableData data = cachedData.get(key);
+                set(key, data.getSerializedData());
             }
         } catch (IOException e) {
             e.printStackTrace();
