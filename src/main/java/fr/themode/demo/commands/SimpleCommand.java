@@ -29,7 +29,6 @@ public class SimpleCommand implements CommandProcessor {
             creature.setPathTo(player.getPosition());
         }
 
-
         player.sendMessage("Direction: " + MathUtils.getHorizontalDirection(player.getPosition().getYaw()));
 
         return true;

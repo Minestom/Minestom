@@ -10,6 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
@@ -89,12 +90,13 @@ public class PlayerDiggingListener {
                 dropItem(player, droppedItemStack, ItemStack.getAirItem());
                 break;
             case DROP_ITEM:
-                ItemStack droppedItemStack2 = player.getInventory().getItemInMainHand().clone();
-                droppedItemStack2.setAmount((byte) 1);
+                ItemStack handItem = player.getInventory().getItemInMainHand().clone();
+                ItemStack droppedItemStack2 = handItem.clone();
+                StackingRule handStackingRule = handItem.getStackingRule();
 
-                ItemStack handItem = player.getInventory().getItemInMainHand();
-                handItem.setAmount((byte) (handItem.getAmount() - 1));
-                handItem = handItem.getAmount() <= 0 ? ItemStack.getAirItem() : handItem;
+                droppedItemStack2 = handStackingRule.apply(droppedItemStack2, 1);
+
+                handItem = handStackingRule.apply(handItem, handStackingRule.getAmount(handItem) - 1);
 
                 dropItem(player, droppedItemStack2, handItem);
                 break;
@@ -121,8 +123,11 @@ public class PlayerDiggingListener {
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {
+        PlayerInventory playerInventory = player.getInventory();
         if (player.dropItem(droppedItem)) {
-            player.getInventory().setItemInMainHand(handItem);
+            playerInventory.setItemInMainHand(handItem);
+        } else {
+            playerInventory.update();
         }
     }
 

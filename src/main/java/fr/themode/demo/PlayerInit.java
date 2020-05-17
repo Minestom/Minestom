@@ -190,7 +190,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 75, 0));
 
                 ItemStack item = new ItemStack(Material.STONE, (byte) 43);

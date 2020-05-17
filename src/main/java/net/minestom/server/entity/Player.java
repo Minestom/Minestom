@@ -613,6 +613,10 @@ public class Player extends LivingEntity {
         this.defaultEatingTime = defaultEatingTime;
     }
 
+    /**
+     * @param item the item to drop
+     * @return true if player can drop the item (event not cancelled), false otherwise
+     */
     public boolean dropItem(ItemStack item) {
         ItemDropEvent itemDropEvent = new ItemDropEvent(item);
         callEvent(ItemDropEvent.class, itemDropEvent);

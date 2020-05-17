@@ -2,11 +2,8 @@ package fr.themode.demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.Dimension;
 
 import java.util.Optional;
