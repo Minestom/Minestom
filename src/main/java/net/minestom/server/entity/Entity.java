@@ -431,6 +431,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         if (instance == null)
             throw new IllegalArgumentException("instance cannot be null!");
 
+        if (!MinecraftServer.getInstanceManager().getInstances().contains(instance))
+            throw new IllegalStateException("Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#createSharedInstance");
+
         if (this.instance != null) {
             this.instance.removeEntity(this);
         }

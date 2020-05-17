@@ -18,10 +18,14 @@ public class InstanceManager {
     private Set<Instance> instances = Collections.synchronizedSet(new HashSet<>());
     private UpdateType updateType = UpdateType.PER_INSTANCE;
 
+    public InstanceContainer createInstanceContainer(InstanceContainer instanceContainer) {
+        this.instances.add(instanceContainer);
+        return instanceContainer;
+    }
+
     public InstanceContainer createInstanceContainer(Dimension dimension, StorageFolder storageFolder) {
         InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimension, storageFolder);
-        this.instances.add(instance);
-        return instance;
+        return createInstanceContainer(instance);
     }
 
     public InstanceContainer createInstanceContainer(StorageFolder storageFolder) {
@@ -36,14 +40,22 @@ public class InstanceManager {
         return createInstanceContainer(Dimension.OVERWORLD);
     }
 
-    public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
+    public SharedInstance createSharedInstance(SharedInstance sharedInstance) {
+        InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
         if (instanceContainer == null)
-            throw new IllegalArgumentException("Instance container cannot be null when creating a Shared instance!");
+            throw new NullPointerException("SharedInstance needs to have an InstanceContainer to be created!");
 
-        SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
         instanceContainer.addSharedInstance(sharedInstance);
         this.instances.add(sharedInstance);
         return sharedInstance;
+    }
+
+    public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
+        if (instanceContainer == null)
+            throw new IllegalArgumentException("Instance container cannot be null when creating a SharedInstance!");
+
+        SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
+        return createSharedInstance(sharedInstance);
     }
 
     public void updateBlocks() {
