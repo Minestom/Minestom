@@ -952,7 +952,10 @@ public class Player extends LivingEntity {
             cursorItem = openInventory.getCursorItem(this);
         }
         if (!cursorItem.isAir()) {
-            dropItem(cursorItem);
+            // Add item to inventory if he hasn't been able to drop it
+            if (!dropItem(cursorItem)) {
+                getInventory().addItemStack(cursorItem);
+            }
         }
 
         CloseWindowPacket closeWindowPacket = new CloseWindowPacket();
