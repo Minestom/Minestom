@@ -395,8 +395,6 @@ public class RegistryMain {
     }
 
     private static JsonObject parse(String path, String key) {
-        List<RegistryStat> registryStats = new ArrayList<>();
-
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(path));

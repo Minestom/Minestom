@@ -7,32 +7,36 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
 
     private BlockPosition blockPosition;
 
-    private short blockId;
-    private boolean customBlock;
+    private short resultBlockId;
+    private short resultCustomBlockId;
 
-    public PlayerBlockBreakEvent(BlockPosition blockPosition) {
+    public PlayerBlockBreakEvent(BlockPosition blockPosition, short resultBlockId, short resultCustomBlockId) {
         this.blockPosition = blockPosition;
+        this.resultBlockId = resultBlockId;
+        this.resultCustomBlockId = resultCustomBlockId;
     }
 
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
 
-    public short getResultBlock() {
-        return blockId;
+    public short getResultBlockId() {
+        return resultBlockId;
     }
 
-    public void setResultBlock(short blockId) {
-        this.blockId = blockId;
-        this.customBlock = false;
+    public void setResultBlockId(short resultBlockId) {
+        this.resultBlockId = resultBlockId;
+    }
+
+    public short getResultCustomBlockId() {
+        return resultCustomBlockId;
+    }
+
+    public void setResultCustomBlockId(short resultCustomBlockId) {
+        this.resultCustomBlockId = resultCustomBlockId;
     }
 
     public boolean isResultCustomBlock() {
-        return customBlock;
-    }
-
-    public void setResultCustomBlock(short customBlockId) {
-        this.blockId = customBlockId;
-        this.customBlock = true;
+        return resultCustomBlockId != 0;
     }
 }
