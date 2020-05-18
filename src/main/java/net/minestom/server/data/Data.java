@@ -6,6 +6,26 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Data {
 
+    public static final Data EMPTY = new Data() {
+        @Override
+        public <T> void set(String key, T value, Class<T> type) {}
+
+        @Override
+        public <T> T get(String key) {
+            return null;
+        }
+
+        @Override
+        public boolean hasKey(String key) {
+            return false;
+        }
+
+        @Override
+        public <T> T getOrDefault(String key, T defaultValue) {
+            return defaultValue;
+        }
+    };
+
     protected ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
 
     public <T> void set(String key, T value, Class<T> type) {

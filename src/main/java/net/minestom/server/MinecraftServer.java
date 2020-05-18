@@ -5,6 +5,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
+import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -90,6 +91,7 @@ public class MinecraftServer {
     // Data
     private static ResponseDataConsumer responseDataConsumer;
     private static Difficulty difficulty = Difficulty.NORMAL;
+    private static LootTableManager lootTableManager;
 
     public static MinecraftServer init() {
         connectionManager = new ConnectionManager();
@@ -108,6 +110,8 @@ public class MinecraftServer {
         benchmarkManager = new BenchmarkManager();
 
         updateManager = new UpdateManager();
+
+        lootTableManager = new LootTableManager();
 
         nettyServer = new NettyServer(packetProcessor);
 
@@ -199,6 +203,10 @@ public class MinecraftServer {
 
     public static ResponseDataConsumer getResponseDataConsumer() {
         return responseDataConsumer;
+    }
+
+    public static LootTableManager getLootTableManager() {
+        return lootTableManager;
     }
 
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
