@@ -161,7 +161,6 @@ public class InstanceContainer extends Instance {
     }
 
     private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
-
         BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
         if (blockPlacementRule != null) {
             return blockPlacementRule.blockRefresh(this, blockPosition);

@@ -1,6 +1,5 @@
 package net.minestom.server.storage;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataContainer;
@@ -70,8 +69,7 @@ public class StorageFolder {
         if (data == null)
             return null;
 
-        ByteBuf buffer = Unpooled.wrappedBuffer(data);
-        PacketReader packetReader = new PacketReader(buffer);
+        PacketReader packetReader = new PacketReader(data);
         T value = dataType.decode(packetReader);
         return value;
     }

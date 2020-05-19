@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
@@ -12,6 +13,10 @@ public class PacketReader {
 
     public PacketReader(ByteBuf buffer) {
         this.buffer = buffer;
+    }
+
+    public PacketReader(byte[] bytes) {
+        this(Unpooled.wrappedBuffer(bytes));
     }
 
     public int readVarInt() {

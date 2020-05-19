@@ -62,7 +62,8 @@ public abstract class CustomBlock {
      * Called at digging start to check for custom breaking time
      * Can be set to < 0 to be cancelled, in this case vanilla time will be used
      *
-     * @param player the player who is trying to break the block
+     * @param player   the player who is trying to break the block
+     * @param position
      * @return the time in ms to break it
      */
     public abstract int getBreakDelay(Player player, BlockPosition position);
@@ -78,11 +79,13 @@ public abstract class CustomBlock {
 
     /**
      * Defines custom behaviour for entities touching this block.
+     *
      * @param instance
      * @param position the position at which the block is
      * @param touching the entity currently touching the block
      */
-    public void handleContact(Instance instance, BlockPosition position, Entity touching) {}
+    public void handleContact(Instance instance, BlockPosition position, Entity touching) {
+    }
 
     public short getBlockId() {
         return blockId;
@@ -105,19 +108,21 @@ public abstract class CustomBlock {
 
     /**
      * Update this block from a neighbor. By default calls 'update' if directNeighbor is true
-     * @param instance current instance
-     * @param thisPosition this block's position
+     *
+     * @param instance         current instance
+     * @param thisPosition     this block's position
      * @param neighborPosition the neighboring block which triggered the update
-     * @param directNeighbor is the neighbor directly connected to this block? (No diagonals)
+     * @param directNeighbor   is the neighbor directly connected to this block? (No diagonals)
      */
     public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
-        if(directNeighbor && hasUpdate()) {
+        if (directNeighbor && hasUpdate()) {
             update(instance, thisPosition, instance.getBlockData(thisPosition));
         }
     }
 
     /**
      * Called when a scheduled update on this block happens. By default, calls 'update'
+     *
      * @param instance
      * @param position
      * @param blockData
@@ -128,9 +133,11 @@ public abstract class CustomBlock {
 
     /**
      * Allows custom block to write block entity data to a given NBT compound
-     * @param instance instance of which the block lives
-     * @param position position of the block
+     *
+     * @param instance  instance of which the block lives
+     * @param position  position of the block
      * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
      */
-    public void writeBlockEntity(Instance instance, BlockPosition position, Data blockData, CompoundTag nbt) {}
+    public void writeBlockEntity(Instance instance, BlockPosition position, Data blockData, CompoundTag nbt) {
+    }
 }
