@@ -232,7 +232,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     public Data getBlockData(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
-        return chunk.getData((byte) x, (byte) y, (byte) z);
+        return chunk.getData(x, (byte) y, z);
     }
 
     public Data getBlockData(BlockPosition blockPosition) {

@@ -1,7 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.data.Data;
 import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -99,6 +101,11 @@ public class ChunkDataPacket implements ServerPacket {
             blockEntity.put("x", new DoubleTag(blockPosition.getX() + 16 * chunk.getChunkX()));
             blockEntity.put("y", new DoubleTag(blockPosition.getY()));
             blockEntity.put("z", new DoubleTag(blockPosition.getZ() + 16 * chunk.getChunkZ()));
+            CustomBlock customBlock = chunk.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+            if (customBlock != null) {
+                Data data = chunk.getData(blockPosition.getX(), (byte)blockPosition.getY(), blockPosition.getZ());
+                customBlock.writeBlockEntity(blockPosition, data, blockEntity);
+            }
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             try {
                 blockEntity.serialize(new DataOutputStream(os), 100);

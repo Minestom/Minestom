@@ -3,6 +3,8 @@ package net.minestom.server.instance.block;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.gamedata.loottables.LootTable;
+import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.UpdateOption;
@@ -134,10 +136,29 @@ public abstract class CustomBlock {
     /**
      * Allows custom block to write block entity data to a given NBT compound
      *
-     * @param instance  instance of which the block lives
      * @param position  position of the block
      * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
      */
-    public void writeBlockEntity(Instance instance, BlockPosition position, Data blockData, CompoundTag nbt) {
+    public void writeBlockEntity(BlockPosition position, Data blockData, CompoundTag nbt) {
+    }
+
+    /**
+     * Called when an explosion wants to destroy this block.
+     * @param instance
+     * @param lootTableArguments arguments used in the loot table loot generation
+     * @return 'true' if the explosion should happen on this block, 'false' to cancel the destruction.
+     * Returning true does NOT block the explosion rays, ie it does not change the block explosion resistance
+     */
+    public boolean onExplode(Instance instance, BlockPosition position, Data lootTableArguments) {
+        return true;
+    }
+
+    /**
+     * Return the loot table associated to this block. Return null to use vanilla behavior
+     * @param tableManager
+     * @return
+     */
+    public LootTable getLootTable(LootTableManager tableManager) {
+        return null;
     }
 }

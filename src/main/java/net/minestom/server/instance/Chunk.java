@@ -213,7 +213,7 @@ public class Chunk implements Viewable {
         refreshBlockValue(x, y, z, blockId, customBlockId);
     }
 
-    public Data getData(byte x, byte y, byte z) {
+    public Data getData(int x, byte y, int z) {
         int index = SerializerUtils.coordToChunkIndex(x, y, z);
         return getData(index);
     }
