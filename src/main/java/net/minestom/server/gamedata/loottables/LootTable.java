@@ -83,12 +83,19 @@ public class LootTable {
             int rollCount = rng.nextInt(maxRollCount - minRollCount +1 /*inclusive*/) + minRollCount;
             int bonusRollCount = rng.nextInt(bonusMaxRollCount - bonusMinRollCount +1 /*inclusive*/) + bonusMinRollCount;
             bonusRollCount *= luck;
+            // TODO: implement luck (quality/weight) weight=floor( weight + (quality * generic.luck))
             WeightedRandom<Entry> weightedRandom = new WeightedRandom<>(entries);
             for (int i = 0; i < rollCount+bonusRollCount; i++) {
                 Entry entry = weightedRandom.get(rng);
-                ItemStack stack = entry.generateStack(arguments);
-                if(!stack.isAir()) {
-                    output.add(stack);
+                boolean shouldGenerate = true;
+                for(Condition c : entry.getConditions()) {
+                    if(!c.test(arguments)) {
+                        shouldGenerate = false;
+                        break;
+                    }
+                }
+                if(shouldGenerate) {
+                    entry.generateStacks(output, arguments);
                 }
             }
         }
@@ -98,11 +105,17 @@ public class LootTable {
         private final LootTableEntryType type;
         private final int weight;
         private final int quality;
+        private final List<Condition> conditions;
 
-        public Entry(LootTableEntryType type, int weight, int quality) {
+        public Entry(LootTableEntryType type, int weight, int quality, List<Condition> conditions) {
             this.type = type;
             this.weight = weight;
             this.quality = quality;
+            this.conditions = conditions;
+        }
+
+        public List<Condition> getConditions() {
+            return conditions;
         }
 
         public int getQuality() {
@@ -117,6 +130,6 @@ public class LootTable {
             return type;
         }
 
-        public abstract ItemStack generateStack(Data arguments);
+        public abstract void generateStacks(List<ItemStack> output, Data arguments);
     }
 }

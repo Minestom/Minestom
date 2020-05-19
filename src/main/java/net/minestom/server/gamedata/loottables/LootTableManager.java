@@ -88,19 +88,43 @@ public class LootTableManager {
         return container.createTable(this);
     }
 
+    /**
+     * Returns the registered condition corresponding to the given namespace ID. If none is registered, returns {@link Condition#ALWAYS_NO}.
+     * @param id
+     * @return
+     */
     public Condition getCondition(NamespaceID id) {
-        return conditions.get(id);
+        return conditions.getOrDefault(id, Condition.ALWAYS_NO);
     }
 
+    /**
+     * Returns the registered table type corresponding to the given namespace ID. If none is registered, throws {@link IllegalArgumentException}
+     * @param id
+     * @return
+     */
     public LootTableType getTableType(NamespaceID id) {
+        if(!tableTypes.containsKey(id))
+            throw new IllegalArgumentException("Unknown table type: "+id);
         return tableTypes.get(id);
     }
 
+    /**
+     * Returns the registered entry type corresponding to the given namespace ID. If none is registered, throws {@link IllegalArgumentException}
+     * @param id
+     * @return
+     */
     public LootTableEntryType getEntryType(NamespaceID id) {
+        if(!entryTypes.containsKey(id))
+            throw new IllegalArgumentException("Unknown entry type: "+id);
         return entryTypes.get(id);
     }
 
+    /**
+     * Returns the registered table type corresponding to the given namespace ID. If none is registered, returns {@link LootTableFunction#IDENTITY}
+     * @param id
+     * @return
+     */
     public LootTableFunction getFunction(NamespaceID id) {
-        return functions.get(id);
+        return functions.getOrDefault(id, LootTableFunction.IDENTITY);
     }
 }

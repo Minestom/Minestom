@@ -13,35 +13,27 @@ import java.util.List;
 public class ItemEntry extends LootTable.Entry {
 
     private final List<LootTableFunction> functions;
-    private final List<Condition> conditions;
     private final Material item;
 
     ItemEntry(ItemType type, Material baseItem, int weight, int quality, List<LootTableFunction> functions, List<Condition> conditions) {
-        super(type, weight, quality);
+        super(type, weight, quality, conditions);
         this.item = baseItem;
         this.functions = new LinkedList<>(functions);
-        this.conditions = new LinkedList<>(conditions);
     }
 
     @Override
-    public ItemStack generateStack(Data arguments) {
-        for(Condition c : conditions) {
-            if(!c.test(arguments))
-                return ItemStack.getAirItem();
-        }
+    public void generateStacks(List<ItemStack> output, Data arguments) {
         ItemStack stack = new ItemStack(item, (byte)1);
         for (LootTableFunction function : functions) {
             stack = function.apply(stack, arguments);
         }
-        return stack;
+        if(!stack.isAir()) {
+            output.add(stack);
+        }
     }
 
     public List<LootTableFunction> getFunctions() {
         return functions;
-    }
-
-    public List<Condition> getConditions() {
-        return conditions;
     }
 
     public Material getItem() {

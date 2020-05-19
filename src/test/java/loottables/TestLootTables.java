@@ -72,26 +72,6 @@ public class TestLootTables {
 
     @Test
     public void loadFromFile() throws FileNotFoundException {
-        // from acacia_button.json
-        final String lootTableJson = "{\n" +
-                "  \"type\": \"minecraft:block\",\n" +
-                "  \"pools\": [\n" +
-                "    {\n" +
-                "      \"rolls\": 1,\n" +
-                "      \"entries\": [\n" +
-                "        {\n" +
-                "          \"type\": \"minecraft:item\",\n" +
-                "          \"name\": \"minecraft:acacia_button\"\n" +
-                "        }\n" +
-                "      ],\n" +
-                "      \"conditions\": [\n" +
-                "        {\n" +
-                "          \"condition\": \"minecraft:survives_explosion\"\n" +
-                "        }\n" +
-                "      ]\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         Assert.assertTrue(lootTable.getType() instanceof BlockType);
         Assert.assertEquals(1, lootTable.getPools().size());
@@ -130,6 +110,33 @@ public class TestLootTables {
         // negative value will force the condition to fail
         arguments.set("explosionPower", -1.0, Double.class);
         List<ItemStack> stacks = lootTable.generate(arguments);
+        Assert.assertEquals(0, stacks.size());
+    }
+
+    @Test
+    public void unknownCondition() {
+        // from acacia_button.json
+        final String lootTableJson = "{\n" +
+                "  \"type\": \"minecraft:block\",\n" +
+                "  \"pools\": [\n" +
+                "    {\n" +
+                "      \"rolls\": 1,\n" +
+                "      \"entries\": [\n" +
+                "        {\n" +
+                "          \"type\": \"minecraft:item\",\n" +
+                "          \"name\": \"minecraft:acacia_button\"\n" +
+                "        }\n" +
+                "      ],\n" +
+                "      \"conditions\": [\n" +
+                "        {\n" +
+                "          \"condition\": \"minestom:unknown\"\n" +
+                "        }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+        LootTable lootTable = tableManager.load(NamespaceID.from("blocks/none"), new StringReader(lootTableJson));
+        List<ItemStack> stacks = lootTable.generate(Data.EMPTY);
         Assert.assertEquals(0, stacks.size());
     }
 }

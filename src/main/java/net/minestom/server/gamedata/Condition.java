@@ -14,4 +14,7 @@ public interface Condition {
      * @return 'true' if the condition passed, 'false' otherwise
      */
     boolean test(Data data);
+
+    Condition ALWAYS_YES = (_d) -> true;
+    Condition ALWAYS_NO = (_d) -> false;
 }

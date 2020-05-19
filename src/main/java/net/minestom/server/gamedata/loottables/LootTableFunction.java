@@ -16,5 +16,7 @@ public interface LootTableFunction {
      * @return
      */
     ItemStack apply(ItemStack stack, Data data);
+
+    LootTableFunction IDENTITY = (stack, _d) -> stack;
 }
 
