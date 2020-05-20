@@ -58,6 +58,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
     protected float gravityDragPerTick;
+    protected float eyeHeight;
 
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
@@ -651,6 +652,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      */
     public Position getPosition() {
         return position;
+    }
+
+    public float getEyeHeight() {
+        return eyeHeight;
+    }
+
+    public void setEyeHeight(float eyeHeight) {
+        this.eyeHeight = eyeHeight;
     }
 
     /**
