@@ -20,7 +20,7 @@ public class DynamicEntry extends LootTable.Entry {
     }
 
     @Override
-    public void generateStacks(List<ItemStack> output, Data arguments) {
+    public void generate(List<ItemStack> output, Data arguments) {
         List<ItemStack> toDrop = arguments.getOrDefault(DROP_LIST_KEY, Collections.emptyList());
         output.addAll(toDrop);
     }

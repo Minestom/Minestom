@@ -16,7 +16,7 @@ public class GroupEntry extends LootTable.Entry {
     }
 
     @Override
-    public void generateStacks(List<ItemStack> output, Data arguments) {
+    public void generate(List<ItemStack> output, Data arguments) {
         for (LootTable.Entry child : children) {
             child.generateStacks(output, arguments);
         }

@@ -19,7 +19,7 @@ public class TagEntry extends LootTable.Entry {
     }
 
     @Override
-    public void generateStacks(List<ItemStack> output, Data arguments) {
+    public void generate(List<ItemStack> output, Data arguments) {
         // TODO: load tags
         if(expand) {
             // TODO: choose a single random item from the tag

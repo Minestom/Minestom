@@ -87,16 +87,7 @@ public class LootTable {
             WeightedRandom<Entry> weightedRandom = new WeightedRandom<>(entries);
             for (int i = 0; i < rollCount+bonusRollCount; i++) {
                 Entry entry = weightedRandom.get(rng);
-                boolean shouldGenerate = true;
-                for(Condition c : entry.getConditions()) {
-                    if(!c.test(arguments)) {
-                        shouldGenerate = false;
-                        break;
-                    }
-                }
-                if(shouldGenerate) {
-                    entry.generateStacks(output, arguments);
-                }
+                entry.generateStacks(output, arguments);
             }
         }
     }
@@ -130,6 +121,14 @@ public class LootTable {
             return type;
         }
 
-        public abstract void generateStacks(List<ItemStack> output, Data arguments);
+        public final void generateStacks(List<ItemStack> output, Data arguments) {
+            for(Condition c : conditions) {
+                if(!c.test(arguments))
+                    return;
+            }
+            generate(output, arguments);
+        }
+
+        protected abstract void generate(List<ItemStack> output, Data arguments);
     }
 }

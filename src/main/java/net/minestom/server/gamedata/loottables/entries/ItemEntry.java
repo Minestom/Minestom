@@ -22,7 +22,7 @@ public class ItemEntry extends LootTable.Entry {
     }
 
     @Override
-    public void generateStacks(List<ItemStack> output, Data arguments) {
+    public void generate(List<ItemStack> output, Data arguments) {
         ItemStack stack = new ItemStack(item, (byte)1);
         for (LootTableFunction function : functions) {
             stack = function.apply(stack, arguments);

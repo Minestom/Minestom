@@ -16,7 +16,7 @@ public class AlternativesEntry extends LootTable.Entry {
     }
 
     @Override
-    public void generateStacks(List<ItemStack> output, Data arguments) {
+    public void generate(List<ItemStack> output, Data arguments) {
         for(LootTable.Entry c : children) {
             int previousSize = output.size();
             c.generateStacks(output, arguments);
