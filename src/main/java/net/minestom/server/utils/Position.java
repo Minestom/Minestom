@@ -95,6 +95,20 @@ public class Position {
         return this;
     }
 
+    public void copy(Vector position) {
+        this.x = position.getX();
+        this.y = position.getY();
+        this.z = position.getZ();
+    }
+
+    public void copy(Position position) {
+        this.x = position.getX();
+        this.y = position.getY();
+        this.z = position.getZ();
+        this.yaw = position.getYaw();
+        this.pitch = position.getPitch();
+    }
+
     public Position clone() {
         return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
     }

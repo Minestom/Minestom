@@ -2,6 +2,7 @@ package net.minestom.server.gamedata.loottables;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import net.minestom.server.gamedata.Condition;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -14,26 +15,27 @@ import java.io.*;
  */
 public class LootTableManager {
 
-    private NamespaceIDHashMap<Condition> conditions = new NamespaceIDHashMap<>();
+    private NamespaceIDHashMap<JsonDeserializer<? extends Condition>> conditionDeserializers = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableType> tableTypes = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableEntryType> entryTypes = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableFunction> functions = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTable> cache = new NamespaceIDHashMap<>();
-    private static Gson gson;
+    private Gson gson;
 
-    static {
+    public LootTableManager() {
         gson = new GsonBuilder()
                 .registerTypeAdapter(RangeContainer.class, new RangeContainer.Deserializer())
+                .registerTypeAdapter(ConditionContainer.class, new ConditionContainer.Deserializer(this))
                 .create();
     }
 
     /**
-     * Registers a condition to the given namespaceID
+     * Registers a condition factory to the given namespaceID
      * @param namespaceID
-     * @param condition
+     * @param factory
      */
-    public void registerCondition(NamespaceID namespaceID, Condition condition) {
-        conditions.put(namespaceID, condition);
+    public <T extends Condition> void registerConditionDeserializer(NamespaceID namespaceID, JsonDeserializer<T> factory) {
+        conditionDeserializers.put(namespaceID, factory);
     }
 
     /**
@@ -89,15 +91,6 @@ public class LootTableManager {
     }
 
     /**
-     * Returns the registered condition corresponding to the given namespace ID. If none is registered, returns {@link Condition#ALWAYS_NO}.
-     * @param id
-     * @return
-     */
-    public Condition getCondition(NamespaceID id) {
-        return conditions.getOrDefault(id, Condition.ALWAYS_NO);
-    }
-
-    /**
      * Returns the registered table type corresponding to the given namespace ID. If none is registered, throws {@link IllegalArgumentException}
      * @param id
      * @return
@@ -126,5 +119,9 @@ public class LootTableManager {
      */
     public LootTableFunction getFunction(NamespaceID id) {
         return functions.getOrDefault(id, LootTableFunction.IDENTITY);
+    }
+
+    public JsonDeserializer<? extends Condition> getConditionDeserializer(NamespaceID id) {
+        return conditionDeserializers.getOrDefault(id, (json, typeOfT, context) -> Condition.ALWAYS_NO);
     }
 }

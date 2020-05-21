@@ -95,16 +95,6 @@ class LootTableContainer {
         }
     }
 
-    private class ConditionContainer {
-        private String condition;
-
-        private ConditionContainer() {}
-
-        public Condition create(LootTableManager lootTableManager) {
-            return lootTableManager.getCondition(NamespaceID.from(condition));
-        }
-    }
-
     private class FunctionContainer {
         private String function;
         private ConditionContainer[] conditions;

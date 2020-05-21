@@ -28,7 +28,7 @@ public class TestLootTables {
         RegistryMain.registerBlocks();
         RegistryMain.registerItems();
         tableManager = new LootTableManager();
-        tableManager.registerCondition(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition());
+        tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());
         tableManager.registerTableType(NamespaceID.from("minecraft:block"), new BlockType());
         tableManager.registerEntryType(NamespaceID.from("minecraft:item"), new ItemType());
     }
