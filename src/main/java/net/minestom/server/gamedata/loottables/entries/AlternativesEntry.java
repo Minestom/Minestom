@@ -20,7 +20,7 @@ public class AlternativesEntry extends LootTable.Entry {
         for(LootTable.Entry c : children) {
             int previousSize = output.size();
             c.generateStacks(output, arguments);
-            int newSize = previousSize;
+            int newSize = output.size();
             if(newSize != previousSize) { // an entry managed to generate, stop here
                 return;
             }
