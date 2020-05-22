@@ -7,6 +7,8 @@ public class InventoryClickResult {
     private ItemStack clicked;
     private ItemStack cursor;
 
+    private boolean playerInventory;
+
     private boolean cancel;
     private boolean refresh;
 
@@ -29,6 +31,14 @@ public class InventoryClickResult {
 
     protected void setCursor(ItemStack cursor) {
         this.cursor = cursor;
+    }
+
+    public boolean isPlayerInventory() {
+        return playerInventory;
+    }
+
+    protected void setPlayerInventory(boolean playerInventory) {
+        this.playerInventory = playerInventory;
     }
 
     public boolean isCancel() {

@@ -16,6 +16,13 @@ public class PlayerInventoryUtils {
     public static final int BOOTS_SLOT = 44;
     public static final int OFFHAND_SLOT = 45;
 
+    /**
+     * Convert a packet slot to an internal one
+     *
+     * @param slot   the packet slot
+     * @param offset the slot count separating the up part of the inventory to the bottom part (armor/craft in PlayerInventory, inventory slots in others)
+     * @return a packet which can be use internally with Minestom
+     */
     public static int convertSlot(int slot, int offset) {
         switch (slot) {
             case 0:
@@ -46,6 +53,27 @@ public class PlayerInventoryUtils {
             slot = slot + rowSize;
         }
         //System.out.println("CONVERT: " + slot);
+        return slot;
+    }
+
+    /**
+     * Used to convert internal slot to one used in packets
+     *
+     * @param slot the internal slot
+     * @return a slot id which can be used for packets
+     */
+    public static int convertToPacketSlot(int slot) {
+        if (slot > -1 && slot < 9) { // Held bar 0-9
+            slot = slot + 36;
+        } else if (slot > 8 && slot < 36) { // Inventory 9-35
+            slot = slot;
+        } else if (slot >= CRAFT_RESULT && slot <= CRAFT_SLOT_4) { // Crafting 36-40
+            slot = slot - 36;
+        } else if (slot >= HELMET_SLOT && slot <= BOOTS_SLOT) { // Armor 41-44
+            slot = slot - 36;
+        } else if (slot == OFFHAND_SLOT) { // Off hand
+            slot = 45;
+        }
         return slot;
     }
 }

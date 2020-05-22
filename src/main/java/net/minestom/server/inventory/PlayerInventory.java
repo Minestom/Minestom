@@ -13,6 +13,7 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.MathUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -99,6 +100,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             }
         }
         return false;
+    }
+
+    @Override
+    public int getSize() {
+        return INVENTORY_SIZE;
     }
 
     @Override
@@ -235,24 +241,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         return this.items[slot];
     }
 
-    protected int convertToPacketSlot(int slot) {
-        if (slot > -1 && slot < 9) { // Held bar 0-9
-            slot = slot + 36;
-        } else if (slot > 8 && slot < 36) { // Inventory 9-35
-            slot = slot;
-        } else if (slot >= CRAFT_RESULT && slot <= CRAFT_SLOT_4) { // Crafting 36-40
-            slot = slot - 36;
-        } else if (slot >= HELMET_SLOT && slot <= BOOTS_SLOT) { // Armor 41-44
-            slot = slot - 36;
-        } else if (slot == OFFHAND_SLOT) { // Off hand
-            slot = 45;
-        }
-        return slot;
-    }
-
     private void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = (byte) (slot > 35 && slot < INVENTORY_SIZE ? 0 : -2);
+        setSlotPacket.windowId = (byte) (MathUtils.isBetween(slot, 35, INVENTORY_SIZE) ? 0 : -2);
         setSlotPacket.slot = slot;
         setSlotPacket.itemStack = itemStack;
         player.getPlayerConnection().sendPacket(setSlotPacket);
@@ -274,7 +265,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public void leftClick(Player player, int slot) {
+    public boolean leftClick(Player player, int slot) {
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
 
@@ -288,10 +279,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         if (!clickResult.isCancel())
             callClickEvent(player, null, slot, ClickType.LEFT_CLICK, clicked, cursor);
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void rightClick(Player player, int slot) {
+    public boolean rightClick(Player player, int slot) {
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(slot, OFFSET);
 
@@ -305,15 +298,18 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         if (!clickResult.isCancel())
             callClickEvent(player, null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void middleClick(Player player, int slot) {
-
+    public boolean middleClick(Player player, int slot) {
+        // TODO
+        return false;
     }
 
     @Override
-    public void drop(Player player, int mode, int slot, int button) {
+    public boolean drop(Player player, int mode, int slot, int button) {
         ItemStack cursor = getCursorItem();
         ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
 
@@ -327,10 +323,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         if (resultClicked != null)
             setItemStack(slot, OFFSET, resultClicked);
         setCursorItem(clickResult.getCursor());
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void shiftClick(Player player, int slot) {
+    public boolean shiftClick(Player player, int slot) {
         ItemStack cursor = getCursorItem();
         ItemStack clicked = getItemStack(slot, OFFSET);
 
@@ -348,18 +346,20 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                         (index, itemStack) -> setItemStack(index, OFFSET, itemStack)));
 
         if (clickResult == null)
-            return;
+            return false;
 
         if (clickResult.doRefresh())
             update();
 
         setCursorItem(clickResult.getCursor());
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void changeHeld(Player player, int slot, int key) {
+    public boolean changeHeld(Player player, int slot, int key) {
         if (!getCursorItem().isAir())
-            return;
+            return false;
 
         ItemStack heldItem = getItemStack(key);
         ItemStack clicked = getItemStack(slot, OFFSET);
@@ -374,10 +374,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         if (!clickResult.isCancel())
             callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem());
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void dragging(Player player, int slot, int button) {
+    public boolean dragging(Player player, int slot, int button) {
         ItemStack cursor = getCursorItem();
         ItemStack clicked = null;
         if (slot != -999)
@@ -388,17 +390,20 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 clicked, cursor, s -> getItemStack(s, OFFSET),
                 (s, item) -> setItemStack(s, OFFSET, item));
 
-        if (clickResult == null)
-            return;
+        if (clickResult == null) {
+            return false;
+        }
 
         if (clickResult.doRefresh())
             update();
 
         setCursorItem(clickResult.getCursor());
+
+        return !clickResult.isCancel();
     }
 
     @Override
-    public void doubleClick(Player player, int slot) {
+    public boolean doubleClick(Player player, int slot) {
         ItemStack cursor = getCursorItem();
 
         InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
@@ -408,11 +413,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                         (index, itemStack) -> setItemStack(index, itemStack)));
 
         if (clickResult == null)
-            return;
+            return false;
 
         if (clickResult.doRefresh())
             update();
 
         setCursorItem(clickResult.getCursor());
+
+        return !clickResult.isCancel();
     }
 }

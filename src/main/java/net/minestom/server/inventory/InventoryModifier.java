@@ -15,6 +15,8 @@ public interface InventoryModifier {
 
     ItemStack[] getItemStacks();
 
+    int getSize();
+
     List<InventoryCondition> getInventoryConditions();
 
     void addInventoryCondition(InventoryCondition inventoryCondition);

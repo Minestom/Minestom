@@ -27,10 +27,7 @@ public class WindowListener {
 
         // System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
 
-        WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
-        windowConfirmationPacket.windowId = windowId;
-        windowConfirmationPacket.actionNumber = actionNumber;
-        windowConfirmationPacket.accepted = true; // Change depending on output
+        boolean successful = false;
 
         switch (mode) {
             case 0:
@@ -38,53 +35,74 @@ public class WindowListener {
                     case 0:
                         if (slot != -999) {
                             // Left click
-                            clickHandler.leftClick(player, slot);
+                            successful = clickHandler.leftClick(player, slot);
                         } else {
                             // DROP
-                            clickHandler.drop(player, mode, slot, button);
+                            successful = clickHandler.drop(player, mode, slot, button);
                         }
                         break;
                     case 1:
                         if (slot != -999) {
                             // Right click
-                            clickHandler.rightClick(player, slot);
+                            successful = clickHandler.rightClick(player, slot);
                         } else {
                             // DROP
-                            clickHandler.drop(player, mode, slot, button);
+                            successful = clickHandler.drop(player, mode, slot, button);
                         }
                         break;
                 }
                 break;
             case 1:
-                clickHandler.shiftClick(player, slot); // Shift + left/right have identical behavior
+                successful = clickHandler.shiftClick(player, slot); // Shift + left/right have identical behavior
                 break;
             case 2:
-                clickHandler.changeHeld(player, slot, button);
+                successful = clickHandler.changeHeld(player, slot, button);
                 break;
             case 3:
                 // Middle click (only creative players in non-player inventories)
                 break;
             case 4:
                 // Dropping functions
-                clickHandler.drop(player, mode, slot, button);
+                successful = clickHandler.drop(player, mode, slot, button);
                 break;
             case 5:
                 // Dragging
-                clickHandler.dragging(player, slot, button);
+                successful = clickHandler.dragging(player, slot, button);
                 break;
             case 6:
-                clickHandler.doubleClick(player, slot);
+                successful = clickHandler.doubleClick(player, slot);
                 break;
         }
 
-        ItemStack cursorItem = clickHandler instanceof Inventory ? ((Inventory) clickHandler).getCursorItem(player) : ((PlayerInventory) clickHandler).getCursorItem();
+        refreshCursorItem(player, player.getOpenInventory());
+
+        WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
+        windowConfirmationPacket.windowId = windowId;
+        windowConfirmationPacket.actionNumber = actionNumber;
+        windowConfirmationPacket.accepted = successful;
+
+        player.getPlayerConnection().sendPacket(windowConfirmationPacket);
+    }
+
+    private static void refreshCursorItem(Player player, Inventory inventory) {
+        PlayerInventory playerInventory = player.getInventory();
+
+        ItemStack cursorItem;
+        if (inventory != null) {
+            cursorItem = inventory.getCursorItem(player);
+        } else {
+            cursorItem = playerInventory.getCursorItem();
+        }
+
+        // Setting the window id properly seems to broke +64 stack support
+        //byte windowId = inventory == null ? 0 : inventory.getWindowId();
+
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = -1;
         setSlotPacket.slot = -1;
         setSlotPacket.itemStack = cursorItem;
 
         player.getPlayerConnection().sendPacket(setSlotPacket);
-        player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
     public static void closeWindowListener(ClientCloseWindow packet, Player player) {

@@ -127,7 +127,10 @@ public class InventoryClickProcessor {
             return clickResult;
         }
 
-        clickResult = startCondition(clickResult, inventory, player, key, ClickType.CHANGE_HELD, clicked, cursor);
+        // Converted again during the inventory condition calling to internal slot
+        int keySlot = PlayerInventoryUtils.convertToPacketSlot(key);
+        clickResult = startCondition(clickResult, null, player, keySlot, ClickType.CHANGE_HELD, clicked, cursor);
+
         if (clickResult.isCancel()) {
             return clickResult;
         }
@@ -478,13 +481,18 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    private InventoryClickResult startCondition(InventoryClickResult clickResult, Inventory inventory, Player player, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
+    private InventoryClickResult startCondition(InventoryClickResult clickResult, Inventory inventory,
+                                                Player player, int slot, ClickType clickType,
+                                                ItemStack clicked, ItemStack cursor) {
         boolean isPlayerInventory = inventory == null;
-        int inventorySlot = isPlayerInventory ? 0 : inventory.getInventoryType().getAdditionalSlot();
+        int inventorySlot = isPlayerInventory ? 0 : inventory.getSize();
         isPlayerInventory = isPlayerInventory ? isPlayerInventory : slot >= inventorySlot;
 
-        if (isPlayerInventory && inventory != null)
+        clickResult.setPlayerInventory(isPlayerInventory);
+
+        if (isPlayerInventory && inventory != null) {
             slot = slot - inventorySlot + PlayerInventoryUtils.OFFSET;
+        }
 
         List<InventoryCondition> inventoryConditions = isPlayerInventory ?
                 player.getInventory().getInventoryConditions() : inventory.getInventoryConditions();
@@ -507,8 +515,8 @@ public class InventoryClickProcessor {
                 cursor = result.getCursorItem();
                 clicked = result.getClickedItem();
 
-                clickResult.setClicked(clicked);
                 clickResult.setCursor(cursor);
+                clickResult.setClicked(clicked);
 
                 clickResult.setCancel(result.isCancel());
                 if (result.isCancel()) {
