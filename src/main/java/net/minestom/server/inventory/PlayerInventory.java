@@ -214,8 +214,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 this.items[slot] = itemStack;
             }
 
-            // Refresh inventory items
-            update();
+            // Refresh slot
+            refreshSlot(slot);
+            //update(); in case of problems
 
             // Sync equipment
             if (equipmentSlot != null) {

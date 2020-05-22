@@ -4,10 +4,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.rule.VanillaStackingRule;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ItemStack implements DataContainer {
 
@@ -31,7 +28,9 @@ public class ItemStack implements DataContainer {
     private boolean unbreakable;
     private ArrayList<String> lore;
 
-    private Map<Enchantment, Integer> enchantmentMap;
+    private Map<Enchantment, Short> enchantmentMap;
+
+    private int hideFlag;
 
     private StackingRule stackingRule;
     private Data data;
@@ -71,6 +70,7 @@ public class ItemStack implements DataContainer {
                 itemStack.isUnbreakable() == unbreakable &&
                 itemStack.getDamage() == damage &&
                 itemStack.enchantmentMap.equals(enchantmentMap) &&
+                itemStack.hideFlag == hideFlag &&
                 itemStack.getStackingRule() == stackingRule &&
                 itemStack.getData() == data;
     }
@@ -123,11 +123,11 @@ public class ItemStack implements DataContainer {
         return lore != null && !lore.isEmpty();
     }
 
-    public Map<Enchantment, Integer> getEnchantmentMap() {
+    public Map<Enchantment, Short> getEnchantmentMap() {
         return Collections.unmodifiableMap(enchantmentMap);
     }
 
-    public void setEnchantment(Enchantment enchantment, int level) {
+    public void setEnchantment(Enchantment enchantment, short level) {
         if (level < 1) {
             removeEnchantment(enchantment);
             return;
@@ -141,7 +141,40 @@ public class ItemStack implements DataContainer {
     }
 
     public int getEnchantmentLevel(Enchantment enchantment) {
-        return this.enchantmentMap.getOrDefault(enchantment, 0);
+        return this.enchantmentMap.getOrDefault(enchantment, (short) 0);
+    }
+
+    public int getHideFlag() {
+        return hideFlag;
+    }
+
+    public void addItemFlags(ItemFlag... hideFlags) {
+        for (ItemFlag f : hideFlags) {
+            this.hideFlag |= getBitModifier(f);
+        }
+    }
+
+    public void removeItemFlags(ItemFlag... hideFlags) {
+        for (ItemFlag f : hideFlags) {
+            this.hideFlag &= ~getBitModifier(f);
+        }
+    }
+
+    public Set<ItemFlag> getItemFlags() {
+        Set<ItemFlag> currentFlags = EnumSet.noneOf(ItemFlag.class);
+
+        for (ItemFlag f : ItemFlag.values()) {
+            if (hasItemFlag(f)) {
+                currentFlags.add(f);
+            }
+        }
+
+        return currentFlags;
+    }
+
+    public boolean hasItemFlag(ItemFlag flag) {
+        int bitModifier = getBitModifier(flag);
+        return (this.hideFlag & bitModifier) == bitModifier;
     }
 
     public boolean isUnbreakable() {
@@ -201,5 +234,9 @@ public class ItemStack implements DataContainer {
             throw new NullPointerException("StackingRule cannot be null!");
 
         ItemStack.defaultStackingRule = defaultStackingRule;
+    }
+
+    private byte getBitModifier(ItemFlag hideFlag) {
+        return (byte) (1 << hideFlag.ordinal());
     }
 }

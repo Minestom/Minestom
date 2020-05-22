@@ -71,7 +71,7 @@ public class NbtReaderUtils {
 
                 if (listName.equals("StoredEnchantments")) {
                     reader.readByte(); // Should be a compound (0x0A)
-                    int size = reader.readInteger();
+                    int size = reader.readInteger(); // Enchants count
 
                     for (int ench = 0; ench < size; ench++) {
                         reader.readByte(); // Type id (short)

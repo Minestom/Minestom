@@ -83,7 +83,7 @@ public class Utils {
             packet.writeBoolean(false);
         } else {
             packet.writeBoolean(true);
-            Utils.writeVarInt(packet, itemStack.getMaterialId());
+            packet.writeVarInt(itemStack.getMaterialId());
             packet.writeByte(itemStack.getAmount());
 
             if (!itemStack.hasNbtTag()) {
@@ -101,10 +101,13 @@ public class Utils {
                 packet.writeInt(1);
             }
 
-            // Damage
-            packet.writeByte((byte) 0x02);
-            packet.writeShortSizedString("Damage");
-            packet.writeShort(itemStack.getDamage());
+            // Start damage
+            {
+                packet.writeByte((byte) 0x02);
+                packet.writeShortSizedString("Damage");
+                packet.writeShort(itemStack.getDamage());
+            }
+            // End damage
 
             // Display
             boolean hasDisplayName = itemStack.hasDisplayName();
@@ -137,22 +140,23 @@ public class Utils {
             // End display
 
             // Start enchantment
+            // FIXME: something is broken, enchants are basically ignored...
             {
-                Map<Enchantment, Integer> enchantmentMap = itemStack.getEnchantmentMap();
+                Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
-                    packet.writeByte((byte) 0x09); // list
+                    packet.writeByte((byte) 0x09); // Type id (list)
                     packet.writeShortSizedString("StoredEnchantments");
 
                     packet.writeByte((byte) 0x0A); // Compound
                     packet.writeInt(enchantmentMap.size()); // Map size
 
-                    for (Map.Entry<Enchantment, Integer> entry : enchantmentMap.entrySet()) {
+                    for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
                         Enchantment enchantment = entry.getKey();
-                        int level = entry.getValue();
+                        short level = entry.getValue();
 
                         packet.writeByte((byte) 0x02); // Type id (short)
                         packet.writeShortSizedString("lvl");
-                        packet.writeShort((short) level);
+                        packet.writeShort(level);
 
                         packet.writeByte((byte) 0x08); // Type id (string)
                         packet.writeShortSizedString("id");
@@ -165,6 +169,16 @@ public class Utils {
                 }
             }
             // End enchantment
+
+            // Start hide flags
+            /*{
+                int hideFlag = itemStack.getHideFlag();
+                if (hideFlag != 0) {
+                    packet.writeByte((byte) 3); // Type id (int)
+                    packet.writeShortSizedString("HideFlags");
+                    packet.writeInt(hideFlag);
+                }
+            }*/
 
             packet.writeByte((byte) 0); // End nbt
         }
