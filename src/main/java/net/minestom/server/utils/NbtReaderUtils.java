@@ -74,22 +74,23 @@ public class NbtReaderUtils {
                     int size = reader.readInteger();
 
                     for (int ench = 0; ench < size; ench++) {
-                        byte test = reader.readByte();
-                        String lvlName = reader.readShortSizedString();
+                        reader.readByte(); // Type id (short)
+                        reader.readShortSizedString(); // Constant "lvl"
                         short lvl = reader.readShort();
 
-                        byte test2 = reader.readByte();
-                        String idName = reader.readShortSizedString();
-                        int id = reader.readVarInt();
-                        System.out.println("byte: " + test + " : " + test2);
-                        System.out.println("string: " + lvlName + " : " + idName);
-                        System.out.println("size: " + lvl + " : " + id);
+                        reader.readByte(); // Type id (string)
+                        reader.readShortSizedString(); // Constant "id"
+                        String id = reader.readShortSizedString();
 
-                        System.out.println("add= " + Enchantment.fromId(id) + " : " + lvl);
-                        item.setEnchantment(Enchantment.fromId(id), lvl);
+                        // Convert id
+                        id = id.replace("minecraft:", "").toUpperCase();
+
+                        Enchantment enchantment = Enchantment.valueOf(id);
+                        item.setEnchantment(enchantment, lvl);
                     }
 
-                    reader.readByte();
+                    reader.readByte(); // Compound end
+
                     readItemStackNBT(reader, item);
                 }
 

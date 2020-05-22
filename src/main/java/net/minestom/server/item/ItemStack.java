@@ -153,7 +153,7 @@ public class ItemStack implements DataContainer {
     }
 
     public boolean hasNbtTag() {
-        return hasDisplayName() || hasLore() || isUnbreakable();
+        return hasDisplayName() || hasLore() || isUnbreakable() || !getEnchantmentMap().isEmpty();
     }
 
     public ItemStack clone() {

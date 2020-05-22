@@ -136,7 +136,7 @@ public class Utils {
             }
             // End display
 
-            // FIXME: Enchantment
+            // Start enchantment
             {
                 Map<Enchantment, Integer> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
@@ -150,17 +150,17 @@ public class Utils {
                         Enchantment enchantment = entry.getKey();
                         int level = entry.getValue();
 
-                        packet.writeByte((byte) 0x02);
+                        packet.writeByte((byte) 0x02); // Type id (short)
                         packet.writeShortSizedString("lvl");
                         packet.writeShort((short) level);
 
-                        packet.writeByte((byte) 0x08);
+                        packet.writeByte((byte) 0x08); // Type id (string)
                         packet.writeShortSizedString("id");
-                        packet.writeShort((short) enchantment.getId());
+                        packet.writeShortSizedString(enchantment.toMinecraftNamespaceId());
 
                     }
 
-                    //packet.writeByte((byte) 0); // End enchantment compound
+                    packet.writeByte((byte) 0); // End enchantment compound
 
                 }
             }
@@ -192,7 +192,7 @@ public class Utils {
         if (nbt == 0x00) {
             return item;
         } else if (nbt == 0x0A) {
-            short compoundName = reader.readShort(); // Ignored, should be empty (main compound name)
+            reader.readShort(); // Ignored, should be empty (main compound name)
             NbtReaderUtils.readItemStackNBT(reader, item);
         }
 
