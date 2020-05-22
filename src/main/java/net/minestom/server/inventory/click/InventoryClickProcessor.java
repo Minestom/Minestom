@@ -443,13 +443,17 @@ public class InventoryClickProcessor {
                 // Left (drop all)
                 int amount = cursorRule.getAmount(resultCursor);
                 ItemStack dropItem = cursorRule.apply(resultCursor.clone(), amount);
-                if (player.dropItem(dropItem)) {
+                boolean dropResult = player.dropItem(dropItem);
+                clickResult.setCancel(!dropResult);
+                if (dropResult) {
                     resultCursor = cursorRule.apply(resultCursor, 0);
                 }
             } else if (button == 1) {
                 // Right (drop 1)
                 ItemStack dropItem = cursorRule.apply(resultCursor.clone(), 1);
-                if (player.dropItem(dropItem)) {
+                boolean dropResult = player.dropItem(dropItem);
+                clickResult.setCancel(!dropResult);
+                if (dropResult) {
                     int amount = cursorRule.getAmount(resultCursor);
                     int newAmount = amount - 1;
                     resultCursor = cursorRule.apply(resultCursor, newAmount);
@@ -460,7 +464,9 @@ public class InventoryClickProcessor {
             if (button == 0) {
                 // Drop key Q (drop 1)
                 ItemStack dropItem = cursorRule.apply(resultClicked.clone(), 1);
-                if (player.dropItem(dropItem)) {
+                boolean dropResult = player.dropItem(dropItem);
+                clickResult.setCancel(!dropResult);
+                if (dropResult) {
                     int amount = clickedRule.getAmount(resultClicked);
                     int newAmount = amount - 1;
                     resultClicked = cursorRule.apply(resultClicked, newAmount);
@@ -469,7 +475,9 @@ public class InventoryClickProcessor {
                 // Ctrl + Drop key Q (drop all)
                 int amount = cursorRule.getAmount(resultClicked);
                 ItemStack dropItem = clickedRule.apply(resultClicked.clone(), amount);
-                if (player.dropItem(dropItem)) {
+                boolean dropResult = player.dropItem(dropItem);
+                clickResult.setCancel(!dropResult);
+                if (dropResult) {
                     resultClicked = cursorRule.apply(resultClicked, 0);
                 }
             }

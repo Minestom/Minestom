@@ -7,7 +7,6 @@ import net.minestom.server.item.ItemStack;
 
 /**
  * Represent an inventory which can receive click input
- * <p>
  * all methods returning boolean returns true if the action is successful, false otherwise
  */
 public interface InventoryClickHandler {
