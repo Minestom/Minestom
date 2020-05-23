@@ -8,6 +8,7 @@ import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
@@ -120,8 +121,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Refresh the inventory for all viewers
      */
     public void update() {
-        WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
-        sendPacketToViewers(windowItemsPacket);
+        PacketWriterUtils.writeAndSend(getViewers(), getWindowItemsPacket());
     }
 
     /**
@@ -133,9 +133,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public void update(Player player) {
         if (!getViewers().contains(player))
             return;
-
-        WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
-        player.getPlayerConnection().sendPacket(windowItemsPacket);
+        
+        PacketWriterUtils.writeAndSend(player, getWindowItemsPacket());
     }
 
     @Override

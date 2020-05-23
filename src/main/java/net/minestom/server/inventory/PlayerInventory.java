@@ -9,10 +9,10 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 
@@ -169,8 +169,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     public void update() {
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(createWindowItemsPacket());
+        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
     }
 
     public void refreshSlot(int slot) {
