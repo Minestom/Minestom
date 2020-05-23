@@ -20,6 +20,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -78,8 +79,7 @@ public class Chunk implements Viewable {
 
     public void UNSAFE_setCustomBlock(int x, int y, int z, short visualBlockId, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        if (customBlock == null)
-            throw new IllegalArgumentException("The custom block " + customBlockId + " does not exist or isn't registered");
+        Check.notNull(customBlock, "The custom block " + customBlockId + " does not exist or isn't registered");
 
         UNSAFE_setCustomBlock(x, y, z, visualBlockId, customBlock, data);
     }

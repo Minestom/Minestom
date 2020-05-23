@@ -32,6 +32,7 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 import net.minestom.server.world.LevelType;
 
@@ -159,7 +160,7 @@ public class Player extends LivingEntity {
         if (targetCustomBlock != null) {
             int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
-            byte stage = (byte) (since / (blockBreakTime / animationCount));
+            byte stage = (byte) (since / (blockBreakTime / animationCount) - 1);
             if (stage != targetLastStage) {
                 sendBlockBreakAnimation(targetBlockPosition, stage);
             }
@@ -374,10 +375,8 @@ public class Player extends LivingEntity {
 
     @Override
     public void setInstance(Instance instance) {
-        if (instance == null)
-            throw new IllegalArgumentException("instance cannot be null!");
-        if (this.instance == instance)
-            throw new IllegalArgumentException("Instance should be different than the current one");
+        Check.notNull(instance, "instance cannot be null!");
+        Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
         boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
         for (Chunk viewableChunk : viewableChunks) {
@@ -596,10 +595,16 @@ public class Player extends LivingEntity {
         sendUpdateHealthPacket();
     }
 
+    /**
+     * @return true if the player is currently eating, false otherwise
+     */
     public boolean isEating() {
         return isEating;
     }
 
+    /**
+     * @return the default eating time for the player
+     */
     public long getDefaultEatingTime() {
         return defaultEatingTime;
     }
@@ -690,8 +695,8 @@ public class Player extends LivingEntity {
     }
 
     public void setExp(float exp) {
-        if (!MathUtils.isBetween(exp, 0, 1))
-            throw new IllegalArgumentException("Exp should be between 0 and 1");
+        Check.argCondition(!MathUtils.isBetween(exp, 0, 1), "Exp should be between 0 and 1");
+
         this.exp = exp;
         sendExperienceUpdatePacket();
     }
@@ -811,10 +816,8 @@ public class Player extends LivingEntity {
 
     // Require sending chunk data after
     public void sendDimension(Dimension dimension) {
-        if (dimension == null)
-            throw new IllegalArgumentException("Dimension cannot be null!");
-        if (dimension.equals(getDimension()))
-            throw new IllegalArgumentException("The dimension need to be different than the current one!");
+        Check.notNull(dimension, "Dimension cannot be null!");
+        Check.argCondition(dimension.equals(getDimension()), "The dimension need to be different than the current one!");
 
         refreshDimension(dimension);
         RespawnPacket respawnPacket = new RespawnPacket();
@@ -847,13 +850,26 @@ public class Player extends LivingEntity {
         refreshGameMode(gameMode);
     }
 
+    /**
+     * Change the current held slot for the player
+     *
+     * @param slot the slot that the player has to held
+     * @throws IllegalArgumentException if {@code slot} is not between 0 and 8
+     */
     public void setHeldItemSlot(short slot) {
-        if (slot < 0 || slot > 8)
-            throw new IllegalArgumentException("Slot has to be between 0 and 8");
+        Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "Slot has to be between 0 and 8");
+
         HeldItemChangePacket heldItemChangePacket = new HeldItemChangePacket();
         heldItemChangePacket.slot = slot;
         playerConnection.sendPacket(heldItemChangePacket);
         refreshHeldSlot(slot);
+    }
+
+    /**
+     * @return the current held slot for the player
+     */
+    public short getHeldSlot() {
+        return heldSlot;
     }
 
     public void setTeam(Team team) {
@@ -887,18 +903,25 @@ public class Player extends LivingEntity {
         }
     }
 
-    public short getHeldSlot() {
-        return heldSlot;
-    }
-
+    /**
+     * @return the currently open inventory, null if there is not (player inventory is not detected)
+     */
     public Inventory getOpenInventory() {
         return openInventory;
     }
 
+    /**
+     * Used to get the {@link CustomBlock} that the player is currently mining
+     *
+     * @return the currently mined {@link CustomBlock} by the player, null if there is not
+     */
     public CustomBlock getCustomBlockTarget() {
         return targetCustomBlock;
     }
 
+    /**
+     * @return an unmodifiable {@link Set} containing all the current player viewable boss bars
+     */
     public Set<BossBar> getBossBars() {
         return Collections.unmodifiableSet(bossBars);
     }
@@ -910,8 +933,7 @@ public class Player extends LivingEntity {
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
      */
     public boolean openInventory(Inventory inventory) {
-        if (inventory == null)
-            throw new IllegalArgumentException("Inventory cannot be null, use Player#closeInventory() to close current");
+        Check.notNull(inventory, "Inventory cannot be null, use Player#closeInventory() to close current");
 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(this, inventory);
 
@@ -970,10 +992,16 @@ public class Player extends LivingEntity {
         inventory.update();
     }
 
+    /**
+     * @return an unmodifiable {@link Set} containing all the chunks that the player sees
+     */
     public Set<Chunk> getViewableChunks() {
         return Collections.unmodifiableSet(viewableChunks);
     }
 
+    /**
+     * Remove all the boss bars that the player has
+     */
     public void clearBossBars() {
         this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
@@ -996,8 +1024,7 @@ public class Player extends LivingEntity {
     }
 
     public void setPermissionLevel(int permissionLevel) {
-        if (!MathUtils.isBetween(permissionLevel, 0, 4))
-            throw new IllegalArgumentException("permissionLevel has to be between 0 and 4");
+        Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");
 
         this.permissionLevel = permissionLevel;
 

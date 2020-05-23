@@ -272,8 +272,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
         ItemStack itemStack = getEquipment(slot);
-        if (itemStack == null)
-            return null;
 
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
         equipmentPacket.entityId = getEntityId();

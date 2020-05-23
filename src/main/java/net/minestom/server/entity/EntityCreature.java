@@ -11,6 +11,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.LinkedList;
@@ -34,6 +35,14 @@ public abstract class EntityCreature extends LivingEntity {
 
     public EntityCreature(EntityType entityType, Position spawnPosition) {
         super(entityType.getId(), spawnPosition);
+
+        this.mainHandItem = ItemStack.getAirItem();
+        this.offHandItem = ItemStack.getAirItem();
+
+        this.helmet = ItemStack.getAirItem();
+        this.chestplate = ItemStack.getAirItem();
+        this.leggings = ItemStack.getAirItem();
+        this.boots = ItemStack.getAirItem();
     }
 
     @Override
@@ -150,7 +159,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setItemInMainHand(ItemStack itemStack) {
-        this.mainHandItem = itemStack;
+        this.mainHandItem = ItemStackUtils.notNull(itemStack);
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
     }
 
@@ -161,7 +170,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void setItemInOffHand(ItemStack itemStack) {
-        this.offHandItem = itemStack;
+        this.offHandItem = ItemStackUtils.notNull(itemStack);
         syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
     }
 
@@ -264,6 +273,8 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
+        itemStack = ItemStackUtils.notNull(itemStack);
+
         ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
         callEvent(ArmorEquipEvent.class, armorEquipEvent);
         return armorEquipEvent.getArmorItem();

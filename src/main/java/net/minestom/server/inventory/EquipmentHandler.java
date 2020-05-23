@@ -70,7 +70,7 @@ public interface EquipmentHandler {
             case BOOTS:
                 return getBoots();
             default:
-                throw new NullPointerException("Equipment slot cannot be null");
+                return null;
         }
     }
 

@@ -6,6 +6,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -162,8 +163,8 @@ public class EntityManager {
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance();
-                if (spawningInstance == null)
-                    throw new NullPointerException("You need to specify a spawning instance in the PlayerLoginEvent");
+
+                Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
                 playerCache.setInstance(spawningInstance);
             });

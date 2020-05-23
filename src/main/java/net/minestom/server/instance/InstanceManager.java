@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 
 import java.util.Collections;
@@ -42,8 +43,7 @@ public class InstanceManager {
 
     public SharedInstance createSharedInstance(SharedInstance sharedInstance) {
         InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
-        if (instanceContainer == null)
-            throw new NullPointerException("SharedInstance needs to have an InstanceContainer to be created!");
+        Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
         instanceContainer.addSharedInstance(sharedInstance);
         this.instances.add(sharedInstance);
@@ -51,8 +51,7 @@ public class InstanceManager {
     }
 
     public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
-        if (instanceContainer == null)
-            throw new IllegalArgumentException("Instance container cannot be null when creating a SharedInstance!");
+        Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
 
         SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
         return createSharedInstance(sharedInstance);

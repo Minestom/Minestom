@@ -4,6 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.validate.Check;
 
 public class DeclareRecipesPacket implements ServerPacket {
 
@@ -11,8 +12,8 @@ public class DeclareRecipesPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        if (recipes == null)
-            throw new NullPointerException("Recipes cannot be null!");
+        Check.notNull(recipes, "Recipes cannot be null!");
+
         writer.writeVarInt(recipes.length);
         for (Recipe recipe : recipes) {
             recipe.write(writer);

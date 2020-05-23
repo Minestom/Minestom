@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 
@@ -208,11 +209,9 @@ public class ItemStack implements DataContainer {
         return stackingRule;
     }
 
-    public void setStackingRule(StackingRule stackingRule) {
-        if (stackingRule == null)
-            throw new NullPointerException("StackingRule cannot be null!");
-
-        this.stackingRule = stackingRule;
+    public static void setDefaultStackingRule(StackingRule defaultStackingRule) {
+        Check.notNull(defaultStackingRule, "StackingRule cannot be null!");
+        ItemStack.defaultStackingRule = defaultStackingRule;
     }
 
     @Override
@@ -229,11 +228,9 @@ public class ItemStack implements DataContainer {
         return defaultStackingRule;
     }
 
-    public static void setDefaultStackingRule(StackingRule defaultStackingRule) {
-        if (defaultStackingRule == null)
-            throw new NullPointerException("StackingRule cannot be null!");
-
-        ItemStack.defaultStackingRule = defaultStackingRule;
+    public void setStackingRule(StackingRule stackingRule) {
+        Check.notNull(stackingRule, "StackingRule cannot be null!");
+        this.stackingRule = stackingRule;
     }
 
     private byte getBitModifier(ItemFlag hideFlag) {

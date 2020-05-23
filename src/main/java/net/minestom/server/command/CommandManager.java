@@ -7,6 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +30,8 @@ public class CommandManager {
     }
 
     public boolean execute(Player source, String command) {
-        if (source == null)
-            throw new NullPointerException("Source cannot be null");
-        if (command == null)
-            throw new NullPointerException("Command string cannot be null");
+        Check.notNull(source, "Source cannot be null");
+        Check.notNull(command, "Command string cannot be null");
 
         PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(source, command);
         source.callEvent(PlayerCommandEvent.class, playerCommandEvent);

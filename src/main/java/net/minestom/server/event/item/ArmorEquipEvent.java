@@ -3,7 +3,7 @@ package net.minestom.server.event.item;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
+import net.minestom.server.utils.item.ItemStackUtils;
 
 public class ArmorEquipEvent extends Event {
 
@@ -26,7 +26,7 @@ public class ArmorEquipEvent extends Event {
     }
 
     public void setArmorItem(ItemStack armorItem) {
-        this.armorItem = armorItem;
+        this.armorItem = ItemStackUtils.notNull(armorItem);
     }
 
     public ArmorSlot getArmorSlot() {
@@ -37,21 +37,6 @@ public class ArmorEquipEvent extends Event {
         HELMET,
         CHESTPLATE,
         LEGGINGS,
-        BOOTS;
-
-        public EntityEquipmentPacket.Slot toEquipmentPacketSlot() {
-            switch (this) {
-                case HELMET:
-                    return EntityEquipmentPacket.Slot.HELMET;
-                case CHESTPLATE:
-                    return EntityEquipmentPacket.Slot.CHESTPLATE;
-                case LEGGINGS:
-                    return EntityEquipmentPacket.Slot.LEGGINGS;
-                case BOOTS:
-                    return EntityEquipmentPacket.Slot.BOOTS;
-                default:
-                    return null;
-            }
-        }
+        BOOTS
     }
 }

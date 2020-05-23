@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -29,7 +30,23 @@ public class EntityEquipmentPacket implements ServerPacket {
         BOOTS,
         LEGGINGS,
         CHESTPLATE,
-        HELMET
+        HELMET;
+
+        public static Slot fromArmorSlot(ArmorEquipEvent.ArmorSlot armorSlot) {
+            switch (armorSlot) {
+                case HELMET:
+                    return HELMET;
+                case CHESTPLATE:
+                    return CHESTPLATE;
+                case LEGGINGS:
+                    return LEGGINGS;
+                case BOOTS:
+                    return BOOTS;
+                default:
+                    return null;
+            }
+        }
+
     }
 
 }

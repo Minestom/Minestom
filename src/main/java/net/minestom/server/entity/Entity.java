@@ -22,6 +22,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -172,8 +173,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void teleport(Position position, Runnable callback) {
-        if (instance == null)
-            throw new IllegalStateException("You need to use Entity#setInstance before teleporting an entity!");
+        Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
         Runnable runnable = () -> {
             refreshPosition(position.getX(), position.getY(), position.getZ());
@@ -429,11 +429,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void setInstance(Instance instance) {
-        if (instance == null)
-            throw new IllegalArgumentException("instance cannot be null!");
-
-        if (!MinecraftServer.getInstanceManager().getInstances().contains(instance))
-            throw new IllegalStateException("Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#createSharedInstance");
+        Check.notNull(instance, "instance cannot be null!");
+        Check.stateCondition(!MinecraftServer.getInstanceManager().getInstances().contains(instance),
+                "Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#createSharedInstance");
 
         if (this.instance != null) {
             this.instance.removeEntity(this);
@@ -472,8 +470,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void addPassenger(Entity entity) {
-        if (instance == null)
-            throw new IllegalStateException("You need to set an instance using Entity#setInstance");
+        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+
         if (entity.getVehicle() != null) {
             entity.getVehicle().removePassenger(entity);
         }
@@ -485,8 +483,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void removePassenger(Entity entity) {
-        if (instance == null)
-            throw new IllegalStateException("You need to set an instance using Entity#setInstance");
+        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+
         if (!passengers.contains(entity))
             return;
         this.passengers.remove(entity);

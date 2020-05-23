@@ -24,7 +24,7 @@ public class InventoryClickEvent extends Event {
     /**
      * Can be null if the clicked inventory is the player one
      *
-     * @return
+     * @return the inventory where the click happened, null if this is the player's inventory
      */
     public Inventory getInventory() {
         return inventory;

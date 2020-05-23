@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -60,15 +61,13 @@ public class Sidebar implements Viewable {
 
     public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
-            if (lines.size() >= MAX_LINES_COUNT)
-                throw new IllegalStateException("You cannot have more than " + MAX_LINES_COUNT + "  lines");
-            if (lines.contains(scoreboardLine))
-                throw new IllegalArgumentException("You cannot add two times the same ScoreboardLine");
+            Check.stateCondition(lines.size() >= MAX_LINES_COUNT, "You cannot have more than " + MAX_LINES_COUNT + "  lines");
+            Check.argCondition(lines.contains(scoreboardLine), "You cannot add two times the same ScoreboardLine");
 
             // Check ID duplication
             for (ScoreboardLine line : lines) {
-                if (line.id.equals(scoreboardLine.id))
-                    throw new IllegalArgumentException("You cannot add two ScoreboardLine with the same id");
+                Check.argCondition(line.id.equals(scoreboardLine.id),
+                        "You cannot add two ScoreboardLine with the same id");
             }
 
             // Setup line

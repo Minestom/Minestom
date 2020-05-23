@@ -11,7 +11,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.item.ItemStackUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -77,8 +80,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        if (slot < 0 || slot > getSize())
-            throw new IllegalArgumentException(inventoryType.toString() + " does not have slot " + slot);
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                inventoryType.toString() + " does not have slot " + slot);
 
         safeItemInsert(slot, itemStack);
     }
@@ -160,7 +163,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
-            itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
+            itemStack = ItemStackUtils.notNull(itemStack);
             this.itemStacks[slot] = itemStack;
             SetSlotPacket setSlotPacket = new SetSlotPacket();
             setSlotPacket.windowId = getWindowId();

@@ -2,6 +2,7 @@ package net.minestom.server.benchmark;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -37,8 +38,7 @@ public class BenchmarkManager {
     private long time;
 
     public void enable(UpdateOption updateOption) {
-        if (enabled)
-            throw new IllegalStateException("A benchmark is already running, please disable it first.");
+        Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
 
         this.updateOption = updateOption;
         time = updateOption.getTimeUnit().toMilliseconds(updateOption.getValue());

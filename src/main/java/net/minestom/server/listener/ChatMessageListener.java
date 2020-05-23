@@ -12,6 +12,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.function.Function;
 
@@ -55,8 +56,7 @@ public class ChatMessageListener {
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
 
             Function<PlayerChatEvent, TextComponent> formatFunction = playerChatEvent.getChatFormatFunction();
-            if (formatFunction == null)
-                throw new NullPointerException("PlayerChatEvent#chatFormat cannot be null!");
+            Check.notNull(formatFunction, "PlayerChatEvent#getChatFormatFunction cannot be null!");
 
             TextComponent textObject = formatFunction.apply(playerChatEvent);
 

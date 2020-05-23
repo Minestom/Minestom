@@ -3,6 +3,7 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.utils.validate.Check;
 
 public class InventoryOpenEvent extends CancellableEvent {
 
@@ -23,9 +24,7 @@ public class InventoryOpenEvent extends CancellableEvent {
     }
 
     public void setInventory(Inventory inventory) {
-        if (inventory == null)
-            throw new NullPointerException("Inventory cannot be null!");
-
+        Check.notNull(inventory, "Inventory cannot be null!");
         this.inventory = inventory;
     }
 }

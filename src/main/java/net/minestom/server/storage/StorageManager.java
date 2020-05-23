@@ -1,5 +1,6 @@
 package net.minestom.server.storage;
 
+import net.minestom.server.utils.validate.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +42,8 @@ public class StorageManager {
      * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
      */
     public StorageFolder getFolder(String folderPath) {
-        if (defaultStorageSystemSupplier == null)
-            throw new NullPointerException("You need to either define a default storage system or specify your storage system for this specific folder");
+        Check.notNull(defaultStorageSystemSupplier,
+                "You need to either define a default storage system or specify your storage system for this specific folder");
 
         StorageSystem storageSystem = defaultStorageSystemSupplier.get();
         return getFolder(folderPath, storageSystem);

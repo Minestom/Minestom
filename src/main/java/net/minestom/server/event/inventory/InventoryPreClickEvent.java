@@ -4,6 +4,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.item.ItemStackUtils;
 
 public class InventoryPreClickEvent extends CancellableEvent {
 
@@ -24,7 +25,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     /**
      * Can be null if the clicked inventory is the player one
      *
-     * @return
+     * @return the inventory where the click happened, null if this is the player's inventory
      */
     public Inventory getInventory() {
         return inventory;
@@ -43,7 +44,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     public void setClickedItem(ItemStack clickedItem) {
-        this.clickedItem = clickedItem;
+        this.clickedItem = ItemStackUtils.notNull(clickedItem);
     }
 
     public ItemStack getCursorItem() {
@@ -51,6 +52,6 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     public void setCursorItem(ItemStack cursorItem) {
-        this.cursorItem = cursorItem;
+        this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
 }

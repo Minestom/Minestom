@@ -21,6 +21,7 @@ public class PlayerInventoryUtils {
      *
      * @param slot   the packet slot
      * @param offset the slot count separating the up part of the inventory to the bottom part (armor/craft in PlayerInventory, inventory slots in others)
+     *               the offset for the player inventory is {@link #OFFSET}
      * @return a packet which can be use internally with Minestom
      */
     public static int convertSlot(int slot, int offset) {

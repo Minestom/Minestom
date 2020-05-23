@@ -9,6 +9,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.reader.DataReader;
+import net.minestom.server.utils.validate.Check;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,8 +51,7 @@ public class StorageFolder {
 
     public <T> void set(String key, T object, Class<T> type) {
         DataType<T> dataType = DATA_MANAGER.getDataType(type);
-        if (dataType == null)
-            throw new NullPointerException("You can only save registered DataType type!");
+        Check.notNull(dataType, "You can only save registered DataType type!");
 
         PacketWriter packetWriter = new PacketWriter();
         dataType.encode(packetWriter, object); // Encode
@@ -62,8 +62,7 @@ public class StorageFolder {
 
     public <T> T get(String key, Class<T> type) {
         DataType<T> dataType = DATA_MANAGER.getDataType(type);
-        if (dataType == null)
-            throw new NullPointerException("You can only save registered DataType type!");
+        Check.notNull(dataType, "You can only save registered DataType type!");
 
         byte[] data = get(key);
         if (data == null)

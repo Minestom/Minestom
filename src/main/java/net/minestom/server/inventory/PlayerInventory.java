@@ -14,6 +14,7 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.item.ItemStackUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -181,12 +182,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     public void setCursorItem(ItemStack cursorItem) {
-        this.cursorItem = cursorItem;
+        this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
 
     private void safeItemInsert(int slot, ItemStack itemStack) {
         synchronized (this) {
-            itemStack = itemStack == null ? ItemStack.getAirItem() : itemStack;
+            itemStack = ItemStackUtils.notNull(itemStack);
 
             EntityEquipmentPacket.Slot equipmentSlot;
 
@@ -208,7 +209,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 }
 
                 if (armorEquipEvent != null) {
-                    equipmentSlot = armorEquipEvent.getArmorSlot().toEquipmentPacketSlot();
+                    ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
+                    equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
                     player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
                     itemStack = armorEquipEvent.getArmorItem();
                 } else {
@@ -216,13 +218,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 }
             }
 
-            if (itemStack != null) {
-                this.items[slot] = itemStack;
-            }
+            this.items[slot] = itemStack;
 
             // Refresh slot
-            refreshSlot(slot);
-            //update(); in case of problems
+            update();
+            //refreshSlot(slot); seems to break things concerning +64 stacks
 
             // Sync equipment
             if (equipmentSlot != null) {
