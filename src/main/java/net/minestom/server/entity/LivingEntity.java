@@ -81,6 +81,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             BoundingBox livingBoundingBox = expandedBoundingBox;
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
+
+                    // Do not pickup if not visible
+                    if (this instanceof Player && !entity.isViewer((Player) this))
+                        continue;
+
                     ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
@@ -135,11 +140,12 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void addViewer(Player player) {
-        super.addViewer(player);
+    public boolean addViewer(Player player) {
+        boolean result = super.addViewer(player);
 
         // Equipments synchronization
         syncEquipments();
+        return result;
     }
 
     /**

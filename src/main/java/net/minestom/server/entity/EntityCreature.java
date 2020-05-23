@@ -133,8 +133,8 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
-    public void addViewer(Player player) {
-        super.addViewer(player);
+    public boolean addViewer(Player player) {
+        boolean result = super.addViewer(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         EntityPacket entityPacket = new EntityPacket();
@@ -150,6 +150,7 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnLivingEntityPacket);
         playerConnection.sendPacket(getMetadataPacket());
+        return result;
     }
 
     @Override

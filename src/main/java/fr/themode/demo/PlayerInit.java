@@ -8,6 +8,7 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.type.EntityBoat;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -19,11 +20,12 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -39,6 +41,8 @@ public class PlayerInit {
 
     private static volatile InstanceContainer instanceContainer;
     private static volatile InstanceContainer netherTest;
+
+    private static volatile Inventory inventory;
 
     static {
         //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("chunk_data");
@@ -61,6 +65,15 @@ public class PlayerInit {
                 instanceContainer.loadChunk(x, z);
                 netherTest.loadChunk(x, z);
             }
+
+
+        inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
+        inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+            p.sendMessage("click type inventory: " + clickType);
+            System.out.println("slot inv: " + slot);
+            inventoryConditionResult.setCancel(false);
+        });
+        inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
     }
 
     public static void init() {
@@ -157,9 +170,9 @@ public class PlayerInit {
             player.addEventCallback(ItemDropEvent.class, event -> {
                 ItemStack droppedItem = event.getItemStack();
 
-                ItemEntity itemEntity = new ItemEntity(droppedItem);
-                itemEntity.setPickupDelay(500);
-                itemEntity.refreshPosition(player.getPosition().clone().add(0, 1.5f, 0));
+                Position position = player.getPosition().clone().add(0, 1.5f, 0);
+                ItemEntity itemEntity = new ItemEntity(droppedItem, position);
+                itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
                 itemEntity.setInstance(player.getInstance());
                 Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
@@ -179,38 +192,36 @@ public class PlayerInit {
                     System.out.println("slot player: " + slot);
                 });
 
-                Sidebar scoreboard = new Sidebar("Scoreboard Title");
+                /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
                 for (int i = 0; i < 15; i++) {
                     scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
                 }
                 scoreboard.addViewer(player);
                 scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
 
-                scoreboard.setTitle("test");
+                scoreboard.setTitle("test");*/
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 75, 0));
+                player.teleport(new Position(0, 70, 0));
 
-                ItemStack item = new ItemStack(Material.STONE, (byte) 43);
+                ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName("Item name");
                 item.getLore().add("a lore line");
-                //item.setEnchantment(Enchantment.SHARPNESS, 2);
+                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                item.setEnchantment(Enchantment.SHARPNESS, (short) 2);
                 player.getInventory().addItemStack(item);
-
-                Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-                inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-                    player.sendMessage("click type inventory: " + clickType);
-                    System.out.println("slot inv: " + slot);
-                    inventoryConditionResult.setCancel(false);
-                });
-                inventory.setItemStack(0, item.clone());
 
                 player.openInventory(inventory);
 
                 player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
-                player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));
+
+                EntityBoat entityBoat = new EntityBoat(player.getPosition());
+                entityBoat.setInstance(player.getInstance());
+                //entityBoat.addPassenger(player);
+
+                //player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));
 
             /*TeamManager teamManager = Main.getTeamManager();
             Team team = teamManager.createTeam(getUsername());

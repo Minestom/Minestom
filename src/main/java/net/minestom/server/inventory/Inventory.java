@@ -133,7 +133,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public void update(Player player) {
         if (!getViewers().contains(player))
             return;
-        
+
         PacketWriterUtils.writeAndSend(player, getWindowItemsPacket());
     }
 
@@ -143,17 +143,19 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
         WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
         player.getPlayerConnection().sendPacket(windowItemsPacket);
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(Player player) {
+        boolean result = this.viewers.remove(player);
         this.cursorPlayersItem.remove(player);
         this.clickProcessor.clearCache(player);
+        return result;
     }
 
     public ItemStack getCursorItem(Player player) {

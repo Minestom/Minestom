@@ -61,6 +61,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float gravityDragPerTick;
     protected float eyeHeight;
 
+    private boolean autoViewable;
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
     private Set<Entity> passengers = new CopyOnWriteArraySet<>();
@@ -109,6 +110,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.position = spawnPosition.clone();
 
         setBoundingBox(0, 0, 0);
+
+        setAutoViewable(true);
 
         entityById.put(id, this);
         setVelocityUpdatePeriod(5);
@@ -204,27 +207,54 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         teleport(position, null);
     }
 
+    /**
+     * When set to true, the entity will automatically get new viewers when they come too close
+     * This can be use to complete control over which player can see it, without having to deal with
+     * raw packets
+     * <p>
+     * True by default for all entities
+     * When set to false, it is important to mention that the players will not be removed automatically from its viewers
+     * list, you would have to do that manually when being too far
+     *
+     * @return true if the entity is automatically viewable for close players, false otherwise
+     */
+    public boolean isAutoViewable() {
+        return autoViewable;
+    }
+
+    /**
+     * @param autoViewable should the entity be automatically viewable for close players
+     */
+    public void setAutoViewable(boolean autoViewable) {
+        this.autoViewable = autoViewable;
+    }
+
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
         player.viewableEntities.add(this);
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getPassengersPacket());
         playerConnection.sendPacket(getMetadataPacket());
+
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
+    public boolean removeViewer(Player player) {
+        boolean result;
         synchronized (viewers) {
-            if (!viewers.contains(player))
-                return;
-            this.viewers.remove(player);
+            result = viewers.remove(player);
+            if (!result)
+                return false;
+
             DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
             destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
             player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
         }
         player.viewableEntities.remove(this);
+        return result;
     }
 
     @Override
@@ -571,7 +601,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
                 }
-                updateView(this, lastChunk, newChunk);
+                updateView(lastChunk, newChunk);
             }
         }
     }
@@ -580,15 +610,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         refreshPosition(position.getX(), position.getY(), position.getZ());
     }
 
-    private void updateView(Entity entity, Chunk lastChunk, Chunk newChunk) {
-        if (entity instanceof Player)
-            ((Player) entity).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
+    private void updateView(Chunk lastChunk, Chunk newChunk) {
+        boolean isPlayer = this instanceof Player;
+
+        if (isPlayer)
+            ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
 
         // Refresh entity viewable list
         long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
         long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
-
-        boolean isPlayer = entity instanceof Player;
 
         int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
         for (int index : oldChunksEntity) {
@@ -599,12 +629,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             instance.getChunkEntities(chunk).forEach(ent -> {
                 if (ent instanceof Player) {
                     Player player = (Player) ent;
-                    removeViewer(player);
+                    if (isAutoViewable())
+                        removeViewer(player);
                     if (isPlayer) {
-                        player.removeViewer((Player) entity);
+                        player.removeViewer((Player) this);
                     }
                 } else if (isPlayer) {
-                    ent.removeViewer((Player) entity);
+                    ent.removeViewer((Player) this);
                 }
             });
         }
@@ -618,12 +649,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             instance.getChunkEntities(chunk).forEach(ent -> {
                 if (ent instanceof Player) {
                     Player player = (Player) ent;
-                    addViewer(player);
-                    if (entity instanceof Player) {
-                        player.addViewer((Player) entity);
+                    if (isAutoViewable())
+                        addViewer(player);
+                    if (this instanceof Player) {
+                        player.addViewer((Player) this);
                     }
                 } else if (isPlayer) {
-                    ent.addViewer((Player) entity);
+                    ent.addViewer((Player) this);
                 }
             });
         }

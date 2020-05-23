@@ -124,8 +124,8 @@ public class Sidebar implements Viewable {
     }
 
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
@@ -145,11 +145,12 @@ public class Sidebar implements Viewable {
             playerConnection.sendPacket(line.sidebarTeam.getCreationPacket());
             playerConnection.sendPacket(line.getScoreCreationPacket(objectiveName));
         }
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(Player player) {
+        boolean result = this.viewers.remove(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
@@ -160,6 +161,7 @@ public class Sidebar implements Viewable {
             playerConnection.sendPacket(line.getScoreDestructionPacket(objectiveName)); // Is it necessary?
             playerConnection.sendPacket(line.sidebarTeam.getDestructionPacket());
         }
+        return result;
     }
 
     @Override

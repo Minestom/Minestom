@@ -25,7 +25,7 @@ public class ExperienceOrb extends Entity {
     }
 
     @Override
-    public void addViewer(Player player) {
+    public boolean addViewer(Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnExperienceOrbPacket experienceOrbPacket = new SpawnExperienceOrbPacket();
@@ -33,7 +33,7 @@ public class ExperienceOrb extends Entity {
         experienceOrbPacket.position = getPosition();
         experienceOrbPacket.expCount = experienceCount;
         playerConnection.sendPacket(experienceOrbPacket);
-        super.addViewer(player); // Add player to viewers list and send velocity packet
+        return super.addViewer(player); // Add player to viewers list and send velocity packet
     }
 
     public short getExperienceCount() {

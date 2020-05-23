@@ -9,9 +9,17 @@ import java.util.Set;
 
 public interface Viewable {
 
-    void addViewer(Player player);
+    /**
+     * @param player the viewer to add
+     * @return true if the player has been added, false otherwise (could be because he is already a viewer)
+     */
+    boolean addViewer(Player player);
 
-    void removeViewer(Player player);
+    /**
+     * @param player the viewer to remove
+     * @return true if the player has been removed, false otherwise (could be because he was not a viewer)
+     */
+    boolean removeViewer(Player player);
 
     Set<Player> getViewers();
 

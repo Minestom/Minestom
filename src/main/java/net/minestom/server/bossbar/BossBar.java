@@ -27,17 +27,19 @@ public class BossBar implements Viewable {
     }
 
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
         player.refreshAddBossbar(this);
         addToPlayer(player);
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(Player player) {
+        boolean result = this.viewers.remove(player);
         player.refreshRemoveBossbar(this);
         removeToPlayer(player);
+        return result;
     }
 
     @Override

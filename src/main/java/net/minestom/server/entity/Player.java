@@ -333,10 +333,11 @@ public class Player extends LivingEntity {
     }
 
     @Override
-    public void addViewer(Player player) {
+    public boolean addViewer(Player player) {
         if (player == this)
-            return;
-        super.addViewer(player);
+            return false;
+
+        boolean result = super.addViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
         String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
@@ -356,13 +357,15 @@ public class Player extends LivingEntity {
         // Team
         if (team != null)
             viewerConnection.sendPacket(team.getTeamsCreationPacket());
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
+    public boolean removeViewer(Player player) {
         if (player == this)
-            return;
-        super.removeViewer(player);
+            return false;
+
+        boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
@@ -371,6 +374,7 @@ public class Player extends LivingEntity {
         // Team
         if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
             viewerConnection.sendPacket(team.createTeamDestructionPacket());
+        return result;
     }
 
     @Override

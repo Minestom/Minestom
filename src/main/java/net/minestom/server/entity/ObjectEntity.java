@@ -14,7 +14,7 @@ public abstract class ObjectEntity extends Entity {
     public abstract int getObjectData();
 
     @Override
-    public void addViewer(Player player) {
+    public boolean addViewer(Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
@@ -25,12 +25,12 @@ public abstract class ObjectEntity extends Entity {
         spawnEntityPacket.data = getObjectData();
         playerConnection.sendPacket(spawnEntityPacket);
         playerConnection.sendPacket(getMetadataPacket());
-        super.addViewer(player); // Add player to viewers list and send velocity packet
+        return super.addViewer(player); // Add player to viewers list and send velocity packet
     }
 
     @Override
-    public void removeViewer(Player player) {
-        super.removeViewer(player);
+    public boolean removeViewer(Player player) {
+        return super.removeViewer(player);
     }
 
 }

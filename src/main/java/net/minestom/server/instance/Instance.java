@@ -315,7 +315,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                     }
 
                     if (ent instanceof Player) {
-                        entity.addViewer((Player) ent);
+                        if (entity.isAutoViewable())
+                            entity.addViewer((Player) ent);
                     }
                 });
             }
@@ -332,7 +333,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
-            entity.getViewers().forEach(p -> entity.removeViewer(p)); // Remove this entity from players viewable list and send delete entities packet
+            if (entity.isAutoViewable()) {
+                // Remove this entity from players viewable list and send delete entities packet
+                entity.getViewers().forEach(p -> entity.removeViewer(p));
+            }
 
             Chunk chunk = getChunkAt(entity.getPosition());
             removeEntityFromChunk(entity, chunk);

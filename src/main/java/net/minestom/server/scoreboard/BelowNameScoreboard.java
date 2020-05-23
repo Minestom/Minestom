@@ -53,15 +53,16 @@ public class BelowNameScoreboard implements Viewable {
     }
 
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(scoreboardObjectivePacket);
+        return result;
     }
 
     @Override
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(Player player) {
+        return this.viewers.remove(player);
     }
 
     @Override

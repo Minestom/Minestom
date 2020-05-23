@@ -374,20 +374,22 @@ public class Chunk implements Viewable {
 
     // UNSAFE
     @Override
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public boolean addViewer(Player player) {
+        boolean result = this.viewers.add(player);
 
         PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
+        return result;
     }
 
     // UNSAFE
     @Override
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(Player player) {
+        boolean result = this.viewers.remove(player);
 
         PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
+        return result;
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -84,11 +85,6 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    public void addViewer(Player player) {
-        super.addViewer(player);
-    }
-
-    @Override
     public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
@@ -118,7 +114,7 @@ public class ItemEntity extends ObjectEntity {
 
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
-        sendMetadataIndex(7); // Refresh itemstack for viewers
+        sendMetadataIndex(7); // Refresh the ItemStack for viewers
     }
 
     public boolean isPickable() {
@@ -141,8 +137,8 @@ public class ItemEntity extends ObjectEntity {
         return pickupDelay;
     }
 
-    public void setPickupDelay(long pickupDelay) {
-        this.pickupDelay = pickupDelay;
+    public void setPickupDelay(long delay, TimeUnit timeUnit) {
+        this.pickupDelay = timeUnit.toMilliseconds(delay);
     }
 
     public long getSpawnTime() {
