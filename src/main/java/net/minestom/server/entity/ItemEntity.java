@@ -5,6 +5,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.Position;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -19,8 +20,8 @@ public class ItemEntity extends ObjectEntity {
     private long spawnTime;
     private long pickupDelay;
 
-    public ItemEntity(ItemStack itemStack) {
-        super(35);
+    public ItemEntity(ItemStack itemStack, Position spawnPosition) {
+        super(EntityType.ITEM, spawnPosition);
         this.itemStack = itemStack;
         setBoundingBox(0.25f, 0.25f, 0.25f);
         setGravity(0.025f);

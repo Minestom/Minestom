@@ -556,8 +556,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         position.setY(y);
         position.setZ(z);
 
-        for (Entity passenger : getPassengers()) {
-            passenger.refreshPosition(x, y, z);
+        if (hasPassenger()) {
+            for (Entity passenger : getPassengers()) {
+                passenger.refreshPosition(x, y, z);
+            }
         }
 
         Instance instance = getInstance();
@@ -632,6 +634,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.lastPitch = position.getPitch();
         position.setYaw(yaw);
         position.setPitch(pitch);
+    }
+
+    /**
+     * Ask for a synchronization (position) to happen during next entity update
+     */
+    public void askSynchronization() {
+        this.lastSynchronizationTime = 0;
     }
 
     public void refreshSneaking(boolean sneaking) {

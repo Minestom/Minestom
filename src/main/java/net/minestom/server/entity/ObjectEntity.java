@@ -2,11 +2,13 @@ package net.minestom.server.entity;
 
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.Position;
 
 public abstract class ObjectEntity extends Entity {
 
-    public ObjectEntity(int entityType) {
-        super(entityType);
+    public ObjectEntity(EntityType entityType, Position spawnPosition) {
+        super(entityType.getId(), spawnPosition);
+        setGravity(0.02f);
     }
 
     public abstract int getObjectData();
