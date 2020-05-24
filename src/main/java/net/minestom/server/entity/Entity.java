@@ -18,7 +18,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.time.TimeUnit;
@@ -233,28 +232,19 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     public boolean addViewer(Player player) {
         boolean result = this.viewers.add(player);
         player.viewableEntities.add(this);
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getVelocityPacket());
-        playerConnection.sendPacket(getPassengersPacket());
-        playerConnection.sendPacket(getMetadataPacket());
-
         return result;
     }
 
     @Override
     public boolean removeViewer(Player player) {
-        boolean result;
-        synchronized (viewers) {
-            result = viewers.remove(player);
-            if (!result)
-                return false;
+        if (!viewers.remove(player))
+            return false;
 
-            DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-            destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
-            player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
-        }
+        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
+        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+        player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
         player.viewableEntities.remove(this);
-        return result;
+        return true;
     }
 
     @Override

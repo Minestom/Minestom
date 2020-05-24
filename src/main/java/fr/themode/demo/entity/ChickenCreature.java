@@ -15,8 +15,6 @@ public class ChickenCreature extends EntityCreature {
     public ChickenCreature(Position defaultPosition) {
         super(EntityType.SKELETON, defaultPosition);
 
-        setAutoViewable(true);
-
         setBoundingBox(0.4f, 0.7f, 0.4f);
         setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
     }

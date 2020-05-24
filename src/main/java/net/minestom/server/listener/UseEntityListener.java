@@ -15,7 +15,7 @@ public class UseEntityListener {
             return;
         ClientInteractEntityPacket.Type type = packet.type;
 
-        // Player cannot interact entities that he cannot see
+        // Player cannot interact with entities he cannot see
         if (!entity.isViewer(player))
             return;
 
@@ -29,7 +29,8 @@ public class UseEntityListener {
             PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(entity, packet.hand);
             player.callEvent(PlayerInteractEvent.class, playerInteractEvent);
         } else {
-            PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(entity, packet.hand); // TODO find difference with INTERACT
+            // TODO find difference with INTERACT
+            PlayerInteractEvent playerInteractEvent = new PlayerInteractEvent(entity, packet.hand);
             player.callEvent(PlayerInteractEvent.class, playerInteractEvent);
         }
     }

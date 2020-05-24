@@ -8,7 +8,6 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.EntityBoat;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -202,8 +201,10 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 70, 0));
+
+                player.setGlowing(true);
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName("Item name");
@@ -216,8 +217,8 @@ public class PlayerInit {
 
                 player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
 
-                EntityBoat entityBoat = new EntityBoat(player.getPosition());
-                entityBoat.setInstance(player.getInstance());
+                //EntityBoat entityBoat = new EntityBoat(player.getPosition());
+                //entityBoat.setInstance(player.getInstance());
                 //entityBoat.addPassenger(player);
 
                 //player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));

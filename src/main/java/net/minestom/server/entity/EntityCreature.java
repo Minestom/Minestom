@@ -149,7 +149,13 @@ public abstract class EntityCreature extends LivingEntity {
 
         playerConnection.sendPacket(entityPacket);
         playerConnection.sendPacket(spawnLivingEntityPacket);
+        playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
+
+        if (hasPassenger()) {
+            playerConnection.sendPacket(getPassengersPacket());
+        }
+
         return result;
     }
 

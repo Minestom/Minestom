@@ -171,16 +171,22 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets fire to this entity for a given duration
      *
-     * @param duration duration of the effet
+     * @param duration duration of the effect
      * @param unit     unit used to express the duration
      */
     public void setFireForDuration(int duration, TimeUnit unit) {
         EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
-        callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
-            long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
-            setOnFire(true);
-            fireExtinguishTime = System.currentTimeMillis() + fireTime;
-        });
+
+        // Do not start fire event if the fire needs to be removed (< 0 duration)
+        if (duration > 0) {
+            callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
+                long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
+                setOnFire(true);
+                fireExtinguishTime = System.currentTimeMillis() + fireTime;
+            });
+        } else {
+            fireExtinguishTime = System.currentTimeMillis();
+        }
     }
 
     /**
@@ -286,6 +292,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return equipmentPacket;
     }
 
+    /**
+     * @return true if the entity is dead, false otherwise
+     */
     public boolean isDead() {
         return isDead;
     }

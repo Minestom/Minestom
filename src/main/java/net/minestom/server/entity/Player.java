@@ -353,6 +353,12 @@ public class Player extends LivingEntity {
 
         viewerConnection.sendPacket(pInfoPacket);
         viewerConnection.sendPacket(spawnPlayerPacket);
+        viewerConnection.sendPacket(getVelocityPacket());
+        viewerConnection.sendPacket(getMetadataPacket());
+
+        if (hasPassenger()) {
+            viewerConnection.sendPacket(getPassengersPacket());
+        }
 
         // Team
         if (team != null)
@@ -667,7 +673,7 @@ public class Player extends LivingEntity {
         callEvent(PlayerRespawnEvent.class, respawnEvent);
         refreshIsDead(false);
 
-        // Runnable called when teleportation is successfull (after loading and sending necessary chunk)
+        // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
     }
 
@@ -698,6 +704,12 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(updateHealthPacket);
     }
 
+    /**
+     * Used to change the percentage experience bar
+     * This cannot change the displayed level, see {@link #setLevel(int)}
+     *
+     * @param exp a percentage between 0 and 1
+     */
     public void setExp(float exp) {
         Check.argCondition(!MathUtils.isBetween(exp, 0, 1), "Exp should be between 0 and 1");
 
@@ -705,6 +717,12 @@ public class Player extends LivingEntity {
         sendExperienceUpdatePacket();
     }
 
+    /**
+     * Used to change the level of the player
+     * This cannot change the displayed percentage bar see {@link #setExp(float)}
+     *
+     * @param level the new level of the player
+     */
     public void setLevel(int level) {
         this.level = level;
         sendExperienceUpdatePacket();
@@ -721,7 +739,6 @@ public class Player extends LivingEntity {
         float dx = newChunk.getChunkX() - lastChunk.getChunkX();
         float dz = newChunk.getChunkZ() - lastChunk.getChunkZ();
         double distance = Math.sqrt(dx * dx + dz * dz);
-        boolean isFar = distance >= MinecraftServer.CHUNK_VIEW_DISTANCE / 2;
 
         long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
         long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
@@ -745,14 +762,9 @@ public class Player extends LivingEntity {
 
         // Load new chunks
         for (int i = 0; i < newChunks.length; i++) {
-            boolean isLast = i == newChunks.length - 1;
             int index = newChunks[i];
             int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
-                if (isFar && isLast) {
-                    updatePlayerPosition();
-                }
-
                 if (chunk == null) {
                     return; // Cannot load chunk (auto load is not enabled)
                 }
@@ -812,13 +824,18 @@ public class Player extends LivingEntity {
     /**
      * Returns true iff this player is in creative. Used for code readability
      *
-     * @return
+     * @return true if the player is in creative mode, false otherwise
      */
     public boolean isCreative() {
         return gameMode == GameMode.CREATIVE;
     }
 
-    // Require sending chunk data after
+    /**
+     * Change the dimension of the player
+     * Mostly unsafe since it requires sending chunks after
+     *
+     * @param dimension the new player dimension
+     */
     public void sendDimension(Dimension dimension) {
         Check.notNull(dimension, "Dimension cannot be null!");
         Check.argCondition(dimension.equals(getDimension()), "The dimension need to be different than the current one!");
@@ -846,6 +863,11 @@ public class Player extends LivingEntity {
         return levelType;
     }
 
+    /**
+     * Used to change the player gamemode
+     *
+     * @param gameMode the new player gamemode
+     */
     public void setGameMode(GameMode gameMode) {
         ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
         changeGameStatePacket.reason = ChangeGameStatePacket.Reason.CHANGE_GAMEMODE;
@@ -1015,6 +1037,9 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(updateViewPositionPacket);
     }
 
+    /**
+     * Used for synchronization purpose, mainly for teleportation
+     */
     protected void updatePlayerPosition() {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position;
@@ -1023,10 +1048,18 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(positionAndLookPacket);
     }
 
+    /**
+     * @return the player permission level
+     */
     public int getPermissionLevel() {
         return permissionLevel;
     }
 
+    /**
+     * Change the player permission level
+     *
+     * @param permissionLevel the new player permission level
+     */
     public void setPermissionLevel(int permissionLevel) {
         Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");
 

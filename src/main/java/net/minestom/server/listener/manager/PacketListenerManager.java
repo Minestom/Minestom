@@ -49,7 +49,7 @@ public class PacketListenerManager {
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            System.err.println("Packet " + packet.getClass() + " does not have any listener!");
+            System.err.println("Packet " + packet.getClass() + " does not have any default listener!");
         }
 
 

@@ -24,8 +24,14 @@ public abstract class ObjectEntity extends Entity {
         spawnEntityPacket.position = getPosition();
         spawnEntityPacket.data = getObjectData();
         playerConnection.sendPacket(spawnEntityPacket);
+        playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
-        return super.addViewer(player); // Add player to viewers list and send velocity packet
+
+        if (hasPassenger()) {
+            playerConnection.sendPacket(getPassengersPacket());
+        }
+
+        return super.addViewer(player); // Add player to viewers list
     }
 
     @Override
