@@ -51,13 +51,13 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     private long fireDamagePeriod = 1000L;
 
-    public LivingEntity(int entityType, Position spawnPosition) {
-        super(entityType, spawnPosition);
+    public LivingEntity(EntityType entityType, Position spawnPosition) {
+        super(entityType.getId(), spawnPosition);
         setupAttributes();
         setGravity(0.02f);
     }
 
-    public LivingEntity(int entityType) {
+    public LivingEntity(EntityType entityType) {
         this(entityType, new Position());
     }
 
@@ -137,15 +137,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             }
             packet.writeByte(activeHandValue);
         }
-    }
-
-    @Override
-    public boolean addViewer(Player player) {
-        boolean result = super.addViewer(player);
-
-        // Equipments synchronization
-        syncEquipments();
-        return result;
     }
 
     /**

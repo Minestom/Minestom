@@ -113,7 +113,7 @@ public class Player extends LivingEntity {
     private PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
-        super(EntityType.PLAYER.getId());
+        super(EntityType.PLAYER);
         this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
@@ -327,7 +327,10 @@ public class Player extends LivingEntity {
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
-        this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+        this.viewableChunks.forEach(chunk -> {
+            if (chunk.isLoaded())
+                chunk.removeViewer(this);
+        });
         resetTargetBlock();
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
     }
@@ -355,6 +358,9 @@ public class Player extends LivingEntity {
         viewerConnection.sendPacket(spawnPlayerPacket);
         viewerConnection.sendPacket(getVelocityPacket());
         viewerConnection.sendPacket(getMetadataPacket());
+
+        // Equipments synchronization
+        syncEquipments();
 
         if (hasPassenger()) {
             viewerConnection.sendPacket(getPassengersPacket());

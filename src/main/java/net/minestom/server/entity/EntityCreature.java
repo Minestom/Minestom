@@ -34,7 +34,7 @@ public abstract class EntityCreature extends LivingEntity {
 
 
     public EntityCreature(EntityType entityType, Position spawnPosition) {
-        super(entityType.getId(), spawnPosition);
+        super(entityType, spawnPosition);
 
         this.mainHandItem = ItemStack.getAirItem();
         this.offHandItem = ItemStack.getAirItem();
@@ -154,6 +154,9 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(spawnLivingEntityPacket);
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
+
+        // Equipments synchronization
+        syncEquipments();
 
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
