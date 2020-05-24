@@ -41,6 +41,7 @@ public class PacketListenerManager {
         addListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
         addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         addListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
+        addListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {

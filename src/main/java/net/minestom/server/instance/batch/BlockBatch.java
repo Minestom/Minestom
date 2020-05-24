@@ -73,6 +73,9 @@ public class BlockBatch implements InstanceBatch {
             boolean isLast = counter == data.size();
             batchesPool.execute(() -> {
                 synchronized (chunk) {
+                    if (!chunk.isLoaded())
+                        return;
+
                     for (BlockData data : dataList) {
                         data.apply(chunk);
                     }

@@ -94,6 +94,9 @@ public class ChunkBatch implements InstanceBatch {
 
     private void singleThreadFlush(Consumer<Chunk> callback) {
         synchronized (chunk) {
+            if (!chunk.isLoaded())
+                return;
+
             for (BlockData data : dataList) {
                 data.apply(chunk);
             }

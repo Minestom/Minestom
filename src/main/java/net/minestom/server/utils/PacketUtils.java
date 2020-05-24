@@ -24,7 +24,7 @@ public class PacketUtils {
         Utils.writeVarIntBuf(buffer, length);
         buffer.writeBytes(bytes);
 
-        //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName() + " size: " + length);
+        //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName());
 
         return Unpooled.copiedBuffer(buffer);
     }

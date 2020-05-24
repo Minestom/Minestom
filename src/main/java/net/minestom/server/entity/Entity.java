@@ -181,11 +181,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         Runnable runnable = () -> {
             refreshPosition(position.getX(), position.getY(), position.getZ());
             refreshView(position.getYaw(), position.getPitch());
-            EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
-            entityTeleportPacket.entityId = getEntityId();
-            entityTeleportPacket.position = position;
-            entityTeleportPacket.onGround = isOnGround();
-            sendPacketToViewers(entityTeleportPacket);
+            sendSynchronization();
         };
 
         if (instance.hasEnabledAutoChunkLoad()) {
@@ -329,8 +325,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 velocity.setX(velocity.getX() * drag);
                 velocity.setZ(velocity.getZ() * drag);
 
-
-                sendSynchronization();
                 if (shouldSendVelocityUpdate(time)) {
                     sendPacketToViewers(getVelocityPacket());
                     lastVelocityUpdateTime = time;
@@ -706,13 +700,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         position.setPitch(pitch);
     }
 
-    /**
-     * Ask for a synchronization (position) to happen during next entity update
-     */
-    public void askSynchronization() {
-        this.lastSynchronizationTime = 0;
-    }
-
     public void refreshSneaking(boolean sneaking) {
         this.crouched = sneaking;
         this.pose = sneaking ? Pose.SNEAKING : Pose.STANDING;
@@ -927,9 +914,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         entityTeleportPacket.position = getPosition();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
+    }
 
-        if (!passengers.isEmpty())
-            sendPacketToViewers(getPassengersPacket());
+    /**
+     * Ask for a synchronization (position) to happen during next entity update
+     */
+    public void askSynchronization() {
+        this.lastSynchronizationTime = 0;
     }
 
     private boolean shouldUpdate(long time) {

@@ -406,11 +406,11 @@ public class Chunk implements Viewable {
         this.biomes = null;
         this.blocksId = null;
         this.customBlocksId = null;
-        this.blocksData.clear();
-        this.updatableBlocks.clear();
-        this.updatableBlocksLastUpdate.clear();
-        this.blockEntities.clear();
-        this.viewers.clear();
+        this.blocksData = null;
+        this.updatableBlocks = null;
+        this.updatableBlocksLastUpdate = null;
+        this.blockEntities = null;
+        this.viewers = null;
     }
 
     private int getBlockIndex(int x, int y, int z) {

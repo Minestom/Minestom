@@ -736,10 +736,6 @@ public class Player extends LivingEntity {
     }
 
     protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {
-        float dx = newChunk.getChunkX() - lastChunk.getChunkX();
-        float dz = newChunk.getChunkZ() - lastChunk.getChunkZ();
-        double distance = Math.sqrt(dx * dx + dz * dz);
-
         long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
         long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
         int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
@@ -766,7 +762,8 @@ public class Player extends LivingEntity {
             int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
                 if (chunk == null) {
-                    return; // Cannot load chunk (auto load is not enabled)
+                    // Cannot load chunk (auto load is not enabled)
+                    return;
                 }
                 this.viewableChunks.add(chunk);
                 chunk.addViewer(this);

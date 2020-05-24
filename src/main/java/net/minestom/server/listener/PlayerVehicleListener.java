@@ -6,7 +6,6 @@ import net.minestom.server.entity.type.EntityBoat;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
-import net.minestom.server.network.packet.server.play.VehicleMovePacket;
 import net.minestom.server.utils.Position;
 
 public class PlayerVehicleListener {
@@ -29,13 +28,14 @@ public class PlayerVehicleListener {
         vehicle.refreshView(packet.yaw, packet.pitch);
         vehicle.askSynchronization();
 
-        VehicleMovePacket vehicleMovePacket = new VehicleMovePacket();
+        // This packet causes weird screen distortion
+        /*VehicleMovePacket vehicleMovePacket = new VehicleMovePacket();
         vehicleMovePacket.x = packet.x;
         vehicleMovePacket.y = packet.y;
         vehicleMovePacket.z = packet.z;
         vehicleMovePacket.yaw = packet.yaw;
         vehicleMovePacket.pitch = packet.pitch;
-        player.getPlayerConnection().sendPacket(vehicleMovePacket);
+        player.getPlayerConnection().sendPacket(vehicleMovePacket);*/
 
     }
 
