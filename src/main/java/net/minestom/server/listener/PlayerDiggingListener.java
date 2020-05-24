@@ -115,8 +115,10 @@ public class PlayerDiggingListener {
             case SWAP_ITEM_HAND:
                 PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(offHand.clone(), mainHand.clone());
                 player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
-                    playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
-                    playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
+                    synchronized (playerInventory) {
+                        playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
+                        playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
+                    }
                 });
                 break;
         }

@@ -12,7 +12,8 @@ public class AnimationListener {
         player.callCancellableEvent(AnimationEvent.class, animationEvent, () -> {
             EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
             entityAnimationPacket.entityId = player.getEntityId();
-            entityAnimationPacket.animation = animationEvent.getHand() == Player.Hand.MAIN ? EntityAnimationPacket.Animation.SWING_MAIN_ARM : EntityAnimationPacket.Animation.SWING_OFF_HAND;
+            entityAnimationPacket.animation = animationEvent.getHand() == Player.Hand.MAIN ?
+                    EntityAnimationPacket.Animation.SWING_MAIN_ARM : EntityAnimationPacket.Animation.SWING_OFF_HAND;
             player.sendPacketToViewers(entityAnimationPacket);
         });
     }

@@ -14,6 +14,11 @@ public class UseEntityListener {
         if (entity == null)
             return;
         ClientInteractEntityPacket.Type type = packet.type;
+
+        // Player cannot interact entities that he cannot see
+        if (!entity.isViewer(player))
+            return;
+
         if (type == ClientInteractEntityPacket.Type.ATTACK) {
             if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) // Can't attack dead entities
                 return;

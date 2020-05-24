@@ -106,10 +106,9 @@ public class PlayerInit {
             }
         }, new UpdateOption(5, TimeUnit.TICK));
 
-        connectionManager.addPacketConsumer((player, packet) -> {
+        connectionManager.addPacketConsumer((player, packetController, packet) -> {
             // Listen to all received packet
-            // Returning true means cancelling the packet
-            return false;
+            packetController.setCancel(false);
         });
 
         connectionManager.addPlayerInitialization(player -> {

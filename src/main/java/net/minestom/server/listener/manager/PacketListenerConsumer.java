@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 
 @FunctionalInterface
-public interface PacketConsumer {
-    // Cancel the packet if return true
-    void accept(Player player, PacketController packetController, ClientPlayPacket packet);
+public interface PacketListenerConsumer<T extends ClientPlayPacket> {
+    void accept(T packet, Player player);
 }

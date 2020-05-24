@@ -9,13 +9,12 @@ import net.minestom.server.network.packet.client.play.*;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
 
 public class PacketListenerManager {
 
     private static ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
-    private Map<Class<? extends ClientPlayPacket>, BiConsumer<? extends ClientPlayPacket, Player>> listeners = new ConcurrentHashMap<>();
+    private Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager() {
         addListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
@@ -46,22 +45,30 @@ public class PacketListenerManager {
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
 
-        boolean cancel = false;
-        for (PacketConsumer packetConsumer : connectionManager.getPacketConsumers()) {
-            cancel = packetConsumer.accept(player, packet);
+        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(packet.getClass());
+
+        // Listener can be null if none has been set before, call PacketConsumer anyway
+        if (packetListenerConsumer == null) {
+            System.err.println("Packet " + packet.getClass() + " does not have any listener!");
         }
-        if (cancel)
+
+
+        PacketController packetController = new PacketController(packetListenerConsumer);
+        for (PacketConsumer packetConsumer : connectionManager.getPacketConsumers()) {
+            packetConsumer.accept(player, packetController, packet);
+        }
+
+        if (packetController.isCancel())
             return;
 
-        BiConsumer<T, Player> biConsumer = (BiConsumer<T, Player>) listeners.get(packet.getClass());
-        if (biConsumer == null) {
-            System.err.println("Packet " + packet.getClass() + " does not have any listener!");
-            return;
+        // Call the listener if not null
+        // (can be null because no listener is set, or because it has been changed by the controller)
+        if (packetListenerConsumer != null) {
+            packetListenerConsumer.accept(packet, player);
         }
-        biConsumer.accept(packet, player);
     }
 
-    public <T extends ClientPlayPacket> void addListener(Class<T> packetClass, BiConsumer<T, Player> consumer) {
+    public <T extends ClientPlayPacket> void addListener(Class<T> packetClass, PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
     }
 

@@ -16,5 +16,4 @@ public class KeepAliveListener {
         int latency = (int) (System.currentTimeMillis() - packet.id);
         player.refreshLatency(latency);
     }
-
 }

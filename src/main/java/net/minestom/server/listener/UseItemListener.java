@@ -21,6 +21,7 @@ public class UseItemListener {
 
         Material material = Material.fromId(itemStack.getMaterialId());
 
+        // Equip armor with right click
         if (material.isArmor()) {
             PlayerInventory playerInventory = player.getInventory();
             if (useItemEvent.isCancelled()) {
