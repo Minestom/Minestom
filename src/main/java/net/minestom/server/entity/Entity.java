@@ -175,6 +175,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void teleport(Position position, Runnable callback) {
+        Check.notNull(position, "Teleport position cannot be null");
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
         Runnable runnable = () -> {
@@ -230,6 +231,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     @Override
     public boolean addViewer(Player player) {
+        Check.notNull(player, "Viewer cannot be null");
         boolean result = this.viewers.add(player);
         player.viewableEntities.add(this);
         return result;
@@ -237,6 +239,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     @Override
     public boolean removeViewer(Player player) {
+        Check.notNull(player, "Viewer cannot be null");
         if (!viewers.remove(player))
             return false;
 
@@ -404,6 +407,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     @Override
     public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+        Check.notNull(eventClass, "Event class cannot be null");
+        Check.notNull(eventCallback, "Event callback cannot be null");
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.add(eventCallback);
         this.eventCallbacks.put(eventClass, callbacks);
@@ -411,6 +416,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
+        Check.notNull(eventClass, "Event class cannot be null");
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
     }
 
@@ -482,6 +488,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public float getDistance(Entity entity) {
+        Check.notNull(entity, "Entity cannot be null");
         return getPosition().getDistance(entity.getPosition());
     }
 
@@ -738,6 +745,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      * @return true if the entity is in the same chunk as {@code position}
      */
     public boolean sameChunk(Position position) {
+        Check.notNull(position, "Position cannot be null");
         Position pos = getPosition();
         int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
         int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getZ()));

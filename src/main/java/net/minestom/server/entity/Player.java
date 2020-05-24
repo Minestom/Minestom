@@ -887,6 +887,7 @@ public class Player extends LivingEntity {
      * @param gameMode the new player gamemode
      */
     public void setGameMode(GameMode gameMode) {
+        Check.notNull(gameMode, "GameMode cannot be null");
         ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
         changeGameStatePacket.reason = ChangeGameStatePacket.Reason.CHANGE_GAMEMODE;
         changeGameStatePacket.value = gameMode.getId();
