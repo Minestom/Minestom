@@ -325,6 +325,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 velocity.setX(velocity.getX() * drag);
                 velocity.setZ(velocity.getZ() * drag);
 
+                sendSynchronization();
+
                 if (shouldSendVelocityUpdate(time)) {
                     sendPacketToViewers(getVelocityPacket());
                     lastVelocityUpdateTime = time;
