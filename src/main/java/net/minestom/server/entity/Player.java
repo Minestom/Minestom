@@ -867,7 +867,7 @@ public class Player extends LivingEntity {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = Chat.toJsonString(message);
         playerConnection.sendPacket(disconnectPacket);
-        playerConnection.getChannel().close();
+        playerConnection.disconnect();
     }
 
     public void kick(String message) {

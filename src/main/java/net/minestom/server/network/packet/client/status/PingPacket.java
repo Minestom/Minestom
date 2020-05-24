@@ -14,7 +14,7 @@ public class PingPacket implements ClientPreplayPacket {
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         PongPacket pongPacket = new PongPacket(number);
         connection.sendPacket(pongPacket);
-        connection.getChannel().close();
+        connection.disconnect();
     }
 
     @Override

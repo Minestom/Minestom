@@ -1,52 +1,39 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.PacketUtils;
 
 import java.net.SocketAddress;
 
-public class PlayerConnection {
+/**
+ * A PlayerConnection is an object needed for all created player
+ * It can be extended to create a new kind of player (NPC for instance)
+ */
+public abstract class PlayerConnection {
 
-    private ChannelHandlerContext channel;
     private ConnectionState connectionState;
     private boolean online;
 
-    public PlayerConnection(ChannelHandlerContext channel) {
-        this.channel = channel;
-        this.connectionState = ConnectionState.UNKNOWN;
+    public PlayerConnection() {
         this.online = true;
+        this.connectionState = ConnectionState.UNKNOWN;
     }
 
-    public void sendPacket(ByteBuf buffer) {
-        buffer.retain();
-        channel.writeAndFlush(buffer);
-    }
+    public abstract void sendPacket(ByteBuf buffer);
 
-    public void writePacket(ByteBuf buffer) {
-        buffer.retain();
-        channel.write(buffer);
-    }
+    public abstract void writePacket(ByteBuf buffer);
 
-    public void sendPacket(ServerPacket serverPacket) {
-        ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-        sendPacket(buffer);
-        buffer.release();
-    }
+    public abstract void sendPacket(ServerPacket serverPacket);
 
-    public void flush() {
-        channel.flush();
-    }
+    public abstract void flush();
 
-    public SocketAddress getRemoteAddress() {
-        return channel.channel().remoteAddress();
-    }
+    public abstract SocketAddress getRemoteAddress();
 
-    public ChannelHandlerContext getChannel() {
-        return channel;
-    }
+    /**
+     * Forcing the player to disconnect
+     */
+    public abstract void disconnect();
 
     public boolean isOnline() {
         return online;

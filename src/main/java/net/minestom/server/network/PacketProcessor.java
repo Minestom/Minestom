@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandl
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
+import net.minestom.server.network.player.IPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 
 import java.util.Arrays;
@@ -40,7 +41,8 @@ public class PacketProcessor {
     private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
 
     public void process(ChannelHandlerContext channel, ByteBuf buffer, int id, int offset) {
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(channel, c -> new PlayerConnection(channel));
+        PlayerConnection playerConnection =
+                connectionPlayerConnectionMap.computeIfAbsent(channel, c -> new IPlayerConnection(channel));
         ConnectionState connectionState = playerConnection.getConnectionState();
         //if (!printBlackList.contains(id)) {
         //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
