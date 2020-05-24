@@ -490,6 +490,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void addPassenger(Entity entity) {
+        Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
 
         if (entity.getVehicle() != null) {
@@ -503,11 +504,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     public void removePassenger(Entity entity) {
+        Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
 
-        if (!passengers.contains(entity))
+        if (!passengers.remove(entity))
             return;
-        this.passengers.remove(entity);
         entity.vehicle = null;
         sendPacketToViewersAndSelf(getPassengersPacket());
     }
@@ -516,6 +517,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return !passengers.isEmpty();
     }
 
+    /**
+     * @return an unmodifiable list containing all the entity passengers
+     */
     public Set<Entity> getPassengers() {
         return Collections.unmodifiableSet(passengers);
     }
@@ -534,6 +538,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return passengersPacket;
     }
 
+    /**
+     * Entity statuses can be find <a href="https://wiki.vg/Entity_statuses">here</a>
+     *
+     * @param status the status to trigger
+     */
     public void triggerStatus(byte status) {
         EntityStatusPacket statusPacket = new EntityStatusPacket();
         statusPacket.entityId = getEntityId();
@@ -541,13 +550,24 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendPacketToViewersAndSelf(statusPacket);
     }
 
+    /**
+     * @return true if the entity is in fire, false otherwise
+     */
+    public boolean isOnFire() {
+        return onFire;
+    }
+
+    /**
+     * Set the entity in fire visually
+     * <p>
+     * WARNING: if you want to apply damage or specify a duration,
+     * see {@link LivingEntity#setFireForDuration(int, TimeUnit)}
+     *
+     * @param fire should the entity be set in fire
+     */
     public void setOnFire(boolean fire) {
         this.onFire = fire;
         sendMetadataIndex(0);
-    }
-
-    public boolean isOnFire() {
-        return onFire;
     }
 
     public void setGlowing(boolean glowing) {
@@ -555,19 +575,40 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendMetadataIndex(0);
     }
 
+    /**
+     * @return true if the entity is glowing, false otherwise
+     */
     public boolean isGlowing() {
         return glowing;
     }
 
+    /**
+     * @param noGravity should the entity ignore gravity
+     */
     public void setNoGravity(boolean noGravity) {
         this.noGravity = noGravity;
         sendMetadataIndex(5);
     }
 
+    /**
+     * @return true if the entity ignore gravity, false otherwise
+     */
     public boolean hasNoGravity() {
         return noGravity;
     }
 
+    /**
+     * Used to refresh the entity and its passengers position
+     * - put the entity in the right instance chunk
+     * - update the viewable chunks (load and unload)
+     * - add/remove players from the viewers list if {@link #isAutoViewable()} is enabled
+     * <p>
+     * WARNING: unsafe, should only be used internally in Minestom
+     *
+     * @param x new position X
+     * @param y new position Y
+     * @param z new position Z
+     */
     public void refreshPosition(float x, float y, float z) {
         this.lastX = position.getX();
         this.lastY = position.getY();

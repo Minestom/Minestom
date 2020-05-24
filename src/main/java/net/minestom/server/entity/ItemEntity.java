@@ -17,6 +17,7 @@ public class ItemEntity extends ObjectEntity {
 
     private boolean pickable = true;
     private boolean mergeable = true;
+    private float mergeRange = 1;
 
     private long spawnTime;
     private long pickupDelay;
@@ -45,7 +46,7 @@ public class ItemEntity extends ObjectEntity {
                         continue;
 
                     // Too far, do not merge
-                    if (getDistance(itemEntity) > 1)
+                    if (getDistance(itemEntity) > mergeRange)
                         continue;
 
                     synchronized (this) {
@@ -125,22 +126,53 @@ public class ItemEntity extends ObjectEntity {
         this.pickable = pickable;
     }
 
+    /**
+     * @return true if the entity is mergeable, false otherwise
+     */
     public boolean isMergeable() {
         return mergeable;
     }
 
+    /**
+     * When set to true, close {@link ItemEntity} will try to merge together as a single entity
+     * when their {@link #getItemStack()} is similar and allowed to stack together
+     *
+     * @param mergeable should the entity merge with other {@link ItemEntity}
+     */
     public void setMergeable(boolean mergeable) {
         this.mergeable = mergeable;
     }
 
+    public float getMergeRange() {
+        return mergeRange;
+    }
+
+    public void setMergeRange(float mergeRange) {
+        this.mergeRange = mergeRange;
+    }
+
+    /**
+     * @return the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}
+     */
     public long getPickupDelay() {
         return pickupDelay;
     }
 
+    /**
+     * Set the pickup delay of the ItemEntity
+     *
+     * @param delay
+     * @param timeUnit
+     */
     public void setPickupDelay(long delay, TimeUnit timeUnit) {
         this.pickupDelay = timeUnit.toMilliseconds(delay);
     }
 
+    /**
+     * Used to know if the ItemEntity can be pickup
+     *
+     * @return the time in milliseconds since this entity has spawn
+     */
     public long getSpawnTime() {
         return spawnTime;
     }

@@ -8,8 +8,10 @@ public class PlayerHeldListener {
 
     public static void heldListener(ClientHeldItemChangePacket packet, Player player) {
         short slot = packet.slot;
-        if (!MathUtils.isBetween(slot, 0, 8))
+        if (!MathUtils.isBetween(slot, 0, 8)) {
+            // Incorrect packet, ignore
             return;
+        }
         player.refreshHeldSlot(slot);
     }
 

@@ -797,10 +797,16 @@ public class Player extends LivingEntity {
         return playerConnection;
     }
 
+    /**
+     * @return true if the player is online, false otherwise
+     */
     public boolean isOnline() {
         return playerConnection.isOnline();
     }
 
+    /**
+     * @return the player settings
+     */
     public PlayerSettings getSettings() {
         return settings;
     }
@@ -809,14 +815,26 @@ public class Player extends LivingEntity {
         return inventory;
     }
 
+    /**
+     * Used to get the player latency,
+     * computed by seeing how long it takes the client to answer the {@link KeepAlivePacket} packet
+     *
+     * @return the player latency
+     */
     public int getLatency() {
         return latency;
     }
 
+    /**
+     * @return the player current dimension
+     */
     public Dimension getDimension() {
         return dimension;
     }
 
+    /**
+     * @return the player current gamemode
+     */
     public GameMode getGameMode() {
         return gameMode;
     }
@@ -1091,19 +1109,31 @@ public class Player extends LivingEntity {
         refreshAbilities();
     }
 
+    /**
+     * @return true if the player if flying, false otherwise
+     */
     public boolean isFlying() {
         return flying;
     }
 
+    /**
+     * @param flying should the player fly
+     */
     public void setFlying(boolean flying) {
         this.flying = flying;
         refreshAbilities();
     }
 
+    /**
+     * @return true if the player if allowed to fly, false otherwise
+     */
     public boolean isAllowFlying() {
         return allowFlying;
     }
 
+    /**
+     * @param allowFlying should the player be allowed to fly
+     */
     public void setAllowFlying(boolean allowFlying) {
         this.allowFlying = allowFlying;
         refreshAbilities();
@@ -1113,6 +1143,14 @@ public class Player extends LivingEntity {
         return instantBreak;
     }
 
+    /**
+     * Change the player ability "Creative Mode"
+     * <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">see</a>
+     * <p>
+     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition)}
+     *
+     * @param instantBreak
+     */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;
         refreshAbilities();

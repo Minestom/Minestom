@@ -66,18 +66,21 @@ public abstract class EntityCreature extends LivingEntity {
 
     }
 
+    /**
+     * @param x          X movement offset
+     * @param y          Y movement offset
+     * @param z          Z movement offset
+     * @param updateView should the entity move its head toward the position?
+     */
     public void move(float x, float y, float z, boolean updateView) {
         Position position = getPosition();
-        float newX = position.getX() + x;
-        float newY = position.getY() + y;
-        float newZ = position.getZ() + z;
         Position newPosition = new Position();
         // Calculate collisions boxes
         onGround = CollisionUtils.handlePhysics(this, new Vector(x, y, z), newPosition, new Vector());
         // Refresh target position
-        newX = newPosition.getX();
-        newY = newPosition.getY();
-        newZ = newPosition.getZ();
+        float newX = newPosition.getX();
+        float newY = newPosition.getY();
+        float newZ = newPosition.getZ();
 
         // Creatures cannot move in unload chunk
         if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
@@ -257,6 +260,13 @@ public abstract class EntityCreature extends LivingEntity {
         setPathTo(position, 1000, null);
     }
 
+    /**
+     * Used to move the entity toward {@code direction} in the axis X and Z
+     * Gravity is still applied but the entity will not attempt to jump
+     *
+     * @param direction the targeted position
+     * @param speed     define how far the entity will move
+     */
     public void moveTowards(Position direction, float speed) {
         float radians = (float) Math.atan2(direction.getZ() - position.getZ(), direction.getX() - position.getX());
         float speedX = (float) (Math.cos(radians) * speed);

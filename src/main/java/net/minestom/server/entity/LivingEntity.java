@@ -255,14 +255,30 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return getAttributeValue(Attribute.MAX_HEALTH);
     }
 
+    /**
+     * Set the heal of the entity as its max health
+     * retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}
+     */
     public void heal() {
         setHealth(getAttributeValue(Attribute.MAX_HEALTH));
     }
 
+    /**
+     * Change the specified attribute value to {@code value}
+     *
+     * @param attribute The attribute to change
+     * @param value     the new value of the attribute
+     */
     public void setAttribute(Attribute attribute, float value) {
         this.attributeValues[attribute.ordinal()] = value;
     }
 
+    /**
+     * Retrieve the attribute value set by {@link #setAttribute(Attribute, float)}
+     *
+     * @param attribute the attribute value to get
+     * @return the attribute value
+     */
     public float getAttributeValue(Attribute attribute) {
         return this.attributeValues[attribute.ordinal()];
     }
@@ -299,10 +315,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return isDead;
     }
 
+    /**
+     * @return true if the entity is able to pickup items
+     */
     public boolean canPickupItem() {
         return canPickupItem;
     }
 
+    /**
+     * When set to false, the entity will not be able to pick {@link ItemEntity} on the ground
+     *
+     * @param canPickupItem can the entity pickup item
+     */
     public void setCanPickupItem(boolean canPickupItem) {
         this.canPickupItem = canPickupItem;
     }

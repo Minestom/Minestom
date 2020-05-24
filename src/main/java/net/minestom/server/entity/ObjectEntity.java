@@ -11,6 +11,11 @@ public abstract class ObjectEntity extends Entity {
         setGravity(0.02f);
     }
 
+    /**
+     * Objects data can be found <a href="https://wiki.vg/Object_Data">here</a>
+     *
+     * @return an object data
+     */
     public abstract int getObjectData();
 
     @Override
