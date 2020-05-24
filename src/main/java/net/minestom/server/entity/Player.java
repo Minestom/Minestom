@@ -1118,8 +1118,12 @@ public class Player extends LivingEntity {
      * @param flying should the player fly
      */
     public void setFlying(boolean flying) {
-        this.flying = flying;
+        refreshFlying(flying);
         refreshAbilities();
+    }
+
+    public void refreshFlying(boolean flying) {
+        this.flying = flying;
     }
 
     /**
