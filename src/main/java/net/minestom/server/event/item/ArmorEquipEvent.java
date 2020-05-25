@@ -1,24 +1,24 @@
 package net.minestom.server.event.item;
 
-import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.item.ItemStackUtils;
 
 public class ArmorEquipEvent extends Event {
 
-    private LivingEntity livingEntity;
+    private Entity entity;
     private ItemStack armorItem;
     private ArmorSlot armorSlot;
 
-    public ArmorEquipEvent(LivingEntity livingEntity, ItemStack armorItem, ArmorSlot armorSlot) {
-        this.livingEntity = livingEntity;
+    public ArmorEquipEvent(Entity entity, ItemStack armorItem, ArmorSlot armorSlot) {
+        this.entity = entity;
         this.armorItem = armorItem;
         this.armorSlot = armorSlot;
     }
 
-    public LivingEntity getEntity() {
-        return livingEntity;
+    public Entity getEntity() {
+        return entity;
     }
 
     public ItemStack getArmorItem() {

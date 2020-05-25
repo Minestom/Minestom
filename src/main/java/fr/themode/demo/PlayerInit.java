@@ -7,10 +7,8 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.fakeplayer.FakePlayerController;
+import net.minestom.server.entity.hologram.Hologram;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -152,13 +150,15 @@ public class PlayerInit {
                 //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 //chickenCreature.setInstance(player.getInstance());
 
-                FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test", true);
+                /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test", true);
                 fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
                     fakePlayer.getController().respawn();
                 });
                 fakePlayer.setArrowCount(25);
                 FakePlayerController controller = fakePlayer.getController();
-                controller.sendChatMessage("I am a bot!");
+                controller.sendChatMessage("I am a bot!");*/
+
+                Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
 
             });
 

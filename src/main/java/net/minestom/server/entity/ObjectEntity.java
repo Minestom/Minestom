@@ -39,9 +39,4 @@ public abstract class ObjectEntity extends Entity {
         return super.addViewer(player); // Add player to viewers list
     }
 
-    @Override
-    public boolean removeViewer(Player player) {
-        return super.removeViewer(player);
-    }
-
 }

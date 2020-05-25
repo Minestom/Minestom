@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
+import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
@@ -46,6 +47,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected static final byte METADATA_OPTCHAT = 5;
     protected static final byte METADATA_SLOT = 6;
     protected static final byte METADATA_BOOLEAN = 7;
+    protected static final byte METADATA_ROTATION = 8;
+    protected static final byte METADATA_POSITION = 9;
     protected static final byte METADATA_POSE = 18;
 
     protected Instance instance;
@@ -90,7 +93,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected boolean glowing;
     protected boolean usingElytra;
     protected int air = 300;
-    protected String customName = "";
+    protected String customName;
     protected boolean customNameVisible;
     protected boolean silent;
     protected boolean noGravity;
@@ -590,6 +593,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendMetadataIndex(0);
     }
 
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+        sendMetadataIndex(0);
+    }
+
     public void setGlowing(boolean glowing) {
         this.glowing = glowing;
         sendMetadataIndex(0);
@@ -600,6 +612,33 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      */
     public boolean isGlowing() {
         return glowing;
+    }
+
+    public String getCustomName() {
+        return customName;
+    }
+
+    public void setCustomName(String customName) {
+        this.customName = customName;
+        sendMetadataIndex(2);
+    }
+
+    public boolean isCustomNameVisible() {
+        return customNameVisible;
+    }
+
+    public void setCustomNameVisible(boolean customNameVisible) {
+        this.customNameVisible = customNameVisible;
+        sendMetadataIndex(3);
+    }
+
+    public boolean isSilent() {
+        return silent;
+    }
+
+    public void setSilent(boolean silent) {
+        this.silent = silent;
+        sendMetadataIndex(4);
     }
 
     /**
@@ -831,6 +870,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return packet -> {
             fillMetadataIndex(packet, 0);
             fillMetadataIndex(packet, 1);
+            fillMetadataIndex(packet, 2);
+            fillMetadataIndex(packet, 3);
+            fillMetadataIndex(packet, 4);
             fillMetadataIndex(packet, 5);
             fillMetadataIndex(packet, 6);
         };
@@ -871,6 +913,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             case 2:
                 fillCustomNameMetaData(packet);
                 break;
+            case 3:
+                fillCustomNameVisibleMetaData(packet);
+                break;
+            case 4:
+                fillSilentMetaData(packet);
+                break;
             case 5:
                 fillNoGravityMetaData(packet);
                 break;
@@ -910,9 +958,26 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     private void fillCustomNameMetaData(PacketWriter packet) {
+        boolean hasCustomName = customName != null && !customName.isEmpty();
+
         packet.writeByte((byte) 2);
-        packet.writeByte(METADATA_CHAT);
-        packet.writeSizedString(customName);
+        packet.writeByte(METADATA_OPTCHAT);
+        packet.writeBoolean(hasCustomName);
+        if (hasCustomName) {
+            packet.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(customName)));
+        }
+    }
+
+    private void fillCustomNameVisibleMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 3);
+        packet.writeByte(METADATA_BOOLEAN);
+        packet.writeBoolean(customNameVisible);
+    }
+
+    private void fillSilentMetaData(PacketWriter packet) {
+        packet.writeByte((byte) 4);
+        packet.writeByte(METADATA_BOOLEAN);
+        packet.writeBoolean(silent);
     }
 
     private void fillNoGravityMetaData(PacketWriter packet) {
