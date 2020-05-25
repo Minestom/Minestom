@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.network.packet.server.ServerPacket;
 
@@ -38,7 +39,8 @@ public class FakePlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-
+        if (fakePlayer.isRegistered())
+            MinecraftServer.getConnectionManager().removePlayer(this);
     }
 
     public FakePlayer getFakePlayer() {

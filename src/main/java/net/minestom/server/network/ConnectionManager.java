@@ -66,15 +66,42 @@ public class ConnectionManager {
         this.playerInitializations.add(playerInitialization);
     }
 
-    // Is only used at LoginStartPacket#process
-    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
-        Player player = new Player(uuid, username, connection);
+    /**
+     * Add a new player in the players list
+     * Is currently used at
+     * {@link net.minestom.server.network.packet.client.login.LoginStartPacket#process(PlayerConnection, ConnectionManager)}
+     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#FakePlayer(UUID, String, boolean)}
+     *
+     * @param player the player to add
+     */
+    public void createPlayer(Player player) {
         this.players.add(player);
-        this.connectionPlayerMap.put(connection, player);
+        this.connectionPlayerMap.put(player.getPlayerConnection(), player);
     }
 
+    /**
+     * Create a player object and register it
+     *
+     * @param uuid       the new player uuid
+     * @param username   the new player username
+     * @param connection the new player connection
+     */
+    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
+        Player player = new Player(uuid, username, connection);
+        createPlayer(player);
+    }
+
+    /**
+     * Remove a player from the players list
+     * used at player disconnection
+     *
+     * @param connection the player connection
+     */
     public void removePlayer(PlayerConnection connection) {
         Player player = this.connectionPlayerMap.get(connection);
+        if (player == null)
+            return;
+
         this.players.remove(player);
         this.connectionPlayerMap.remove(player);
     }
