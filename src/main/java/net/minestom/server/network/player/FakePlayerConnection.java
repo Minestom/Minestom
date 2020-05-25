@@ -23,7 +23,7 @@ public class FakePlayerConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(ServerPacket serverPacket) {
-
+        this.fakePlayer.getController().consumePacket(serverPacket);
     }
 
     @Override

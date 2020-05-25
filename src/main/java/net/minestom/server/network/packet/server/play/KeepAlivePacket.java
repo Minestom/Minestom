@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class KeepAlivePacket implements ServerPacket {
 
-    private long id;
+    public long id;
 
     public KeepAlivePacket(long id) {
         this.id = id;

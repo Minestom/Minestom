@@ -126,6 +126,9 @@ public class Player extends LivingEntity {
 
         setRespawnPoint(new Position(0, 0, 0));
 
+        // FakePlayer init its connection there
+        playerConnectionInit();
+
         init();
 
         // Some client update
@@ -178,6 +181,7 @@ public class Player extends LivingEntity {
         spawnPositionPacket.z = 0;
         playerConnection.sendPacket(spawnPositionPacket);
 
+        // Add player to list
         String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
         PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), username, getGameMode(), 10);
@@ -186,18 +190,22 @@ public class Player extends LivingEntity {
         playerInfoPacket.playerInfos.add(addPlayer);
         playerConnection.sendPacket(playerInfoPacket);
 
+        // Init player
         for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
             playerInitialization.accept(this);
         }
 
+        // Commands start
         {
             CommandManager commandManager = MinecraftServer.getCommandManager();
             DeclareCommandsPacket declareCommandsPacket = commandManager.createDeclareCommandsPacket(this);
 
             playerConnection.sendPacket(declareCommandsPacket);
         }
+        // Commands end
 
 
+        // Recipes start
         {
             RecipeManager recipeManager = MinecraftServer.getRecipeManager();
             DeclareRecipesPacket declareRecipesPacket = recipeManager.getDeclareRecipesPacket();
@@ -221,6 +229,10 @@ public class Player extends LivingEntity {
                 playerConnection.sendPacket(unlockRecipesPacket);
             }
         }
+        // Recipes end
+    }
+
+    protected void playerConnectionInit() {
     }
 
     @Override

@@ -8,6 +8,7 @@ import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerController;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -154,6 +155,8 @@ public class PlayerInit {
                 //chickenCreature.setInstance(player.getInstance());
 
                 FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
+                FakePlayerController controller = fakePlayer.getController();
+                controller.sendChatMessage("I am a bot!");
 
             });
 

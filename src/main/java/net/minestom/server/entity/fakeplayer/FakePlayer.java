@@ -11,9 +11,12 @@ public class FakePlayer extends Player {
 
     public FakePlayer(UUID uuid, String username) {
         super(uuid, username, new FakePlayerConnection());
+    }
+
+    @Override
+    protected void playerConnectionInit() {
         FakePlayerConnection playerConnection = (FakePlayerConnection) getPlayerConnection();
         playerConnection.setFakePlayer(this);
-
         this.fakePlayerController = new FakePlayerController(this);
     }
 

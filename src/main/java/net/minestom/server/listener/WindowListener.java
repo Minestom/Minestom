@@ -14,12 +14,17 @@ import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        InventoryClickHandler clickHandler = player.getOpenInventory();
-        if (clickHandler == null) {
-            clickHandler = player.getInventory();
+        Inventory inventory;
+        byte windowId = packet.windowId;
+        if (windowId == 0) {
+            inventory = null;
+        } else {
+            inventory = player.getOpenInventory();
         }
 
-        byte windowId = packet.windowId;
+        InventoryClickHandler clickHandler = inventory == null ?
+                player.getInventory() : player.getOpenInventory();
+
         short slot = packet.slot;
         byte button = packet.button;
         short actionNumber = packet.actionNumber;
@@ -74,7 +79,7 @@ public class WindowListener {
                 break;
         }
 
-        refreshCursorItem(player, player.getOpenInventory());
+        refreshCursorItem(player, inventory);
 
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
