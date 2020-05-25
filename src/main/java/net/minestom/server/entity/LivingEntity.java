@@ -171,6 +171,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         // Reset velocity
         velocity.zero();
 
+        // Remove passengers if any
+        if (hasPassenger()) {
+            getPassengers().forEach(entity -> removePassenger(entity));
+        }
+
         EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
         callEvent(EntityDeathEvent.class, entityDeathEvent);
     }
