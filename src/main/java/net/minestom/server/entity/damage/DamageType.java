@@ -36,7 +36,7 @@ public class DamageType {
     }
 
     public Component buildChatMessage(Player killed) {
-        return TranslatableComponent.of("death."+identifier, TextComponent.of(killed.getUsername()));
+        return TranslatableComponent.of("death." + identifier, TextComponent.of(killed.getUsername()));
     }
 
     public static DamageType fromPlayer(Player player) {
@@ -49,12 +49,13 @@ public class DamageType {
 
     /**
      * Sound event to play when the given entity is hit by this damage. Possible to return null if no sound should be played
+     *
      * @param entity the entity hit by this damage
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
     public Sound getSound(LivingEntity entity) {
-        if(entity instanceof Player) {
-            return getPlayerSound((Player)entity);
+        if (entity instanceof Player) {
+            return getPlayerSound((Player) entity);
         }
         return getGenericSound(entity);
     }

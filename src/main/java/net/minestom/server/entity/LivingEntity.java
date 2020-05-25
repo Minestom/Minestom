@@ -116,6 +116,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 7);
+            fillMetadataIndex(packet, 8);
 
             // TODO all remaining metadata
         };
@@ -136,6 +137,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     activeHandValue += 4;
             }
             packet.writeByte(activeHandValue);
+        } else if (index == 8) {
+            packet.writeByte((byte) 8);
+            packet.writeByte(METADATA_FLOAT);
+            packet.writeFloat(health);
         }
     }
 
@@ -240,6 +245,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         if (this.health <= 0 && !isDead) {
             kill();
         }
+        sendMetadataIndex(8); // Health metadata index
     }
 
     public float getMaxHealth() {

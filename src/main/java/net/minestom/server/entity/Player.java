@@ -86,6 +86,9 @@ public class Player extends LivingEntity {
     private long eatingTime;
     private boolean isEating;
 
+    // Game state (https://wiki.vg/Protocol#Change_Game_State)
+    private boolean enableRespawnScreen;
+
     // CustomBlock break delay
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
@@ -161,8 +164,8 @@ public class Player extends LivingEntity {
         final float y = 0;
         final float z = 0;
 
-        refreshDimension(dimension);
-        refreshGameMode(gameMode);
+        this.dimension = dimension;
+        this.gameMode = gameMode;
         refreshLevelType(levelType);
         refreshPosition(x, y, z);
 
@@ -422,6 +425,26 @@ public class Player extends LivingEntity {
             });
         }
         super.kill();
+    }
+
+    public void respawn() {
+        if (!isDead())
+            return;
+
+        setFireForDuration(0);
+        setOnFire(false);
+        refreshHealth();
+        RespawnPacket respawnPacket = new RespawnPacket();
+        respawnPacket.dimension = getDimension();
+        respawnPacket.gameMode = getGameMode();
+        respawnPacket.levelType = getLevelType();
+        getPlayerConnection().sendPacket(respawnPacket);
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getRespawnPoint());
+        callEvent(PlayerRespawnEvent.class, respawnEvent);
+        refreshIsDead(false);
+
+        // Runnable called when teleportation is successful (after loading and sending necessary chunk)
+        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
     }
 
     @Override
@@ -749,6 +772,33 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Used to change the player gamemode
+     *
+     * @param gameMode the new player gamemode
+     */
+    public void setGameMode(GameMode gameMode) {
+        Check.notNull(gameMode, "GameMode cannot be null");
+        this.gameMode = gameMode;
+        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
+    }
+
+    public boolean isEnableRespawnScreen() {
+        return enableRespawnScreen;
+    }
+
+    public void setEnableRespawnScreen(boolean enableRespawnScreen) {
+        this.enableRespawnScreen = enableRespawnScreen;
+        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.ENABLE_RESPAWN_SCREEN, enableRespawnScreen ? 0 : 1);
+    }
+
+    private void sendChangeGameStatePacket(ChangeGameStatePacket.Reason reason, float value) {
+        ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
+        changeGameStatePacket.reason = reason;
+        changeGameStatePacket.value = value;
+        playerConnection.sendPacket(changeGameStatePacket);
+    }
+
+    /**
      * @param item the item to drop
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
@@ -775,26 +825,6 @@ public class Player extends LivingEntity {
      */
     public void setRespawnPoint(Position respawnPoint) {
         this.respawnPoint = respawnPoint;
-    }
-
-    public void respawn() {
-        if (!isDead())
-            return;
-
-        setFireForDuration(0);
-        setOnFire(false);
-        refreshHealth();
-        RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimension = getDimension();
-        respawnPacket.gameMode = getGameMode();
-        respawnPacket.levelType = getLevelType();
-        getPlayerConnection().sendPacket(respawnPacket);
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getRespawnPoint());
-        callEvent(PlayerRespawnEvent.class, respawnEvent);
-        refreshIsDead(false);
-
-        // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
     }
 
     public void refreshAfterTeleport() {
@@ -975,7 +1005,7 @@ public class Player extends LivingEntity {
         Check.notNull(dimension, "Dimension cannot be null!");
         Check.argCondition(dimension.equals(getDimension()), "The dimension need to be different than the current one!");
 
-        refreshDimension(dimension);
+        this.dimension = dimension;
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimension = dimension;
         respawnPacket.gameMode = gameMode;
@@ -996,20 +1026,6 @@ public class Player extends LivingEntity {
 
     public LevelType getLevelType() {
         return levelType;
-    }
-
-    /**
-     * Used to change the player gamemode
-     *
-     * @param gameMode the new player gamemode
-     */
-    public void setGameMode(GameMode gameMode) {
-        Check.notNull(gameMode, "GameMode cannot be null");
-        ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
-        changeGameStatePacket.reason = ChangeGameStatePacket.Reason.CHANGE_GAMEMODE;
-        changeGameStatePacket.value = gameMode.getId();
-        playerConnection.sendPacket(changeGameStatePacket);
-        refreshGameMode(gameMode);
     }
 
     /**
@@ -1338,14 +1354,6 @@ public class Player extends LivingEntity {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
         sendPacketToViewersAndSelf(playerInfoPacket);
-    }
-
-    public void refreshDimension(Dimension dimension) {
-        this.dimension = dimension;
-    }
-
-    public void refreshGameMode(GameMode gameMode) {
-        this.gameMode = gameMode;
     }
 
     public void refreshLevelType(LevelType levelType) {

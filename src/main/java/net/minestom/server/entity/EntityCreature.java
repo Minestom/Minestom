@@ -43,6 +43,8 @@ public abstract class EntityCreature extends LivingEntity {
         this.chestplate = ItemStack.getAirItem();
         this.leggings = ItemStack.getAirItem();
         this.boots = ItemStack.getAirItem();
+
+        heal();
     }
 
     @Override
