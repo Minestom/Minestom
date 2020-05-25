@@ -48,7 +48,7 @@ public class RecipeManager {
                     packetRecipe.group = recipe.getGroup();
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
                     List<DeclareRecipesPacket.Ingredient> ingredients = shapelessRecipe.getIngredients();
-                    packetRecipe.ingredients = ingredients.toArray(new DeclareRecipesPacket.Ingredient[ingredients.size()]);
+                    packetRecipe.ingredients = ingredients.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapelessRecipe.getResult();
                     break;
                 case SHAPED:
@@ -56,7 +56,7 @@ public class RecipeManager {
                     packetRecipe.group = recipe.getGroup();
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
                     List<DeclareRecipesPacket.Ingredient> ingredients2 = shapedRecipe.getIngredients();
-                    packetRecipe.ingredients = ingredients2.toArray(new DeclareRecipesPacket.Ingredient[ingredients2.size()]);
+                    packetRecipe.ingredients = ingredients2.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapedRecipe.getResult();
                     break;
                 case SMELTING:
@@ -75,7 +75,7 @@ public class RecipeManager {
             recipesCache.add(packetRecipe);
         }
 
-        declareRecipesPacket.recipes = recipesCache.toArray(new DeclareRecipesPacket.Recipe[recipesCache.size()]);
+        declareRecipesPacket.recipes = recipesCache.toArray(new DeclareRecipesPacket.Recipe[0]);
     }
 
 }

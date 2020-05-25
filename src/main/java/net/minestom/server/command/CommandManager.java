@@ -135,7 +135,7 @@ public class CommandManager {
 
         nodes.add(rootNode);
 
-        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[nodes.size()]);
+        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
         declareCommandsPacket.rootIndex = nodes.size() - 1;
 
         return declareCommandsPacket;
@@ -185,7 +185,7 @@ public class CommandManager {
 
         nodes.add(rootNode);
 
-        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[nodes.size()]);
+        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
         declareCommandsPacket.rootIndex = nodes.size() - 1;
     }
 

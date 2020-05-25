@@ -33,7 +33,7 @@ public class StatusListener {
                     statisticList.add(statistic);
                 }
 
-                statisticsPacket.statistics = statisticList.toArray(new StatisticsPacket.Statistic[statisticList.size()]);
+                statisticsPacket.statistics = statisticList.toArray(new StatisticsPacket.Statistic[0]);
 
                 player.getPlayerConnection().sendPacket(statisticsPacket);
                 break;

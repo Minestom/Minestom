@@ -224,7 +224,7 @@ public class Player extends LivingEntity {
                 recipesIdentifier.add(recipe.getRecipeId());
             }
             if (!recipesIdentifier.isEmpty()) {
-                String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);
+                String[] identifiers = recipesIdentifier.toArray(new String[0]);
                 UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
                 unlockRecipesPacket.mode = 0;
                 unlockRecipesPacket.recipesId = identifiers;

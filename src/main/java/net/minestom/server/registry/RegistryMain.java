@@ -58,7 +58,7 @@ public class RegistryMain {
 
             for (RegistryBlock.BlockState blockState : registryBlock.states) {
                 short id = blockState.id;
-                String[] properties = blockState.propertiesValues.toArray(new String[blockState.propertiesValues.size()]);
+                String[] properties = blockState.propertiesValues.toArray(new String[0]);
                 Block.BlockAlternative blockAlternative = new Block.BlockAlternative(id, properties);
 
                 block.addBlockAlternative(blockAlternative);
