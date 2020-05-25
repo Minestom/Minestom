@@ -163,7 +163,7 @@ public class Chunk implements Viewable {
     public short getBlockId(int x, int y, int z) {
         unloadCheck();
         int index = getBlockIndex(x, y, z);
-        if (index < 0 || index >= blocksId.length) {
+        if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return 0; // TODO: custom invalid block
         }
         short id = blocksId[index];

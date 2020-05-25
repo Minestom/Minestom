@@ -116,6 +116,9 @@ public class Player extends LivingEntity {
     // Vehicle
     private PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
+    // Tick related
+    private final PlayerTickEvent playerTickEvent = new PlayerTickEvent();
+
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
         this.uuid = uuid;
@@ -317,7 +320,7 @@ public class Player extends LivingEntity {
         }
 
         // Tick event
-        callEvent(PlayerTickEvent.class, new PlayerTickEvent());
+        callEvent(PlayerTickEvent.class, playerTickEvent);
 
 
         // Multiplayer sync

@@ -11,11 +11,11 @@ import java.net.SocketAddress;
  * Represent a networking connection with Netty
  * It is the implementation used for all server connection client
  */
-public class BasicPlayerConnection extends PlayerConnection {
+public class NettyPlayerConnection extends PlayerConnection {
 
     private ChannelHandlerContext channel;
 
-    public BasicPlayerConnection(ChannelHandlerContext channel) {
+    public NettyPlayerConnection(ChannelHandlerContext channel) {
         super();
         this.channel = channel;
     }
