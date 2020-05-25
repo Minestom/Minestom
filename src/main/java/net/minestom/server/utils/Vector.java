@@ -213,6 +213,15 @@ public class Vector implements Cloneable {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return "Vector{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
+
     /**
      * Get a new vector.
      *

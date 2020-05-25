@@ -289,7 +289,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             this.lastUpdate = time;
 
             // Velocity
-            if (!PlayerUtils.isNettyClient(this)) {
+            boolean applyVelocity = (PlayerUtils.isNettyClient(this) && hasVelocity())
+                    || !PlayerUtils.isNettyClient(this);
+            if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
                 float newX = position.getX() + velocity.getX() / tps;
                 float newY = position.getY() + velocity.getY() / tps;
@@ -301,9 +303,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 if (chunkUnloaded)
                     return;
 
-                if (!PlayerUtils.isNettyClient(this) && !noGravity) { // players handle gravity by themselves
+                //if (!PlayerUtils.isNettyClient(this) && !noGravity) { // players handle gravity by themselves
+                if (!noGravity) {
                     velocity.setY(velocity.getY() - gravityDragPerTick * tps);
                 }
+                // }
 
                 Vector newVelocityOut = new Vector();
                 Vector deltaPos = new Vector(
@@ -320,6 +324,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 float drag;
                 if (onGround) {
                     drag = 0.5f; // ground drag
+
+                    // Stop player velocity
+                    if (PlayerUtils.isNettyClient(this)) {
+                        velocity.zero();
+                    }
                 } else {
                     drag = 0.98f; // air drag
                 }
@@ -329,7 +338,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 sendSynchronization();
 
                 if (shouldSendVelocityUpdate(time)) {
-                    sendPacketToViewers(getVelocityPacket());
+                    sendPacketToViewersAndSelf(getVelocityPacket());
                     lastVelocityUpdateTime = time;
                 }
             }
@@ -470,6 +479,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     public Vector getVelocity() {
         return velocity;
+    }
+
+    public boolean hasVelocity() {
+        return velocity.getX() != 0 ||
+                velocity.getY() != 0 ||
+                velocity.getZ() != 0;
     }
 
     public void setVelocity(Vector velocity) {
