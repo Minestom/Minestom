@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 
@@ -288,7 +289,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             this.lastUpdate = time;
 
             // Velocity
-            if (!(this instanceof Player)) {
+            if (!PlayerUtils.isNettyClient(this)) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
                 float newX = position.getX() + velocity.getX() / tps;
                 float newY = position.getY() + velocity.getY() / tps;
@@ -300,7 +301,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 if (chunkUnloaded)
                     return;
 
-                if (!(this instanceof Player) && !noGravity) { // players handle gravity by themselves
+                if (!PlayerUtils.isNettyClient(this) && !noGravity) { // players handle gravity by themselves
                     velocity.setY(velocity.getY() - gravityDragPerTick * tps);
                 }
 

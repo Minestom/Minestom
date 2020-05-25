@@ -22,6 +22,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.SerializerUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
@@ -377,6 +378,9 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunk(Player player, Chunk chunk) {
+        if (!PlayerUtils.isNettyClient(player))
+            return;
+
         ByteBuf data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), packet -> {

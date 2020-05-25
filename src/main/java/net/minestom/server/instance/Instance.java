@@ -22,6 +22,7 @@ import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.Dimension;
 
@@ -115,6 +116,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
         ByteBuf chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
+            if (!PlayerUtils.isNettyClient(player))
+                return;
+
             player.getPlayerConnection().sendPacket(chunkData);
         });
     }
@@ -124,6 +128,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
+        if (!PlayerUtils.isNettyClient(player))
+            return;
+
         PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(chunk, section));
     }
 

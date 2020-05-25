@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.property.Attribute;
@@ -24,8 +25,11 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.BelowNameScoreboard;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
@@ -47,7 +51,7 @@ public class Player extends LivingEntity {
     private long lastKeepAlive;
 
     private String username;
-    private PlayerConnection playerConnection;
+    protected PlayerConnection playerConnection;
     private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
 
     private int latency;
@@ -122,6 +126,8 @@ public class Player extends LivingEntity {
 
         setRespawnPoint(new Position(0, 0, 0));
 
+        init();
+
         // Some client update
         getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
@@ -131,6 +137,90 @@ public class Player extends LivingEntity {
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
+
+        MinecraftServer.getEntityManager().addWaitingPlayer(this);
+    }
+
+    protected void init() {
+        GameMode gameMode = GameMode.SURVIVAL;
+        Dimension dimension = Dimension.OVERWORLD;
+        LevelType levelType = LevelType.DEFAULT;
+        final float x = 0;
+        final float y = 0;
+        final float z = 0;
+
+        refreshDimension(dimension);
+        refreshGameMode(gameMode);
+        refreshLevelType(levelType);
+        refreshPosition(x, y, z);
+
+        // TODO complete login sequence with optionals packets
+        JoinGamePacket joinGamePacket = new JoinGamePacket();
+        joinGamePacket.entityId = getEntityId();
+        joinGamePacket.gameMode = gameMode;
+        joinGamePacket.dimension = dimension;
+        joinGamePacket.maxPlayers = 0; // Unused
+        joinGamePacket.levelType = levelType;
+        joinGamePacket.viewDistance = MinecraftServer.CHUNK_VIEW_DISTANCE;
+        joinGamePacket.reducedDebugInfo = false;
+        playerConnection.sendPacket(joinGamePacket);
+
+        // TODO minecraft:brand plugin message
+
+        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
+        serverDifficultyPacket.difficulty = MinecraftServer.getDifficulty();
+        serverDifficultyPacket.locked = true;
+        playerConnection.sendPacket(serverDifficultyPacket);
+
+        SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
+        spawnPositionPacket.x = 0;
+        spawnPositionPacket.y = 0;
+        spawnPositionPacket.z = 0;
+        playerConnection.sendPacket(spawnPositionPacket);
+
+        String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), username, getGameMode(), 10);
+        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property); //new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(username));
+        addPlayer.properties.add(prop);
+        playerInfoPacket.playerInfos.add(addPlayer);
+        playerConnection.sendPacket(playerInfoPacket);
+
+        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
+            playerInitialization.accept(this);
+        }
+
+        {
+            CommandManager commandManager = MinecraftServer.getCommandManager();
+            DeclareCommandsPacket declareCommandsPacket = commandManager.createDeclareCommandsPacket(this);
+
+            playerConnection.sendPacket(declareCommandsPacket);
+        }
+
+
+        {
+            RecipeManager recipeManager = MinecraftServer.getRecipeManager();
+            DeclareRecipesPacket declareRecipesPacket = recipeManager.getDeclareRecipesPacket();
+            if (declareRecipesPacket.recipes != null) {
+                playerConnection.sendPacket(declareRecipesPacket);
+            }
+
+            List<String> recipesIdentifier = new ArrayList<>();
+            for (Recipe recipe : recipeManager.getRecipes()) {
+                if (!recipe.shouldShow(this))
+                    continue;
+
+                recipesIdentifier.add(recipe.getRecipeId());
+            }
+            if (!recipesIdentifier.isEmpty()) {
+                String[] identifiers = recipesIdentifier.toArray(new String[recipesIdentifier.size()]);
+                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
+                unlockRecipesPacket.mode = 0;
+                unlockRecipesPacket.recipesId = identifiers;
+                unlockRecipesPacket.initRecipesId = identifiers;
+                playerConnection.sendPacket(unlockRecipesPacket);
+            }
+        }
     }
 
     @Override
@@ -144,7 +234,6 @@ public class Player extends LivingEntity {
 
     @Override
     public void update() {
-
         // Flush all pending packets
         playerConnection.flush();
 

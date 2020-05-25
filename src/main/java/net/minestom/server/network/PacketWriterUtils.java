@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.Collection;
@@ -31,15 +32,24 @@ public class PacketWriterUtils {
 
             ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             for (Player player : players) {
-                player.getPlayerConnection().writePacket(buffer);
+                PlayerConnection playerConnection = player.getPlayerConnection();
+                if (PlayerUtils.isNettyClient(player)) {
+                    playerConnection.writePacket(buffer);
+                } else {
+                    playerConnection.sendPacket(serverPacket);
+                }
             }
         });
     }
 
     public static void writeAndSend(PlayerConnection playerConnection, ServerPacket serverPacket) {
         batchesPool.execute(() -> {
-            ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-            playerConnection.sendPacket(buffer);
+            if (PlayerUtils.isNettyClient(playerConnection)) {
+                ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+                playerConnection.sendPacket(buffer);
+            } else {
+                playerConnection.sendPacket(serverPacket);
+            }
         });
     }
 

@@ -11,11 +11,11 @@ import java.net.SocketAddress;
  * Represent a networking connection with Netty
  * It is the implementation used for all server connection client
  */
-public class IPlayerConnection extends PlayerConnection {
+public class BasicPlayerConnection extends PlayerConnection {
 
     private ChannelHandlerContext channel;
 
-    public IPlayerConnection(ChannelHandlerContext channel) {
+    public BasicPlayerConnection(ChannelHandlerContext channel) {
         super();
         this.channel = channel;
     }
@@ -23,13 +23,13 @@ public class IPlayerConnection extends PlayerConnection {
     @Override
     public void sendPacket(ByteBuf buffer) {
         buffer.retain();
-        channel.writeAndFlush(buffer);
+        getChannel().writeAndFlush(buffer);
     }
 
     @Override
     public void writePacket(ByteBuf buffer) {
         buffer.retain();
-        channel.write(buffer);
+        getChannel().write(buffer);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class IPlayerConnection extends PlayerConnection {
 
     @Override
     public void flush() {
-        channel.flush();
+        getChannel().flush();
     }
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return channel.channel().remoteAddress();
+        return getChannel().channel().remoteAddress();
     }
 
     @Override

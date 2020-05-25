@@ -1,6 +1,5 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
@@ -8,6 +7,7 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -34,9 +34,12 @@ import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class PlayerInit {
+
+    private static Random random = new Random();
 
     private static volatile InstanceContainer instanceContainer;
     private static volatile InstanceContainer netherTest;
@@ -147,8 +150,10 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
+                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                //chickenCreature.setInstance(player.getInstance());
+
+                FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
 
             });
 
@@ -202,7 +207,7 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
-                player.teleport(new Position(0, 70, 0));
+                player.teleport(new Position(random.nextInt(5), 70, random.nextInt(5)));
 
                 player.setGlowing(true);
 
