@@ -29,6 +29,12 @@ public class FakePlayer extends Player {
         }
     }
 
+    /**
+     * Create a FakePlayer not registered in {@link ConnectionManager}
+     *
+     * @param uuid     the player uuid
+     * @param username the player username
+     */
     public FakePlayer(UUID uuid, String username) {
         this(uuid, username, false);
     }

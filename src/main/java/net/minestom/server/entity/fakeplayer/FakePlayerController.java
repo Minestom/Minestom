@@ -129,6 +129,14 @@ public class FakePlayerController {
         addToQueue(playerDiggingPacket);
     }
 
+    public void finishDigging(BlockPosition blockPosition) {
+        ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
+        playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.FINISHED_DIGGING;
+        playerDiggingPacket.blockPosition = blockPosition;
+        playerDiggingPacket.blockFace = ClientPlayerDiggingPacket.BlockFace.BOTTOM; // TODO not hardcode
+        addToQueue(playerDiggingPacket);
+    }
+
     /**
      * Make the player receives a packet
      * WARNING: pretty much unsafe, used internally to redirect packets here,
