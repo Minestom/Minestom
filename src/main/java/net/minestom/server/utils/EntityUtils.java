@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 public class EntityUtils {
 

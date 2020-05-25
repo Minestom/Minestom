@@ -20,8 +20,8 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
 
         // 0x10 packet not used server-side
         register(0x11, ClientPlayerPositionPacket::new);
-        register(0x12, ClientPlayerPositionAndLookPacket::new);
-        register(0x13, ClientPlayerLookPacket::new);
+        register(0x12, ClientPlayerPositionAndRotationPacket::new);
+        register(0x13, ClientPlayerRotationPacket::new);
         register(0x14, ClientPlayerPacket::new);
         register(0x15, ClientVehicleMovePacket::new);
         register(0x16, ClientSteerBoatPacket::new);

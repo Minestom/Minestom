@@ -26,15 +26,16 @@ public class PlayerDiggingListener {
         PlayerInventory playerInventory = player.getInventory();
         ItemStack mainHand = playerInventory.getItemInMainHand();
         ItemStack offHand = playerInventory.getItemInOffHand();
+
+        Instance instance = player.getInstance();
+
         switch (status) {
             case STARTED_DIGGING:
                 if (player.getGameMode() == GameMode.CREATIVE) {
-                    Instance instance = player.getInstance();
                     if (instance != null) {
                         instance.breakBlock(player, blockPosition);
                     }
                 } else if (player.getGameMode() == GameMode.SURVIVAL) {
-                    Instance instance = player.getInstance();
                     if (instance != null) {
                         CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
@@ -58,6 +59,9 @@ public class PlayerDiggingListener {
                                         removeEffect(player);
                                     }
                                     instance.breakBlock(player, blockPosition);
+
+                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                                 } else {
                                     player.resetTargetBlock();
                                     removeEffect(player);
@@ -73,16 +77,23 @@ public class PlayerDiggingListener {
             case CANCELLED_DIGGING:
                 player.resetTargetBlock();
                 removeEffect(player);
+
+                final short blockId = instance.getBlockId(blockPosition);
+                sendAcknowledgePacket(player, blockPosition, blockId,
+                        ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
                 if (player.getCustomBlockTarget() != null) {
                     player.resetTargetBlock();
                     removeEffect(player);
                 } else {
-                    Instance instance = player.getInstance();
+                    final short id = instance.getBlockId(blockPosition);
                     if (instance != null) {
                         instance.breakBlock(player, blockPosition);
                     }
+
+                    sendAcknowledgePacket(player, blockPosition, id,
+                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                 }
                 break;
             case DROP_ITEM_STACK:

@@ -35,12 +35,9 @@ import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class PlayerInit {
-
-    private static Random random = new Random();
 
     private static volatile InstanceContainer instanceContainer;
     private static volatile InstanceContainer netherTest;
@@ -154,7 +151,7 @@ public class PlayerInit {
                 //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 //chickenCreature.setInstance(player.getInstance());
 
-                FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
+                FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test", true);
                 FakePlayerController controller = fakePlayer.getController();
                 controller.sendChatMessage("I am a bot!");
 
@@ -209,8 +206,8 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
-                player.teleport(new Position(random.nextInt(5), 70, random.nextInt(5)));
+                player.setGameMode(GameMode.SURVIVAL);
+                player.teleport(new Position(0, 70, 0));
 
                 player.setGlowing(true);
 

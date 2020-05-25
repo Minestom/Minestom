@@ -19,9 +19,9 @@ import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.SerializerUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -293,7 +293,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        return ChunkUtils.isChunkUnloaded(this, chunk) ? null : chunk;
     }
 
     @Override

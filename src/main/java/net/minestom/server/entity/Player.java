@@ -35,7 +35,11 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 import net.minestom.server.world.LevelType;
@@ -139,6 +143,8 @@ public class Player extends LivingEntity {
         refreshHealth();
         refreshAbilities();
 
+        sendUpdateHealthPacket();
+
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
@@ -235,6 +241,10 @@ public class Player extends LivingEntity {
         // Recipes end
     }
 
+    /**
+     * Used to initialize the player connection
+     * mostly used by {@link net.minestom.server.entity.fakeplayer.FakePlayer}
+     */
     protected void playerConnectionInit() {
     }
 

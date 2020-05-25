@@ -28,9 +28,9 @@ public class PacketListenerManager {
         addListener(ClientVehicleMovePacket.class, PlayerVehicleListener::vehicleMoveListener);
         addListener(ClientSteerBoatPacket.class, PlayerVehicleListener::boatSteerListener);
         addListener(ClientPlayerPacket.class, PlayerPositionListener::playerPacketListener);
-        addListener(ClientPlayerLookPacket.class, PlayerPositionListener::playerLookListener);
+        addListener(ClientPlayerRotationPacket.class, PlayerPositionListener::playerLookListener);
         addListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
-        addListener(ClientPlayerPositionAndLookPacket.class, PlayerPositionListener::playerPositionAndLookListener);
+        addListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
         addListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
         addListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         addListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);

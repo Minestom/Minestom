@@ -1,9 +1,20 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.chunk;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
 
 public class ChunkUtils {
+
+    /**
+     * @param instance the instance where {@code chunk} is
+     * @param chunk    the chunk to check
+     * @return true if the chunk is unloaded, false otherwise
+     */
+    public static boolean isChunkUnloaded(Instance instance, Chunk chunk) {
+        return chunk == null || !chunk.isLoaded();
+    }
 
     /**
      * @param instance the instance to check
@@ -16,7 +27,7 @@ public class ChunkUtils {
         int chunkZ = getChunkCoordinate((int) z);
 
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        return chunk == null || !chunk.isLoaded();
+        return isChunkUnloaded(instance, chunk);
     }
 
     /**

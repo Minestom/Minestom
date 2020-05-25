@@ -1,11 +1,14 @@
 package fr.themode.demo.commands;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.MathUtils;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerController;
+import net.minestom.server.timer.TaskRunnable;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -20,16 +23,25 @@ public class SimpleCommand implements CommandProcessor {
 
     @Override
     public boolean process(Player player, String command, String[] args) {
-        player.sendMessage("Everyone come at you!");
-        player.setFireForDuration(1000, TimeUnit.MILLISECOND);
 
-        Instance instance = player.getInstance();
+        for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            if (!(p instanceof FakePlayer))
+                continue;
+            FakePlayer fakePlayer = (FakePlayer) p;
+            FakePlayerController controller = fakePlayer.getController();
+            BlockPosition blockPosition = new BlockPosition(0, 39, 0);
+            controller.startDigging(blockPosition);
 
-        for (EntityCreature creature : instance.getCreatures()) {
-            creature.setPathTo(player.getPosition());
+            MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
+                @Override
+                public void run() {
+                    controller.stopDigging(blockPosition);
+                }
+            }, new UpdateOption(15, TimeUnit.TICK));
         }
 
-        player.sendMessage("Direction: " + MathUtils.getHorizontalDirection(player.getPosition().getYaw()));
+        //System.gc();
+        //player.sendMessage("Garbage collector called");
 
         return true;
     }

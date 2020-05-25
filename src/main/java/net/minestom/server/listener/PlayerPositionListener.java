@@ -2,12 +2,12 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.network.packet.client.play.ClientPlayerLookPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
-import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndLookPacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
-import net.minestom.server.utils.ChunkUtils;
+import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.function.Consumer;
 
@@ -17,7 +17,7 @@ public class PlayerPositionListener {
         player.refreshOnGround(packet.onGround);
     }
 
-    public static void playerLookListener(ClientPlayerLookPacket packet, Player player) {
+    public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
         Position playerPosition = player.getPosition();
         float x = playerPosition.getX();
         float y = playerPosition.getY();
@@ -45,7 +45,7 @@ public class PlayerPositionListener {
         });
     }
 
-    public static void playerPositionAndLookListener(ClientPlayerPositionAndLookPacket packet, Player player) {
+    public static void playerPositionAndLookListener(ClientPlayerPositionAndRotationPacket packet, Player player) {
         float x = (float) packet.x;
         float y = (float) packet.y;
         float z = (float) packet.z;

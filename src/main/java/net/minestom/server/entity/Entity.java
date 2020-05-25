@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.*;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;

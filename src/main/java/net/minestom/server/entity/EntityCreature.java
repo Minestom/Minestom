@@ -8,9 +8,9 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.ChunkUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
 

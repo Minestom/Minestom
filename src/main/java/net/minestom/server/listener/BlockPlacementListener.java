@@ -21,7 +21,7 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.ChunkUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.Set;
 
