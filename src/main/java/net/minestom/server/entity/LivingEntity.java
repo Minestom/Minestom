@@ -35,6 +35,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private boolean isHandActive;
     private boolean offHand;
     private boolean riptideSpinAttack;
+    // The number of arrows in entity
+    private int arrowCount;
 
     /**
      * Time at which this entity must be extinguished
@@ -117,6 +119,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 7);
             fillMetadataIndex(packet, 8);
+            fillMetadataIndex(packet, 11);
 
             // TODO all remaining metadata
         };
@@ -141,7 +144,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             packet.writeByte((byte) 8);
             packet.writeByte(METADATA_FLOAT);
             packet.writeFloat(health);
+        } else if (index == 11) {
+            packet.writeByte((byte) 11);
+            packet.writeByte(METADATA_VARINT);
+            packet.writeVarInt(arrowCount);
         }
+    }
+
+    public int getArrowCount() {
+        return arrowCount;
+    }
+
+    public void setArrowCount(int arrowCount) {
+        this.arrowCount = arrowCount;
+        sendMetadataIndex(11);
     }
 
     /**
@@ -151,6 +167,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
         setHealth(0);
+
+        // Reset velocity
+        velocity.zero();
+
         EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
         callEvent(EntityDeathEvent.class, entityDeathEvent);
     }
@@ -342,7 +362,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         sendPacketToViewers(getMetadataPacket());
     }
 
-    public void refreshIsDead(boolean isDead) {
+    protected void refreshIsDead(boolean isDead) {
         this.isDead = isDead;
     }
 

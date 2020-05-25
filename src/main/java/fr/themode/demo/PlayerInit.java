@@ -10,6 +10,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerController;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -152,6 +153,10 @@ public class PlayerInit {
                 //chickenCreature.setInstance(player.getInstance());
 
                 FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test", true);
+                fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
+                    fakePlayer.getController().respawn();
+                });
+                fakePlayer.setArrowCount(25);
                 FakePlayerController controller = fakePlayer.getController();
                 controller.sendChatMessage("I am a bot!");
 
@@ -207,7 +212,7 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 70, 0));
+                player.teleport(new Position(0, 45, 0));
 
                 player.setGlowing(true);
 
@@ -245,7 +250,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
-                event.setRespawnPosition(new Position(0f, 70f, 0f));
+                event.setRespawnPosition(new Position(0f, 45f, 0f));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

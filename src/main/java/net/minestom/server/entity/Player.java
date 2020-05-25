@@ -835,6 +835,7 @@ public class Player extends LivingEntity {
         spawnPlayerPacket.playerUuid = getUuid();
         spawnPlayerPacket.position = getPosition();
         sendPacketToViewers(spawnPlayerPacket);
+        sendPacketToViewersAndSelf(getMetadataPacket());
         playerConnection.sendPacket(getPropertiesPacket());
         sendUpdateHealthPacket();
         syncEquipments();
@@ -1356,7 +1357,7 @@ public class Player extends LivingEntity {
         sendPacketToViewersAndSelf(playerInfoPacket);
     }
 
-    public void refreshLevelType(LevelType levelType) {
+    protected void refreshLevelType(LevelType levelType) {
         this.levelType = levelType;
     }
 
@@ -1375,7 +1376,7 @@ public class Player extends LivingEntity {
         refreshEating(false);
     }
 
-    public void refreshOpenInventory(Inventory openInventory) {
+    protected void refreshOpenInventory(Inventory openInventory) {
         this.openInventory = openInventory;
     }
 
