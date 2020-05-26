@@ -39,6 +39,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     private Dimension dimension;
 
+    private WorldBorder worldBorder;
+
     private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
@@ -56,6 +58,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public Instance(UUID uniqueId, Dimension dimension) {
         this.uniqueId = uniqueId;
         this.dimension = dimension;
+
+        this.worldBorder = new WorldBorder(this);
     }
 
     public abstract void refreshBlockId(BlockPosition blockPosition, short blockId);
@@ -156,6 +160,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     public Dimension getDimension() {
         return dimension;
+    }
+
+    public WorldBorder getWorldBorder() {
+        return worldBorder;
     }
 
     public Set<Player> getPlayers() {
@@ -319,7 +327,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {
-                sendChunks((Player) entity);
+                Player player = (Player) entity;
+                sendChunks(player);
+                getWorldBorder().init(player);
             }
 
             // Send all visible entities
@@ -423,6 +433,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the current time
      */
     public void tick(long time) {
+        worldBorder.update();
     }
 
     /**

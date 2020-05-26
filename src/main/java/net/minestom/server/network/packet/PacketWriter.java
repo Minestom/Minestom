@@ -90,6 +90,10 @@ public class PacketWriter {
         Utils.writeVarInt(this, i);
     }
 
+    public void writeVarLong(long l) {
+        Utils.writeVarLong(this, l);
+    }
+
     public void writeSizedString(String string) {
         byte[] bytes;
         bytes = string.getBytes(StandardCharsets.UTF_8);

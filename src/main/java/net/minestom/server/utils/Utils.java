@@ -78,6 +78,17 @@ public class Utils {
         return result;
     }
 
+    public static void writeVarLong(PacketWriter writer, long value) {
+        do {
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0) {
+                temp |= 0b10000000;
+            }
+            writer.writeByte(temp);
+        } while (value != 0);
+    }
+
     public static void writeItemStack(PacketWriter packet, ItemStack itemStack) {
         if (itemStack == null || itemStack.isAir()) {
             packet.writeBoolean(false);

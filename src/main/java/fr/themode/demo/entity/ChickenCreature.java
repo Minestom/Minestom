@@ -5,18 +5,15 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 
 public class ChickenCreature extends EntityCreature {
 
     public ChickenCreature(Position defaultPosition) {
-        super(EntityType.SKELETON, defaultPosition);
+        super(EntityType.CHICKEN, defaultPosition);
 
         setBoundingBox(0.4f, 0.7f, 0.4f);
-        setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
     }
 
     @Override

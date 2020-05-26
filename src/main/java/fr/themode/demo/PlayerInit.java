@@ -1,5 +1,6 @@
 package fr.themode.demo;
 
+import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
@@ -7,7 +8,6 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.hologram.Hologram;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -16,6 +16,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -147,10 +148,10 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                //ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                //chickenCreature.setInstance(player.getInstance());
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                chickenCreature.setInstance(player.getInstance());
 
-                /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test", true);
+                /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
                 fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
                     fakePlayer.getController().respawn();
                 });
@@ -158,7 +159,7 @@ public class PlayerInit {
                 FakePlayerController controller = fakePlayer.getController();
                 controller.sendChatMessage("I am a bot!");*/
 
-                Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
+                //Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
 
             });
 
@@ -211,7 +212,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 45, 0));
 
                 player.setGlowing(true);
@@ -226,6 +227,11 @@ public class PlayerInit {
                 player.openInventory(inventory);
 
                 player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
+
+                Instance instance = player.getInstance();
+                WorldBorder worldBorder = instance.getWorldBorder();
+                worldBorder.setDiameter(30);
+
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());
                 //entityBoat.setInstance(player.getInstance());
