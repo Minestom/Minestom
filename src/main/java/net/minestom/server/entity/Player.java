@@ -23,6 +23,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
@@ -80,6 +81,7 @@ public class Player extends LivingEntity {
 
     private Position respawnPoint;
 
+    private float additionalHearts;
     private int food;
     private float foodSaturation;
     private long startEatingTime;
@@ -129,7 +131,7 @@ public class Player extends LivingEntity {
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
-        this.uuid = uuid;
+        this.uuid = uuid; // Override Entity#uuid defined in the constructor
         this.username = username;
         this.playerConnection = playerConnection;
 
@@ -570,6 +572,24 @@ public class Player extends LivingEntity {
         }
     }
 
+    @Override
+    public Consumer<PacketWriter> getMetadataConsumer() {
+        return packet -> {
+            super.getMetadataConsumer().accept(packet);
+            fillMetadataIndex(packet, 14);
+        };
+    }
+
+    @Override
+    protected void fillMetadataIndex(PacketWriter packet, int index) {
+        super.fillMetadataIndex(packet, index);
+        if (index == 14) {
+            packet.writeByte((byte) 14);
+            packet.writeByte(METADATA_FLOAT);
+            packet.writeFloat(additionalHearts);
+        }
+    }
+
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
         BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
         breakAnimationPacket.entityId = getEntityId() + 1;
@@ -723,6 +743,15 @@ public class Player extends LivingEntity {
     public void setHealth(float health) {
         super.setHealth(health);
         sendUpdateHealthPacket();
+    }
+
+    public float getAdditionalHearts() {
+        return additionalHearts;
+    }
+
+    public void setAdditionalHearts(float additionalHearts) {
+        this.additionalHearts = additionalHearts;
+        sendMetadataIndex(14);
     }
 
     public int getFood() {

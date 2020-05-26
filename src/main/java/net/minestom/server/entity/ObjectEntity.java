@@ -19,6 +19,16 @@ public abstract class ObjectEntity extends Entity {
     public abstract int getObjectData();
 
     @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void spawn() {
+
+    }
+
+    @Override
     public boolean addViewer(Player player) {
         PlayerConnection playerConnection = player.getPlayerConnection();
 

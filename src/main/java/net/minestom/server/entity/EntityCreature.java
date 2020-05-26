@@ -130,6 +130,11 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
+    public void spawn() {
+
+    }
+
+    @Override
     public void kill() {
         super.kill();
 

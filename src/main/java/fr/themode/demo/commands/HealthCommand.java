@@ -28,7 +28,6 @@ public class HealthCommand extends Command<Player> {
     }
 
     private boolean condition(Player player) {
-        // TODO: Your custom condition, called no matter the syntax used
         boolean hasPerm = true;
         if (!hasPerm) {
             player.sendMessage("You do not have permission !");

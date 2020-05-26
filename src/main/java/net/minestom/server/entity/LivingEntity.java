@@ -120,8 +120,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             fillMetadataIndex(packet, 7);
             fillMetadataIndex(packet, 8);
             fillMetadataIndex(packet, 11);
-
-            // TODO all remaining metadata
         };
     }
 

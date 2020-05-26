@@ -48,8 +48,6 @@ public class UpdateManager {
                 // Scheduler
                 schedulerManager.update();
 
-                // TODO miscellaneous update (scoreboard)
-
                 // Sleep until next tick
                 long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
                 sleepTime = Math.max(1, sleepTime);
