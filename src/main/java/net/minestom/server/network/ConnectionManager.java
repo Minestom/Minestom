@@ -16,6 +16,7 @@ public class ConnectionManager {
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     private List<PacketConsumer> packetConsumers = new CopyOnWriteArrayList<>();
+    private UuidProvider uuidProvider;
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     public Player getPlayer(PlayerConnection connection) {
@@ -56,6 +57,29 @@ public class ConnectionManager {
 
     public void addPacketConsumer(PacketConsumer packetConsumer) {
         this.packetConsumers.add(packetConsumer);
+    }
+
+    /**
+     * Shouldn't be override if not already defined
+     *
+     * @param uuidProvider the new player connection uuid provider
+     */
+    public void setUuidProvider(UuidProvider uuidProvider) {
+        this.uuidProvider = uuidProvider;
+    }
+
+    /**
+     * Compute the UUID of the specified connection
+     * Used in {@link net.minestom.server.network.packet.client.login.LoginStartPacket} in order
+     * to give the player the right UUID
+     *
+     * @param playerConnection
+     * @return
+     */
+    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection) {
+        if (uuidProvider == null)
+            return UUID.randomUUID();
+        return uuidProvider.provide(playerConnection);
     }
 
     public List<Consumer<Player>> getPlayerInitializations() {
