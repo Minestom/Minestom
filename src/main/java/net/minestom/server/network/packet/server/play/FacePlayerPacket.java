@@ -8,7 +8,6 @@ public class FacePlayerPacket implements ServerPacket {
 
     public FacePosition facePosition;
     public double targetX, targetY, targetZ;
-    public boolean isEntity;
     public int entityId;
     public FacePosition entityFacePosition;
 
@@ -20,6 +19,7 @@ public class FacePlayerPacket implements ServerPacket {
         writer.writeDouble(targetY);
         writer.writeDouble(targetZ);
 
+        final boolean isEntity = entityId > 0;
         writer.writeBoolean(isEntity);
         if (isEntity) {
             writer.writeVarInt(entityId);

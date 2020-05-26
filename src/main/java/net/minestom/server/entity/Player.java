@@ -737,7 +737,7 @@ public class Player extends LivingEntity {
      * @param food the new food value
      */
     public void setFood(int food) {
-        Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food needs to be between 0 and 20");
+        Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
         this.food = food;
         sendUpdateHealthPacket();
     }
@@ -840,6 +840,60 @@ public class Player extends LivingEntity {
         ItemDropEvent itemDropEvent = new ItemDropEvent(item);
         callEvent(ItemDropEvent.class, itemDropEvent);
         return !itemDropEvent.isCancelled();
+    }
+
+    /**
+     * Rotate the player to face {@code targetPosition}
+     *
+     * @param facePoint      the point from where the player should aim
+     * @param targetPosition the target position to face
+     */
+    public void facePosition(FacePoint facePoint, Position targetPosition) {
+        facePosition(facePoint, targetPosition, null, null);
+    }
+
+    /**
+     * Rotate the player to face {@code entity}
+     *
+     * @param facePoint   the point from where the player should aim
+     * @param entity      the entity to face
+     * @param targetPoint the point to aim at {@code entity} position
+     */
+    public void facePosition(FacePoint facePoint, Entity entity, FacePoint targetPoint) {
+        facePosition(facePoint, entity.getPosition(), entity, targetPoint);
+    }
+
+    private void facePosition(FacePoint facePoint, Position targetPosition, Entity entity, FacePoint targetPoint) {
+        FacePlayerPacket facePlayerPacket = new FacePlayerPacket();
+        facePlayerPacket.entityFacePosition = facePoint == FacePoint.EYE ?
+                FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
+        facePlayerPacket.targetX = targetPosition.getX();
+        facePlayerPacket.targetY = targetPosition.getY();
+        facePlayerPacket.targetZ = targetPosition.getZ();
+        if (entity != null) {
+            facePlayerPacket.entityId = entity.getEntityId();
+            facePlayerPacket.entityFacePosition = targetPoint == FacePoint.EYE ?
+                    FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
+        }
+        playerConnection.sendPacket(facePlayerPacket);
+    }
+
+    /**
+     * Set the camera at {@code entity} eyes
+     *
+     * @param entity the entity to spectate
+     */
+    public void spectate(Entity entity) {
+        CameraPacket cameraPacket = new CameraPacket();
+        cameraPacket.cameraId = entity.getEntityId();
+        playerConnection.sendPacket(cameraPacket);
+    }
+
+    /**
+     * Reset the camera at the player
+     */
+    public void stopSpectating() {
+        spectate(this);
     }
 
     /**
@@ -1564,6 +1618,11 @@ public class Player extends LivingEntity {
         ENABLED,
         COMMANDS_ONLY,
         HIDDEN
+    }
+
+    public enum FacePoint {
+        FEET,
+        EYE
     }
 
     public class PlayerSettings {
