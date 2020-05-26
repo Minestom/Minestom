@@ -28,7 +28,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private float health;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
-    private BoundingBox expandedBoundingBox;
+    protected BoundingBox expandedBoundingBox;
 
     private float[] attributeValues = new float[Attribute.values().length];
 

@@ -381,6 +381,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void sendChunk(Player player, Chunk chunk) {
+        if (!chunk.isLoaded())
+            return;
         if (!PlayerUtils.isNettyClient(player))
             return;
 

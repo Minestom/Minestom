@@ -189,8 +189,8 @@ public class Player extends LivingEntity {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
         PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
         addPlayer.displayName = jsonDisplayName;
-        //PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property);
-        //addPlayer.properties.add(prop);
+        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property);
+        addPlayer.properties.add(prop);
         playerInfoPacket.playerInfos.add(addPlayer);
         playerConnection.sendPacket(playerInfoPacket);
 
@@ -237,8 +237,8 @@ public class Player extends LivingEntity {
 
         // Some client update
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
-        refreshHealth();
-        refreshAbilities();
+        refreshHealth(); // Heal and send health packet
+        refreshAbilities(); // Send abilities packet
     }
 
     /**
@@ -268,11 +268,11 @@ public class Player extends LivingEntity {
             packet.process(this);
         }
 
-        super.update(); // Super update (item pickup)
+        super.update(); // Super update (item pickup/fire management)
 
         // Target block stage
         if (targetCustomBlock != null) {
-            int animationCount = 10;
+            final int animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
             byte stage = (byte) (since / (blockBreakTime / animationCount) - 1);
             if (stage != targetLastStage) {
@@ -288,16 +288,15 @@ public class Player extends LivingEntity {
         // Experience orb pickup
         Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
         Set<Entity> entities = instance.getChunkEntities(chunk);
-        BoundingBox livingBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
         for (Entity entity : entities) {
             if (entity instanceof ExperienceOrb) {
                 ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                 BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
-                if (livingBoundingBox.intersect(itemBoundingBox)) {
+                if (expandedBoundingBox.intersect(itemBoundingBox)) {
                     synchronized (experienceOrb) {
                         if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
                             continue;
-                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb.getExperienceCount());
+                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
                         callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
                             short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
                             entity.remove();
@@ -335,9 +334,8 @@ public class Player extends LivingEntity {
 
         // Multiplayer sync
         if (!getViewers().isEmpty()) {
-            Position position = getPosition();
-            boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
-            boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+            final boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
+            final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
             ServerPacket updatePacket = null;
             ServerPacket optionalUpdatePacket = null;
             if (positionChanged && viewChanged) {

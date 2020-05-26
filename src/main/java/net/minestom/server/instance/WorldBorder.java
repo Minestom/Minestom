@@ -9,7 +9,7 @@ public class WorldBorder {
 
     private double centerX, centerZ;
 
-    private double currentDiameter;
+    private volatile double currentDiameter;
 
     private double oldDiameter;
     private double newDiameter;
@@ -123,6 +123,7 @@ public class WorldBorder {
      * @param diameter the new diameter of the world border
      */
     public void setDiameter(double diameter) {
+        this.currentDiameter = diameter;
         this.oldDiameter = diameter;
         this.newDiameter = diameter;
         this.lerpStartTime = 0;
@@ -133,6 +134,9 @@ public class WorldBorder {
         sendPacket(worldBorderPacket);
     }
 
+    /**
+     * Used to update in real-time the current diameter time
+     */
     protected void update() {
         if (lerpStartTime == 0) {
             this.currentDiameter = oldDiameter;

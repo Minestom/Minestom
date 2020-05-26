@@ -363,6 +363,7 @@ public class Chunk implements Viewable {
 
     // Write the packet in the writer thread pools
     public void refreshDataPacket(Runnable runnable) {
+        unloadCheck();
         PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), buf -> {
             setFullDataPacket(buf);
             runnable.run();

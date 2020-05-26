@@ -101,17 +101,23 @@ public class PlayerInfoPacket implements ServerPacket {
 
             public String name;
             public String value;
-            public boolean signed = false;
             public String signature;
 
-            public Property(String name, String value) {
+            public Property(String name, String value, String signature) {
                 this.name = name;
                 this.value = value;
+                this.signature = signature;
+            }
+
+            public Property(String name, String value) {
+                this(name, value, null);
             }
 
             public void write(PacketWriter writer) {
                 writer.writeSizedString(name);
                 writer.writeSizedString(value);
+
+                final boolean signed = signature != null;
                 writer.writeBoolean(signed);
                 if (signed)
                     writer.writeSizedString(signature);
