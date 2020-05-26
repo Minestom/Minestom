@@ -59,6 +59,7 @@ public class Player extends LivingEntity {
     private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
 
     private int latency;
+    private String displayName;
 
     private Dimension dimension;
     private GameMode gameMode;
@@ -156,6 +157,10 @@ public class Player extends LivingEntity {
         MinecraftServer.getEntityManager().addWaitingPlayer(this);
     }
 
+    /**
+     * Used when the player is created
+     * Init the player and spawn him
+     */
     protected void init() {
         GameMode gameMode = GameMode.SURVIVAL;
         Dimension dimension = Dimension.OVERWORLD;
@@ -194,11 +199,13 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(spawnPositionPacket);
 
         // Add player to list
-        String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
+        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
+        String property = "";
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), username, getGameMode(), 10);
-        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property); //new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(username));
-        addPlayer.properties.add(prop);
+        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
+        addPlayer.displayName = jsonDisplayName;
+        //PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property);
+        //addPlayer.properties.add(prop);
         playerInfoPacket.playerInfos.add(addPlayer);
         playerConnection.sendPacket(playerInfoPacket);
 
@@ -780,6 +787,31 @@ public class Player extends LivingEntity {
         Check.notNull(gameMode, "GameMode cannot be null");
         this.gameMode = gameMode;
         sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
+
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
+        sendPacketToViewersAndSelf(infoPacket);
+    }
+
+    /**
+     * @return the displayed name of the player in the tab-list,
+     * null means that {@link #getUsername()} is display
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * @param displayName the new displayed name of the player in the tab-list,
+     *                    set to null to show the player username
+     */
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+
+        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), jsonDisplayName));
+        sendPacketToViewersAndSelf(infoPacket);
     }
 
     public boolean isEnableRespawnScreen() {

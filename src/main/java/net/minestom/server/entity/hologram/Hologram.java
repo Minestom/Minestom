@@ -34,6 +34,7 @@ public class Hologram {
     }
 
     public void setPosition(Position position) {
+        checkRemoved();
         position = position.add(0, OFFSET_Y, 0);
         this.position = position;
         this.entity.teleport(position);
@@ -54,8 +55,12 @@ public class Hologram {
         this.entity.remove();
     }
 
+    public boolean isRemoved() {
+        return removed;
+    }
+
     private void checkRemoved() {
-        Check.stateCondition(removed, "You cannot interact with a removed Hologram");
+        Check.stateCondition(isRemoved(), "You cannot interact with a removed Hologram");
     }
 
     private class HologramEntity extends EntityArmorStand {

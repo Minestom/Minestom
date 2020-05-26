@@ -24,9 +24,11 @@ public class PacketUtils {
         Utils.writeVarIntBuf(buffer, length);
         buffer.writeBytes(bytes);
 
+        //if(!(serverPacket instanceof ChunkDataPacket) && !(serverPacket instanceof PlayerListHeaderAndFooterPacket))
         //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName());
 
-        return Unpooled.copiedBuffer(buffer);
+        //Unpooled.copiedBuffer(buffer);
+        return buffer;
     }
 
 }

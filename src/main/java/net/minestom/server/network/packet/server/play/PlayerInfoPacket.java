@@ -71,7 +71,6 @@ public class PlayerInfoPacket implements ServerPacket {
         public ArrayList<Property> properties;
         public GameMode gameMode;
         public int ping;
-        public boolean hasDisplayName = false;
         public String displayName;
 
         public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
@@ -91,6 +90,8 @@ public class PlayerInfoPacket implements ServerPacket {
             }
             writer.writeVarInt(gameMode.getId());
             writer.writeVarInt(ping);
+
+            final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
                 writer.writeSizedString(displayName);
@@ -159,8 +160,10 @@ public class PlayerInfoPacket implements ServerPacket {
 
         @Override
         public void write(PacketWriter writer) {
-            writer.writeBoolean(true); // ????
-            writer.writeSizedString(displayName);
+            final boolean hasDisplayName = displayName != null;
+            writer.writeBoolean(hasDisplayName);
+            if (hasDisplayName)
+                writer.writeSizedString(displayName);
         }
     }
 

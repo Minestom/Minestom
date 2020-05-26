@@ -10,11 +10,6 @@ public class LoginSuccessPacket implements ServerPacket {
     public UUID uuid;
     public String username;
 
-    public LoginSuccessPacket(String username) {
-        this.uuid = UUID.randomUUID();
-        this.username = username;
-    }
-
     public LoginSuccessPacket(UUID uuid, String username) {
         this.uuid = uuid;
         this.username = username;
