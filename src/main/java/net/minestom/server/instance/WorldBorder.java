@@ -1,13 +1,15 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.WorldBorderPacket;
+import net.minestom.server.utils.Position;
 
 public class WorldBorder {
 
     private Instance instance;
 
-    private double centerX, centerZ;
+    private float centerX, centerZ;
 
     private volatile double currentDiameter;
 
@@ -33,7 +35,7 @@ public class WorldBorder {
 
     }
 
-    public void setCenter(double centerX, double centerZ) {
+    public void setCenter(float centerX, float centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
         refreshCenter();
@@ -43,7 +45,7 @@ public class WorldBorder {
         return centerX;
     }
 
-    public void setCenterX(double centerX) {
+    public void setCenterX(float centerX) {
         this.centerX = centerX;
         refreshCenter();
     }
@@ -52,7 +54,7 @@ public class WorldBorder {
         return centerZ;
     }
 
-    public void setCenterZ(double centerZ) {
+    public void setCenterZ(float centerZ) {
         this.centerZ = centerZ;
         refreshCenter();
     }
@@ -132,6 +134,31 @@ public class WorldBorder {
         worldBorderPacket.action = WorldBorderPacket.Action.SET_SIZE;
         worldBorderPacket.wbAction = new WorldBorderPacket.WBSetSize(diameter);
         sendPacket(worldBorderPacket);
+    }
+
+    /**
+     * Used to know if a position is located inside the world border or not
+     *
+     * @param position the position to check
+     * @return true if {@code position} is inside the world border, false otherwise
+     */
+    public boolean isInside(Position position) {
+        final double radius = getDiameter() / 2d;
+        final boolean checkX = position.getX() < getCenterX() + radius && position.getX() > getCenterX() - radius;
+        if (!checkX)
+            return false;
+        final boolean checkZ = position.getZ() < getCenterZ() + radius && position.getZ() > getCenterZ() - radius;
+        return checkZ;
+    }
+
+    /**
+     * Used to know if an entity is located inside the world border or not
+     *
+     * @param entity the entity to check
+     * @return true if {@code entity} is inside the world border, false otherwise
+     */
+    public boolean isInside(Entity entity) {
+        return isInside(entity.getPosition());
     }
 
     /**

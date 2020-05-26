@@ -230,7 +230,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             // Additional hearts support
             if (this instanceof Player) {
                 Player player = (Player) this;
-                float additionalHearts = player.getAdditionalHearts();
+                final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (damage > additionalHearts) {
                         damage -= additionalHearts;

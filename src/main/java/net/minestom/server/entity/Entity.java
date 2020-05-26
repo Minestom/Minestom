@@ -16,6 +16,7 @@ import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
@@ -289,8 +290,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             this.lastUpdate = time;
 
             // Velocity
-            boolean applyVelocity = (PlayerUtils.isNettyClient(this) && hasVelocity())
-                    || !PlayerUtils.isNettyClient(this);
+            final boolean applyVelocity = !PlayerUtils.isNettyClient(this) ||
+                    (PlayerUtils.isNettyClient(this) && hasVelocity());
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
                 float newX = position.getX() + velocity.getX() / tps;
@@ -299,11 +300,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
                 Position newPosition = new Position(newX, newY, newZ);
 
-                //if (!PlayerUtils.isNettyClient(this) && !noGravity) { // players handle gravity by themselves
                 if (!noGravity) {
                     velocity.setY(velocity.getY() - gravityDragPerTick * tps);
                 }
-                // }
 
                 Vector newVelocityOut = new Vector();
                 Vector deltaPos = new Vector(
@@ -313,7 +312,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 );
                 onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
-                refreshPosition(newPosition);
+                WorldBorder worldBorder = instance.getWorldBorder();
+                if (worldBorder.isInside(newPosition)) {
+                    // Apply velocity + gravity
+                    refreshPosition(newPosition);
+                } else {
+                    // Only apply Y velocity/gravity
+                    refreshPosition(position.getX(), newPosition.getY(), position.getZ());
+                }
+
                 velocity.copy(newVelocityOut);
                 velocity.multiply(tps);
 

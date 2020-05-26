@@ -127,7 +127,7 @@ public class Player extends LivingEntity {
     private PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
     // Tick related
-    private final PlayerTickEvent playerTickEvent = new PlayerTickEvent();
+    private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER);

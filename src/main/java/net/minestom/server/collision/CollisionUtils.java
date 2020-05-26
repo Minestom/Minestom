@@ -15,7 +15,8 @@ public class CollisionUtils {
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
-     * @param entity the entity to move
+     *
+     * @param entity      the entity to move
      * @param positionOut the Position object in which the new position will be saved
      * @param velocityOut the Vector object in which the new velocity will be saved
      * @return whether this entity is on the ground
@@ -29,7 +30,7 @@ public class CollisionUtils {
         boolean yCollision = stepAxis(instance, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
                 intermediaryPosition,
                 deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
-                );
+        );
 
         boolean xCollision = stepAxis(instance, intermediaryPosition, X_AXIS, deltaPosition.getX(),
                 intermediaryPosition,
@@ -61,12 +62,13 @@ public class CollisionUtils {
     /**
      * Steps on a single axis. Checks against collisions for each point of 'corners'. This method assumes that startPosition is valid.
      * Immediately return false if corners is of length 0.
-     * @param instance instance to check blocks from
+     *
+     * @param instance      instance to check blocks from
      * @param startPosition starting position for stepping, can be intermediary position from last step
-     * @param axis step direction. Works best if unit vector and aligned to an axis
-     * @param stepAmount how much to step in the direction (in blocks)
-     * @param positionOut the vector in which to store the new position
-     * @param corners the corners to check against
+     * @param axis          step direction. Works best if unit vector and aligned to an axis
+     * @param stepAmount    how much to step in the direction (in blocks)
+     * @param positionOut   the vector in which to store the new position
+     * @param corners       the corners to check against
      * @return true iif a collision has been found
      */
     private static boolean stepAxis(Instance instance, Vector startPosition, Vector axis, float stepAmount, Vector positionOut, Vector... corners) {
@@ -83,21 +85,21 @@ public class CollisionUtils {
         }
 
         float sign = Math.signum(stepAmount);
-        int blockLength = (int)stepAmount;
-        float remainingLength = stepAmount-blockLength;
+        int blockLength = (int) stepAmount;
+        float remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
             if (!stepOnce(instance, axis, sign, cornersCopy, cornerPositions)) {
                 collisionFound = true;
             }
-            if(collisionFound) {
+            if (collisionFound) {
                 break;
             }
         }
 
         // add remainingLength
-        if(!collisionFound) {
+        if (!collisionFound) {
             Vector direction = new Vector();
             direction.copy(axis);
             collisionFound |= !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
@@ -113,15 +115,16 @@ public class CollisionUtils {
         }
 
         positionOut.copy(startPosition);
-        positionOut.add(smallestDisplacement*axis.getX()*sign, smallestDisplacement*axis.getY()*sign, smallestDisplacement*axis.getZ()*sign);
+        positionOut.add(smallestDisplacement * axis.getX() * sign, smallestDisplacement * axis.getY() * sign, smallestDisplacement * axis.getZ() * sign);
         return collisionFound;
     }
 
     /**
      * Steps once (by a length of 1 block) on the given axis. Returns false if this method encountered a collision
-     * @param instance instance to get blocks from
-     * @param axis the axis to move along
-     * @param cornersCopy the corners of the bounding box to consider (mutable)
+     *
+     * @param instance        instance to get blocks from
+     * @param axis            the axis to move along
+     * @param cornersCopy     the corners of the bounding box to consider (mutable)
      * @param cornerPositions the corners, converted to BlockPosition (mutable)
      * @return
      */
@@ -130,7 +133,7 @@ public class CollisionUtils {
         for (int cornerIndex = 0; cornerIndex < cornersCopy.length; cornerIndex++) {
             Vector corner = cornersCopy[cornerIndex];
             BlockPosition blockPos = cornerPositions[cornerIndex];
-            corner.add(axis.getX()*amount, axis.getY()*amount, axis.getZ()*amount);
+            corner.add(axis.getX() * amount, axis.getY() * amount, axis.getZ() * amount);
             blockPos.setX((int) Math.floor(corner.getX()));
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
@@ -140,7 +143,7 @@ public class CollisionUtils {
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corner.subtract(axis.getX()*amount, axis.getY()*amount, axis.getZ()*amount);
+                corner.subtract(axis.getX() * amount, axis.getY() * amount, axis.getZ() * amount);
 
                 if (Math.abs(axis.getX()) > 10e-16) {
                     corner.setX(blockPos.getX() - axis.getX() * sign);
