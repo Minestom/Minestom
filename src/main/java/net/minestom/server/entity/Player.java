@@ -252,6 +252,7 @@ public class Player extends LivingEntity {
 
     @Override
     public boolean damage(DamageType type, float value) {
+        // Compute final heart based on health and additional hearts
         boolean result = super.damage(type, value);
         if (result) {
             lastDamageSource = type;

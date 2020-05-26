@@ -226,6 +226,22 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             entityAnimationPacket.entityId = getEntityId();
             entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
             sendPacketToViewersAndSelf(entityAnimationPacket);
+
+            // Additional hearts support
+            if (this instanceof Player) {
+                Player player = (Player) this;
+                float additionalHearts = player.getAdditionalHearts();
+                if (additionalHearts > 0) {
+                    if (damage > additionalHearts) {
+                        damage -= additionalHearts;
+                        player.setAdditionalHearts(0);
+                    } else {
+                        player.setAdditionalHearts(additionalHearts - damage);
+                        damage = 0;
+                    }
+                }
+            }
+
             setHealth(getHealth() - damage);
 
             // play damage sound
