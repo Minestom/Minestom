@@ -312,13 +312,28 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 );
                 onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
-                WorldBorder worldBorder = instance.getWorldBorder();
-                if (worldBorder.isInside(newPosition)) {
-                    // Apply velocity + gravity
-                    refreshPosition(newPosition);
-                } else {
-                    // Only apply Y velocity/gravity
-                    refreshPosition(position.getX(), newPosition.getY(), position.getZ());
+                // World border collision
+                {
+                    WorldBorder worldBorder = instance.getWorldBorder();
+                    WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
+                    switch (collisionAxis) {
+                        case NONE:
+                            // Apply velocity + gravity
+                            refreshPosition(newPosition);
+                            break;
+                        case BOTH:
+                            // Apply Y velocity/gravity
+                            refreshPosition(position.getX(), newPosition.getY(), position.getZ());
+                            break;
+                        case X:
+                            // Apply Y/Z velocity/gravity
+                            refreshPosition(position.getX(), newPosition.getY(), newPosition.getZ());
+                            break;
+                        case Z:
+                            // Apply X/Y velocity/gravity
+                            refreshPosition(newPosition.getX(), newPosition.getY(), position.getZ());
+                            break;
+                    }
                 }
 
                 velocity.copy(newVelocityOut);

@@ -41,7 +41,7 @@ public class WorldBorder {
         refreshCenter();
     }
 
-    public double getCenterX() {
+    public float getCenterX() {
         return centerX;
     }
 
@@ -50,7 +50,7 @@ public class WorldBorder {
         refreshCenter();
     }
 
-    public double getCenterZ() {
+    public float getCenterZ() {
         return centerZ;
     }
 
@@ -137,18 +137,33 @@ public class WorldBorder {
     }
 
     /**
+     * Used to check at which axis does the position collides with the world border
+     *
+     * @param position the position to check
+     * @return the axis where the position collides with the world border
+     */
+    public CollisionAxis getCollisionAxis(Position position) {
+        final double radius = getDiameter() / 2d;
+        final boolean checkX = position.getX() <= getCenterX() + radius && position.getX() >= getCenterX() - radius;
+        final boolean checkZ = position.getZ() <= getCenterZ() + radius && position.getZ() >= getCenterZ() - radius;
+        if (!checkX && !checkZ) {
+            return CollisionAxis.BOTH;
+        } else if (!checkX) {
+            return CollisionAxis.X;
+        } else if (!checkZ) {
+            return CollisionAxis.Z;
+        }
+        return CollisionAxis.NONE;
+    }
+
+    /**
      * Used to know if a position is located inside the world border or not
      *
      * @param position the position to check
      * @return true if {@code position} is inside the world border, false otherwise
      */
     public boolean isInside(Position position) {
-        final double radius = getDiameter() / 2d;
-        final boolean checkX = position.getX() < getCenterX() + radius && position.getX() > getCenterX() - radius;
-        if (!checkX)
-            return false;
-        final boolean checkZ = position.getZ() < getCenterZ() + radius && position.getZ() > getCenterZ() - radius;
-        return checkZ;
+        return getCollisionAxis(position) == CollisionAxis.NONE;
     }
 
     /**
@@ -199,4 +214,9 @@ public class WorldBorder {
     private void sendPacket(WorldBorderPacket worldBorderPacket) {
         instance.getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(worldBorderPacket));
     }
+
+    public enum CollisionAxis {
+        X, Z, BOTH, NONE
+    }
+
 }
