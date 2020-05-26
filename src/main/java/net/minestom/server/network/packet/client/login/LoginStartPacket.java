@@ -16,8 +16,11 @@ public class LoginStartPacket implements ClientPreplayPacket {
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         // TODO send encryption request OR directly login success
-        UUID adam = UUID.fromString("58ffa9d8-aee1-4587-8b79-41b754f6f238");
-        UUID playerUuid = UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e");//UUID.randomUUID();
+
+        // TODO: Skin
+        //UUID adam = UUID.fromString("58ffa9d8-aee1-4587-8b79-41b754f6f238");
+        //UUID mode = UUID.fromString("ab70ecb4-2346-4c14-a52d-7a091507c24e");
+        UUID playerUuid = UUID.randomUUID();
 
         LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
         connection.sendPacket(successPacket);

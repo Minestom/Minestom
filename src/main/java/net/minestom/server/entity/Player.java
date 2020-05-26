@@ -137,42 +137,27 @@ public class Player extends LivingEntity {
 
         setRespawnPoint(new Position(0, 0, 0));
 
-        // FakePlayer init its connection there
-        playerConnectionInit();
-
-        init();
-
-        // Some client update
-        getPlayerConnection().sendPacket(getPropertiesPacket()); // Send default properties
-        refreshHealth();
-        refreshAbilities();
-
-        sendUpdateHealthPacket();
-
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
 
+        this.gameMode = GameMode.SURVIVAL;
+        this.dimension = Dimension.OVERWORLD;
+        this.levelType = LevelType.DEFAULT;
+        refreshPosition(0, 0, 0);
+
+        // FakePlayer init its connection there
+        playerConnectionInit();
+
         MinecraftServer.getEntityManager().addWaitingPlayer(this);
     }
 
     /**
-     * Used when the player is created
+     * Used when the player is created ({@link EntityManager#waitingPlayersTick()})
      * Init the player and spawn him
      */
     protected void init() {
-        GameMode gameMode = GameMode.SURVIVAL;
-        Dimension dimension = Dimension.OVERWORLD;
-        LevelType levelType = LevelType.DEFAULT;
-        final float x = 0;
-        final float y = 0;
-        final float z = 0;
-
-        this.dimension = dimension;
-        this.gameMode = gameMode;
-        refreshLevelType(levelType);
-        refreshPosition(x, y, z);
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
@@ -249,6 +234,13 @@ public class Player extends LivingEntity {
             }
         }
         // Recipes end
+
+        // Some client update
+        playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        refreshHealth();
+        refreshAbilities();
+
+        sendUpdateHealthPacket();
     }
 
     /**
@@ -1387,10 +1379,6 @@ public class Player extends LivingEntity {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
         sendPacketToViewersAndSelf(playerInfoPacket);
-    }
-
-    protected void refreshLevelType(LevelType levelType) {
-        this.levelType = levelType;
     }
 
     public void refreshOnGround(boolean onGround) {

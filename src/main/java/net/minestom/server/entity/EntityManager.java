@@ -160,6 +160,8 @@ public class EntityManager {
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
             final Player playerCache = waitingPlayer;
             playersPool.execute(() -> {
+                playerCache.init();
+
                 PlayerLoginEvent loginEvent = new PlayerLoginEvent();
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance();
