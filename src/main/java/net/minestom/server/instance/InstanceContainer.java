@@ -283,10 +283,8 @@ public class InstanceContainer extends Instance {
         unloadChunkPacket.chunkZ = chunkZ;
         chunk.sendPacketToViewers(unloadChunkPacket);
 
-        if (!ChunkUtils.isChunkUnloaded(this, chunk)) {
-            for (Player viewer : chunk.getViewers()) {
-                chunk.removeViewer(viewer);
-            }
+        for (Player viewer : chunk.getViewers()) {
+            chunk.removeViewer(viewer);
         }
 
         this.chunks.remove(index);

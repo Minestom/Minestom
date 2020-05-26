@@ -73,8 +73,9 @@ public class ConnectionManager {
      * Used in {@link net.minestom.server.network.packet.client.login.LoginStartPacket} in order
      * to give the player the right UUID
      *
-     * @param playerConnection
-     * @return
+     * @param playerConnection the player connection
+     * @return the uuid based on {@code playerConnection}
+     * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
     public UUID getPlayerConnectionUuid(PlayerConnection playerConnection) {
         if (uuidProvider == null)

@@ -61,8 +61,8 @@ public class PlayerPositionListener {
     private static void processMovement(Player player, float x, float y, float z,
                                         float yaw, float pitch, Consumer<Position> consumer) {
 
-        boolean chunkTest = ChunkUtils.isChunkUnloaded(player.getInstance(), x, z);
-        if (chunkTest) {
+        // Try to move in an unloaded chunk, prevent it
+        if (ChunkUtils.isChunkUnloaded(player.getInstance(), x, z)) {
             player.teleport(player.getPosition());
             return;
         }

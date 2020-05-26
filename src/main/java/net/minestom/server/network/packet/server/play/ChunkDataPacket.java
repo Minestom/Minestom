@@ -103,7 +103,7 @@ public class ChunkDataPacket implements ServerPacket {
             blockEntity.put("z", new DoubleTag(blockPosition.getZ() + 16 * chunk.getChunkZ()));
             CustomBlock customBlock = chunk.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
             if (customBlock != null) {
-                Data data = chunk.getData(blockPosition.getX(), (byte)blockPosition.getY(), blockPosition.getZ());
+                Data data = chunk.getData(blockPosition.getX(), (byte) blockPosition.getY(), blockPosition.getZ());
                 customBlock.writeBlockEntity(blockPosition, data, blockEntity);
             }
             ByteArrayOutputStream os = new ByteArrayOutputStream();

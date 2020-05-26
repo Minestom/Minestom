@@ -187,20 +187,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             refreshPosition(position.getX(), position.getY(), position.getZ());
             refreshView(position.getYaw(), position.getPitch());
             sendSynchronization();
+            if (callback != null)
+                callback.run();
         };
 
         if (instance.hasEnabledAutoChunkLoad()) {
             instance.loadChunk(position, chunk -> {
                 runnable.run();
-                if (callback != null)
-                    callback.run();
             });
         } else {
-            if (ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ()))
-                return;
             runnable.run();
-            if (callback != null)
-                callback.run();
         }
     }
 
@@ -302,10 +298,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 float newZ = position.getZ() + velocity.getZ() / tps;
 
                 Position newPosition = new Position(newX, newY, newZ);
-
-                chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, newX, newZ);
-                if (chunkUnloaded)
-                    return;
 
                 //if (!PlayerUtils.isNettyClient(this) && !noGravity) { // players handle gravity by themselves
                 if (!noGravity) {

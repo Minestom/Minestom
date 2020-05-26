@@ -91,7 +91,6 @@ public class Chunk implements Viewable {
     }
 
     public void UNSAFE_removeCustomBlock(int x, int y, int z) {
-        unloadCheck();
         this.customBlocksId[getBlockIndex(x, y, z)] = 0; // Set to none
         int index = SerializerUtils.coordToChunkIndex(x, y, z);
         this.blocksData.remove(index);
@@ -103,7 +102,6 @@ public class Chunk implements Viewable {
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
-        unloadCheck();
         int index = SerializerUtils.coordToChunkIndex(x, y, z);
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
@@ -151,7 +149,6 @@ public class Chunk implements Viewable {
     }
 
     public void setBlockData(int x, int y, int z, Data data) {
-        unloadCheck();
         int index = SerializerUtils.coordToChunkIndex(x, y, z);
         if (data != null) {
             this.blocksData.put(index, data);
@@ -161,7 +158,6 @@ public class Chunk implements Viewable {
     }
 
     public short getBlockId(int x, int y, int z) {
-        unloadCheck();
         int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return 0; // TODO: custom invalid block
@@ -171,7 +167,6 @@ public class Chunk implements Viewable {
     }
 
     public short getCustomBlockId(int x, int y, int z) {
-        unloadCheck();
         int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return 0; // TODO: custom invalid block
@@ -181,7 +176,6 @@ public class Chunk implements Viewable {
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
-        unloadCheck();
         int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return null; // TODO: custom invalid block
@@ -196,7 +190,6 @@ public class Chunk implements Viewable {
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
-        unloadCheck();
         int blockIndex = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
             return;
@@ -207,7 +200,6 @@ public class Chunk implements Viewable {
     }
 
     protected void refreshBlockId(int x, int y, int z, short blockId) {
-        unloadCheck();
         int blockIndex = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
             return;
@@ -228,12 +220,10 @@ public class Chunk implements Viewable {
     }
 
     protected Data getData(int index) {
-        unloadCheck();
         return blocksData.get(index);
     }
 
     public void updateBlocks(long time, Instance instance) {
-        unloadCheck();
         if (updatableBlocks.isEmpty())
             return;
 
@@ -296,7 +286,6 @@ public class Chunk implements Viewable {
     }
 
     protected byte[] getSerializedData() throws IOException {
-        unloadCheck();
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(output);
 
@@ -318,14 +307,16 @@ public class Chunk implements Viewable {
                     Data data = blocksData.get(index);
                     boolean hasData = data != null;
 
-                    // Chunk coord
+                    // Chunk coordinates
                     dos.writeInt(x);
                     dos.writeInt(y);
                     dos.writeInt(z);
 
+                    // Id
                     dos.writeShort(blockId);
                     dos.writeShort(customBlockId);
 
+                    // Data
                     hasData = (data != null && (data instanceof SerializableData)) && hasData;
                     dos.writeBoolean(hasData);
                     if (hasData) {
@@ -363,7 +354,6 @@ public class Chunk implements Viewable {
 
     // Write the packet in the writer thread pools
     public void refreshDataPacket(Runnable runnable) {
-        unloadCheck();
         PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), buf -> {
             setFullDataPacket(buf);
             runnable.run();
@@ -388,7 +378,6 @@ public class Chunk implements Viewable {
     // UNSAFE
     @Override
     public boolean addViewer(Player player) {
-        unloadCheck();
         boolean result = this.viewers.add(player);
 
         PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
@@ -399,7 +388,6 @@ public class Chunk implements Viewable {
     // UNSAFE
     @Override
     public boolean removeViewer(Player player) {
-        unloadCheck();
         boolean result = this.viewers.remove(player);
 
         PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
@@ -413,26 +401,10 @@ public class Chunk implements Viewable {
     }
 
     /**
-     * Used to prevent major memory leak when unloading chunks
+     * Set the chunk as "unloaded"
      */
     protected void unload() {
         this.loaded = false;
-
-        this.biomes = null;
-        this.blocksId = null;
-        this.customBlocksId = null;
-        this.blocksData = null;
-        this.updatableBlocks = null;
-        this.updatableBlocksLastUpdate = null;
-        this.blockEntities = null;
-        this.viewers = null;
-    }
-
-    /**
-     * Ensure that the check is loaded before interaction
-     */
-    private void unloadCheck() {
-        Check.stateCondition(!isLoaded(), "The chunk " + toString() + " is unloaded, you cannot interact with it");
     }
 
     private int getBlockIndex(int x, int y, int z) {

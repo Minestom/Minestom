@@ -118,9 +118,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     //
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
-        if (ChunkUtils.isChunkUnloaded(this, chunk))
-            return;
-
         ByteBuf chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
             if (!PlayerUtils.isNettyClient(player))
@@ -131,16 +128,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     protected void sendChunkSectionUpdate(Chunk chunk, int section, Collection<Player> players) {
-        if (ChunkUtils.isChunkUnloaded(this, chunk))
-            return;
-
         PacketWriterUtils.writeAndSend(players, getChunkSectionUpdatePacket(chunk, section));
     }
 
     public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
         if (!PlayerUtils.isNettyClient(player))
-            return;
-        if (ChunkUtils.isChunkUnloaded(this, chunk))
             return;
 
         PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(chunk, section));
