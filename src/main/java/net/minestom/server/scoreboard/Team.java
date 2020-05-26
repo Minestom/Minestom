@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import io.netty.buffer.ByteBuf;
 import net.kyori.text.format.TextColor;
+import net.minestom.server.chat.Chat;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -32,13 +33,13 @@ public class Team {
         teamsCreationPacket = new TeamsPacket();
         teamsCreationPacket.teamName = teamName;
         teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = teamDisplayName;
+        teamsCreationPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
         teamsCreationPacket.friendlyFlags = friendlyFlags;
         teamsCreationPacket.nameTagVisibility = nameTagVisibility;
         teamsCreationPacket.collisionRule = collisionRule;
         teamsCreationPacket.teamColor = teamColor.ordinal();
-        teamsCreationPacket.teamPrefix = prefix;
-        teamsCreationPacket.teamSuffix = suffix;
+        teamsCreationPacket.teamPrefix = Chat.fromLegacyText(prefix);
+        teamsCreationPacket.teamSuffix = Chat.fromLegacyText(suffix);
         teamsCreationPacket.entities = entities;
 
         TeamsPacket destroyPacket = new TeamsPacket();
@@ -91,7 +92,7 @@ public class Team {
 
     public void setTeamDisplayName(String teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
-        this.teamsCreationPacket.teamDisplayName = teamDisplayName;
+        this.teamsCreationPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
         sendUpdatePacket();
     }
 
@@ -115,13 +116,13 @@ public class Team {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-        this.teamsCreationPacket.teamPrefix = prefix;
+        this.teamsCreationPacket.teamPrefix = Chat.fromLegacyText(prefix);
         sendUpdatePacket();
     }
 
     public void setSuffix(String suffix) {
         this.suffix = suffix;
-        this.teamsCreationPacket.teamSuffix = suffix;
+        this.teamsCreationPacket.teamSuffix = Chat.fromLegacyText(suffix);
         sendUpdatePacket();
     }
 
@@ -148,13 +149,13 @@ public class Team {
         TeamsPacket updatePacket = new TeamsPacket();
         updatePacket.teamName = teamName;
         updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = teamDisplayName;
+        updatePacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
         updatePacket.friendlyFlags = friendlyFlags;
         updatePacket.nameTagVisibility = nameTagVisibility;
         updatePacket.collisionRule = collisionRule;
         updatePacket.teamColor = teamColor.ordinal();
-        updatePacket.teamPrefix = prefix;
-        updatePacket.teamSuffix = suffix;
+        updatePacket.teamPrefix = Chat.fromLegacyText(prefix);
+        updatePacket.teamSuffix = Chat.fromLegacyText(suffix);
         ByteBuf buffer = PacketUtils.writePacket(updatePacket);
         players.forEach(p -> p.getPlayerConnection().sendPacket(buffer));
     }

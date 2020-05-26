@@ -1,5 +1,6 @@
 package net.minestom.server.scoreboard;
 
+import net.minestom.server.chat.Chat;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 
 public class SidebarTeam {
@@ -26,13 +27,13 @@ public class SidebarTeam {
         TeamsPacket teamsPacket = new TeamsPacket();
         teamsPacket.teamName = teamName;
         teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsPacket.teamDisplayName = teamDisplayName;
+        teamsPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
         teamsPacket.friendlyFlags = friendlyFlags;
         teamsPacket.nameTagVisibility = nameTagVisibility;
         teamsPacket.collisionRule = collisionRule;
         teamsPacket.teamColor = teamColor;
-        teamsPacket.teamPrefix = prefix;
-        teamsPacket.teamSuffix = suffix;
+        teamsPacket.teamPrefix = Chat.fromLegacyText(prefix);
+        teamsPacket.teamSuffix = Chat.fromLegacyText(suffix);
         teamsPacket.entities = new String[]{entityName};
         return teamsPacket;
     }
@@ -48,13 +49,13 @@ public class SidebarTeam {
         TeamsPacket teamsPacket = new TeamsPacket();
         teamsPacket.teamName = teamName;
         teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        teamsPacket.teamDisplayName = teamDisplayName;
+        teamsPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
         teamsPacket.friendlyFlags = friendlyFlags;
         teamsPacket.nameTagVisibility = nameTagVisibility;
         teamsPacket.collisionRule = collisionRule;
         teamsPacket.teamColor = teamColor;
-        teamsPacket.teamPrefix = prefix;
-        teamsPacket.teamSuffix = suffix;
+        teamsPacket.teamPrefix = Chat.fromLegacyText(prefix);
+        teamsPacket.teamSuffix = Chat.fromLegacyText(suffix);
         return teamsPacket;
     }
 

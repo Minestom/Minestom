@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.text.Component;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -10,13 +11,13 @@ public class TeamsPacket implements ServerPacket {
     public String teamName;
     public Action action;
 
-    public String teamDisplayName;
+    public Component teamDisplayName;
     public byte friendlyFlags;
     public NameTagVisibility nameTagVisibility;
     public CollisionRule collisionRule;
     public int teamColor;
-    public String teamPrefix;
-    public String teamSuffix;
+    public Component teamPrefix;
+    public Component teamSuffix;
     public String[] entities;
 
     @Override
@@ -27,13 +28,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamDisplayName)));
+                writer.writeSizedString(Chat.toJsonString(teamDisplayName));
                 writer.writeByte(friendlyFlags);
                 writer.writeSizedString(nameTagVisibility.getIdentifier());
                 writer.writeSizedString(collisionRule.getIdentifier());
                 writer.writeVarInt(teamColor);
-                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamPrefix)));
-                writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(teamSuffix)));
+                writer.writeSizedString(Chat.toJsonString(teamPrefix));
+                writer.writeSizedString(Chat.toJsonString(teamSuffix));
                 break;
             case REMOVE_TEAM:
 

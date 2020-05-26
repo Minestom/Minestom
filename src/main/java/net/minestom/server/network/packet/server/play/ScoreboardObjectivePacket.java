@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.text.Component;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -9,7 +10,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
 
     public String objectiveName;
     public byte mode;
-    public String objectiveValue;
+    public Component objectiveValue;
     public int type;
 
     @Override
@@ -18,7 +19,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(objectiveValue)));
+            writer.writeSizedString(Chat.toJsonString(objectiveValue));
             writer.writeVarInt(type);
         }
     }

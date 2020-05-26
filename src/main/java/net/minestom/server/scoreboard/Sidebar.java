@@ -53,7 +53,7 @@ public class Sidebar implements Viewable {
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = title;
+        scoreboardObjectivePacket.objectiveValue = Chat.fromLegacyText(title);
         scoreboardObjectivePacket.type = 0;
 
         sendPacketToViewers(scoreboardObjectivePacket);
@@ -131,7 +131,7 @@ public class Sidebar implements Viewable {
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 0; // Create scoreboard
-        scoreboardObjectivePacket.objectiveValue = title;
+        scoreboardObjectivePacket.objectiveValue = Chat.fromLegacyText(title);
         scoreboardObjectivePacket.type = 0; // Type integer
 
         DisplayScoreboardPacket displayScoreboardPacket = new DisplayScoreboardPacket();

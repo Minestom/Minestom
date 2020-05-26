@@ -239,8 +239,6 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth();
         refreshAbilities();
-
-        sendUpdateHealthPacket();
     }
 
     /**
@@ -733,7 +731,13 @@ public class Player extends LivingEntity {
         return food;
     }
 
+    /**
+     * Set and refresh client food bar
+     *
+     * @param food the new food value
+     */
     public void setFood(int food) {
+        Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food needs to be between 0 and 20");
         this.food = food;
         sendUpdateHealthPacket();
     }
@@ -742,7 +746,13 @@ public class Player extends LivingEntity {
         return foodSaturation;
     }
 
+    /**
+     * Set and refresh client food saturation
+     *
+     * @param foodSaturation the food saturation
+     */
     public void setFoodSaturation(float foodSaturation) {
+        Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 5), "Food saturation has to be between 0 and 5");
         this.foodSaturation = foodSaturation;
         sendUpdateHealthPacket();
     }
@@ -866,9 +876,10 @@ public class Player extends LivingEntity {
     }
 
     protected void refreshHealth() {
-        heal();
         this.food = 20;
         this.foodSaturation = 5;
+        // refresh health and send health packet
+        heal();
     }
 
     protected void sendUpdateHealthPacket() {

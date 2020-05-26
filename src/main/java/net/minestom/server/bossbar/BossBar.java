@@ -1,6 +1,7 @@
 package net.minestom.server.bossbar;
 
 import net.minestom.server.Viewable;
+import net.minestom.server.chat.Chat;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 
@@ -94,7 +95,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.ADD;
-        bossBarPacket.title = title;
+        bossBarPacket.title = Chat.fromLegacyText(title);
         bossBarPacket.health = progress;
         bossBarPacket.color = color;
         bossBarPacket.division = division;
@@ -113,7 +114,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_TITLE;
-        bossBarPacket.title = title;
+        bossBarPacket.title = Chat.fromLegacyText(title);
         sendPacketToViewers(bossBarPacket);
     }
 
