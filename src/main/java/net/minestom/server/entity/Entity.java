@@ -287,6 +287,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
+        // Synchronization with updated fields in #getPosition()
         if (cacheX != position.getX() ||
                 cacheY != position.getY() ||
                 cacheZ != position.getZ()) {
