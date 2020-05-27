@@ -252,6 +252,9 @@ public class Player extends LivingEntity {
 
     @Override
     public boolean damage(DamageType type, float value) {
+        if (isInvulnerable())
+            return false;
+
         // Compute final heart based on health and additional hearts
         boolean result = super.damage(type, value);
         if (result) {
@@ -1340,6 +1343,9 @@ public class Player extends LivingEntity {
         triggerStatus(permissionLevelStatus);
     }
 
+    /**
+     * @param reduced should the player has the reduced debug screen
+     */
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
@@ -1348,14 +1354,28 @@ public class Player extends LivingEntity {
         triggerStatus(debugScreenStatus);
     }
 
+    /**
+     * @return true if the player has the reduced debug screen, false otherwise
+     */
     public boolean hasReducedDebugScreenInformation() {
         return reducedDebugScreenInformation;
     }
 
+    /**
+     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet
+     *
+     * @return true if the player is invulnerable, false otherwise
+     */
     public boolean isInvulnerable() {
         return invulnerable;
     }
 
+    /**
+     * This do update the {@code invulnerable} field in the packet {@link PlayerAbilitiesPacket}
+     * and prevent the player from receiving damage
+     *
+     * @param invulnerable should the player be invulnerable
+     */
     public void setInvulnerable(boolean invulnerable) {
         this.invulnerable = invulnerable;
         refreshAbilities();
@@ -1372,10 +1392,18 @@ public class Player extends LivingEntity {
      * @param flying should the player fly
      */
     public void setFlying(boolean flying) {
-        refreshFlying(flying);
+        this.flying = flying;
         refreshAbilities();
     }
 
+    /**
+     * Update the internal flying field
+     * <p>
+     * Mostly unsafe since there is nothing to backup the value, used internally for creative players
+     *
+     * @param flying the new flying field
+     * @see #setFlying(boolean) instead
+     */
     public void refreshFlying(boolean flying) {
         this.flying = flying;
     }
@@ -1412,10 +1440,18 @@ public class Player extends LivingEntity {
         refreshAbilities();
     }
 
+    /**
+     * @return the flying speed of the player
+     */
     public float getFlyingSpeed() {
         return flyingSpeed;
     }
 
+    /**
+     * Update the internal field and send a {@link PlayerAbilitiesPacket} with the new flying speed
+     *
+     * @param flyingSpeed the new flying speed of the player
+     */
     public void setFlyingSpeed(float flyingSpeed) {
         this.flyingSpeed = flyingSpeed;
         refreshAbilities();

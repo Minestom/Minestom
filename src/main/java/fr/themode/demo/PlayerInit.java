@@ -212,7 +212,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 45, 0));
 
                 player.setGlowing(true);

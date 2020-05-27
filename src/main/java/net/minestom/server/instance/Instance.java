@@ -24,6 +24,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 
 import java.util.*;
@@ -360,6 +361,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public void addEntityToChunk(Entity entity, Chunk chunk) {
+        Check.notNull(chunk,
+                "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
+        Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
         long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         synchronized (chunkEntities) {
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);

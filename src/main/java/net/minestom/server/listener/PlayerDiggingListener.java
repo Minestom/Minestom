@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -29,45 +28,57 @@ public class PlayerDiggingListener {
 
         Instance instance = player.getInstance();
 
+        if (instance == null)
+            return;
+        final short blockId = instance.getBlockId(blockPosition);
+
         switch (status) {
             case STARTED_DIGGING:
-                if (player.getGameMode() == GameMode.CREATIVE) {
-                    if (instance != null) {
-                        instance.breakBlock(player, blockPosition);
-                    }
-                } else if (player.getGameMode() == GameMode.SURVIVAL) {
-                    if (instance != null) {
-                        CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-                        if (customBlock != null) {
-                            int breakTime = customBlock.getBreakDelay(player, blockPosition);
-                            if (breakTime >= 0) {
-                                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
-                                player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
-                                if (!playerStartDiggingEvent.isCancelled()) {
-                                    player.refreshTargetBlock(customBlock, blockPosition, breakTime);
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
-                                } else {
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                                }
-                                addEffect(player);
-                            } else {
-                                if (Block.fromId(instance.getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ())).breaksInstantaneously()) {
-                                    if (player.getCustomBlockTarget() != null) {
-                                        player.resetTargetBlock();
-                                        removeEffect(player);
-                                    }
-                                    instance.breakBlock(player, blockPosition);
+                final boolean instantBreak = player.isCreative() ||
+                        player.isInstantBreak() ||
+                        Block.fromId(blockId).breaksInstantaneously();
 
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
-                                } else {
-                                    player.resetTargetBlock();
-                                    removeEffect(player);
-                                }
+                if (instantBreak) {
+                    instance.breakBlock(player, blockPosition);
+
+                    if (!player.isCreative()) {
+                        if (player.getCustomBlockTarget() != null) {
+                            player.resetTargetBlock();
+                            removeEffect(player);
+                        }
+
+                        sendAcknowledgePacket(player, blockPosition, blockId,
+                                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
+                    }
+                } else {
+                    CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+                    if (customBlock != null) {
+                        int breakTime = customBlock.getBreakDelay(player, blockPosition);
+                        if (breakTime >= 0) {
+                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
+                            player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                            if (!playerStartDiggingEvent.isCancelled()) {
+                                player.refreshTargetBlock(customBlock, blockPosition, breakTime);
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                            } else {
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                             }
+                            addEffect(player);
                         } else {
+                            if (player.getCustomBlockTarget() != null) {
+                                player.resetTargetBlock();
+                                removeEffect(player);
+                            }
+
+                            instance.breakBlock(player, blockPosition);
+
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                    ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
+                        }
+                    } else {
+                        if (player.getCustomBlockTarget() != null) {
                             player.resetTargetBlock();
                             removeEffect(player);
                         }
@@ -78,7 +89,6 @@ public class PlayerDiggingListener {
                 player.resetTargetBlock();
                 removeEffect(player);
 
-                final short blockId = instance.getBlockId(blockPosition);
                 sendAcknowledgePacket(player, blockPosition, blockId,
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
@@ -87,12 +97,11 @@ public class PlayerDiggingListener {
                     player.resetTargetBlock();
                     removeEffect(player);
                 } else {
-                    final short id = instance.getBlockId(blockPosition);
                     if (instance != null) {
                         instance.breakBlock(player, blockPosition);
                     }
 
-                    sendAcknowledgePacket(player, blockPosition, id,
+                    sendAcknowledgePacket(player, blockPosition, blockId,
                             ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                 }
                 break;
