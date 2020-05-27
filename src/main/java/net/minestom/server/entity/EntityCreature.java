@@ -125,14 +125,6 @@ public abstract class EntityCreature extends LivingEntity {
         refreshPosition(newX, newY, newZ);
     }
 
-    public void setView(float yaw, float pitch) {
-        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-        entityHeadLookPacket.entityId = getEntityId();
-        entityHeadLookPacket.yaw = yaw;
-        sendPacketToViewers(entityHeadLookPacket);
-        refreshView(yaw, pitch);
-    }
-
     @Override
     public void spawn() {
 

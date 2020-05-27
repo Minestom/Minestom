@@ -57,6 +57,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float lastX, lastY, lastZ;
     protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
+    protected float cacheYaw, cachePitch;
     private int id;
 
     private BoundingBox boundingBox;
@@ -207,6 +208,38 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Change the view of the entity
+     *
+     * @param yaw   the new yaw
+     * @param pitch the new pitch
+     */
+    public void setView(float yaw, float pitch) {
+        refreshView(yaw, pitch);
+
+        EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+        entityRotationPacket.entityId = getEntityId();
+        entityRotationPacket.yaw = yaw;
+        entityRotationPacket.pitch = pitch;
+        entityRotationPacket.onGround = onGround;
+
+        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+        entityHeadLookPacket.entityId = getEntityId();
+        entityHeadLookPacket.yaw = yaw;
+        sendPacketToViewers(entityHeadLookPacket);
+        sendPacketToViewersAndSelf(entityRotationPacket);
+    }
+
+    /**
+     * Change the view of the entity
+     * Only the yaw and pitch is used
+     *
+     * @param position the new view
+     */
+    public void setView(Position position) {
+        setView(position.getYaw(), position.getPitch());
+    }
+
+    /**
      * When set to true, the entity will automatically get new viewers when they come too close
      * This can be use to complete control over which player can see it, without having to deal with
      * raw packets
@@ -288,10 +321,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
 
         // Synchronization with updated fields in #getPosition()
-        if (cacheX != position.getX() ||
-                cacheY != position.getY() ||
-                cacheZ != position.getZ()) {
-            teleport(position);
+        {
+            // X/Y/Z axis
+            if (cacheX != position.getX() ||
+                    cacheY != position.getY() ||
+                    cacheZ != position.getZ()) {
+                teleport(position);
+            }
+            // Yaw/Pitch
+            if (cacheYaw != position.getYaw() ||
+                    cachePitch != position.getPitch()) {
+                setView(position);
+            }
         }
 
         if (shouldUpdate(time)) {
@@ -779,7 +820,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Update the entity view internally
      * <p>
-     * Warning: you probably want to use {@link EntityCreature#setView(float, float)}
+     * Warning: you probably want to use {@link #setView(float, float)}
      *
      * @param yaw   the yaw
      * @param pitch the pitch
@@ -789,6 +830,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.lastPitch = position.getPitch();
         position.setYaw(yaw);
         position.setPitch(pitch);
+        this.cacheYaw = yaw;
+        this.cachePitch = pitch;
     }
 
     public void refreshSneaking(boolean sneaking) {
