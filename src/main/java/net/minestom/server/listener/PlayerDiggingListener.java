@@ -44,10 +44,7 @@ public class PlayerDiggingListener {
 
                     // Reset player target
                     if (!player.isCreative()) {
-                        if (player.getCustomBlockTarget() != null) {
-                            player.resetTargetBlock();
-                            removeEffect(player);
-                        }
+                        removeEffect(player);
 
                         sendAcknowledgePacket(player, blockPosition, blockId,
                                 ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
@@ -73,26 +70,19 @@ public class PlayerDiggingListener {
                             addEffect(player);
                         } else {
                             // Does not have a custom break time, remove effect and keep vanilla time
-                            if (player.getCustomBlockTarget() != null) {
-                                player.resetTargetBlock();
-                                removeEffect(player);
-                            }
+                            removeEffect(player);
 
                             sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
                                     ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                         }
                     } else {
                         // Player is not mining a custom block, be sure that he doesn't have the effect
-                        if (player.getCustomBlockTarget() != null) {
-                            player.resetTargetBlock();
-                            removeEffect(player);
-                        }
+                        removeEffect(player);
                     }
                 }
                 break;
             case CANCELLED_DIGGING:
                 // Remove custom block target
-                player.resetTargetBlock();
                 removeEffect(player);
 
                 sendAcknowledgePacket(player, blockPosition, blockId,
@@ -100,10 +90,7 @@ public class PlayerDiggingListener {
                 break;
             case FINISHED_DIGGING:
                 // Finished digging, remove effect if any
-                if (player.getCustomBlockTarget() != null) {
-                    player.resetTargetBlock();
-                    removeEffect(player);
-                }
+                removeEffect(player);
 
                 // Unverified block break, client is fully responsive
                 instance.breakBlock(player, blockPosition);
@@ -170,10 +157,14 @@ public class PlayerDiggingListener {
     }
 
     private static void removeEffect(Player player) {
-        RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-        removeEntityEffectPacket.entityId = player.getEntityId();
-        removeEntityEffectPacket.effectId = 4;
-        player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        if (player.getCustomBlockTarget() != null) {
+            player.resetTargetBlock();
+
+            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
+            removeEntityEffectPacket.entityId = player.getEntityId();
+            removeEntityEffectPacket.effectId = 4;
+            player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        }
     }
 
     private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockId,
