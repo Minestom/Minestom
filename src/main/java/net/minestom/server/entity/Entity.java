@@ -55,6 +55,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected Instance instance;
     protected Position position;
     protected float lastX, lastY, lastZ;
+    protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     private int id;
 
@@ -284,6 +285,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         if (chunkUnloaded) {
             // No update for entities in unloaded chunk
             return;
+        }
+
+        if (cacheX != position.getX() ||
+                cacheY != position.getY() ||
+                cacheZ != position.getZ()) {
+            teleport(position);
         }
 
         if (shouldUpdate(time)) {
@@ -689,6 +696,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         position.setX(x);
         position.setY(y);
         position.setZ(z);
+        this.cacheX = x;
+        this.cacheY = y;
+        this.cacheZ = z;
 
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
