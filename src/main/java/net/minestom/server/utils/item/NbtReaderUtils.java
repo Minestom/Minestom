@@ -1,10 +1,11 @@
-package net.minestom.server.utils;
+package net.minestom.server.utils.item;
 
 import net.kyori.text.Component;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.potion.PotionType;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class NbtReaderUtils {
 
         byte typeId = reader.readByte();
 
-        //System.out.println("DEBUG TYPE: " + typeId);
+        System.out.println("DEBUG TYPE: " + typeId);
         switch (typeId) {
             case 0x00: // TAG_End
                 // End of item NBT
@@ -63,7 +64,17 @@ public class NbtReaderUtils {
 
                 break;
             case 0x08: // TAG_String
+                String stringName = reader.readShortSizedString();
 
+                if (stringName.equals("Potion")) {
+                    String potionId = reader.readShortSizedString();
+                    potionId = potionId.replace("minecraft:", "").toUpperCase();
+                    PotionType potionType = PotionType.valueOf(potionId);
+
+                    item.addPotionType(potionType);
+
+                    readItemStackNBT(reader, item);
+                }
                 break;
             case 0x09: // TAG_List
 

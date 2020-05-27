@@ -154,7 +154,9 @@ public class EntityManager {
         }
     }
 
-    // Add connected clients after the handshake (used to free the networking threads)
+    /**
+     * Add connected clients after the handshake (used to free the networking threads)
+     */
     private void waitingPlayersTick() {
         Player waitingPlayer;
         while ((waitingPlayer = waitingPlayers.poll()) != null) {

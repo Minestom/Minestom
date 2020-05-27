@@ -3,11 +3,14 @@ package net.minestom.server.item;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 
 public class ItemStack implements DataContainer {
+
+    private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(127);
 
     public static ItemStack getAirItem() {
         return new ItemStack((short) 0, (byte) 0);
@@ -16,11 +19,7 @@ public class ItemStack implements DataContainer {
     private static StackingRule defaultStackingRule;
 
     private short materialId;
-
-    {
-        if (defaultStackingRule == null)
-            defaultStackingRule = new VanillaStackingRule(127);
-    }
+    private Set<PotionType> potionTypes;
 
     private byte amount;
     private short damage;
@@ -30,6 +29,11 @@ public class ItemStack implements DataContainer {
     private ArrayList<String> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
+
+    {
+        if (defaultStackingRule == null)
+            defaultStackingRule = DEFAULT_STACKING_RULE;
+    }
 
     private int hideFlag;
 
@@ -43,6 +47,7 @@ public class ItemStack implements DataContainer {
         this.lore = new ArrayList<>();
 
         this.enchantmentMap = new HashMap<>();
+        this.potionTypes = new HashSet<>();
 
         this.stackingRule = defaultStackingRule;
     }
@@ -145,6 +150,14 @@ public class ItemStack implements DataContainer {
         return this.enchantmentMap.getOrDefault(enchantment, (short) 0);
     }
 
+    public Set<PotionType> getPotionTypes() {
+        return Collections.unmodifiableSet(potionTypes);
+    }
+
+    public void addPotionType(PotionType potionType) {
+        this.potionTypes.add(potionType);
+    }
+
     public int getHideFlag() {
         return hideFlag;
     }
@@ -187,7 +200,7 @@ public class ItemStack implements DataContainer {
     }
 
     public boolean hasNbtTag() {
-        return hasDisplayName() || hasLore() || isUnbreakable() || !getEnchantmentMap().isEmpty();
+        return hasDisplayName() || hasLore() || isUnbreakable() || !getEnchantmentMap().isEmpty() || !potionTypes.isEmpty();
     }
 
     public ItemStack clone() {

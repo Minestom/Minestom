@@ -7,10 +7,13 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.buffer.BufferWrapper;
+import net.minestom.server.utils.item.NbtReaderUtils;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 public class Utils {
 
@@ -171,7 +174,7 @@ public class Utils {
 
                         packet.writeByte((byte) 0x08); // Type id (string)
                         packet.writeShortSizedString("id");
-                        packet.writeShortSizedString(enchantment.toMinecraftNamespaceId());
+                        packet.writeShortSizedString("minecraft:" + enchantment.name().toLowerCase());
 
                     }
 
@@ -180,6 +183,20 @@ public class Utils {
                 }
             }
             // End enchantment
+
+            // Start potion
+            {
+                Set<PotionType> potionTypes = itemStack.getPotionTypes();
+                if (!potionTypes.isEmpty()) {
+                    for (PotionType potionType : potionTypes) {
+                        packet.writeByte((byte) 0x08); // type id (string)
+                        packet.writeShortSizedString("Potion");
+                        packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
+
+                    }
+                }
+            }
+            // End potion
 
             // Start hide flags
             /*{

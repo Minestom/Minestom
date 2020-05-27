@@ -60,7 +60,7 @@ public class ConnectionManager {
     }
 
     /**
-     * Shouldn't be override if not already defined
+     * Shouldn't be override if already defined
      *
      * @param uuidProvider the new player connection uuid provider
      */

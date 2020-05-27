@@ -60,8 +60,4 @@ public enum Enchantment {
         return id;
     }
 
-    public String toMinecraftNamespaceId() {
-        return "minecraft:" + name().toLowerCase();
-    }
-
 }
