@@ -24,6 +24,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 
 import java.util.*;
@@ -204,7 +205,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void breakBlock(Player player, BlockPosition blockPosition) {
+    public boolean breakBlock(Player player, BlockPosition blockPosition) {
         Chunk chunk = getChunkAt(blockPosition);
 
         int x = blockPosition.getX();
@@ -216,12 +217,13 @@ public class InstanceContainer extends Instance {
         // The player probably have a wrong version of this chunk section, send it
         if (blockId == 0) {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(y), player);
-            return;
+            return false;
         }
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
-        if (!blockBreakEvent.isCancelled()) {
+        boolean result = !blockBreakEvent.isCancelled();
+        if (result) {
 
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockId(), blockBreakEvent.getResultCustomBlockId());
@@ -238,6 +240,7 @@ public class InstanceContainer extends Instance {
             // Cancelled so we need to refresh player chunk section
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
+        return result;
     }
 
     @Override
@@ -298,14 +301,13 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
+        Check.notNull(getStorageFolder(), "You cannot save the chunk if no StorageFolder has been defined");
         CHUNK_LOADER_IO.saveChunk(chunk, getStorageFolder(), callback);
     }
 
     @Override
     public void saveChunksToStorageFolder(Runnable callback) {
-        if (storageFolder == null)
-            throw new UnsupportedOperationException("You cannot save an instance without setting a folder.");
-
+        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
         Iterator<Chunk> chunks = getChunks().iterator();
         while (chunks.hasNext()) {
             Chunk chunk = chunks.next();
@@ -321,12 +323,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public ChunkBatch createChunkBatch(Chunk chunk) {
+        Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
         return new ChunkBatch(this, chunk);
-    }
-
-    @Override
-    public void sendChunkUpdate(Player player, Chunk chunk) {
-        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket());
     }
 
     @Override
@@ -345,7 +343,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, Biome.VOID);
@@ -418,6 +416,12 @@ public class InstanceContainer extends Instance {
         this.chunks.put(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
     }
 
+    @Override
+    public ChunkGenerator getChunkGenerator() {
+        return chunkGenerator;
+    }
+
+    @Override
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
     }

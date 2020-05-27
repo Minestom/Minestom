@@ -63,49 +63,139 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.worldBorder = new WorldBorder(this);
     }
 
+    /**
+     * Used to change the id of the block in a specific position.
+     * <p>
+     * In case of a CustomBlock it does not remove it but only refresh its visual
+     *
+     * @param blockPosition the block position
+     * @param blockId       the new block id
+     */
     public abstract void refreshBlockId(BlockPosition blockPosition, short blockId);
 
-    // Used to call BlockBreakEvent and sending particle packet if true
-    public abstract void breakBlock(Player player, BlockPosition blockPosition);
+    /**
+     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
+     * and send particle packets
+     *
+     * @param player        the player who break the block
+     * @param blockPosition the position of the broken block
+     * @return true if the block has been broken, false if it has been cancelled
+     */
+    public abstract boolean breakBlock(Player player, BlockPosition blockPosition);
 
-    // Force the generation of the chunk, even if no file and ChunkGenerator are defined
+    /**
+     * Force the generation of the chunk, even if no file and ChunkGenerator are defined
+     *
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @param callback consumer called after the chunk has been generated,
+     *                 the returned chunk will never be null
+     */
     public abstract void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
-    // Load only if auto chunk load is enabled
+    /**
+     * Load the chunk if the chunk is already loaded or if
+     * {@link #hasEnabledAutoChunkLoad()} returns true
+     *
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @param callback consumer called after the chunk has tried to be loaded,
+     *                 contains a chunk if it is successful, null otherwise
+     */
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
+    /**
+     * @param chunk the chunk to unload
+     */
     public abstract void unloadChunk(Chunk chunk);
 
+    /**
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the chunk at the specified position, null if not loaded
+     */
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
+    /**
+     * @param chunk    the chunk to save
+     * @param callback called when the chunk is done saving
+     * @throws NullPointerException if {@link #getStorageFolder()} returns null
+     */
     public abstract void saveChunkToStorageFolder(Chunk chunk, Runnable callback);
 
+    /**
+     * @param callback called when the chunks are done saving
+     * @throws NullPointerException if {@link #getStorageFolder()} returns null
+     */
     public abstract void saveChunksToStorageFolder(Runnable callback);
 
+    /**
+     * @return a BlockBatch linked to the instance
+     */
     public abstract BlockBatch createBlockBatch();
 
+    /**
+     * @param chunk the chunk to modify
+     * @return a ChunkBatch linked to {@code chunk}
+     * @throws NullPointerException if {@code chunk} is null
+     */
     public abstract ChunkBatch createChunkBatch(Chunk chunk);
 
+    /**
+     * @return the chunk generator of the instance
+     */
+    public abstract ChunkGenerator getChunkGenerator();
+
+    /**
+     * @param chunkGenerator the new chunk generator of the instance
+     */
     public abstract void setChunkGenerator(ChunkGenerator chunkGenerator);
 
+    /**
+     * @return an unmodifiable containing all the loaded chunks of the instance
+     */
     public abstract Collection<Chunk> getChunks();
 
+    /**
+     * @return the storage folder of the instance
+     */
     public abstract StorageFolder getStorageFolder();
 
+    /**
+     * @param storageFolder the new storage folder of the instance
+     */
     public abstract void setStorageFolder(StorageFolder storageFolder);
-
-    public abstract void sendChunkUpdate(Player player, Chunk chunk);
 
     protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
-    public abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    protected abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
+    /**
+     * Send all chunks data to {@code player}
+     *
+     * @param player the player
+     */
     public abstract void sendChunks(Player player);
 
+    /**
+     * Send a specific chunk data to {@code player}
+     *
+     * @param player the player
+     * @param chunk  the chunk
+     */
     public abstract void sendChunk(Player player, Chunk chunk);
 
+    /**
+     * When set to true, chunks will load with players moving closer
+     * Otherwise using {@link #loadChunk(int, int)} will be required to even spawn a player
+     *
+     * @param enable enable the auto chunk load
+     */
     public abstract void enableAutoChunkLoad(boolean enable);
 
+    /**
+     * @return true if auto chunk load is enabled, false otherwise
+     */
     public abstract boolean hasEnabledAutoChunkLoad();
 
     /**
@@ -118,6 +208,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract boolean isInVoid(Position position);
 
     //
+
+    /**
+     * Send a full {@link ChunkDataPacket} to {@code player}
+     *
+     * @param player the player to update the chunk to
+     * @param chunk  the chunk to send
+     */
+    public void sendChunkUpdate(Player player, Chunk chunk) {
+        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket());
+    }
+
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
         ByteBuf chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
@@ -150,32 +251,55 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     //
 
 
+    /**
+     * @return the dimension of the instance
+     */
     public Dimension getDimension() {
         return dimension;
     }
 
+    /**
+     * @return the world border linked to the instance
+     */
     public WorldBorder getWorldBorder() {
         return worldBorder;
     }
 
+    /**
+     * @return an unmodifiable list containing all the players in the instance
+     */
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
     }
 
+    /**
+     * @return an unmodifiable list containing all the creatures in the instance
+     */
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
     }
 
+    /**
+     * @return an unmodifiable list containing all the object entities in the instance
+     */
     public Set<ObjectEntity> getObjectEntities() {
         return Collections.unmodifiableSet(objectEntities);
     }
 
+    /**
+     * @return an unmodifiable list containing all the experience orbs in the instance
+     */
     public Set<ExperienceOrb> getExperienceOrbs() {
         return Collections.unmodifiableSet(experienceOrbs);
     }
 
+    /**
+     * @param chunk the chunk to get the entities from
+     * @return an unmodifiable set containing all the entities in a chunk
+     */
     public Set<Entity> getChunkEntities(Chunk chunk) {
-        return Collections.unmodifiableSet(getEntitiesInChunk(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ())));
+        long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        return Collections.unmodifiableSet(getEntitiesInChunk(index));
     }
 
     public void refreshBlockId(int x, int y, int z, short blockId) {
@@ -308,6 +432,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     // UNSAFE METHODS (need most of time to be synchronized)
 
+    /**
+     * Used when called {@link Entity#setInstance(Instance)}, it is used to refresh viewable chunks
+     * and add viewers if {@code entity} is a Player
+     * <p>
+     * Warning: unsafe, you probably want to use {@link Entity#setInstance(Instance)} instead
+     *
+     * @param entity the entity to add
+     */
     public void addEntity(Entity entity) {
         Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
@@ -343,6 +475,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         });
     }
 
+    /**
+     * Used when an entity is removed from the instance, it removes all of his viewers
+     * <p>
+     * Warning: unsafe, you probably want to set the entity to another instance
+     *
+     * @param entity the entity to remove
+     */
     public void removeEntity(Entity entity) {
         Instance entityInstance = entity.getInstance();
         if (entityInstance == null || entityInstance != this)
@@ -360,6 +499,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         });
     }
 
+    /**
+     * Add the specified entity to the instance entities cache
+     * <p>
+     * Warning: this is done automatically the entity move out of his chunk
+     *
+     * @param entity the entity to add
+     * @param chunk  the chunk where the entity will be added
+     */
     public void addEntityToChunk(Entity entity, Chunk chunk) {
         Check.notNull(chunk,
                 "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
@@ -382,6 +529,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         }
     }
 
+    /**
+     * Remove the specified entity to the instance entities cache
+     * <p>
+     * Warning: this is done automatically the entity move out of his chunk
+     *
+     * @param entity the entity to remove
+     * @param chunk  the chunk where the entity will be removed
+     */
     public void removeEntityFromChunk(Entity entity, Chunk chunk) {
         long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         synchronized (chunkEntities) {

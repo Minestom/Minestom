@@ -30,6 +30,7 @@ public class PlayerDiggingListener {
 
         if (instance == null)
             return;
+
         final short blockId = instance.getBlockId(blockPosition);
 
         switch (status) {

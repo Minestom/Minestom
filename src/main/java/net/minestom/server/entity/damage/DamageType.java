@@ -39,8 +39,12 @@ public class DamageType {
         return TranslatableComponent.of("death." + identifier, TextComponent.of(killed.getUsername()));
     }
 
-    public static DamageType fromPlayer(Player player) {
+    public static EntityDamage fromPlayer(Player player) {
         return new EntityDamage(player);
+    }
+
+    public static EntityDamage fromEntity(Entity entity) {
+        return new EntityDamage(entity);
     }
 
     public Component buildDeathScreenMessage(Player killed) {

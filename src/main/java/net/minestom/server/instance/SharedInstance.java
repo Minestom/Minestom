@@ -31,8 +31,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void breakBlock(Player player, BlockPosition blockPosition) {
-        instanceContainer.breakBlock(player, blockPosition);
+    public boolean breakBlock(Player player, BlockPosition blockPosition) {
+        return instanceContainer.breakBlock(player, blockPosition);
     }
 
     @Override
@@ -81,6 +81,11 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public ChunkGenerator getChunkGenerator() {
+        return instanceContainer.getChunkGenerator();
+    }
+
+    @Override
     public Collection<Chunk> getChunks() {
         return instanceContainer.getChunks();
     }
@@ -96,11 +101,6 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void sendChunkUpdate(Player player, Chunk chunk) {
-        instanceContainer.sendChunkUpdate(player, chunk);
-    }
-
-    @Override
     public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
         instanceContainer.sendChunkSectionUpdate(chunk, section, player);
     }
@@ -111,7 +111,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         instanceContainer.createChunk(chunkX, chunkZ, callback);
     }
 

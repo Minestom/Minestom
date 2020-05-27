@@ -428,6 +428,10 @@ public class Player extends LivingEntity {
         super.kill();
     }
 
+    /**
+     * Respawn the player by sending a {@link RespawnPacket} to the player and teleporting him
+     * to {@link #getRespawnPoint()}. It also reset fire and his health
+     */
     public void respawn() {
         if (!isDead())
             return;
@@ -594,7 +598,17 @@ public class Player extends LivingEntity {
         }
     }
 
+    /**
+     * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
+     * Setting {@code destroyStage} to -1 reset the break animation
+     *
+     * @param blockPosition the position of the block
+     * @param destroyStage  the destroy stage
+     * @throws IllegalArgumentException if {@code destroyStage} is not between -1 and 10
+     */
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
+        Check.argCondition(!MathUtils.isBetween(destroyStage, -1, 10),
+                "The destroy stage has to be between -1 and 10");
         BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
         breakAnimationPacket.entityId = getEntityId() + 1;
         breakAnimationPacket.blockPosition = blockPosition;
@@ -607,6 +621,12 @@ public class Player extends LivingEntity {
         sendMessage(Chat.fromLegacyText(message));
     }
 
+    /**
+     * Send a message to the player
+     *
+     * @param message   the message to send
+     * @param colorChar the character used to represent the color
+     */
     public void sendMessage(String message, char colorChar) {
         sendMessage(Chat.fromLegacyText(message, colorChar));
     }
@@ -749,15 +769,26 @@ public class Player extends LivingEntity {
         sendUpdateHealthPacket();
     }
 
+    /**
+     * @return the additional hearts of the player
+     */
     public float getAdditionalHearts() {
         return additionalHearts;
     }
 
+    /**
+     * Update the internal field and send the appropriate {@link EntityMetaDataPacket}
+     *
+     * @param additionalHearts the count of additional heartss
+     */
     public void setAdditionalHearts(float additionalHearts) {
         this.additionalHearts = additionalHearts;
         sendMetadataIndex(14);
     }
 
+    /**
+     * @return the food of the player
+     */
     public int getFood() {
         return food;
     }
