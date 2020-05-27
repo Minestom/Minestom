@@ -8,6 +8,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.MinecraftServer.*;
 
@@ -27,7 +28,7 @@ public class BenchmarkManager {
     private Map<Long, Long> lastUserTimeMap = new HashMap<>();
     private Map<Long, Long> lastBlockedMap = new HashMap<>();
 
-    private Map<String, ThreadResult> resultMap = new HashMap<>();
+    private Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
 
     private boolean enabled = false;
     private volatile boolean stop = false;

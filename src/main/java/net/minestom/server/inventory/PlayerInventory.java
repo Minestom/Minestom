@@ -219,14 +219,14 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
             this.items[slot] = itemStack;
 
-            // Refresh slot
-            update();
-            //refreshSlot(slot); seems to break things concerning +64 stacks
-
             // Sync equipment
             if (equipmentSlot != null) {
                 player.syncEquipment(equipmentSlot);
             }
+
+            // Refresh slot
+            update();
+            //refreshSlot(slot); seems to break things concerning +64 stacks
         }
     }
 
@@ -365,14 +365,18 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         InventoryClickResult clickResult = clickProcessor.changeHeld(null, player, slot, key, clicked, heldItem);
 
-        if (clickResult.doRefresh())
+        if (clickResult.doRefresh()) {
             sendSlotRefresh((short) slot, clicked);
+        }
 
         setItemStack(slot, OFFSET, clickResult.getClicked());
         setItemStack(key, clickResult.getCursor());
 
         if (!clickResult.isCancel())
             callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem());
+
+        // Weird synchronization issue when omitted
+        update();
 
         return !clickResult.isCancel();
     }

@@ -328,6 +328,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!clickResult.isCancel())
             callClickEvent(player, this, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
 
+        // Weird synchronization issue when omitted
+        updateFromClick(clickResult, player);
+
         return !clickResult.isCancel();
     }
 

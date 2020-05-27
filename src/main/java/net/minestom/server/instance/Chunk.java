@@ -333,21 +333,22 @@ public class Chunk implements Viewable {
     }
 
     public ChunkDataPacket getFreshFullDataPacket() {
-        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
+        ChunkDataPacket fullDataPacket = getFreshPacket();
         fullDataPacket.fullChunk = true;
-        fullDataPacket.biomes = biomes.clone();
-        fullDataPacket.chunkX = chunkX;
-        fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.blocksId = blocksId.clone();
-        fullDataPacket.customBlocksId = customBlocksId.clone();
-        fullDataPacket.blockEntities = new CopyOnWriteArraySet<>(blockEntities);
-        fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
     }
 
     public ChunkDataPacket getFreshPartialDataPacket() {
-        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
+        ChunkDataPacket fullDataPacket = getFreshPacket();
         fullDataPacket.fullChunk = false;
+        return fullDataPacket;
+    }
+
+    /**
+     * @return a {@link ChunkDataPacket} containing a copy this chunk data
+     */
+    private ChunkDataPacket getFreshPacket() {
+        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;

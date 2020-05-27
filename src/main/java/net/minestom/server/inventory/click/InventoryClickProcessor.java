@@ -145,8 +145,8 @@ public class InventoryClickProcessor {
 
         if (clicked.isAir()) {
             // Set held item [key] to slot
-            resultClicked = ItemStack.getAirItem();
-            resultHeld = clicked.clone();
+            resultClicked = cursor.clone();
+            resultHeld = ItemStack.getAirItem();
         } else {
             if (cursor.isAir()) {
                 // if held item [key] is air then set clicked to held
