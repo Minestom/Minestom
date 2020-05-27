@@ -225,7 +225,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();
         entityHeadLookPacket.yaw = yaw;
-        sendPacketToViewers(entityHeadLookPacket);
+
+        sendPacketToViewersAndSelf(entityHeadLookPacket);
         sendPacketToViewersAndSelf(entityRotationPacket);
     }
 

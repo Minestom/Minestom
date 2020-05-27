@@ -42,6 +42,7 @@ public class PlayerDiggingListener {
                 if (instantBreak) {
                     instance.breakBlock(player, blockPosition);
 
+                    // Reset player target
                     if (!player.isCreative()) {
                         if (player.getCustomBlockTarget() != null) {
                             player.resetTargetBlock();
@@ -56,29 +57,32 @@ public class PlayerDiggingListener {
                     if (customBlock != null) {
                         int breakTime = customBlock.getBreakDelay(player, blockPosition);
                         if (breakTime >= 0) {
+                            // Custom block has a custom break time, allow for digging event
                             PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
+                                // Start digging the block
                                 player.refreshTargetBlock(customBlock, blockPosition, breakTime);
                                 sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
                                         ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                             } else {
+                                // Unsuccessful digging
                                 sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
                                         ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                             }
                             addEffect(player);
                         } else {
+                            // Does not have a custom break time, remove effect and keep vanilla time
                             if (player.getCustomBlockTarget() != null) {
                                 player.resetTargetBlock();
                                 removeEffect(player);
                             }
 
-                            instance.breakBlock(player, blockPosition);
-
                             sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
                                     ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                         }
                     } else {
+                        // Player is not mining a custom block, be sure that he doesn't have the effect
                         if (player.getCustomBlockTarget() != null) {
                             player.resetTargetBlock();
                             removeEffect(player);
@@ -87,6 +91,7 @@ public class PlayerDiggingListener {
                 }
                 break;
             case CANCELLED_DIGGING:
+                // Remove custom block target
                 player.resetTargetBlock();
                 removeEffect(player);
 
@@ -94,17 +99,17 @@ public class PlayerDiggingListener {
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
+                // Finished digging, remove effect if any
                 if (player.getCustomBlockTarget() != null) {
                     player.resetTargetBlock();
                     removeEffect(player);
-                } else {
-                    if (instance != null) {
-                        instance.breakBlock(player, blockPosition);
-                    }
-
-                    sendAcknowledgePacket(player, blockPosition, blockId,
-                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                 }
+
+                // Unverified block break, client is fully responsive
+                instance.breakBlock(player, blockPosition);
+
+                sendAcknowledgePacket(player, blockPosition, blockId,
+                        ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                 break;
             case DROP_ITEM_STACK:
                 ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
