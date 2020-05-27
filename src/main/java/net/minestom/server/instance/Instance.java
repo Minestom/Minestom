@@ -139,9 +139,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     protected ChunkDataPacket getChunkSectionUpdatePacket(Chunk chunk, int section) {
-        ChunkDataPacket chunkDataPacket = new ChunkDataPacket();
+        ChunkDataPacket chunkDataPacket = chunk.getFreshPartialDataPacket();
         chunkDataPacket.fullChunk = false;
-        chunkDataPacket.chunk = chunk;
         int[] sections = new int[16];
         sections[section] = 1;
         chunkDataPacket.sections = sections;

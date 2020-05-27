@@ -15,7 +15,7 @@ public class NbtReaderUtils {
 
         byte typeId = reader.readByte();
 
-        System.out.println("DEBUG TYPE: " + typeId);
+        //System.out.println("DEBUG TYPE: " + typeId);
         switch (typeId) {
             case 0x00: // TAG_End
                 // End of item NBT

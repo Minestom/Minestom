@@ -2,6 +2,7 @@ package net.minestom.server.utils.chunk;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 
@@ -81,6 +82,36 @@ public class ChunkUtils {
             }
         }
         return visibleChunks;
+    }
+
+    public static int getBlockIndex(int x, int y, int z) {
+        x = x % Chunk.CHUNK_SIZE_X;
+        z = z % Chunk.CHUNK_SIZE_Z;
+
+        short index = (short) (x & 0x000F);
+        index |= (y << 4) & 0x0FF0;
+        index |= (z << 12) & 0xF000;
+        return index & 0xffff;
+    }
+
+    public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
+        int[] pos = indexToPosition(index, chunkX, chunkZ);
+        return new BlockPosition(pos[0], pos[1], pos[2]);
+    }
+
+    public static int[] indexToPosition(int index, int chunkX, int chunkZ) {
+        int z = (byte) (index >> 12 & 0xF);
+        int y = (index >>> 4 & 0xFF);
+        int x = (byte) (index >> 0 & 0xF);
+
+        x += 16 * chunkX;
+        z += 16 * chunkZ;
+
+        return new int[]{x, y, z};
+    }
+
+    public static int[] indexToChunkPosition(int index) {
+        return indexToPosition(index, 0, 0);
     }
 
 }

@@ -20,7 +20,6 @@ import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -80,8 +79,6 @@ public class InstanceContainer extends Instance {
 
             boolean isCustomBlock = customBlock != null;
 
-            int index = SerializerUtils.coordToChunkIndex(x, y, z);
-
             BlockPosition blockPosition = new BlockPosition(x, y, z);
 
             if (isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
@@ -90,6 +87,8 @@ public class InstanceContainer extends Instance {
                 return;
             }
             setAlreadyChanged(blockPosition, blockId);
+
+            int index = ChunkUtils.getBlockIndex(x, y, z);
 
             // Call the destroy listener if previous block was a custom block
             callBlockDestroy(chunk, index, blockPosition);

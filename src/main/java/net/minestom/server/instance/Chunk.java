@@ -18,7 +18,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.SerializerUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -91,8 +91,8 @@ public class Chunk implements Viewable {
     }
 
     public void UNSAFE_removeCustomBlock(int x, int y, int z) {
-        this.customBlocksId[getBlockIndex(x, y, z)] = 0; // Set to none
-        int index = SerializerUtils.coordToChunkIndex(x, y, z);
+        int index = getBlockIndex(x, y, z);
+        this.customBlocksId[index] = 0; // Set to none
         this.blocksData.remove(index);
 
         this.updatableBlocks.remove(index);
@@ -102,15 +102,15 @@ public class Chunk implements Viewable {
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
-        int index = SerializerUtils.coordToChunkIndex(x, y, z);
+        int index = getBlockIndex(x, y, z);
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
-            refreshBlockValue(x, y, z, blockId, customId);
+            this.blocksId[index] = blockId;
+            this.customBlocksId[index] = customId;
         } else {
             // Block has been deleted, clear cache and return
 
-            this.blocksId[getBlockIndex(x, y, z)] = 0; // Set to air
-            //this.blocks.remove(index);
+            this.blocksId[index] = 0; // Set to air
 
             this.blocksData.remove(index);
 
@@ -149,7 +149,7 @@ public class Chunk implements Viewable {
     }
 
     public void setBlockData(int x, int y, int z, Data data) {
-        int index = SerializerUtils.coordToChunkIndex(x, y, z);
+        int index = getBlockIndex(x, y, z);
         if (data != null) {
             this.blocksData.put(index, data);
         } else {
@@ -185,7 +185,7 @@ public class Chunk implements Viewable {
     }
 
     protected CustomBlock getCustomBlock(int index) {
-        int[] pos = SerializerUtils.indexToChunkPosition(index);
+        int[] pos = ChunkUtils.indexToChunkPosition(index);
         return getCustomBlock(pos[0], pos[1], pos[2]);
     }
 
@@ -215,7 +215,7 @@ public class Chunk implements Viewable {
     }
 
     public Data getData(int x, byte y, int z) {
-        int index = SerializerUtils.coordToChunkIndex(x, y, z);
+        int index = getBlockIndex(x, y, z);
         return getData(index);
     }
 
@@ -243,12 +243,12 @@ public class Chunk implements Viewable {
 
                 this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
-                int[] blockPos = SerializerUtils.indexToChunkPosition(index);
+                int[] blockPos = ChunkUtils.indexToPosition(index, chunkX, chunkZ);
                 int x = blockPos[0];
                 int y = blockPos[1];
                 int z = blockPos[2];
 
-                BlockPosition blockPosition = new BlockPosition(x + 16 * chunkX, y, z + 16 * chunkZ);
+                BlockPosition blockPosition = new BlockPosition(x, y, z);
                 Data data = getData(index);
                 customBlock.update(instance, blockPosition, data);
             }
@@ -296,10 +296,10 @@ public class Chunk implements Viewable {
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (short y = 0; y < CHUNK_SIZE_Y; y++) {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int index = SerializerUtils.coordToChunkIndex(x, y, z);
+                    int index = getBlockIndex(x, y, z);
 
-                    short blockId = getBlockId(x, y, z);
-                    short customBlockId = getCustomBlockId(x, y, z);
+                    short blockId = blocksId[index];
+                    short customBlockId = customBlocksId[index];
 
                     if (blockId == 0 && customBlockId == 0)
                         continue;
@@ -334,15 +334,27 @@ public class Chunk implements Viewable {
 
     public ChunkDataPacket getFreshFullDataPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();
-        fullDataPacket.chunk = this;
         fullDataPacket.fullChunk = true;
+        fullDataPacket.biomes = biomes.clone();
+        fullDataPacket.chunkX = chunkX;
+        fullDataPacket.chunkZ = chunkZ;
+        fullDataPacket.blocksId = blocksId.clone();
+        fullDataPacket.customBlocksId = customBlocksId.clone();
+        fullDataPacket.blockEntities = new CopyOnWriteArraySet<>(blockEntities);
+        fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
     }
 
     public ChunkDataPacket getFreshPartialDataPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();
-        fullDataPacket.chunk = this;
         fullDataPacket.fullChunk = false;
+        fullDataPacket.biomes = biomes.clone();
+        fullDataPacket.chunkX = chunkX;
+        fullDataPacket.chunkZ = chunkZ;
+        fullDataPacket.blocksId = blocksId.clone();
+        fullDataPacket.customBlocksId = customBlocksId.clone();
+        fullDataPacket.blockEntities = new CopyOnWriteArraySet<>(blockEntities);
+        fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
     }
 
@@ -408,13 +420,6 @@ public class Chunk implements Viewable {
     }
 
     private int getBlockIndex(int x, int y, int z) {
-        x = x % Chunk.CHUNK_SIZE_X;
-        z = z % Chunk.CHUNK_SIZE_Z;
-
-        x = x < 0 ? Chunk.CHUNK_SIZE_X + x : x;
-        z = z < 0 ? Chunk.CHUNK_SIZE_Z + z : z;
-
-        int index = (((y * 16) + x) * 16) + z;
-        return index;
+        return ChunkUtils.getBlockIndex(x, y, z);
     }
 }

@@ -1,45 +1,6 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.instance.Chunk;
-
 public class SerializerUtils {
-
-    public static byte[] intToBytes(int value) {
-        byte[] result = new byte[4];
-        result[0] = (byte) (value >> 24);
-        result[1] = (byte) (value >> 16);
-        result[2] = (byte) (value >> 8);
-        result[3] = (byte) (value >> 0);
-        return result;
-    }
-
-    public static int bytesToInt(byte[] value) {
-        return ((value[0] & 0xFF) << 24) |
-                ((value[1] & 0xFF) << 16) |
-                ((value[2] & 0xFF) << 8) |
-                ((value[3] & 0xFF) << 0);
-    }
-
-    public static int coordToChunkIndex(int x, int y, int z) {
-        x = x % Chunk.CHUNK_SIZE_X;
-        z = z % Chunk.CHUNK_SIZE_Z;
-        short index = (short) (x & 0x000F);
-        index |= (y << 4) & 0x0FF0;
-        index |= (z << 12) & 0xF000;
-        return index & 0xffff;
-    }
-
-    public static int[] indexToChunkPosition(int index) {
-        int z = (byte) (index >> 12 & 0xF);
-        int y = (index >>> 4 & 0xFF);
-        int x = (byte) (index >> 0 & 0xF);
-        return new int[]{x, y, z};
-    }
-
-    public static BlockPosition indexToChunkBlockPosition(int index) {
-        int[] pos = indexToChunkPosition(index);
-        return new BlockPosition(pos[0], pos[1], pos[2]);
-    }
 
     public static long positionToLong(int x, int y, int z) {
         return (((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF);
