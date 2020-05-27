@@ -765,6 +765,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
     }
 
+    /**
+     * Update the entity view internally
+     * <p>
+     * Warning: you probably want to use {@link EntityCreature#setView(float, float)}
+     *
+     * @param yaw   the yaw
+     * @param pitch the pitch
+     */
     public void refreshView(float yaw, float pitch) {
         this.lastYaw = position.getYaw();
         this.lastPitch = position.getPitch();

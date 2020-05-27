@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public class ChunkLoader {
 
     private static String getChunkKey(int chunkX, int chunkZ) {
-        return "chunk_" + chunkX + "." + chunkZ;
+        return chunkX + "." + chunkZ;
     }
 
     protected void saveChunk(Chunk chunk, StorageFolder storageFolder, Runnable callback) {

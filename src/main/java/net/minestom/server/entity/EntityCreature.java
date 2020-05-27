@@ -119,14 +119,18 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         if (lastYaw != yaw) {
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = yaw;
-            sendPacketToViewers(entityHeadLookPacket);
-            refreshView(yaw, pitch);
+            setView(yaw, pitch);
         }
 
         refreshPosition(newX, newY, newZ);
+    }
+
+    public void setView(float yaw, float pitch) {
+        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+        entityHeadLookPacket.entityId = getEntityId();
+        entityHeadLookPacket.yaw = yaw;
+        sendPacketToViewers(entityHeadLookPacket);
+        refreshView(yaw, pitch);
     }
 
     @Override

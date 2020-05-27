@@ -413,7 +413,8 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(Chunk chunk) {
-        this.chunks.put(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        this.chunks.put(index, chunk);
     }
 
     @Override
