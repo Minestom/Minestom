@@ -1,22 +1,17 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class UpdateViewPositionPacket implements ServerPacket {
 
-    private Chunk chunk;
-
-    public UpdateViewPositionPacket(Chunk chunk) {
-        this.chunk = chunk;
-    }
+    public int chunkX, chunkZ;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeVarInt(chunk.getChunkX());
-        writer.writeVarInt(chunk.getChunkZ());
+        writer.writeVarInt(chunkX);
+        writer.writeVarInt(chunkZ);
     }
 
     @Override

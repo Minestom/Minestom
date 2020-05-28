@@ -39,15 +39,7 @@ public class PlayerDiggingListener {
                         Block.fromId(blockId).breaksInstantaneously();
 
                 if (instantBreak) {
-                    instance.breakBlock(player, blockPosition);
-
-                    // Reset player target
-                    if (!player.isCreative()) {
-                        removeEffect(player);
-
-                        sendAcknowledgePacket(player, blockPosition, blockId,
-                                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
-                    }
+                    breakBlock(instance, player, blockPosition);
                 } else {
                     CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                     if (customBlock != null) {
@@ -58,7 +50,7 @@ public class PlayerDiggingListener {
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
                                 // Start digging the block
-                                player.refreshTargetBlock(customBlock, blockPosition, breakTime);
+                                player.setTargetBlock(customBlock, blockPosition, breakTime);
                                 sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
                                         ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                             } else {
@@ -69,10 +61,7 @@ public class PlayerDiggingListener {
                             addEffect(player);
                         } else {
                             // Does not have a custom break time, remove effect and keep vanilla time
-                            removeEffect(player);
-
-                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                    ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
+                            breakBlock(instance, player, blockPosition);
                         }
                     } else {
                         // Player is not mining a custom block, be sure that he doesn't have the effect
@@ -88,14 +77,7 @@ public class PlayerDiggingListener {
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
-                // Finished digging, remove effect if any
-                removeEffect(player);
-
-                // Unverified block break, client is fully responsive
-                instance.breakBlock(player, blockPosition);
-
-                sendAcknowledgePacket(player, blockPosition, 0,
-                        ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
+                breakBlock(instance, player, blockPosition);
                 break;
             case DROP_ITEM_STACK:
                 ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
@@ -134,6 +116,18 @@ public class PlayerDiggingListener {
                 });
                 break;
         }
+    }
+
+    private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition) {
+        // Finished digging, remove effect if any
+        removeEffect(player);
+
+        // Unverified block break, client is fully responsive
+        instance.breakBlock(player, blockPosition);
+
+        // Send acknowledge packet to confirm the digging process
+        sendAcknowledgePacket(player, blockPosition, 0,
+                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {

@@ -247,7 +247,8 @@ public class InstanceContainer extends Instance {
 
         } else {
             // Cancelled so we need to refresh player chunk section
-            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            int section = ChunkUtils.getSectionAt(blockPosition.getY());
+            sendChunkSectionUpdate(chunk, section, player);
         }
         return result;
     }

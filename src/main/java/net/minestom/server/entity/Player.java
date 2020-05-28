@@ -1281,7 +1281,7 @@ public class Player extends LivingEntity {
             openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
-            refreshOpenInventory(newInventory);
+            this.openInventory = newInventory;
 
         });
 
@@ -1316,7 +1316,7 @@ public class Player extends LivingEntity {
         } else {
             closeWindowPacket.windowId = openInventory.getWindowId();
             openInventory.removeViewer(this); // Clear cache
-            refreshOpenInventory(null);
+            this.openInventory = null;
         }
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
@@ -1336,8 +1336,15 @@ public class Player extends LivingEntity {
         this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
 
+    /**
+     * Send a {@link UpdateViewPositionPacket}  to the player
+     *
+     * @param chunk the chunk to update the view
+     */
     public void updateViewPosition(Chunk chunk) {
-        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
+        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket();
+        updateViewPositionPacket.chunkX = chunk.getChunkX();
+        updateViewPositionPacket.chunkZ = chunk.getChunkZ();
         playerConnection.sendPacket(updateViewPositionPacket);
     }
 
@@ -1550,19 +1557,31 @@ public class Player extends LivingEntity {
         this.onGround = onGround;
     }
 
+    /**
+     * Used to change internally the last sent last keep alive id
+     * <p>
+     * Warning: could lead to have the player kicked because of a wrong keep alive packet
+     *
+     * @param lastKeepAlive the new lastKeepAlive id
+     */
     public void refreshKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
     }
 
+    /**
+     * Change the held item for the player viewers
+     * Also cancel eating if {@link #isEating()} was true
+     * <p>
+     * Warning: the player will not be noticed by this chance, only his viewers,
+     * see instead: {@link #setHeldItemSlot(short)}
+     *
+     * @param slot the new held slot
+     */
     public void refreshHeldSlot(short slot) {
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
         refreshEating(false);
-    }
-
-    protected void refreshOpenInventory(Inventory openInventory) {
-        this.openInventory = openInventory;
     }
 
     public void refreshEating(boolean isEating, long eatingTime) {
@@ -1579,6 +1598,14 @@ public class Player extends LivingEntity {
         refreshEating(isEating, defaultEatingTime);
     }
 
+    /**
+     * Used to call {@link ItemUpdateStateEvent} with the proper item
+     * It does check which hand to get the item to update
+     *
+     * @param allowFood true if food should be updated, false otherwise
+     * @return the called {@link ItemUpdateStateEvent},
+     * null if there is no item to update the state
+     */
     public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
         Material mainHandMat = Material.fromId(getItemInMainHand().getMaterialId());
         Material offHandMat = Material.fromId(getItemInOffHand().getMaterialId());
@@ -1601,13 +1628,24 @@ public class Player extends LivingEntity {
         return itemUpdateStateEvent;
     }
 
-    public void refreshTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
+    /**
+     * Make the player digging a custom block, see {@link #resetTargetBlock()} to rewind
+     *
+     * @param targetCustomBlock   the custom block to dig
+     * @param targetBlockPosition the custom block position
+     * @param breakTime           the time it will take to break the block in milliseconds
+     */
+    public void setTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
         this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
         this.blockBreakTime = breakTime;
     }
 
+    /**
+     * Reset data from the current block the player is mining.
+     * If the currently mined block (or if there isn't any) is not a CustomBlock, nothing append
+     */
     public void resetTargetBlock() {
         if (targetBlockPosition != null) {
             sendBlockBreakAnimation(targetBlockPosition, (byte) -1); // Clear the break animation
@@ -1623,10 +1661,22 @@ public class Player extends LivingEntity {
         }
     }
 
+    /**
+     * Used internally to add Bossbar in the {@link #getBossBars()} set
+     * You probably want to use {@link BossBar#addViewer(Player)}
+     *
+     * @param bossBar the bossbar to add internally
+     */
     public void refreshAddBossbar(BossBar bossBar) {
         this.bossBars.add(bossBar);
     }
 
+    /**
+     * Used internally to remove Bossbar from the {@link #getBossBars()} set
+     * You probably want to use {@link BossBar#removeViewer(Player)}
+     *
+     * @param bossBar the bossbar to remove internally
+     */
     public void refreshRemoveBossbar(BossBar bossBar) {
         this.bossBars.remove(bossBar);
     }
@@ -1635,6 +1685,11 @@ public class Player extends LivingEntity {
         this.vehicleInformation.refresh(sideways, forward, jump, unmount);
     }
 
+    /**
+     * @return the chunk range of the viewers,
+     * which is {@link MinecraftServer#CHUNK_VIEW_DISTANCE} or {@link PlayerSettings#getViewDistance()}
+     * based on which one is the lowest
+     */
     public int getChunkRange() {
         int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
         int playerRange = getSettings().viewDistance;
@@ -1645,6 +1700,9 @@ public class Player extends LivingEntity {
         }
     }
 
+    /**
+     * @return the last keep alive id sent to the player
+     */
     public long getLastKeepAlive() {
         return lastKeepAlive;
     }
@@ -1709,13 +1767,24 @@ public class Player extends LivingEntity {
         inventory.setBoots(itemStack);
     }
 
+    /**
+     * Represent the main or off hand of the player
+     */
     public enum Hand {
         MAIN,
         OFF
     }
 
+    public enum FacePoint {
+        FEET,
+        EYE
+    }
+
     // Settings enum
 
+    /**
+     * Represent where is located the main hand of the player (can be changed in Minecraft option)
+     */
     public enum MainHand {
         LEFT,
         RIGHT
@@ -1725,11 +1794,6 @@ public class Player extends LivingEntity {
         ENABLED,
         COMMANDS_ONLY,
         HIDDEN
-    }
-
-    public enum FacePoint {
-        FEET,
-        EYE
     }
 
     public class PlayerSettings {
@@ -1765,6 +1829,18 @@ public class Player extends LivingEntity {
             return mainHand;
         }
 
+        /**
+         * Change the player settings internally
+         * <p>
+         * WARNING: the player will not be noticed by this change, probably unsafe
+         *
+         * @param locale             the player locale
+         * @param viewDistance       the player view distance
+         * @param chatMode           the player chat mode
+         * @param chatColors         the player chat colors
+         * @param displayedSkinParts the player displayed skin parts
+         * @param mainHand           the player main handœ
+         */
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
             this.locale = locale;
             this.viewDistance = viewDistance;
