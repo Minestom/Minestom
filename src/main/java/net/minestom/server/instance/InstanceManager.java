@@ -57,6 +57,9 @@ public class InstanceManager {
         return createSharedInstance(sharedInstance);
     }
 
+    /**
+     * Execute a whole block tick update for all instances
+     */
     public void updateBlocks() {
         if (instances.isEmpty())
             return;

@@ -24,6 +24,9 @@ public class EntityManager {
 
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
+    /**
+     * Execute a whole entity server tick
+     */
     public void update() {
         final long time = System.currentTimeMillis();
 
@@ -179,10 +182,16 @@ public class EntityManager {
         this.waitingPlayers.add(player);
     }
 
+    /**
+     * @return the current entity update type
+     */
     public UpdateType getUpdateType() {
         return updateType;
     }
 
+    /**
+     * @param updateType the new entity update type
+     */
     public void setUpdateType(UpdateType updateType) {
         this.updateType = updateType;
     }

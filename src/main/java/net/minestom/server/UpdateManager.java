@@ -19,10 +19,10 @@ public class UpdateManager {
     public void start() {
         mainUpdate.execute(() -> {
 
-            ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-            EntityManager entityManager = MinecraftServer.getEntityManager();
-            InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-            SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
+            final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            final EntityManager entityManager = MinecraftServer.getEntityManager();
+            final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+            final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
 
             final long tickDistance = MinecraftServer.TICK_MS * 1000000;
             long currentTime;
@@ -30,11 +30,11 @@ public class UpdateManager {
                 currentTime = System.nanoTime();
 
                 // Keep Alive Handling
+                final long time = System.currentTimeMillis();
+                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    long time = System.currentTimeMillis();
                     if (time - player.getLastKeepAlive() > 10000) {
                         player.refreshKeepAlive(time);
-                        KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
                     }
                 }

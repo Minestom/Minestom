@@ -6,6 +6,7 @@ import net.minestom.server.data.type.array.*;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.PrimitiveConversion;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,14 +51,27 @@ public class DataManager {
         registerType(Inventory.class, new InventoryData());
     }
 
+    /**
+     * Register a new data type
+     *
+     * @param clazz    the data class
+     * @param dataType the data type associated
+     * @param <T>      the data type
+     */
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {
         clazz = PrimitiveConversion.getObjectClass(clazz);
-        if (dataTypeMap.containsKey(clazz))
-            throw new UnsupportedOperationException("Type " + clazz.getName() + " has already been registed");
+        Check.stateCondition(dataTypeMap.containsKey(clazz),
+                "Type " + clazz.getName() + " has already been registered");
 
         this.dataTypeMap.put(clazz, dataType);
     }
 
+    /**
+     * @param clazz the data class
+     * @param <T>   the data type
+     * @return the {@link DataType} associated to the class
+     * @throws NullPointerException if none is found
+     */
     public <T> DataType<T> getDataType(Class<T> clazz) {
         return dataTypeMap.get(PrimitiveConversion.getObjectClass(clazz));
     }

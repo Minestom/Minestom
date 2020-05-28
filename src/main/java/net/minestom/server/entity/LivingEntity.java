@@ -423,11 +423,19 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    /**
+     * @return the time in ms between two fire damage applications
+     */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
     }
 
-    public void setFireDamagePeriod(long fireDamagePeriod) {
+    /**
+     * @param fireDamagePeriod the delay between two fire damage applications
+     * @param timeUnit         the time unit
+     */
+    public void setFireDamagePeriod(long fireDamagePeriod, TimeUnit timeUnit) {
+        fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
         this.fireDamagePeriod = fireDamagePeriod;
     }
 }

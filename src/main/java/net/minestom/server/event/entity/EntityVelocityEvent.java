@@ -14,14 +14,23 @@ public class EntityVelocityEvent extends CancellableEvent {
         this.velocity = velocity;
     }
 
+    /**
+     * @return the entity who the velocity is applied to
+     */
     public Entity getEntity() {
         return entity;
     }
 
+    /**
+     * @return the velocity which will be applied
+     */
     public Vector getVelocity() {
         return velocity;
     }
 
+    /**
+     * @param velocity the new velocity to applies
+     */
     public void setVelocity(Vector velocity) {
         this.velocity = velocity;
     }

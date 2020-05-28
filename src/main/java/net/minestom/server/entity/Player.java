@@ -1165,7 +1165,7 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(respawnPacket);
     }
 
-    public void kick(Component message) {
+    public void kick(TextComponent message) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = Chat.toJsonString(message);
         playerConnection.sendPacket(disconnectPacket);
@@ -1534,6 +1534,11 @@ public class Player extends LivingEntity {
         this.packets.add(packet);
     }
 
+    /**
+     * Change the storage player latency and update its tab value
+     *
+     * @param latency the new player latency
+     */
     public void refreshLatency(int latency) {
         this.latency = latency;
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);

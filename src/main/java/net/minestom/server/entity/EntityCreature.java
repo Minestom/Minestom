@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
 import net.minestom.server.entity.property.Attribute;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
@@ -232,6 +233,16 @@ public abstract class EntityCreature extends LivingEntity {
     public void setBoots(ItemStack itemStack) {
         this.boots = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
         syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+    }
+
+    /**
+     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target
+     *
+     * @param target the entity target
+     */
+    public void attack(Entity target) {
+        EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
+        callEvent(EntityAttackEvent.class, attackEvent);
     }
 
     public void jump(float height) {

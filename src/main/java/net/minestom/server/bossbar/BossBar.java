@@ -4,6 +4,8 @@ import net.minestom.server.Viewable;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Collections;
 import java.util.Set;
@@ -48,41 +50,71 @@ public class BossBar implements Viewable {
         return Collections.unmodifiableSet(viewers);
     }
 
+    /**
+     * @return the current title of the bossbar
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * @param title the new title of the bossbar
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * @return the current progress of the bossbar
+     */
     public float getProgress() {
         return progress;
     }
 
+    /**
+     * @param progress the new progress bar percentage
+     * @throws IllegalArgumentException if {@code progress} is not between 0 and 1
+     */
     public void setProgress(float progress) {
+        Check.argCondition(!MathUtils.isBetween(progress, 0, 1),
+                "BossBar progress percentage should be between 0 and 1");
         this.progress = progress;
         updateProgress();
     }
 
+    /**
+     * @return the current bossbar color
+     */
     public BarColor getColor() {
         return color;
     }
 
+    /**
+     * @param color the new color of the bossbar
+     */
     public void setColor(BarColor color) {
         this.color = color;
         updateStyle();
     }
 
+    /**
+     * @return the current bossbar division
+     */
     public BarDivision getDivision() {
         return division;
     }
 
+    /**
+     * @param division the new bossbar division count
+     */
     public void setDivision(BarDivision division) {
         this.division = division;
         updateStyle();
     }
 
+    /**
+     * Delete the boss bar and remove all of its viewers
+     */
     public void delete() {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
