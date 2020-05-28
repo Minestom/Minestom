@@ -20,7 +20,7 @@ public class NbtReaderUtils {
 
         byte typeId = reader.readByte();
 
-        System.out.println("DEBUG TYPE: " + typeId);
+        //System.out.println("DEBUG TYPE: " + typeId);
         switch (typeId) {
             case 0x00: // TAG_End
                 // End of item NBT
@@ -55,6 +55,13 @@ public class NbtReaderUtils {
                     item.setUnbreakable(value == 1);
                     readItemStackNBT(reader, item);
                 }
+
+                if (intName.equals("HideFlags")) {
+                    int flag = reader.readInteger();
+                    item.setHideFlag(flag);
+                    readItemStackNBT(reader, item);
+                }
+
                 break;
             case 0x04: // TAG_Long
 

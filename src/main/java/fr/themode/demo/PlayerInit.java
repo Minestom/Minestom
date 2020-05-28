@@ -137,10 +137,10 @@ public class PlayerInit {
                     return;
 
                 if (event.getBlockId() == Block.STONE.getBlockId()) {
-                    event.setCustomBlockId((short) 2); // custom stone block
+                    event.setCustomBlock((short) 2); // custom stone block
                 }
                 if (event.getBlockId() == Block.TORCH.getBlockId()) {
-                    event.setCustomBlockId((short) 3); // custom torch block
+                    event.setCustomBlock((short) 3); // custom torch block
                 }
 
                 /*for (Player p : player.getInstance().getPlayers()) {
@@ -212,21 +212,21 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 45, 0));
+                player.setGameMode(GameMode.CREATIVE);
+                player.teleport(new Position(0, 41f, 0));
 
                 player.setGlowing(true);
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName("Item name");
                 item.getLore().add("a lore line");
-                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                item.setEnchantment(Enchantment.SHARPNESS, (short) 2);
+                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
 
                 player.openInventory(inventory);
 
-                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
 
                 Instance instance = player.getInstance();
                 WorldBorder worldBorder = instance.getWorldBorder();
@@ -256,7 +256,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
-                event.setRespawnPosition(new Position(0f, 45f, 0f));
+                event.setRespawnPosition(new Position(0f, 41f, 0f));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

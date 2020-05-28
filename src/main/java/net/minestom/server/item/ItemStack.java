@@ -201,6 +201,10 @@ public class ItemStack implements DataContainer {
         return hideFlag;
     }
 
+    public void setHideFlag(int hideFlag) {
+        this.hideFlag = hideFlag;
+    }
+
     public void addItemFlags(ItemFlag... hideFlags) {
         for (ItemFlag f : hideFlags) {
             this.hideFlag |= getBitModifier(f);

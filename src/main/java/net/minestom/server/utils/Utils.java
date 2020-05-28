@@ -153,7 +153,6 @@ public class Utils {
             // End display
 
             // Start enchantment
-            // FIXME: something is broken, enchants are basically ignored...
             {
                 Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
@@ -244,14 +243,14 @@ public class Utils {
             // End potion
 
             // Start hide flags
-            /*{
+            {
                 int hideFlag = itemStack.getHideFlag();
                 if (hideFlag != 0) {
                     packet.writeByte((byte) 3); // Type id (int)
                     packet.writeShortSizedString("HideFlags");
                     packet.writeInt(hideFlag);
                 }
-            }*/
+            }
 
             packet.writeByte((byte) 0); // End nbt
         }
