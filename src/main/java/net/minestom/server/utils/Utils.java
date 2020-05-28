@@ -5,15 +5,14 @@ import net.minestom.server.chat.Chat;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.item.NbtReaderUtils;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Utils {
 
@@ -183,6 +182,52 @@ public class Utils {
                 }
             }
             // End enchantment
+
+            // Start attribute
+            {
+                List<ItemAttribute> itemAttributes = itemStack.getAttributes();
+                if (!itemAttributes.isEmpty()) {
+                    packet.writeByte((byte) 0x09); // Type id (list)
+                    packet.writeShortSizedString("AttributeModifiers");
+
+                    packet.writeByte((byte) 0x0A); // Compound
+                    packet.writeInt(itemAttributes.size());
+
+                    for (ItemAttribute itemAttribute : itemAttributes) {
+                        UUID uuid = itemAttribute.getUuid();
+
+                        packet.writeByte((byte) 0x04); // Type id (long)
+                        packet.writeShortSizedString("UUIDMost");
+                        packet.writeLong(uuid.getMostSignificantBits());
+
+                        packet.writeByte((byte) 0x04); // Type id (long)
+                        packet.writeShortSizedString("UUIDLeast");
+                        packet.writeLong(uuid.getLeastSignificantBits());
+
+                        packet.writeByte((byte) 0x06); // Type id (double)
+                        packet.writeShortSizedString("Amount");
+                        packet.writeDouble(itemAttribute.getValue());
+
+                        packet.writeByte((byte) 0x08); // Type id (string)
+                        packet.writeShortSizedString("Slot");
+                        packet.writeShortSizedString(itemAttribute.getSlot().name().toLowerCase());
+
+                        packet.writeByte((byte) 0x08); // Type id (string)
+                        packet.writeShortSizedString("AttributeName");
+                        packet.writeShortSizedString(itemAttribute.getAttribute().getKey());
+
+                        packet.writeByte((byte) 0x03); // Type id (int)
+                        packet.writeShortSizedString("Operation");
+                        packet.writeInt(itemAttribute.getOperation().getId());
+
+                        packet.writeByte((byte) 0x08); // Type id (string)
+                        packet.writeShortSizedString("Name");
+                        packet.writeShortSizedString(itemAttribute.getInternalName());
+                    }
+                    packet.writeByte((byte) 0x00); // End compound
+                }
+            }
+            // End attribute
 
             // Start potion
             {

@@ -2,12 +2,17 @@ package net.minestom.server.utils.item;
 
 import net.kyori.text.Component;
 import net.minestom.server.chat.Chat;
+import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.attribute.AttributeOperation;
+import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.potion.PotionType;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class NbtReaderUtils {
 
@@ -15,7 +20,7 @@ public class NbtReaderUtils {
 
         byte typeId = reader.readByte();
 
-        //System.out.println("DEBUG TYPE: " + typeId);
+        System.out.println("DEBUG TYPE: " + typeId);
         switch (typeId) {
             case 0x00: // TAG_End
                 // End of item NBT
@@ -82,9 +87,9 @@ public class NbtReaderUtils {
 
                 if (listName.equals("StoredEnchantments")) {
                     reader.readByte(); // Should be a compound (0x0A)
-                    int size = reader.readInteger(); // Enchants count
+                    int size = reader.readInteger(); // Enchantments count
 
-                    for (int ench = 0; ench < size; ench++) {
+                    for (int i = 0; i < size; i++) {
                         reader.readByte(); // Type id (short)
                         reader.readShortSizedString(); // Constant "lvl"
                         short lvl = reader.readShort();
@@ -98,6 +103,63 @@ public class NbtReaderUtils {
 
                         Enchantment enchantment = Enchantment.valueOf(id);
                         item.setEnchantment(enchantment, lvl);
+                    }
+
+                    reader.readByte(); // Compound end
+
+                    readItemStackNBT(reader, item);
+
+                } else if (listName.equals("AttributeModifiers")) {
+                    reader.readByte(); // Should be a compound (0x0A);
+                    int size = reader.readInteger(); // Attributes count
+                    for (int i = 0; i < size; i++) {
+                        reader.readByte(); // Type id (long)
+                        reader.readShortSizedString(); // Constant "UUIDMost"
+                        long uuidMost = reader.readLong();
+
+                        reader.readByte(); // Type id (long)
+                        reader.readShortSizedString(); // Constant "UUIDLeast"
+                        long uuidLeast = reader.readLong();
+
+                        final UUID uuid = new UUID(uuidMost, uuidLeast);
+
+                        reader.readByte(); // Type id (double)
+                        reader.readShortSizedString(); // Constant "Amount"
+                        final double value = reader.readDouble();
+
+                        reader.readByte(); // Type id (string)
+                        reader.readShortSizedString(); // Constant "Slot"
+                        final String slot = reader.readShortSizedString();
+
+                        reader.readByte(); // Type id (string)
+                        reader.readShortSizedString(); // Constant "AttributeName"
+                        final String attributeName = reader.readShortSizedString();
+
+                        reader.readByte(); // Type id (int)
+                        reader.readShortSizedString(); // Constant "Operation"
+                        final int operation = reader.readInteger();
+
+                        reader.readByte(); // Type id (string)
+                        reader.readShortSizedString(); // Constant "Name"
+                        final String name = reader.readShortSizedString();
+
+                        final Attribute attribute = Attribute.fromKey(attributeName);
+                        // Wrong attribute name, stop here
+                        if (attribute == null)
+                            break;
+                        final AttributeOperation attributeOperation = AttributeOperation.byId(operation);
+                        // Wrong attribute operation, stop here
+                        if (attributeOperation == null)
+                            break;
+                        final AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+                        // Wrong attribute slot, stop here
+                        if (attributeSlot == null)
+                            break;
+
+                        // Add attribute
+                        final ItemAttribute itemAttribute =
+                                new ItemAttribute(uuid, name, attribute, attributeOperation, value, attributeSlot);
+                        item.addAttribute(itemAttribute);
                     }
 
                     reader.readByte(); // Compound end

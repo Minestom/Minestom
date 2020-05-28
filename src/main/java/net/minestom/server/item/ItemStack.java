@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.validate.Check;
@@ -19,7 +20,6 @@ public class ItemStack implements DataContainer {
     private static StackingRule defaultStackingRule;
 
     private short materialId;
-    private Set<PotionType> potionTypes;
 
     private byte amount;
     private short damage;
@@ -29,6 +29,8 @@ public class ItemStack implements DataContainer {
     private ArrayList<String> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
+    private List<ItemAttribute> attributes;
+    private Set<PotionType> potionTypes;
 
     {
         if (defaultStackingRule == null)
@@ -47,6 +49,7 @@ public class ItemStack implements DataContainer {
         this.lore = new ArrayList<>();
 
         this.enchantmentMap = new HashMap<>();
+        this.attributes = new ArrayList<>();
         this.potionTypes = new HashSet<>();
 
         this.stackingRule = defaultStackingRule;
@@ -150,6 +153,14 @@ public class ItemStack implements DataContainer {
         return this.enchantmentMap.getOrDefault(enchantment, (short) 0);
     }
 
+    public List<ItemAttribute> getAttributes() {
+        return Collections.unmodifiableList(attributes);
+    }
+
+    public void addAttribute(ItemAttribute itemAttribute) {
+        this.attributes.add(itemAttribute);
+    }
+
     public Set<PotionType> getPotionTypes() {
         return Collections.unmodifiableSet(potionTypes);
     }
@@ -200,7 +211,8 @@ public class ItemStack implements DataContainer {
     }
 
     public boolean hasNbtTag() {
-        return hasDisplayName() || hasLore() || isUnbreakable() || !getEnchantmentMap().isEmpty() || !potionTypes.isEmpty();
+        return hasDisplayName() || hasLore() || isUnbreakable() ||
+                !getEnchantmentMap().isEmpty() || !attributes.isEmpty() || !potionTypes.isEmpty();
     }
 
     public ItemStack clone() {

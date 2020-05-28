@@ -37,4 +37,12 @@ public enum Attribute {
     public float getMaxVanillaValue() {
         return maxVanillaValue;
     }
+
+    public static Attribute fromKey(String key) {
+        for (Attribute attribute : values()) {
+            if (attribute.getKey().equals(key))
+                return attribute;
+        }
+        return null;
+    }
 }
