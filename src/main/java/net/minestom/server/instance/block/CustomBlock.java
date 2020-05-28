@@ -19,6 +19,10 @@ public abstract class CustomBlock {
     private short blockId;
     private String identifier;
 
+    /**
+     * @param blockId    the visual block id
+     * @param identifier the custom block identifier
+     */
     public CustomBlock(short blockId, String identifier) {
         this.blockId = blockId;
         this.identifier = identifier;
@@ -28,16 +32,48 @@ public abstract class CustomBlock {
         this(block.getBlockId(), identifier);
     }
 
+    /**
+     * Calling delay depends on {@link #getUpdateOption()} which should be overridden
+     *
+     * @param instance      the instance of the block
+     * @param blockPosition the position of the block
+     * @param data          the data associated with the block
+     * @throws UnsupportedOperationException if {@link #getUpdateOption()}
+     *                                       is not null but the update method is not overridden
+     */
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
         throw new UnsupportedOperationException("Update method not overridden");
     }
 
+    /**
+     * The update option is used to define the delay between two
+     * {@link #update(Instance, BlockPosition, Data)} execution.
+     * <p>
+     * If this is not null, {@link #update(Instance, BlockPosition, Data)}
+     * should be overridden or errors with occurs
+     *
+     * @return the update option of the block
+     */
     public UpdateOption getUpdateOption() {
         return null;
     }
 
+    /**
+     * Called when a custom block has been placed
+     *
+     * @param instance      the instance of the block
+     * @param blockPosition the position of the block
+     * @param data          the data associated with the block
+     */
     public abstract void onPlace(Instance instance, BlockPosition blockPosition, Data data);
 
+    /**
+     * Called when a custom block has been destroyed or replaced
+     *
+     * @param instance      the instance of the block
+     * @param blockPosition the position of the block
+     * @param data          the data associated with the block
+     */
     public abstract void onDestroy(Instance instance, BlockPosition blockPosition, Data data);
 
     /**
@@ -70,6 +106,9 @@ public abstract class CustomBlock {
      */
     public abstract int getBreakDelay(Player player, BlockPosition position);
 
+    /**
+     * @return true if {@link #getUpdateOption()} is not null, false otherwise
+     */
     public boolean hasUpdate() {
         UpdateOption updateOption = getUpdateOption();
         if (updateOption == null)
@@ -89,10 +128,25 @@ public abstract class CustomBlock {
     public void handleContact(Instance instance, BlockPosition position, Entity touching) {
     }
 
+    /**
+     * This is the default visual for the block when the custom block is set,
+     * it is possible to change this value per block using
+     * {@link net.minestom.server.instance.BlockModifier#setSeparateBlocks(int, int, int, short, short)}
+     * <p>
+     * Meaning that you should not believe that your custom blocks id will always be this one.
+     *
+     * @return the default visual block id
+     */
     public short getBlockId() {
         return blockId;
     }
 
+    /**
+     * The custom block identifier, used to retrieve the custom block object with
+     * {@link BlockManager#getCustomBlock(String)} and to set custom block in the instance
+     *
+     * @return the custom block identifier
+     */
     public String getIdentifier() {
         return identifier;
     }
@@ -144,6 +198,7 @@ public abstract class CustomBlock {
 
     /**
      * Called when an explosion wants to destroy this block.
+     *
      * @param instance
      * @param lootTableArguments arguments used in the loot table loot generation
      * @return 'true' if the explosion should happen on this block, 'false' to cancel the destruction.
@@ -155,6 +210,7 @@ public abstract class CustomBlock {
 
     /**
      * Return the loot table associated to this block. Return null to use vanilla behavior
+     *
      * @param tableManager
      * @return
      */

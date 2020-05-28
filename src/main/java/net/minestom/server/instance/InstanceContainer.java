@@ -212,7 +212,7 @@ public class InstanceContainer extends Instance {
         int y = blockPosition.getY();
         int z = blockPosition.getZ();
 
-        short blockId = chunk.getBlockId(x, y, z);
+        short blockId = getBlockId(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
         if (blockId == 0) {
@@ -220,7 +220,9 @@ public class InstanceContainer extends Instance {
             return false;
         }
 
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, (short) 0, (short) 0);
+        CustomBlock customBlock = getCustomBlock(x, y, z);
+
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, blockId, customBlock, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         boolean result = !blockBreakEvent.isCancelled();
         if (result) {
@@ -235,7 +237,13 @@ public class InstanceContainer extends Instance {
                         writer.writeVarInt(blockId);
                     });
 
-            chunk.sendPacketToViewers(particlePacket);
+            chunk.getViewers().forEach(p -> {
+                // The player who breaks the block already get particles client-side
+                if (!(p.equals(player) && player.isCreative())) {
+                    p.getPlayerConnection().sendPacket(particlePacket);
+                }
+            });
+
         } else {
             // Cancelled so we need to refresh player chunk section
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
