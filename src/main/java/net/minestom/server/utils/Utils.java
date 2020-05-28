@@ -158,7 +158,7 @@ public class Utils {
                 Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
                     packet.writeByte((byte) 0x09); // Type id (list)
-                    packet.writeShortSizedString("StoredEnchantments");
+                    packet.writeShortSizedString("Enchantments");
 
                     packet.writeByte((byte) 0x0A); // Compound
                     packet.writeInt(enchantmentMap.size()); // Map size

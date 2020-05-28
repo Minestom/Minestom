@@ -85,7 +85,9 @@ public class NbtReaderUtils {
 
                 String listName = reader.readShortSizedString();
 
-                if (listName.equals("StoredEnchantments")) {
+                final boolean isEnchantment = listName.equals("Enchantments");
+                final boolean isStoredEnchantment = listName.equals("StoredEnchantments");
+                if (isEnchantment || isStoredEnchantment) {
                     reader.readByte(); // Should be a compound (0x0A)
                     int size = reader.readInteger(); // Enchantments count
 
@@ -100,16 +102,22 @@ public class NbtReaderUtils {
 
                         // Convert id
                         id = id.replace("minecraft:", "").toUpperCase();
-
                         Enchantment enchantment = Enchantment.valueOf(id);
-                        item.setEnchantment(enchantment, lvl);
+
+                        if (isEnchantment) {
+                            item.setEnchantment(enchantment, lvl);
+                        } else if (isStoredEnchantment) {
+                            item.setStoredEnchantment(enchantment, lvl);
+                        }
                     }
 
                     reader.readByte(); // Compound end
 
                     readItemStackNBT(reader, item);
 
-                } else if (listName.equals("AttributeModifiers")) {
+                }
+
+                if (listName.equals("AttributeModifiers")) {
                     reader.readByte(); // Should be a compound (0x0A);
                     int size = reader.readInteger(); // Attributes count
                     for (int i = 0; i < size; i++) {

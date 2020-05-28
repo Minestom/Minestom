@@ -29,6 +29,7 @@ public class ItemStack implements DataContainer {
     private ArrayList<String> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
+    private Map<Enchantment, Short> storedEnchantmentMap;
     private List<ItemAttribute> attributes;
     private Set<PotionType> potionTypes;
 
@@ -49,6 +50,7 @@ public class ItemStack implements DataContainer {
         this.lore = new ArrayList<>();
 
         this.enchantmentMap = new HashMap<>();
+        this.storedEnchantmentMap = new HashMap<>();
         this.attributes = new ArrayList<>();
         this.potionTypes = new HashSet<>();
 
@@ -153,6 +155,32 @@ public class ItemStack implements DataContainer {
         return this.enchantmentMap.getOrDefault(enchantment, (short) 0);
     }
 
+    /**
+     * Stored enchantments are used on enchanted book
+     *
+     * @return an unmodifiable map containing the stored enchantments
+     */
+    public Map<Enchantment, Short> getStoredEnchantmentMap() {
+        return Collections.unmodifiableMap(storedEnchantmentMap);
+    }
+
+    public void setStoredEnchantment(Enchantment enchantment, short level) {
+        if (level < 1) {
+            removeStoredEnchantment(enchantment);
+            return;
+        }
+
+        this.storedEnchantmentMap.put(enchantment, level);
+    }
+
+    public void removeStoredEnchantment(Enchantment enchantment) {
+        this.storedEnchantmentMap.remove(enchantment);
+    }
+
+    public int getStoredEnchantmentLevel(Enchantment enchantment) {
+        return this.storedEnchantmentMap.getOrDefault(enchantment, (short) 0);
+    }
+
     public List<ItemAttribute> getAttributes() {
         return Collections.unmodifiableList(attributes);
     }
@@ -212,7 +240,8 @@ public class ItemStack implements DataContainer {
 
     public boolean hasNbtTag() {
         return hasDisplayName() || hasLore() || isUnbreakable() ||
-                !getEnchantmentMap().isEmpty() || !attributes.isEmpty() || !potionTypes.isEmpty();
+                !enchantmentMap.isEmpty() || !storedEnchantmentMap.isEmpty() ||
+                !attributes.isEmpty() || !potionTypes.isEmpty();
     }
 
     public ItemStack clone() {
