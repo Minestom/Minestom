@@ -16,7 +16,6 @@ public class ClientPacketsHandler {
     }
 
     public ClientPacket getPacketInstance(int id) {
-        // System.out.println("RECEIVED PACKET 0x" + Integer.toHexString(id));
         if (id > SIZE)
             throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
 
@@ -25,6 +24,7 @@ public class ClientPacketsHandler {
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
 
         ClientPacket packet = supplier.get();
+        //System.out.println("RECEIVED PACKET 0x" + Integer.toHexString(id)+" : "+packet.getClass().getSimpleName());
         return packet;
     }
 

@@ -156,28 +156,12 @@ public class Utils {
             {
                 Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
                 if (!enchantmentMap.isEmpty()) {
-                    packet.writeByte((byte) 0x09); // Type id (list)
-                    packet.writeShortSizedString("Enchantments");
+                    writeEnchant(packet, "Enchantments", enchantmentMap);
+                }
 
-                    packet.writeByte((byte) 0x0A); // Compound
-                    packet.writeInt(enchantmentMap.size()); // Map size
-
-                    for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
-                        Enchantment enchantment = entry.getKey();
-                        short level = entry.getValue();
-
-                        packet.writeByte((byte) 0x02); // Type id (short)
-                        packet.writeShortSizedString("lvl");
-                        packet.writeShort(level);
-
-                        packet.writeByte((byte) 0x08); // Type id (string)
-                        packet.writeShortSizedString("id");
-                        packet.writeShortSizedString("minecraft:" + enchantment.name().toLowerCase());
-
-                    }
-
-                    packet.writeByte((byte) 0); // End enchantment compound
-
+                Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
+                if (!storedEnchantmentMap.isEmpty()) {
+                    writeEnchant(packet, "StoredEnchantments", storedEnchantmentMap);
                 }
             }
             // End enchantment
@@ -254,6 +238,30 @@ public class Utils {
 
             packet.writeByte((byte) 0); // End nbt
         }
+    }
+
+    private static void writeEnchant(PacketWriter packet, String listName, Map<Enchantment, Short> enchantmentMap) {
+        packet.writeByte((byte) 0x09); // Type id (list)
+        packet.writeShortSizedString(listName);
+
+        packet.writeByte((byte) 0x0A); // Compound
+        packet.writeInt(enchantmentMap.size()); // Map size
+
+        for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            short level = entry.getValue();
+
+            packet.writeByte((byte) 0x02); // Type id (short)
+            packet.writeShortSizedString("lvl");
+            packet.writeShort(level);
+
+            packet.writeByte((byte) 0x08); // Type id (string)
+            packet.writeShortSizedString("id");
+            packet.writeShortSizedString("minecraft:" + enchantment.name().toLowerCase());
+
+        }
+
+        packet.writeByte((byte) 0); // End enchantment compound
     }
 
     public static ItemStack readItemStack(PacketReader reader) {

@@ -25,7 +25,7 @@ public class PacketUtils {
         buffer.writeBytes(bytes);
 
         //if(!(serverPacket instanceof ChunkDataPacket) && !(serverPacket instanceof PlayerListHeaderAndFooterPacket))
-        //System.out.println("WRITE PACKET: " + id + " " + serverPacket.getClass().getSimpleName());
+        //System.out.println("WRITE PACKET: " + serverPacket.getClass().getSimpleName());
 
         //Unpooled.copiedBuffer(buffer);
         return buffer;
