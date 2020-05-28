@@ -1609,11 +1609,18 @@ public class Player extends LivingEntity {
     }
 
     public void resetTargetBlock() {
-        if (targetBlockPosition != null)
+        if (targetBlockPosition != null) {
             sendBlockBreakAnimation(targetBlockPosition, (byte) -1); // Clear the break animation
-        this.targetCustomBlock = null;
-        this.targetBlockPosition = null;
-        this.targetBlockTime = 0;
+            this.targetCustomBlock = null;
+            this.targetBlockPosition = null;
+            this.targetBlockTime = 0;
+
+            // Remove effect
+            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
+            removeEntityEffectPacket.entityId = getEntityId();
+            removeEntityEffectPacket.effectId = 4;
+            getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        }
     }
 
     public void refreshAddBossbar(BossBar bossBar) {

@@ -13,7 +13,6 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.utils.BlockPosition;
 
 public class PlayerDiggingListener {
@@ -95,7 +94,7 @@ public class PlayerDiggingListener {
                 // Unverified block break, client is fully responsive
                 instance.breakBlock(player, blockPosition);
 
-                sendAcknowledgePacket(player, blockPosition, blockId,
+                sendAcknowledgePacket(player, blockPosition, 0,
                         ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
                 break;
             case DROP_ITEM_STACK:
@@ -157,14 +156,7 @@ public class PlayerDiggingListener {
     }
 
     private static void removeEffect(Player player) {
-        if (player.getCustomBlockTarget() != null) {
-            player.resetTargetBlock();
-
-            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-            removeEntityEffectPacket.entityId = player.getEntityId();
-            removeEntityEffectPacket.effectId = 4;
-            player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
-        }
+        player.resetTargetBlock();
     }
 
     private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockId,

@@ -206,6 +206,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean breakBlock(Player player, BlockPosition blockPosition) {
+        player.resetTargetBlock();
+
         Chunk chunk = getChunkAt(blockPosition);
 
         int x = blockPosition.getX();
@@ -226,7 +228,6 @@ public class InstanceContainer extends Instance {
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         boolean result = !blockBreakEvent.isCancelled();
         if (result) {
-
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockId(), blockBreakEvent.getResultCustomBlockId());
 
@@ -239,7 +240,7 @@ public class InstanceContainer extends Instance {
 
             chunk.getViewers().forEach(p -> {
                 // The player who breaks the block already get particles client-side
-                if (!(p.equals(player) && player.isCreative())) {
+                if (customBlock == null || !(p.equals(player) && player.isCreative())) {
                     p.getPlayerConnection().sendPacket(particlePacket);
                 }
             });
