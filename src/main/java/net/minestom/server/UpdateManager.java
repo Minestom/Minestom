@@ -43,7 +43,7 @@ public class UpdateManager {
                         player.refreshKeepAlive(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
                     } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                        TextComponent textComponent = TextComponent.of("No Keep Alive answer")
+                        TextComponent textComponent = TextComponent.of("Timeout")
                                 .color(TextColor.RED);
                         player.kick(textComponent);
                     }

@@ -38,6 +38,7 @@ public class PacketWriterUtils {
                     playerConnection.sendPacket(serverPacket);
                 }
             }
+            buffer.release();
         });
     }
 
@@ -45,7 +46,8 @@ public class PacketWriterUtils {
         batchesPool.execute(() -> {
             if (PlayerUtils.isNettyClient(playerConnection)) {
                 ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-                playerConnection.sendPacket(buffer);
+                playerConnection.writePacket(buffer);
+                buffer.release();
             } else {
                 playerConnection.sendPacket(serverPacket);
             }

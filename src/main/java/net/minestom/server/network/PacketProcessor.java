@@ -62,7 +62,7 @@ public class PacketProcessor {
 
         switch (connectionState) {
             case PLAY:
-                Player player = connectionManager.getPlayer(playerConnection);
+                Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
                 playPacket.read(packetReader);
 

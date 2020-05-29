@@ -28,8 +28,9 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        PacketHandler packetHandler = (PacketHandler) msg;
+    public void channelRead(ChannelHandlerContext ctx, Object obj) {
+        PacketHandler packetHandler = (PacketHandler) obj;
+
         int packetLength = packetHandler.length;
         ByteBuf buffer = packetHandler.buffer;
 
@@ -50,11 +51,6 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        super.channelReadComplete(ctx);
-    }
-
-    @Override
     public void channelInactive(ChannelHandlerContext ctx) {
         PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
         if (playerConnection != null) {
@@ -62,7 +58,6 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
             Player player = connectionManager.getPlayer(playerConnection);
             if (player != null) {
                 player.remove();
-
                 connectionManager.removePlayer(playerConnection);
             }
             packetProcessor.removePlayerConnection(ctx);

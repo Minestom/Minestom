@@ -249,9 +249,9 @@ public class Player extends LivingEntity {
 
     /**
      * Used to initialize the player connection
-     * mostly used by {@link net.minestom.server.entity.fakeplayer.FakePlayer}
      */
     protected void playerConnectionInit() {
+        this.playerConnection.setPlayer(this);
     }
 
     @Override
@@ -282,9 +282,10 @@ public class Player extends LivingEntity {
 
         // Target block stage
         if (targetCustomBlock != null) {
-            final int animationCount = 10;
+            final byte animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
             byte stage = (byte) (since / (blockBreakTime / animationCount) - 1);
+            stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
             if (stage != targetLastStage) {
                 sendBlockBreakAnimation(targetBlockPosition, stage);
             }
@@ -468,6 +469,7 @@ public class Player extends LivingEntity {
     @Override
     public void remove() {
         super.remove();
+        this.packets.clear();
         clearBossBars();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);

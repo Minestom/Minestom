@@ -46,11 +46,13 @@ public class PacketListenerManager {
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
 
-        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(packet.getClass());
+        final Class clazz = packet.getClass();
+
+        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            System.err.println("Packet " + packet.getClass() + " does not have any default listener!");
+            System.err.println("Packet " + clazz + " does not have any default listener!");
         }
 
 
