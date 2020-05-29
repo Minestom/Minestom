@@ -33,15 +33,17 @@ public class ItemStack implements DataContainer {
     private List<ItemAttribute> attributes;
     private Set<PotionType> potionTypes;
 
-    {
-        if (defaultStackingRule == null)
-            defaultStackingRule = DEFAULT_STACKING_RULE;
-    }
-
     private int hideFlag;
 
     private StackingRule stackingRule;
     private Data data;
+
+    {
+        if (defaultStackingRule == null)
+            defaultStackingRule = DEFAULT_STACKING_RULE;
+        if (this.stackingRule == null)
+            this.stackingRule = defaultStackingRule;
+    }
 
     public ItemStack(short materialId, byte amount, short damage) {
         this.materialId = materialId;
@@ -53,8 +55,6 @@ public class ItemStack implements DataContainer {
         this.storedEnchantmentMap = new HashMap<>();
         this.attributes = new ArrayList<>();
         this.potionTypes = new HashSet<>();
-
-        this.stackingRule = defaultStackingRule;
     }
 
     public ItemStack(short materialId, byte amount) {
@@ -70,20 +70,30 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Do not take amount in consideration
+     * Do not take amount and stacking rule in consideration
      *
      * @param itemStack The ItemStack to compare to
      * @return true if both items are similar (without comparing amount)
      */
-    public boolean isSimilar(ItemStack itemStack) {
+    public synchronized boolean isSimilar(ItemStack itemStack) {
+        final String itemDisplayName = itemStack.getDisplayName();
+        final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
+                (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));
+
+        final Data itemData = itemStack.getData();
+        final boolean dataCheck = (data == null && itemData == null) ||
+                (data != null && itemData != null && data.equals(itemData));
+
         return itemStack.getMaterialId() == materialId &&
-                itemStack.getDisplayName() == displayName &&
+                displayNameCheck &&
                 itemStack.isUnbreakable() == unbreakable &&
                 itemStack.getDamage() == damage &&
                 itemStack.enchantmentMap.equals(enchantmentMap) &&
+                itemStack.storedEnchantmentMap.equals(storedEnchantmentMap) &&
+                itemStack.attributes.equals(attributes) &&
+                itemStack.potionTypes.equals(potionTypes) &&
                 itemStack.hideFlag == hideFlag &&
-                itemStack.getStackingRule() == stackingRule &&
-                itemStack.getData() == data;
+                dataCheck;
     }
 
     public byte getAmount() {
@@ -248,7 +258,7 @@ public class ItemStack implements DataContainer {
                 !attributes.isEmpty() || !potionTypes.isEmpty();
     }
 
-    public ItemStack clone() {
+    public synchronized ItemStack clone() {
         ItemStack itemStack = new ItemStack(materialId, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
