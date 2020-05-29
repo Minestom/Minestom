@@ -4,18 +4,9 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
@@ -33,21 +24,21 @@ public class ResourceGatherer {
      * If it is already present, directly return
      */
     public static void ensureResourcesArePresent(File minecraftFolderOverride) throws IOException {
-        if(DATA_FOLDER.exists()) {
+        if (DATA_FOLDER.exists()) {
             return;
         }
-        LOGGER.info(DATA_FOLDER +" folder does not exist. Minestom will now generate the necessary files.");
+        LOGGER.info(DATA_FOLDER + " folder does not exist. Minestom will now generate the necessary files.");
 
-        if(!TMP_FOLDER.exists() && !TMP_FOLDER.mkdirs()) {
+        if (!TMP_FOLDER.exists() && !TMP_FOLDER.mkdirs()) {
             throw new IOException("Failed to create tmp folder.");
         }
 
         final String version = "1.15.2"; // TODO: Do not hardcode
-    
+
         LOGGER.info("Starting download of Minecraft server jar for version " + version + " from Mojang servers...");
         File minecraftFolder = getMinecraftFolder(minecraftFolderOverride);
-        if(!minecraftFolder.exists()) {
-            throw new IOException("Could not find Minecraft installation folder, attempted location "+minecraftFolder+". If this location is not the correct one, please supply the correct one as argument of ResourceGatherer#ensureResourcesArePresent");
+        if (!minecraftFolder.exists()) {
+            throw new IOException("Could not find Minecraft installation folder, attempted location " + minecraftFolder + ". If this location is not the correct one, please supply the correct one as argument of ResourceGatherer#ensureResourcesArePresent");
         }
         File serverJar = downloadServerJar(minecraftFolder, version);
         LOGGER.info("Download complete.");
@@ -70,7 +61,7 @@ public class ResourceGatherer {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                 Path relativePath = generatedFolder.relativize(dir);
-                if(dir.startsWith(generatedFolder)) { // don't copy logs
+                if (dir.startsWith(generatedFolder)) { // don't copy logs
                     Path resolvedPath = dataFolderPath.resolve(relativePath);
                     LOGGER.info("> Creating sub-folder " + relativePath);
                     Files.createDirectories(resolvedPath);
@@ -88,7 +79,7 @@ public class ResourceGatherer {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 Path relativePath = generatedFolder.relativize(file);
-                if(file.startsWith(generatedFolder)) { // don't copy logs
+                if (file.startsWith(generatedFolder)) { // don't copy logs
                     Path resolvedPath = dataFolderPath.resolve(relativePath);
                     LOGGER.info("> Moving " + relativePath);
                     Files.move(file, resolvedPath);
@@ -113,11 +104,11 @@ public class ResourceGatherer {
                 new InputStreamReader(dataGeneratorProcess.getInputStream())
         ).lines().forEach(LOGGER::info);
         LOGGER.info("");
-    
+
         try {
             int resultCode = dataGeneratorProcess.waitFor();
-            if(resultCode != 0) {
-                throw new IOException("Data generator finished with non-zero return code "+resultCode);
+            if (resultCode != 0) {
+                throw new IOException("Data generator finished with non-zero return code " + resultCode);
             }
         } catch (InterruptedException e) {
             throw new IOException("Data generator was interrupted.", e);
@@ -126,30 +117,31 @@ public class ResourceGatherer {
 
     /**
      * Finds the URL for the server jar inside the versions/ folder of the game installation and download the .jar file from there
+     *
      * @param minecraftFolder
      * @param version
      * @return
      */
     private static File downloadServerJar(File minecraftFolder, String version) throws IOException {
-        File versionInfoFile = new File(minecraftFolder, "versions/"+version+"/"+version+".json");
-        if(!versionInfoFile.exists()) {
-            throw new IOException("Could not find "+version+".json in your Minecraft installation. Make sure to launch this version at least once before running Minestom");
+        File versionInfoFile = new File(minecraftFolder, "versions/" + version + "/" + version + ".json");
+        if (!versionInfoFile.exists()) {
+            throw new IOException("Could not find " + version + ".json in your Minecraft installation. Make sure to launch this version at least once before running Minestom");
         }
 
-        try(FileReader fileReader = new FileReader(versionInfoFile)) {
+        try (FileReader fileReader = new FileReader(versionInfoFile)) {
             Gson gson = new Gson();
             VersionInfo versionInfo = gson.fromJson(fileReader, VersionInfo.class);
             VersionInfo.DownloadObject serverJarInfo = versionInfo.getDownloadableFiles().get("server");
             String downloadURL = serverJarInfo.getUrl();
-    
+
             LOGGER.info("Found URL, starting download from " + downloadURL + "...");
             return download(version, downloadURL);
         }
     }
 
     private static File download(String version, String url) throws IOException {
-        File target = new File(TMP_FOLDER, "server_"+version+".jar");
-        try(BufferedInputStream in = new BufferedInputStream(new URL(url).openStream())) {
+        File target = new File(TMP_FOLDER, "server_" + version + ".jar");
+        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream())) {
             Files.copy(in, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new IOException("Failed to download Minecraft server jar.", e);
@@ -158,18 +150,19 @@ public class ResourceGatherer {
     }
 
     private static File getMinecraftFolder(File minecraftFolderOverride) {
-        if(minecraftFolderOverride != null) {
+        if (minecraftFolderOverride != null) {
             return minecraftFolderOverride;
         }
 
         // https://help.minecraft.net/hc/en-us/articles/360035131551-Where-are-Minecraft-files-stored-
         String os = System.getProperty("os.name").toLowerCase();
-        if(os.contains("win")) {
+        if (os.contains("win")) {
             String user = System.getProperty("user.name");
-            return new File("C:/Users/"+user+"/AppData/Roaming/.minecraft/");
+            return new File("C:/Users/" + user + "/AppData/Roaming/.minecraft/");
         }
-        if(os.contains("mac")) {
-            return new File("~/Library/Application Support/minecraft");
+        if (os.contains("mac")) {
+            String user = System.getProperty("user.home");
+            return new File(user + "/Library/Application Support/minecraft");
         }
 
         return new File("~/.minecraft");
