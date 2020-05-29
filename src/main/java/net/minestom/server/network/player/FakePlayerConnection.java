@@ -29,7 +29,7 @@ public class FakePlayerConnection extends PlayerConnection {
 
     @Override
     public void flush() {
-        throw new UnsupportedOperationException("FakePlayer does not have anything to flush");
+        // Does nothing
     }
 
     @Override

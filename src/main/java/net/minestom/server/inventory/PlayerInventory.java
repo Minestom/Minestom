@@ -72,32 +72,30 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public boolean addItemStack(ItemStack itemStack) {
-        synchronized (this) {
-            StackingRule stackingRule = itemStack.getStackingRule();
-            for (int i = 0; i < items.length - 10; i++) {
-                ItemStack item = items[i];
-                StackingRule itemStackingRule = item.getStackingRule();
-                if (itemStackingRule.canBeStacked(itemStack, item)) {
-                    int itemAmount = itemStackingRule.getAmount(item);
-                    if (itemAmount == stackingRule.getMaxSize())
-                        continue;
-                    int itemStackAmount = itemStackingRule.getAmount(itemStack);
-                    int totalAmount = itemStackAmount + itemAmount;
-                    if (!stackingRule.canApply(itemStack, totalAmount)) {
-                        item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
+    public synchronized boolean addItemStack(ItemStack itemStack) {
+        StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = 0; i < items.length - 10; i++) {
+            ItemStack item = items[i];
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                int totalAmount = itemStackAmount + itemAmount;
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
+                    item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
 
-                        sendSlotRefresh((short) convertToPacketSlot(i), item);
-                        itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
-                    } else {
-                        item.setAmount((byte) totalAmount);
-                        sendSlotRefresh((short) convertToPacketSlot(i), item);
-                        return true;
-                    }
-                } else if (item.isAir()) {
-                    setItemStack(i, itemStack);
+                    sendSlotRefresh((short) convertToPacketSlot(i), item);
+                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                } else {
+                    item.setAmount((byte) totalAmount);
+                    sendSlotRefresh((short) convertToPacketSlot(i), item);
                     return true;
                 }
+            } else if (item.isAir()) {
+                setItemStack(i, itemStack);
+                return true;
             }
         }
         return false;
@@ -184,50 +182,48 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
 
-    private void safeItemInsert(int slot, ItemStack itemStack) {
-        synchronized (this) {
-            itemStack = ItemStackUtils.notNull(itemStack);
+    private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
 
-            EntityEquipmentPacket.Slot equipmentSlot;
+        EntityEquipmentPacket.Slot equipmentSlot;
 
-            if (slot == player.getHeldSlot()) {
-                equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
-            } else if (slot == OFFHAND_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
+        if (slot == player.getHeldSlot()) {
+            equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
+        } else if (slot == OFFHAND_SLOT) {
+            equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
+        } else {
+            ArmorEquipEvent armorEquipEvent = null;
+
+            if (slot == HELMET_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+            } else if (slot == CHESTPLATE_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+            } else if (slot == LEGGINGS_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+            } else if (slot == BOOTS_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+            }
+
+            if (armorEquipEvent != null) {
+                ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
+                equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
             } else {
-                ArmorEquipEvent armorEquipEvent = null;
-
-                if (slot == HELMET_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-                } else if (slot == CHESTPLATE_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-                } else if (slot == LEGGINGS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-                } else if (slot == BOOTS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-                }
-
-                if (armorEquipEvent != null) {
-                    ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
-                    equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
-                    player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                    itemStack = armorEquipEvent.getArmorItem();
-                } else {
-                    equipmentSlot = null;
-                }
+                equipmentSlot = null;
             }
-
-            this.items[slot] = itemStack;
-
-            // Sync equipment
-            if (equipmentSlot != null) {
-                player.syncEquipment(equipmentSlot);
-            }
-
-            // Refresh slot
-            update();
-            //refreshSlot(slot); seems to break things concerning +64 stacks
         }
+
+        this.items[slot] = itemStack;
+
+        // Sync equipment
+        if (equipmentSlot != null) {
+            player.syncEquipment(equipmentSlot);
+        }
+
+        // Refresh slot
+        update();
+        //refreshSlot(slot); seems to break things concerning +64 stacks
     }
 
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {

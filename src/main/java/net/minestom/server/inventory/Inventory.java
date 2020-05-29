@@ -8,6 +8,7 @@ import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
@@ -88,7 +89,32 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean addItemStack(ItemStack itemStack) {
+    public synchronized boolean addItemStack(ItemStack itemStack) {
+        StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = 0; i < getItemStacks().length; i++) {
+            ItemStack item = getItemStacks()[i];
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                int totalAmount = itemStackAmount + itemAmount;
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
+                    item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
+
+                    sendSlotRefresh((short) i, item);
+                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                } else {
+                    item.setAmount((byte) totalAmount);
+                    sendSlotRefresh((short) i, item);
+                    return true;
+                }
+            } else if (item.isAir()) {
+                setItemStack(i, itemStack);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -161,16 +187,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
     }
 
-    private void safeItemInsert(int slot, ItemStack itemStack) {
-        synchronized (this) {
-            itemStack = ItemStackUtils.notNull(itemStack);
-            this.itemStacks[slot] = itemStack;
-            SetSlotPacket setSlotPacket = new SetSlotPacket();
-            setSlotPacket.windowId = getWindowId();
-            setSlotPacket.slot = (short) slot;
-            setSlotPacket.itemStack = itemStack;
-            sendPacketToViewers(setSlotPacket);
-        }
+    private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
+        this.itemStacks[slot] = itemStack;
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = getWindowId();
+        setSlotPacket.slot = (short) slot;
+        setSlotPacket.itemStack = itemStack;
+        sendPacketToViewers(setSlotPacket);
     }
 
     private WindowItemsPacket createWindowItemsPacket() {
@@ -438,6 +462,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         setCursorPlayerItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
+    }
+
+    private void sendSlotRefresh(short slot, ItemStack itemStack) {
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = getWindowId();
+        setSlotPacket.slot = slot;
+        setSlotPacket.itemStack = itemStack;
+        sendPacketToViewers(setSlotPacket);
     }
 
     /**

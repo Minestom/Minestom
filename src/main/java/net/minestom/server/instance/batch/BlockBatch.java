@@ -21,28 +21,22 @@ public class BlockBatch implements InstanceBatch {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, Data data) {
-        synchronized (this) {
-            Chunk chunk = this.instance.getChunkAt(x, z);
-            addBlockData(chunk, x, y, z, false, blockId, (short) 0, data);
-        }
+    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
+        Chunk chunk = this.instance.getChunkAt(x, z);
+        addBlockData(chunk, x, y, z, false, blockId, (short) 0, data);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        synchronized (this) {
-            Chunk chunk = this.instance.getChunkAt(x, z);
-            CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
-            addBlockData(chunk, x, y, z, true, customBlock.getBlockId(), blockId, data);
-        }
+    public synchronized void setCustomBlock(int x, int y, int z, short blockId, Data data) {
+        Chunk chunk = this.instance.getChunkAt(x, z);
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
+        addBlockData(chunk, x, y, z, true, customBlock.getBlockId(), blockId, data);
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
-        synchronized (this) {
-            Chunk chunk = this.instance.getChunkAt(x, z);
-            addBlockData(chunk, x, y, z, true, blockId, customBlockId, data);
-        }
+    public synchronized void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+        Chunk chunk = this.instance.getChunkAt(x, z);
+        addBlockData(chunk, x, y, z, true, blockId, customBlockId, data);
     }
 
     private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockId, short customBlockId, Data data) {
