@@ -48,7 +48,6 @@ public class NbtWriter {
         packet.writeDouble(value);
     }
 
-    // FIXME: not sure
     public void writeByteArray(String name, byte[] value) {
         packet.writeByte(NBT_BYTE_ARRAY);
         packet.writeShortSizedString(name);
@@ -79,6 +78,24 @@ public class NbtWriter {
         packet.writeShortSizedString(name == null ? "" : name);
         consumer.accept(this);
         packet.writeByte((byte) 0x00); // End compound
+    }
+
+    public void writeIntArray(String name, int[] value) {
+        packet.writeByte(NBT_INT_ARRAY);
+        packet.writeShortSizedString(name);
+        packet.writeInt(value.length);
+        for (int val : value) {
+            packet.writeInt(val);
+        }
+    }
+
+    public void writeLongArray(String name, long[] value) {
+        packet.writeByte(NBT_LONG_ARRAY);
+        packet.writeShortSizedString(name);
+        packet.writeInt(value.length);
+        for (long val : value) {
+            packet.writeLong(val);
+        }
     }
 
 }

@@ -15,13 +15,8 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.buffer.BufferUtils;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.querz.nbt.CompoundTag;
-import net.querz.nbt.DoubleTag;
-import net.querz.nbt.LongArrayTag;
+import net.minestom.server.utils.nbt.NbtWriter;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Set;
 
 public class ChunkDataPacket implements ServerPacket {
@@ -47,6 +42,8 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
+        NbtWriter nbtWriter = new NbtWriter(writer);
+
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
         writer.writeBoolean(fullChunk);
@@ -80,17 +77,10 @@ public class ChunkDataPacket implements ServerPacket {
         }
 
         {
-            CompoundTag compound = new CompoundTag();
-            compound.put("MOTION_BLOCKING", new LongArrayTag(Utils.encodeBlocks(motionBlocking, 9)));
-            compound.put("WORLD_SURFACE", new LongArrayTag(Utils.encodeBlocks(worldSurface, 9)));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            try {
-                compound.serialize(new DataOutputStream(outputStream), 100);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            byte[] data = outputStream.toByteArray();
-            writer.writeBytes(data);
+            nbtWriter.writeCompound(null, compound -> {
+                compound.writeLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9));
+                compound.writeLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9));
+            });
         }
 
         // Biome data
@@ -108,25 +98,20 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeVarInt(blockEntities.size());
 
         for (int index : blockEntities) {
-            BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-            CompoundTag blockEntity = new CompoundTag();
-            blockEntity.put("x", new DoubleTag(blockPosition.getX()));
-            blockEntity.put("y", new DoubleTag(blockPosition.getY()));
-            blockEntity.put("z", new DoubleTag(blockPosition.getZ()));
-            short customBlockId = customBlocksId[index];
-            CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-            if (customBlock != null) {
-                Data data = blocksData.get(index);
-                customBlock.writeBlockEntity(blockPosition, data, blockEntity);
-            }
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            try {
-                blockEntity.serialize(new DataOutputStream(os), 100);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            byte[] d = os.toByteArray();
-            writer.writeBytes(d);
+            final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+
+            nbtWriter.writeCompound(null, compound -> {
+                compound.writeDouble("x", blockPosition.getX());
+                compound.writeDouble("y", blockPosition.getY());
+                compound.writeDouble("z", blockPosition.getZ());
+
+                final short customBlockId = customBlocksId[index];
+                final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+                if (customBlock != null) {
+                    Data data = blocksData.get(index);
+                    customBlock.writeBlockEntity(blockPosition, data, compound);
+                }
+            });
         }
     }
 

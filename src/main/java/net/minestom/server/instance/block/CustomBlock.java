@@ -7,8 +7,8 @@ import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.nbt.NbtWriter;
 import net.minestom.server.utils.time.UpdateOption;
-import net.querz.nbt.CompoundTag;
 
 /**
  * TODO
@@ -193,7 +193,7 @@ public abstract class CustomBlock {
      * @param position  position of the block
      * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
      */
-    public void writeBlockEntity(BlockPosition position, Data blockData, CompoundTag nbt) {
+    public void writeBlockEntity(BlockPosition position, Data blockData, NbtWriter nbt) {
     }
 
     /**
