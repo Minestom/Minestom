@@ -1,4 +1,4 @@
-package net.minestom.server.entity.property;
+package net.minestom.server.attribute;
 
 public enum Attribute {
 

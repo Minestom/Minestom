@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -26,14 +27,19 @@ public class EntityPropertiesPacket implements ServerPacket {
 
     public static class Property {
 
-        public String key;
+        public Attribute attribute;
         public double value;
 
         private void write(PacketWriter writer) {
-            writer.writeSizedString(key);
-            writer.writeDouble(value);
+            float maxValue = attribute.getMaxVanillaValue();
 
-            // TODO modifiers
+            // Bypass vanilla limit client-side if needed (by sending the max value allowed)
+            final double v = value > maxValue ? maxValue : value;
+
+            writer.writeSizedString(attribute.getKey());
+            writer.writeDouble(v);
+
+            // TODO support for AttributeOperation
             writer.writeVarInt(0);
         }
     }

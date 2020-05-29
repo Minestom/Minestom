@@ -1,6 +1,7 @@
 package net.minestom.server.item.attribute;
 
-import net.minestom.server.entity.property.Attribute;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
 
 import java.util.UUID;
 

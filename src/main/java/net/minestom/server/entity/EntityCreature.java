@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;

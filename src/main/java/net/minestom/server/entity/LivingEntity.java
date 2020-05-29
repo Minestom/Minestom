@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
@@ -149,10 +149,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    /**
+     * Get the amount of arrows in the entity
+     *
+     * @return the arrow count
+     */
     public int getArrowCount() {
         return arrowCount;
     }
 
+    /**
+     * Change the amount of arrow stuck in the entity
+     *
+     * @param arrowCount the arrow count
+     */
     public void setArrowCount(int arrowCount) {
         this.arrowCount = arrowCount;
         sendMetadataIndex(11);
@@ -275,10 +285,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return false;
     }
 
+    /**
+     * Get the entity health
+     *
+     * @return the entity health
+     */
     public float getHealth() {
         return health;
     }
 
+    /**
+     * Change the entity health, kill it if {@code health} is <= 0 and is not dead yet
+     *
+     * @param health the new entity health
+     */
     public void setHealth(float health) {
         health = Math.min(health, getMaxHealth());
 
@@ -289,6 +309,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         sendMetadataIndex(8); // Health metadata index
     }
 
+    /**
+     * Get the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}
+     *
+     * @return the entity max health
+     */
     public float getMaxHealth() {
         return getAttributeValue(Attribute.MAX_HEALTH);
     }
@@ -347,6 +372,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Get if the entity is dead or not
+     *
      * @return true if the entity is dead, false otherwise
      */
     public boolean isDead() {
@@ -354,6 +381,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Get if the entity is able to pickup items
+     *
      * @return true if the entity is able to pickup items
      */
     public boolean canPickupItem() {
@@ -394,14 +423,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         int length = Attribute.values().length;
         EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[length];
         for (int i = 0; i < length; i++) {
-            Attribute attribute = Attribute.values()[i];
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
-            float maxValue = attribute.getMaxVanillaValue();
-            float value = getAttributeValue(attribute);
-            value = value > maxValue ? maxValue : value; // Bypass vanilla limit client-side if needed (by sending the max value allowed)
 
-            property.key = attribute.getKey();
+            Attribute attribute = Attribute.values()[i];
+            float value = getAttributeValue(attribute);
+
+            property.attribute = attribute;
             property.value = value;
+
             properties[i] = property;
         }
 
@@ -424,14 +453,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * @return the time in ms between two fire damage applications
+     * Get the time in ms between two fire damage applications
+     *
+     * @return the time in ms
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
     }
 
     /**
-     * @param fireDamagePeriod the delay between two fire damage applications
+     * Change the delay between two fire damage applications
+     *
+     * @param fireDamagePeriod the delay
      * @param timeUnit         the time unit
      */
     public void setFireDamagePeriod(long fireDamagePeriod, TimeUnit timeUnit) {

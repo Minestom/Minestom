@@ -1,11 +1,11 @@
 package net.minestom.server.utils.item;
 
 import net.kyori.text.Component;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.Chat;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.attribute.AttributeOperation;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;

@@ -1,4 +1,4 @@
-package net.minestom.server.item.attribute;
+package net.minestom.server.attribute;
 
 public enum AttributeOperation {
     ADDITION(0),

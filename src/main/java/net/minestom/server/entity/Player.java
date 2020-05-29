@@ -3,13 +3,13 @@ package net.minestom.server.entity;
 import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -1005,13 +1005,17 @@ public class Player extends LivingEntity {
     /**
      * Change the default spawn point
      *
-     * @param respawnPoint
+     * @param respawnPoint the player respawn point
      */
     public void setRespawnPoint(Position respawnPoint) {
         this.respawnPoint = respawnPoint;
     }
 
-    public void refreshAfterTeleport() {
+    /**
+     * Called after the player teleportation to refresh his position
+     * and send data to his new viewers
+     */
+    protected void refreshAfterTeleport() {
         getInventory().update();
 
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
@@ -1019,9 +1023,10 @@ public class Player extends LivingEntity {
         spawnPlayerPacket.playerUuid = getUuid();
         spawnPlayerPacket.position = getPosition();
         sendPacketToViewers(spawnPlayerPacket);
+
+        // Update for viewers
         sendPacketToViewersAndSelf(getMetadataPacket());
         playerConnection.sendPacket(getPropertiesPacket());
-        sendUpdateHealthPacket();
         syncEquipments();
     }
 
