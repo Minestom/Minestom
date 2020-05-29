@@ -14,9 +14,7 @@ import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.handler.EventHandler;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.WorldBorder;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
@@ -301,6 +299,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.data = data;
     }
 
+    /**
+     * Update the entity, called every tick
+     *
+     * @param time update time in milliseconds
+     */
     public void tick(long time) {
         if (instance == null)
             return;
@@ -464,9 +467,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Returns the number of ticks this entity has been active for
+     * Get the number of ticks this entity has been active for
      *
-     * @return
+     * @return the number of ticks this entity has been active for
      */
     public long getAliveTicks() {
         return ticks;
@@ -507,30 +510,73 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return id;
     }
 
+    /**
+     * Return the entity type id, can convert using {@link EntityType#fromId(int)}
+     *
+     * @return the entity type id
+     */
     public int getEntityType() {
         return entityType;
     }
 
+    /**
+     * Get the entity UUID
+     *
+     * @return the entity UUID
+     */
     public UUID getUuid() {
         return uuid;
     }
 
+    /**
+     * Return false just after instantiation, set to true after calling {@link #setInstance(Instance)}
+     *
+     * @return true if the entity has been linked to an instance, false otherwise
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * Is used to check collision with coordinates or other blocks/entities
+     *
+     * @return the entity bounding box
+     */
     public BoundingBox getBoundingBox() {
         return boundingBox;
     }
 
+    /**
+     * Change the internal entity bounding box
+     * <p>
+     * WARNING: this does not change the entity hit-box which is client-side
+     *
+     * @param x the bounding box X size
+     * @param y the bounding box Y size
+     * @param z the bounding box Z size
+     */
     public void setBoundingBox(float x, float y, float z) {
         this.boundingBox = new BoundingBox(this, x, y, z);
     }
 
+    /**
+     * Get the entity current instance
+     *
+     * @return the entity instance
+     */
     public Instance getInstance() {
         return instance;
     }
 
+    /**
+     * Change the entity instance
+     *
+     * @param instance the new instance of the entity
+     * @throws NullPointerException  if {@code instance} is null
+     * @throws IllegalStateException if {@code instance} has not been registered in
+     *                               {@link InstanceManager#createInstanceContainer()} or
+     *                               {@link InstanceManager#createSharedInstance(InstanceContainer)}
+     */
     public void setInstance(Instance instance) {
         Check.notNull(instance, "instance cannot be null!");
         Check.stateCondition(!MinecraftServer.getInstanceManager().getInstances().contains(instance),
@@ -548,16 +594,22 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
     }
 
+    /**
+     * Get the entity current velocity
+     *
+     * @return the entity current velocity
+     */
     public Vector getVelocity() {
         return velocity;
     }
 
-    public boolean hasVelocity() {
-        return velocity.getX() != 0 ||
-                velocity.getY() != 0 ||
-                velocity.getZ() != 0;
-    }
-
+    /**
+     * Change the entity velocity and calls {@link EntityVelocityEvent}.
+     * <p>
+     * The final velocity can be cancelled or modified by the event
+     *
+     * @param velocity the new entity velocity
+     */
     public void setVelocity(Vector velocity) {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         callCancellableEvent(EntityVelocityEvent.class, entityVelocityEvent, () -> {
@@ -566,19 +618,51 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         });
     }
 
+    /**
+     * @return true if velocity is not set to 0
+     */
+    public boolean hasVelocity() {
+        return velocity.getX() != 0 ||
+                velocity.getY() != 0 ||
+                velocity.getZ() != 0;
+    }
+
+    /**
+     * Change the gravity of the entity
+     *
+     * @param gravityDragPerTick
+     */
     public void setGravity(float gravityDragPerTick) {
         this.gravityDragPerTick = gravityDragPerTick;
     }
 
+    /**
+     * Get the distance between two entities
+     *
+     * @param entity the entity to get the distance from
+     * @return the distance between this and {@code entity}
+     */
     public float getDistance(Entity entity) {
         Check.notNull(entity, "Entity cannot be null");
         return getPosition().getDistance(entity.getPosition());
     }
 
+    /**
+     * Get the entity vehicle or null
+     *
+     * @return the entity vehicle, or null if there is not any
+     */
     public Entity getVehicle() {
         return vehicle;
     }
 
+    /**
+     * Add a new passenger to this entity
+     *
+     * @param entity the new passenger
+     * @throws NullPointerException  if {@code entity} is null
+     * @throws IllegalStateException if {@link #getInstance()} returns null
+     */
     public void addPassenger(Entity entity) {
         Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
@@ -593,6 +677,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendPacketToViewersAndSelf(getPassengersPacket());
     }
 
+    /**
+     * Remove a passenger to this entity
+     *
+     * @param entity the passenger to remove
+     * @throws NullPointerException  if {@code entity} is null
+     * @throws IllegalStateException if {@link #getInstance()} returns null
+     */
     public void removePassenger(Entity entity) {
         Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
@@ -603,11 +694,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendPacketToViewersAndSelf(getPassengersPacket());
     }
 
+    /**
+     * Get if the entity has any passenger
+     *
+     * @return true if the entity has any passenger, false otherwise
+     */
     public boolean hasPassenger() {
         return !passengers.isEmpty();
     }
 
     /**
+     * Get the entity passengers
+     *
      * @return an unmodifiable list containing all the entity passengers
      */
     public Set<Entity> getPassengers() {
@@ -641,6 +739,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Get if the entity is on fire
+     *
      * @return true if the entity is in fire, false otherwise
      */
     public boolean isOnFire() {
@@ -660,40 +760,79 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         sendMetadataIndex(0);
     }
 
+    /**
+     * Get if the entity is invisible or not
+     *
+     * @return true if the entity is invisible, false otherwise
+     */
     public boolean isInvisible() {
         return invisible;
     }
 
+    /**
+     * Change the internal invisible value and send a {@link EntityMetaDataPacket}
+     * to make visible or invisible the entity to its viewers
+     *
+     * @param invisible true to set the entity invisible, false otherwise
+     */
     public void setInvisible(boolean invisible) {
         this.invisible = invisible;
         sendMetadataIndex(0);
     }
 
-    public void setGlowing(boolean glowing) {
-        this.glowing = glowing;
-        sendMetadataIndex(0);
-    }
-
     /**
+     * Get if the entity is glowing or not
+     *
      * @return true if the entity is glowing, false otherwise
      */
     public boolean isGlowing() {
         return glowing;
     }
 
+    /**
+     * Set or remove the entity glowing effect
+     *
+     * @param glowing true to make the entity glows, false otherwise
+     */
+    public void setGlowing(boolean glowing) {
+        this.glowing = glowing;
+        sendMetadataIndex(0);
+    }
+
+    /**
+     * Get the entity custom name
+     *
+     * @return the custom name of the entity, null if there is not
+     */
     public String getCustomName() {
         return customName;
     }
 
+    /**
+     * Change the entity custom name
+     *
+     * @param customName the custom name of the entity, null to remove it
+     */
     public void setCustomName(String customName) {
         this.customName = customName;
         sendMetadataIndex(2);
     }
 
+    /**
+     * Get the custom name visible metadata field
+     *
+     * @return true if the custom name is visible, false otherwise
+     */
     public boolean isCustomNameVisible() {
         return customNameVisible;
     }
 
+    /**
+     * Change the internal custom name visible field and send a {@link EntityMetaDataPacket}
+     * to update the entity state to its viewers
+     *
+     * @param customNameVisible true to make the custom name visible, false otherwise
+     */
     public void setCustomNameVisible(boolean customNameVisible) {
         this.customNameVisible = customNameVisible;
         sendMetadataIndex(3);
@@ -709,6 +848,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Change the noGravity metadata field and change the gravity behaviour accordingly
+     *
      * @param noGravity should the entity ignore gravity
      */
     public void setNoGravity(boolean noGravity) {
@@ -717,6 +858,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Get the noGravity metadata field
+     *
      * @return true if the entity ignore gravity, false otherwise
      */
     public boolean hasNoGravity() {
@@ -766,6 +909,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
     }
 
+    /**
+     * @param position the new position
+     * @see #refreshPosition(float, float, float)
+     */
     public void refreshPosition(Position position) {
         refreshPosition(position.getX(), position.getY(), position.getZ());
     }
@@ -851,21 +998,35 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Get the entity position
+     *
      * @return the current position of the entity
      */
     public Position getPosition() {
         return position;
     }
 
+    /**
+     * Get the entity eye height
+     *
+     * @return the entity eye height
+     */
     public float getEyeHeight() {
         return eyeHeight;
     }
 
+    /**
+     * Change the entity eye height
+     *
+     * @param eyeHeight the entity eye eight
+     */
     public void setEyeHeight(float eyeHeight) {
         this.eyeHeight = eyeHeight;
     }
 
     /**
+     * Get if this entity is in the same chunk as the specified position
+     *
      * @param position the checked position chunk
      * @return true if the entity is in the same chunk as {@code position}
      */
@@ -881,6 +1042,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }
 
+    /**
+     * Get if the entity is in the same chunk as another
+     *
+     * @param entity the entity to check
+     * @return true if both entities are in the same chunk, false otherwise
+     */
     public boolean sameChunk(Entity entity) {
         return sameChunk(entity.getPosition());
     }
@@ -913,6 +1080,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Get if the entity removal is scheduled
+     *
      * @return true if {@link #scheduleRemove(long, TimeUnit)} has been called, false otherwise
      */
     public boolean isRemoveScheduled() {
@@ -1081,7 +1250,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Ask for a synchronization (position) to happen during next entity update
+     * Ask for a synchronization (position) to happen during next entity tick
      */
     public void askSynchronization() {
         this.lastSynchronizationTime = 0;
@@ -1091,7 +1260,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         return (float) (time - lastUpdate) >= MinecraftServer.TICK_MS * 0.9f; // Margin of error
     }
 
-    public enum Pose {
+    private enum Pose {
         STANDING,
         FALL_FLYING,
         SLEEPING,

@@ -640,8 +640,13 @@ public class Player extends LivingEntity {
         sendMessage(Chat.fromLegacyText(message, colorChar));
     }
 
-    public void sendMessage(Component textObject) {
-        String json = Chat.toJsonString(textObject);
+    /**
+     * Send a message to the player
+     *
+     * @param component the text component
+     */
+    public void sendMessage(Component component) {
+        String json = Chat.toJsonString(component);
         playerConnection.sendPacket(new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT));
     }
 
@@ -676,6 +681,9 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(packet);
     }
 
+    /**
+     * Send a {@link StopSoundPacket} packet
+     */
     public void stopSound() {
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
         stopSoundPacket.flags = 0x00;
@@ -779,7 +787,9 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return the additional hearts of the player
+     * Get the player additional hearts
+     *
+     * @return the player additional hearts
      */
     public float getAdditionalHearts() {
         return additionalHearts;
@@ -796,7 +806,9 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return the food of the player
+     * Get the player food
+     *
+     * @return the player food
      */
     public int getFood() {
         return food;
@@ -829,14 +841,18 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return true if the player is currently eating, false otherwise
+     * Get if the player is eating
+     *
+     * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
         return isEating;
     }
 
     /**
-     * @return the default eating time for the player
+     * Get the player default eating time
+     *
+     * @return the player default eating time
      */
     public long getDefaultEatingTime() {
         return defaultEatingTime;
@@ -852,31 +868,21 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * Used to change the player gamemode
+     * Get the player display name in the tab-list
      *
-     * @param gameMode the new player gamemode
-     */
-    public void setGameMode(GameMode gameMode) {
-        Check.notNull(gameMode, "GameMode cannot be null");
-        this.gameMode = gameMode;
-        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-
-        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
-        sendPacketToViewersAndSelf(infoPacket);
-    }
-
-    /**
-     * @return the displayed name of the player in the tab-list,
-     * null means that {@link #getUsername()} is display
+     * @return the player display name,
+     * null means that {@link #getUsername()} is displayed
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * @param displayName the new displayed name of the player in the tab-list,
-     *                    set to null to show the player username
+     * Change the player display name in the tab-list
+     * <p>
+     * Set to null to show the player username
+     *
+     * @param displayName the display name
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
@@ -887,13 +893,32 @@ public class Player extends LivingEntity {
         sendPacketToViewersAndSelf(infoPacket);
     }
 
+    /**
+     * Get if the player has the respawn screen enabled or disabled
+     *
+     * @return true if the player has the respawn screen, false if he didn't
+     */
     public boolean isEnableRespawnScreen() {
         return enableRespawnScreen;
     }
 
+    /**
+     * Enable or disable the respawn screen
+     *
+     * @param enableRespawnScreen true to enable the respawn screen, false to disable it
+     */
     public void setEnableRespawnScreen(boolean enableRespawnScreen) {
         this.enableRespawnScreen = enableRespawnScreen;
         sendChangeGameStatePacket(ChangeGameStatePacket.Reason.ENABLE_RESPAWN_SCREEN, enableRespawnScreen ? 0 : 1);
+    }
+
+    /**
+     * Get the player username
+     *
+     * @return the player username
+     */
+    public String getUsername() {
+        return username;
     }
 
     private void sendChangeGameStatePacket(ChangeGameStatePacket.Reason reason, float value) {
@@ -1097,15 +1122,20 @@ public class Player extends LivingEntity {
         teleport(position, null);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
+    /**
+     * Get the player connection
+     * <p>
+     * Used to send packets and get relatives stuff to the connection
+     *
+     * @return the player connection
+     */
     public PlayerConnection getPlayerConnection() {
         return playerConnection;
     }
 
     /**
+     * Get if the player is online or not
+     *
      * @return true if the player is online, false otherwise
      */
     public boolean isOnline() {
@@ -1113,10 +1143,21 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player settings
+     *
      * @return the player settings
      */
     public PlayerSettings getSettings() {
         return settings;
+    }
+
+    /**
+     * Get the player dimension
+     *
+     * @return the player current dimension
+     */
+    public Dimension getDimension() {
+        return dimension;
     }
 
     public PlayerInventory getInventory() {
@@ -1134,17 +1175,27 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return the player current dimension
-     */
-    public Dimension getDimension() {
-        return dimension;
-    }
-
-    /**
+     * Get the player GameMode
+     *
      * @return the player current gamemode
      */
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    /**
+     * Change the player GameMode
+     *
+     * @param gameMode the new player GameMode
+     */
+    public void setGameMode(GameMode gameMode) {
+        Check.notNull(gameMode, "GameMode cannot be null");
+        this.gameMode = gameMode;
+        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
+
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
+        sendPacketToViewersAndSelf(infoPacket);
     }
 
     /**
@@ -1174,13 +1225,23 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(respawnPacket);
     }
 
-    public void kick(TextComponent message) {
+    /**
+     * Kick the player with a reason
+     *
+     * @param textComponent the kick reason
+     */
+    public void kick(TextComponent textComponent) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = Chat.toJsonString(message);
+        disconnectPacket.message = Chat.toJsonString(textComponent);
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.disconnect();
     }
 
+    /**
+     * Kick the player with a reason
+     *
+     * @param message the kick reason
+     */
     public void kick(String message) {
         kick(Chat.fromLegacyText(message));
     }
@@ -1205,6 +1266,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player held slot (0-8)
+     *
      * @return the current held slot for the player
      */
     public short getHeldSlot() {
@@ -1243,6 +1306,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player open inventory
+     *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
     public Inventory getOpenInventory() {
@@ -1332,6 +1397,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player viewable chunks
+     *
      * @return an unmodifiable {@link Set} containing all the chunks that the player sees
      */
     public Set<Chunk> getViewableChunks() {
@@ -1369,6 +1436,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player permission level
+     *
      * @return the player permission level
      */
     public int getPermissionLevel() {
@@ -1391,6 +1460,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Set or remove the reduced debug screen
+     *
      * @param reduced should the player has the reduced debug screen
      */
     public void setReducedDebugScreenInformation(boolean reduced) {
@@ -1402,6 +1473,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get if the player has the reduced debug screen
+     *
      * @return true if the player has the reduced debug screen, false otherwise
      */
     public boolean hasReducedDebugScreenInformation() {
@@ -1429,6 +1502,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get if the player is currently flying
+     *
      * @return true if the player if flying, false otherwise
      */
     public boolean isFlying() {
@@ -1436,6 +1511,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Set the player flying
+     *
      * @param flying should the player fly
      */
     public void setFlying(boolean flying) {
@@ -1456,6 +1533,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get if the player is allowed to fly
+     *
      * @return true if the player if allowed to fly, false otherwise
      */
     public boolean isAllowFlying() {
@@ -1463,6 +1542,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Allow or forbid the player to fly
+     *
      * @param allowFlying should the player be allowed to fly
      */
     public void setAllowFlying(boolean allowFlying) {
@@ -1488,6 +1569,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player flying speed
+     *
      * @return the flying speed of the player
      */
     public float getFlyingSpeed() {
@@ -1523,6 +1606,11 @@ public class Player extends LivingEntity {
         return statisticValueMap;
     }
 
+    /**
+     * Get the player vehicle information
+     *
+     * @return the player vehicle information
+     */
     public PlayerVehicleInformation getVehicleInformation() {
         return vehicleInformation;
     }
@@ -1719,6 +1807,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the last sent keep alive id
+     *
      * @return the last keep alive id sent to the player
      */
     public long getLastKeepAlive() {
@@ -1823,18 +1913,38 @@ public class Player extends LivingEntity {
         private byte displayedSkinParts;
         private MainHand mainHand;
 
+        /**
+         * The player game language
+         *
+         * @return the player locale
+         */
         public String getLocale() {
             return locale;
         }
 
+        /**
+         * Get the player view distance
+         *
+         * @return the player view distance
+         */
         public byte getViewDistance() {
             return viewDistance;
         }
 
+        /**
+         * Get the player chat mode
+         *
+         * @return the player chat mode
+         */
         public ChatMode getChatMode() {
             return chatMode;
         }
 
+        /**
+         * Get if the player has chat colors enabled
+         *
+         * @return true if chat colors are enabled, false otherwise
+         */
         public boolean hasChatColors() {
             return chatColors;
         }
@@ -1843,6 +1953,11 @@ public class Player extends LivingEntity {
             return displayedSkinParts;
         }
 
+        /**
+         * Get the player main hand
+         *
+         * @return the player main hand
+         */
         public MainHand getMainHand() {
             return mainHand;
         }
