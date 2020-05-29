@@ -13,6 +13,7 @@ public class EntityIronGolem extends EntityCreature {
 
     public EntityIronGolem(Position spawnPosition) {
         super(EntityType.IRON_GOLEM, spawnPosition);
+        setBoundingBox(1.4f, 2.7f, 1.4f);
     }
 
     @Override

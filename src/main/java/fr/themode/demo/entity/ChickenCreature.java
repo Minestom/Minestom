@@ -1,19 +1,16 @@
 package fr.themode.demo.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.type.EntityChicken;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 
-public class ChickenCreature extends EntityCreature {
+public class ChickenCreature extends EntityChicken {
 
     public ChickenCreature(Position defaultPosition) {
-        super(EntityType.CHICKEN, defaultPosition);
-
-        setBoundingBox(0.4f, 0.7f, 0.4f);
+        super(defaultPosition);
     }
 
     @Override

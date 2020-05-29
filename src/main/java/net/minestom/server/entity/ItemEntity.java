@@ -26,7 +26,6 @@ public class ItemEntity extends ObjectEntity {
         super(EntityType.ITEM, spawnPosition);
         this.itemStack = itemStack;
         setBoundingBox(0.25f, 0.25f, 0.25f);
-        setGravity(0.025f);
     }
 
     @Override

@@ -15,6 +15,7 @@ public class EntityCreeper extends EntityCreature {
 
     public EntityCreeper(Position spawnPosition) {
         super(EntityType.CREEPER, spawnPosition);
+        setBoundingBox(0.6f, 1.7f, 0.6f);
     }
 
     @Override

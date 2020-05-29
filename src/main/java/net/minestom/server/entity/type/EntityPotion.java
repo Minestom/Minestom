@@ -14,6 +14,7 @@ public class EntityPotion extends ObjectEntity {
 
     public EntityPotion(Position spawnPosition, ItemStack potion) {
         super(EntityType.POTION, spawnPosition);
+        setBoundingBox(0.25f, 0.25f, 0.25f);
         setPotion(potion);
     }
 

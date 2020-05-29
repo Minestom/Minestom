@@ -13,6 +13,7 @@ public class EntityPolarBear extends EntityCreature {
 
     public EntityPolarBear(Position spawnPosition) {
         super(EntityType.POLAR_BEAR, spawnPosition);
+        setBoundingBox(1.3f, 1.4f, 1.3f);
     }
 
     @Override

@@ -220,7 +220,6 @@ public class Utils {
                         packet.writeByte((byte) 0x08); // type id (string)
                         packet.writeShortSizedString("Potion");
                         packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
-
                     }
                 }
             }

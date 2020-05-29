@@ -13,6 +13,7 @@ public class EntitySpider extends EntityCreature {
 
     public EntitySpider(Position spawnPosition) {
         super(EntityType.SPIDER, spawnPosition);
+        setBoundingBox(1.4f, 0.9f, 1.4f);
     }
 
     @Override
