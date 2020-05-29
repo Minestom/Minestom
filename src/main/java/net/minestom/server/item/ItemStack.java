@@ -73,27 +73,29 @@ public class ItemStack implements DataContainer {
      * Do not take amount and stacking rule in consideration
      *
      * @param itemStack The ItemStack to compare to
-     * @return true if both items are similar (without comparing amount)
+     * @return true if both items are similar
      */
     public synchronized boolean isSimilar(ItemStack itemStack) {
-        final String itemDisplayName = itemStack.getDisplayName();
-        final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
-                (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));
+        synchronized (itemStack) {
+            final String itemDisplayName = itemStack.getDisplayName();
+            final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
+                    (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));
 
-        final Data itemData = itemStack.getData();
-        final boolean dataCheck = (data == null && itemData == null) ||
-                (data != null && itemData != null && data.equals(itemData));
+            final Data itemData = itemStack.getData();
+            final boolean dataCheck = (data == null && itemData == null) ||
+                    (data != null && itemData != null && data.equals(itemData));
 
-        return itemStack.getMaterialId() == materialId &&
-                displayNameCheck &&
-                itemStack.isUnbreakable() == unbreakable &&
-                itemStack.getDamage() == damage &&
-                itemStack.enchantmentMap.equals(enchantmentMap) &&
-                itemStack.storedEnchantmentMap.equals(storedEnchantmentMap) &&
-                itemStack.attributes.equals(attributes) &&
-                itemStack.potionTypes.equals(potionTypes) &&
-                itemStack.hideFlag == hideFlag &&
-                dataCheck;
+            return itemStack.getMaterialId() == materialId &&
+                    displayNameCheck &&
+                    itemStack.isUnbreakable() == unbreakable &&
+                    itemStack.getDamage() == damage &&
+                    itemStack.enchantmentMap.equals(enchantmentMap) &&
+                    itemStack.storedEnchantmentMap.equals(storedEnchantmentMap) &&
+                    itemStack.attributes.equals(attributes) &&
+                    itemStack.potionTypes.equals(potionTypes) &&
+                    itemStack.hideFlag == hideFlag &&
+                    dataCheck;
+        }
     }
 
     public byte getAmount() {

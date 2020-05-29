@@ -50,7 +50,4 @@ dependencies {
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'
 
-    // Used to parse minecraft anvil world format
-    api 'com.github.Hugobros3:Enklume:bec416b92e'
-
 }
