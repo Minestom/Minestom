@@ -11,6 +11,8 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.item.NbtReaderUtils;
+import net.minestom.server.utils.nbt.NBT;
+import net.minestom.server.utils.nbt.NbtWriter;
 
 import java.util.*;
 
@@ -104,163 +106,128 @@ public class Utils {
                 return;
             }
 
-            packet.writeByte((byte) 0x0A); // Compound
-            packet.writeShort((short) 0); // Empty compound name
+            NbtWriter mainWriter = new NbtWriter(packet);
 
-            // Unbreakable
-            if (itemStack.isUnbreakable()) {
-                packet.writeByte((byte) 0x03); // Integer
-                packet.writeShortSizedString("Unbreakable");
-                packet.writeInt(1);
-            }
-
-            // Start damage
-            {
-                packet.writeByte((byte) 0x02);
-                packet.writeShortSizedString("Damage");
-                packet.writeShort(itemStack.getDamage());
-            }
-            // End damage
-
-            // Display
-            boolean hasDisplayName = itemStack.hasDisplayName();
-            boolean hasLore = itemStack.hasLore();
-
-            if (hasDisplayName || hasLore) {
-                packet.writeByte((byte) 0x0A); // Start display compound
-                packet.writeShortSizedString("display");
-
-                if (hasDisplayName) {
-                    packet.writeByte((byte) 0x08);
-                    packet.writeShortSizedString("Name");
-                    packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName())));
+            mainWriter.writeCompound(null, writer -> {
+                // Unbreakable
+                if (itemStack.isUnbreakable()) {
+                    writer.writeInt("Unbreakable", 1);
                 }
 
-                if (hasLore) {
-                    ArrayList<String> lore = itemStack.getLore();
+                // Start damage
+                {
+                    writer.writeShort("Damage", itemStack.getDamage());
+                }
+                // End damage
 
-                    packet.writeByte((byte) 0x09);
-                    packet.writeShortSizedString("Lore");
-                    packet.writeByte((byte) 0x08);
-                    packet.writeInt(lore.size());
-                    for (String line : lore) {
-                        packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(line)));
+                // Display
+                boolean hasDisplayName = itemStack.hasDisplayName();
+                boolean hasLore = itemStack.hasLore();
+
+                if (hasDisplayName || hasLore) {
+                    writer.writeCompound("display", displayWriter -> {
+                        if (hasDisplayName) {
+                            final String name = Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName()));
+                            displayWriter.writeString("Name", name);
+                        }
+
+                        if (hasLore) {
+                            final ArrayList<String> lore = itemStack.getLore();
+
+                            displayWriter.writeList("Lore", NBT.NBT_STRING, lore.size(), () -> {
+                                for (String line : lore) {
+                                    line = Chat.toJsonString(Chat.fromLegacyText(line));
+                                    packet.writeShortSizedString(line);
+                                }
+                            });
+
+                        }
+                    });
+                }
+                // End display
+
+                // Start enchantment
+                {
+                    Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
+                    if (!enchantmentMap.isEmpty()) {
+                        writeEnchant(writer, "Enchantments", enchantmentMap);
+                    }
+
+                    Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
+                    if (!storedEnchantmentMap.isEmpty()) {
+                        writeEnchant(writer, "StoredEnchantments", storedEnchantmentMap);
                     }
                 }
+                // End enchantment
 
-                packet.writeByte((byte) 0); // End display compound
-            }
-            // End display
+                // Start attribute
+                {
+                    List<ItemAttribute> itemAttributes = itemStack.getAttributes();
+                    if (!itemAttributes.isEmpty()) {
+                        packet.writeByte((byte) 0x09); // Type id (list)
+                        packet.writeShortSizedString("AttributeModifiers");
 
-            // Start enchantment
-            {
-                Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
-                if (!enchantmentMap.isEmpty()) {
-                    writeEnchant(packet, "Enchantments", enchantmentMap);
-                }
+                        packet.writeByte((byte) 0x0A); // Compound
+                        packet.writeInt(itemAttributes.size());
 
-                Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
-                if (!storedEnchantmentMap.isEmpty()) {
-                    writeEnchant(packet, "StoredEnchantments", storedEnchantmentMap);
-                }
-            }
-            // End enchantment
+                        for (ItemAttribute itemAttribute : itemAttributes) {
+                            UUID uuid = itemAttribute.getUuid();
 
-            // Start attribute
-            {
-                List<ItemAttribute> itemAttributes = itemStack.getAttributes();
-                if (!itemAttributes.isEmpty()) {
-                    packet.writeByte((byte) 0x09); // Type id (list)
-                    packet.writeShortSizedString("AttributeModifiers");
+                            writer.writeLong("UUIDMost", uuid.getMostSignificantBits());
 
-                    packet.writeByte((byte) 0x0A); // Compound
-                    packet.writeInt(itemAttributes.size());
+                            writer.writeLong("UUIDLeast", uuid.getLeastSignificantBits());
 
-                    for (ItemAttribute itemAttribute : itemAttributes) {
-                        UUID uuid = itemAttribute.getUuid();
+                            writer.writeDouble("Amount", itemAttribute.getValue());
 
-                        packet.writeByte((byte) 0x04); // Type id (long)
-                        packet.writeShortSizedString("UUIDMost");
-                        packet.writeLong(uuid.getMostSignificantBits());
+                            writer.writeString("Slot", itemAttribute.getSlot().name().toLowerCase());
 
-                        packet.writeByte((byte) 0x04); // Type id (long)
-                        packet.writeShortSizedString("UUIDLeast");
-                        packet.writeLong(uuid.getLeastSignificantBits());
+                            writer.writeString("itemAttribute", itemAttribute.getAttribute().getKey());
 
-                        packet.writeByte((byte) 0x06); // Type id (double)
-                        packet.writeShortSizedString("Amount");
-                        packet.writeDouble(itemAttribute.getValue());
+                            writer.writeInt("Operation", itemAttribute.getOperation().getId());
 
-                        packet.writeByte((byte) 0x08); // Type id (string)
-                        packet.writeShortSizedString("Slot");
-                        packet.writeShortSizedString(itemAttribute.getSlot().name().toLowerCase());
-
-                        packet.writeByte((byte) 0x08); // Type id (string)
-                        packet.writeShortSizedString("AttributeName");
-                        packet.writeShortSizedString(itemAttribute.getAttribute().getKey());
-
-                        packet.writeByte((byte) 0x03); // Type id (int)
-                        packet.writeShortSizedString("Operation");
-                        packet.writeInt(itemAttribute.getOperation().getId());
-
-                        packet.writeByte((byte) 0x08); // Type id (string)
-                        packet.writeShortSizedString("Name");
-                        packet.writeShortSizedString(itemAttribute.getInternalName());
-                    }
-                    packet.writeByte((byte) 0x00); // End compound
-                }
-            }
-            // End attribute
-
-            // Start potion
-            {
-                Set<PotionType> potionTypes = itemStack.getPotionTypes();
-                if (!potionTypes.isEmpty()) {
-                    for (PotionType potionType : potionTypes) {
-                        packet.writeByte((byte) 0x08); // type id (string)
-                        packet.writeShortSizedString("Potion");
-                        packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
+                            writer.writeString("Name", itemAttribute.getInternalName());
+                        }
+                        packet.writeByte((byte) 0x00); // End compound
                     }
                 }
-            }
-            // End potion
+                // End attribute
 
-            // Start hide flags
-            {
-                int hideFlag = itemStack.getHideFlag();
-                if (hideFlag != 0) {
-                    packet.writeByte((byte) 3); // Type id (int)
-                    packet.writeShortSizedString("HideFlags");
-                    packet.writeInt(hideFlag);
+                // Start potion
+                {
+                    Set<PotionType> potionTypes = itemStack.getPotionTypes();
+                    if (!potionTypes.isEmpty()) {
+                        for (PotionType potionType : potionTypes) {
+                            packet.writeByte((byte) 0x08); // type id (string)
+                            packet.writeShortSizedString("Potion");
+                            packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
+                        }
+                    }
                 }
-            }
+                // End potion
 
-            packet.writeByte((byte) 0); // End nbt
+                // Start hide flags
+                {
+                    int hideFlag = itemStack.getHideFlag();
+                    if (hideFlag != 0) {
+                        writer.writeInt("HideFlags", hideFlag);
+                    }
+                }
+            });
         }
     }
 
-    private static void writeEnchant(PacketWriter packet, String listName, Map<Enchantment, Short> enchantmentMap) {
-        packet.writeByte((byte) 0x09); // Type id (list)
-        packet.writeShortSizedString(listName);
+    private static void writeEnchant(NbtWriter writer, String listName, Map<Enchantment, Short> enchantmentMap) {
+        writer.writeList(listName, NBT.NBT_COMPOUND, enchantmentMap.size(), () -> {
+            for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
+                Enchantment enchantment = entry.getKey();
+                short level = entry.getValue();
 
-        packet.writeByte((byte) 0x0A); // Compound
-        packet.writeInt(enchantmentMap.size()); // Map size
+                writer.writeShort("lvl", level);
 
-        for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            short level = entry.getValue();
+                writer.writeString("id", "minecraft:" + enchantment.name().toLowerCase());
 
-            packet.writeByte((byte) 0x02); // Type id (short)
-            packet.writeShortSizedString("lvl");
-            packet.writeShort(level);
-
-            packet.writeByte((byte) 0x08); // Type id (string)
-            packet.writeShortSizedString("id");
-            packet.writeShortSizedString("minecraft:" + enchantment.name().toLowerCase());
-
-        }
-
-        packet.writeByte((byte) 0); // End enchantment compound
+            }
+        });
     }
 
     public static ItemStack readItemStack(PacketReader reader) {
