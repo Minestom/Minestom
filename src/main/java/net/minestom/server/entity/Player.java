@@ -284,7 +284,7 @@ public class Player extends LivingEntity {
         if (targetCustomBlock != null) {
             final byte animationCount = 10;
             long since = System.currentTimeMillis() - targetBlockTime;
-            byte stage = (byte) (since / (blockBreakTime / animationCount) - 1);
+            byte stage = (byte) (since / (blockBreakTime / animationCount));
             stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
             if (stage != targetLastStage) {
                 sendBlockBreakAnimation(targetBlockPosition, stage);
@@ -480,6 +480,7 @@ public class Player extends LivingEntity {
         });
         resetTargetBlock();
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
+        playerConnection.disconnect();
     }
 
     @Override

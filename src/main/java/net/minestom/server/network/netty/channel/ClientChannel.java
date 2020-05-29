@@ -55,7 +55,7 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
         PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
         if (playerConnection != null) {
             playerConnection.refreshOnline(false);
-            Player player = connectionManager.getPlayer(playerConnection);
+            Player player = playerConnection.getPlayer();
             if (player != null) {
                 player.remove();
                 connectionManager.removePlayer(playerConnection);

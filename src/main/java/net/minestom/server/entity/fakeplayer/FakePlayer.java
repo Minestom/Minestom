@@ -22,6 +22,8 @@ public class FakePlayer extends Player {
     public FakePlayer(UUID uuid, String username, boolean addInCache) {
         super(uuid, username, new FakePlayerConnection());
 
+        this.fakePlayerController = new FakePlayerController(this);
+
         this.registered = addInCache;
 
         if (registered) {
@@ -37,13 +39,6 @@ public class FakePlayer extends Player {
      */
     public FakePlayer(UUID uuid, String username) {
         this(uuid, username, false);
-    }
-
-    @Override
-    protected void playerConnectionInit() {
-        FakePlayerConnection playerConnection = (FakePlayerConnection) getPlayerConnection();
-        playerConnection.setFakePlayer(this);
-        this.fakePlayerController = new FakePlayerController(this);
     }
 
     public FakePlayerController getController() {
