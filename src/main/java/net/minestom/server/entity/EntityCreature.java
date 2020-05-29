@@ -142,6 +142,9 @@ public abstract class EntityCreature extends LivingEntity {
     @Override
     public boolean addViewer(Player player) {
         boolean result = super.addViewer(player);
+        if (!result)
+            return false;
+
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         EntityPacket entityPacket = new EntityPacket();

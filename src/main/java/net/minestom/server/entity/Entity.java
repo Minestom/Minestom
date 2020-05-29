@@ -266,6 +266,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     public boolean addViewer(Player player) {
         Check.notNull(player, "Viewer cannot be null");
         boolean result = this.viewers.add(player);
+        if (!result)
+            return false;
         player.viewableEntities.add(this);
         return result;
     }

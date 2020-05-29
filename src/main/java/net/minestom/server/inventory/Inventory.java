@@ -121,7 +121,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Refresh the inventory for all viewers
      */
     public void update() {
-        PacketWriterUtils.writeAndSend(getViewers(), getWindowItemsPacket());
+        PacketWriterUtils.writeAndSend(getViewers(), createWindowItemsPacket());
     }
 
     /**
@@ -134,7 +134,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!getViewers().contains(player))
             return;
 
-        PacketWriterUtils.writeAndSend(player, getWindowItemsPacket());
+        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
     }
 
     @Override
@@ -145,8 +145,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public boolean addViewer(Player player) {
         boolean result = this.viewers.add(player);
-        WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
-        player.getPlayerConnection().sendPacket(windowItemsPacket);
+        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
         return result;
     }
 
@@ -174,7 +173,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         }
     }
 
-    private WindowItemsPacket getWindowItemsPacket() {
+    private WindowItemsPacket createWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
         windowItemsPacket.count = (short) itemStacks.length;

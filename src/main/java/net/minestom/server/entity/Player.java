@@ -54,6 +54,7 @@ import java.util.function.Consumer;
 public class Player extends LivingEntity {
 
     private long lastKeepAlive;
+    private boolean answerKeepAlive;
 
     private String username;
     protected PlayerConnection playerConnection;
@@ -143,6 +144,9 @@ public class Player extends LivingEntity {
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
+
+        // Allow the server to send the next keep alive packet
+        refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
         this.dimension = Dimension.OVERWORLD;
@@ -337,11 +341,10 @@ public class Player extends LivingEntity {
         // Tick event
         callEvent(PlayerTickEvent.class, playerTickEvent);
 
-
         // Multiplayer sync
-        if (!getViewers().isEmpty()) {
-            final boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
-            final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+        final boolean positionChanged = position.getX() != lastX || position.getY() != lastY || position.getZ() != lastZ;
+        final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+        if (!getViewers().isEmpty() && (positionChanged || viewChanged)) {
             ServerPacket updatePacket = null;
             ServerPacket optionalUpdatePacket = null;
             if (positionChanged && viewChanged) {
@@ -483,6 +486,9 @@ public class Player extends LivingEntity {
             return false;
 
         boolean result = super.addViewer(player);
+        if (!result)
+            return false;
+
         PlayerConnection viewerConnection = player.getPlayerConnection();
         String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
@@ -1566,6 +1572,15 @@ public class Player extends LivingEntity {
      */
     public void refreshKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
+        this.answerKeepAlive = false;
+    }
+
+    public boolean didAnswerKeepAlive() {
+        return answerKeepAlive;
+    }
+
+    public void refreshAnswerKeepAlive(boolean answerKeepAlive) {
+        this.answerKeepAlive = answerKeepAlive;
     }
 
     /**

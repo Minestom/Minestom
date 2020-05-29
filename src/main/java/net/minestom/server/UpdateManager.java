@@ -1,5 +1,7 @@
 package net.minestom.server;
 
+import net.kyori.text.TextComponent;
+import net.kyori.text.format.TextColor;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceManager;
@@ -11,6 +13,9 @@ import net.minestom.server.utils.thread.MinestomThread;
 import java.util.concurrent.ExecutorService;
 
 public class UpdateManager {
+
+    private static final long KEEP_ALIVE_DELAY = 10_000;
+    private static final long KEEP_ALIVE_KICK = 30_000;
 
     private ExecutorService mainUpdate = new MinestomThread(MinecraftServer.THREAD_COUNT_MAIN_UPDATE, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
@@ -33,9 +38,14 @@ public class UpdateManager {
                 final long time = System.currentTimeMillis();
                 final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    if (time - player.getLastKeepAlive() > 10000) {
+                    final long lastKeepAlive = time - player.getLastKeepAlive();
+                    if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                         player.refreshKeepAlive(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
+                    } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                        TextComponent textComponent = TextComponent.of("No Keep Alive answer")
+                                .color(TextColor.RED);
+                        player.kick(textComponent);
                     }
                 }
 

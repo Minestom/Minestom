@@ -26,8 +26,7 @@ public class PacketWriterUtils {
 
     public static void writeAndSend(Collection<Player> players, ServerPacket serverPacket) {
         batchesPool.execute(() -> {
-            int size = players.size();
-            if (size == 0)
+            if (players.isEmpty())
                 return;
 
             ByteBuf buffer = PacketUtils.writePacket(serverPacket);
