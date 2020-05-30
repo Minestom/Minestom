@@ -453,12 +453,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
             ticks++;
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+        }
 
-            // Scheduled synchronization
-            if (time - lastSynchronizationTime >= synchronizationDelay) {
-                lastSynchronizationTime = time;
-                sendSynchronization();
-            }
+        // Scheduled synchronization
+        if (time - lastSynchronizationTime >= synchronizationDelay) {
+            lastSynchronizationTime = time;
+            sendSynchronization();
         }
 
         if (shouldRemove()) {

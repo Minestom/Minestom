@@ -1051,9 +1051,12 @@ public class Player extends LivingEntity {
         sendPacketToViewers(spawnPlayerPacket);
 
         // Update for viewers
+        sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
         playerConnection.sendPacket(getPropertiesPacket());
         syncEquipments();
+
+        askSynchronization();
     }
 
     protected void refreshHealth() {

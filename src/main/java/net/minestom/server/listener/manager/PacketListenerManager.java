@@ -21,6 +21,7 @@ public class PacketListenerManager {
         addListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         addListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         addListener(ClientCloseWindow.class, WindowListener::closeWindowListener);
+        addListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
         addListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         addListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
         addListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
@@ -42,6 +43,7 @@ public class PacketListenerManager {
         addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         addListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         addListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
+        addListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
