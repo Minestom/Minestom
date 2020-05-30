@@ -199,9 +199,7 @@ public class Player extends LivingEntity {
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this);
         callEvent(PlayerSkinInitEvent.class, skinInitEvent);
         this.skin = skinInitEvent.getSkin();
-        final String textures = skin == null ? "" : skin.getTextures();
-        final String signature = skin == null ? null : skin.getSignature();
-        playerConnection.sendPacket(getAddPlayerToList(textures, signature));
+        playerConnection.sendPacket(getAddPlayerToList());
 
         // Commands start
         {
@@ -882,14 +880,11 @@ public class Player extends LivingEntity {
     public synchronized void setSkin(PlayerSkin skin) {
         this.skin = skin;
 
-        final String textures = skin == null ? "" : skin.getTextures();
-        final String signature = skin == null ? null : skin.getSignature();
-
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
 
         PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        PlayerInfoPacket addPlayerPacket = getAddPlayerToList(textures, signature);
+        PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimension = getDimension();
@@ -1854,11 +1849,12 @@ public class Player extends LivingEntity {
     /**
      * Get the packet to add the player from tab-list
      *
-     * @param textures  the textures value
-     * @param signature the textures signature
      * @return a {@link PlayerInfoPacket} to add the player
      */
-    protected PlayerInfoPacket getAddPlayerToList(String textures, String signature) {
+    protected PlayerInfoPacket getAddPlayerToList() {
+        final String textures = skin == null ? "" : skin.getTextures();
+        final String signature = skin == null ? null : skin.getSignature();
+
         String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
@@ -1903,9 +1899,7 @@ public class Player extends LivingEntity {
         spawnPlayerPacket.playerUuid = getUuid();
         spawnPlayerPacket.position = getPosition();
 
-        final String textures = skin == null ? "" : skin.getTextures();
-        final String signature = skin == null ? null : skin.getSignature();
-        connection.sendPacket(getAddPlayerToList(textures, signature));
+        connection.sendPacket(getAddPlayerToList());
 
         connection.sendPacket(spawnPlayerPacket);
         connection.sendPacket(getVelocityPacket());
