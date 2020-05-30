@@ -1906,7 +1906,7 @@ public class Player extends LivingEntity {
         connection.sendPacket(getMetadataPacket());
 
         // Equipments synchronization
-        syncEquipments();
+        syncEquipments(connection);
 
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());

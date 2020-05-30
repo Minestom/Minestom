@@ -12,6 +12,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
@@ -347,6 +348,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     // Equipments
+    public void syncEquipments(PlayerConnection connection) {
+        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
+            EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+            if (entityEquipmentPacket == null)
+                return;
+            connection.sendPacket(entityEquipmentPacket);
+        }
+    }
+
     public void syncEquipments() {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             syncEquipment(slot);

@@ -151,7 +151,7 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(getMetadataPacket());
 
         // Equipments synchronization
-        syncEquipments();
+        syncEquipments(playerConnection);
 
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
