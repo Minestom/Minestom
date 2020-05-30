@@ -62,6 +62,7 @@ public class Player extends LivingEntity {
 
     private int latency;
     private String displayName;
+    private PlayerSkin skin;
 
     private Dimension dimension;
     private GameMode gameMode;
@@ -165,6 +166,11 @@ public class Player extends LivingEntity {
      */
     protected void init() {
 
+        // Init player (register events)
+        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
+            playerInitialization.accept(this);
+        }
+
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
@@ -189,21 +195,13 @@ public class Player extends LivingEntity {
         spawnPositionPacket.z = 0;
         playerConnection.sendPacket(spawnPositionPacket);
 
-        // Add player to list
-        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
-        String property = "";
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
-        addPlayer.displayName = jsonDisplayName;
-        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property);
-        addPlayer.properties.add(prop);
-        playerInfoPacket.playerInfos.add(addPlayer);
-        playerConnection.sendPacket(playerInfoPacket);
-
-        // Init player
-        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
-            playerInitialization.accept(this);
-        }
+        // Add player to list with spawning skin
+        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this);
+        callEvent(PlayerSkinInitEvent.class, skinInitEvent);
+        this.skin = skinInitEvent.getSkin();
+        final String textures = skin == null ? "" : skin.getTextures();
+        final String signature = skin == null ? null : skin.getSignature();
+        playerConnection.sendPacket(getAddPlayerToList(textures, signature));
 
         // Commands start
         {
@@ -245,6 +243,7 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+        getInventory().update();
     }
 
     /**
@@ -493,33 +492,7 @@ public class Player extends LivingEntity {
             return false;
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-
-        PlayerInfoPacket pInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addP = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), 10);
-        PlayerInfoPacket.AddPlayer.Property p = new PlayerInfoPacket.AddPlayer.Property("textures", property);//new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(onlinePlayer.getUsername()));
-        addP.properties.add(p);
-        pInfoPacket.playerInfos.add(addP);
-
-        viewerConnection.sendPacket(pInfoPacket);
-        viewerConnection.sendPacket(spawnPlayerPacket);
-        viewerConnection.sendPacket(getVelocityPacket());
-        viewerConnection.sendPacket(getMetadataPacket());
-
-        // Equipments synchronization
-        syncEquipments();
-
-        if (hasPassenger()) {
-            viewerConnection.sendPacket(getPassengersPacket());
-        }
-
-        // Team
-        if (team != null)
-            viewerConnection.sendPacket(team.getTeamsCreationPacket());
+        showPlayer(viewerConnection);
         return result;
     }
 
@@ -530,9 +503,7 @@ public class Player extends LivingEntity {
 
         boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
-        viewerConnection.sendPacket(playerInfoPacket);
+        viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
         if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
@@ -891,6 +862,66 @@ public class Player extends LivingEntity {
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
         infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), jsonDisplayName));
         sendPacketToViewersAndSelf(infoPacket);
+    }
+
+    /**
+     * Get the player skin
+     *
+     * @return the player skin object,
+     * null means that the player has his {@link #getUuid()} default skin
+     */
+    public PlayerSkin getSkin() {
+        return skin;
+    }
+
+    /**
+     * Change the player skin
+     *
+     * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
+     */
+    public synchronized void setSkin(PlayerSkin skin) {
+        this.skin = skin;
+
+        final String textures = skin == null ? "" : skin.getTextures();
+        final String signature = skin == null ? null : skin.getSignature();
+
+        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
+        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+
+        PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
+        PlayerInfoPacket addPlayerPacket = getAddPlayerToList(textures, signature);
+
+        RespawnPacket respawnPacket = new RespawnPacket();
+        respawnPacket.dimension = getDimension();
+        respawnPacket.gameMode = getGameMode();
+        respawnPacket.levelType = getLevelType();
+
+        playerConnection.sendPacket(removePlayerPacket);
+        playerConnection.sendPacket(destroyEntitiesPacket);
+        playerConnection.sendPacket(respawnPacket);
+        playerConnection.sendPacket(addPlayerPacket);
+
+        for (Player viewer : getViewers()) {
+            PlayerConnection connection = viewer.getPlayerConnection();
+
+            connection.sendPacket(removePlayerPacket);
+            connection.sendPacket(destroyEntitiesPacket);
+
+            showPlayer(connection);
+        }
+
+        getInventory().update();
+        teleport(getPosition());
+    }
+
+    /**
+     * Used to update the internal skin field
+     *
+     * @param skin the player skin
+     * @see #setSkin(PlayerSkin) instead
+     */
+    protected void refreshSkin(PlayerSkin skin) {
+        this.skin = skin;
     }
 
     /**
@@ -1818,6 +1849,78 @@ public class Player extends LivingEntity {
      */
     public long getLastKeepAlive() {
         return lastKeepAlive;
+    }
+
+    /**
+     * Get the packet to add the player from tab-list
+     *
+     * @param textures  the textures value
+     * @param signature the textures signature
+     * @return a {@link PlayerInfoPacket} to add the player
+     */
+    protected PlayerInfoPacket getAddPlayerToList(String textures, String signature) {
+        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+
+        PlayerInfoPacket.AddPlayer addPlayer =
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
+        addPlayer.displayName = jsonDisplayName;
+
+        PlayerInfoPacket.AddPlayer.Property prop =
+                new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+        addPlayer.properties.add(prop);
+
+        playerInfoPacket.playerInfos.add(addPlayer);
+        return playerInfoPacket;
+    }
+
+    /**
+     * Get the packet to remove the player from tab-list
+     *
+     * @return a {@link PlayerInfoPacket} to add the player
+     */
+    protected PlayerInfoPacket getRemovePlayerToList() {
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
+
+        PlayerInfoPacket.RemovePlayer removePlayer =
+                new PlayerInfoPacket.RemovePlayer(getUuid());
+
+        playerInfoPacket.playerInfos.add(removePlayer);
+        return playerInfoPacket;
+    }
+
+    /**
+     * Send all the related packet to have the player sent to another with related data
+     * (create player, spawn position, velocity, metadata, equipments, passengers, team)
+     * <p>
+     * WARNING: this does not sync the player, please use {@link #addViewer(Player)}
+     *
+     * @param connection the connection to show the player to
+     */
+    protected void showPlayer(PlayerConnection connection) {
+        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
+        spawnPlayerPacket.entityId = getEntityId();
+        spawnPlayerPacket.playerUuid = getUuid();
+        spawnPlayerPacket.position = getPosition();
+
+        final String textures = skin == null ? "" : skin.getTextures();
+        final String signature = skin == null ? null : skin.getSignature();
+        connection.sendPacket(getAddPlayerToList(textures, signature));
+
+        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getVelocityPacket());
+        connection.sendPacket(getMetadataPacket());
+
+        // Equipments synchronization
+        syncEquipments();
+
+        if (hasPassenger()) {
+            connection.sendPacket(getPassengersPacket());
+        }
+
+        // Team
+        if (team != null)
+            connection.sendPacket(team.getTeamsCreationPacket());
     }
 
     @Override

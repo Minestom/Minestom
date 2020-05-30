@@ -53,19 +53,7 @@ public abstract class EntityCreature extends LivingEntity {
         super.update();
 
         // Path finding
-        if (blockPositions != null) {
-            if (targetPosition != null) {
-                float distance = getPosition().getDistance(targetPosition);
-                //System.out.println("test: "+distance);
-                if (distance < 0.7f) {
-                    setNextPathPosition();
-                    //System.out.println("END TARGET");
-                } else {
-                    moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
-                    //System.out.println("MOVE TOWARD " + targetPosition);
-                }
-            }
-        }
+        pathProgress();
 
     }
 
@@ -250,7 +238,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 10, 0);
+        Vector velocity = new Vector(0, height * 5, 0);
         setVelocity(velocity);
     }
 
@@ -281,7 +269,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Used to move the entity toward {@code direction} in the axis X and Z
+     * Used to move the entity toward {@code direction} in the X and Z axis
      * Gravity is still applied but the entity will not attempt to jump
      *
      * @param direction the targeted position
@@ -304,9 +292,25 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         this.targetPosition = blockPosition.toPosition();//.add(0.5f, 0, 0.5f);
-        // FIXME: jump support
         if (blockPosition.getY() > getPosition().getY())
             jump(1);
+    }
+
+    private void pathProgress() {
+        if (blockPositions != null) {
+            if (targetPosition != null) {
+                float distance = getPosition().getDistance(targetPosition);
+                //System.out.println("test: "+distance);
+                if (distance < 1f) {
+                    setNextPathPosition();
+                    pathProgress();
+                    //System.out.println("END TARGET");
+                } else {
+                    moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
+                    //System.out.println("MOVE TOWARD " + targetPosition);
+                }
+            }
+        }
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
