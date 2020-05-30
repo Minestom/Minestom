@@ -46,7 +46,7 @@ public class PlayerDiggingListener {
                         int breakTime = customBlock.getBreakDelay(player, blockPosition);
                         if (breakTime >= 0) {
                             // Custom block has a custom break time, allow for digging event
-                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
+                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, customBlock);
                             player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                             if (!playerStartDiggingEvent.isCancelled()) {
                                 // Start digging the block
@@ -107,7 +107,7 @@ public class PlayerDiggingListener {
 
                 break;
             case SWAP_ITEM_HAND:
-                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(offHand.clone(), mainHand.clone());
+                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand.clone(), mainHand.clone());
                 player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
                     synchronized (playerInventory) {
                         playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());

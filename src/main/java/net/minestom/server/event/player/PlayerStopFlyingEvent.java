@@ -3,6 +3,9 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
+/**
+ * Called when a player stop flying
+ */
 public class PlayerStopFlyingEvent extends Event {
 
     private Player player;
@@ -11,6 +14,11 @@ public class PlayerStopFlyingEvent extends Event {
         this.player = player;
     }
 
+    /**
+     * Get the player who stopped flying
+     *
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }

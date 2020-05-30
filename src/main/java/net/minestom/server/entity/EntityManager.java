@@ -167,7 +167,7 @@ public class EntityManager {
             playersPool.execute(() -> {
                 playerCache.init();
 
-                PlayerLoginEvent loginEvent = new PlayerLoginEvent();
+                PlayerLoginEvent loginEvent = new PlayerLoginEvent(playerCache);
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance();
 

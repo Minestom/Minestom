@@ -330,7 +330,7 @@ public class Player extends LivingEntity {
                 boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
             }
@@ -445,7 +445,7 @@ public class Player extends LivingEntity {
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
         getPlayerConnection().sendPacket(respawnPacket);
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getRespawnPoint());
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this, getRespawnPoint());
         callEvent(PlayerRespawnEvent.class, respawnEvent);
         refreshIsDead(false);
 
@@ -476,7 +476,7 @@ public class Player extends LivingEntity {
                 chunk.removeViewer(this);
         });
         resetTargetBlock();
-        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
+        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
         playerConnection.disconnect();
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
 
@@ -10,7 +11,21 @@ import net.minestom.server.instance.Instance;
  */
 public class PlayerLoginEvent extends Event {
 
+    private Player player;
     private Instance spawningInstance;
+
+    public PlayerLoginEvent(Player player) {
+        this.player = player;
+    }
+
+    /**
+     * Get the player who is logging
+     *
+     * @return the player who is logging
+     */
+    public Player getPlayer() {
+        return player;
+    }
 
     /**
      * Get the spawning instance of the player

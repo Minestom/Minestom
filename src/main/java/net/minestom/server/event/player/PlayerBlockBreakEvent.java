@@ -26,19 +26,28 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
         this.resultCustomBlockId = resultCustomBlockId;
     }
 
+    /**
+     * Get the block position
+     *
+     * @return the block position
+     */
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
 
     /**
-     * @return the block id of the block that has been broken
+     * Get the broken block visual id
+     *
+     * @return the block id
      */
     public short getBlockId() {
         return blockId;
     }
 
     /**
-     * @return the custom block of the block that has been broken,
+     * Get the broken custom block
+     *
+     * @return the custom block,
      * null if not any
      */
     public CustomBlock getCustomBlock() {
@@ -46,6 +55,8 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     }
 
     /**
+     * Get the visual block id result, which will be placed after the event
+     *
      * @return the block id that will be set at {@link #getBlockPosition()}
      * set to 0 to remove
      */
@@ -54,6 +65,8 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     }
 
     /**
+     * Change the visual block id result
+     *
      * @param resultBlockId the result block id
      */
     public void setResultBlockId(short resultBlockId) {
@@ -61,18 +74,22 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     }
 
     /**
-     * @return the custom block id that will be set at {@link #getBlockPosition()}
-     * set to 0 to remove
+     * Get the custom block id result, which will be placed after the event
      * <p>
      * Warning: the visual block will not be changed, be sure to call {@link #setResultBlockId(short)}
      * if you want the visual to be the same as {@link CustomBlock#getBlockId()}
+     *
+     * @return the custom block id that will be set at {@link #getBlockPosition()}
+     * set to 0 to remove
      */
     public short getResultCustomBlockId() {
         return resultCustomBlockId;
     }
 
     /**
-     * @param resultCustomBlockId the result custom block id
+     * Change the custom block id result, which will be placed after the event
+     *
+     * @param resultCustomBlockId the custom block id result
      */
     public void setResultCustomBlockId(short resultCustomBlockId) {
         this.resultCustomBlockId = resultCustomBlockId;

@@ -18,14 +18,29 @@ public class PlayerChunkUnloadEvent extends Event {
         this.chunkZ = chunkZ;
     }
 
+    /**
+     * Get the player
+     *
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Get the chunk X
+     *
+     * @return the chunk X
+     */
     public int getChunkX() {
         return chunkX;
     }
 
+    /**
+     * Get the chunk Z
+     *
+     * @return the chunk Z
+     */
     public int getChunkZ() {
         return chunkZ;
     }

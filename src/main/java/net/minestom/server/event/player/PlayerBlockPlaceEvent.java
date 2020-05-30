@@ -7,6 +7,9 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 
+/**
+ * Called when a player tries placing a block
+ */
 public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
