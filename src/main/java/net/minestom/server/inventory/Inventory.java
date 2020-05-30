@@ -183,7 +183,15 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return result;
     }
 
+    /**
+     * Get the cursor item of a viewer
+     *
+     * @param player the player to get the cursor item from
+     * @return the player cursor item
+     * @throws IllegalStateException if {@code player} is not in the viewer list
+     */
     public ItemStack getCursorItem(Player player) {
+        Check.stateCondition(!isViewer(player), "You can only get the cursor item of a viewer");
         return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
     }
 

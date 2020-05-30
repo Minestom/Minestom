@@ -506,7 +506,7 @@ public class InventoryClickProcessor {
                 player.getInventory().getInventoryConditions() : inventory.getInventoryConditions();
         if (!inventoryConditions.isEmpty()) {
 
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, slot, clickType, clicked, cursor);
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(player, inventory, slot, clickType, clicked, cursor);
             player.callEvent(InventoryPreClickEvent.class, inventoryPreClickEvent);
             cursor = inventoryPreClickEvent.getCursorItem();
             clicked = inventoryPreClickEvent.getClickedItem();
@@ -544,7 +544,7 @@ public class InventoryClickProcessor {
 
     private void callClickEvent(Player player, Inventory inventory, int slot,
                                 ClickType clickType, ItemStack clicked, ItemStack cursor) {
-        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, slot, clickType, clicked, cursor);
+        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(player, inventory, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
     }
 

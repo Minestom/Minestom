@@ -166,18 +166,37 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         safeItemInsert(BOOTS_SLOT, itemStack);
     }
 
+    /**
+     * Refresh the player inventory by sending a {@link WindowItemsPacket} containing all
+     * the inventory items
+     */
     public void update() {
         PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
     }
 
+    /**
+     * Refresh only a specific slot with the updated item stack data
+     *
+     * @param slot the slot to refresh
+     */
     public void refreshSlot(int slot) {
         sendSlotRefresh((short) convertToPacketSlot(slot), getItemStack(slot));
     }
 
+    /**
+     * Get the item in player cursor
+     *
+     * @return the cursor item
+     */
     public ItemStack getCursorItem() {
         return cursorItem;
     }
 
+    /**
+     * Change the player cursor item
+     *
+     * @param cursorItem the new cursor item
+     */
     public void setCursorItem(ItemStack cursorItem) {
         this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
