@@ -10,10 +10,12 @@ import net.minestom.server.item.ItemStack;
 public class PlayerSetItemStackEvent extends CancellableEvent {
 
     private Player player;
+    private int slot;
     private ItemStack itemStack;
 
-    public PlayerSetItemStackEvent(Player player, ItemStack itemStack) {
+    public PlayerSetItemStackEvent(Player player, int slot, ItemStack itemStack) {
         this.player = player;
+        this.slot = slot;
         this.itemStack = itemStack;
     }
 
@@ -24,6 +26,24 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Get the slot where the item will be set
+     *
+     * @return the slot
+     */
+    public int getSlot() {
+        return slot;
+    }
+
+    /**
+     * Change the slot where the item will be set
+     *
+     * @param slot the new slot
+     */
+    public void setSlot(int slot) {
+        this.slot = slot;
     }
 
     /**

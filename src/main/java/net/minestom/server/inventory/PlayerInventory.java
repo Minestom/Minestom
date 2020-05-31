@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,11 +72,14 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public void setItemStack(int slot, ItemStack itemStack) {
         itemStack = ItemStackUtils.notNull(itemStack);
 
-        PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, itemStack);
-        player.callCancellableEvent(PlayerSetItemStackEvent.class, setItemStackEvent, () -> {
-            ItemStack item = setItemStackEvent.getItemStack();
-            safeItemInsert(slot, item);
-        });
+        PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, slot, itemStack);
+        player.callEvent(PlayerSetItemStackEvent.class, setItemStackEvent);
+        if (setItemStackEvent.isCancelled())
+            return;
+        slot = setItemStackEvent.getSlot();
+        itemStack = setItemStackEvent.getItemStack();
+
+        safeItemInsert(slot, itemStack);
     }
 
     @Override
@@ -222,8 +226,14 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      *
      * @param slot      an internal slot
      * @param itemStack the item to insert at the slot
+     * @throws IllegalArgumentException if the slot {@code slot} does not exist
+     * @throws NullPointerException     if {@code itemStack} is null
      */
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                "The slot " + slot + " does not exist for player");
+        Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
+        
         EntityEquipmentPacket.Slot equipmentSlot;
 
         if (slot == player.getHeldSlot()) {
