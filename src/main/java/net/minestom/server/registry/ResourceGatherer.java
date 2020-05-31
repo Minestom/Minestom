@@ -165,6 +165,6 @@ public class ResourceGatherer {
             return new File(user + "/Library/Application Support/minecraft");
         }
 
-        return new File("~/.minecraft");
+        return new File(System.getProperty("user.home") + "/.minecraft");
     }
 }
