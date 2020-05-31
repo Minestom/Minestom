@@ -65,14 +65,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void update() {
+    public void update(long time) {
         if (isOnFire()) {
-            if (System.currentTimeMillis() > fireExtinguishTime) {
+            if (time > fireExtinguishTime) {
                 setOnFire(false);
             } else {
-                if (System.currentTimeMillis() - lastFireDamageTime > fireDamagePeriod) {
+                if (time - lastFireDamageTime > fireDamagePeriod) {
                     damage(DamageType.ON_FIRE, 1.0f);
-                    lastFireDamageTime = System.currentTimeMillis();
+                    lastFireDamageTime = time;
                 }
             }
         }
@@ -92,6 +92,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
+
                     BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                     if (livingBoundingBox.intersect(itemBoundingBox)) {
                         synchronized (itemEntity) {

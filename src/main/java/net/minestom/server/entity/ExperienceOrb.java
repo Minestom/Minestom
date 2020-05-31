@@ -18,7 +18,7 @@ public class ExperienceOrb extends Entity {
     }
 
     @Override
-    public void update() {
+    public void update(long time) {
         // TODO slide toward nearest player
     }
 

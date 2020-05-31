@@ -141,8 +141,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     /**
      * Called each tick
+     *
+     * @param time the time of update in milliseconds
      */
-    public abstract void update();
+    public abstract void update(long time);
 
     /**
      * Called when a new instance is set
@@ -449,7 +451,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             handleVoid();
 
             // Call the abstract update method
-            update();
+            update(time);
 
             ticks++;
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick

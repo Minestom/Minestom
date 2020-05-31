@@ -6,12 +6,24 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.Set;
 import java.util.function.Consumer;
 
 public class ItemEntity extends ObjectEntity {
+
+    /**
+     * Used to slow down the merge check delay
+     */
+    private static UpdateOption mergeUpdateOption = new UpdateOption(10, TimeUnit.TICK);
+
+    /**
+     * The last time that this item has checked his neighbors for merge
+     */
+    private long lastMergeCheck;
 
     private ItemStack itemStack;
 
@@ -28,9 +40,31 @@ public class ItemEntity extends ObjectEntity {
         setBoundingBox(0.25f, 0.25f, 0.25f);
     }
 
+    /**
+     * Get the update option for the merging feature
+     *
+     * @return the merge update option
+     */
+    public static UpdateOption getMergeUpdateOption() {
+        return mergeUpdateOption;
+    }
+
+    /**
+     * Change the merge update option.
+     * Can be set to null to entirely remove the delay
+     *
+     * @param mergeUpdateOption the new merge update option
+     */
+    public static void setMergeUpdateOption(UpdateOption mergeUpdateOption) {
+        ItemEntity.mergeUpdateOption = mergeUpdateOption;
+    }
+
     @Override
-    public void update() {
-        if (isMergeable() && isPickable()) {
+    public void update(long time) {
+        if (isMergeable() && isPickable() &&
+                (mergeUpdateOption != null && !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
+            this.lastMergeCheck = time;
+
             Chunk chunk = instance.getChunkAt(getPosition());
             Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
@@ -48,30 +82,29 @@ public class ItemEntity extends ObjectEntity {
                     if (getDistance(itemEntity) > mergeRange)
                         continue;
 
-                    synchronized (this) {
-                        synchronized (itemEntity) {
-                            ItemStack itemStackEntity = itemEntity.getItemStack();
+                    // Use the class as a monitor to prevent deadlock
+                    // Shouldn't happen too often to be an issue
+                    synchronized (ItemEntity.class) {
+                        final ItemStack itemStackEntity = itemEntity.getItemStack();
 
-                            StackingRule stackingRule = itemStack.getStackingRule();
-                            boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+                        final StackingRule stackingRule = itemStack.getStackingRule();
+                        final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
 
-                            if (!canStack)
-                                continue;
+                        if (!canStack)
+                            continue;
 
-                            int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
-                            boolean canApply = stackingRule.canApply(itemStack, totalAmount);
+                        final int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
+                        final boolean canApply = stackingRule.canApply(itemStack, totalAmount);
 
-                            if (!canApply)
-                                continue;
+                        if (!canApply)
+                            continue;
 
-                            EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
-                            callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
-                                ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
-                                setItemStack(result);
-                                itemEntity.remove();
-                            });
-
-                        }
+                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
+                        callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
+                            ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
+                            setItemStack(result);
+                            itemEntity.remove();
+                        });
                     }
 
                 }

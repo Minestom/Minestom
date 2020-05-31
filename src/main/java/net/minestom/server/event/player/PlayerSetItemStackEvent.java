@@ -3,9 +3,11 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.item.ItemStackUtils;
 
 /**
  * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#setItemStack(int, ItemStack)}
+ * and player click in his inventory
  */
 public class PlayerSetItemStackEvent extends CancellableEvent {
 
@@ -61,7 +63,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
      * @param itemStack the new item stack
      */
     public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
+        this.itemStack = ItemStackUtils.notNull(itemStack);
     }
 
 }

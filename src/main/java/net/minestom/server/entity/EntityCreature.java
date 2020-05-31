@@ -49,12 +49,11 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(long time) {
+        super.update(time);
 
         // Path finding
         pathProgress();
-
     }
 
     /**

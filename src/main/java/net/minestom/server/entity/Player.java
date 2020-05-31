@@ -266,7 +266,7 @@ public class Player extends LivingEntity {
     }
 
     @Override
-    public void update() {
+    public void update(long time) {
         // Flush all pending packets
         playerConnection.flush();
 
@@ -276,12 +276,12 @@ public class Player extends LivingEntity {
             packet.process(this);
         }
 
-        super.update(); // Super update (item pickup/fire management)
+        super.update(time); // Super update (item pickup/fire management)
 
         // Target block stage
         if (targetCustomBlock != null) {
             final byte animationCount = 10;
-            long since = System.currentTimeMillis() - targetBlockTime;
+            long since = time - targetBlockTime;
             byte stage = (byte) (since / (blockBreakTime / animationCount));
             stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
             if (stage != targetLastStage) {
@@ -317,7 +317,7 @@ public class Player extends LivingEntity {
 
         // Eating animation
         if (isEating()) {
-            if (System.currentTimeMillis() - startEatingTime >= eatingTime) {
+            if (time - startEatingTime >= eatingTime) {
                 refreshEating(false);
 
                 triggerStatus((byte) 9); // Mark item use as finished

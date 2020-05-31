@@ -19,7 +19,7 @@ public abstract class ObjectEntity extends Entity {
     public abstract int getObjectData();
 
     @Override
-    public void update() {
+    public void update(long time) {
 
     }
 
