@@ -966,7 +966,7 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * Set the resource pack of the player
+     * Set the player resource pack
      *
      * @param resourcePack the resource pack
      */
@@ -974,10 +974,7 @@ public class Player extends LivingEntity {
         Check.notNull(resourcePack, "The resource pack cannot be null");
         final String url = resourcePack.getUrl();
         Check.notNull(url, "The resource pack url cannot be null");
-
-        // Optional hash, set to empty if null
-        String hash = resourcePack.getHash();
-        hash = hash == null ? "" : hash;
+        final String hash = resourcePack.getHash();
 
         ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
         resourcePackSendPacket.url = url;

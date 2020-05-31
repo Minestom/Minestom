@@ -10,13 +10,14 @@ public class ResourcePack {
 
     public ResourcePack(String url, String hash) {
         this.url = url;
-        this.hash = hash;
+        // Optional, set to empty if null
+        this.hash = hash == null ? "" : hash;
     }
 
     /**
      * Get the resource pack URL
      *
-     * @return
+     * @return the resource pack URL
      */
     public String getUrl() {
         return url;
