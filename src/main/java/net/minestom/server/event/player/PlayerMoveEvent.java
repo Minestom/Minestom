@@ -12,9 +12,9 @@ public class PlayerMoveEvent extends CancellableEvent {
     private Player player;
     private Position newPosition;
 
-    public PlayerMoveEvent(Player player, float x, float y, float z, float yaw, float pitch) {
+    public PlayerMoveEvent(Player player, Position newPosition) {
         this.player = player;
-        this.newPosition = new Position(x, y, z, yaw, pitch);
+        this.newPosition = newPosition;
     }
 
     /**

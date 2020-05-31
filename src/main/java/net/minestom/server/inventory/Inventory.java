@@ -13,6 +13,7 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
@@ -56,9 +57,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         this.itemStacks = new ItemStack[size];
 
-        for (int i = 0; i < size; i++) {
-            itemStacks[i] = ItemStack.getAirItem();
-        }
+        ArrayUtils.fill(itemStacks, ItemStack::getAirItem);
     }
 
     private static byte generateId() {

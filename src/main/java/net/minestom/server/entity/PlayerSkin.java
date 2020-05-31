@@ -1,5 +1,8 @@
 package net.minestom.server.entity;
 
+/**
+ * Contains all the data required to store a skin
+ */
 public class PlayerSkin {
 
     private String textures;
@@ -10,19 +13,21 @@ public class PlayerSkin {
         this.signature = signature;
     }
 
+    /**
+     * Get the skin textures value
+     *
+     * @return the textures value
+     */
     public String getTextures() {
         return textures;
     }
 
-    public void setTextures(String textures) {
-        this.textures = textures;
-    }
-
+    /**
+     * Get the skin signature
+     *
+     * @return the skin signature
+     */
     public String getSignature() {
         return signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
     }
 }

@@ -1056,7 +1056,7 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(getPropertiesPacket());
         syncEquipments();
 
-        askSynchronization();
+        sendSynchronization();
     }
 
     protected void refreshHealth() {

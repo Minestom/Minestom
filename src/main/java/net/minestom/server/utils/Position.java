@@ -36,7 +36,9 @@ public class Position {
     }
 
     public float getDistance(Position position) {
-        return (float) Math.sqrt(MathUtils.square(position.getX() - getX()) + MathUtils.square(position.getY() - getY()) + MathUtils.square(position.getZ() - getZ()));
+        return (float) Math.sqrt(MathUtils.square(position.getX() - getX()) +
+                MathUtils.square(position.getY() - getY()) +
+                MathUtils.square(position.getZ() - getZ()));
     }
 
     /**

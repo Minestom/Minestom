@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 public class ArrayUtils {
 
@@ -59,6 +60,19 @@ public class ArrayUtils {
             array[i] = list.get(i);
         }
         return array;
+    }
+
+    /**
+     * Fill an array by a supplier
+     *
+     * @param array    the array to fill
+     * @param supplier the supplier to fill the array
+     * @param <T>      the array type
+     */
+    public static <T> void fill(T[] array, Supplier<T> supplier) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = supplier.get();
+        }
     }
 
 }

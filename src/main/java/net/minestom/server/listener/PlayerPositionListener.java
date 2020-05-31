@@ -67,7 +67,8 @@ public class PlayerPositionListener {
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, x, y, z, yaw, pitch);
+        Position newPosition = new Position(x, y, z, yaw, pitch);
+        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
         if (!playerMoveEvent.isCancelled()) {
             consumer.accept(playerMoveEvent.getNewPosition());

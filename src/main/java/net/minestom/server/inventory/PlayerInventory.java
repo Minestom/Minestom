@@ -13,6 +13,7 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 
@@ -36,9 +37,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public PlayerInventory(Player player) {
         this.player = player;
 
-        for (int i = 0; i < items.length; i++) {
-            items[i] = ItemStack.getAirItem();
-        }
+        ArrayUtils.fill(items, ItemStack::getAirItem);
     }
 
     @Override
@@ -201,6 +200,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
 
+    /**
+     * Insert an item safely (synchronized) in the appropriate slot
+     *
+     * @param slot      an internal slot
+     * @param itemStack the item to insert at the slot
+     */
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
         itemStack = ItemStackUtils.notNull(itemStack);
 
@@ -245,17 +250,38 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         //refreshSlot(slot); seems to break things concerning +64 stacks
     }
 
+    /**
+     * Set an item from a packet slot
+     *
+     * @param slot      a packet slot
+     * @param offset    offset (generally 9 to ignore armor and craft slots)
+     * @param itemStack the item stack to set
+     */
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {
         slot = convertSlot(slot, offset);
         safeItemInsert(slot, itemStack);
     }
 
+    /**
+     * Get the item from a packet slot
+     *
+     * @param slot   a packet slot
+     * @param offset offset (generally 9 to ignore armor and craft slots)
+     * @return the item in the specified slot
+     */
     protected ItemStack getItemStack(int slot, int offset) {
         slot = convertSlot(slot, offset);
         return this.items[slot];
     }
 
-    private void sendSlotRefresh(short slot, ItemStack itemStack) {
+    /**
+     * Refresh an inventory slot
+     *
+     * @param slot      the packet slot
+     *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
+     * @param itemStack the item stack in the slot
+     */
+    protected void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = (byte) (MathUtils.isBetween(slot, 35, INVENTORY_SIZE) ? 0 : -2);
         setSlotPacket.slot = slot;
@@ -263,6 +289,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
+    /**
+     * Get a {@link WindowItemsPacket} with all the items in the inventory
+     *
+     * @return a {@link WindowItemsPacket} with inventory items
+     */
     private WindowItemsPacket createWindowItemsPacket() {
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
 
