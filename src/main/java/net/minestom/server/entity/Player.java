@@ -31,6 +31,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameScoreboard;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
@@ -962,6 +963,26 @@ public class Player extends LivingEntity {
         ItemDropEvent itemDropEvent = new ItemDropEvent(item);
         callEvent(ItemDropEvent.class, itemDropEvent);
         return !itemDropEvent.isCancelled();
+    }
+
+    /**
+     * Set the resource pack of the player
+     *
+     * @param resourcePack the resource pack
+     */
+    public void setResourcePack(ResourcePack resourcePack) {
+        Check.notNull(resourcePack, "The resource pack cannot be null");
+        final String url = resourcePack.getUrl();
+        Check.notNull(url, "The resource pack url cannot be null");
+
+        // Optional hash, set to empty if null
+        String hash = resourcePack.getHash();
+        hash = hash == null ? "" : hash;
+
+        ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
+        resourcePackSendPacket.url = url;
+        resourcePackSendPacket.hash = hash;
+        playerConnection.sendPacket(resourcePackSendPacket);
     }
 
     /**

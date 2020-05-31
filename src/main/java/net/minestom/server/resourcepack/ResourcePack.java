@@ -1,0 +1,36 @@
+package net.minestom.server.resourcepack;
+
+/**
+ * Represent a resource pack which can be send to a player
+ */
+public class ResourcePack {
+
+    private String url;
+    private String hash;
+
+    public ResourcePack(String url, String hash) {
+        this.url = url;
+        this.hash = hash;
+    }
+
+    /**
+     * Get the resource pack URL
+     *
+     * @return
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * Get the resource pack hash
+     * <p>
+     * WARNING: if null or empty, the player will probably waste bandwidth by re-downloading
+     * the resource pack
+     *
+     * @return the resource pack hash
+     */
+    public String getHash() {
+        return hash;
+    }
+}
