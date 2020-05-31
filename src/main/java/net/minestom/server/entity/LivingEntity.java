@@ -414,6 +414,28 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
     }
 
+    /**
+     * Send a {@link EntityAnimationPacket} to swing the main hand
+     * (can be used for attack animation)
+     */
+    public void swingMainHand() {
+        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = EntityAnimationPacket.Animation.SWING_MAIN_ARM;
+        sendPacketToViewers(animationPacket);
+    }
+
+    /**
+     * Send a {@link EntityAnimationPacket} to swing the off hand
+     * (can be used for attack animation)
+     */
+    public void swingOffHand() {
+        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = EntityAnimationPacket.Animation.SWING_OFF_HAND;
+        sendPacketToViewers(animationPacket);
+    }
+
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
         this.isHandActive = isHandActive;
         this.offHand = offHand;
