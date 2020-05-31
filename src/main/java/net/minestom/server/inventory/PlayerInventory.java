@@ -2,6 +2,8 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.player.PlayerAddItemStackEvent;
+import net.minestom.server.event.player.PlayerSetItemStackEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
@@ -67,11 +69,26 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        safeItemInsert(slot, itemStack);
+        itemStack = ItemStackUtils.notNull(itemStack);
+
+        PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, itemStack);
+        player.callCancellableEvent(PlayerSetItemStackEvent.class, setItemStackEvent, () -> {
+            ItemStack item = setItemStackEvent.getItemStack();
+            safeItemInsert(slot, item);
+        });
     }
 
     @Override
     public synchronized boolean addItemStack(ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
+
+        PlayerAddItemStackEvent addItemStackEvent = new PlayerAddItemStackEvent(player, itemStack);
+        player.callEvent(PlayerAddItemStackEvent.class, addItemStackEvent);
+        if (addItemStackEvent.isCancelled())
+            return false;
+
+        itemStack = addItemStackEvent.getItemStack();
+
         StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < items.length - 10; i++) {
             ItemStack item = items[i];
@@ -93,7 +110,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                     return true;
                 }
             } else if (item.isAir()) {
-                setItemStack(i, itemStack);
+                safeItemInsert(i, itemStack);
                 return true;
             }
         }
@@ -207,8 +224,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param itemStack the item to insert at the slot
      */
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
-        itemStack = ItemStackUtils.notNull(itemStack);
-
         EntityEquipmentPacket.Slot equipmentSlot;
 
         if (slot == player.getHeldSlot()) {
@@ -259,7 +274,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      */
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {
         slot = convertSlot(slot, offset);
-        safeItemInsert(slot, itemStack);
+        setItemStack(slot, itemStack);
     }
 
     /**
