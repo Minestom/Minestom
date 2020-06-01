@@ -1680,7 +1680,7 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * All packets in the queue are executed in the {@link #update()} method
+     * All packets in the queue are executed in the {@link #update(long)} method
      * It is used internally to add all received packet from the client
      * Could be used to "simulate" a received packet, but to use at your own risk
      *

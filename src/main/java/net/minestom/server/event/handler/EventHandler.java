@@ -18,6 +18,15 @@ public interface EventHandler {
     <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback);
 
     /**
+     * Remove an event callback
+     *
+     * @param eventClass    the event class
+     * @param eventCallback the event callback
+     * @param <E>           the event type
+     */
+    <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback);
+
+    /**
      * @param eventClass
      * @param <E>
      * @return all event callbacks for the specified type {@code eventClass}

@@ -426,6 +426,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     @Override
+    public <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+        List<EventCallback> callbacks = getEventCallbacks(eventClass);
+        callbacks.remove(eventCallback);
+        this.eventCallbacks.put(eventClass, callbacks);
+    }
+
+    @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
     }

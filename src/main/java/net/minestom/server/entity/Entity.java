@@ -497,6 +497,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     @Override
+    public <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+        Check.notNull(eventClass, "Event class cannot be null");
+        Check.notNull(eventCallback, "Event callback cannot be null");
+        List<EventCallback> callbacks = getEventCallbacks(eventClass);
+        callbacks.remove(eventCallback);
+        this.eventCallbacks.put(eventClass, callbacks);
+    }
+
+    @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         Check.notNull(eventClass, "Event class cannot be null");
         return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
