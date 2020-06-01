@@ -306,7 +306,7 @@ public class InstanceContainer extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-        return ChunkUtils.isChunkUnloaded(this, chunk) ? null : chunk;
+        return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
     }
 
     @Override

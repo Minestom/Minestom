@@ -1,6 +1,8 @@
 package net.minestom.server.utils.nbt;
 
 import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.validate.Check;
 
 import static net.minestom.server.utils.nbt.NBT.*;
 
@@ -13,44 +15,37 @@ public class NbtWriter {
     }
 
     public void writeByte(String name, byte value) {
-        packet.writeByte(NBT_BYTE);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_BYTE, name);
         packet.writeByte(value);
     }
 
     public void writeShort(String name, short value) {
-        packet.writeByte(NBT_SHORT);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_SHORT, name);
         packet.writeShort(value);
     }
 
     public void writeInt(String name, int value) {
-        packet.writeByte(NBT_INT);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_INT, name);
         packet.writeInt(value);
     }
 
     public void writeLong(String name, long value) {
-        packet.writeByte(NBT_LONG);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_LONG, name);
         packet.writeLong(value);
     }
 
     public void writeFloat(String name, float value) {
-        packet.writeByte(NBT_FLOAT);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_FLOAT, name);
         packet.writeFloat(value);
     }
 
     public void writeDouble(String name, double value) {
-        packet.writeByte(NBT_DOUBLE);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_DOUBLE, name);
         packet.writeDouble(value);
     }
 
     public void writeByteArray(String name, byte[] value) {
-        packet.writeByte(NBT_BYTE_ARRAY);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_BYTE_ARRAY, name);
         packet.writeInt(value.length);
         for (byte val : value) {
             packet.writeByte(val);
@@ -58,14 +53,12 @@ public class NbtWriter {
     }
 
     public void writeString(String name, String value) {
-        packet.writeByte(NBT_STRING);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_STRING, name);
         packet.writeShortSizedString(value);
     }
 
     public void writeList(String name, byte type, int size, Runnable callback) {
-        packet.writeByte(NBT_LIST);
-        packet.writeShortSizedString(name == null ? "" : name);
+        writeHeader(NBT_LIST, name);
         packet.writeByte(type);
         packet.writeInt(size);
         callback.run();
@@ -74,15 +67,13 @@ public class NbtWriter {
     }
 
     public void writeCompound(String name, NbtConsumer consumer) {
-        packet.writeByte(NBT_COMPOUND);
-        packet.writeShortSizedString(name == null ? "" : name);
+        writeHeader(NBT_COMPOUND, name);
         consumer.accept(this);
         packet.writeByte((byte) 0x00); // End compound
     }
 
     public void writeIntArray(String name, int[] value) {
-        packet.writeByte(NBT_INT_ARRAY);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_INT_ARRAY, name);
         packet.writeInt(value.length);
         for (int val : value) {
             packet.writeInt(val);
@@ -90,12 +81,19 @@ public class NbtWriter {
     }
 
     public void writeLongArray(String name, long[] value) {
-        packet.writeByte(NBT_LONG_ARRAY);
-        packet.writeShortSizedString(name);
+        writeHeader(NBT_LONG_ARRAY, name);
         packet.writeInt(value.length);
         for (long val : value) {
             packet.writeLong(val);
         }
+    }
+
+    private void writeHeader(byte type, String name) {
+        Check.argCondition(!MathUtils.isBetween(type, NBT_BYTE, NBT_LONG_ARRAY),
+                "The NbtTag type " + type + " is not valid");
+        Check.notNull(name, "The NbtTag name cannot be null");
+        packet.writeByte(type);
+        packet.writeShortSizedString(name);
     }
 
 }

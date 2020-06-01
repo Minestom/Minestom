@@ -82,9 +82,9 @@ public abstract class EntityCreature extends LivingEntity {
         float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
         float pitch = position.getPitch(); // TODO
 
-        short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
-        short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
-        short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
+        final short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
+        final short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
+        final short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
 
         if (updateView) {
             EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();

@@ -108,7 +108,7 @@ public class Utils {
 
             NbtWriter mainWriter = new NbtWriter(packet);
 
-            mainWriter.writeCompound(null, writer -> {
+            mainWriter.writeCompound("", writer -> {
                 // Unbreakable
                 if (itemStack.isUnbreakable()) {
                     writer.writeInt("Unbreakable", 1);

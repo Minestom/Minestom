@@ -39,6 +39,10 @@ public class MathUtils {
         return Direction.HORIZONTAL[directionIndex];
     }
 
+    public static boolean isBetween(byte number, byte min, byte max) {
+        return number >= min && number <= max;
+    }
+
     public static boolean isBetween(int number, int min, int max) {
         return number >= min && number <= max;
     }

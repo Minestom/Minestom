@@ -77,7 +77,7 @@ public class ChunkDataPacket implements ServerPacket {
         }
 
         {
-            nbtWriter.writeCompound(null, compound -> {
+            nbtWriter.writeCompound("", compound -> {
                 compound.writeLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9));
                 compound.writeLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9));
             });
@@ -100,7 +100,7 @@ public class ChunkDataPacket implements ServerPacket {
         for (int index : blockEntities) {
             final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
 
-            nbtWriter.writeCompound(null, compound -> {
+            nbtWriter.writeCompound("", compound -> {
                 compound.writeDouble("x", blockPosition.getX());
                 compound.writeDouble("y", blockPosition.getY());
                 compound.writeDouble("z", blockPosition.getZ());
