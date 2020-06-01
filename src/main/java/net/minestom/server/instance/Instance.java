@@ -105,6 +105,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     /**
+     * Unload a chunk
+     * <p>
+     * WARNING: all entities other than {@link Player} will be removed
+     *
      * @param chunk the chunk to unload
      */
     public abstract void unloadChunk(Chunk chunk);

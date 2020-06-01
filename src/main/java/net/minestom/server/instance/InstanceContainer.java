@@ -313,6 +313,13 @@ public class InstanceContainer extends Instance {
             chunk.removeViewer(viewer);
         }
 
+        // Remove all entities in chunk
+        getChunkEntities(chunk).forEach(entity -> {
+            if (!(entity instanceof Player))
+                entity.remove();
+        });
+
+        // Clear cache
         this.chunks.remove(index);
         this.chunkEntities.remove(index);
 
