@@ -62,7 +62,7 @@ public class ItemEntity extends ObjectEntity {
     @Override
     public void update(long time) {
         if (isMergeable() && isPickable() &&
-                (mergeUpdateOption != null && !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
+                (mergeUpdateOption == null || !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
             this.lastMergeCheck = time;
 
             Chunk chunk = instance.getChunkAt(getPosition());
