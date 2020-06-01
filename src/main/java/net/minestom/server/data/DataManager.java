@@ -10,6 +10,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class DataManager {
 
@@ -42,6 +43,8 @@ public class DataManager {
 
         registerType(String.class, new StringData());
         registerType(String[].class, new StringArrayData());
+
+        registerType(UUID.class, new UuidType());
 
         registerType(SerializableData.class, new SerializableDataData());
 

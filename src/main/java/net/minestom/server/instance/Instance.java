@@ -51,7 +51,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
     protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
-    private UUID uniqueId;
+    protected UUID uniqueId;
 
     private Data data;
     private ExplosionSupplier explosionSupplier;

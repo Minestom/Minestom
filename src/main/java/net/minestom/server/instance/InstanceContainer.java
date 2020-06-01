@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
@@ -38,7 +39,11 @@ import java.util.function.Consumer;
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
+// TODO save data + other things such as UUID
 public class InstanceContainer extends Instance {
+
+    private static final String UUID_KEY = "uuid";
+    private static final String DATA_KEY = "data";
 
     private StorageFolder storageFolder;
 
@@ -54,7 +59,16 @@ public class InstanceContainer extends Instance {
 
     public InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
         super(uniqueId, dimension);
+
         this.storageFolder = storageFolder;
+
+        if (storageFolder == null)
+            return;
+        // Retrieve instance data
+        this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
+
+        Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
+        setData(data);
     }
 
     @Override
@@ -307,6 +321,27 @@ public class InstanceContainer extends Instance {
     public Chunk getChunk(int chunkX, int chunkZ) {
         Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
+    }
+
+    /**
+     * Save the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorageFolder(Runnable)}
+     * <p>
+     * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
+     *
+     * @param callback the callback
+     */
+    public void saveInstance(Runnable callback) {
+        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
+
+        this.storageFolder.set(UUID_KEY, getUniqueId(), UUID.class);
+        Data data = getData();
+        if (data != null) {
+            Check.stateCondition(!(data instanceof SerializableData),
+                    "Instance#getData needs to be a SerializableData in order to be saved");
+            this.storageFolder.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
+        }
+
+        saveChunksToStorageFolder(callback);
     }
 
     @Override
