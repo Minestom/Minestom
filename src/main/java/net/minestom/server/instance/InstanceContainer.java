@@ -314,6 +314,8 @@ public class InstanceContainer extends Instance {
         }
 
         this.chunks.remove(index);
+        this.chunkEntities.remove(index);
+
         chunk.unload();
     }
 

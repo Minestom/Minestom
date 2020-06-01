@@ -295,9 +295,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * @param chunk the chunk to get the entities from
-     * @return an unmodifiable set containing all the entities in a chunk
+     * @return an unmodifiable set containing all the entities in a chunk,
+     * if {@code chunk} is null, return an empty {@link HashSet}
      */
     public Set<Entity> getChunkEntities(Chunk chunk) {
+        if (chunk == null)
+            return new HashSet<>();
+
         long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         return Collections.unmodifiableSet(getEntitiesInChunk(index));
     }
@@ -545,14 +549,16 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunk  the chunk where the entity will be removed
      */
     public void removeEntityFromChunk(Entity entity, Chunk chunk) {
-        long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         synchronized (chunkEntities) {
-            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-            entities.remove(entity);
-            if (entities.isEmpty()) {
-                this.chunkEntities.remove(chunkIndex);
-            } else {
-                this.chunkEntities.put(chunkIndex, entities);
+            if (chunk != null) {
+                long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+                Set<Entity> entities = getEntitiesInChunk(chunkIndex);
+                entities.remove(entity);
+                if (entities.isEmpty()) {
+                    this.chunkEntities.remove(chunkIndex);
+                } else {
+                    this.chunkEntities.put(chunkIndex, entities);
+                }
             }
 
             if (entity instanceof Player) {
