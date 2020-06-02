@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ConnectionManager {
+public final class ConnectionManager {
 
     private Set<Player> players = new CopyOnWriteArraySet<>();
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());

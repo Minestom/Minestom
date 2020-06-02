@@ -12,14 +12,19 @@ import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.concurrent.ExecutorService;
 
-public class UpdateManager {
+public final class UpdateManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
 
-    private ExecutorService mainUpdate = new MinestomThread(MinecraftServer.THREAD_COUNT_MAIN_UPDATE, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
+    private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
 
+    /**
+     * Should only be created in MinecraftServer
+     */
+    protected UpdateManager() {
+    }
 
     public void start() {
         mainUpdate.execute(() -> {

@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 
-public class EntityManager {
+public final class EntityManager {
 
     private static InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 

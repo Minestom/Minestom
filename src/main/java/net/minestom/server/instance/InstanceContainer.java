@@ -224,6 +224,10 @@ public class InstanceContainer extends Instance {
 
         Chunk chunk = getChunkAt(blockPosition);
 
+        // Chunk unloaded, stop here
+        if (ChunkUtils.isChunkUnloaded(chunk))
+            return false;
+
         int x = blockPosition.getX();
         int y = blockPosition.getY();
         int z = blockPosition.getZ();
@@ -254,7 +258,7 @@ public class InstanceContainer extends Instance {
 
             chunk.getViewers().forEach(p -> {
                 // The player who breaks the block already get particles client-side
-                if (customBlock == null || !(p.equals(player) && player.isCreative())) {
+                if (customBlock != null || !(p.equals(player) && !player.isCreative())) {
                     p.getPlayerConnection().sendPacket(particlePacket);
                 }
             });

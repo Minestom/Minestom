@@ -256,6 +256,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
 
     /**
+     * Get the instance dimension
+     *
      * @return the dimension of the instance
      */
     public Dimension getDimension() {
@@ -263,6 +265,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the instance world border
+     *
      * @return the world border linked to the instance
      */
     public WorldBorder getWorldBorder() {
@@ -270,6 +274,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the players in the instance
+     *
      * @return an unmodifiable list containing all the players in the instance
      */
     public Set<Player> getPlayers() {
@@ -277,6 +283,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the creatures in the instance
+     *
      * @return an unmodifiable list containing all the creatures in the instance
      */
     public Set<EntityCreature> getCreatures() {
@@ -284,6 +292,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the object entities in the instance
+     *
      * @return an unmodifiable list containing all the object entities in the instance
      */
     public Set<ObjectEntity> getObjectEntities() {
@@ -291,6 +301,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the experience orbs in the instance
+     *
      * @return an unmodifiable list containing all the experience orbs in the instance
      */
     public Set<ExperienceOrb> getExperienceOrbs() {
@@ -298,6 +310,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Get the entities located in the chunk
+     *
      * @param chunk the chunk to get the entities from
      * @return an unmodifiable set containing all the entities in a chunk,
      * if {@code chunk} is null, return an empty {@link HashSet}
@@ -412,6 +426,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         saveChunksToStorageFolder(null);
     }
 
+    /**
+     * Get the instance unique id
+     *
+     * @return the instance unique id
+     */
     public UUID getUniqueId() {
         return uniqueId;
     }
@@ -517,7 +536,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Add the specified entity to the instance entities cache
      * <p>
-     * Warning: this is done automatically the entity move out of his chunk
+     * Warning: this is done automatically when the entity move out of his chunk
      *
      * @param entity the entity to add
      * @param chunk  the chunk where the entity will be added
@@ -547,7 +566,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Remove the specified entity to the instance entities cache
      * <p>
-     * Warning: this is done automatically the entity move out of his chunk
+     * Warning: this is done automatically when the entity move out of his chunk
      *
      * @param entity the entity to remove
      * @param chunk  the chunk where the entity will be removed
@@ -604,27 +623,29 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
-     * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     * Creates an explosion at the given position with the given strength.
+     * The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      *
      * @param centerX
      * @param centerY
      * @param centerZ
      * @param strength
+     * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
     public void explode(float centerX, float centerY, float centerZ, float strength) {
         explode(centerX, centerY, centerZ, strength, null);
     }
 
     /**
-     * Creates an explosion at the given position with the given strength. The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
-     * If no {@link ExplosionSupplier} was supplied, this method will throw an {@link IllegalStateException}
+     * Creates an explosion at the given position with the given strength.
+     * The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      *
      * @param centerX
      * @param centerY
      * @param centerZ
      * @param strength
      * @param additionalData data to pass to the explosion supplier
+     * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
     public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
         ExplosionSupplier explosionSupplier = getExplosionSupplier();
@@ -637,7 +658,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Return the registered explosion supplier, or null if none was provided
      *
-     * @return
+     * @return the instance explosion supplier, null if none was provided
      */
     public ExplosionSupplier getExplosionSupplier() {
         return explosionSupplier;
@@ -646,7 +667,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Registers the explosion supplier to use in this instance
      *
-     * @param supplier
+     * @param supplier the explosion supplier
      */
     public void setExplosionSupplier(ExplosionSupplier supplier) {
         this.explosionSupplier = supplier;

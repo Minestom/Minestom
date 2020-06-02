@@ -12,6 +12,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Represent a bossbar which can be showed to any player {@link #addViewer(Player)}
+ */
 public class BossBar implements Viewable {
 
     private UUID uuid = UUID.randomUUID();
@@ -51,6 +54,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Get the bossbar title
+     *
      * @return the current title of the bossbar
      */
     public String getTitle() {
@@ -58,6 +63,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Change the bossbar title
+     *
      * @param title the new title of the bossbar
      */
     public void setTitle(String title) {
@@ -65,6 +72,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Get the bossbar progress
+     *
      * @return the current progress of the bossbar
      */
     public float getProgress() {
@@ -72,6 +81,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Change the bossbar progress
+     *
      * @param progress the new progress bar percentage
      * @throws IllegalArgumentException if {@code progress} is not between 0 and 1
      */
@@ -83,6 +94,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Get the bossbar color
+     *
      * @return the current bossbar color
      */
     public BarColor getColor() {
@@ -90,6 +103,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Change the bossbar color
+     *
      * @param color the new color of the bossbar
      */
     public void setColor(BarColor color) {
@@ -98,6 +113,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Get the bossbar division
+     *
      * @return the current bossbar division
      */
     public BarDivision getDivision() {
@@ -105,6 +122,8 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Change the bossbar division
+     *
      * @param division the new bossbar division count
      */
     public void setDivision(BarDivision division) {

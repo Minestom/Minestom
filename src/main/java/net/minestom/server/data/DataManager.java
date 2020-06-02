@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class DataManager {
+public final class DataManager {
 
     private Map<Class, DataType> dataTypeMap = new HashMap<>();
 
