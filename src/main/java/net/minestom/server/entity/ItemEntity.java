@@ -99,10 +99,11 @@ public class ItemEntity extends ObjectEntity {
                         if (!canApply)
                             continue;
 
-                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity);
+                        final ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
+
+                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
                         callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
-                            ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
-                            setItemStack(result);
+                            setItemStack(entityItemMergeEvent.getResult());
                             itemEntity.remove();
                         });
                     }
