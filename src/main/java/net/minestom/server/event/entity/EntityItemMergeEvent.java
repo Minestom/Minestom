@@ -17,6 +17,7 @@ public class EntityItemMergeEvent extends CancellableEvent {
     public EntityItemMergeEvent(ItemEntity source, ItemEntity merged, ItemStack result) {
         this.source = source;
         this.merged = merged;
+        this.result = result;
     }
 
     /**
