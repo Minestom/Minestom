@@ -226,13 +226,27 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target
+     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     *
+     * @param target    the entity target
+     * @param swingHand true to swing the entity main hand, false otherwise
+     */
+    public void attack(Entity target, boolean swingHand) {
+        if (swingHand)
+            swingMainHand();
+        EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
+        callEvent(EntityAttackEvent.class, attackEvent);
+    }
+
+    /**
+     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     * <p>
+     * This does not trigger the hand animation
      *
      * @param target the entity target
      */
     public void attack(Entity target) {
-        EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
-        callEvent(EntityAttackEvent.class, attackEvent);
+        attack(target, false);
     }
 
     public void jump(float height) {

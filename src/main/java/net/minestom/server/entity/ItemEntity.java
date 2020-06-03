@@ -13,6 +13,9 @@ import net.minestom.server.utils.time.UpdateOption;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Represent an item on the ground
+ */
 public class ItemEntity extends ObjectEntity {
 
     /**
