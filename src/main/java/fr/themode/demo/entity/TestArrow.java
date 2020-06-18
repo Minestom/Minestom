@@ -15,16 +15,6 @@ public class TestArrow extends ObjectEntity {
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void spawn() {
-
-    }
-
-    @Override
     public int getObjectData() {
         return shooter.getEntityId() + 1;
     }
