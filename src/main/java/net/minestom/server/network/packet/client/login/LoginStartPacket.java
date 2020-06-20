@@ -17,7 +17,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         // TODO send encryption request OR directly login success
 
-        UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection);
+        UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection, username);
 
         LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
         connection.sendPacket(successPacket);

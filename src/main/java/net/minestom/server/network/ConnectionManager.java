@@ -110,10 +110,10 @@ public final class ConnectionManager {
      * @return the uuid based on {@code playerConnection}
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
-    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection) {
+    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection, String username) {
         if (uuidProvider == null)
             return UUID.randomUUID();
-        return uuidProvider.provide(playerConnection);
+        return uuidProvider.provide(playerConnection, username);
     }
 
     /**
