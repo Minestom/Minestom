@@ -9,18 +9,39 @@ import net.minestom.server.item.ItemStack;
  */
 public class PlayerUseItemEvent extends CancellableEvent {
 
+    private Player player;
     private Player.Hand hand;
     private ItemStack itemStack;
 
-    public PlayerUseItemEvent(Player.Hand hand, ItemStack itemStack) {
+    public PlayerUseItemEvent(Player player, Player.Hand hand, ItemStack itemStack) {
+        this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
     }
 
+    /**
+     * Get the player who used an item
+     *
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Get which hand the player used
+     *
+     * @return the hand used
+     */
     public Player.Hand getHand() {
         return hand;
     }
 
+    /**
+     * Get the item which have been used
+     *
+     * @return the item
+     */
     public ItemStack getItemStack() {
         return itemStack;
     }

@@ -26,6 +26,7 @@ public class BenchmarkManager {
 
     private Map<Long, Long> lastCpuTimeMap = new HashMap<>();
     private Map<Long, Long> lastUserTimeMap = new HashMap<>();
+    private Map<Long, Long> lastWaitedMap = new HashMap<>();
     private Map<Long, Long> lastBlockedMap = new HashMap<>();
 
     private Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
@@ -100,26 +101,30 @@ public class BenchmarkManager {
 
             long lastCpuTime = lastCpuTimeMap.getOrDefault(id, 0L);
             long lastUserTime = lastUserTimeMap.getOrDefault(id, 0L);
+            long lastWaitedTime = lastWaitedMap.getOrDefault(id, 0L);
             long lastBlockedTime = lastBlockedMap.getOrDefault(id, 0L);
 
             long blockedTime = threadInfo2.getBlockedTime();
-            //long waitedTime = threadInfo2.getWaitedTime();
+            long waitedTime = threadInfo2.getWaitedTime();
             long cpuTime = threadMXBean.getThreadCpuTime(id);
             long userTime = threadMXBean.getThreadUserTime(id);
 
             lastCpuTimeMap.put(id, cpuTime);
             lastUserTimeMap.put(id, userTime);
+            lastWaitedMap.put(id, waitedTime);
             lastBlockedMap.put(id, blockedTime);
 
             double totalCpuTime = (double) (cpuTime - lastCpuTime) / 1000000D;
             double totalUserTime = (double) (userTime - lastUserTime) / 1000000D;
             long totalBlocked = blockedTime - lastBlockedTime;
+            long totalWaited = waitedTime - lastWaitedTime;
 
             double cpuPercentage = totalCpuTime / (double) time * 100L;
             double userPercentage = totalUserTime / (double) time * 100L;
+            double waitedPercentage = totalWaited / (double) time * 100L;
             double blockedPercentage = totalBlocked / (double) time * 100L;
 
-            ThreadResult threadResult = new ThreadResult(cpuPercentage, userPercentage, blockedPercentage);
+            ThreadResult threadResult = new ThreadResult(cpuPercentage, userPercentage, waitedPercentage, blockedPercentage);
             resultMap.put(name, threadResult);
         }
     }

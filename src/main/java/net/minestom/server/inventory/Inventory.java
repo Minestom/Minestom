@@ -8,10 +8,12 @@ import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
@@ -55,9 +57,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         this.itemStacks = new ItemStack[size];
 
-        for (int i = 0; i < size; i++) {
-            itemStacks[i] = ItemStack.getAirItem();
-        }
+        ArrayUtils.fill(itemStacks, ItemStack::getAirItem);
     }
 
     private static byte generateId() {
@@ -88,7 +88,32 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean addItemStack(ItemStack itemStack) {
+    public synchronized boolean addItemStack(ItemStack itemStack) {
+        StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = 0; i < getItemStacks().length; i++) {
+            ItemStack item = getItemStacks()[i];
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                int totalAmount = itemStackAmount + itemAmount;
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
+                    item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
+
+                    sendSlotRefresh((short) i, item);
+                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                } else {
+                    item.setAmount((byte) totalAmount);
+                    sendSlotRefresh((short) i, item);
+                    return true;
+                }
+            } else if (item.isAir()) {
+                setItemStack(i, itemStack);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -121,7 +146,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Refresh the inventory for all viewers
      */
     public void update() {
-        PacketWriterUtils.writeAndSend(getViewers(), getWindowItemsPacket());
+        PacketWriterUtils.writeAndSend(getViewers(), createWindowItemsPacket());
     }
 
     /**
@@ -134,7 +159,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!getViewers().contains(player))
             return;
 
-        PacketWriterUtils.writeAndSend(player, getWindowItemsPacket());
+        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
     }
 
     @Override
@@ -145,8 +170,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public boolean addViewer(Player player) {
         boolean result = this.viewers.add(player);
-        WindowItemsPacket windowItemsPacket = getWindowItemsPacket();
-        player.getPlayerConnection().sendPacket(windowItemsPacket);
+        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
         return result;
     }
 
@@ -158,23 +182,29 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return result;
     }
 
+    /**
+     * Get the cursor item of a viewer
+     *
+     * @param player the player to get the cursor item from
+     * @return the player cursor item
+     * @throws IllegalStateException if {@code player} is not in the viewer list
+     */
     public ItemStack getCursorItem(Player player) {
+        Check.stateCondition(!isViewer(player), "You can only get the cursor item of a viewer");
         return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
     }
 
-    private void safeItemInsert(int slot, ItemStack itemStack) {
-        synchronized (this) {
-            itemStack = ItemStackUtils.notNull(itemStack);
-            this.itemStacks[slot] = itemStack;
-            SetSlotPacket setSlotPacket = new SetSlotPacket();
-            setSlotPacket.windowId = getWindowId();
-            setSlotPacket.slot = (short) slot;
-            setSlotPacket.itemStack = itemStack;
-            sendPacketToViewers(setSlotPacket);
-        }
+    private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
+        this.itemStacks[slot] = itemStack;
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = getWindowId();
+        setSlotPacket.slot = (short) slot;
+        setSlotPacket.itemStack = itemStack;
+        sendPacketToViewers(setSlotPacket);
     }
 
-    private WindowItemsPacket getWindowItemsPacket() {
+    private WindowItemsPacket createWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
         windowItemsPacket.count = (short) itemStacks.length;
@@ -439,6 +469,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         setCursorPlayerItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
+    }
+
+    private void sendSlotRefresh(short slot, ItemStack itemStack) {
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = getWindowId();
+        setSlotPacket.slot = slot;
+        setSlotPacket.itemStack = itemStack;
+        sendPacketToViewers(setSlotPacket);
     }
 
     /**

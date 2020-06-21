@@ -21,18 +21,40 @@ public class PlayerPreEatEvent extends CancellableEvent {
         this.eatingTime = eatingTime;
     }
 
+    /**
+     * The player who is trying to eat
+     *
+     * @return the concerned player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * The food item which will be eaten
+     *
+     * @return the food item
+     */
     public ItemStack getFoodItem() {
         return foodItem;
     }
 
+    /**
+     * Get the food eating time
+     * <p>
+     * This is by default {@link Player#getDefaultEatingTime()}
+     *
+     * @return the eating time
+     */
     public long getEatingTime() {
         return eatingTime;
     }
 
+    /**
+     * Change the food eating time
+     *
+     * @param eatingTime the new eating time
+     */
     public void setEatingTime(long eatingTime) {
         this.eatingTime = eatingTime;
     }

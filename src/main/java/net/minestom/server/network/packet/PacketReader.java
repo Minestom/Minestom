@@ -7,6 +7,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 
+import java.util.UUID;
+
 public class PacketReader {
 
     private ByteBuf buffer;
@@ -88,6 +90,12 @@ public class PacketReader {
     public BlockPosition readBlockPosition() {
         long value = buffer.readLong();
         return SerializerUtils.longToBlockPosition(value);
+    }
+
+    public UUID readUuid() {
+        long most = readLong();
+        long least = readLong();
+        return new UUID(most, least);
     }
 
     public ItemStack readSlot() {

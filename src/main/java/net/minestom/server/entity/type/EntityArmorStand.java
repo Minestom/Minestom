@@ -8,6 +8,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.item.ItemStackUtils;
@@ -63,7 +64,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     @Override
     public boolean addViewer(Player player) {
         boolean result = super.addViewer(player);
-        syncEquipments();
+        syncEquipments(player.getPlayerConnection());
         return result;
     }
 
@@ -316,6 +317,15 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     // Equipments
+    public void syncEquipments(PlayerConnection connection) {
+        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
+            EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+            if (entityEquipmentPacket == null)
+                return;
+            connection.sendPacket(entityEquipmentPacket);
+        }
+    }
+
     public void syncEquipments() {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             syncEquipment(slot);

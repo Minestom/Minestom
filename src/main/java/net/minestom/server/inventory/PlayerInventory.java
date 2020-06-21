@@ -2,6 +2,8 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.player.PlayerAddItemStackEvent;
+import net.minestom.server.event.player.PlayerSetItemStackEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
@@ -13,8 +15,10 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,9 +40,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public PlayerInventory(Player player) {
         this.player = player;
 
-        for (int i = 0; i < items.length; i++) {
-            items[i] = ItemStack.getAirItem();
-        }
+        ArrayUtils.fill(items, ItemStack::getAirItem);
     }
 
     @Override
@@ -68,36 +70,52 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
+
+        PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, slot, itemStack);
+        player.callEvent(PlayerSetItemStackEvent.class, setItemStackEvent);
+        if (setItemStackEvent.isCancelled())
+            return;
+        slot = setItemStackEvent.getSlot();
+        itemStack = setItemStackEvent.getItemStack();
+
         safeItemInsert(slot, itemStack);
     }
 
     @Override
-    public boolean addItemStack(ItemStack itemStack) {
-        synchronized (this) {
-            StackingRule stackingRule = itemStack.getStackingRule();
-            for (int i = 0; i < items.length - 10; i++) {
-                ItemStack item = items[i];
-                StackingRule itemStackingRule = item.getStackingRule();
-                if (itemStackingRule.canBeStacked(itemStack, item)) {
-                    int itemAmount = itemStackingRule.getAmount(item);
-                    if (itemAmount == stackingRule.getMaxSize())
-                        continue;
-                    int itemStackAmount = itemStackingRule.getAmount(itemStack);
-                    int totalAmount = itemStackAmount + itemAmount;
-                    if (!stackingRule.canApply(itemStack, totalAmount)) {
-                        item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
+    public synchronized boolean addItemStack(ItemStack itemStack) {
+        itemStack = ItemStackUtils.notNull(itemStack);
 
-                        sendSlotRefresh((short) convertToPacketSlot(i), item);
-                        itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
-                    } else {
-                        item.setAmount((byte) totalAmount);
-                        sendSlotRefresh((short) convertToPacketSlot(i), item);
-                        return true;
-                    }
-                } else if (item.isAir()) {
-                    setItemStack(i, itemStack);
+        PlayerAddItemStackEvent addItemStackEvent = new PlayerAddItemStackEvent(player, itemStack);
+        player.callEvent(PlayerAddItemStackEvent.class, addItemStackEvent);
+        if (addItemStackEvent.isCancelled())
+            return false;
+
+        itemStack = addItemStackEvent.getItemStack();
+
+        StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = 0; i < items.length - 10; i++) {
+            ItemStack item = items[i];
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                int totalAmount = itemStackAmount + itemAmount;
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
+                    item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
+
+                    sendSlotRefresh((short) convertToPacketSlot(i), item);
+                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                } else {
+                    item.setAmount((byte) totalAmount);
+                    sendSlotRefresh((short) convertToPacketSlot(i), item);
                     return true;
                 }
+            } else if (item.isAir()) {
+                safeItemInsert(i, itemStack);
+                return true;
             }
         }
         return false;
@@ -168,79 +186,127 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         safeItemInsert(BOOTS_SLOT, itemStack);
     }
 
+    /**
+     * Refresh the player inventory by sending a {@link WindowItemsPacket} containing all
+     * the inventory items
+     */
     public void update() {
         PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
     }
 
+    /**
+     * Refresh only a specific slot with the updated item stack data
+     *
+     * @param slot the slot to refresh
+     */
     public void refreshSlot(int slot) {
         sendSlotRefresh((short) convertToPacketSlot(slot), getItemStack(slot));
     }
 
+    /**
+     * Get the item in player cursor
+     *
+     * @return the cursor item
+     */
     public ItemStack getCursorItem() {
         return cursorItem;
     }
 
+    /**
+     * Change the player cursor item
+     *
+     * @param cursorItem the new cursor item
+     */
     public void setCursorItem(ItemStack cursorItem) {
         this.cursorItem = ItemStackUtils.notNull(cursorItem);
     }
 
-    private void safeItemInsert(int slot, ItemStack itemStack) {
-        synchronized (this) {
-            itemStack = ItemStackUtils.notNull(itemStack);
+    /**
+     * Insert an item safely (synchronized) in the appropriate slot
+     *
+     * @param slot      an internal slot
+     * @param itemStack the item to insert at the slot
+     * @throws IllegalArgumentException if the slot {@code slot} does not exist
+     * @throws NullPointerException     if {@code itemStack} is null
+     */
+    private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                "The slot " + slot + " does not exist for player");
+        Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
+        
+        EntityEquipmentPacket.Slot equipmentSlot;
 
-            EntityEquipmentPacket.Slot equipmentSlot;
+        if (slot == player.getHeldSlot()) {
+            equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
+        } else if (slot == OFFHAND_SLOT) {
+            equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
+        } else {
+            ArmorEquipEvent armorEquipEvent = null;
 
-            if (slot == player.getHeldSlot()) {
-                equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
-            } else if (slot == OFFHAND_SLOT) {
-                equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
+            if (slot == HELMET_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+            } else if (slot == CHESTPLATE_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+            } else if (slot == LEGGINGS_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+            } else if (slot == BOOTS_SLOT) {
+                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+            }
+
+            if (armorEquipEvent != null) {
+                ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
+                equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
+                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
+                itemStack = armorEquipEvent.getArmorItem();
             } else {
-                ArmorEquipEvent armorEquipEvent = null;
-
-                if (slot == HELMET_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-                } else if (slot == CHESTPLATE_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-                } else if (slot == LEGGINGS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-                } else if (slot == BOOTS_SLOT) {
-                    armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-                }
-
-                if (armorEquipEvent != null) {
-                    ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
-                    equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
-                    player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                    itemStack = armorEquipEvent.getArmorItem();
-                } else {
-                    equipmentSlot = null;
-                }
+                equipmentSlot = null;
             }
-
-            this.items[slot] = itemStack;
-
-            // Sync equipment
-            if (equipmentSlot != null) {
-                player.syncEquipment(equipmentSlot);
-            }
-
-            // Refresh slot
-            update();
-            //refreshSlot(slot); seems to break things concerning +64 stacks
         }
+
+        this.items[slot] = itemStack;
+
+        // Sync equipment
+        if (equipmentSlot != null) {
+            player.syncEquipment(equipmentSlot);
+        }
+
+        // Refresh slot
+        update();
+        //refreshSlot(slot); seems to break things concerning +64 stacks
     }
 
+    /**
+     * Set an item from a packet slot
+     *
+     * @param slot      a packet slot
+     * @param offset    offset (generally 9 to ignore armor and craft slots)
+     * @param itemStack the item stack to set
+     */
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {
         slot = convertSlot(slot, offset);
-        safeItemInsert(slot, itemStack);
+        setItemStack(slot, itemStack);
     }
 
+    /**
+     * Get the item from a packet slot
+     *
+     * @param slot   a packet slot
+     * @param offset offset (generally 9 to ignore armor and craft slots)
+     * @return the item in the specified slot
+     */
     protected ItemStack getItemStack(int slot, int offset) {
         slot = convertSlot(slot, offset);
         return this.items[slot];
     }
 
-    private void sendSlotRefresh(short slot, ItemStack itemStack) {
+    /**
+     * Refresh an inventory slot
+     *
+     * @param slot      the packet slot
+     *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
+     * @param itemStack the item stack in the slot
+     */
+    protected void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = (byte) (MathUtils.isBetween(slot, 35, INVENTORY_SIZE) ? 0 : -2);
         setSlotPacket.slot = slot;
@@ -248,6 +314,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
+    /**
+     * Get a {@link WindowItemsPacket} with all the items in the inventory
+     *
+     * @return a {@link WindowItemsPacket} with inventory items
+     */
     private WindowItemsPacket createWindowItemsPacket() {
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
 

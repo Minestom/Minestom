@@ -21,6 +21,7 @@ public class PacketListenerManager {
         addListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         addListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         addListener(ClientCloseWindow.class, WindowListener::closeWindowListener);
+        addListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
         addListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         addListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
         addListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
@@ -42,15 +43,19 @@ public class PacketListenerManager {
         addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         addListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         addListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
+        addListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
+        addListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
 
-        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(packet.getClass());
+        final Class clazz = packet.getClass();
+
+        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            System.err.println("Packet " + packet.getClass() + " does not have any default listener!");
+            System.err.println("Packet " + clazz + " does not have any default listener!");
         }
 
 

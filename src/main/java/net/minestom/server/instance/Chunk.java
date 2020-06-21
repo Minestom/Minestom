@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 // TODO light data & API
-public class Chunk implements Viewable {
+public final class Chunk implements Viewable {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
@@ -223,35 +223,33 @@ public class Chunk implements Viewable {
         return blocksData.get(index);
     }
 
-    public void updateBlocks(long time, Instance instance) {
+    public synchronized void updateBlocks(long time, Instance instance) {
         if (updatableBlocks.isEmpty())
             return;
 
         // Block all chunk operation during the update
-        synchronized (this) {
-            IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
-            while (iterator.hasNext()) {
-                int index = iterator.nextInt();
-                CustomBlock customBlock = getCustomBlock(index);
+        IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
+        while (iterator.hasNext()) {
+            final int index = iterator.nextInt();
+            final CustomBlock customBlock = getCustomBlock(index);
 
-                // Update cooldown
-                UpdateOption updateOption = customBlock.getUpdateOption();
-                long lastUpdate = updatableBlocksLastUpdate.get(index);
-                boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
-                if (hasCooldown)
-                    continue;
+            // Update cooldown
+            final UpdateOption updateOption = customBlock.getUpdateOption();
+            final long lastUpdate = updatableBlocksLastUpdate.get(index);
+            final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
+            if (hasCooldown)
+                continue;
 
-                this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
+            this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
-                int[] blockPos = ChunkUtils.indexToPosition(index, chunkX, chunkZ);
-                int x = blockPos[0];
-                int y = blockPos[1];
-                int z = blockPos[2];
+            final int[] blockPos = ChunkUtils.indexToPosition(index, chunkX, chunkZ);
+            int x = blockPos[0];
+            int y = blockPos[1];
+            int z = blockPos[2];
 
-                BlockPosition blockPosition = new BlockPosition(x, y, z);
-                Data data = getData(index);
-                customBlock.update(instance, blockPosition, data);
-            }
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+            Data data = getData(index);
+            customBlock.update(instance, blockPosition, data);
         }
     }
 

@@ -3,6 +3,9 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
+/**
+ * Called when a player receive a new chunk data
+ */
 public class PlayerChunkLoadEvent extends Event {
 
     private Player player;
@@ -14,14 +17,29 @@ public class PlayerChunkLoadEvent extends Event {
         this.chunkZ = chunkZ;
     }
 
+    /**
+     * Get the player
+     *
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Get the chunk X
+     *
+     * @return the chunk X
+     */
     public int getChunkX() {
         return chunkX;
     }
 
+    /**
+     * Get the chunk Z
+     *
+     * @return the chunk Z
+     */
     public int getChunkZ() {
         return chunkZ;
     }

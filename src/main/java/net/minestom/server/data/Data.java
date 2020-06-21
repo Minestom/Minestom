@@ -8,7 +8,8 @@ public class Data {
 
     public static final Data EMPTY = new Data() {
         @Override
-        public <T> void set(String key, T value, Class<T> type) {}
+        public <T> void set(String key, T value, Class<T> type) {
+        }
 
         @Override
         public <T> T get(String key) {
@@ -41,6 +42,8 @@ public class Data {
     }
 
     /**
+     * Get if the data has a key
+     *
      * @param key
      * @return true if the data contains the key, false otherwise
      */
@@ -49,6 +52,8 @@ public class Data {
     }
 
     /**
+     * Get the list of data keys
+     *
      * @return an unmodifiable set containing all keys
      */
     public Set<String> getKeys() {
@@ -56,12 +61,19 @@ public class Data {
     }
 
     /**
+     * Get if the data is empty or not
+     *
      * @return true if the data does not contain anything, false otherwise
      */
     public boolean isEmpty() {
         return data.isEmpty();
     }
 
+    /**
+     * Clone this data
+     *
+     * @return a cloned data object
+     */
     public Data clone() {
         Data data = new Data();
         data.data = new ConcurrentHashMap<>(this.data);

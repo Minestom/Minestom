@@ -4,6 +4,7 @@ import fr.themode.command.Arguments;
 import fr.themode.command.Command;
 import fr.themode.command.arguments.Argument;
 import fr.themode.command.arguments.ArgumentType;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 /**
  * Command that make a player change gamemode
  */
-public class GamemodeCommand extends Command<Player> {
+public class GamemodeCommand extends Command<CommandSender> {
     public GamemodeCommand() {
         super("gamemode", "g", "gm");
 
@@ -35,11 +36,13 @@ public class GamemodeCommand extends Command<Player> {
         addSyntax(this::executeOnOther, player, mode);
     }
 
-    private void usage(Player player, Arguments arguments) {
-        player.sendMessage("Usage: /gamemode [player] <gamemode>");
+    private void usage(CommandSender sender, Arguments arguments) {
+        sender.sendMessage("Usage: /gamemode [player] <gamemode>");
     }
 
-    private void executeOnSelf(Player player, Arguments arguments) {
+    private void executeOnSelf(CommandSender sender, Arguments arguments) {
+        Player player = (Player) sender;
+
         String gamemodeName = arguments.getWord("mode");
         GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
         assert mode != null; // mode is not supposed to be null, because gamemodeName will be valid
@@ -47,7 +50,9 @@ public class GamemodeCommand extends Command<Player> {
         player.sendMessage("You are now playing in " + gamemodeName);
     }
 
-    private void executeOnOther(Player player, Arguments arguments) {
+    private void executeOnOther(CommandSender sender, Arguments arguments) {
+        Player player = (Player) sender;
+
         String gamemodeName = arguments.getWord("mode");
         String targetName = arguments.getWord("player");
         GameMode mode = GameMode.valueOf(gamemodeName.toUpperCase());
@@ -61,11 +66,15 @@ public class GamemodeCommand extends Command<Player> {
         }
     }
 
-    private void gameModeCallback(Player player, String gamemode, int error) {
-        player.sendMessage("'" + gamemode + "' is not a valid gamemode!");
+    private void gameModeCallback(CommandSender sender, String gamemode, int error) {
+        sender.sendMessage("'" + gamemode + "' is not a valid gamemode!");
     }
 
-    private boolean isAllowed(Player player) {
-        return true; // TODO: permissions
+    private boolean isAllowed(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("The command is only available for player");
+            return false;
+        }
+        return true;
     }
 }

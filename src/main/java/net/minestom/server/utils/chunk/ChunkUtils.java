@@ -9,11 +9,10 @@ import net.minestom.server.utils.Position;
 public class ChunkUtils {
 
     /**
-     * @param instance the instance where {@code chunk} is
-     * @param chunk    the chunk to check
+     * @param chunk the chunk to check
      * @return true if the chunk is unloaded, false otherwise
      */
-    public static boolean isChunkUnloaded(Instance instance, Chunk chunk) {
+    public static boolean isChunkUnloaded(Chunk chunk) {
         return chunk == null || !chunk.isLoaded();
     }
 
@@ -28,7 +27,7 @@ public class ChunkUtils {
         int chunkZ = getChunkCoordinate((int) z);
 
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        return isChunkUnloaded(instance, chunk);
+        return isChunkUnloaded(chunk);
     }
 
     /**
@@ -84,6 +83,12 @@ public class ChunkUtils {
         return visibleChunks;
     }
 
+    /**
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return an index which can be used to store and retrieve later data linked to a block position
+     */
     public static int getBlockIndex(int x, int y, int z) {
         x = x % Chunk.CHUNK_SIZE_X;
         z = z % Chunk.CHUNK_SIZE_Z;
@@ -94,11 +99,24 @@ public class ChunkUtils {
         return index & 0xffff;
     }
 
+    /**
+     * @param index  an index computed from {@link #getBlockIndex(int, int, int)}
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the instance position of the block located in {@code index}
+     */
     public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
         int[] pos = indexToPosition(index, chunkX, chunkZ);
         return new BlockPosition(pos[0], pos[1], pos[2]);
     }
 
+    /**
+     * @param index  an index computed from {@link #getBlockIndex(int, int, int)}
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the world position of the specified index with its chunks being {@code chunkX} and {@code chunk Z}
+     * positions in the array are in the order X/Y/Z
+     */
     public static int[] indexToPosition(int index, int chunkX, int chunkZ) {
         int z = (byte) (index >> 12 & 0xF);
         int y = (index >>> 4 & 0xFF);
@@ -110,6 +128,11 @@ public class ChunkUtils {
         return new int[]{x, y, z};
     }
 
+    /**
+     * @param index an index computed from {@link #getBlockIndex(int, int, int)}
+     * @return the chunk position (O-15) of the specified index,
+     * positions in the array are in the order X/Y/Z
+     */
     public static int[] indexToChunkPosition(int index) {
         return indexToPosition(index, 0, 0);
     }

@@ -123,7 +123,7 @@ public class BlockPlacementListener {
                 refreshChunk = true;
             }
         } else {
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(hand, usedItem, blockPosition, blockFace.toDirection());
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace.toDirection());
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;
         }

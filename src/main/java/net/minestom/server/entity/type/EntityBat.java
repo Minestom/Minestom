@@ -13,6 +13,7 @@ public class EntityBat extends EntityCreature {
 
     public EntityBat(Position spawnPosition) {
         super(EntityType.BAT, spawnPosition);
+        setBoundingBox(0.5f, 0.9f, 0.5f);
     }
 
     @Override

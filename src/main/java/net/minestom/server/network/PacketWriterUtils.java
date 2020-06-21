@@ -26,8 +26,7 @@ public class PacketWriterUtils {
 
     public static void writeAndSend(Collection<Player> players, ServerPacket serverPacket) {
         batchesPool.execute(() -> {
-            int size = players.size();
-            if (size == 0)
+            if (players.isEmpty())
                 return;
 
             ByteBuf buffer = PacketUtils.writePacket(serverPacket);
@@ -39,6 +38,7 @@ public class PacketWriterUtils {
                     playerConnection.sendPacket(serverPacket);
                 }
             }
+            buffer.release();
         });
     }
 
@@ -46,7 +46,8 @@ public class PacketWriterUtils {
         batchesPool.execute(() -> {
             if (PlayerUtils.isNettyClient(playerConnection)) {
                 ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-                playerConnection.sendPacket(buffer);
+                playerConnection.writePacket(buffer);
+                buffer.release();
             } else {
                 playerConnection.sendPacket(serverPacket);
             }

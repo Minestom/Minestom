@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
@@ -12,6 +12,7 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
@@ -64,14 +65,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public void update() {
+    public void update(long time) {
         if (isOnFire()) {
-            if (System.currentTimeMillis() > fireExtinguishTime) {
+            if (time > fireExtinguishTime) {
                 setOnFire(false);
             } else {
-                if (System.currentTimeMillis() - lastFireDamageTime > fireDamagePeriod) {
+                if (time - lastFireDamageTime > fireDamagePeriod) {
                     damage(DamageType.ON_FIRE, 1.0f);
-                    lastFireDamageTime = System.currentTimeMillis();
+                    lastFireDamageTime = time;
                 }
             }
         }
@@ -91,6 +92,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
+
                     BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                     if (livingBoundingBox.intersect(itemBoundingBox)) {
                         synchronized (itemEntity) {
@@ -149,10 +151,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    /**
+     * Get the amount of arrows in the entity
+     *
+     * @return the arrow count
+     */
     public int getArrowCount() {
         return arrowCount;
     }
 
+    /**
+     * Change the amount of arrow stuck in the entity
+     *
+     * @param arrowCount the arrow count
+     */
     public void setArrowCount(int arrowCount) {
         this.arrowCount = arrowCount;
         sendMetadataIndex(11);
@@ -214,6 +226,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(DamageType type, float value) {
+        if (isDead())
+            return false;
         if (isImmune(type)) {
             return false;
         }
@@ -273,10 +287,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return false;
     }
 
+    /**
+     * Get the entity health
+     *
+     * @return the entity health
+     */
     public float getHealth() {
         return health;
     }
 
+    /**
+     * Change the entity health, kill it if {@code health} is <= 0 and is not dead yet
+     *
+     * @param health the new entity health
+     */
     public void setHealth(float health) {
         health = Math.min(health, getMaxHealth());
 
@@ -287,6 +311,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         sendMetadataIndex(8); // Health metadata index
     }
 
+    /**
+     * Get the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}
+     *
+     * @return the entity max health
+     */
     public float getMaxHealth() {
         return getAttributeValue(Attribute.MAX_HEALTH);
     }
@@ -320,6 +349,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     // Equipments
+    public void syncEquipments(PlayerConnection connection) {
+        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
+            EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+            if (entityEquipmentPacket == null)
+                return;
+            connection.sendPacket(entityEquipmentPacket);
+        }
+    }
+
     public void syncEquipments() {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             syncEquipment(slot);
@@ -345,6 +383,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Get if the entity is dead or not
+     *
      * @return true if the entity is dead, false otherwise
      */
     public boolean isDead() {
@@ -352,6 +392,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Get if the entity is able to pickup items
+     *
      * @return true if the entity is able to pickup items
      */
     public boolean canPickupItem() {
@@ -373,6 +415,28 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
     }
 
+    /**
+     * Send a {@link EntityAnimationPacket} to swing the main hand
+     * (can be used for attack animation)
+     */
+    public void swingMainHand() {
+        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = EntityAnimationPacket.Animation.SWING_MAIN_ARM;
+        sendPacketToViewers(animationPacket);
+    }
+
+    /**
+     * Send a {@link EntityAnimationPacket} to swing the off hand
+     * (can be used for attack animation)
+     */
+    public void swingOffHand() {
+        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
+        animationPacket.entityId = getEntityId();
+        animationPacket.animation = EntityAnimationPacket.Animation.SWING_OFF_HAND;
+        sendPacketToViewers(animationPacket);
+    }
+
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
         this.isHandActive = isHandActive;
         this.offHand = offHand;
@@ -392,14 +456,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         int length = Attribute.values().length;
         EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[length];
         for (int i = 0; i < length; i++) {
-            Attribute attribute = Attribute.values()[i];
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
-            float maxValue = attribute.getMaxVanillaValue();
-            float value = getAttributeValue(attribute);
-            value = value > maxValue ? maxValue : value; // Bypass vanilla limit client-side if needed (by sending the max value allowed)
 
-            property.key = attribute.getKey();
+            Attribute attribute = Attribute.values()[i];
+            float value = getAttributeValue(attribute);
+
+            property.attribute = attribute;
             property.value = value;
+
             properties[i] = property;
         }
 
@@ -421,11 +485,23 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    /**
+     * Get the time in ms between two fire damage applications
+     *
+     * @return the time in ms
+     */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
     }
 
-    public void setFireDamagePeriod(long fireDamagePeriod) {
+    /**
+     * Change the delay between two fire damage applications
+     *
+     * @param fireDamagePeriod the delay
+     * @param timeUnit         the time unit
+     */
+    public void setFireDamagePeriod(long fireDamagePeriod, TimeUnit timeUnit) {
+        fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
         this.fireDamagePeriod = fireDamagePeriod;
     }
 }

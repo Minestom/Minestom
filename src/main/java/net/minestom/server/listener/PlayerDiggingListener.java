@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -14,7 +13,6 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.utils.BlockPosition;
 
 public class PlayerDiggingListener {
@@ -29,72 +27,57 @@ public class PlayerDiggingListener {
 
         Instance instance = player.getInstance();
 
+        if (instance == null)
+            return;
+
+        final short blockId = instance.getBlockId(blockPosition);
+
         switch (status) {
             case STARTED_DIGGING:
-                if (player.getGameMode() == GameMode.CREATIVE) {
-                    if (instance != null) {
-                        instance.breakBlock(player, blockPosition);
-                    }
-                } else if (player.getGameMode() == GameMode.SURVIVAL) {
-                    if (instance != null) {
-                        CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-                        if (customBlock != null) {
-                            int breakTime = customBlock.getBreakDelay(player, blockPosition);
-                            if (breakTime >= 0) {
-                                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(blockPosition, customBlock);
-                                player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
-                                if (!playerStartDiggingEvent.isCancelled()) {
-                                    player.refreshTargetBlock(customBlock, blockPosition, breakTime);
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
-                                } else {
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                                }
-                                addEffect(player);
-                            } else {
-                                if (Block.fromId(instance.getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ())).breaksInstantaneously()) {
-                                    if (player.getCustomBlockTarget() != null) {
-                                        player.resetTargetBlock();
-                                        removeEffect(player);
-                                    }
-                                    instance.breakBlock(player, blockPosition);
+                final boolean instantBreak = player.isCreative() ||
+                        player.isInstantBreak() ||
+                        Block.fromId(blockId).breaksInstantaneously();
 
-                                    sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
-                                } else {
-                                    player.resetTargetBlock();
-                                    removeEffect(player);
-                                }
+                if (instantBreak) {
+                    breakBlock(instance, player, blockPosition);
+                } else {
+                    CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+                    if (customBlock != null) {
+                        int breakTime = customBlock.getBreakDelay(player, blockPosition);
+                        if (breakTime >= 0) {
+                            // Custom block has a custom break time, allow for digging event
+                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, customBlock);
+                            player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                            if (!playerStartDiggingEvent.isCancelled()) {
+                                // Start digging the block
+                                player.setTargetBlock(customBlock, blockPosition, breakTime);
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                            } else {
+                                // Unsuccessful digging
+                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                             }
+                            addEffect(player);
                         } else {
-                            player.resetTargetBlock();
-                            removeEffect(player);
+                            // Does not have a custom break time, remove effect and keep vanilla time
+                            breakBlock(instance, player, blockPosition);
                         }
+                    } else {
+                        // Player is not mining a custom block, be sure that he doesn't have the effect
+                        removeEffect(player);
                     }
                 }
                 break;
             case CANCELLED_DIGGING:
-                player.resetTargetBlock();
+                // Remove custom block target
                 removeEffect(player);
 
-                final short blockId = instance.getBlockId(blockPosition);
                 sendAcknowledgePacket(player, blockPosition, blockId,
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
-                if (player.getCustomBlockTarget() != null) {
-                    player.resetTargetBlock();
-                    removeEffect(player);
-                } else {
-                    final short id = instance.getBlockId(blockPosition);
-                    if (instance != null) {
-                        instance.breakBlock(player, blockPosition);
-                    }
-
-                    sendAcknowledgePacket(player, blockPosition, id,
-                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
-                }
+                breakBlock(instance, player, blockPosition);
                 break;
             case DROP_ITEM_STACK:
                 ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
@@ -124,7 +107,7 @@ public class PlayerDiggingListener {
 
                 break;
             case SWAP_ITEM_HAND:
-                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(offHand.clone(), mainHand.clone());
+                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand.clone(), mainHand.clone());
                 player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
                     synchronized (playerInventory) {
                         playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
@@ -133,6 +116,18 @@ public class PlayerDiggingListener {
                 });
                 break;
         }
+    }
+
+    private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition) {
+        // Finished digging, remove effect if any
+        removeEffect(player);
+
+        // Unverified block break, client is fully responsive
+        instance.breakBlock(player, blockPosition);
+
+        // Send acknowledge packet to confirm the digging process
+        sendAcknowledgePacket(player, blockPosition, 0,
+                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {
@@ -155,10 +150,7 @@ public class PlayerDiggingListener {
     }
 
     private static void removeEffect(Player player) {
-        RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-        removeEntityEffectPacket.entityId = player.getEntityId();
-        removeEntityEffectPacket.effectId = 4;
-        player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        player.resetTargetBlock();
     }
 
     private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockId,

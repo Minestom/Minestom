@@ -5,15 +5,16 @@ import net.minestom.server.chat.Chat;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.item.NbtReaderUtils;
+import net.minestom.server.utils.nbt.NBT;
+import net.minestom.server.utils.nbt.NbtWriter;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Utils {
 
@@ -105,111 +106,128 @@ public class Utils {
                 return;
             }
 
-            packet.writeByte((byte) 0x0A); // Compound
-            packet.writeShort((short) 0); // Empty compound name
+            NbtWriter mainWriter = new NbtWriter(packet);
 
-            // Unbreakable
-            if (itemStack.isUnbreakable()) {
-                packet.writeByte((byte) 0x03); // Integer
-                packet.writeShortSizedString("Unbreakable");
-                packet.writeInt(1);
-            }
-
-            // Start damage
-            {
-                packet.writeByte((byte) 0x02);
-                packet.writeShortSizedString("Damage");
-                packet.writeShort(itemStack.getDamage());
-            }
-            // End damage
-
-            // Display
-            boolean hasDisplayName = itemStack.hasDisplayName();
-            boolean hasLore = itemStack.hasLore();
-
-            if (hasDisplayName || hasLore) {
-                packet.writeByte((byte) 0x0A); // Start display compound
-                packet.writeShortSizedString("display");
-
-                if (hasDisplayName) {
-                    packet.writeByte((byte) 0x08);
-                    packet.writeShortSizedString("Name");
-                    packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName())));
+            mainWriter.writeCompound("", writer -> {
+                // Unbreakable
+                if (itemStack.isUnbreakable()) {
+                    writer.writeInt("Unbreakable", 1);
                 }
 
-                if (hasLore) {
-                    ArrayList<String> lore = itemStack.getLore();
-
-                    packet.writeByte((byte) 0x09);
-                    packet.writeShortSizedString("Lore");
-                    packet.writeByte((byte) 0x08);
-                    packet.writeInt(lore.size());
-                    for (String line : lore) {
-                        packet.writeShortSizedString(Chat.toJsonString(Chat.fromLegacyText(line)));
-                    }
+                // Start damage
+                {
+                    writer.writeShort("Damage", itemStack.getDamage());
                 }
+                // End damage
 
-                packet.writeByte((byte) 0); // End display compound
-            }
-            // End display
+                // Display
+                boolean hasDisplayName = itemStack.hasDisplayName();
+                boolean hasLore = itemStack.hasLore();
 
-            // Start enchantment
-            // FIXME: something is broken, enchants are basically ignored...
-            {
-                Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
-                if (!enchantmentMap.isEmpty()) {
-                    packet.writeByte((byte) 0x09); // Type id (list)
-                    packet.writeShortSizedString("StoredEnchantments");
+                if (hasDisplayName || hasLore) {
+                    writer.writeCompound("display", displayWriter -> {
+                        if (hasDisplayName) {
+                            final String name = Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName()));
+                            displayWriter.writeString("Name", name);
+                        }
 
-                    packet.writeByte((byte) 0x0A); // Compound
-                    packet.writeInt(enchantmentMap.size()); // Map size
+                        if (hasLore) {
+                            final ArrayList<String> lore = itemStack.getLore();
 
-                    for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
-                        Enchantment enchantment = entry.getKey();
-                        short level = entry.getValue();
+                            displayWriter.writeList("Lore", NBT.NBT_STRING, lore.size(), () -> {
+                                for (String line : lore) {
+                                    line = Chat.toJsonString(Chat.fromLegacyText(line));
+                                    packet.writeShortSizedString(line);
+                                }
+                            });
 
-                        packet.writeByte((byte) 0x02); // Type id (short)
-                        packet.writeShortSizedString("lvl");
-                        packet.writeShort(level);
+                        }
+                    });
+                }
+                // End display
 
-                        packet.writeByte((byte) 0x08); // Type id (string)
-                        packet.writeShortSizedString("id");
-                        packet.writeShortSizedString("minecraft:" + enchantment.name().toLowerCase());
-
+                // Start enchantment
+                {
+                    Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
+                    if (!enchantmentMap.isEmpty()) {
+                        writeEnchant(writer, "Enchantments", enchantmentMap);
                     }
 
-                    packet.writeByte((byte) 0); // End enchantment compound
-
-                }
-            }
-            // End enchantment
-
-            // Start potion
-            {
-                Set<PotionType> potionTypes = itemStack.getPotionTypes();
-                if (!potionTypes.isEmpty()) {
-                    for (PotionType potionType : potionTypes) {
-                        packet.writeByte((byte) 0x08); // type id (string)
-                        packet.writeShortSizedString("Potion");
-                        packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
-
+                    Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
+                    if (!storedEnchantmentMap.isEmpty()) {
+                        writeEnchant(writer, "StoredEnchantments", storedEnchantmentMap);
                     }
                 }
-            }
-            // End potion
+                // End enchantment
 
-            // Start hide flags
-            /*{
-                int hideFlag = itemStack.getHideFlag();
-                if (hideFlag != 0) {
-                    packet.writeByte((byte) 3); // Type id (int)
-                    packet.writeShortSizedString("HideFlags");
-                    packet.writeInt(hideFlag);
+                // Start attribute
+                {
+                    List<ItemAttribute> itemAttributes = itemStack.getAttributes();
+                    if (!itemAttributes.isEmpty()) {
+                        packet.writeByte((byte) 0x09); // Type id (list)
+                        packet.writeShortSizedString("AttributeModifiers");
+
+                        packet.writeByte((byte) 0x0A); // Compound
+                        packet.writeInt(itemAttributes.size());
+
+                        for (ItemAttribute itemAttribute : itemAttributes) {
+                            UUID uuid = itemAttribute.getUuid();
+
+                            writer.writeLong("UUIDMost", uuid.getMostSignificantBits());
+
+                            writer.writeLong("UUIDLeast", uuid.getLeastSignificantBits());
+
+                            writer.writeDouble("Amount", itemAttribute.getValue());
+
+                            writer.writeString("Slot", itemAttribute.getSlot().name().toLowerCase());
+
+                            writer.writeString("itemAttribute", itemAttribute.getAttribute().getKey());
+
+                            writer.writeInt("Operation", itemAttribute.getOperation().getId());
+
+                            writer.writeString("Name", itemAttribute.getInternalName());
+                        }
+                        packet.writeByte((byte) 0x00); // End compound
+                    }
                 }
-            }*/
+                // End attribute
 
-            packet.writeByte((byte) 0); // End nbt
+                // Start potion
+                {
+                    Set<PotionType> potionTypes = itemStack.getPotionTypes();
+                    if (!potionTypes.isEmpty()) {
+                        for (PotionType potionType : potionTypes) {
+                            packet.writeByte((byte) 0x08); // type id (string)
+                            packet.writeShortSizedString("Potion");
+                            packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
+                        }
+                    }
+                }
+                // End potion
+
+                // Start hide flags
+                {
+                    int hideFlag = itemStack.getHideFlag();
+                    if (hideFlag != 0) {
+                        writer.writeInt("HideFlags", hideFlag);
+                    }
+                }
+            });
         }
+    }
+
+    private static void writeEnchant(NbtWriter writer, String listName, Map<Enchantment, Short> enchantmentMap) {
+        writer.writeList(listName, NBT.NBT_COMPOUND, enchantmentMap.size(), () -> {
+            for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
+                Enchantment enchantment = entry.getKey();
+                short level = entry.getValue();
+
+                writer.writeShort("lvl", level);
+
+                writer.writeString("id", "minecraft:" + enchantment.name().toLowerCase());
+
+            }
+        });
     }
 
     public static ItemStack readItemStack(PacketReader reader) {

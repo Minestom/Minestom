@@ -40,6 +40,8 @@ public class EntitySlime extends EntityCreature {
 
     public void setSize(int size) {
         this.size = size;
+        final float boxSize = 0.51000005f * size;
+        setBoundingBox(boxSize, boxSize, boxSize);
         sendMetadataIndex(15);
     }
 }

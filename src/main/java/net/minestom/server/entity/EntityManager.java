@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 
-public class EntityManager {
+public final class EntityManager {
 
     private static InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
@@ -24,6 +24,9 @@ public class EntityManager {
 
     private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
+    /**
+     * Execute a whole entity server tick
+     */
     public void update() {
         final long time = System.currentTimeMillis();
 
@@ -164,7 +167,7 @@ public class EntityManager {
             playersPool.execute(() -> {
                 playerCache.init();
 
-                PlayerLoginEvent loginEvent = new PlayerLoginEvent();
+                PlayerLoginEvent loginEvent = new PlayerLoginEvent(playerCache);
                 playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
                 Instance spawningInstance = loginEvent.getSpawningInstance();
 
@@ -179,10 +182,16 @@ public class EntityManager {
         this.waitingPlayers.add(player);
     }
 
+    /**
+     * @return the current entity update type
+     */
     public UpdateType getUpdateType() {
         return updateType;
     }
 
+    /**
+     * @param updateType the new entity update type
+     */
     public void setUpdateType(UpdateType updateType) {
         this.updateType = updateType;
     }

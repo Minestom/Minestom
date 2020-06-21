@@ -12,8 +12,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
-import net.minestom.server.utils.validate.Check;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 public class ChatMessageListener {
@@ -37,28 +37,23 @@ public class ChatMessageListener {
         }
 
 
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, MinecraftServer.getConnectionManager().getOnlinePlayers(), message);
-
-        // Default format
-        playerChatEvent.setChatFormat((event) -> {
-            String username = player.getUsername();
-
-            TextComponent usernameText = TextComponent.of(String.format("<%s>", username))
-                    .color(TextColor.WHITE)
-                    .hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of("Its " + username).color(TextColor.GRAY)))
-                    .clickEvent(ClickEvent.of(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + username + " "))
-                    .append(TextComponent.of(" " + event.getMessage()));
-
-            return usernameText;
-        });
+        Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, message);
 
         // Call the event
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
 
             Function<PlayerChatEvent, TextComponent> formatFunction = playerChatEvent.getChatFormatFunction();
-            Check.notNull(formatFunction, "PlayerChatEvent#getChatFormatFunction cannot be null!");
 
-            TextComponent textObject = formatFunction.apply(playerChatEvent);
+            TextComponent textObject;
+
+            if (formatFunction != null) {
+                // Custom format
+                textObject = formatFunction.apply(playerChatEvent);
+            } else {
+                // Default format
+                textObject = buildDefaultChatMessage(playerChatEvent);
+            }
 
             for (Player recipient : playerChatEvent.getRecipients()) {
                 recipient.sendMessage(textObject);
@@ -66,6 +61,18 @@ public class ChatMessageListener {
 
         });
 
+    }
+
+    private static TextComponent buildDefaultChatMessage(PlayerChatEvent chatEvent) {
+        String username = chatEvent.getSender().getUsername();
+
+        TextComponent usernameText = TextComponent.of(String.format("<%s>", username))
+                .color(TextColor.WHITE)
+                .hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of("Its " + username).color(TextColor.GRAY)))
+                .clickEvent(ClickEvent.of(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + username + " "))
+                .append(TextComponent.of(" " + chatEvent.getMessage()));
+
+        return usernameText;
     }
 
 }

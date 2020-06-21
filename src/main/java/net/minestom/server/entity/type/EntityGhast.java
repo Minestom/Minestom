@@ -13,6 +13,7 @@ public class EntityGhast extends EntityCreature {
 
     public EntityGhast(Position spawnPosition) {
         super(EntityType.GHAST, spawnPosition);
+        setBoundingBox(4, 4, 4);
     }
 
     @Override

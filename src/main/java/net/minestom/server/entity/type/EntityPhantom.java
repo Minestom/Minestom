@@ -13,6 +13,7 @@ public class EntityPhantom extends EntityCreature {
 
     public EntityPhantom(Position spawnPosition) {
         super(EntityType.PHANTOM, spawnPosition);
+        setBoundingBox(0.9f, 0.5f, 0.9f); // TODO change based on size
     }
 
     @Override

@@ -12,6 +12,9 @@ public class EntityDeathEvent extends Event {
         this.entity = entity;
     }
 
+    /**
+     * @return the entity that died
+     */
     public Entity getEntity() {
         return entity;
     }

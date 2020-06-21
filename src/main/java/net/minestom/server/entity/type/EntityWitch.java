@@ -13,6 +13,7 @@ public class EntityWitch extends EntityCreature {
 
     public EntityWitch(Position spawnPosition) {
         super(EntityType.WITCH, spawnPosition);
+        setBoundingBox(0.6f, 1.95f, 0.6f);
     }
 
     @Override

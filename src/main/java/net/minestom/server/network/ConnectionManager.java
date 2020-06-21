@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.kyori.text.TextComponent;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.player.PlayerConnection;
@@ -10,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class ConnectionManager {
+public final class ConnectionManager {
 
     private Set<Player> players = new CopyOnWriteArraySet<>();
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
@@ -19,14 +20,25 @@ public class ConnectionManager {
     private UuidProvider uuidProvider;
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
+    /**
+     * @param connection the player connection
+     * @return the {@link Player} linked to the conneciton
+     */
     public Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
+    /**
+     * @return an unmodifiable collection containing all the online players
+     */
     public Collection<Player> getOnlinePlayers() {
         return Collections.unmodifiableCollection(players);
     }
 
+    /**
+     * @param username the player username (ignoreCase)
+     * @return the first player who validate the username condition
+     */
     public Player getPlayer(String username) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
@@ -35,26 +47,47 @@ public class ConnectionManager {
         return null;
     }
 
-    public void broadcastMessage(String message, Function<Player, Boolean> condition) {
+    /**
+     * Send a message to all online players who validate the condition {@code condition}
+     *
+     * @param textComponent the message to send
+     * @param condition     the condition to receive the message
+     */
+    public void broadcastMessage(TextComponent textComponent, Function<Player, Boolean> condition) {
         if (condition == null) {
-            getOnlinePlayers().forEach(player -> player.sendMessage(message));
+            getOnlinePlayers().forEach(player -> player.sendMessage(textComponent));
         } else {
             getOnlinePlayers().forEach(player -> {
                 boolean result = condition.apply(player);
                 if (result)
-                    player.sendMessage(message);
+                    player.sendMessage(textComponent);
             });
         }
     }
 
-    public void broadcastMessage(String message) {
-        broadcastMessage(message, null);
+    /**
+     * Send a message to all online players without exception
+     *
+     * @param textComponent the message to send
+     */
+    public void broadcastMessage(TextComponent textComponent) {
+        broadcastMessage(textComponent, null);
     }
 
+    /**
+     * Those are all the listeners which are called for each packet received
+     *
+     * @return an unmodifiable list of packet's consumers
+     */
     public List<PacketConsumer> getPacketConsumers() {
         return Collections.unmodifiableList(packetConsumers);
     }
 
+    /**
+     * Add a new packet listener
+     *
+     * @param packetConsumer the packet consumer
+     */
     public void addPacketConsumer(PacketConsumer packetConsumer) {
         this.packetConsumers.add(packetConsumer);
     }
@@ -77,16 +110,27 @@ public class ConnectionManager {
      * @return the uuid based on {@code playerConnection}
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
-    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection) {
+    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection, String username) {
         if (uuidProvider == null)
             return UUID.randomUUID();
-        return uuidProvider.provide(playerConnection);
+        return uuidProvider.provide(playerConnection, username);
     }
 
+    /**
+     * Those are all the consumers called when a new player join
+     *
+     * @return an unmodifiable list containing all the player initialization consumer
+     */
     public List<Consumer<Player>> getPlayerInitializations() {
         return Collections.unmodifiableList(playerInitializations);
     }
 
+    /**
+     * Add a new player initialization consumer. Those are called when a player join,
+     * mainly to add event callbacks to the player
+     *
+     * @param playerInitialization the player initialization consumer
+     */
     public void addPlayerInitialization(Consumer<Player> playerInitialization) {
         this.playerInitializations.add(playerInitialization);
     }

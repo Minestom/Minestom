@@ -11,6 +11,7 @@ public class EntityBlaze extends EntityCreature {
 
     public EntityBlaze(Position spawnPosition) {
         super(EntityType.BLAZE, spawnPosition);
+        setBoundingBox(0.6f, 1.8f, 0.6f);
     }
 
     @Override

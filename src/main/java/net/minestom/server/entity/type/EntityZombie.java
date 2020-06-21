@@ -14,6 +14,7 @@ public class EntityZombie extends EntityCreature {
 
     public EntityZombie(Position spawnPosition) {
         super(EntityType.ZOMBIE, spawnPosition);
+        setBoundingBox(0.6f, 1.95f, 0.6f);
     }
 
     @Override

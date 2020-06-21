@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.validate.Check;
 
 public interface BlockModifier {
 
@@ -53,6 +54,8 @@ public interface BlockModifier {
 
     default void setCustomBlock(int x, int y, int z, String customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The CustomBlock " + customBlockId + " is not registered");
+
         setCustomBlock(x, y, z, customBlock.getCustomBlockId(), data);
     }
 

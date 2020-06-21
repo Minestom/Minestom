@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
-public class InstanceManager {
+public final class InstanceManager {
 
     private ExecutorService blocksPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_UPDATE, MinecraftServer.THREAD_NAME_BLOCK_UPDATE);
 
@@ -57,6 +57,9 @@ public class InstanceManager {
         return createSharedInstance(sharedInstance);
     }
 
+    /**
+     * Execute a whole block tick update for all instances
+     */
     public void updateBlocks() {
         if (instances.isEmpty())
             return;

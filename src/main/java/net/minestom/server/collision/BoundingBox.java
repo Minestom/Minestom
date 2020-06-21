@@ -21,12 +21,24 @@ public class BoundingBox {
         this.z = z;
     }
 
+    /**
+     * Used to know if two BoundingBox intersect with each other
+     *
+     * @param boundingBox the bounding box to check
+     * @return true if the two BoundingBox intersect with each other, false otherwise
+     */
     public boolean intersect(BoundingBox boundingBox) {
         return (getMinX() <= boundingBox.getMaxX() && getMaxX() >= boundingBox.getMinX()) &&
                 (getMinY() <= boundingBox.getMaxY() && getMaxY() >= boundingBox.getMinY()) &&
                 (getMinZ() <= boundingBox.getMaxZ() && getMaxZ() >= boundingBox.getMinZ());
     }
 
+    /**
+     * Used to know if the bounding box intersects with a block (can be air)
+     *
+     * @param blockPosition the position to check
+     * @return true if the bounding box intersects with the position, false otherwise
+     */
     public boolean intersect(BlockPosition blockPosition) {
 
         final float x = blockPosition.getX();
@@ -62,10 +74,22 @@ public class BoundingBox {
         return intersect(position.getX(), position.getY(), position.getZ());
     }
 
+    /**
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return a new bounding box expanded
+     */
     public BoundingBox expand(float x, float y, float z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
 
+    /**
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return a new bounding box contracted
+     */
     public BoundingBox contract(float x, float y, float z) {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
@@ -107,7 +131,7 @@ public class BoundingBox {
     }
 
     public Vector[] getBottomFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
                 new Vector(getMaxX(), getMinY(), getMinZ()),
                 new Vector(getMaxX(), getMinY(), getMaxZ()),
@@ -116,7 +140,7 @@ public class BoundingBox {
     }
 
     public Vector[] getTopFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMinX(), getMaxY(), getMinZ()),
                 new Vector(getMaxX(), getMaxY(), getMinZ()),
                 new Vector(getMaxX(), getMaxY(), getMaxZ()),
@@ -125,7 +149,7 @@ public class BoundingBox {
     }
 
     public Vector[] getLeftFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
                 new Vector(getMinX(), getMaxY(), getMinZ()),
                 new Vector(getMinX(), getMaxY(), getMaxZ()),
@@ -134,7 +158,7 @@ public class BoundingBox {
     }
 
     public Vector[] getRightFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMaxX(), getMinY(), getMinZ()),
                 new Vector(getMaxX(), getMaxY(), getMinZ()),
                 new Vector(getMaxX(), getMaxY(), getMaxZ()),
@@ -143,7 +167,7 @@ public class BoundingBox {
     }
 
     public Vector[] getFrontFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
                 new Vector(getMaxX(), getMinY(), getMinZ()),
                 new Vector(getMaxX(), getMaxY(), getMinZ()),
@@ -152,7 +176,7 @@ public class BoundingBox {
     }
 
     public Vector[] getBackFace() {
-        return new Vector[] {
+        return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMaxZ()),
                 new Vector(getMaxX(), getMinY(), getMaxZ()),
                 new Vector(getMaxX(), getMaxY(), getMaxZ()),

@@ -4,6 +4,7 @@ import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.entity.*;
@@ -38,6 +39,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerInit {
+
+    private static String textures = "ewogICJ0aW1lc3RhbXAiIDogMTU5MDg1NTI3NjIwNCwKICAicHJvZmlsZUlkIiA6ICI0NTY2ZTY5ZmM5MDc0OGVlOGQ3MWQ3YmE1YWEwMGQyMCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUaGlua29mZGVhdGgiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRkMWUwOGIwYmI3ZTlmNTkwYWYyNzc1ODEyNWJiZWQxNzc4YWM2Y2VmNzI5YWVkZmNiOTYxM2U5OTExYWU3NSIKICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjYzA4ODQwNzAwNDQ3MzIyZDk1M2EwMmI5NjVmMWQ2NWExM2E2MDNiZjY0YjE3YzgwM2MyMTQ0NmZlMTYzNSIKICAgIH0KICB9Cn0=";
+    private static String signature = "rCVVwVpLF9ovy+Hm4cOXOLSPOMjNo5WoBfHo9K2OcTUPqcZJ1P/1k4lAnQkChD/Ri11iJ84PejWJzDkHMXM8196Wh+jf12d2GJVhca9/SRLms0cFJjdZZjs72+82AdX0OtO3+qzwKRHzHoEYb+ZVZLfgx37ZKKo4DD3IKmaSnwEjOVJ4BOhnsXLmcNW37kdZUmv2/hlg7ZuWZaayWPhadCYEMnkpVtDIpnpzAeV9EcRfg/ysQoynO2v6WEW0RtnfFEczMN6vXtfiuC8UqyA2SK9aiLnBgpGaehDfFIq/0dpo2uFilVDS/Il6uQ1JSwq7yNT5lNF+i1AlH9SGf1VVy5mT9ShmkVmRxCXX5cSNLXZD0acsNNJb/GAuDHuXpE32GsfgKxWAXMHLw0GnbADbFDfdl5nQyQTDS7FRfUjsFpF8a8Z83muFXaty2WLFy1zxy2JEkI/q+ltLaEG6mQbWI2zhOS7ARvK0OmPz4lDYVInfrwL93AIdMUg2Re817hsapkN6Dm1ND+iirvayR90gqQ9C9J0dMMBlSyTSoKBQeLsi8qETS+7LuhvletPTDFolnTIvP8hj2bWLmQ7LfXJ2arJCUw86YEavVYuF0gYrBuKcEYTC4DA0kO4yLj63gwEgOj9dEigCgyqUcenzmZBffSZ365/QF0cGrG7HC7HmF0w=";
+
+    private static PlayerSkin skin = new PlayerSkin(textures, signature);
 
     private static volatile InstanceContainer instanceContainer;
     private static volatile InstanceContainer netherTest;
@@ -95,16 +101,15 @@ public class PlayerInit {
                     benchmarkMessage += "&e" + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
                     benchmarkMessage += "&c" + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
                     benchmarkMessage += "&d" + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+                    benchmarkMessage += "&a" + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
                     benchmarkMessage += "\n";
                 }
-                // if (benchmarkMessage.length() > 0)
-                //    System.out.println(benchmarkMessage);
 
                 for (Player player : connectionManager.getOnlinePlayers()) {
                     player.sendHeaderFooter("RAM USAGE: " + ramUsage + " MB", benchmarkMessage, '&');
                 }
             }
-        }, new UpdateOption(5, TimeUnit.TICK));
+        }, new UpdateOption(10, TimeUnit.TICK));
 
         connectionManager.addPacketConsumer((player, packetController, packet) -> {
             // Listen to all received packet
@@ -137,10 +142,10 @@ public class PlayerInit {
                     return;
 
                 if (event.getBlockId() == Block.STONE.getBlockId()) {
-                    event.setCustomBlockId((short) 2); // custom stone block
+                    event.setCustomBlock((short) 2); // custom stone block
                 }
                 if (event.getBlockId() == Block.TORCH.getBlockId()) {
-                    event.setCustomBlockId((short) 3); // custom torch block
+                    event.setCustomBlock((short) 3); // custom torch block
                 }
 
                 /*for (Player p : player.getInstance().getPlayers()) {
@@ -150,6 +155,7 @@ public class PlayerInit {
 
                 ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
+                chickenCreature.setAttribute(Attribute.MOVEMENT_SPEED, 0.4f);
 
                 /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
                 fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
@@ -211,19 +217,24 @@ public class PlayerInit {
                 scoreboard.setTitle("test");*/
             });
 
+            player.addEventCallback(PlayerSkinInitEvent.class, event -> {
+                event.setSkin(skin);
+            });
+
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
-                player.teleport(new Position(0, 45, 0));
+                player.teleport(new Position(0, 41f, 0));
 
                 player.setGlowing(true);
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName("Item name");
                 item.getLore().add("a lore line");
-                item.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                item.setEnchantment(Enchantment.SHARPNESS, (short) 2);
+                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
 
+                inventory.addItemStack(item.clone());
                 player.openInventory(inventory);
 
                 player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
@@ -256,7 +267,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
-                event.setRespawnPosition(new Position(0f, 45f, 0f));
+                event.setRespawnPosition(new Position(0f, 41f, 0f));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
@@ -301,7 +312,7 @@ public class PlayerInit {
 
     public static ResponseDataConsumer getResponseDataConsumer() {
         return (playerConnection, responseData) -> {
-            responseData.setMaxPlayer(100);
+            responseData.setMaxPlayer(0);
             responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
             responseData.addPlayer("A name", UUID.randomUUID());
             responseData.addPlayer("Could be some message", UUID.randomUUID());

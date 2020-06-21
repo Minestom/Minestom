@@ -19,7 +19,7 @@ public abstract class ObjectEntity extends Entity {
     public abstract int getObjectData();
 
     @Override
-    public void update() {
+    public void update(long time) {
 
     }
 
@@ -30,6 +30,10 @@ public abstract class ObjectEntity extends Entity {
 
     @Override
     public boolean addViewer(Player player) {
+        boolean result = super.addViewer(player);
+        if (!result)
+            return false;
+
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
@@ -46,7 +50,7 @@ public abstract class ObjectEntity extends Entity {
             playerConnection.sendPacket(getPassengersPacket());
         }
 
-        return super.addViewer(player); // Add player to viewers list
+        return result;
     }
 
 }

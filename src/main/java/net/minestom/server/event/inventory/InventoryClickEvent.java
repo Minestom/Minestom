@@ -1,5 +1,6 @@
 package net.minestom.server.event.inventory;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
@@ -7,18 +8,28 @@ import net.minestom.server.item.ItemStack;
 
 public class InventoryClickEvent extends Event {
 
+    private Player player;
     private Inventory inventory;
     private int slot;
     private ClickType clickType;
     private ItemStack clickedItem;
     private ItemStack cursorItem;
 
-    public InventoryClickEvent(Inventory inventory, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
+    public InventoryClickEvent(Player player, Inventory inventory, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
         this.inventory = inventory;
         this.slot = slot;
         this.clickType = clickType;
         this.clickedItem = clicked;
         this.cursorItem = cursor;
+    }
+
+    /**
+     * Get the player who clicked in the inventory
+     *
+     * @return the player who clicked in the inventory
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     /**
@@ -30,18 +41,38 @@ public class InventoryClickEvent extends Event {
         return inventory;
     }
 
+    /**
+     * Get the clicked slot number
+     *
+     * @return the clicked slot number
+     */
     public int getSlot() {
         return slot;
     }
 
+    /**
+     * Get the click type
+     *
+     * @return the click type
+     */
     public ClickType getClickType() {
         return clickType;
     }
 
+    /**
+     * Get the clicked item
+     *
+     * @return the clicked item
+     */
     public ItemStack getClickedItem() {
         return clickedItem;
     }
 
+    /**
+     * Get the item in the player cursor
+     *
+     * @return the cursor item
+     */
     public ItemStack getCursorItem() {
         return cursorItem;
     }

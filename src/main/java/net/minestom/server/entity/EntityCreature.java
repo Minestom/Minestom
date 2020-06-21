@@ -1,8 +1,9 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.EntityPathFinder;
-import net.minestom.server.entity.property.Attribute;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
@@ -48,24 +49,11 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(long time) {
+        super.update(time);
 
         // Path finding
-        if (blockPositions != null) {
-            if (targetPosition != null) {
-                float distance = getPosition().getDistance(targetPosition);
-                //System.out.println("test: "+distance);
-                if (distance < 0.7f) {
-                    setNextPathPosition();
-                    //System.out.println("END TARGET");
-                } else {
-                    moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
-                    //System.out.println("MOVE TOWARD " + targetPosition);
-                }
-            }
-        }
-
+        pathProgress();
     }
 
     /**
@@ -94,9 +82,9 @@ public abstract class EntityCreature extends LivingEntity {
         float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
         float pitch = position.getPitch(); // TODO
 
-        short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
-        short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
-        short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
+        final short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
+        final short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
+        final short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
 
         if (updateView) {
             EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
@@ -119,11 +107,7 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         if (lastYaw != yaw) {
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = yaw;
-            sendPacketToViewers(entityHeadLookPacket);
-            refreshView(yaw, pitch);
+            setView(yaw, pitch);
         }
 
         refreshPosition(newX, newY, newZ);
@@ -145,6 +129,9 @@ public abstract class EntityCreature extends LivingEntity {
     @Override
     public boolean addViewer(Player player) {
         boolean result = super.addViewer(player);
+        if (!result)
+            return false;
+
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         EntityPacket entityPacket = new EntityPacket();
@@ -163,7 +150,7 @@ public abstract class EntityCreature extends LivingEntity {
         playerConnection.sendPacket(getMetadataPacket());
 
         // Equipments synchronization
-        syncEquipments();
+        syncEquipments(playerConnection);
 
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
@@ -238,9 +225,33 @@ public abstract class EntityCreature extends LivingEntity {
         syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
+    /**
+     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     *
+     * @param target    the entity target
+     * @param swingHand true to swing the entity main hand, false otherwise
+     */
+    public void attack(Entity target, boolean swingHand) {
+        if (swingHand)
+            swingMainHand();
+        EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
+        callEvent(EntityAttackEvent.class, attackEvent);
+    }
+
+    /**
+     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     * <p>
+     * This does not trigger the hand animation
+     *
+     * @param target the entity target
+     */
+    public void attack(Entity target) {
+        attack(target, false);
+    }
+
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 10, 0);
+        Vector velocity = new Vector(0, height * 5, 0);
         setVelocity(velocity);
     }
 
@@ -271,7 +282,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Used to move the entity toward {@code direction} in the axis X and Z
+     * Used to move the entity toward {@code direction} in the X and Z axis
      * Gravity is still applied but the entity will not attempt to jump
      *
      * @param direction the targeted position
@@ -294,9 +305,25 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         this.targetPosition = blockPosition.toPosition();//.add(0.5f, 0, 0.5f);
-        // FIXME: jump support
         if (blockPosition.getY() > getPosition().getY())
             jump(1);
+    }
+
+    private void pathProgress() {
+        if (blockPositions != null) {
+            if (targetPosition != null) {
+                float distance = getPosition().getDistance(targetPosition);
+                //System.out.println("test: "+distance);
+                if (distance < 1f) {
+                    setNextPathPosition();
+                    pathProgress();
+                    //System.out.println("END TARGET");
+                } else {
+                    moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
+                    //System.out.println("MOVE TOWARD " + targetPosition);
+                }
+            }
+        }
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {

@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
@@ -24,6 +25,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 
 import java.util.*;
@@ -37,7 +39,11 @@ import java.util.function.Consumer;
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
+// TODO save data + other things such as UUID
 public class InstanceContainer extends Instance {
+
+    private static final String UUID_KEY = "uuid";
+    private static final String DATA_KEY = "data";
 
     private StorageFolder storageFolder;
 
@@ -53,7 +59,16 @@ public class InstanceContainer extends Instance {
 
     public InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
         super(uniqueId, dimension);
+
         this.storageFolder = storageFolder;
+
+        if (storageFolder == null)
+            return;
+        // Retrieve instance data
+        this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
+
+        Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
+        setData(data);
     }
 
     @Override
@@ -204,25 +219,33 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void breakBlock(Player player, BlockPosition blockPosition) {
+    public boolean breakBlock(Player player, BlockPosition blockPosition) {
+        player.resetTargetBlock();
+
         Chunk chunk = getChunkAt(blockPosition);
+
+        // Chunk unloaded, stop here
+        if (ChunkUtils.isChunkUnloaded(chunk))
+            return false;
 
         int x = blockPosition.getX();
         int y = blockPosition.getY();
         int z = blockPosition.getZ();
 
-        short blockId = chunk.getBlockId(x, y, z);
+        short blockId = getBlockId(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
         if (blockId == 0) {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(y), player);
-            return;
+            return false;
         }
 
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, (short) 0, (short) 0);
-        player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
-        if (!blockBreakEvent.isCancelled()) {
+        CustomBlock customBlock = getCustomBlock(x, y, z);
 
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, blockId, customBlock, (short) 0, (short) 0);
+        player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
+        boolean result = !blockBreakEvent.isCancelled();
+        if (result) {
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockId(), blockBreakEvent.getResultCustomBlockId());
 
@@ -233,11 +256,19 @@ public class InstanceContainer extends Instance {
                         writer.writeVarInt(blockId);
                     });
 
-            chunk.sendPacketToViewers(particlePacket);
+            chunk.getViewers().forEach(p -> {
+                // The player who breaks the block already get particles client-side
+                if (customBlock != null || !(p.equals(player) && !player.isCreative())) {
+                    p.getPlayerConnection().sendPacket(particlePacket);
+                }
+            });
+
         } else {
             // Cancelled so we need to refresh player chunk section
-            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            int section = ChunkUtils.getSectionAt(blockPosition.getY());
+            sendChunkSectionUpdate(chunk, section, player);
         }
+        return result;
     }
 
     @Override
@@ -286,26 +317,55 @@ public class InstanceContainer extends Instance {
             chunk.removeViewer(viewer);
         }
 
+        // Remove all entities in chunk
+        getChunkEntities(chunk).forEach(entity -> {
+            if (!(entity instanceof Player))
+                entity.remove();
+        });
+
+        // Clear cache
         this.chunks.remove(index);
+        this.chunkEntities.remove(index);
+
         chunk.unload();
     }
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-        return ChunkUtils.isChunkUnloaded(this, chunk) ? null : chunk;
+        return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
+    }
+
+    /**
+     * Save the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorageFolder(Runnable)}
+     * <p>
+     * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
+     *
+     * @param callback the callback
+     */
+    public void saveInstance(Runnable callback) {
+        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
+
+        this.storageFolder.set(UUID_KEY, getUniqueId(), UUID.class);
+        Data data = getData();
+        if (data != null) {
+            Check.stateCondition(!(data instanceof SerializableData),
+                    "Instance#getData needs to be a SerializableData in order to be saved");
+            this.storageFolder.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
+        }
+
+        saveChunksToStorageFolder(callback);
     }
 
     @Override
     public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
+        Check.notNull(getStorageFolder(), "You cannot save the chunk if no StorageFolder has been defined");
         CHUNK_LOADER_IO.saveChunk(chunk, getStorageFolder(), callback);
     }
 
     @Override
     public void saveChunksToStorageFolder(Runnable callback) {
-        if (storageFolder == null)
-            throw new UnsupportedOperationException("You cannot save an instance without setting a folder.");
-
+        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
         Iterator<Chunk> chunks = getChunks().iterator();
         while (chunks.hasNext()) {
             Chunk chunk = chunks.next();
@@ -321,12 +381,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public ChunkBatch createChunkBatch(Chunk chunk) {
+        Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
         return new ChunkBatch(this, chunk);
-    }
-
-    @Override
-    public void sendChunkUpdate(Player player, Chunk chunk) {
-        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket());
     }
 
     @Override
@@ -345,7 +401,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, Biome.VOID);
@@ -415,9 +471,16 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(Chunk chunk) {
-        this.chunks.put(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        this.chunks.put(index, chunk);
     }
 
+    @Override
+    public ChunkGenerator getChunkGenerator() {
+        return chunkGenerator;
+    }
+
+    @Override
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
         this.chunkGenerator = chunkGenerator;
     }

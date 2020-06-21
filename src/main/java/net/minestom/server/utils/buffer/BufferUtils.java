@@ -1,12 +1,12 @@
 package net.minestom.server.utils.buffer;
 
-import pbbl.heap.HeapByteBufferPool;
+import com.github.pbbl.heap.ByteBufferPool;
 
 import java.nio.ByteBuffer;
 
 public class BufferUtils {
 
-    private static HeapByteBufferPool pool = new HeapByteBufferPool();
+    private static ByteBufferPool pool = new ByteBufferPool();
 
     public static BufferWrapper getBuffer(int size) {
         return new BufferWrapper(pool.take(size));

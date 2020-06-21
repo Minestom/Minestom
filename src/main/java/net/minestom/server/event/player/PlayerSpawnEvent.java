@@ -3,6 +3,9 @@ package net.minestom.server.event.player;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.instance.Instance;
 
+/**
+ * Called when a new instance is set for a player
+ */
 public class PlayerSpawnEvent extends EntitySpawnEvent {
     private final boolean firstSpawn;
 
@@ -13,7 +16,8 @@ public class PlayerSpawnEvent extends EntitySpawnEvent {
 
     /**
      * 'true' if the player is spawning for the first time. 'false' if this spawn event was triggered by a dimension teleport
-     * @return
+     *
+     * @return true if this is the first spawn, false otherwise
      */
     public boolean isFirstSpawn() {
         return firstSpawn;

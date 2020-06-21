@@ -32,7 +32,7 @@ public class StorageFolder {
 
         this.storageSystem.open(folderPath);
     }
-
+    
     public byte[] get(String key) {
         return storageSystem.get(key);
     }

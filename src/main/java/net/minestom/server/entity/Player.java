@@ -3,13 +3,14 @@ package net.minestom.server.entity;
 import net.kyori.text.Component;
 import net.kyori.text.TextComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.property.Attribute;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -31,6 +32,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameScoreboard;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
@@ -51,9 +53,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class Player extends LivingEntity {
+public class Player extends LivingEntity implements CommandSender {
 
     private long lastKeepAlive;
+    private boolean answerKeepAlive;
 
     private String username;
     protected PlayerConnection playerConnection;
@@ -61,6 +64,7 @@ public class Player extends LivingEntity {
 
     private int latency;
     private String displayName;
+    private PlayerSkin skin;
 
     private Dimension dimension;
     private GameMode gameMode;
@@ -144,6 +148,9 @@ public class Player extends LivingEntity {
 
         setCanPickupItem(true); // By default
 
+        // Allow the server to send the next keep alive packet
+        refreshAnswerKeepAlive(true);
+
         this.gameMode = GameMode.SURVIVAL;
         this.dimension = Dimension.OVERWORLD;
         this.levelType = LevelType.DEFAULT;
@@ -160,6 +167,11 @@ public class Player extends LivingEntity {
      * Init the player and spawn him
      */
     protected void init() {
+
+        // Init player (register events)
+        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
+            playerInitialization.accept(this);
+        }
 
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
@@ -185,21 +197,11 @@ public class Player extends LivingEntity {
         spawnPositionPacket.z = 0;
         playerConnection.sendPacket(spawnPositionPacket);
 
-        // Add player to list
-        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
-        String property = "";
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
-        addPlayer.displayName = jsonDisplayName;
-        PlayerInfoPacket.AddPlayer.Property prop = new PlayerInfoPacket.AddPlayer.Property("textures", property);
-        addPlayer.properties.add(prop);
-        playerInfoPacket.playerInfos.add(addPlayer);
-        playerConnection.sendPacket(playerInfoPacket);
-
-        // Init player
-        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
-            playerInitialization.accept(this);
-        }
+        // Add player to list with spawning skin
+        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this);
+        callEvent(PlayerSkinInitEvent.class, skinInitEvent);
+        this.skin = skinInitEvent.getSkin();
+        playerConnection.sendPacket(getAddPlayerToList());
 
         // Commands start
         {
@@ -241,17 +243,21 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+        getInventory().update();
     }
 
     /**
      * Used to initialize the player connection
-     * mostly used by {@link net.minestom.server.entity.fakeplayer.FakePlayer}
      */
     protected void playerConnectionInit() {
+        this.playerConnection.setPlayer(this);
     }
 
     @Override
     public boolean damage(DamageType type, float value) {
+        if (isInvulnerable())
+            return false;
+
         // Compute final heart based on health and additional hearts
         boolean result = super.damage(type, value);
         if (result) {
@@ -261,7 +267,7 @@ public class Player extends LivingEntity {
     }
 
     @Override
-    public void update() {
+    public void update(long time) {
         // Flush all pending packets
         playerConnection.flush();
 
@@ -271,13 +277,14 @@ public class Player extends LivingEntity {
             packet.process(this);
         }
 
-        super.update(); // Super update (item pickup/fire management)
+        super.update(time); // Super update (item pickup/fire management)
 
         // Target block stage
         if (targetCustomBlock != null) {
-            final int animationCount = 10;
-            long since = System.currentTimeMillis() - targetBlockTime;
-            byte stage = (byte) (since / (blockBreakTime / animationCount) - 1);
+            final byte animationCount = 10;
+            long since = time - targetBlockTime;
+            byte stage = (byte) (since / (blockBreakTime / animationCount));
+            stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
             if (stage != targetLastStage) {
                 sendBlockBreakAnimation(targetBlockPosition, stage);
             }
@@ -311,7 +318,7 @@ public class Player extends LivingEntity {
 
         // Eating animation
         if (isEating()) {
-            if (System.currentTimeMillis() - startEatingTime >= eatingTime) {
+            if (time - startEatingTime >= eatingTime) {
                 refreshEating(false);
 
                 triggerStatus((byte) 9); // Mark item use as finished
@@ -325,7 +332,7 @@ public class Player extends LivingEntity {
                 boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
             }
@@ -334,11 +341,10 @@ public class Player extends LivingEntity {
         // Tick event
         callEvent(PlayerTickEvent.class, playerTickEvent);
 
-
         // Multiplayer sync
-        if (!getViewers().isEmpty()) {
-            final boolean positionChanged = position.getX() != lastX || position.getZ() != lastZ || position.getY() != lastY;
-            final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+        final boolean positionChanged = position.getX() != lastX || position.getY() != lastY || position.getZ() != lastZ;
+        final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
+        if (!getViewers().isEmpty() && (positionChanged || viewChanged)) {
             ServerPacket updatePacket = null;
             ServerPacket optionalUpdatePacket = null;
             if (positionChanged && viewChanged) {
@@ -425,6 +431,10 @@ public class Player extends LivingEntity {
         super.kill();
     }
 
+    /**
+     * Respawn the player by sending a {@link RespawnPacket} to the player and teleporting him
+     * to {@link #getRespawnPoint()}. It also reset fire and his health
+     */
     public void respawn() {
         if (!isDead())
             return;
@@ -437,7 +447,7 @@ public class Player extends LivingEntity {
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
         getPlayerConnection().sendPacket(respawnPacket);
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(getRespawnPoint());
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this, getRespawnPoint());
         callEvent(PlayerRespawnEvent.class, respawnEvent);
         refreshIsDead(false);
 
@@ -458,6 +468,7 @@ public class Player extends LivingEntity {
     @Override
     public void remove() {
         super.remove();
+        this.packets.clear();
         clearBossBars();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
@@ -467,7 +478,8 @@ public class Player extends LivingEntity {
                 chunk.removeViewer(this);
         });
         resetTargetBlock();
-        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent());
+        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
+        playerConnection.disconnect();
     }
 
     @Override
@@ -476,34 +488,11 @@ public class Player extends LivingEntity {
             return false;
 
         boolean result = super.addViewer(player);
+        if (!result)
+            return false;
+
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        String property = "eyJ0aW1lc3RhbXAiOjE1NjU0ODMwODQwOTYsInByb2ZpbGVJZCI6ImFiNzBlY2I0MjM0NjRjMTRhNTJkN2EwOTE1MDdjMjRlIiwicHJvZmlsZU5hbWUiOiJUaGVNb2RlOTExIiwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2RkOTE2NzJiNTE0MmJhN2Y3MjA2ZTRjN2IwOTBkNzhlM2Y1ZDc2NDdiNWFmZDIyNjFhZDk4OGM0MWI2ZjcwYTEifX19";
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-
-        PlayerInfoPacket pInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket.AddPlayer addP = new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), 10);
-        PlayerInfoPacket.AddPlayer.Property p = new PlayerInfoPacket.AddPlayer.Property("textures", property);//new PlayerInfoPacket.AddPlayer.Property("textures", properties.get(onlinePlayer.getUsername()));
-        addP.properties.add(p);
-        pInfoPacket.playerInfos.add(addP);
-
-        viewerConnection.sendPacket(pInfoPacket);
-        viewerConnection.sendPacket(spawnPlayerPacket);
-        viewerConnection.sendPacket(getVelocityPacket());
-        viewerConnection.sendPacket(getMetadataPacket());
-
-        // Equipments synchronization
-        syncEquipments();
-
-        if (hasPassenger()) {
-            viewerConnection.sendPacket(getPassengersPacket());
-        }
-
-        // Team
-        if (team != null)
-            viewerConnection.sendPacket(team.getTeamsCreationPacket());
+        showPlayer(viewerConnection);
         return result;
     }
 
@@ -514,9 +503,7 @@ public class Player extends LivingEntity {
 
         boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.RemovePlayer(getUuid()));
-        viewerConnection.sendPacket(playerInfoPacket);
+        viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
         if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
@@ -591,7 +578,17 @@ public class Player extends LivingEntity {
         }
     }
 
+    /**
+     * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
+     * Setting {@code destroyStage} to -1 reset the break animation
+     *
+     * @param blockPosition the position of the block
+     * @param destroyStage  the destroy stage
+     * @throws IllegalArgumentException if {@code destroyStage} is not between -1 and 10
+     */
     public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
+        Check.argCondition(!MathUtils.isBetween(destroyStage, -1, 10),
+                "The destroy stage has to be between -1 and 10");
         BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
         breakAnimationPacket.entityId = getEntityId() + 1;
         breakAnimationPacket.blockPosition = blockPosition;
@@ -600,16 +597,28 @@ public class Player extends LivingEntity {
     }
 
     // Use legacy color formatting
+    @Override
     public void sendMessage(String message) {
         sendMessage(Chat.fromLegacyText(message));
     }
 
+    /**
+     * Send a message to the player
+     *
+     * @param message   the message to send
+     * @param colorChar the character used to represent the color
+     */
     public void sendMessage(String message, char colorChar) {
         sendMessage(Chat.fromLegacyText(message, colorChar));
     }
 
-    public void sendMessage(Component textObject) {
-        String json = Chat.toJsonString(textObject);
+    /**
+     * Send a message to the player
+     *
+     * @param component the text component
+     */
+    public void sendMessage(Component component) {
+        String json = Chat.toJsonString(component);
         playerConnection.sendPacket(new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT));
     }
 
@@ -644,6 +653,9 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(packet);
     }
 
+    /**
+     * Send a {@link StopSoundPacket} packet
+     */
     public void stopSound() {
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
         stopSoundPacket.flags = 0x00;
@@ -746,15 +758,30 @@ public class Player extends LivingEntity {
         sendUpdateHealthPacket();
     }
 
+    /**
+     * Get the player additional hearts
+     *
+     * @return the player additional hearts
+     */
     public float getAdditionalHearts() {
         return additionalHearts;
     }
 
+    /**
+     * Update the internal field and send the appropriate {@link EntityMetaDataPacket}
+     *
+     * @param additionalHearts the count of additional heartss
+     */
     public void setAdditionalHearts(float additionalHearts) {
         this.additionalHearts = additionalHearts;
         sendMetadataIndex(14);
     }
 
+    /**
+     * Get the player food
+     *
+     * @return the player food
+     */
     public int getFood() {
         return food;
     }
@@ -786,14 +813,18 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return true if the player is currently eating, false otherwise
+     * Get if the player is eating
+     *
+     * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
         return isEating;
     }
 
     /**
-     * @return the default eating time for the player
+     * Get the player default eating time
+     *
+     * @return the player default eating time
      */
     public long getDefaultEatingTime() {
         return defaultEatingTime;
@@ -809,31 +840,21 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * Used to change the player gamemode
+     * Get the player display name in the tab-list
      *
-     * @param gameMode the new player gamemode
-     */
-    public void setGameMode(GameMode gameMode) {
-        Check.notNull(gameMode, "GameMode cannot be null");
-        this.gameMode = gameMode;
-        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-
-        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
-        sendPacketToViewersAndSelf(infoPacket);
-    }
-
-    /**
-     * @return the displayed name of the player in the tab-list,
-     * null means that {@link #getUsername()} is display
+     * @return the player display name,
+     * null means that {@link #getUsername()} is displayed
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * @param displayName the new displayed name of the player in the tab-list,
-     *                    set to null to show the player username
+     * Change the player display name in the tab-list
+     * <p>
+     * Set to null to show the player username
+     *
+     * @param displayName the display name
      */
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
@@ -844,13 +865,89 @@ public class Player extends LivingEntity {
         sendPacketToViewersAndSelf(infoPacket);
     }
 
+    /**
+     * Get the player skin
+     *
+     * @return the player skin object,
+     * null means that the player has his {@link #getUuid()} default skin
+     */
+    public PlayerSkin getSkin() {
+        return skin;
+    }
+
+    /**
+     * Change the player skin
+     *
+     * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
+     */
+    public synchronized void setSkin(PlayerSkin skin) {
+        this.skin = skin;
+
+        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
+        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+
+        PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
+        PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+
+        RespawnPacket respawnPacket = new RespawnPacket();
+        respawnPacket.dimension = getDimension();
+        respawnPacket.gameMode = getGameMode();
+        respawnPacket.levelType = getLevelType();
+
+        playerConnection.sendPacket(removePlayerPacket);
+        playerConnection.sendPacket(destroyEntitiesPacket);
+        playerConnection.sendPacket(respawnPacket);
+        playerConnection.sendPacket(addPlayerPacket);
+
+        for (Player viewer : getViewers()) {
+            PlayerConnection connection = viewer.getPlayerConnection();
+
+            connection.sendPacket(removePlayerPacket);
+            connection.sendPacket(destroyEntitiesPacket);
+
+            showPlayer(connection);
+        }
+
+        getInventory().update();
+        teleport(getPosition());
+    }
+
+    /**
+     * Used to update the internal skin field
+     *
+     * @param skin the player skin
+     * @see #setSkin(PlayerSkin) instead
+     */
+    protected void refreshSkin(PlayerSkin skin) {
+        this.skin = skin;
+    }
+
+    /**
+     * Get if the player has the respawn screen enabled or disabled
+     *
+     * @return true if the player has the respawn screen, false if he didn't
+     */
     public boolean isEnableRespawnScreen() {
         return enableRespawnScreen;
     }
 
+    /**
+     * Enable or disable the respawn screen
+     *
+     * @param enableRespawnScreen true to enable the respawn screen, false to disable it
+     */
     public void setEnableRespawnScreen(boolean enableRespawnScreen) {
         this.enableRespawnScreen = enableRespawnScreen;
         sendChangeGameStatePacket(ChangeGameStatePacket.Reason.ENABLE_RESPAWN_SCREEN, enableRespawnScreen ? 0 : 1);
+    }
+
+    /**
+     * Get the player username
+     *
+     * @return the player username
+     */
+    public String getUsername() {
+        return username;
     }
 
     private void sendChangeGameStatePacket(ChangeGameStatePacket.Reason reason, float value) {
@@ -868,6 +965,23 @@ public class Player extends LivingEntity {
         ItemDropEvent itemDropEvent = new ItemDropEvent(item);
         callEvent(ItemDropEvent.class, itemDropEvent);
         return !itemDropEvent.isCancelled();
+    }
+
+    /**
+     * Set the player resource pack
+     *
+     * @param resourcePack the resource pack
+     */
+    public void setResourcePack(ResourcePack resourcePack) {
+        Check.notNull(resourcePack, "The resource pack cannot be null");
+        final String url = resourcePack.getUrl();
+        Check.notNull(url, "The resource pack url cannot be null");
+        final String hash = resourcePack.getHash();
+
+        ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
+        resourcePackSendPacket.url = url;
+        resourcePackSendPacket.hash = hash;
+        playerConnection.sendPacket(resourcePackSendPacket);
     }
 
     /**
@@ -937,13 +1051,17 @@ public class Player extends LivingEntity {
     /**
      * Change the default spawn point
      *
-     * @param respawnPoint
+     * @param respawnPoint the player respawn point
      */
     public void setRespawnPoint(Position respawnPoint) {
         this.respawnPoint = respawnPoint;
     }
 
-    public void refreshAfterTeleport() {
+    /**
+     * Called after the player teleportation to refresh his position
+     * and send data to his new viewers
+     */
+    protected void refreshAfterTeleport() {
         getInventory().update();
 
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
@@ -951,10 +1069,14 @@ public class Player extends LivingEntity {
         spawnPlayerPacket.playerUuid = getUuid();
         spawnPlayerPacket.position = getPosition();
         sendPacketToViewers(spawnPlayerPacket);
+
+        // Update for viewers
+        sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
         playerConnection.sendPacket(getPropertiesPacket());
-        sendUpdateHealthPacket();
         syncEquipments();
+
+        sendSynchronization();
     }
 
     protected void refreshHealth() {
@@ -1054,15 +1176,20 @@ public class Player extends LivingEntity {
         teleport(position, null);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
+    /**
+     * Get the player connection
+     * <p>
+     * Used to send packets and get relatives stuff to the connection
+     *
+     * @return the player connection
+     */
     public PlayerConnection getPlayerConnection() {
         return playerConnection;
     }
 
     /**
+     * Get if the player is online or not
+     *
      * @return true if the player is online, false otherwise
      */
     public boolean isOnline() {
@@ -1070,10 +1197,21 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player settings
+     *
      * @return the player settings
      */
     public PlayerSettings getSettings() {
         return settings;
+    }
+
+    /**
+     * Get the player dimension
+     *
+     * @return the player current dimension
+     */
+    public Dimension getDimension() {
+        return dimension;
     }
 
     public PlayerInventory getInventory() {
@@ -1091,17 +1229,27 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * @return the player current dimension
-     */
-    public Dimension getDimension() {
-        return dimension;
-    }
-
-    /**
+     * Get the player GameMode
+     *
      * @return the player current gamemode
      */
     public GameMode getGameMode() {
         return gameMode;
+    }
+
+    /**
+     * Change the player GameMode
+     *
+     * @param gameMode the new player GameMode
+     */
+    public void setGameMode(GameMode gameMode) {
+        Check.notNull(gameMode, "GameMode cannot be null");
+        this.gameMode = gameMode;
+        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
+
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
+        sendPacketToViewersAndSelf(infoPacket);
     }
 
     /**
@@ -1131,13 +1279,23 @@ public class Player extends LivingEntity {
         playerConnection.sendPacket(respawnPacket);
     }
 
-    public void kick(Component message) {
+    /**
+     * Kick the player with a reason
+     *
+     * @param textComponent the kick reason
+     */
+    public void kick(TextComponent textComponent) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = Chat.toJsonString(message);
+        disconnectPacket.message = Chat.toJsonString(textComponent);
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.disconnect();
     }
 
+    /**
+     * Kick the player with a reason
+     *
+     * @param message the kick reason
+     */
     public void kick(String message) {
         kick(Chat.fromLegacyText(message));
     }
@@ -1162,6 +1320,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player held slot (0-8)
+     *
      * @return the current held slot for the player
      */
     public short getHeldSlot() {
@@ -1200,6 +1360,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player open inventory
+     *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
     public Inventory getOpenInventory() {
@@ -1247,7 +1409,7 @@ public class Player extends LivingEntity {
             openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
-            refreshOpenInventory(newInventory);
+            this.openInventory = newInventory;
 
         });
 
@@ -1282,13 +1444,15 @@ public class Player extends LivingEntity {
         } else {
             closeWindowPacket.windowId = openInventory.getWindowId();
             openInventory.removeViewer(this); // Clear cache
-            refreshOpenInventory(null);
+            this.openInventory = null;
         }
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
     }
 
     /**
+     * Get the player viewable chunks
+     *
      * @return an unmodifiable {@link Set} containing all the chunks that the player sees
      */
     public Set<Chunk> getViewableChunks() {
@@ -1302,8 +1466,15 @@ public class Player extends LivingEntity {
         this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
 
+    /**
+     * Send a {@link UpdateViewPositionPacket}  to the player
+     *
+     * @param chunk the chunk to update the view
+     */
     public void updateViewPosition(Chunk chunk) {
-        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket(chunk);
+        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket();
+        updateViewPositionPacket.chunkX = chunk.getChunkX();
+        updateViewPositionPacket.chunkZ = chunk.getChunkZ();
         playerConnection.sendPacket(updateViewPositionPacket);
     }
 
@@ -1319,6 +1490,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Get the player permission level
+     *
      * @return the player permission level
      */
     public int getPermissionLevel() {
@@ -1340,6 +1513,11 @@ public class Player extends LivingEntity {
         triggerStatus(permissionLevelStatus);
     }
 
+    /**
+     * Set or remove the reduced debug screen
+     *
+     * @param reduced should the player has the reduced debug screen
+     */
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
@@ -1348,20 +1526,38 @@ public class Player extends LivingEntity {
         triggerStatus(debugScreenStatus);
     }
 
+    /**
+     * Get if the player has the reduced debug screen
+     *
+     * @return true if the player has the reduced debug screen, false otherwise
+     */
     public boolean hasReducedDebugScreenInformation() {
         return reducedDebugScreenInformation;
     }
 
+    /**
+     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet
+     *
+     * @return true if the player is invulnerable, false otherwise
+     */
     public boolean isInvulnerable() {
         return invulnerable;
     }
 
+    /**
+     * This do update the {@code invulnerable} field in the packet {@link PlayerAbilitiesPacket}
+     * and prevent the player from receiving damage
+     *
+     * @param invulnerable should the player be invulnerable
+     */
     public void setInvulnerable(boolean invulnerable) {
         this.invulnerable = invulnerable;
         refreshAbilities();
     }
 
     /**
+     * Get if the player is currently flying
+     *
      * @return true if the player if flying, false otherwise
      */
     public boolean isFlying() {
@@ -1369,18 +1565,30 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Set the player flying
+     *
      * @param flying should the player fly
      */
     public void setFlying(boolean flying) {
-        refreshFlying(flying);
+        this.flying = flying;
         refreshAbilities();
     }
 
+    /**
+     * Update the internal flying field
+     * <p>
+     * Mostly unsafe since there is nothing to backup the value, used internally for creative players
+     *
+     * @param flying the new flying field
+     * @see #setFlying(boolean) instead
+     */
     public void refreshFlying(boolean flying) {
         this.flying = flying;
     }
 
     /**
+     * Get if the player is allowed to fly
+     *
      * @return true if the player if allowed to fly, false otherwise
      */
     public boolean isAllowFlying() {
@@ -1388,6 +1596,8 @@ public class Player extends LivingEntity {
     }
 
     /**
+     * Allow or forbid the player to fly
+     *
      * @param allowFlying should the player be allowed to fly
      */
     public void setAllowFlying(boolean allowFlying) {
@@ -1412,10 +1622,20 @@ public class Player extends LivingEntity {
         refreshAbilities();
     }
 
+    /**
+     * Get the player flying speed
+     *
+     * @return the flying speed of the player
+     */
     public float getFlyingSpeed() {
         return flyingSpeed;
     }
 
+    /**
+     * Update the internal field and send a {@link PlayerAbilitiesPacket} with the new flying speed
+     *
+     * @param flyingSpeed the new flying speed of the player
+     */
     public void setFlyingSpeed(float flyingSpeed) {
         this.flyingSpeed = flyingSpeed;
         refreshAbilities();
@@ -1440,6 +1660,11 @@ public class Player extends LivingEntity {
         return statisticValueMap;
     }
 
+    /**
+     * Get the player vehicle information
+     *
+     * @return the player vehicle information
+     */
     public PlayerVehicleInformation getVehicleInformation() {
         return vehicleInformation;
     }
@@ -1457,7 +1682,7 @@ public class Player extends LivingEntity {
     }
 
     /**
-     * All packets in the queue are executed in the {@link #update()} method
+     * All packets in the queue are executed in the {@link #update(long)} method
      * It is used internally to add all received packet from the client
      * Could be used to "simulate" a received packet, but to use at your own risk
      *
@@ -1467,6 +1692,11 @@ public class Player extends LivingEntity {
         this.packets.add(packet);
     }
 
+    /**
+     * Change the storage player latency and update its tab value
+     *
+     * @param latency the new player latency
+     */
     public void refreshLatency(int latency) {
         this.latency = latency;
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
@@ -1478,19 +1708,40 @@ public class Player extends LivingEntity {
         this.onGround = onGround;
     }
 
+    /**
+     * Used to change internally the last sent last keep alive id
+     * <p>
+     * Warning: could lead to have the player kicked because of a wrong keep alive packet
+     *
+     * @param lastKeepAlive the new lastKeepAlive id
+     */
     public void refreshKeepAlive(long lastKeepAlive) {
         this.lastKeepAlive = lastKeepAlive;
+        this.answerKeepAlive = false;
     }
 
+    public boolean didAnswerKeepAlive() {
+        return answerKeepAlive;
+    }
+
+    public void refreshAnswerKeepAlive(boolean answerKeepAlive) {
+        this.answerKeepAlive = answerKeepAlive;
+    }
+
+    /**
+     * Change the held item for the player viewers
+     * Also cancel eating if {@link #isEating()} was true
+     * <p>
+     * Warning: the player will not be noticed by this chance, only his viewers,
+     * see instead: {@link #setHeldItemSlot(short)}
+     *
+     * @param slot the new held slot
+     */
     public void refreshHeldSlot(short slot) {
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
         refreshEating(false);
-    }
-
-    protected void refreshOpenInventory(Inventory openInventory) {
-        this.openInventory = openInventory;
     }
 
     public void refreshEating(boolean isEating, long eatingTime) {
@@ -1507,6 +1758,14 @@ public class Player extends LivingEntity {
         refreshEating(isEating, defaultEatingTime);
     }
 
+    /**
+     * Used to call {@link ItemUpdateStateEvent} with the proper item
+     * It does check which hand to get the item to update
+     *
+     * @param allowFood true if food should be updated, false otherwise
+     * @return the called {@link ItemUpdateStateEvent},
+     * null if there is no item to update the state
+     */
     public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
         Material mainHandMat = Material.fromId(getItemInMainHand().getMaterialId());
         Material offHandMat = Material.fromId(getItemInOffHand().getMaterialId());
@@ -1529,25 +1788,55 @@ public class Player extends LivingEntity {
         return itemUpdateStateEvent;
     }
 
-    public void refreshTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
+    /**
+     * Make the player digging a custom block, see {@link #resetTargetBlock()} to rewind
+     *
+     * @param targetCustomBlock   the custom block to dig
+     * @param targetBlockPosition the custom block position
+     * @param breakTime           the time it will take to break the block in milliseconds
+     */
+    public void setTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
         this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
         this.blockBreakTime = breakTime;
     }
 
+    /**
+     * Reset data from the current block the player is mining.
+     * If the currently mined block (or if there isn't any) is not a CustomBlock, nothing append
+     */
     public void resetTargetBlock() {
-        if (targetBlockPosition != null)
+        if (targetBlockPosition != null) {
             sendBlockBreakAnimation(targetBlockPosition, (byte) -1); // Clear the break animation
-        this.targetCustomBlock = null;
-        this.targetBlockPosition = null;
-        this.targetBlockTime = 0;
+            this.targetCustomBlock = null;
+            this.targetBlockPosition = null;
+            this.targetBlockTime = 0;
+
+            // Remove effect
+            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
+            removeEntityEffectPacket.entityId = getEntityId();
+            removeEntityEffectPacket.effectId = 4;
+            getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        }
     }
 
+    /**
+     * Used internally to add Bossbar in the {@link #getBossBars()} set
+     * You probably want to use {@link BossBar#addViewer(Player)}
+     *
+     * @param bossBar the bossbar to add internally
+     */
     public void refreshAddBossbar(BossBar bossBar) {
         this.bossBars.add(bossBar);
     }
 
+    /**
+     * Used internally to remove Bossbar from the {@link #getBossBars()} set
+     * You probably want to use {@link BossBar#removeViewer(Player)}
+     *
+     * @param bossBar the bossbar to remove internally
+     */
     public void refreshRemoveBossbar(BossBar bossBar) {
         this.bossBars.remove(bossBar);
     }
@@ -1556,6 +1845,11 @@ public class Player extends LivingEntity {
         this.vehicleInformation.refresh(sideways, forward, jump, unmount);
     }
 
+    /**
+     * @return the chunk range of the viewers,
+     * which is {@link MinecraftServer#CHUNK_VIEW_DISTANCE} or {@link PlayerSettings#getViewDistance()}
+     * based on which one is the lowest
+     */
     public int getChunkRange() {
         int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
         int playerRange = getSettings().viewDistance;
@@ -1566,8 +1860,84 @@ public class Player extends LivingEntity {
         }
     }
 
+    /**
+     * Get the last sent keep alive id
+     *
+     * @return the last keep alive id sent to the player
+     */
     public long getLastKeepAlive() {
         return lastKeepAlive;
+    }
+
+    /**
+     * Get the packet to add the player from tab-list
+     *
+     * @return a {@link PlayerInfoPacket} to add the player
+     */
+    protected PlayerInfoPacket getAddPlayerToList() {
+        final String textures = skin == null ? "" : skin.getTextures();
+        final String signature = skin == null ? null : skin.getSignature();
+
+        String jsonDisplayName = displayName != null ? Chat.toJsonString(Chat.fromLegacyText(displayName)) : null;
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+
+        PlayerInfoPacket.AddPlayer addPlayer =
+                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
+        addPlayer.displayName = jsonDisplayName;
+
+        PlayerInfoPacket.AddPlayer.Property prop =
+                new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+        addPlayer.properties.add(prop);
+
+        playerInfoPacket.playerInfos.add(addPlayer);
+        return playerInfoPacket;
+    }
+
+    /**
+     * Get the packet to remove the player from tab-list
+     *
+     * @return a {@link PlayerInfoPacket} to add the player
+     */
+    protected PlayerInfoPacket getRemovePlayerToList() {
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
+
+        PlayerInfoPacket.RemovePlayer removePlayer =
+                new PlayerInfoPacket.RemovePlayer(getUuid());
+
+        playerInfoPacket.playerInfos.add(removePlayer);
+        return playerInfoPacket;
+    }
+
+    /**
+     * Send all the related packet to have the player sent to another with related data
+     * (create player, spawn position, velocity, metadata, equipments, passengers, team)
+     * <p>
+     * WARNING: this does not sync the player, please use {@link #addViewer(Player)}
+     *
+     * @param connection the connection to show the player to
+     */
+    protected void showPlayer(PlayerConnection connection) {
+        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
+        spawnPlayerPacket.entityId = getEntityId();
+        spawnPlayerPacket.playerUuid = getUuid();
+        spawnPlayerPacket.position = getPosition();
+
+        connection.sendPacket(getAddPlayerToList());
+
+        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getVelocityPacket());
+        connection.sendPacket(getMetadataPacket());
+
+        // Equipments synchronization
+        syncEquipments(connection);
+
+        if (hasPassenger()) {
+            connection.sendPacket(getPassengersPacket());
+        }
+
+        // Team
+        if (team != null)
+            connection.sendPacket(team.getTeamsCreationPacket());
     }
 
     @Override
@@ -1630,13 +2000,24 @@ public class Player extends LivingEntity {
         inventory.setBoots(itemStack);
     }
 
+    /**
+     * Represent the main or off hand of the player
+     */
     public enum Hand {
         MAIN,
         OFF
     }
 
+    public enum FacePoint {
+        FEET,
+        EYE
+    }
+
     // Settings enum
 
+    /**
+     * Represent where is located the main hand of the player (can be changed in Minecraft option)
+     */
     public enum MainHand {
         LEFT,
         RIGHT
@@ -1648,11 +2029,6 @@ public class Player extends LivingEntity {
         HIDDEN
     }
 
-    public enum FacePoint {
-        FEET,
-        EYE
-    }
-
     public class PlayerSettings {
 
         private String locale;
@@ -1662,18 +2038,38 @@ public class Player extends LivingEntity {
         private byte displayedSkinParts;
         private MainHand mainHand;
 
+        /**
+         * The player game language
+         *
+         * @return the player locale
+         */
         public String getLocale() {
             return locale;
         }
 
+        /**
+         * Get the player view distance
+         *
+         * @return the player view distance
+         */
         public byte getViewDistance() {
             return viewDistance;
         }
 
+        /**
+         * Get the player chat mode
+         *
+         * @return the player chat mode
+         */
         public ChatMode getChatMode() {
             return chatMode;
         }
 
+        /**
+         * Get if the player has chat colors enabled
+         *
+         * @return true if chat colors are enabled, false otherwise
+         */
         public boolean hasChatColors() {
             return chatColors;
         }
@@ -1682,10 +2078,27 @@ public class Player extends LivingEntity {
             return displayedSkinParts;
         }
 
+        /**
+         * Get the player main hand
+         *
+         * @return the player main hand
+         */
         public MainHand getMainHand() {
             return mainHand;
         }
 
+        /**
+         * Change the player settings internally
+         * <p>
+         * WARNING: the player will not be noticed by this change, probably unsafe
+         *
+         * @param locale             the player locale
+         * @param viewDistance       the player view distance
+         * @param chatMode           the player chat mode
+         * @param chatColors         the player chat colors
+         * @param displayedSkinParts the player displayed skin parts
+         * @param mainHand           the player main handœ
+         */
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
             this.locale = locale;
             this.viewDistance = viewDistance;

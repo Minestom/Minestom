@@ -13,6 +13,7 @@ public class EntityMooshroom extends EntityCreature {
 
     public EntityMooshroom(Position spawnPosition) {
         super(EntityType.MOOSHROOM, spawnPosition);
+        setBoundingBox(0.9f, 1.4f, 0.9f);
         setMooshroomType(MooshroomType.RED);
     }
 

@@ -1,5 +1,10 @@
 package net.minestom.server.inventory;
 
+/**
+ * List of inventory property and their ID
+ * <p>
+ * See https://wiki.vg/Protocol#Window_Property for more information
+ */
 public enum InventoryProperty {
 
     FURNACE_FIRE_ICON((short) 0),

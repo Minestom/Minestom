@@ -13,6 +13,7 @@ public class EntitySnowman extends EntityCreature {
 
     public EntitySnowman(Position spawnPosition) {
         super(EntityType.SNOW_GOLEM, spawnPosition);
+        setBoundingBox(0.7f, 1.9f, 0.7f);
     }
 
     @Override

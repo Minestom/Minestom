@@ -1,19 +1,16 @@
 package fr.themode.demo.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.type.EntityChicken;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 
-public class ChickenCreature extends EntityCreature {
+public class ChickenCreature extends EntityChicken {
 
     public ChickenCreature(Position defaultPosition) {
-        super(EntityType.CHICKEN, defaultPosition);
-
-        setBoundingBox(0.4f, 0.7f, 0.4f);
+        super(defaultPosition);
     }
 
     @Override
@@ -22,8 +19,8 @@ public class ChickenCreature extends EntityCreature {
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(long time) {
+        super.update(time);
         float speed = 0.075f;
 
         if (hasPassenger()) {
@@ -80,10 +77,7 @@ public class ChickenCreature extends EntityCreature {
                 move(x, 0, z, updateView);
             }
         } else {
-            //move(0.5f * speed, 0, 0.5f * speed, true);
+            //move(-0.5f * speed, 0, 0.5f * speed, true);
         }
-
-        //Player player = MinecraftServer.getConnectionManager().getPlayer("TheMode911");
-        //moveTo(player.getPosition().clone());
     }
 }

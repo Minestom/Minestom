@@ -23,16 +23,6 @@ public class EntityBoat extends ObjectEntity {
     }
 
     @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void spawn() {
-
-    }
-
-    @Override
     public Consumer<PacketWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);

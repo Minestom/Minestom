@@ -13,6 +13,7 @@ public class EntityPig extends EntityCreature {
 
     public EntityPig(Position spawnPosition) {
         super(EntityType.PIG, spawnPosition);
+        setBoundingBox(0.9f, 0.9f, 0.9f);
     }
 
     @Override

@@ -12,6 +12,7 @@ public class AbilitiesListener {
 
         if (canFly) {
             boolean isFlying = (packet.flags & 0x2) > 0;
+
             player.refreshFlying(isFlying);
 
             if (isFlying) {

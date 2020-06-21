@@ -9,19 +9,33 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommandManager {
 
     private String commandPrefix = "/";
 
-    private CommandDispatcher<Player> dispatcher = new CommandDispatcher<>();
+    private ConsoleSender consoleSender = new ConsoleSender();
+
+    private CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
     private Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
-    public void register(Command<Player> command) {
+    public CommandManager() {
+        // Setup console thread
+        new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                String command = scanner.nextLine();
+                if (!command.startsWith(commandPrefix))
+                    continue;
+                command = command.replaceFirst(commandPrefix, "");
+                execute(consoleSender, command);
+
+            }
+        }, "ConsoleCommand-Thread").start();
+    }
+
+    public void register(Command<CommandSender> command) {
         this.dispatcher.register(command);
     }
 
@@ -29,20 +43,24 @@ public class CommandManager {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
     }
 
-    public boolean execute(Player source, String command) {
-        Check.notNull(source, "Source cannot be null");
+    public boolean execute(CommandSender sender, String command) {
+        Check.notNull(sender, "Source cannot be null");
         Check.notNull(command, "Command string cannot be null");
 
-        PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(source, command);
-        source.callEvent(PlayerCommandEvent.class, playerCommandEvent);
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
 
-        if (playerCommandEvent.isCancelled())
-            return false;
+            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
+            player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
 
-        command = playerCommandEvent.getCommand();
+            if (playerCommandEvent.isCancelled())
+                return false;
+
+            command = playerCommandEvent.getCommand();
+        }
 
         try {
-            this.dispatcher.execute(source, command);
+            this.dispatcher.execute(sender, command);
             return true;
         } catch (NullPointerException e) {
             String[] splitted = command.split(" ");
@@ -53,7 +71,7 @@ public class CommandManager {
 
             String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
 
-            return commandProcessor.process(source, commandName, args);
+            return commandProcessor.process(sender, commandName, args);
 
         }
     }
@@ -66,6 +84,10 @@ public class CommandManager {
         this.commandPrefix = commandPrefix;
     }
 
+    public ConsoleSender getConsoleSender() {
+        return consoleSender;
+    }
+
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
         return buildPacket(player);
     }
@@ -74,7 +96,7 @@ public class CommandManager {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<String> commands = new ArrayList<>();
-        for (Command<Player> command : dispatcher.getCommands()) {
+        for (Command<CommandSender> command : dispatcher.getCommands()) {
             CommandCondition<Player> commandCondition = command.getCondition();
             if (commandCondition != null) {
                 // Do not show command if return false

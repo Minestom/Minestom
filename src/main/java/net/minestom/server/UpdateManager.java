@@ -1,5 +1,7 @@
 package net.minestom.server;
 
+import net.kyori.text.TextComponent;
+import net.kyori.text.format.TextColor;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceManager;
@@ -10,19 +12,27 @@ import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.concurrent.ExecutorService;
 
-public class UpdateManager {
+public final class UpdateManager {
 
-    private ExecutorService mainUpdate = new MinestomThread(MinecraftServer.THREAD_COUNT_MAIN_UPDATE, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
+    private static final long KEEP_ALIVE_DELAY = 10_000;
+    private static final long KEEP_ALIVE_KICK = 30_000;
+
+    private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
 
+    /**
+     * Should only be created in MinecraftServer
+     */
+    protected UpdateManager() {
+    }
 
     public void start() {
         mainUpdate.execute(() -> {
 
-            ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-            EntityManager entityManager = MinecraftServer.getEntityManager();
-            InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-            SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
+            final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+            final EntityManager entityManager = MinecraftServer.getEntityManager();
+            final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+            final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
 
             final long tickDistance = MinecraftServer.TICK_MS * 1000000;
             long currentTime;
@@ -30,12 +40,17 @@ public class UpdateManager {
                 currentTime = System.nanoTime();
 
                 // Keep Alive Handling
+                final long time = System.currentTimeMillis();
+                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    long time = System.currentTimeMillis();
-                    if (time - player.getLastKeepAlive() > 10000) {
+                    final long lastKeepAlive = time - player.getLastKeepAlive();
+                    if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                         player.refreshKeepAlive(time);
-                        KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
+                    } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                        TextComponent textComponent = TextComponent.of("Timeout")
+                                .color(TextColor.RED);
+                        player.kick(textComponent);
                     }
                 }
 

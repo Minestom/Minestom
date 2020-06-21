@@ -7,6 +7,10 @@ public class CooldownUtils {
         return currentTime - lastUpdate < cooldownMs;
     }
 
+    public static boolean hasCooldown(long currentTime, long lastUpdate, UpdateOption updateOption) {
+        return hasCooldown(currentTime, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
+    }
+
     public static boolean hasCooldown(long lastUpdate, TimeUnit timeUnit, int cooldown) {
         return hasCooldown(System.currentTimeMillis(), lastUpdate, timeUnit, cooldown);
     }

@@ -11,30 +11,61 @@ import net.minestom.server.utils.Direction;
  */
 public class PlayerUseItemOnBlockEvent extends Event {
 
+    private Player player;
     private Player.Hand hand;
     private ItemStack itemStack;
     private final BlockPosition position;
     private final Direction blockFace;
 
-    public PlayerUseItemOnBlockEvent(Player.Hand hand, ItemStack itemStack, BlockPosition position, Direction blockFace) {
+    public PlayerUseItemOnBlockEvent(Player player, Player.Hand hand, ItemStack itemStack, BlockPosition position, Direction blockFace) {
+        this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
         this.position = position;
         this.blockFace = blockFace;
     }
 
+    /**
+     * Get the player who used an item while clicking on a block
+     *
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Get the position of the interacted block
+     *
+     * @return the block position
+     */
     public BlockPosition getPosition() {
         return position;
     }
 
+    /**
+     * Get which face the player has interacted with
+     *
+     * @return the block face
+     */
     public Direction getBlockFace() {
         return blockFace;
     }
 
+    /**
+     * Get which hand the player used to interact with the block
+     *
+     * @return the hand
+     */
     public Player.Hand getHand() {
         return hand;
     }
 
+    /**
+     * Get with which item the player has interacted with the block
+     *
+     * @return the item
+     */
     public ItemStack getItemStack() {
         return itemStack;
     }
