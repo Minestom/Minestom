@@ -62,7 +62,7 @@ It is our major concept, worlds are great for survival with friends, but when it
 
 Being able to create instances directly on the go is a must-have, according to us it can push many more projects forward.
 
-Instances also come with performance benefits, unlike some others which will be fully single-threaded or maybe using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more of CPU power.
+Instances also come with performance benefits, unlike some others which will be fully single-threaded or maybe using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more CPU power.
 
 ## Blocks
 Minestom by default does not know what is a chest, you will have to tell him that it opens an inventory. 
