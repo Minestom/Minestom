@@ -8,6 +8,7 @@ import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.Chat;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -52,7 +53,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public class Player extends LivingEntity {
+public class Player extends LivingEntity implements CommandSender {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -596,6 +597,7 @@ public class Player extends LivingEntity {
     }
 
     // Use legacy color formatting
+    @Override
     public void sendMessage(String message) {
         sendMessage(Chat.fromLegacyText(message));
     }

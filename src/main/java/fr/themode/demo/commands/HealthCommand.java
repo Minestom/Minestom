@@ -5,9 +5,10 @@ import fr.themode.command.Command;
 import fr.themode.command.arguments.Argument;
 import fr.themode.command.arguments.ArgumentType;
 import fr.themode.command.arguments.number.ArgumentNumber;
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 
-public class HealthCommand extends Command<Player> {
+public class HealthCommand extends Command<CommandSender> {
 
     public HealthCommand() {
         super("health", "h", "healthbar");
@@ -27,39 +28,39 @@ public class HealthCommand extends Command<Player> {
         addSyntax(this::execute2, arg0, arg1);
     }
 
-    private boolean condition(Player player) {
-        boolean hasPerm = true;
-        if (!hasPerm) {
-            player.sendMessage("You do not have permission !");
+    private boolean condition(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("The command is only available for player");
             return false;
         }
         return true;
     }
 
-    private void defaultExecutor(Player player, Arguments args) {
-        player.sendMessage("Correct usage: health [set/add] [number]");
+    private void defaultExecutor(CommandSender sender, Arguments args) {
+        sender.sendMessage("Correct usage: health [set/add] [number]");
     }
 
-    private void modeCallback(Player player, String value, int error) {
-        player.sendMessage("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
+    private void modeCallback(CommandSender sender, String value, int error) {
+        sender.sendMessage("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
     }
 
-    private void valueCallback(Player player, String value, int error) {
+    private void valueCallback(CommandSender sender, String value, int error) {
         switch (error) {
             case ArgumentNumber.NOT_NUMBER_ERROR:
-                player.sendMessage("SYNTAX ERROR: '" + value + "' isn't a number!");
+                sender.sendMessage("SYNTAX ERROR: '" + value + "' isn't a number!");
                 break;
             case ArgumentNumber.RANGE_ERROR:
-                player.sendMessage("SYNTAX ERROR: " + value + " is not between 0 and 100");
+                sender.sendMessage("SYNTAX ERROR: " + value + " is not between 0 and 100");
                 break;
         }
     }
 
-    private void execute(Player player, Arguments args) {
-        player.sendMessage("/health " + args.getWord("mode") + " [Integer]");
+    private void execute(CommandSender sender, Arguments args) {
+        sender.sendMessage("/health " + args.getWord("mode") + " [Integer]");
     }
 
-    private void execute2(Player player, Arguments args) {
+    private void execute2(CommandSender sender, Arguments args) {
+        Player player = (Player) sender;
         String mode = args.getWord("mode");
         int value = args.getInteger("value");
 
