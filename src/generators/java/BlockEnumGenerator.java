@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import org.slf4j.Logger;
@@ -75,17 +76,74 @@ public class BlockEnumGenerator {
         String folder = packageName.replace(".", "/");
         String className = "TmpBlock";
         EnumGenerator blockGenerator = new EnumGenerator(packageName, className);
-        blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid");
-        blockGenerator.addMethod("getId", "short", "return defaultID;");
-        blockGenerator.addMethod("isAir", "boolean", "return isAir;");
-        blockGenerator.addMethod("isSolid", "boolean", "return isSolid;");
-        blockGenerator.addMethod("getHardness", "double", "return hardness;");
-        blockGenerator.addMethod("getResistance", "double", "return resistance;");
-        blockGenerator.addMethod("breaksInstantaneously", "boolean", "return hardness == 0;");
+        blockGenerator.addImport(NamespaceID.class.getCanonicalName());
+        blockGenerator.addImport(BlockAlternative.class.getCanonicalName());
+        blockGenerator.addImport(List.class.getCanonicalName());
+        blockGenerator.addImport(ArrayList.class.getCanonicalName());
+        blockGenerator.addImport(Arrays.class.getCanonicalName());
+        blockGenerator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
+        blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity");
+        blockGenerator.addMethod("getId", "()", "short", "return defaultID;");
+        blockGenerator.addMethod("isAir", "()", "boolean", "return isAir;");
+        blockGenerator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
+        blockGenerator.addMethod("getBlockEntityName", "()", "NamespaceID", "return blockEntity;");
+        blockGenerator.addMethod("isSolid", "()", "boolean", "return isSolid;");
+        blockGenerator.addMethod("getHardness", "()", "double", "return hardness;");
+        blockGenerator.addMethod("getResistance", "()", "double", "return resistance;");
+        blockGenerator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");
+        blockGenerator.addPrivateMethod("addBlockAlternative", "(BlockAlternative alternative)", "void", "alternatives.add(alternative);");
+        String[] withPropertiesLines = {
+            "for (BlockAlternative alt : alternatives) {",
+            "\tif (Arrays.equals(alt.getProperties(), properties)) {",
+            "\t\treturn alt.getId();",
+            "\t}",
+            "}",
+            "return defaultID;"
+        };
+        blockGenerator.addPrivateMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
+        blockGenerator.appendToConstructor("alternatives.add(new BlockAlternative(defaultID));");
         LOGGER.debug("Generating enum");
+        StringBuilder staticBlock = new StringBuilder();
         for (BlockContainer block : blocks) {
-            blockGenerator.addInstance(block.getId().getPath().toUpperCase(), "\""+block.getId().toString()+"\"", "(short) "+block.getDefaultState().getId(), block.getHardness(), block.getResistance(), block.isAir(), block.isSolid());
+            String instanceName = block.getId().getPath().toUpperCase();
+            blockGenerator.addInstance(instanceName,
+                    "\""+block.getId().toString()+"\"",
+                    "(short) "+block.getDefaultState().getId(),
+                    block.getHardness(),
+                    block.getResistance(),
+                    block.isAir(),
+                    block.isSolid(),
+                    block.getBlockEntityName() != null ? "NamespaceID.from(\""+block.getBlockEntityName()+"\")" : "null"
+            );
+
+            // do not add alternative for default states. This will be added by default inside the constructor
+            if(block.getStates().size() > 1) {
+                staticBlock.append("\t");
+                staticBlock.append("{ // block alternatives of "+instanceName);
+                staticBlock.append("\n");
+                for(BlockContainer.BlockState state : block.getStates()) {
+                    if(state == block.getDefaultState())
+                        continue;
+                    // generate BlockAlternative instance that will be used to lookup block alternatives
+
+                    staticBlock.append("\t\t");
+                    staticBlock.append(instanceName).append(".addBlockAlternative(");
+                    staticBlock.append("new BlockAlternative(");
+                    staticBlock.append("(short) ").append(state.getId());
+
+                    if(state.getProperties() != null) {
+                        for(var property : state.getProperties().entrySet()) {
+                            staticBlock.append(", ");
+                            staticBlock.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
+                        }
+                    }
+                    staticBlock.append(")").append(");\n");
+                }
+                staticBlock.append("\t}\n");
+            }
         }
+
+        blockGenerator.setStaticInitBlock(staticBlock.toString());
 
         File classFolder = new File(targetPart+"/"+folder);
         if(!classFolder.exists()) {
@@ -124,12 +182,15 @@ public class BlockEnumGenerator {
 
             BlockContainer.BlockState defaultState = new BlockContainer.BlockState(data.defaultState.id, data.defaultState.properties);
 
-            BlockContainer block = new BlockContainer(prismarine.id, data.name, prismarine.hardness, burger.resistance, defaultState, states);
+            BlockContainer block = new BlockContainer(prismarine.id, data.name, prismarine.hardness, burger.resistance, burger.blockEntity == null ? null : NamespaceID.from(burger.blockEntity.name), defaultState, states);
             if(!"empty".equals(prismarine.boundingBox)) {
                 block.setSolid();
             }
             if(data.name.equals(NamespaceID.from("minecraft:water")) || data.name.equals(NamespaceID.from("minecraft:lava"))) {
                 block.setLiquid();
+            }
+            if(data.name.equals(NamespaceID.from("minecraft:air"))) {
+                block.setAir();
             }
 
             blocks.add(block);
@@ -148,12 +209,26 @@ public class BlockEnumGenerator {
     private static List<BurgerBlock> parseBlocksFromBurger(Gson gson, String url) throws IOException {
         try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             LOGGER.debug("\tConnection established, reading file");
-            JsonObject obj = gson.fromJson(bufferedReader, JsonArray.class).get(0).getAsJsonObject().getAsJsonObject("blocks").getAsJsonObject("block");
+            JsonObject dictionary = gson.fromJson(bufferedReader, JsonArray.class).get(0).getAsJsonObject();
+            JsonObject tileEntityMap = dictionary.getAsJsonObject("tileentity").getAsJsonObject("tileentities");
+
+            Map<String, BurgerTileEntity> block2entityMap = new HashMap<>();
+            for(var entry : tileEntityMap.entrySet()) {
+                BurgerTileEntity te = gson.fromJson(entry.getValue(), BurgerTileEntity.class);
+                if(te.blocks != null) {
+                    for(String block : te.blocks) {
+                        block2entityMap.put(block, te);
+                    }
+                }
+            }
+
+            JsonObject blockMap = dictionary.getAsJsonObject("blocks").getAsJsonObject("block");
 
             LOGGER.debug("\tExtracting blocks");
             List<BurgerBlock> blocks = new LinkedList<>();
-            for(var entry : obj.entrySet()) {
+            for(var entry : blockMap.entrySet()) {
                 BurgerBlock block = gson.fromJson(entry.getValue(), BurgerBlock.class);
+                block.blockEntity = block2entityMap.get(block.text_id);
                 blocks.add(block);
             }
 

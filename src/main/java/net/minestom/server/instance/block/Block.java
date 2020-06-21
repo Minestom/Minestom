@@ -713,14 +713,14 @@ public enum Block {
 
     public void addBlockAlternative(BlockAlternative blockAlternative) {
         this.blockAlternatives.add(blockAlternative);
-        blocksMap.put(blockAlternative.id, this);
-        blocksAlternativesMap.put(blockAlternative.id, blockAlternative);
+        blocksMap.put(blockAlternative.getId(), this);
+        blocksAlternativesMap.put(blockAlternative.getId(), blockAlternative);
     }
 
     public short withProperties(String... properties) {
         for (BlockAlternative blockAlternative : blockAlternatives) {
-            if (Arrays.equals(blockAlternative.properties, properties)) {
-                return blockAlternative.id;
+            if (Arrays.equals(blockAlternative.getProperties(), properties)) {
+                return blockAlternative.getId();
             }
         }
         // No id found, return default
@@ -1568,30 +1568,4 @@ public enum Block {
         return Collections.unmodifiableList(blockAlternatives);
     }
 
-    public static class BlockAlternative {
-
-        private short id;
-        private String[] properties;
-
-        public BlockAlternative(short id, String... properties) {
-            this.id = id;
-            this.properties = properties;
-        }
-
-        public short getId() {
-            return id;
-        }
-
-        public String[] getProperties() {
-            return properties;
-        }
-
-        @Override
-        public String toString() {
-            return "BlockAlternative{" +
-                    "id=" + id +
-                    ", properties=" + Arrays.toString(properties) +
-                    '}';
-        }
-    }
 }

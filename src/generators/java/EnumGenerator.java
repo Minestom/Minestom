@@ -12,7 +12,11 @@ public class EnumGenerator {
     private String[] parameters;
     private List<Method> methods = new LinkedList<>();
     private List<Instance> instances = new LinkedList<>();
+    private List<String> imports = new LinkedList<>();
+    private List<Field> hardcodedFields = new LinkedList<>();
     private String enumPackage;
+    private String staticBlock;
+    private StringBuilder constructorEnd = new StringBuilder();
 
     public EnumGenerator(String packageName, String enumName) {
         this.enumPackage = packageName;
@@ -24,8 +28,12 @@ public class EnumGenerator {
         this.parameters = parameters;
     }
 
-    public void addMethod(String name, String returnType, String... lines) {
-        methods.add(new Method(name, returnType, lines));
+    public void addMethod(String name, String signature, String returnType, String... lines) {
+        methods.add(new Method(true, name, signature, returnType, lines));
+    }
+
+    public void addPrivateMethod(String name, String signature, String returnType, String... lines) {
+        methods.add(new Method(false, name, signature, returnType, lines));
     }
 
     public void addInstance(String name, Object... parameters) {
@@ -36,6 +44,9 @@ public class EnumGenerator {
         StringBuilder builder = new StringBuilder();
         builder.append(COMMENT);
         builder.append("\npackage ").append(enumPackage).append(";\n");
+        for(String imp : imports) {
+            builder.append("import ").append(imp).append(";\n");
+        }
         builder.append("\npublic enum ").append(enumName).append(" {\n");
 
         // generate instances
@@ -54,6 +65,11 @@ public class EnumGenerator {
         }
         builder.append(";\n");
 
+        if(staticBlock != null) {
+            builder.append("\n\tstatic {\n");
+            builder.append(staticBlock);
+            builder.append("\t}\n\n");
+        }
 
         // generate properties & constructor
         if(parameters.length != 0) {
@@ -63,6 +79,12 @@ public class EnumGenerator {
                 builder.append("private ").append(property).append(";\n");
             }
             builder.append("\n");
+
+            // hard coded fields
+            for(Field hardcoded : hardcodedFields) {
+                builder.append("\t").append(hardcoded.type).append(" ").append(hardcoded.name).append(" = ").append(hardcoded.value).append(";");
+                builder.append("\n");
+            }
 
             // constructor
             builder.append("\t");
@@ -84,14 +106,21 @@ public class EnumGenerator {
                 builder.append("this.").append(name).append(" = ").append(name).append(";\n");
             }
 
+            builder.append(constructorEnd);
+
             builder.append("\t}\n");
         }
 
         // generate methods
         for(Method m : methods) {
             builder.append("\n");
-            builder.append("\tpublic ");
-            builder.append(m.returnType).append(" ").append(m.name).append("() {\n");
+            builder.append("\t");
+            if(m.isPublic) {
+                builder.append("public ");
+            } else {
+                builder.append("private ");
+            }
+            builder.append(m.returnType).append(" ").append(m.name).append(m.signature).append(" {\n");
 
             for(String line : m.lines) {
                 builder.append("\t\t").append(line).append("\n");
@@ -108,15 +137,49 @@ public class EnumGenerator {
         this.enumPackage = enumPackage;
     }
 
+    public void addImport(String canonicalName) {
+        imports.add(canonicalName);
+    }
+
+    public void setStaticInitBlock(String staticBlock) {
+        this.staticBlock = staticBlock;
+    }
+
+    public void appendToConstructor(String... lines) {
+        for(String line : lines) {
+            constructorEnd.append("\t\t").append(line).append("\n");
+        }
+    }
+
+    public void addHardcodedField(String type, String name, String value) {
+        hardcodedFields.add(new Field(type, name, value));
+    }
+
     private class Method {
+        private final boolean isPublic;
         private String name;
+        private String signature;
         private String returnType;
         private String[] lines;
 
-        private Method(String name, String returnType, String[] lines) {
+        private Method(boolean isPublic, String name, String signature, String returnType, String[] lines) {
+            this.isPublic = isPublic;
             this.name = name;
+            this.signature = signature;
             this.returnType = returnType;
             this.lines = lines;
+        }
+    }
+
+    private class Field {
+        private String type;
+        private String name;
+        private String value;
+
+        public Field(String type, String name, String value) {
+            this.type = type;
+            this.name = name;
+            this.value = value;
         }
     }
 

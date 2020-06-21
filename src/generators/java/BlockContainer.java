@@ -19,13 +19,14 @@ public class BlockContainer implements Comparable<BlockContainer> {
     private boolean isFlower;
     private boolean isFlowerPot;
     private boolean isCoral;
-    private boolean hasBlockEntity;
+    private NamespaceID blockEntity;
 
-    public BlockContainer(int ordinal, NamespaceID id, double hardness, double resistance, BlockState defaultState, List<BlockState> states) {
+    public BlockContainer(int ordinal, NamespaceID id, double hardness, double resistance, NamespaceID blockEntity, BlockState defaultState, List<BlockState> states) {
         this.ordinal = ordinal;
         this.id = id;
         this.hardness = hardness;
         this.resistance = resistance;
+        this.blockEntity = blockEntity;
         this.defaultState = defaultState;
         this.states = states;
     }
@@ -50,18 +51,6 @@ public class BlockContainer implements Comparable<BlockContainer> {
         return isAir;
     }
 
-    public boolean isCoral() {
-        return isCoral;
-    }
-
-    public boolean isFlowerPot() {
-        return isFlowerPot;
-    }
-
-    public boolean isFlower() {
-        return isFlower;
-    }
-
     public boolean isLiquid() {
         return isLiquid;
     }
@@ -82,28 +71,8 @@ public class BlockContainer implements Comparable<BlockContainer> {
         return resistance;
     }
 
-    public boolean hasBlockEntity() {
-        return hasBlockEntity;
-    }
-
-    public BlockContainer setHasBlockEntity() {
-        hasBlockEntity = true;
-        return this;
-    }
-
-    public BlockContainer setCoral() {
-        isCoral = true;
-        return this;
-    }
-
-    public BlockContainer setFlowerPot() {
-        isFlowerPot = true;
-        return this;
-    }
-
-    public BlockContainer setFlower() {
-        isFlower = true;
-        return this;
+    public NamespaceID getBlockEntityName() {
+        return blockEntity;
     }
 
     public BlockContainer setLiquid() {
@@ -118,6 +87,11 @@ public class BlockContainer implements Comparable<BlockContainer> {
 
     public BlockContainer setSolid() {
         isSolid = true;
+        return this;
+    }
+
+    public BlockContainer setAir() {
+        isAir = true;
         return this;
     }
 
@@ -136,7 +110,7 @@ public class BlockContainer implements Comparable<BlockContainer> {
                 ", isFlower=" + isFlower +
                 ", isFlowerPot=" + isFlowerPot +
                 ", isCoral=" + isCoral +
-                ", hasBlockEntity=" + hasBlockEntity +
+                ", blockEntity=" + blockEntity +
                 '}';
     }
 

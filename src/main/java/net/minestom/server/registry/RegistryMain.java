@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
@@ -59,7 +60,7 @@ public class RegistryMain {
             for (RegistryBlock.BlockState blockState : registryBlock.states) {
                 short id = blockState.id;
                 String[] properties = blockState.propertiesValues.toArray(new String[0]);
-                Block.BlockAlternative blockAlternative = new Block.BlockAlternative(id, properties);
+                BlockAlternative blockAlternative = new BlockAlternative(id, properties);
 
                 block.addBlockAlternative(blockAlternative);
             }
