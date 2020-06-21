@@ -540,6 +540,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Change the internal entity UUID, mostly unsafe
+     *
+     * @param uuid the new entity uuid
+     */
+    protected void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
      * Return false just after instantiation, set to true after calling {@link #setInstance(Instance)}
      *
      * @return true if the entity has been linked to an instance, false otherwise

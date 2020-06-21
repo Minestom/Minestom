@@ -167,12 +167,6 @@ public class Player extends LivingEntity implements CommandSender {
      * Init the player and spawn him
      */
     protected void init() {
-
-        // Init player (register events)
-        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
-            playerInitialization.accept(this);
-        }
-
         // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
@@ -950,6 +944,16 @@ public class Player extends LivingEntity implements CommandSender {
         return username;
     }
 
+    /**
+     * Change the internal player name, used for the {@link PlayerPreLoginEvent}
+     * mostly unsafe outside of it
+     *
+     * @param username the new player name
+     */
+    protected void setUsername(String username) {
+        this.username = username;
+    }
+
     private void sendChangeGameStatePacket(ChangeGameStatePacket.Reason reason, float value) {
         ChangeGameStatePacket changeGameStatePacket = new ChangeGameStatePacket();
         changeGameStatePacket.reason = reason;
@@ -1289,6 +1293,7 @@ public class Player extends LivingEntity implements CommandSender {
         disconnectPacket.message = Chat.toJsonString(textComponent);
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.disconnect();
+        playerConnection.refreshOnline(false);
     }
 
     /**
