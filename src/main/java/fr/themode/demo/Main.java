@@ -9,6 +9,7 @@ import fr.themode.demo.commands.HealthCommand;
 import fr.themode.demo.commands.SimpleCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -62,6 +63,8 @@ public class Main {
         });
 
         PlayerInit.init();
+
+        //MojangAuth.init();
 
         minecraftServer.start("localhost", 55555, PlayerInit.getResponseDataConsumer());
     }

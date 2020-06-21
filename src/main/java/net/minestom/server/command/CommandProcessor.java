@@ -8,7 +8,7 @@ public interface CommandProcessor {
 
     String[] getAliases();
 
-    boolean process(Player player, String command, String[] args);
+    boolean process(CommandSender sender, String command, String[] args);
 
     boolean hasAccess(Player player);
 }

@@ -49,8 +49,10 @@ dependencies {
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'
     api 'com.mojang:authlib:1.5.21'
-    api 'net.sf.jopt-simple:jopt-simple:5.0.4'
     api 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // Pathfinding
+    implementation 'com.github.MadMartian:hydrazine-path-finding:1.02'
 
 }
