@@ -1,10 +1,16 @@
 package net.minestom.server;
 
+import com.mojang.authlib.AuthenticationService;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import lombok.Getter;
+import lombok.Setter;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
+import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -26,8 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.Proxy;
+import java.security.KeyPair;
 
 public class MinecraftServer {
+    @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     public static final int PROTOCOL_VERSION = 578;
@@ -66,6 +75,11 @@ public class MinecraftServer {
     public static final int TICK_MS = MS_TO_SEC / 20;
     public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
 
+    //Extras
+    @Getter
+    @Setter
+    private static boolean fixLighting = true;
+
     // Networking
     private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
@@ -91,6 +105,14 @@ public class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static LootTableManager lootTableManager;
+
+    //Mojang Auth
+    @Getter
+    private static KeyPair keyPair = MojangCrypt.generateKeyPair();
+    @Getter
+    private static AuthenticationService authService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
+    @Getter
+    private static MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
         connectionManager = new ConnectionManager();

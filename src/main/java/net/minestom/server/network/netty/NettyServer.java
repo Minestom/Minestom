@@ -39,8 +39,8 @@ public class NettyServer {
 
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 protected void initChannel(SocketChannel socketChannel) {
-                    socketChannel.pipeline().addLast(new NettyDecoder());
-                    socketChannel.pipeline().addLast(new ClientChannel(packetProcessor));
+                    socketChannel.pipeline().addLast("decoder", new NettyDecoder());
+                    socketChannel.pipeline().addLast("encoder", new ClientChannel(packetProcessor));
                 }
             });
             ChannelFuture channelFuture = serverBootstrap.bind().sync();

@@ -1,9 +1,11 @@
 package net.minestom.server.network.packet.client.login;
 
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
+import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.PlayerConnection;
 
@@ -15,15 +17,21 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
-        // TODO send encryption request OR directly login success
+        if (MojangAuth.isUsingMojangAuth()) {
+            connection.setConnectionState(ConnectionState.LOGIN);
 
-        UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection);
+            connection.setLoginUsername(username);
+            EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(connection);
+            connection.sendPacket(encryptionRequestPacket);
+        } else {
+            UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection);
 
-        LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
-        connection.sendPacket(successPacket);
+            LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
+            connection.sendPacket(successPacket);
 
-        connection.setConnectionState(ConnectionState.PLAY);
-        connectionManager.createPlayer(playerUuid, username, connection);
+            connection.setConnectionState(ConnectionState.PLAY);
+            connectionManager.createPlayer(playerUuid, username, connection);
+        }
     }
 
     @Override

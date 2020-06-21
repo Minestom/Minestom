@@ -12,9 +12,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.PacketWriterUtils;
-import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.network.packet.server.play.ParticlePacket;
-import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageFolder;
@@ -447,6 +445,29 @@ public class InstanceContainer extends Instance {
             });
         } else {
             sendChunkUpdate(player, chunk);
+        }
+
+        if (MinecraftServer.isFixLighting()) {
+            UpdateLightPacket updateLightPacket = new UpdateLightPacket();
+            updateLightPacket.chunkX = chunk.getChunkX();
+            updateLightPacket.chunkZ = chunk.getChunkZ();
+            updateLightPacket.skyLightMask = 0x3FFF0;
+            updateLightPacket.blockLightMask = 0x3F;
+            updateLightPacket.emptySkyLightMask = 0x0F;
+            updateLightPacket.emptyBlockLightMask = 0x3FFC0;
+            byte[] bytes = new byte[2048];
+            Arrays.fill(bytes, (byte) 0xFF);
+            List<byte[]> temp = new ArrayList<>();
+            List<byte[]> temp2 = new ArrayList<>();
+            for (int i = 0; i < 14; ++i) {
+                temp.add(bytes);
+            }
+            for (int i = 0; i < 6; ++i) {
+                temp2.add(bytes);
+            }
+            updateLightPacket.skyLight = temp;
+            updateLightPacket.blockLight = temp2;
+            PacketWriterUtils.writeAndSend(player, updateLightPacket);
         }
     }
 

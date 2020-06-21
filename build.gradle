@@ -11,6 +11,7 @@ sourceCompatibility = 1.11
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
+    maven { url 'https://libraries.minecraft.net' }
 }
 
 
@@ -47,5 +48,9 @@ dependencies {
     api 'net.kyori:text-serializer-legacy:3.0.3'
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'
+    api 'com.mojang:authlib:1.5.21'
+    api 'net.sf.jopt-simple:jopt-simple:5.0.4'
+    api 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
 }

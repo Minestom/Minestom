@@ -1,6 +1,8 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
+import lombok.Getter;
+import lombok.Setter;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -14,6 +16,10 @@ import java.net.SocketAddress;
 public abstract class PlayerConnection {
 
     private Player player;
+    //Could be null. Only used for Mojang Auth
+    @Getter @Setter private String loginUsername;
+    //Could be null. Only used for Mojang Auth
+    @Getter @Setter private byte[] nonce = new byte[4];
     private ConnectionState connectionState;
     private boolean online;
 

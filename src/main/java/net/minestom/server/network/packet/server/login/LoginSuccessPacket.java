@@ -17,7 +17,7 @@ public class LoginSuccessPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeSizedString(uuid.toString()); // TODO mojang auth
+        writer.writeSizedString(uuid.toString());
         writer.writeSizedString(username);
     }
 

@@ -4,6 +4,8 @@ import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
+import java.util.List;
+
 public class UpdateLightPacket implements ServerPacket {
 
     public int chunkX;
@@ -15,8 +17,8 @@ public class UpdateLightPacket implements ServerPacket {
     public int emptySkyLightMask;
     public int emptyBlockLightMask;
 
-    public byte[] skyLight;
-    public byte[] blockLight;
+    public List<byte[]> skyLight;
+    public List<byte[]> blockLight;
 
     @Override
     public void write(PacketWriter writer) {
@@ -29,10 +31,17 @@ public class UpdateLightPacket implements ServerPacket {
         writer.writeVarInt(emptySkyLightMask);
         writer.writeVarInt(emptyBlockLightMask);
 
-        writer.writeVarInt(2048); // Always 2048 length
-        writer.writeBytes(skyLight);
-        writer.writeVarInt(2048); // Always 2048 length
-        writer.writeBytes(blockLight);
+        //writer.writeVarInt(skyLight.size());
+        for (byte[] bytes : skyLight) {
+            writer.writeVarInt(2048); // Always 2048 length
+            writer.writeBytes(bytes);
+        }
+
+        //writer.writeVarInt(blockLight.size());
+        for (byte[] bytes : blockLight) {
+            writer.writeVarInt(2048); // Always 2048 length
+            writer.writeBytes(bytes);
+        }
     }
 
     @Override
