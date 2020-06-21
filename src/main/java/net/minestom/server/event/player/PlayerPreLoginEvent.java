@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  * Called before the player initialization, it can be used to kick the player before any connection
- * or to change its final username/uuid
+ * or to change his final username/uuid
  */
 public class PlayerPreLoginEvent extends Event {
 
