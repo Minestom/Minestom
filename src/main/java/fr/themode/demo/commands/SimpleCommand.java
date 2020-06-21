@@ -1,15 +1,10 @@
 package fr.themode.demo.commands;
 
-import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.model.PathObject;
-import com.extollit.linalg.immutable.Vec3i;
 import fr.themode.demo.entity.ChickenCreature;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-
-import java.util.Iterator;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -25,7 +20,7 @@ public class SimpleCommand implements CommandProcessor {
     @Override
     public boolean process(CommandSender sender, String command, String[] args) {
 
-        if (!(sender instanceof Player))
+        if (!sender.isPlayer())
             return false;
         Player player = (Player) sender;
 

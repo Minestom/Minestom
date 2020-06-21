@@ -23,7 +23,7 @@ public class DimensionCommand implements CommandProcessor {
     @Override
     public boolean process(CommandSender sender, String command, String[] args) {
 
-        if (!(sender instanceof Player))
+        if (!sender.isPlayer())
             return false;
         Player player = (Player) sender;
 
