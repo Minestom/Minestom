@@ -7,8 +7,6 @@ import fr.themode.demo.entity.ChickenCreature;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.pathfinding.hydrazine.PFInstanceSpace;
-import net.minestom.server.entity.pathfinding.hydrazine.PFPathingEntity;
 import net.minestom.server.instance.Instance;
 
 import java.util.Iterator;
@@ -61,7 +59,7 @@ public class SimpleCommand implements CommandProcessor {
 
         ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
         chickenCreature.setInstance(instance);
-
+/*
         PFPathingEntity pathingEntity = new PFPathingEntity(chickenCreature);
         PFInstanceSpace instanceSpace = new PFInstanceSpace(instance);
 
@@ -75,7 +73,7 @@ public class SimpleCommand implements CommandProcessor {
             System.out.println("test: " + ite);
 
         }
-
+*/
         return true;
     }
 
