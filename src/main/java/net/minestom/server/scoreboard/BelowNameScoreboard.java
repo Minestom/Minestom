@@ -1,7 +1,7 @@
 package net.minestom.server.scoreboard;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -35,7 +35,7 @@ public class BelowNameScoreboard implements Viewable {
         scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 0;
-        scoreboardObjectivePacket.objectiveValue = Chat.fromLegacyText(objectiveName);
+        scoreboardObjectivePacket.objectiveValue = ColoredText.of(objectiveName);
         scoreboardObjectivePacket.type = 0;
 
         displayScoreboardPacket = new DisplayScoreboardPacket();

@@ -1,9 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.text.Component;
 import net.minestom.server.bossbar.BarColor;
 import net.minestom.server.bossbar.BarDivision;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -15,7 +14,7 @@ public class BossBarPacket implements ServerPacket {
     public UUID uuid;
     public Action action;
 
-    public Component title;
+    public ColoredText title;
     public float health;
     public BarColor color;
     public BarDivision division;
@@ -29,7 +28,7 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(Chat.toJsonString(title));
+                writer.writeSizedString(title.toString());
                 writer.writeFloat(health);
                 writer.writeVarInt(color.ordinal());
                 writer.writeVarInt(division.ordinal());
@@ -42,7 +41,7 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(Chat.toJsonString(title));
+                writer.writeSizedString(title.toString());
                 break;
             case UPDATE_STYLE:
                 writer.writeVarInt(color.ordinal());

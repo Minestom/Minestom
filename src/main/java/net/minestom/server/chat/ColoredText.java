@@ -1,0 +1,180 @@
+package net.minestom.server.chat;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ColoredText {
+
+    private String message;
+
+    private ColoredText(String message) {
+        this.message = message;
+    }
+
+    public static ColoredText of(ChatColor color, String message) {
+        return new ColoredText(color + message);
+    }
+
+    public static ColoredText of(String message) {
+        return of(ChatColor.WHITE, message);
+    }
+
+    public static ColoredText ofFormat(String message) {
+        return new ColoredText(message);
+    }
+
+    public ColoredText append(ChatColor color, String message) {
+        this.message += color + message;
+        return this;
+    }
+
+    public ColoredText append(String message) {
+        return append(ChatColor.NO_COLOR, message);
+    }
+
+    public ColoredText appendFormat(String message) {
+        this.message += message;
+        return this;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public String toString() {
+        return getJsonObject().toString();
+    }
+
+    protected JsonObject getJsonObject() {
+        List<JsonObject> components = getComponents();
+
+        // No message, return empty object
+        if (components.isEmpty()) {
+            return new JsonObject();
+        }
+
+        // Get the first element and remove it
+        JsonObject mainObject = components.remove(0);
+
+        // Append all the components
+        if (!components.isEmpty()) {
+            JsonArray extraArray = new JsonArray();
+            for (JsonObject component : components) {
+                extraArray.add(component);
+            }
+            mainObject.add("extra", extraArray);
+        }
+
+
+        return mainObject;
+    }
+
+    /**
+     * Get the list of objects composing the message
+     *
+     * @return the list of objects composing the message
+     */
+    protected List<JsonObject> getComponents() {
+        final List<JsonObject> objects = new ArrayList<>();
+        // No message, return empty list
+        if (message.isEmpty())
+            return objects;
+
+        boolean inFormat = false;
+        int formatStart = 0;
+        int formatEnd = 0;
+
+        String currentColor = "";
+
+        for (int i = 0; i < message.length(); i++) {
+            // Last char or null
+            Character p = i == 0 ? null : message.charAt(i - 1);
+            // Current char
+            char c = message.charAt(i);
+            if ((p == null || (p != '/')) && c == '{' && !inFormat) {
+
+                formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
+                String rawMessage = message.substring(formatEnd, i);
+                if (!rawMessage.isEmpty()) {
+                    objects.add(getMessagePart(MessageType.RAW, rawMessage, currentColor));
+                }
+
+                inFormat = true;
+                formatStart = i;
+                continue;
+            } else if ((p == null || (p != '/')) && c == '}' && inFormat) {
+                // Represent the custom format between the brackets
+                String formatString = message.substring(formatStart + 1, i);
+                if (formatString.isEmpty())
+                    continue;
+
+                inFormat = false;
+                formatStart = 0;
+                formatEnd = i;
+
+                // Color component
+                if (formatString.startsWith("#")) {
+                    // Remove the first # character to get code
+                    String colorCode = formatString.substring(1);
+                    ChatColor color = ChatColor.fromName(colorCode);
+                    if (color == ChatColor.NO_COLOR) {
+                        // Use rgb formatting
+                        currentColor = colorCode;
+                    } else {
+                        // Use color name formatiing
+                        currentColor = color.getName();
+                    }
+                    continue;
+                }
+                // Translatable component
+                if (formatString.startsWith("@")) {
+                    String translatableCode = formatString.substring(1);
+                    objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor));
+                    continue;
+                }
+                // Keybind component
+                if (formatString.startsWith("&")) {
+                    String keybindCode = formatString.substring(1);
+                    objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor));
+                    continue;
+                }
+            }
+        }
+
+        // Add the remaining of the message as a raw message when any
+        if (formatEnd < message.length()) {
+            String lastRawMessage = message.substring(formatEnd + 1);
+            objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor));
+        }
+
+        return objects;
+    }
+
+    private JsonObject getMessagePart(MessageType messageType, String message, String color) {
+        JsonObject object = new JsonObject();
+        switch (messageType) {
+            case RAW:
+                object.addProperty("text", message);
+                break;
+            case KEYBIND:
+                object.addProperty("keybind", message);
+                break;
+            case TRANSLATABLE:
+                object.addProperty("translate", message);
+                break;
+        }
+        if (!color.isEmpty()) {
+            object.addProperty("color", color);
+        }
+        return object;
+    }
+
+    private enum MessageType {
+        RAW, KEYBIND, TRANSLATABLE
+    }
+
+}

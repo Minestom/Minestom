@@ -1,14 +1,15 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
+import net.minestom.server.chat.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.type.EntityZombie;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -39,19 +40,13 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerInit {
-
-    private static String textures = "ewogICJ0aW1lc3RhbXAiIDogMTU5MDg1NTI3NjIwNCwKICAicHJvZmlsZUlkIiA6ICI0NTY2ZTY5ZmM5MDc0OGVlOGQ3MWQ3YmE1YWEwMGQyMCIsCiAgInByb2ZpbGVOYW1lIiA6ICJUaGlua29mZGVhdGgiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzRkMWUwOGIwYmI3ZTlmNTkwYWYyNzc1ODEyNWJiZWQxNzc4YWM2Y2VmNzI5YWVkZmNiOTYxM2U5OTExYWU3NSIKICAgIH0sCiAgICAiQ0FQRSIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBjYzA4ODQwNzAwNDQ3MzIyZDk1M2EwMmI5NjVmMWQ2NWExM2E2MDNiZjY0YjE3YzgwM2MyMTQ0NmZlMTYzNSIKICAgIH0KICB9Cn0=";
-    private static String signature = "rCVVwVpLF9ovy+Hm4cOXOLSPOMjNo5WoBfHo9K2OcTUPqcZJ1P/1k4lAnQkChD/Ri11iJ84PejWJzDkHMXM8196Wh+jf12d2GJVhca9/SRLms0cFJjdZZjs72+82AdX0OtO3+qzwKRHzHoEYb+ZVZLfgx37ZKKo4DD3IKmaSnwEjOVJ4BOhnsXLmcNW37kdZUmv2/hlg7ZuWZaayWPhadCYEMnkpVtDIpnpzAeV9EcRfg/ysQoynO2v6WEW0RtnfFEczMN6vXtfiuC8UqyA2SK9aiLnBgpGaehDfFIq/0dpo2uFilVDS/Il6uQ1JSwq7yNT5lNF+i1AlH9SGf1VVy5mT9ShmkVmRxCXX5cSNLXZD0acsNNJb/GAuDHuXpE32GsfgKxWAXMHLw0GnbADbFDfdl5nQyQTDS7FRfUjsFpF8a8Z83muFXaty2WLFy1zxy2JEkI/q+ltLaEG6mQbWI2zhOS7ARvK0OmPz4lDYVInfrwL93AIdMUg2Re817hsapkN6Dm1ND+iirvayR90gqQ9C9J0dMMBlSyTSoKBQeLsi8qETS+7LuhvletPTDFolnTIvP8hj2bWLmQ7LfXJ2arJCUw86YEavVYuF0gYrBuKcEYTC4DA0kO4yLj63gwEgOj9dEigCgyqUcenzmZBffSZ365/QF0cGrG7HC7HmF0w=";
-
-    private static PlayerSkin skin = new PlayerSkin(textures, signature);
-
     private static volatile InstanceContainer instanceContainer;
     private static volatile InstanceContainer netherTest;
 
     private static volatile Inventory inventory;
 
     static {
-        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("chunk_data");
+        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data");
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
@@ -96,23 +91,26 @@ public class PlayerInit {
                 for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
                     String name = resultEntry.getKey();
                     ThreadResult result = resultEntry.getValue();
-                    benchmarkMessage += "&7" + name;
+                    benchmarkMessage += ChatColor.GRAY + name;
                     benchmarkMessage += ": ";
-                    benchmarkMessage += "&e" + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
-                    benchmarkMessage += "&c" + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
-                    benchmarkMessage += "&d" + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
-                    benchmarkMessage += "&a" + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
+                    benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
+                    benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
+                    benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+                    benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
                     benchmarkMessage += "\n";
                 }
 
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    player.sendHeaderFooter("RAM USAGE: " + ramUsage + " MB", benchmarkMessage, '&');
+                    ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
+                    ColoredText footer = ColoredText.of(benchmarkMessage);
+                    player.sendHeaderFooter(header, footer);
                 }
             }
         }, new UpdateOption(10, TimeUnit.TICK));
 
         connectionManager.addPacketConsumer((player, packetController, packet) -> {
             // Listen to all received packet
+            //System.out.println("PACKET: "+packet.getClass().getSimpleName());
             packetController.setCancel(false);
         });
 
@@ -153,9 +151,13 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                /*ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
-                chickenCreature.setAttribute(Attribute.MOVEMENT_SPEED, 0.4f);
+                chickenCreature.setAttribute(Attribute.MOVEMENT_SPEED, 0.4f);*/
+
+                EntityZombie zombie = new EntityZombie(player.getPosition());
+                zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
+                zombie.setInstance(player.getInstance());
 
                 /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
                 fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
@@ -198,7 +200,12 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerLoginEvent.class, event -> {
+                //final String url = "https://download.mc-packs.net/pack/a83a04f5d78061e0890e13519fea925550461c74.zip";
+                //final String hash = "a83a04f5d78061e0890e13519fea925550461c74";
+                //player.setResourcePack(new ResourcePack(url, hash));
+
                 event.setSpawningInstance(instanceContainer);
+                player.setEnableRespawnScreen(false);
 
                 player.setPermissionLevel(4);
 
@@ -217,10 +224,6 @@ public class PlayerInit {
                 scoreboard.setTitle("test");*/
             });
 
-            player.addEventCallback(PlayerSkinInitEvent.class, event -> {
-                event.setSkin(skin);
-            });
-
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 41f, 0));
@@ -228,16 +231,18 @@ public class PlayerInit {
                 player.setGlowing(true);
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
-                item.setDisplayName("Item name");
-                item.getLore().add("a lore line");
+                item.setDisplayName(ColoredText.of(ChatColor.BLUE + "Item name"));
+                item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line"));
                 item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
 
-                inventory.addItemStack(item.clone());
-                player.openInventory(inventory);
+                //player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
 
-                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
+                inventory.addItemStack(item.clone());
+                //player.openInventory(inventory);
+
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
 
                 Instance instance = player.getInstance();
                 WorldBorder worldBorder = instance.getWorldBorder();
@@ -263,6 +268,23 @@ public class PlayerInit {
             BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
+
+                ColoredText coloredText1 = ColoredText.of(ChatColor.BLUE, "I am colored")
+                        .append(ChatColor.BLUE, "I am the next")
+                        .appendFormat("I am {#blue}here");
+
+                ColoredText coloredText2 =
+                        ColoredText.ofFormat(
+                                "I am {#green}colo{#red}red {#white}{&key.jump} keybind, {@attack.fall} translatable");
+
+
+                RichMessage richMessage1 = RichMessage.of(coloredText1)
+                        .setClickEvent(ChatClickEvent.runCommand("/test"))
+                        .setHoverEvent(ChatHoverEvent.showText("I'm a text"))
+                        .append(coloredText2)
+                        .setHoverEvent(ChatHoverEvent.showText("I'm a second text"));
+
+                player.sendMessage(richMessage1);
 
             });
 

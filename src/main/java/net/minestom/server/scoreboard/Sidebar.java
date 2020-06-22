@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -53,7 +54,7 @@ public class Sidebar implements Viewable {
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = Chat.fromLegacyText(title);
+        scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
         scoreboardObjectivePacket.type = 0;
 
         sendPacketToViewers(scoreboardObjectivePacket);
@@ -82,7 +83,7 @@ public class Sidebar implements Viewable {
         }
     }
 
-    public void updateLineContent(String id, String content) {
+    public void updateLineContent(String id, ColoredText content) {
         ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
@@ -131,7 +132,7 @@ public class Sidebar implements Viewable {
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 0; // Create scoreboard
-        scoreboardObjectivePacket.objectiveValue = Chat.fromLegacyText(title);
+        scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
         scoreboardObjectivePacket.type = 0; // Type integer
 
         DisplayScoreboardPacket displayScoreboardPacket = new DisplayScoreboardPacket();
@@ -172,7 +173,7 @@ public class Sidebar implements Viewable {
     public static class ScoreboardLine {
 
         private String id; // ID used to modify the line later
-        private String content;
+        private ColoredText content;
         private int line;
 
         private String teamName;
@@ -180,7 +181,7 @@ public class Sidebar implements Viewable {
         private String entityName;
         private SidebarTeam sidebarTeam;
 
-        public ScoreboardLine(String id, String content, int line) {
+        public ScoreboardLine(String id, ColoredText content, int line) {
             this.id = id;
             this.content = content;
             this.line = line;
@@ -192,7 +193,7 @@ public class Sidebar implements Viewable {
             return id;
         }
 
-        public String getContent() {
+        public ColoredText getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
@@ -209,7 +210,7 @@ public class Sidebar implements Viewable {
         private void createTeam() {
             this.entityName = Chat.COLOR_CHAR + Integer.toHexString(colorName);
 
-            this.sidebarTeam = new SidebarTeam(teamName, content, "", entityName);
+            this.sidebarTeam = new SidebarTeam(teamName, content, ColoredText.of(""), entityName);
         }
 
         private void returnName(LinkedList<Integer> colors) {
@@ -241,7 +242,7 @@ public class Sidebar implements Viewable {
             return updateScorePacket;
         }
 
-        private void refreshContent(String content) {
+        private void refreshContent(ColoredText content) {
             this.sidebarTeam.refreshPrefix(content);
         }
 

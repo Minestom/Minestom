@@ -43,7 +43,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
     api group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
 
-    api 'net.kyori:text-api:3.0.3'
     api 'net.kyori:text-serializer-legacy:3.0.3'
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'

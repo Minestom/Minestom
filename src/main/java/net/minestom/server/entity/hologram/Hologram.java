@@ -1,5 +1,6 @@
 package net.minestom.server.entity.hologram;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.type.EntityArmorStand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
@@ -12,11 +13,11 @@ public class Hologram {
     private HologramEntity entity;
 
     private Position position;
-    private String text;
+    private ColoredText text;
 
     private boolean removed;
 
-    public Hologram(Instance instance, Position spawnPosition, String text, boolean autoViewable) {
+    public Hologram(Instance instance, Position spawnPosition, ColoredText text, boolean autoViewable) {
         this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
         this.entity.setInstance(instance);
         this.entity.setAutoViewable(autoViewable);
@@ -25,7 +26,7 @@ public class Hologram {
         setText(text);
     }
 
-    public Hologram(Instance instance, Position spawnPosition, String text) {
+    public Hologram(Instance instance, Position spawnPosition, ColoredText text) {
         this(instance, spawnPosition, text, true);
     }
 
@@ -40,11 +41,11 @@ public class Hologram {
         this.entity.teleport(position);
     }
 
-    public String getText() {
+    public ColoredText getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(ColoredText text) {
         checkRemoved();
         this.text = text;
         this.entity.setCustomName(text);
@@ -70,7 +71,7 @@ public class Hologram {
             setSmall(true);
 
             setNoGravity(true);
-            setCustomName("");
+            setCustomName(ColoredText.of(""));
             setCustomNameVisible(true);
             setInvisible(true);
         }

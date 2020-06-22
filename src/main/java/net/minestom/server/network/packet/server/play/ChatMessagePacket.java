@@ -26,7 +26,6 @@ public class ChatMessagePacket implements ServerPacket {
     }
 
     public enum Position {
-
         CHAT,
         SYSTEM_MESSAGE,
         GAME_INFO
