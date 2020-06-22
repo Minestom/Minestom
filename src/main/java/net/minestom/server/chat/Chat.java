@@ -6,6 +6,8 @@ import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
 
 public class Chat {
 
+    public static final char COLOR_CHAR = (char) 0xA7; // Represent the character '§'
+
     public static Component fromJsonString(String json) {
         return GsonComponentSerializer.INSTANCE.deserialize(json);
     }
