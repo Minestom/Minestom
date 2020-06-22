@@ -2,6 +2,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -76,13 +78,17 @@ public class BlockEnumGenerator {
         String folder = packageName.replace(".", "/");
         String className = "TmpBlock";
         EnumGenerator blockGenerator = new EnumGenerator(packageName, className);
+        blockGenerator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
         blockGenerator.addImport(NamespaceID.class.getCanonicalName());
         blockGenerator.addImport(BlockAlternative.class.getCanonicalName());
         blockGenerator.addImport(List.class.getCanonicalName());
         blockGenerator.addImport(ArrayList.class.getCanonicalName());
         blockGenerator.addImport(Arrays.class.getCanonicalName());
+        blockGenerator.addImport(Short2ObjectOpenHashMap.class.getCanonicalName());
+        blockGenerator.addImport(blockGenerator.getPackage()+".states.*");
         blockGenerator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
-        blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity");
+        blockGenerator.addHardcodedField("static Short2ObjectOpenHashMap<"+className+">", "blocksMap", "new Short2ObjectOpenHashMap<>()");
+        blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity", "boolean singleState");
         blockGenerator.addMethod("getId", "()", "short", "return defaultID;");
         blockGenerator.addMethod("isAir", "()", "boolean", "return isAir;");
         blockGenerator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
@@ -91,7 +97,10 @@ public class BlockEnumGenerator {
         blockGenerator.addMethod("getHardness", "()", "double", "return hardness;");
         blockGenerator.addMethod("getResistance", "()", "double", "return resistance;");
         blockGenerator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");
-        blockGenerator.addPrivateMethod("addBlockAlternative", "(BlockAlternative alternative)", "void", "alternatives.add(alternative);");
+        blockGenerator.addMethod("addBlockAlternative", "(BlockAlternative alternative)", "void",
+                "alternatives.add(alternative);",
+                "blocksMap.put(alternative.getId(), this);"
+        );
         String[] withPropertiesLines = {
             "for (BlockAlternative alt : alternatives) {",
             "\tif (Arrays.equals(alt.getProperties(), properties)) {",
@@ -100,10 +109,14 @@ public class BlockEnumGenerator {
             "}",
             "return defaultID;"
         };
-        blockGenerator.addPrivateMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
-        blockGenerator.appendToConstructor("alternatives.add(new BlockAlternative(defaultID));");
+        blockGenerator.addMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
+        blockGenerator.addMethod("fromId", "(short blockId)", "static "+className, "return blocksMap.getOrDefault(blockId, AIR);");
+        blockGenerator.appendToConstructor("if(singleState) {");
+        blockGenerator.appendToConstructor("\taddBlockAlternative(new BlockAlternative(defaultID));");
+        blockGenerator.appendToConstructor("}");
         LOGGER.debug("Generating enum");
         StringBuilder staticBlock = new StringBuilder();
+        Map<String, String> subclassContents = new HashMap<>();
         for (BlockContainer block : blocks) {
             String instanceName = block.getId().getPath().toUpperCase();
             blockGenerator.addInstance(instanceName,
@@ -113,33 +126,34 @@ public class BlockEnumGenerator {
                     block.getResistance(),
                     block.isAir(),
                     block.isSolid(),
-                    block.getBlockEntityName() != null ? "NamespaceID.from(\""+block.getBlockEntityName()+"\")" : "null"
+                    block.getBlockEntityName() != null ? "NamespaceID.from(\""+block.getBlockEntityName()+"\")" : "null",
+                    block.getStates().size() == 1 // used to avoid duplicates inside the 'alternatives' field due to both constructor addition and subclasses initStates()
             );
 
             // do not add alternative for default states. This will be added by default inside the constructor
             if(block.getStates().size() > 1) {
-                staticBlock.append("\t");
-                staticBlock.append("{ // block alternatives of "+instanceName);
-                staticBlock.append("\n");
+                StringBuilder subclass = new StringBuilder();
                 for(BlockContainer.BlockState state : block.getStates()) {
                     if(state == block.getDefaultState())
                         continue;
                     // generate BlockAlternative instance that will be used to lookup block alternatives
 
-                    staticBlock.append("\t\t");
-                    staticBlock.append(instanceName).append(".addBlockAlternative(");
-                    staticBlock.append("new BlockAlternative(");
-                    staticBlock.append("(short) ").append(state.getId());
+                    subclass.append(instanceName).append(".addBlockAlternative(");
+                    subclass.append("new BlockAlternative(");
+                    subclass.append("(short) ").append(state.getId());
 
                     if(state.getProperties() != null) {
                         for(var property : state.getProperties().entrySet()) {
-                            staticBlock.append(", ");
-                            staticBlock.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
+                            subclass.append(", ");
+                            subclass.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
                         }
                     }
-                    staticBlock.append(")").append(");\n");
+                    subclass.append(")").append(");\n");
                 }
-                staticBlock.append("\t}\n");
+                String blockName = snakeCaseToCapitalizedCamelCase(block.getId().getPath());
+                blockName = blockName.replace("_", "");
+                subclassContents.put(blockName, subclass.toString());
+                staticBlock.append("\t\t").append(blockName).append(".initStates();\n");
             }
         }
 
@@ -149,10 +163,65 @@ public class BlockEnumGenerator {
         if(!classFolder.exists()) {
             classFolder.mkdirs();
         }
+        File subclassFolder = new File(classFolder, "states");
+        if(!subclassFolder.exists()) {
+            subclassFolder.mkdirs();
+        }
+
         LOGGER.debug("Writing enum to file: "+classFolder+"/"+className+".java");
         try(Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, className+".java")))) {
             writer.write(blockGenerator.generate());
         }
+
+        LOGGER.debug("Writing subclasses for block alternatives...");
+        StringBuilder classContents = new StringBuilder();
+        for (var entry : subclassContents.entrySet()) {
+            classContents.delete(0, classContents.length());
+            String subclass = entry.getKey();
+            LOGGER.debug("\t Writing subclass "+subclass+"... ");
+
+            String contents = entry.getValue();
+            classContents.append("package ").append(blockGenerator.getPackage()).append(".states;\n");
+            classContents.append("import ").append(BlockAlternative.class.getCanonicalName()).append(";\n");
+            classContents.append("import static ").append(blockGenerator.getPackage()).append(".").append(blockGenerator.getEnumName()).append(".*;\n");
+            classContents.append("/**\n");
+            classContents.append(" * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.\n");
+            classContents.append(" */\n");
+            classContents.append("@Deprecated(forRemoval = false, since = \"forever\")\n");
+            classContents.append("public class ").append(subclass).append(" {\n");
+            classContents.append("\tpublic static void initStates() {\n");
+
+            String[] lines = contents.split("\n");
+            for(String line : lines) {
+                classContents.append("\t\t").append(line).append("\n");
+            }
+
+            classContents.append("\t}\n");
+            classContents.append("}\n");
+
+            try(Writer writer = new BufferedWriter(new FileWriter(new File(subclassFolder, subclass+".java")))) {
+                writer.write(classContents.toString());
+            }
+            LOGGER.debug("\t\t - Done");
+        }
+    }
+
+    private static String snakeCaseToCapitalizedCamelCase(String identifier) {
+        boolean capitalizeNext = true;
+        StringBuilder result = new StringBuilder();
+        char[] chars = identifier.toCharArray();
+        for (int i = 0; i < identifier.length(); i++) {
+            char currentCharacter = chars[i];
+            if(capitalizeNext) {
+                result.append(Character.toUpperCase(currentCharacter));
+                capitalizeNext = false;
+            } else if(currentCharacter == '_') {
+                capitalizeNext = true;
+            } else {
+                result.append(currentCharacter);
+            }
+        }
+        return result.toString();
     }
 
     /**

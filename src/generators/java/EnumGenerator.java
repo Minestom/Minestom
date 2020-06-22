@@ -14,6 +14,7 @@ public class EnumGenerator {
     private List<Instance> instances = new LinkedList<>();
     private List<String> imports = new LinkedList<>();
     private List<Field> hardcodedFields = new LinkedList<>();
+    private List<String> annotations = new LinkedList<>();
     private String enumPackage;
     private String staticBlock;
     private StringBuilder constructorEnd = new StringBuilder();
@@ -32,7 +33,7 @@ public class EnumGenerator {
         methods.add(new Method(true, name, signature, returnType, lines));
     }
 
-    public void addPrivateMethod(String name, String signature, String returnType, String... lines) {
+    public void addPackageMethod(String name, String signature, String returnType, String... lines) {
         methods.add(new Method(false, name, signature, returnType, lines));
     }
 
@@ -46,6 +47,9 @@ public class EnumGenerator {
         builder.append("\npackage ").append(enumPackage).append(";\n");
         for(String imp : imports) {
             builder.append("import ").append(imp).append(";\n");
+        }
+        for (String annotation : annotations) {
+            builder.append(annotation).append("\n");
         }
         builder.append("\npublic enum ").append(enumName).append(" {\n");
 
@@ -82,7 +86,7 @@ public class EnumGenerator {
 
             // hard coded fields
             for(Field hardcoded : hardcodedFields) {
-                builder.append("\t").append(hardcoded.type).append(" ").append(hardcoded.name).append(" = ").append(hardcoded.value).append(";");
+                builder.append("\tprivate ").append(hardcoded.type).append(" ").append(hardcoded.name).append(" = ").append(hardcoded.value).append(";");
                 builder.append("\n");
             }
 
@@ -117,8 +121,6 @@ public class EnumGenerator {
             builder.append("\t");
             if(m.isPublic) {
                 builder.append("public ");
-            } else {
-                builder.append("private ");
             }
             builder.append(m.returnType).append(" ").append(m.name).append(m.signature).append(" {\n");
 
@@ -153,6 +155,18 @@ public class EnumGenerator {
 
     public void addHardcodedField(String type, String name, String value) {
         hardcodedFields.add(new Field(type, name, value));
+    }
+
+    public void addClassAnnotation(String annotation) {
+        annotations.add(annotation);
+    }
+
+    public String getPackage() {
+        return enumPackage;
+    }
+
+    public String getEnumName() {
+        return enumName;
     }
 
     private class Method {

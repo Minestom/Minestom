@@ -1,0 +1,91 @@
+package net.minestom.instance.block.states;
+import net.minestom.server.instance.block.BlockAlternative;
+import static net.minestom.instance.block.TmpBlock.*;
+/**
+ * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+ */
+@Deprecated(forRemoval = false, since = "forever")
+public class PolishedDioriteStairs {
+	public static void initStates() {
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9373, "facing=north", "half=top", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9374, "facing=north", "half=top", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9375, "facing=north", "half=top", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9376, "facing=north", "half=top", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9377, "facing=north", "half=top", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9378, "facing=north", "half=top", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9379, "facing=north", "half=top", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9380, "facing=north", "half=top", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9381, "facing=north", "half=top", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9382, "facing=north", "half=top", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9383, "facing=north", "half=bottom", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9384, "facing=north", "half=bottom", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9385, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9386, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9387, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9388, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9389, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9390, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9391, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9392, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9393, "facing=south", "half=top", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9394, "facing=south", "half=top", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9395, "facing=south", "half=top", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9396, "facing=south", "half=top", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9397, "facing=south", "half=top", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9398, "facing=south", "half=top", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9399, "facing=south", "half=top", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9400, "facing=south", "half=top", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9401, "facing=south", "half=top", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9402, "facing=south", "half=top", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9403, "facing=south", "half=bottom", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9404, "facing=south", "half=bottom", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9405, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9406, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9407, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9408, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9409, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9410, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9411, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9412, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9413, "facing=west", "half=top", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9414, "facing=west", "half=top", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9415, "facing=west", "half=top", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9416, "facing=west", "half=top", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9417, "facing=west", "half=top", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9418, "facing=west", "half=top", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9419, "facing=west", "half=top", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9420, "facing=west", "half=top", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9421, "facing=west", "half=top", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9422, "facing=west", "half=top", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9423, "facing=west", "half=bottom", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9424, "facing=west", "half=bottom", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9425, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9426, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9427, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9428, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9429, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9430, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9431, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9432, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9433, "facing=east", "half=top", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9434, "facing=east", "half=top", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9435, "facing=east", "half=top", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9436, "facing=east", "half=top", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9437, "facing=east", "half=top", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9438, "facing=east", "half=top", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9439, "facing=east", "half=top", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9440, "facing=east", "half=top", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9441, "facing=east", "half=top", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9442, "facing=east", "half=top", "shape=outer_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9443, "facing=east", "half=bottom", "shape=straight", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9444, "facing=east", "half=bottom", "shape=straight", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9445, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9446, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9447, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9448, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9449, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9450, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9451, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		POLISHED_DIORITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9452, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=false"));
+	}
+}
