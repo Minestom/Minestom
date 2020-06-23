@@ -78,9 +78,13 @@ public class Player extends LivingEntity implements CommandSender {
     private PlayerSettings settings;
     private float exp;
     private int level;
+
     private PlayerInventory inventory;
-    private short heldSlot;
     private Inventory openInventory;
+    // Used internally to allow the closing of inventory within the inventory listener
+    private boolean didCloseInventory;
+
+    private short heldSlot;
 
     private Position respawnPoint;
 
@@ -1336,15 +1340,6 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player open inventory
-     *
-     * @return the currently open inventory, null if there is not (player inventory is not detected)
-     */
-    public Inventory getOpenInventory() {
-        return openInventory;
-    }
-
-    /**
      * Used to get the {@link CustomBlock} that the player is currently mining
      *
      * @return the currently mined {@link CustomBlock} by the player, null if there is not
@@ -1358,6 +1353,15 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public Set<BossBar> getBossBars() {
         return Collections.unmodifiableSet(bossBars);
+    }
+
+    /**
+     * Get the player open inventory
+     *
+     * @return the currently open inventory, null if there is not (player inventory is not detected)
+     */
+    public Inventory getOpenInventory() {
+        return openInventory;
     }
 
     /**
@@ -1394,7 +1398,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Close the current inventory if there is any
-     * It closes the player inventory if {@link #getOpenInventory()} returns null
+     * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null
      */
     public void closeInventory() {
         Inventory openInventory = getOpenInventory();
@@ -1406,6 +1410,7 @@ public class Player extends LivingEntity implements CommandSender {
             getInventory().setCursorItem(ItemStack.getAirItem());
         } else {
             cursorItem = openInventory.getCursorItem(this);
+            openInventory.setCursorItem(this, ItemStack.getAirItem());
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
@@ -1424,6 +1429,30 @@ public class Player extends LivingEntity implements CommandSender {
         }
         playerConnection.sendPacket(closeWindowPacket);
         inventory.update();
+        this.didCloseInventory = true;
+    }
+
+    /**
+     * Used internally to prevent an inventory click to be processed
+     * when the inventory listeners closed the inventory
+     * <p>
+     * Should only be used within an inventory listener (event or condition)
+     *
+     * @return true if the inventory has been closed, false otherwise
+     */
+    public boolean didCloseInventory() {
+        return didCloseInventory;
+    }
+
+    /**
+     * Used internally to reset the didCloseInventory field
+     * <p>
+     * Shouldn't be used externally without proper understanding of its consequence
+     *
+     * @param didCloseInventory the new didCloseInventory field
+     */
+    public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
+        this.didCloseInventory = didCloseInventory;
     }
 
     /**
