@@ -2,6 +2,7 @@
 /minecraft_data/
 /.minestom_tmp/
 
+/chunks/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
@@ -48,3 +49,4 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+/src/main/java/com/mcecraft/

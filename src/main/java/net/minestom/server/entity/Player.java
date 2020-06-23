@@ -153,7 +153,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         this.gameMode = GameMode.SURVIVAL;
         this.dimension = Dimension.OVERWORLD;
-        this.levelType = LevelType.DEFAULT;
+        this.levelType = LevelType.FLAT;
         refreshPosition(0, 0, 0);
 
         // FakePlayer init its connection there

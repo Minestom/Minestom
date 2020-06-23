@@ -64,7 +64,7 @@ public class Main {
 
         PlayerInit.init();
 
-        //MojangAuth.init();
+        MojangAuth.init();
 
         minecraftServer.start("localhost", 55555, PlayerInit.getResponseDataConsumer());
     }
