@@ -11,9 +11,9 @@ import net.minestom.server.utils.validate.Check;
 public class PlayerChangeHeldSlotEvent extends CancellableEvent {
 
     private Player player;
-    private short slot;
+    private byte slot;
 
-    public PlayerChangeHeldSlotEvent(Player player, short slot) {
+    public PlayerChangeHeldSlotEvent(Player player, byte slot) {
         this.player = player;
         this.slot = slot;
     }
@@ -32,7 +32,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
      *
      * @return the held slot
      */
-    public short getSlot() {
+    public byte getSlot() {
         return slot;
     }
 
@@ -42,7 +42,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
      * @param slot the new held slot
      * @throws IllegalArgumentException if {@param slot} is not between 0 and 8
      */
-    public void setSlot(short slot) {
+    public void setSlot(byte slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "The held slot needs to be between 0 and 8");
         this.slot = slot;
     }

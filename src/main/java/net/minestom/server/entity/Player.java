@@ -84,7 +84,7 @@ public class Player extends LivingEntity implements CommandSender {
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
-    private short heldSlot;
+    private byte heldSlot;
 
     private Position respawnPoint;
 
@@ -1290,7 +1290,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param slot the slot that the player has to held
      * @throws IllegalArgumentException if {@code slot} is not between 0 and 8
      */
-    public void setHeldItemSlot(short slot) {
+    public void setHeldItemSlot(byte slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "Slot has to be between 0 and 8");
 
         HeldItemChangePacket heldItemChangePacket = new HeldItemChangePacket();
@@ -1304,7 +1304,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return the current held slot for the player
      */
-    public short getHeldSlot() {
+    public byte getHeldSlot() {
         return heldSlot;
     }
 
@@ -1738,11 +1738,11 @@ public class Player extends LivingEntity implements CommandSender {
      * Also cancel eating if {@link #isEating()} was true
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
-     * see instead: {@link #setHeldItemSlot(short)}
+     * see instead: {@link #setHeldItemSlot(byte)}
      *
      * @param slot the new held slot
      */
-    public void refreshHeldSlot(short slot) {
+    public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 

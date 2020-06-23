@@ -212,6 +212,7 @@ public class PlayerInit {
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     player.sendMessage("CLICK PLAYER INVENTORY");
                     System.out.println("slot player: " + slot);
+                    p.closeInventory();
                 });
 
                 /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
@@ -225,8 +226,10 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 41f, 0));
+
+                player.setHeldItemSlot((byte) 5);
 
                 player.setGlowing(true);
 

@@ -8,11 +8,12 @@ import net.minestom.server.utils.MathUtils;
 public class PlayerHeldListener {
 
     public static void heldListener(ClientHeldItemChangePacket packet, Player player) {
-        final short slot = packet.slot;
-        if (!MathUtils.isBetween(slot, 0, 8)) {
+        if (!MathUtils.isBetween(packet.slot, 0, 8)) {
             // Incorrect packet, ignore
             return;
         }
+
+        final byte slot = (byte) packet.slot;
 
         PlayerChangeHeldSlotEvent changeHeldSlotEvent = new PlayerChangeHeldSlotEvent(player, slot);
         player.callEvent(PlayerChangeHeldSlotEvent.class, changeHeldSlotEvent);
@@ -20,7 +21,7 @@ public class PlayerHeldListener {
         if (!changeHeldSlotEvent.isCancelled()) {
             // Event hasn't been canceled, process it
 
-            final short resultSlot = changeHeldSlotEvent.getSlot();
+            final byte resultSlot = changeHeldSlotEvent.getSlot();
 
             // If the held slot has been changed by the event, send the change to the player
             if (resultSlot != slot) {

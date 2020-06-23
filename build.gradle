@@ -48,6 +48,6 @@ dependencies {
     api 'net.kyori:text-serializer-plain:3.0.3'
     
     // Pathfinding
-    implementation 'com.github.MadMartian:hydrazine-path-finding:1.02'
+    implementation 'com.github.MadMartian:hydrazine-path-finding:1.1.0'
 
 }
