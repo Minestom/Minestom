@@ -26,6 +26,12 @@ public class ColoredText {
         return new ColoredText(message);
     }
 
+    public static ColoredText ofLegacy(String message, char colorChar) {
+        String legacy = toLegacy(message, colorChar);
+
+        return ofFormat(legacy);
+    }
+
     public ColoredText append(ChatColor color, String message) {
         this.message += color + message;
         return this;
@@ -38,6 +44,32 @@ public class ColoredText {
     public ColoredText appendFormat(String message) {
         this.message += message;
         return this;
+    }
+
+    private static String toLegacy(String message, char colorChar) {
+        String result = "";
+
+        for (int i = 0; i < message.length(); i++) {
+            char c = message.charAt(i);
+            if (c == colorChar) {
+                final boolean hasNextChar = i < message.length();
+                if (hasNextChar) {
+                    final char nextChar = message.charAt(i + 1);
+                    final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
+                    if (color != ChatColor.NO_COLOR) {
+                        String replacement = color.toString();
+                        result += replacement;
+                        i++; // Increment to ignore the color code
+                    } else {
+                        result += c;
+                    }
+                }
+            } else {
+                result += c;
+            }
+        }
+
+        return result;
     }
 
     public String getMessage() {
@@ -175,6 +207,11 @@ public class ColoredText {
 
     private enum MessageType {
         RAW, KEYBIND, TRANSLATABLE
+    }
+
+    public ColoredText appendLegacy(String message, char colorChar) {
+        String legacy = toLegacy(message, colorChar);
+        return appendFormat(legacy);
     }
 
 }

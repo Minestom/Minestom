@@ -18,7 +18,7 @@ public class ChatColor {
     public static final ChatColor DARK_GRAY = new ChatColor("dark_gray", 8);
     public static final ChatColor BLUE = new ChatColor("blue", 9);
     public static final ChatColor BRIGHT_GREEN = new ChatColor("green", 10);
-    public static final ChatColor CYAN = new ChatColor("cyan", 11);
+    public static final ChatColor CYAN = new ChatColor("aqua", 11);
     public static final ChatColor RED = new ChatColor("red", 12);
     public static final ChatColor PINK = new ChatColor("light_purple", 13);
     public static final ChatColor YELLOW = new ChatColor("yellow", 14);
@@ -41,6 +41,7 @@ public class ChatColor {
     public static final ChatColor YELLOW = fromRGB(255, 255, 85);
     public static final ChatColor WHITE = fromRGB(255, 255, 255);*/
     private static Map<String, ChatColor> colorCode = new HashMap<>();
+    private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
 
     static {
         colorCode.put("black", BLACK);
@@ -59,6 +60,23 @@ public class ChatColor {
         colorCode.put("pink", PINK);
         colorCode.put("yellow", YELLOW);
         colorCode.put("white", WHITE);
+
+        legacyColorCodesMap.put('0', BLACK);
+        legacyColorCodesMap.put('1', DARK_BLUE);
+        legacyColorCodesMap.put('2', DARK_GREEN);
+        legacyColorCodesMap.put('3', DARK_CYAN);
+        legacyColorCodesMap.put('4', DARK_RED);
+        legacyColorCodesMap.put('5', PURPLE);
+        legacyColorCodesMap.put('6', GOLD);
+        legacyColorCodesMap.put('7', GRAY);
+        legacyColorCodesMap.put('8', DARK_GRAY);
+        legacyColorCodesMap.put('9', BLUE);
+        legacyColorCodesMap.put('a', BRIGHT_GREEN);
+        legacyColorCodesMap.put('b', CYAN);
+        legacyColorCodesMap.put('c', RED);
+        legacyColorCodesMap.put('d', PINK);
+        legacyColorCodesMap.put('e', YELLOW);
+        legacyColorCodesMap.put('f', WHITE);
     }
 
     private boolean empty;
@@ -91,6 +109,10 @@ public class ChatColor {
 
     public static ChatColor fromName(String name) {
         return colorCode.getOrDefault(name.toLowerCase(), NO_COLOR);
+    }
+
+    public static ChatColor fromLegacyColorCodes(char colorCode) {
+        return legacyColorCodesMap.getOrDefault(colorCode, NO_COLOR);
     }
 
     public boolean isEmpty() {
