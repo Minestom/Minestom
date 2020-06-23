@@ -1,7 +1,7 @@
 package net.minestom.server.bossbar;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.MathUtils;
@@ -20,13 +20,13 @@ public class BossBar implements Viewable {
     private UUID uuid = UUID.randomUUID();
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
 
-    private String title;
+    private ColoredText title;
     private float progress;
     private BarColor color;
     private BarDivision division;
     private byte flags;
 
-    public BossBar(String title, BarColor color, BarDivision division) {
+    public BossBar(ColoredText title, BarColor color, BarDivision division) {
         this.title = title;
         this.color = color;
         this.division = division;
@@ -58,7 +58,7 @@ public class BossBar implements Viewable {
      *
      * @return the current title of the bossbar
      */
-    public String getTitle() {
+    public ColoredText getTitle() {
         return title;
     }
 
@@ -67,7 +67,7 @@ public class BossBar implements Viewable {
      *
      * @param title the new title of the bossbar
      */
-    public void setTitle(String title) {
+    public void setTitle(ColoredText title) {
         this.title = title;
     }
 
@@ -146,7 +146,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.ADD;
-        bossBarPacket.title = Chat.fromLegacyText(title);
+        bossBarPacket.title = title;
         bossBarPacket.health = progress;
         bossBarPacket.color = color;
         bossBarPacket.division = division;
@@ -165,7 +165,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_TITLE;
-        bossBarPacket.title = Chat.fromLegacyText(title);
+        bossBarPacket.title = title;
         sendPacketToViewers(bossBarPacket);
     }
 

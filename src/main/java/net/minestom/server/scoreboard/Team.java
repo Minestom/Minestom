@@ -1,8 +1,8 @@
 package net.minestom.server.scoreboard;
 
 import io.netty.buffer.ByteBuf;
-import net.kyori.text.format.TextColor;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -14,12 +14,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Team {
 
     private String teamName;
-    private String teamDisplayName = "";
+    private ColoredText teamDisplayName = ColoredText.of("");
     private byte friendlyFlags = 0x00;
     private TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.ALWAYS;
     private TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-    private TextColor teamColor = TextColor.WHITE;
-    private String prefix = "", suffix = "";
+    private ChatColor teamColor = ChatColor.WHITE;
+
+    private ColoredText prefix = ColoredText.of("");
+    private ColoredText suffix = ColoredText.of("");
+
     private String[] entities = new String[0];
     private Set<Player> players = new CopyOnWriteArraySet<>();
 
@@ -33,13 +36,13 @@ public class Team {
         teamsCreationPacket = new TeamsPacket();
         teamsCreationPacket.teamName = teamName;
         teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
+        teamsCreationPacket.teamDisplayName = teamDisplayName.toString();
         teamsCreationPacket.friendlyFlags = friendlyFlags;
         teamsCreationPacket.nameTagVisibility = nameTagVisibility;
         teamsCreationPacket.collisionRule = collisionRule;
-        teamsCreationPacket.teamColor = teamColor.ordinal();
-        teamsCreationPacket.teamPrefix = Chat.fromLegacyText(prefix);
-        teamsCreationPacket.teamSuffix = Chat.fromLegacyText(suffix);
+        teamsCreationPacket.teamColor = teamColor.getId();
+        teamsCreationPacket.teamPrefix = prefix.toString();
+        teamsCreationPacket.teamSuffix = suffix.toString();
         teamsCreationPacket.entities = entities;
 
         TeamsPacket destroyPacket = new TeamsPacket();
@@ -90,9 +93,9 @@ public class Team {
         this.teamsCreationPacket.entities = entities;
     }
 
-    public void setTeamDisplayName(String teamDisplayName) {
+    public void setTeamDisplayName(ColoredText teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
-        this.teamsCreationPacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
+        this.teamsCreationPacket.teamDisplayName = teamDisplayName.toString();
         sendUpdatePacket();
     }
 
@@ -108,21 +111,21 @@ public class Team {
         sendUpdatePacket();
     }
 
-    public void setTeamColor(TextColor teamColor) {
+    public void setTeamColor(ChatColor teamColor) {
         this.teamColor = teamColor;
-        this.teamsCreationPacket.teamColor = teamColor.ordinal();
+        this.teamsCreationPacket.teamColor = teamColor.getId();
         sendUpdatePacket();
     }
 
-    public void setPrefix(String prefix) {
+    public void setPrefix(ColoredText prefix) {
         this.prefix = prefix;
-        this.teamsCreationPacket.teamPrefix = Chat.fromLegacyText(prefix);
+        this.teamsCreationPacket.teamPrefix = prefix.toString();
         sendUpdatePacket();
     }
 
-    public void setSuffix(String suffix) {
+    public void setSuffix(ColoredText suffix) {
         this.suffix = suffix;
-        this.teamsCreationPacket.teamSuffix = Chat.fromLegacyText(suffix);
+        this.teamsCreationPacket.teamSuffix = suffix.toString();
         sendUpdatePacket();
     }
 
@@ -149,13 +152,13 @@ public class Team {
         TeamsPacket updatePacket = new TeamsPacket();
         updatePacket.teamName = teamName;
         updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = Chat.fromLegacyText(teamDisplayName);
+        updatePacket.teamDisplayName = teamDisplayName.toString();
         updatePacket.friendlyFlags = friendlyFlags;
         updatePacket.nameTagVisibility = nameTagVisibility;
         updatePacket.collisionRule = collisionRule;
-        updatePacket.teamColor = teamColor.ordinal();
-        updatePacket.teamPrefix = Chat.fromLegacyText(prefix);
-        updatePacket.teamSuffix = Chat.fromLegacyText(suffix);
+        updatePacket.teamColor = teamColor.getId();
+        updatePacket.teamPrefix = prefix.toString();
+        updatePacket.teamSuffix = suffix.toString();
         ByteBuf buffer = PacketUtils.writePacket(updatePacket);
         players.forEach(p -> p.getPlayerConnection().sendPacket(buffer));
     }

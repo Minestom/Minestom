@@ -1,6 +1,6 @@
 package net.minestom.server.event.player;
 
-import net.kyori.text.TextComponent;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 
@@ -17,7 +17,7 @@ public class PlayerChatEvent extends CancellableEvent {
     private Player sender;
     private Collection<Player> recipients;
     private String message;
-    private Function<PlayerChatEvent, TextComponent> chatFormat;
+    private Function<PlayerChatEvent, RichMessage> chatFormat;
 
     public PlayerChatEvent(Player sender, Collection<Player> recipients, String message) {
         this.sender = sender;
@@ -28,7 +28,7 @@ public class PlayerChatEvent extends CancellableEvent {
     /**
      * @param chatFormat the custom chat format
      */
-    public void setChatFormat(Function<PlayerChatEvent, TextComponent> chatFormat) {
+    public void setChatFormat(Function<PlayerChatEvent, RichMessage> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -71,7 +71,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @return the chat format which will be used
      */
-    public Function<PlayerChatEvent, TextComponent> getChatFormatFunction() {
+    public Function<PlayerChatEvent, RichMessage> getChatFormatFunction() {
         return chatFormat;
     }
 }

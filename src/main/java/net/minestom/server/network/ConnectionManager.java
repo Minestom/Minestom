@@ -1,6 +1,6 @@
 package net.minestom.server.network;
 
-import net.kyori.text.TextComponent;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.player.PlayerConnection;
@@ -50,17 +50,17 @@ public final class ConnectionManager {
     /**
      * Send a message to all online players who validate the condition {@code condition}
      *
-     * @param textComponent the message to send
-     * @param condition     the condition to receive the message
+     * @param coloredText the message to send
+     * @param condition   the condition to receive the message
      */
-    public void broadcastMessage(TextComponent textComponent, Function<Player, Boolean> condition) {
+    public void broadcastMessage(ColoredText coloredText, Function<Player, Boolean> condition) {
         if (condition == null) {
-            getOnlinePlayers().forEach(player -> player.sendMessage(textComponent));
+            getOnlinePlayers().forEach(player -> player.sendMessage(coloredText));
         } else {
             getOnlinePlayers().forEach(player -> {
                 boolean result = condition.apply(player);
                 if (result)
-                    player.sendMessage(textComponent);
+                    player.sendMessage(coloredText);
             });
         }
     }
@@ -68,10 +68,10 @@ public final class ConnectionManager {
     /**
      * Send a message to all online players without exception
      *
-     * @param textComponent the message to send
+     * @param coloredText the message to send
      */
-    public void broadcastMessage(TextComponent textComponent) {
-        broadcastMessage(textComponent, null);
+    public void broadcastMessage(ColoredText coloredText) {
+        broadcastMessage(coloredText, null);
     }
 
     /**

@@ -90,6 +90,10 @@ public class WindowListener {
         player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
+    /**
+     * @param player    the player to refresh the cursor item
+     * @param inventory the player open inventory, null if not any (could be player inventory)
+     */
     private static void refreshCursorItem(Player player, Inventory inventory) {
         PlayerInventory playerInventory = player.getInventory();
 
@@ -100,8 +104,10 @@ public class WindowListener {
             cursorItem = playerInventory.getCursorItem();
         }
 
-        // Setting the window id properly seems to broke +64 stack support
-        //byte windowId = inventory == null ? 0 : inventory.getWindowId();
+        // Error occurred while retrieving the cursor item, stop here
+        if (cursorItem == null) {
+            return;
+        }
 
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = -1;

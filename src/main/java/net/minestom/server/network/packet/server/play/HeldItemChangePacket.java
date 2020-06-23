@@ -6,11 +6,11 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class HeldItemChangePacket implements ServerPacket {
 
-    public short slot;
+    public byte slot;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeShort(slot);
+        writer.writeByte(slot);
     }
 
     @Override

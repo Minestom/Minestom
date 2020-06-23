@@ -2,7 +2,7 @@ package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
@@ -95,7 +95,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected boolean glowing;
     protected boolean usingElytra;
     protected int air = 300;
-    protected String customName;
+    protected ColoredText customName;
     protected boolean customNameVisible;
     protected boolean silent;
     protected boolean noGravity;
@@ -824,7 +824,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      *
      * @return the custom name of the entity, null if there is not
      */
-    public String getCustomName() {
+    public ColoredText getCustomName() {
         return customName;
     }
 
@@ -833,7 +833,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      *
      * @param customName the custom name of the entity, null to remove it
      */
-    public void setCustomName(String customName) {
+    public void setCustomName(ColoredText customName) {
         this.customName = customName;
         sendMetadataIndex(2);
     }
@@ -1227,13 +1227,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     private void fillCustomNameMetaData(PacketWriter packet) {
-        boolean hasCustomName = customName != null && !customName.isEmpty();
+        boolean hasCustomName = customName != null;
 
         packet.writeByte((byte) 2);
         packet.writeByte(METADATA_OPTCHAT);
         packet.writeBoolean(hasCustomName);
         if (hasCustomName) {
-            packet.writeSizedString(Chat.toJsonString(Chat.fromLegacyText(customName)));
+            packet.writeSizedString(customName.toString());
         }
     }
 

@@ -1,7 +1,7 @@
 package net.minestom.server;
 
-import net.kyori.text.TextComponent;
-import net.kyori.text.format.TextColor;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceManager;
@@ -48,9 +48,7 @@ public final class UpdateManager {
                         player.refreshKeepAlive(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
                     } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                        TextComponent textComponent = TextComponent.of("Timeout")
-                                .color(TextColor.RED);
-                        player.kick(textComponent);
+                        player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
                     }
                 }
 

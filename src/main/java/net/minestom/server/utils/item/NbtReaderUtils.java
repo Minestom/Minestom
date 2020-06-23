@@ -4,6 +4,7 @@ import net.kyori.text.Component;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.attribute.AttributeSlot;
@@ -213,7 +214,7 @@ public class NbtReaderUtils {
                     Component textObject = Chat.fromJsonString(jsonDisplayName);
                     String displayName = Chat.toLegacyText(textObject);
 
-                    item.setDisplayName(displayName);
+                    item.setDisplayName(ColoredText.of(displayName));
                     readItemStackDisplayNBT(reader, item);
                 }
                 break;
@@ -225,13 +226,13 @@ public class NbtReaderUtils {
                     reader.readByte(); // lore type, should always be 0x08 (TAG_String)
 
                     int size = reader.readInteger();
-                    ArrayList<String> lore = new ArrayList<>(size);
+                    ArrayList<ColoredText> lore = new ArrayList<>(size);
                     for (int i = 0; i < size; i++) {
                         String string = reader.readShortSizedString();
                         Component textObject = Chat.fromJsonString(string);
                         String line = Chat.toLegacyText(textObject);
 
-                        lore.add(line);
+                        lore.add(ColoredText.of(line));
                         if (lore.size() == size) {
                             item.setLore(lore);
                         }

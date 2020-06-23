@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
@@ -127,17 +127,16 @@ public class Utils {
                 if (hasDisplayName || hasLore) {
                     writer.writeCompound("display", displayWriter -> {
                         if (hasDisplayName) {
-                            final String name = Chat.toJsonString(Chat.fromLegacyText(itemStack.getDisplayName()));
+                            final String name = itemStack.getDisplayName().toString();
                             displayWriter.writeString("Name", name);
                         }
 
                         if (hasLore) {
-                            final ArrayList<String> lore = itemStack.getLore();
+                            final ArrayList<ColoredText> lore = itemStack.getLore();
 
                             displayWriter.writeList("Lore", NBT.NBT_STRING, lore.size(), () -> {
-                                for (String line : lore) {
-                                    line = Chat.toJsonString(Chat.fromLegacyText(line));
-                                    packet.writeShortSizedString(line);
+                                for (ColoredText line : lore) {
+                                    packet.writeShortSizedString(line.toString());
                                 }
                             });
 
