@@ -3,7 +3,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -74,9 +73,9 @@ public class BlockEnumGenerator {
     }
 
     private static void generateEnum(String targetPart, Collection<BlockContainer> blocks) throws IOException {
-        String packageName = "net.minestom.instance.block";
+        String packageName = "net.minestom.server.instance.block";
         String folder = packageName.replace(".", "/");
-        String className = "TmpBlock";
+        String className = "Block";
         EnumGenerator blockGenerator = new EnumGenerator(packageName, className);
         blockGenerator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
         blockGenerator.addImport(NamespaceID.class.getCanonicalName());
@@ -87,9 +86,8 @@ public class BlockEnumGenerator {
         blockGenerator.addImport(Short2ObjectOpenHashMap.class.getCanonicalName());
         blockGenerator.addImport(blockGenerator.getPackage()+".states.*");
         blockGenerator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
-        blockGenerator.addHardcodedField("static Short2ObjectOpenHashMap<"+className+">", "blocksMap", "new Short2ObjectOpenHashMap<>()");
         blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity", "boolean singleState");
-        blockGenerator.addMethod("getId", "()", "short", "return defaultID;");
+        blockGenerator.addMethod("getBlockId", "()", "short", "return defaultID;");
         blockGenerator.addMethod("isAir", "()", "boolean", "return isAir;");
         blockGenerator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
         blockGenerator.addMethod("getBlockEntityName", "()", "NamespaceID", "return blockEntity;");
@@ -99,7 +97,7 @@ public class BlockEnumGenerator {
         blockGenerator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");
         blockGenerator.addMethod("addBlockAlternative", "(BlockAlternative alternative)", "void",
                 "alternatives.add(alternative);",
-                "blocksMap.put(alternative.getId(), this);"
+                "BlockMap.blocksMap.put(alternative.getId(), this);"
         );
         String[] withPropertiesLines = {
             "for (BlockAlternative alt : alternatives) {",
@@ -110,7 +108,7 @@ public class BlockEnumGenerator {
             "return defaultID;"
         };
         blockGenerator.addMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
-        blockGenerator.addMethod("fromId", "(short blockId)", "static "+className, "return blocksMap.getOrDefault(blockId, AIR);");
+        blockGenerator.addMethod("fromId", "(short blockId)", "static "+className, "return BlockMap.blocksMap.getOrDefault(blockId, AIR);");
         blockGenerator.appendToConstructor("if(singleState) {");
         blockGenerator.appendToConstructor("\taddBlockAlternative(new BlockAlternative(defaultID));");
         blockGenerator.appendToConstructor("}");
@@ -166,6 +164,17 @@ public class BlockEnumGenerator {
         File subclassFolder = new File(classFolder, "states");
         if(!subclassFolder.exists()) {
             subclassFolder.mkdirs();
+        }
+
+        StringBuilder blockMapClass = new StringBuilder();
+        blockMapClass.append("package "+blockGenerator.getPackage()+";\n")
+                .append("import "+Short2ObjectOpenHashMap.class.getCanonicalName()+";\n")
+                .append("final class BlockMap {\n")
+                .append("\tstatic final Short2ObjectOpenHashMap<"+className+"> blocksMap = new Short2ObjectOpenHashMap<>();\n")
+                .append("}\n");
+        LOGGER.debug("Writing BlockMap to file: "+classFolder+"/BlockMap.java");
+        try(Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, "BlockMap.java")))) {
+            writer.write(blockMapClass.toString());
         }
 
         LOGGER.debug("Writing enum to file: "+classFolder+"/"+className+".java");

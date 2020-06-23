@@ -271,7 +271,7 @@ public final class Chunk implements Viewable {
 
     private boolean isBlockEntity(short blockId) {
         Block block = Block.fromId(blockId);
-        return block.isBlockEntity();
+        return block.hasBlockEntity();
     }
 
     public Set<Integer> getBlockEntities() {

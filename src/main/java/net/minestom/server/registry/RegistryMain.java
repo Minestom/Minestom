@@ -49,24 +49,6 @@ public class RegistryMain {
         writePotionsClass(potions);
     }
 
-    public static void registerBlocks() {
-        List<RegistryBlock> blocks = parseBlocks(BLOCKS_PATH);
-
-        for (RegistryBlock registryBlock : blocks) {
-            String name = registryBlock.name;
-            Block block = Block.valueOf(name);
-            block.initBlock(registryBlock.defaultId);
-
-            for (RegistryBlock.BlockState blockState : registryBlock.states) {
-                short id = blockState.id;
-                String[] properties = blockState.propertiesValues.toArray(new String[0]);
-                BlockAlternative blockAlternative = new BlockAlternative(id, properties);
-
-                block.addBlockAlternative(blockAlternative);
-            }
-        }
-    }
-
     public static void registerItems() {
         List<RegistryItem> items = parseItems(ITEMS_PATH);
 

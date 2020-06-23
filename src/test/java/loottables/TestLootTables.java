@@ -25,7 +25,6 @@ public class TestLootTables {
 
     @Before
     public void init() {
-        RegistryMain.registerBlocks();
         RegistryMain.registerItems();
         tableManager = new LootTableManager();
         tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());
