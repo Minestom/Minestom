@@ -71,7 +71,7 @@ public class GamemodeCommand extends Command<CommandSender> {
     }
 
     private boolean isAllowed(CommandSender sender) {
-        if (!(sender instanceof Player)) {
+        if (!sender.isPlayer()) {
             sender.sendMessage("The command is only available for player");
             return false;
         }

@@ -532,6 +532,12 @@ public class InventoryClickProcessor {
                 }
             }
 
+            // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
+            if (player.didCloseInventory()) {
+                clickResult.setCancel(true);
+                player.UNSAFE_changeDidCloseInventory(false);
+            }
+
 
         }
         return clickResult;

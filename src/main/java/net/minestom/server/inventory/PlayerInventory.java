@@ -218,7 +218,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(ItemStack cursorItem) {
-        this.cursorItem = ItemStackUtils.notNull(cursorItem);
+        cursorItem = ItemStackUtils.notNull(cursorItem);
+        this.cursorItem = cursorItem;
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = -1;
+        setSlotPacket.slot = -1;
+        setSlotPacket.itemStack = cursorItem;
+        player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
     /**
@@ -233,7 +239,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "The slot " + slot + " does not exist for player");
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
-        
+
         EntityEquipmentPacket.Slot equipmentSlot;
 
         if (slot == player.getHeldSlot()) {

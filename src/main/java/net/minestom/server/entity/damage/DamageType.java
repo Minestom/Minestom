@@ -1,8 +1,7 @@
 package net.minestom.server.entity.damage;
 
-import net.kyori.text.Component;
-import net.kyori.text.TextComponent;
-import net.kyori.text.TranslatableComponent;
+import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -35,8 +34,10 @@ public class DamageType {
         return new EntityProjectileDamage(shooter, projectile);
     }
 
-    public Component buildChatMessage(Player killed) {
-        return TranslatableComponent.of("death." + identifier, TextComponent.of(killed.getUsername()));
+    public RichMessage buildChatMessage(Player killed) {
+        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + "}"))
+                .append(ColoredText.ofFormat(killed.getUsername()));
+        return richMessage;
     }
 
     public static EntityDamage fromPlayer(Player player) {
@@ -47,8 +48,8 @@ public class DamageType {
         return new EntityDamage(entity);
     }
 
-    public Component buildDeathScreenMessage(Player killed) {
-        return buildChatMessage(killed);
+    public ColoredText buildDeathScreenMessage(Player killed) {
+        return ColoredText.ofFormat("{@death." + identifier + "}");
     }
 
     /**

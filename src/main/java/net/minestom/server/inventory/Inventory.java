@@ -186,12 +186,32 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Get the cursor item of a viewer
      *
      * @param player the player to get the cursor item from
-     * @return the player cursor item
-     * @throws IllegalStateException if {@code player} is not in the viewer list
+     * @return the player cursor item, air item if the player is not a viewer
      */
     public ItemStack getCursorItem(Player player) {
-        Check.stateCondition(!isViewer(player), "You can only get the cursor item of a viewer");
         return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
+    }
+
+    /**
+     * Change the cursor item of a viewer,
+     * does nothing if {@param player} is not a viewer
+     *
+     * @param player     the player to change the cursor item
+     * @param cursorItem the new player cursor item
+     */
+    public void setCursorItem(Player player, ItemStack cursorItem) {
+        if (!isViewer(player))
+            return;
+
+        cursorItem = ItemStackUtils.notNull(cursorItem);
+
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = -1;
+        setSlotPacket.slot = -1;
+        setSlotPacket.itemStack = cursorItem;
+        player.getPlayerConnection().sendPacket(setSlotPacket);
+
+        this.cursorPlayersItem.put(player, cursorItem);
     }
 
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {

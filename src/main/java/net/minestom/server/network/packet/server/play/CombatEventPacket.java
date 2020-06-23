@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.text.Component;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.PacketWriter;
@@ -20,7 +19,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private Component deathMessage;
+    private ColoredText deathMessage;
 
     private CombatEventPacket() {
     }
@@ -39,7 +38,7 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
-    public static CombatEventPacket death(Player player, Optional<Entity> killer, Component message) {
+    public static CombatEventPacket death(Player player, Optional<Entity> killer, ColoredText message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();
@@ -64,7 +63,7 @@ public class CombatEventPacket implements ServerPacket {
             case DEATH:
                 writer.writeVarInt(playerID);
                 writer.writeInt(opponent);
-                writer.writeSizedString(Chat.toJsonString(deathMessage));
+                writer.writeSizedString(deathMessage.toString());
                 break;
         }
     }

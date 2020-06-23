@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerPreLoginEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -9,8 +10,10 @@ import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public final class EntityManager {
 
@@ -178,8 +181,38 @@ public final class EntityManager {
         }
     }
 
+    /**
+     * Call the player initialization callbacks and the event {@link PlayerPreLoginEvent}
+     * If the player hasn't been kicked, add him to the waiting list
+     * <p>
+     * Can be considered as a pre-init thing
+     *
+     * @param player the player to add
+     */
     public void addWaitingPlayer(Player player) {
+
+        // Init player (register events)
+        for (Consumer<Player> playerInitialization : MinecraftServer.getConnectionManager().getPlayerInitializations()) {
+            playerInitialization.accept(player);
+        }
+
+        // Call pre login event
+        PlayerPreLoginEvent playerPreLoginEvent = new PlayerPreLoginEvent(player, player.getUsername(), player.getUuid());
+        player.callEvent(PlayerPreLoginEvent.class, playerPreLoginEvent);
+
+        // Ignore the player if he has been disconnected (kick)
+        final boolean online = player.isOnline();
+        if (!online)
+            return;
+
+        // Add him to the list and change his username/uuid if changed
         this.waitingPlayers.add(player);
+
+        String username = playerPreLoginEvent.getUsername();
+        UUID uuid = playerPreLoginEvent.getPlayerUuid();
+
+        player.setUsername(username);
+        player.setUuid(uuid);
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -24,9 +25,9 @@ public class ItemStack implements DataContainer {
     private byte amount;
     private short damage;
 
-    private String displayName;
+    private ColoredText displayName;
     private boolean unbreakable;
-    private ArrayList<String> lore;
+    private ArrayList<ColoredText> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
     private Map<Enchantment, Short> storedEnchantmentMap;
@@ -103,7 +104,7 @@ public class ItemStack implements DataContainer {
      */
     public synchronized boolean isSimilar(ItemStack itemStack) {
         synchronized (itemStack) {
-            final String itemDisplayName = itemStack.getDisplayName();
+            final ColoredText itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
                     (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));
 
@@ -179,7 +180,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item display name, can be null if not present
      */
-    public String getDisplayName() {
+    public ColoredText getDisplayName() {
         return displayName;
     }
 
@@ -188,7 +189,7 @@ public class ItemStack implements DataContainer {
      *
      * @param displayName the item display name
      */
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(ColoredText displayName) {
         this.displayName = displayName;
     }
 
@@ -206,7 +207,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item lore, can be null if not present
      */
-    public ArrayList<String> getLore() {
+    public ArrayList<ColoredText> getLore() {
         return lore;
     }
 
@@ -215,7 +216,7 @@ public class ItemStack implements DataContainer {
      *
      * @param lore the item lore, can be null to remove
      */
-    public void setLore(ArrayList<String> lore) {
+    public void setLore(ArrayList<ColoredText> lore) {
         this.lore = lore;
     }
 

@@ -29,7 +29,7 @@ public class HealthCommand extends Command<CommandSender> {
     }
 
     private boolean condition(CommandSender sender) {
-        if (!(sender instanceof Player)) {
+        if (!sender.isPlayer()) {
             sender.sendMessage("The command is only available for player");
             return false;
         }

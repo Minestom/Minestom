@@ -7,13 +7,13 @@ import net.minestom.server.event.Event;
 /**
  * Called when a player interacts (right-click) with an entity
  */
-public class PlayerInteractEvent extends Event {
+public class PlayerEntityInteractEvent extends Event {
 
     private Player player;
     private Entity entityTarget;
     private Player.Hand hand;
 
-    public PlayerInteractEvent(Player player, Entity entityTarget, Player.Hand hand) {
+    public PlayerEntityInteractEvent(Player player, Entity entityTarget, Player.Hand hand) {
         this.player = player;
         this.entityTarget = entityTarget;
         this.hand = hand;
