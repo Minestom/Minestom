@@ -220,7 +220,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunk  the chunk to send
      */
     public void sendChunkUpdate(Player player, Chunk chunk) {
-        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket());
+        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket(), true);
     }
 
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
@@ -229,7 +229,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             if (!PlayerUtils.isNettyClient(player))
                 return;
 
-            player.getPlayerConnection().sendPacket(chunkData);
+            player.getPlayerConnection().sendPacket(chunkData, true);
         });
     }
 

@@ -1715,7 +1715,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerAbilitiesPacket.allowFlying = allowFlying;
         playerAbilitiesPacket.instantBreak = instantBreak;
         playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.walkingSpeed = walkingSpeed;
+        playerAbilitiesPacket.walkingSpeed = 0.1f;
 
         playerConnection.sendPacket(playerAbilitiesPacket);
     }

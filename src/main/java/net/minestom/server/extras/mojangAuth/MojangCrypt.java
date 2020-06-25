@@ -14,85 +14,79 @@ public class MojangCrypt {
 
    public static KeyPair generateKeyPair() {
       try {
-         KeyPairGenerator keyPairGenerator1 = KeyPairGenerator.getInstance("RSA");
-         keyPairGenerator1.initialize(1024);
-         return keyPairGenerator1.generateKeyPair();
-      } catch (NoSuchAlgorithmException var1) {
-         var1.printStackTrace();
+         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+         keyGen.initialize(1024);
+         return keyGen.generateKeyPair();
+      } catch (NoSuchAlgorithmException e) {
+         e.printStackTrace();
          LOGGER.error("Key pair generation failed!");
          return null;
       }
    }
 
-   public static byte[] digestData(String string, PublicKey publicKey, SecretKey secretKey) {
+   public static byte[] digestData(String data, PublicKey publicKey, SecretKey secretKey) {
       try {
-         return digestData("SHA-1", string.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
-      } catch (UnsupportedEncodingException var4) {
-         var4.printStackTrace();
+         return digestData("SHA-1", data.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
+      } catch (UnsupportedEncodingException e) {
+         e.printStackTrace();
          return null;
       }
    }
 
-   private static byte[] digestData(String string, byte[]... arr) {
+   private static byte[] digestData(String algorithm, byte[]... data) {
       try {
-         MessageDigest messageDigest3 = MessageDigest.getInstance(string);
+         MessageDigest digest = MessageDigest.getInstance(algorithm);
 
-         for(byte[] arr7 : arr) {
-            messageDigest3.update(arr7);
+         for(byte[] bytes : data) {
+            digest.update(bytes);
          }
 
-         return messageDigest3.digest();
-      } catch (NoSuchAlgorithmException var7) {
-         var7.printStackTrace();
+         return digest.digest();
+      } catch (NoSuchAlgorithmException e) {
+         e.printStackTrace();
          return null;
       }
    }
 
-   public static SecretKey decryptByteToSecretKey(PrivateKey privateKey, byte[] arr) {
-      return new SecretKeySpec(decryptUsingKey(privateKey, arr), "AES");
+   public static SecretKey decryptByteToSecretKey(PrivateKey privateKey, byte[] bytes) {
+      return new SecretKeySpec(decryptUsingKey(privateKey, bytes), "AES");
    }
 
-   public static byte[] decryptUsingKey(Key key, byte[] arr) {
-      return cipherData(2, key, arr);
+   public static byte[] decryptUsingKey(Key key, byte[] bytes) {
+      return cipherData(2, key, bytes);
    }
 
-   private static byte[] cipherData(int integer, Key key, byte[] arr) {
+   private static byte[] cipherData(int mode, Key key, byte[] data) {
       try {
-         return setupCipher(integer, key.getAlgorithm(), key).doFinal(arr);
-      } catch (IllegalBlockSizeException var4) {
+         return setupCipher(mode, key.getAlgorithm(), key).doFinal(data);
+      } catch (IllegalBlockSizeException | BadPaddingException var4) {
          var4.printStackTrace();
-      } catch (BadPaddingException var5) {
-         var5.printStackTrace();
       }
 
       LOGGER.error("Cipher data failed!");
       return null;
    }
 
-   private static Cipher setupCipher(int integer, String string, Key key) {
+   private static Cipher setupCipher(int mode, String transformation, Key key) {
       try {
-         Cipher cipher4 = Cipher.getInstance(string);
-         cipher4.init(integer, key);
+         Cipher cipher4 = Cipher.getInstance(transformation);
+         cipher4.init(mode, key);
          return cipher4;
-      } catch (InvalidKeyException var4) {
+      } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException var4) {
          var4.printStackTrace();
-      } catch (NoSuchAlgorithmException var5) {
-         var5.printStackTrace();
-      } catch (NoSuchPaddingException var6) {
-         var6.printStackTrace();
       }
 
       LOGGER.error("Cipher creation failed!");
       return null;
    }
 
-   public static Cipher getCipher(int integer, Key key) {
+   public static Cipher getCipher(int mode, Key key) {
       try {
          Cipher cipher3 = Cipher.getInstance("AES/CFB8/NoPadding");
-         cipher3.init(integer, key, new IvParameterSpec(key.getEncoded()));
+         cipher3.init(mode, key, new IvParameterSpec(key.getEncoded()));
          return cipher3;
-      } catch (GeneralSecurityException var3) {
-         throw new RuntimeException(var3);
+      } catch (GeneralSecurityException e) {
+         throw new RuntimeException(e);
       }
    }
 }

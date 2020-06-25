@@ -28,9 +28,19 @@ public abstract class PlayerConnection {
         this.connectionState = ConnectionState.UNKNOWN;
     }
 
-    public abstract void sendPacket(ByteBuf buffer);
+    /**
+     *
+     * @param buffer The buffer to send.
+     * @param copy Should be true unless your only using the ByteBuf once.
+     */
+    public abstract void sendPacket(ByteBuf buffer, boolean copy);
 
-    public abstract void writePacket(ByteBuf buffer);
+    /**
+     *
+     * @param buffer The buffer to send.
+     * @param copy Should be true unless your only using the ByteBuf once.
+     */
+    public abstract void writePacket(ByteBuf buffer, boolean copy);
 
     public abstract void sendPacket(ServerPacket serverPacket);
 

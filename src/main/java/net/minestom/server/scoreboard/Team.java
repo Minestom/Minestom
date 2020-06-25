@@ -82,7 +82,7 @@ public class Team {
         }
 
         this.players.remove(player);
-        player.getPlayerConnection().sendPacket(teamsDestroyPacket); // TODO do not destroy, simply remove the player from the team
+        player.getPlayerConnection().sendPacket(teamsDestroyPacket, true); // TODO do not destroy, simply remove the player from the team
 
         String[] entitiesCache = new String[entities.length - 1];
         int count = 0;
@@ -160,6 +160,6 @@ public class Team {
         updatePacket.teamPrefix = prefix.toString();
         updatePacket.teamSuffix = suffix.toString();
         ByteBuf buffer = PacketUtils.writePacket(updatePacket);
-        players.forEach(p -> p.getPlayerConnection().sendPacket(buffer));
+        players.forEach(p -> p.getPlayerConnection().sendPacket(buffer, true));
     }
 }
