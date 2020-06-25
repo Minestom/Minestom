@@ -46,8 +46,6 @@ dependencies {
 
     api 'org.mongodb.morphia:morphia:1.3.2'
     api 'org.mongodb:mongo-java-driver:3.12.5'
-
-    api 'net.kyori:text-api:3.0.3'
     api 'net.kyori:text-serializer-legacy:3.0.3'
     api 'net.kyori:text-serializer-gson:3.0.3'
     api 'net.kyori:text-serializer-plain:3.0.3'

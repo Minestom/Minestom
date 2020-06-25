@@ -17,7 +17,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
         ResponseData responseData = new ResponseData();
 
         // Fill default params
-        responseData.setName("1.15.2");
+        responseData.setName("1.16.1");
         responseData.setProtocol(MinecraftServer.PROTOCOL_VERSION);
         responseData.setMaxPlayer(0);
         responseData.setOnline(0);

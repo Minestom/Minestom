@@ -16,10 +16,18 @@ public class RespawnPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeInt(dimension.getId());
+        //TODO add api
+        writer.writeSizedString("test:normal");
+        writer.writeSizedString("test:spawn");
         writer.writeLong(hashedSeed);
+        writer.writeByte(gameMode.getId());
         writer.writeByte(gameMode.getId()); // Hardcore flag not included
-        writer.writeSizedString(levelType.getType());
+        //debug
+        writer.writeBoolean(false);
+        //is flat
+        writer.writeBoolean(true);
+        //copy meta
+        writer.writeBoolean(true);
     }
 
     @Override

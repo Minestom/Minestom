@@ -33,7 +33,7 @@ public class ResourceGatherer {
             throw new IOException("Failed to create tmp folder.");
         }
 
-        final String version = "1.15.2"; // TODO: Do not hardcode
+        final String version = "1.16.1"; // TODO: Do not hardcode
 
         LOGGER.info("Starting download of Minecraft server jar for version " + version + " from Mojang servers...");
         File minecraftFolder = getMinecraftFolder(minecraftFolderOverride);

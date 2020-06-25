@@ -126,7 +126,7 @@ public class Player extends LivingEntity implements CommandSender {
     private boolean allowFlying;
     private boolean instantBreak;
     private float flyingSpeed = 0.05f;
-    private float fieldViewModifier = 0.1f;
+    private float walkingSpeed = 0.1f;
 
     // Statistics
     private Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
@@ -262,6 +262,14 @@ public class Player extends LivingEntity implements CommandSender {
             lastDamageSource = type;
         }
         return result;
+    }
+
+    @Override
+    public float getAttributeValue(Attribute attribute) {
+        if (attribute == Attribute.MOVEMENT_SPEED) {
+            return walkingSpeed;
+        }
+        return super.getAttributeValue(attribute);
     }
 
     @Override
@@ -1672,12 +1680,12 @@ public class Player extends LivingEntity implements CommandSender {
         refreshAbilities();
     }
 
-    public float getFieldViewModifier() {
-        return fieldViewModifier;
+    public float getWalkingSpeed() {
+        return walkingSpeed;
     }
 
-    public void setFieldViewModifier(float fieldViewModifier) {
-        this.fieldViewModifier = fieldViewModifier;
+    public void setWalkingSpeed(float walkingSpeed) {
+        this.walkingSpeed = walkingSpeed;
         refreshAbilities();
     }
 
@@ -1707,7 +1715,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerAbilitiesPacket.allowFlying = allowFlying;
         playerAbilitiesPacket.instantBreak = instantBreak;
         playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
+        playerAbilitiesPacket.walkingSpeed = walkingSpeed;
 
         playerConnection.sendPacket(playerAbilitiesPacket);
     }

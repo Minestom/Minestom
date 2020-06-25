@@ -32,6 +32,7 @@ import net.minestom.server.world.Difficulty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
@@ -40,7 +41,7 @@ public class MinecraftServer {
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final int PROTOCOL_VERSION = 578;
+    public static final int PROTOCOL_VERSION = 736;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -141,7 +142,7 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent(null); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent(new File("C:\\Users\\Eogha\\AppData\\Roaming\\.minecraft")); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }

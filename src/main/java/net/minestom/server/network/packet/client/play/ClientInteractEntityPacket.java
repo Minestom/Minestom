@@ -30,8 +30,8 @@ public class ClientInteractEntityPacket extends ClientPlayPacket {
                 this.z = reader.readFloat();
                 this.hand = Player.Hand.values()[reader.readVarInt()];
                 break;
-
         }
+        reader.readBoolean(); //TODO use
     }
 
     public enum Type {

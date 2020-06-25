@@ -41,7 +41,7 @@ public class MainDemo {
         });
 
         // Start the server
-        minecraftServer.start("localhost", 55555);
+        minecraftServer.start("localhost", 25565);
     }
 
     private static class GeneratorDemo extends ChunkGenerator {

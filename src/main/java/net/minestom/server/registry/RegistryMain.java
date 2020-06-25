@@ -39,13 +39,14 @@ public class RegistryMain {
         List<RegistryStat> stats = parseStats(STATS_PATH);
         List<RegistryEnchantment> enchantments = parseEnchantments(STATS_PATH);
         List<RegistryPotion> potions = parsePotions(STATS_PATH);
-        //writeBlocksClass(blocks);
-        //writeItemsClass(items);
-        //writeEntitiesClass(entities);
-        //writeSoundsClass(sounds);
-        //writeStatsClass(stats);
-        //writeEnchantmentsClass(enchantments);
+        writeBlocksClass(blocks);
+        writeItemsClass(items);
+        writeEntitiesClass(entities);
+        writeSoundsClass(sounds);
+        writeStatsClass(stats);
+        writeEnchantmentsClass(enchantments);
         writePotionsClass(potions);
+        writeParticlesClass(particles);
     }
 
     public static void registerBlocks() {
@@ -142,60 +143,76 @@ public class RegistryMain {
     }
 
     private static void writeBlocksClass(List<RegistryBlock> blocks) {
+        System.out.println("\n//Blocks Start");
         for (RegistryBlock registryBlock : blocks) {
             String line = registryBlock.name + ",";
             System.out.println(line);
 
         }
+        System.out.println("//Blocks End");
     }
 
     private static void writeItemsClass(List<RegistryItem> items) {
+        System.out.println("\n//Items Start");
         for (RegistryItem registryItem : items) {
             String line = registryItem.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Items End");
     }
 
     private static void writeEntitiesClass(List<RegistryEntityType> entities) {
+        System.out.println("\n//Entities Start");
         for (RegistryEntityType registryEntityType : entities) {
             String line = registryEntityType.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Entities End");
     }
 
     private static void writeSoundsClass(List<RegistrySound> sounds) {
+        System.out.println("\n//Sounds Start");
         for (RegistrySound registrySound : sounds) {
             String line = registrySound.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Sounds End");
     }
 
     private static void writeParticlesClass(List<RegistryParticle> particles) {
+        System.out.println("\n//Particles Start");
         for (RegistryParticle registryParticle : particles) {
             String line = registryParticle.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Particles End");
     }
 
     private static void writeStatsClass(List<RegistryStat> stats) {
+        System.out.println("\n//Stats Start");
         for (RegistryStat registryStat : stats) {
             String line = registryStat.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Stats End");
     }
 
     private static void writeEnchantmentsClass(List<RegistryEnchantment> enchantments) {
+        System.out.println("\n//Enchantments Start");
         for (RegistryEnchantment registryEnchantment : enchantments) {
             String line = registryEnchantment.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Enchantments End");
     }
 
     private static void writePotionsClass(List<RegistryPotion> potions) {
+        System.out.println("\n//Potions Start");
         for (RegistryPotion registryPotion : potions) {
             String line = registryPotion.name + ",";
             System.out.println(line);
         }
+        System.out.println("//Potions End");
     }
 
 

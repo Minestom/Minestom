@@ -31,6 +31,8 @@ public enum Particle {
     FIREWORK,
     FISHING,
     FLAME,
+    SOUL_FIRE_FLAME,
+    SOUL,
     FLASH,
     HAPPY_VILLAGER,
     COMPOSTER,
@@ -65,7 +67,15 @@ public enum Particle {
     DRIPPING_HONEY,
     FALLING_HONEY,
     LANDING_HONEY,
-    FALLING_NECTAR;
+    FALLING_NECTAR,
+    ASH,
+    CRIMSON_SPORE,
+    WARPED_SPORE,
+    DRIPPING_OBSIDIAN_TEAR,
+    FALLING_OBSIDIAN_TEAR,
+    LANDING_OBSIDIAN_TEAR,
+    REVERSE_PORTAL,
+    WHITE_ASH;
 
     private static Int2ObjectOpenHashMap<Particle> map = new Int2ObjectOpenHashMap();
 

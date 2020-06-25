@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 public class ClientPacketsHandler {
 
     // Max packet id
-    private static final int SIZE = 0x2E;
+    private static final int SIZE = 0x2F;
 
-    private Supplier<? extends ClientPacket>[] supplierAccesses = new Supplier[SIZE];
+    private final Supplier<? extends ClientPacket>[] supplierAccesses = new Supplier[SIZE];
 
     public void register(int id, Supplier<? extends ClientPacket> packetSupplier) {
         supplierAccesses[id] = packetSupplier;
@@ -20,7 +20,7 @@ public class ClientPacketsHandler {
             throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
 
         Supplier<? extends ClientPacket> supplier = supplierAccesses[id];
-        if (supplierAccesses == null)
+        if (supplierAccesses[id] == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
 
         ClientPacket packet = supplier.get();

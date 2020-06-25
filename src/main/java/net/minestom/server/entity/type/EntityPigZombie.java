@@ -13,7 +13,7 @@ public class EntityPigZombie extends EntityCreature {
     private boolean becomingDrowned;
 
     public EntityPigZombie(Position spawnPosition) {
-        super(EntityType.ZOMBIE_PIGMAN, spawnPosition);
+        super(EntityType.ZOMBIFIED_PIGLIN, spawnPosition);
         setBoundingBox(0.6f, 1.95f, 0.6f);
     }
 

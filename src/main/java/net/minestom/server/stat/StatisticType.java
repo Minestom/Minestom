@@ -23,6 +23,7 @@ public enum StatisticType {
     HORSE_ONE_CM,
     AVIATE_ONE_CM,
     SWIM_ONE_CM,
+    STRIDER_ONE_CM,
     JUMP,
     DROP,
     DAMAGE_DEALT,
@@ -74,7 +75,9 @@ public enum StatisticType {
     RAID_TRIGGER,
     RAID_WIN,
     INTERACT_WITH_ANVIL,
-    INTERACT_WITH_GRINDSTONE;
+    INTERACT_WITH_GRINDSTONE,
+    TARGET_HIT,
+    INTERACT_WITH_SMITHING_TABLE;
 
     private static Int2ObjectOpenHashMap<StatisticType> map = new Int2ObjectOpenHashMap();
 

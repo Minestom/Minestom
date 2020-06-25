@@ -10,6 +10,8 @@ public class UpdateLightPacket implements ServerPacket {
 
     public int chunkX;
     public int chunkZ;
+    //todo make changeable
+    public boolean trustEdges = true;
 
     public int skyLightMask;
     public int blockLightMask;
@@ -24,6 +26,8 @@ public class UpdateLightPacket implements ServerPacket {
     public void write(PacketWriter writer) {
         writer.writeVarInt(chunkX);
         writer.writeVarInt(chunkZ);
+
+        writer.writeBoolean(trustEdges);
 
         writer.writeVarInt(skyLightMask);
         writer.writeVarInt(blockLightMask);

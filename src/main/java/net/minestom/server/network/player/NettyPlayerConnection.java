@@ -36,6 +36,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
 	public void sendPacket(ByteBuf buffer) {
+		//System.out.println(getConnectionState() + " out");
 		if (encrypted) {
 			buffer = buffer.copy();
 			buffer.retain();
@@ -50,10 +51,10 @@ public class NettyPlayerConnection extends PlayerConnection {
 	@Override
 	public void writePacket(ByteBuf buffer) {
 		if (encrypted) {
-		buffer = buffer.copy();
-		buffer.retain();
-		getChannel().write(buffer);
-		buffer.release();
+			buffer = buffer.copy();
+			buffer.retain();
+			getChannel().write(buffer);
+			buffer.release();
 		} else {
 			buffer.retain();
 			getChannel().write(buffer);
@@ -62,6 +63,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
 	public void sendPacket(ServerPacket serverPacket) {
+		//System.out.println(serverPacket.getClass().getName() + " out");
 		ByteBuf buffer = PacketUtils.writePacket(serverPacket);
 		sendPacket(buffer);
 		buffer.release();

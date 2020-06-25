@@ -15,6 +15,7 @@ public enum Enchantment {
     DEPTH_STRIDER,
     FROST_WALKER,
     BINDING_CURSE,
+    SOUL_SPEED,
     SHARPNESS,
     SMITE,
     BANE_OF_ARTHROPODS,

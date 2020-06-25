@@ -65,13 +65,13 @@ public class PacketProcessor {
                 Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(id);
                 playPacket.read(packetReader);
-
+                //System.out.println("play");
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(id);
                 loginPacket.read(packetReader);
-
+                //System.out.println("login");
                 loginPacket.process(playerConnection, connectionManager);
                 break;
             case STATUS:
