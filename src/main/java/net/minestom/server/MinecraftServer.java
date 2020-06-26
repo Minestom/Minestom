@@ -142,7 +142,7 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent(new File("C:\\Users\\Eogha\\AppData\\Roaming\\.minecraft")); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent(null); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
