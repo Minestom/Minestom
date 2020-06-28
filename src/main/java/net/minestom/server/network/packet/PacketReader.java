@@ -9,6 +9,7 @@ import net.minestom.server.utils.Utils;
 
 import java.util.UUID;
 
+// TODO delete
 public class PacketReader {
 
     private ByteBuf buffer;

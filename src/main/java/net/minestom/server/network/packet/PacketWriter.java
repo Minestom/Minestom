@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+// TODO delete
 public class PacketWriter {
 
     private ByteArrayOutputStream output = new ByteArrayOutputStream();
