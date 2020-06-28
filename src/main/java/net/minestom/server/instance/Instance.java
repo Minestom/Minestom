@@ -53,6 +53,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     protected UUID uniqueId;
 
+    protected List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());
+
     private Data data;
     private ExplosionSupplier explosionSupplier;
 
@@ -61,6 +63,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.dimension = dimension;
 
         this.worldBorder = new WorldBorder(this);
+    }
+
+    public void scheduleNextTick(Consumer<Instance> callback) {
+        nextTick.add(callback);
     }
 
     /**
@@ -619,6 +625,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the current time
      */
     public void tick(long time) {
+        synchronized (nextTick) {
+            for (final Consumer<Instance> e : nextTick) {
+                e.accept(this);
+            }
+            nextTick.clear();
+        }
         worldBorder.update();
     }
 

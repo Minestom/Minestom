@@ -1366,6 +1366,7 @@ public enum Block {
 			case SPAWNER:
 			case COMMAND_BLOCK:
 			case BEACON:
+			case CHEST:
 			case CREEPER_HEAD:
 			case CREEPER_WALL_HEAD:
 			case DRAGON_HEAD:

@@ -100,12 +100,10 @@ public class InstanceContainer extends Instance {
                 return;
             }
             setAlreadyChanged(blockPosition, blockId);
-
             int index = ChunkUtils.getBlockIndex(x, y, z);
 
             // Call the destroy listener if previous block was a custom block
             callBlockDestroy(chunk, index, blockPosition);
-
             // Change id based on neighbors
             blockId = executeBlockPlacementRule(blockId, blockPosition);
 
@@ -176,7 +174,7 @@ public class InstanceContainer extends Instance {
     private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
         BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
         if (blockPlacementRule != null) {
-            return blockPlacementRule.blockRefresh(this, blockPosition);
+            return blockPlacementRule.blockRefresh(this, blockPosition, blockId);
         }
         return blockId;
     }
@@ -194,7 +192,7 @@ public class InstanceContainer extends Instance {
                     BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
                     if (neighborBlockPlacementRule != null) {
                         short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
-                                new BlockPosition(neighborX, neighborY, neighborZ));
+                                new BlockPosition(neighborX, neighborY, neighborZ), neighborId);
                         if (neighborId != newNeighborId) {
                             refreshBlockId(neighborX, neighborY, neighborZ, newNeighborId);
                         }

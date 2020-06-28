@@ -46,7 +46,7 @@ public final class Chunk implements Viewable {
     private int chunkX, chunkZ;
 
     // blocks id based on coord, see Chunk#getBlockIndex
-    private short[] blocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    public short[] blocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
     private short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     // Used to get all blocks with data (no null)

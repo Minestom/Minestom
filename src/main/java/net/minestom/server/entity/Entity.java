@@ -101,6 +101,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
+    protected final List<Consumer<Entity>> nextTick = Collections.synchronizedList(new ArrayList<>());
 
     private long velocityUpdatePeriod;
     protected boolean onGround;
@@ -121,6 +122,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
         entityById.put(id, this);
         setVelocityUpdatePeriod(5);
+    }
+
+    public void scheduleNextTick(Consumer<Entity> callback) {
+        nextTick.add(callback);
     }
 
     public Entity(int entityType) {
@@ -329,6 +334,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
+        synchronized (nextTick) {
+            for (final Consumer<Entity> e : nextTick) {
+                e.accept(this);
+            }
+            nextTick.clear();
+        }
         // Synchronization with updated fields in #getPosition()
         {
             // X/Y/Z axis

@@ -24,7 +24,6 @@ public enum Direction {
                 return SOUTH;
             case SOUTH:
                 return NORTH;
-
             default:
                 throw new IllegalArgumentException();
         }

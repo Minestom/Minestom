@@ -2,6 +2,7 @@ package net.minestom.server.entity.fakeplayer;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryModifier;
 import net.minestom.server.inventory.PlayerInventory;
@@ -117,7 +118,7 @@ public class FakePlayerController {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.STARTED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = ClientPlayerDiggingPacket.BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
         addToQueue(playerDiggingPacket);
     }
 
@@ -125,7 +126,7 @@ public class FakePlayerController {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = ClientPlayerDiggingPacket.BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
         addToQueue(playerDiggingPacket);
     }
 
@@ -133,7 +134,7 @@ public class FakePlayerController {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.FINISHED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = ClientPlayerDiggingPacket.BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
         addToQueue(playerDiggingPacket);
     }
 

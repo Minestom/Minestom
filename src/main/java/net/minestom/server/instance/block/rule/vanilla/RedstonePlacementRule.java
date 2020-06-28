@@ -1,7 +1,9 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 
@@ -18,7 +20,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockRefresh(Instance instance, BlockPosition blockPosition) {
+    public short blockRefresh(Instance instance, BlockPosition blockPosition, short currentId) {
         int x = blockPosition.getX();
         int y = blockPosition.getY();
         int z = blockPosition.getZ();
@@ -71,6 +73,11 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
         return Block.REDSTONE_WIRE.withProperties("east=" + east, "north=" + north,
                 "power=" + power, "south=" + south, "west=" + west);
+    }
+
+    @Override
+    public short blockPlace(Instance instance, Block block, BlockFace blockFace, Player pl) {
+        return getBlockId();
     }
 
     private boolean isRedstone(Instance instance, int x, int y, int z) {

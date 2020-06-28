@@ -85,4 +85,8 @@ public class StorageManager {
         }
         this.defaultStorageSystemSupplier = storageSystemSupplier;
     }
+
+    public boolean isDefaultStorageSystemDefined() {
+        return defaultStorageSystemSupplier != null;
+    }
 }
