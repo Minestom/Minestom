@@ -17,8 +17,6 @@ import java.net.InetSocketAddress;
 
 public class NettyServer {
 
-    private final PacketProcessor packetProcessor;
-
     private final EventLoopGroup boss, worker;
     private final ServerBootstrap bootstrap;
 
@@ -28,8 +26,6 @@ public class NettyServer {
     private int port;
 
     public NettyServer(PacketProcessor packetProcessor) {
-        this.packetProcessor = packetProcessor;
-
         Class<? extends ServerChannel> channel;
 
         if (Epoll.isAvailable()) {
@@ -49,12 +45,15 @@ public class NettyServer {
         bootstrap.channel(channel);
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-            protected void initChannel(SocketChannel socketChannel) {
-                socketChannel.pipeline().addLast(new NettyDecoder());
-                socketChannel.pipeline().addLast(new ClientChannel(packetProcessor));
+            protected void initChannel(SocketChannel ch) {
+                ChannelConfig config = ch.config();
+                config.setOption(ChannelOption.TCP_NODELAY, true);
+
+                ChannelPipeline pipeline = ch.pipeline();
+                pipeline.addLast(new NettyDecoder());
+                pipeline.addLast(new ClientChannel(packetProcessor));
             }
         });
-
     }
 
     public void start(String address, int port) {
