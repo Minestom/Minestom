@@ -7,27 +7,19 @@ import net.minestom.server.network.packet.server.ServerPacket;
 
 public class PacketUtils {
 
-    public static ByteBuf writePacket(ServerPacket serverPacket) {
-        int id = serverPacket.getId();
-        PacketWriter packetWriter = new PacketWriter();
+    public static void writePacket(ByteBuf buf, ServerPacket packet) {
+        PacketWriter writer = new PacketWriter();
 
-        packetWriter.writeVarInt(id);
+        Utils.writeVarIntBuf(buf, packet.getId());
+        packet.write(writer);
+        buf.writeBytes(writer.toByteArray());
+    }
 
-        serverPacket.write(packetWriter);
+    public static ByteBuf writePacket(ServerPacket packet) {
+        ByteBuf buffer = Unpooled.buffer();
 
-        byte[] bytes = packetWriter.toByteArray();
-        int length = bytes.length;
+        writePacket(buffer, packet);
 
-        int varIntSize = Utils.lengthVarInt(length);
-
-        ByteBuf buffer = Unpooled.buffer(length + varIntSize);
-        Utils.writeVarIntBuf(buffer, length);
-        buffer.writeBytes(bytes);
-
-        //if(!(serverPacket instanceof ChunkDataPacket) && !(serverPacket instanceof PlayerListHeaderAndFooterPacket))
-        //System.out.println("WRITE PACKET: " + serverPacket.getClass().getSimpleName());
-
-        //Unpooled.copiedBuffer(buffer);
         return buffer;
     }
 

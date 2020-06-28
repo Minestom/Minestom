@@ -1,9 +1,13 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 
 import java.net.SocketAddress;
 
@@ -13,40 +17,46 @@ import java.net.SocketAddress;
  */
 public class NettyPlayerConnection extends PlayerConnection {
 
-    private ChannelHandlerContext channel;
+    private final SocketChannel channel;
 
-    public NettyPlayerConnection(ChannelHandlerContext channel) {
+    public NettyPlayerConnection(SocketChannel channel) {
         super();
+
         this.channel = channel;
+    }
+
+    @Override
+    public void enableCompression(int threshold) {
+        sendPacket(new SetCompressionPacket(threshold));
+
+        channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
     }
 
     @Override
     public void sendPacket(ByteBuf buffer) {
         buffer.retain();
-        getChannel().writeAndFlush(buffer);
+        channel.writeAndFlush(buffer);
     }
 
     @Override
     public void writePacket(ByteBuf buffer) {
         buffer.retain();
-        getChannel().write(buffer);
+        channel.write(buffer);
     }
 
     @Override
     public void sendPacket(ServerPacket serverPacket) {
-        ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-        sendPacket(buffer);
-        buffer.release();
+        channel.writeAndFlush(serverPacket);
     }
 
     @Override
     public void flush() {
-        getChannel().flush();
+        channel.flush();
     }
 
     @Override
     public SocketAddress getRemoteAddress() {
-        return getChannel().channel().remoteAddress();
+        return channel.remoteAddress();
     }
 
     @Override
@@ -54,7 +64,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         getChannel().close();
     }
 
-    public ChannelHandlerContext getChannel() {
+    public Channel getChannel() {
         return channel;
     }
 

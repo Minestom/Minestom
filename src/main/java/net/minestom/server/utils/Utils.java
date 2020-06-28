@@ -18,6 +18,14 @@ import java.util.*;
 
 public class Utils {
 
+    public static int getVarIntSize(int input) {
+        return (input & 0xFFFFFF80) == 0
+                ? 1 : (input & 0xFFFFC000) == 0
+                ? 2 : (input & 0xFFE00000) == 0
+                ? 3 : (input & 0xF0000000) == 0
+                ? 4 : 5;
+    }
+
     public static void writeVarIntBuf(ByteBuf buffer, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
@@ -49,19 +57,6 @@ public class Utils {
             }
             writer.writeByte(temp);
         } while (value != 0);
-    }
-
-    public static int lengthVarInt(int value) {
-        int i = 0;
-        do {
-            i++;
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
-            }
-        } while (value != 0);
-        return i;
     }
 
     public static int readVarInt(ByteBuf buffer) {

@@ -22,6 +22,8 @@ public abstract class PlayerConnection {
         this.connectionState = ConnectionState.UNKNOWN;
     }
 
+    public abstract void enableCompression(int threshold);
+
     public abstract void sendPacket(ByteBuf buffer);
 
     public abstract void writePacket(ByteBuf buffer);

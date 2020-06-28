@@ -11,7 +11,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
-import net.minestom.server.network.netty.channel.NettyDecoder;
+import net.minestom.server.network.netty.codec.LegacyPingHandler;
+import net.minestom.server.network.netty.codec.PacketDecoder;
+import net.minestom.server.network.netty.codec.PacketEncoder;
+import net.minestom.server.network.netty.codec.PacketFramer;
 
 import java.net.InetSocketAddress;
 
@@ -50,8 +53,19 @@ public class NettyServer {
                 config.setOption(ChannelOption.TCP_NODELAY, true);
 
                 ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new NettyDecoder());
-                pipeline.addLast(new ClientChannel(packetProcessor));
+
+                pipeline.addLast("legacy-ping", new LegacyPingHandler());
+
+                // Adds packetLength at start | Reads framed bytebuf
+                pipeline.addLast("framer", new PacketFramer());
+
+                // Reads bytebuf and creating inbound packet
+                pipeline.addLast("decoder", new PacketDecoder());
+
+                // Writes packet to bytebuf
+                pipeline.addLast("encoder", new PacketEncoder());
+
+                pipeline.addLast("handler", new ClientChannel(packetProcessor));
             }
         });
     }
