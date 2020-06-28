@@ -18,8 +18,9 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    // https://mvnrepository.com/artifact/io.netty/netty-all
-    api group: 'io.netty', name: 'netty-all', version: '4.1.50.Final'
+    api 'io.netty:netty-handler:4.1.45.Final'
+    api 'io.netty:netty-codec:4.1.45.Final'
+    implementation 'io.netty:netty-transport-native-epoll:4.1.45.Final:linux-x86_64'
 
     api 'com.github.jhg023:Pbbl:1.0.2'
 

@@ -35,7 +35,7 @@ public class BufferWrapper {
 
     public void putVarInt(int n) {
         Utils.writeVarIntBuffer(this, n);
-        size += Utils.lengthVarInt(n);
+        size += Utils.getVarIntSize(n);
     }
 
     public void putBytes(byte[] bytes) {

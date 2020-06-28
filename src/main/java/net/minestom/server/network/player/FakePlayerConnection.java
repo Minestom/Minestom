@@ -13,13 +13,18 @@ import java.net.SocketAddress;
 public class FakePlayerConnection extends PlayerConnection {
 
     @Override
+    public void enableCompression(int threshold) {
+        throw new UnsupportedOperationException("FakePlayer cannot enable compression");
+    }
+
+    @Override
     public void sendPacket(ByteBuf buffer, boolean copy) {
         throw new UnsupportedOperationException("FakePlayer cannot read Bytebuf");
     }
 
     @Override
     public void writePacket(ByteBuf buffer, boolean copy) {
-        throw new UnsupportedOperationException("FakePlayer cannot read Bytebuf");
+        throw new UnsupportedOperationException("FakePlayer cannot write to Bytebuf");
     }
 
     @Override

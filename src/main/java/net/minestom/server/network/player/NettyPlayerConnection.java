@@ -1,13 +1,17 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.SocketChannel;
+import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
@@ -18,12 +22,11 @@ import java.net.SocketAddress;
  */
 public class NettyPlayerConnection extends PlayerConnection {
 
-	private ChannelHandlerContext channel;
+	private final SocketChannel channel;
 	@Getter
 	private boolean encrypted = false;
 
-
-	public NettyPlayerConnection(ChannelHandlerContext channel) {
+	public NettyPlayerConnection(SocketChannel channel) {
 		super();
 		this.channel = channel;
 	}
@@ -35,12 +38,19 @@ public class NettyPlayerConnection extends PlayerConnection {
 	}
 
 	@Override
+    public void enableCompression(int threshold) {
+        sendPacket(new SetCompressionPacket(threshold));
+
+        channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
+    }
+
+    @Override
 	public void sendPacket(ByteBuf buffer, boolean copy) {
 		//System.out.println(getConnectionState() + " out");
 		if (encrypted) {
 			buffer = buffer.copy();
 			buffer.retain();
-			getChannel().writeAndFlush(buffer);
+			channel.writeAndFlush(buffer);
 			buffer.release();
 		} else {
 			buffer.retain();
@@ -53,7 +63,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 		if (encrypted) {
 			buffer = buffer.copy();
 			buffer.retain();
-			getChannel().write(buffer);
+			channel.write(buffer);
 			buffer.release();
 		} else {
 			buffer.retain();
@@ -64,9 +74,8 @@ public class NettyPlayerConnection extends PlayerConnection {
 	@Override
 	public void sendPacket(ServerPacket serverPacket) {
 		//System.out.println(serverPacket.getClass().getName() + " out");
-		ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-		sendPacket(buffer, false);
-		buffer.release();
+        //TODO check wat this does
+        channel.writeAndFlush(serverPacket);
 	}
 
 	@Override
@@ -76,7 +85,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
 	public SocketAddress getRemoteAddress() {
-		return getChannel().channel().remoteAddress();
+		return getChannel().remoteAddress();
 	}
 
 	@Override
@@ -84,7 +93,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 		getChannel().close();
 	}
 
-	public ChannelHandlerContext getChannel() {
+	public Channel getChannel() {
 		return channel;
 	}
 

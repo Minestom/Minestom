@@ -28,6 +28,7 @@ public abstract class PlayerConnection {
         this.connectionState = ConnectionState.UNKNOWN;
     }
 
+    public abstract void enableCompression(int threshold);
     /**
      *
      * @param buffer The buffer to send.

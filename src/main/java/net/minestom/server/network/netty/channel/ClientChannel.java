@@ -1,22 +1,18 @@
 package net.minestom.server.network.netty.channel;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.netty.packet.PacketHandler;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.client.status.LegacyServerListPingPacket;
+import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.Utils;
 
-public class ClientChannel extends ChannelInboundHandlerAdapter {
+public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
-    private ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-    private PacketProcessor packetProcessor;
+    private final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+    private final PacketProcessor packetProcessor;
 
     public ClientChannel(PacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
@@ -28,26 +24,20 @@ public class ClientChannel extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object obj) {
-        PacketHandler packetHandler = (PacketHandler) obj;
+    public void channelRead0(ChannelHandlerContext ctx, InboundPacket packet) {
+        try {
+            packetProcessor.process(ctx, packet);
+        } finally {
+            int availableBytes = packet.body.readableBytes();
 
-        int packetLength = packetHandler.length;
-        ByteBuf buffer = packetHandler.buffer;
+            if (availableBytes > 0) {
+                // TODO log4j2
+                System.out.println("Packet 0x" + Integer.toHexString(packet.packetId)
+                        + " not fully read (" + availableBytes + " bytes left)");
 
-        if (packetLength == 0xFE) { // Legacy server ping
-            LegacyServerListPingPacket legacyServerListPingPacket = new LegacyServerListPingPacket();
-            legacyServerListPingPacket.read(new PacketReader(buffer));
-            legacyServerListPingPacket.process(null, null);
-            return;
+                packet.body.skipBytes(availableBytes);
+            }
         }
-
-        final int varIntLength = Utils.lengthVarInt(packetLength);
-        int packetId = Utils.readVarInt(buffer);
-
-        int offset = varIntLength + Utils.lengthVarInt(packetId);
-        packetProcessor.process(ctx, buffer, packetId, offset);
-
-        buffer.release();
     }
 
     @Override

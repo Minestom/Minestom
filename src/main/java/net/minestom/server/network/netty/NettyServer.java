@@ -1,30 +1,73 @@
 package net.minestom.server.network.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
-import net.minestom.server.network.netty.channel.NettyDecoder;
+import net.minestom.server.network.netty.codec.LegacyPingHandler;
+import net.minestom.server.network.netty.codec.PacketDecoder;
+import net.minestom.server.network.netty.codec.PacketEncoder;
+import net.minestom.server.network.netty.codec.PacketFramer;
 
 import java.net.InetSocketAddress;
 
 public class NettyServer {
 
-    private PacketProcessor packetProcessor;
-    private EventLoopGroup group;
+    private final EventLoopGroup boss, worker;
+    private final ServerBootstrap bootstrap;
+
+    private ServerSocketChannel serverChannel;
 
     private String address;
     private int port;
 
     public NettyServer(PacketProcessor packetProcessor) {
-        this.packetProcessor = packetProcessor;
-        this.group = new NioEventLoopGroup();
+        Class<? extends ServerChannel> channel;
+
+        if (Epoll.isAvailable()) {
+            boss = new EpollEventLoopGroup(2);
+            worker = new EpollEventLoopGroup();
+
+            channel = EpollServerSocketChannel.class;
+        } else {
+            boss = new NioEventLoopGroup(2);
+            worker = new EpollEventLoopGroup();
+
+            channel = NioServerSocketChannel.class;
+        }
+
+        bootstrap = new ServerBootstrap();
+        bootstrap.group(boss, worker);
+        bootstrap.channel(channel);
+
+        bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+            protected void initChannel(SocketChannel ch) {
+                ChannelConfig config = ch.config();
+                config.setOption(ChannelOption.TCP_NODELAY, true);
+
+                ChannelPipeline pipeline = ch.pipeline();
+
+                pipeline.addLast("legacy-ping", new LegacyPingHandler());
+
+                // Adds packetLength at start | Reads framed bytebuf
+                pipeline.addLast("framer", new PacketFramer());
+
+                // Reads bytebuf and creating inbound packet
+                pipeline.addLast("decoder", new PacketDecoder());
+
+                // Writes packet to bytebuf
+                pipeline.addLast("encoder", new PacketEncoder());
+
+                pipeline.addLast("handler", new ClientChannel(packetProcessor));
+            }
+        });
     }
 
     public void start(String address, int port) {
@@ -32,27 +75,15 @@ public class NettyServer {
         this.port = port;
 
         try {
-            ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(group);
-            serverBootstrap.channel(NioServerSocketChannel.class);
-            serverBootstrap.localAddress(new InetSocketAddress(address, port));
+            ChannelFuture cf = bootstrap.bind(new InetSocketAddress(address, port)).sync();
 
-            serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-                protected void initChannel(SocketChannel socketChannel) {
-                    socketChannel.pipeline().addLast("decoder", new NettyDecoder());
-                    socketChannel.pipeline().addLast("encoder", new ClientChannel(packetProcessor));
-                }
-            });
-            ChannelFuture channelFuture = serverBootstrap.bind().sync();
-            channelFuture.channel().closeFuture().sync();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                group.shutdownGracefully().sync();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (!cf.isSuccess()) {
+                throw new IllegalStateException("Unable to bind server at " + address + ":" + port);
             }
+
+            serverChannel = (ServerSocketChannel) cf.channel();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -65,10 +96,9 @@ public class NettyServer {
     }
 
     public void stop() {
-        try {
-            group.shutdownGracefully().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        serverChannel.close();
+
+        worker.shutdownGracefully();
+        boss.shutdownGracefully();
     }
 }
