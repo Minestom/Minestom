@@ -34,13 +34,11 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(ByteBuf buffer) {
-        buffer.retain();
         channel.writeAndFlush(buffer);
     }
 
     @Override
     public void writePacket(ByteBuf buffer) {
-        buffer.retain();
         channel.write(buffer);
     }
 
