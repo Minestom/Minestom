@@ -1,3 +1,5 @@
+package net.minestom.codegen.blocks;
+
 import com.google.gson.annotations.SerializedName;
 import net.minestom.server.utils.NamespaceID;
 
@@ -43,7 +45,7 @@ public class DataReportBlock {
 
     @Override
     public String toString() {
-        return "DataReportBlock{" +
+        return "blocks.DataReportBlock{" +
                 "name=" + name +
                 ", properties=" + properties +
                 ", states=" + Arrays.toString(states) +

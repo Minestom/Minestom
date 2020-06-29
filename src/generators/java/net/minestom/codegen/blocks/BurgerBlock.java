@@ -1,3 +1,5 @@
+package net.minestom.codegen.blocks;
+
 public class BurgerBlock {
 
     String text_id;
@@ -8,7 +10,7 @@ public class BurgerBlock {
 
     @Override
     public String toString() {
-        return "BurgerBlock{" +
+        return "blocks.BurgerBlock{" +
                 "text_id='" + text_id + '\'' +
                 ", resistance=" + resistance +
                 '}';

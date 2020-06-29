@@ -1,3 +1,5 @@
+package net.minestom.codegen.blocks;
+
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.List;
@@ -97,7 +99,7 @@ public class BlockContainer implements Comparable<BlockContainer> {
 
     @Override
     public String toString() {
-        return "BlockContainer{" +
+        return "blocks.BlockContainer{" +
                 "id=" + id +
                 ", hardness=" + hardness +
                 ", resistance=" + resistance +

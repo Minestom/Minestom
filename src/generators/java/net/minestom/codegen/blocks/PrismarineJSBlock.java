@@ -1,3 +1,5 @@
+package net.minestom.codegen.blocks;
+
 public class PrismarineJSBlock {
 
     int id;
@@ -13,7 +15,7 @@ public class PrismarineJSBlock {
 
     @Override
     public String toString() {
-        return "PrismarineJSBlock{" +
+        return "blocks.PrismarineJSBlock{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", hardness=" + hardness +

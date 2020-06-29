@@ -1,3 +1,5 @@
+package net.minestom.codegen.blocks;
+
 public class BurgerTileEntity {
 
     String[] blocks;

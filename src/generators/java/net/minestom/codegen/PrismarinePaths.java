@@ -1,3 +1,5 @@
+package net.minestom.codegen;
+
 import java.io.File;
 
 public class PrismarinePaths {
@@ -17,5 +19,9 @@ public class PrismarinePaths {
 
     public File getBlockFile() {
         return new File("prismarine-minecraft-data/data/"+blocks+"/blocks.json");
+    }
+
+    public File getItemsFile() {
+        return new File("prismarine-minecraft-data/data/"+items+"/items.json");
     }
 }
