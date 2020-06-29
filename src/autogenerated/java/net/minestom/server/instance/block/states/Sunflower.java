@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Sunflower {
 	public static void initStates() {
-		SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7349, "half=upper"));
-		SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7350, "half=lower"));
+		SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7885, "half=upper"));
+		SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7886, "half=lower"));
 	}
 }

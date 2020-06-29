@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class StructureBlock {
 	public static void initStates() {
-		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 11268, "mode=save"));
-		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 11269, "mode=load"));
-		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 11270, "mode=corner"));
-		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 11271, "mode=data"));
+		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15735, "mode=save"));
+		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15736, "mode=load"));
+		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15737, "mode=corner"));
+		STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15738, "mode=data"));
 	}
 }

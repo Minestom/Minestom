@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Loom {
 	public static void initStates() {
-		LOOM.addBlockAlternative(new BlockAlternative((short) 11131, "facing=north"));
-		LOOM.addBlockAlternative(new BlockAlternative((short) 11132, "facing=south"));
-		LOOM.addBlockAlternative(new BlockAlternative((short) 11133, "facing=west"));
-		LOOM.addBlockAlternative(new BlockAlternative((short) 11134, "facing=east"));
+		LOOM.addBlockAlternative(new BlockAlternative((short) 14787, "facing=north"));
+		LOOM.addBlockAlternative(new BlockAlternative((short) 14788, "facing=south"));
+		LOOM.addBlockAlternative(new BlockAlternative((short) 14789, "facing=west"));
+		LOOM.addBlockAlternative(new BlockAlternative((short) 14790, "facing=east"));
 	}
 }

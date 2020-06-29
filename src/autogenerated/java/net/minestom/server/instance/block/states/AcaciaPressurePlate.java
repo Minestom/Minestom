@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AcaciaPressurePlate {
 	public static void initStates() {
-		ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3879, "powered=true"));
-		ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3880, "powered=false"));
+		ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3881, "powered=true"));
+		ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3882, "powered=false"));
 	}
 }

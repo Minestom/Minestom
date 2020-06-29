@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RedstoneTorch {
 	public static void initStates() {
-		REDSTONE_TORCH.addBlockAlternative(new BlockAlternative((short) 3885, "lit=true"));
-		REDSTONE_TORCH.addBlockAlternative(new BlockAlternative((short) 3886, "lit=false"));
+		REDSTONE_TORCH.addBlockAlternative(new BlockAlternative((short) 3887, "lit=true"));
+		REDSTONE_TORCH.addBlockAlternative(new BlockAlternative((short) 3888, "lit=false"));
 	}
 }

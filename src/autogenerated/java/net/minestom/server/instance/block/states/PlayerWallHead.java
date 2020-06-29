@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PlayerWallHead {
 	public static void initStates() {
-		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6030, "facing=north"));
-		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6031, "facing=south"));
-		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6032, "facing=west"));
-		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6033, "facing=east"));
+		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6566, "facing=north"));
+		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6567, "facing=south"));
+		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6568, "facing=west"));
+		PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6569, "facing=east"));
 	}
 }

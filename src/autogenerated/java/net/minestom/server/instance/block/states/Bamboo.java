@@ -7,17 +7,17 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Bamboo {
 	public static void initStates() {
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9116, "age=0", "leaves=none", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9117, "age=0", "leaves=none", "stage=1"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9118, "age=0", "leaves=small", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9119, "age=0", "leaves=small", "stage=1"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9120, "age=0", "leaves=large", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9121, "age=0", "leaves=large", "stage=1"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9122, "age=1", "leaves=none", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9123, "age=1", "leaves=none", "stage=1"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9124, "age=1", "leaves=small", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9125, "age=1", "leaves=small", "stage=1"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9126, "age=1", "leaves=large", "stage=0"));
-		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9127, "age=1", "leaves=large", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9652, "age=0", "leaves=none", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9653, "age=0", "leaves=none", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9654, "age=0", "leaves=small", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9655, "age=0", "leaves=small", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9656, "age=0", "leaves=large", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9657, "age=0", "leaves=large", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9658, "age=1", "leaves=none", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9659, "age=1", "leaves=none", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9660, "age=1", "leaves=small", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9661, "age=1", "leaves=small", "stage=1"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9662, "age=1", "leaves=large", "stage=0"));
+		BAMBOO.addBlockAlternative(new BlockAlternative((short) 9663, "age=1", "leaves=large", "stage=1"));
 	}
 }

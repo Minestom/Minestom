@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class SpruceSlab {
 	public static void initStates() {
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7770, "type=top", "waterlogged=true"));
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7771, "type=top", "waterlogged=false"));
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7772, "type=bottom", "waterlogged=true"));
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7773, "type=bottom", "waterlogged=false"));
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7774, "type=double", "waterlogged=true"));
-		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 7775, "type=double", "waterlogged=false"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8306, "type=top", "waterlogged=true"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8307, "type=top", "waterlogged=false"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8308, "type=bottom", "waterlogged=true"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8309, "type=bottom", "waterlogged=false"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8310, "type=double", "waterlogged=true"));
+		SPRUCE_SLAB.addBlockAlternative(new BlockAlternative((short) 8311, "type=double", "waterlogged=false"));
 	}
 }

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BrainCoralWallFan {
 	public static void initStates() {
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9072, "facing=north", "waterlogged=true"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9073, "facing=north", "waterlogged=false"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9074, "facing=south", "waterlogged=true"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9075, "facing=south", "waterlogged=false"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9076, "facing=west", "waterlogged=true"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9077, "facing=west", "waterlogged=false"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9078, "facing=east", "waterlogged=true"));
-		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9079, "facing=east", "waterlogged=false"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9608, "facing=north", "waterlogged=true"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9609, "facing=north", "waterlogged=false"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9610, "facing=south", "waterlogged=true"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9611, "facing=south", "waterlogged=false"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9612, "facing=west", "waterlogged=true"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9613, "facing=west", "waterlogged=false"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9614, "facing=east", "waterlogged=true"));
+		BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9615, "facing=east", "waterlogged=false"));
 	}
 }

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BlastFurnace {
 	public static void initStates() {
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11155, "facing=north", "lit=true"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11156, "facing=north", "lit=false"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11157, "facing=south", "lit=true"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11158, "facing=south", "lit=false"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11159, "facing=west", "lit=true"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11160, "facing=west", "lit=false"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11161, "facing=east", "lit=true"));
-		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 11162, "facing=east", "lit=false"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14811, "facing=north", "lit=true"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14812, "facing=north", "lit=false"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14813, "facing=south", "lit=true"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14814, "facing=south", "lit=false"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14815, "facing=west", "lit=true"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14816, "facing=west", "lit=false"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14817, "facing=east", "lit=true"));
+		BLAST_FURNACE.addBlockAlternative(new BlockAlternative((short) 14818, "facing=east", "lit=false"));
 	}
 }

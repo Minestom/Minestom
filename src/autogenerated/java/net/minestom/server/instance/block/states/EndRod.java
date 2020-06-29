@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class EndRod {
 	public static void initStates() {
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8522, "facing=north"));
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8523, "facing=east"));
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8524, "facing=south"));
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8525, "facing=west"));
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8526, "facing=up"));
-		END_ROD.addBlockAlternative(new BlockAlternative((short) 8527, "facing=down"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9058, "facing=north"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9059, "facing=east"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9060, "facing=south"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9061, "facing=west"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9062, "facing=up"));
+		END_ROD.addBlockAlternative(new BlockAlternative((short) 9063, "facing=down"));
 	}
 }

@@ -7,21 +7,21 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class GrayBanner {
 	public static void initStates() {
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7473, "rotation=0"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7474, "rotation=1"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7475, "rotation=2"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7476, "rotation=3"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7477, "rotation=4"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7478, "rotation=5"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7479, "rotation=6"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7480, "rotation=7"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7481, "rotation=8"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7482, "rotation=9"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7483, "rotation=10"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7484, "rotation=11"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7485, "rotation=12"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7486, "rotation=13"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7487, "rotation=14"));
-		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 7488, "rotation=15"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8009, "rotation=0"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8010, "rotation=1"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8011, "rotation=2"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8012, "rotation=3"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8013, "rotation=4"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8014, "rotation=5"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8015, "rotation=6"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8016, "rotation=7"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8017, "rotation=8"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8018, "rotation=9"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8019, "rotation=10"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8020, "rotation=11"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8021, "rotation=12"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8022, "rotation=13"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8023, "rotation=14"));
+		GRAY_BANNER.addBlockAlternative(new BlockAlternative((short) 8024, "rotation=15"));
 	}
 }

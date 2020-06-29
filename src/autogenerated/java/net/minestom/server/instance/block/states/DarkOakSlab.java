@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DarkOakSlab {
 	public static void initStates() {
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7794, "type=top", "waterlogged=true"));
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7795, "type=top", "waterlogged=false"));
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7796, "type=bottom", "waterlogged=true"));
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7797, "type=bottom", "waterlogged=false"));
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7798, "type=double", "waterlogged=true"));
-		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 7799, "type=double", "waterlogged=false"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8330, "type=top", "waterlogged=true"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8331, "type=top", "waterlogged=false"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8332, "type=bottom", "waterlogged=true"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8333, "type=bottom", "waterlogged=false"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8334, "type=double", "waterlogged=true"));
+		DARK_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8335, "type=double", "waterlogged=false"));
 	}
 }

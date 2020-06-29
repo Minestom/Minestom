@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RedstoneWallTorch {
 	public static void initStates() {
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3887, "facing=north", "lit=true"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3888, "facing=north", "lit=false"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3889, "facing=south", "lit=true"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3890, "facing=south", "lit=false"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3891, "facing=west", "lit=true"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3892, "facing=west", "lit=false"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3893, "facing=east", "lit=true"));
-		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3894, "facing=east", "lit=false"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3889, "facing=north", "lit=true"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3890, "facing=north", "lit=false"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3891, "facing=south", "lit=true"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3892, "facing=south", "lit=false"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3893, "facing=west", "lit=true"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3894, "facing=west", "lit=false"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3895, "facing=east", "lit=true"));
+		REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3896, "facing=east", "lit=false"));
 	}
 }

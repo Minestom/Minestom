@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class TallSeagrass {
 	public static void initStates() {
-		TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1345, "half=upper"));
-		TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1346, "half=lower"));
+		TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1346, "half=upper"));
+		TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1347, "half=lower"));
 	}
 }

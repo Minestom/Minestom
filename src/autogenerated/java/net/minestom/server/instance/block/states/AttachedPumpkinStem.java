@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AttachedPumpkinStem {
 	public static void initStates() {
-		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4748, "facing=north"));
-		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4749, "facing=south"));
-		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4750, "facing=west"));
-		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4751, "facing=east"));
+		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4764, "facing=north"));
+		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4765, "facing=south"));
+		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4766, "facing=west"));
+		ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4767, "facing=east"));
 	}
 }
