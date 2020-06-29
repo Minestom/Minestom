@@ -10,7 +10,11 @@ public class TranslatableText {
         this.arguments = arguments;
     }
 
-    public static TranslatableText TranslatableText(String code, String... arguments) {
+    public static TranslatableText of(String code) {
+        return new TranslatableText(code, null);
+    }
+
+    public static TranslatableText of(String code, String... arguments) {
         return new TranslatableText(code, arguments);
     }
 
