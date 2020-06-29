@@ -130,7 +130,6 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     protected void prepare(EnumGenerator generator) {
         String className = getClassName();
         generator.addImport(Block.class.getCanonicalName());
-        generator.addImport(Short2ObjectOpenHashMap.class.getCanonicalName());
         generator.setParams("String namespaceID", "int maxDefaultStackSize", "Block correspondingBlock");
         generator.addMethod("getId", "()", "short", "return (short)ordinal();");
         generator.addMethod("getName", "()", "String", "return namespaceID;");
