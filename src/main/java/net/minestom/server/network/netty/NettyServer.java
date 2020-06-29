@@ -38,7 +38,7 @@ public class NettyServer {
             channel = EpollServerSocketChannel.class;
         } else {
             boss = new NioEventLoopGroup(2);
-            worker = new EpollEventLoopGroup();
+            worker = new NioEventLoopGroup();
 
             channel = NioServerSocketChannel.class;
         }

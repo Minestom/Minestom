@@ -33,40 +33,37 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	public void setEncryptionKey(SecretKey secretKey) {
 		this.encrypted = true;
-		getChannel().pipeline().addBefore("decoder", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-		getChannel().pipeline().addBefore("encoder", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
+		getChannel().pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
+		getChannel().pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
 	}
 
 	@Override
     public void enableCompression(int threshold) {
         sendPacket(new SetCompressionPacket(threshold));
-
         channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
     }
 
     @Override
 	public void sendPacket(ByteBuf buffer, boolean copy) {
 		//System.out.println(getConnectionState() + " out");
-		if (encrypted) {
+		if (encrypted && copy) {
 			buffer = buffer.copy();
 			buffer.retain();
 			channel.writeAndFlush(buffer);
 			buffer.release();
 		} else {
-			buffer.retain();
 			getChannel().writeAndFlush(buffer);
 		}
 	}
 
 	@Override
 	public void writePacket(ByteBuf buffer, boolean copy) {
-		if (encrypted) {
+		if (encrypted && copy) {
 			buffer = buffer.copy();
 			buffer.retain();
 			channel.write(buffer);
 			buffer.release();
 		} else {
-			buffer.retain();
 			getChannel().write(buffer);
 		}
 	}
@@ -74,7 +71,6 @@ public class NettyPlayerConnection extends PlayerConnection {
 	@Override
 	public void sendPacket(ServerPacket serverPacket) {
 		//System.out.println(serverPacket.getClass().getName() + " out");
-        //TODO check wat this does
         channel.writeAndFlush(serverPacket);
 	}
 

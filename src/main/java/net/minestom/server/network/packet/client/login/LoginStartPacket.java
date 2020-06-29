@@ -1,5 +1,8 @@
 package net.minestom.server.network.packet.client.login;
 
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.ConnectionManager;
@@ -7,6 +10,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
+import net.minestom.server.network.packet.server.login.LoginDisconnect;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -15,35 +19,42 @@ import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
-    public String username;
+	public String username;
 
-    @Override
-    public void process(PlayerConnection connection, ConnectionManager connectionManager) {
-        if (MojangAuth.isUsingMojangAuth()) {
-            connection.setConnectionState(ConnectionState.LOGIN);
+	@Override
+	public void process(PlayerConnection connection, ConnectionManager connectionManager) {
+		if (MojangAuth.isUsingMojangAuth()) {
+			for (final Player pl : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+				//toLowerCase b/c there is a hack to change caps in your name
+				if (pl.getUsername().toLowerCase().equals(username.toLowerCase())) {
+					connection.sendPacket(new LoginDisconnect(ColoredText.of(ChatColor.RED, "You are already on this server").toString()));
+					return;
+				}
+			}
+			connection.setConnectionState(ConnectionState.LOGIN);
+			connection.setLoginUsername(username);
+			EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(connection);
+			connection.sendPacket(encryptionRequestPacket);
+		} else {
+			UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection, username);
 
-            connection.setLoginUsername(username);
-            EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(connection);
-            connection.sendPacket(encryptionRequestPacket);
-        } else {
-            UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection, username);
+			int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
 
-        int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
+			if (threshold > 0) {
+				connection.enableCompression(threshold);
+			}
 
-        if (threshold > 0) {
-            connection.enableCompression(threshold);
-        }
+			LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
+			connection.sendPacket(successPacket);
 
-        LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);
-        connection.sendPacket(successPacket);
+			connection.setConnectionState(ConnectionState.PLAY);
+			connectionManager.createPlayer(playerUuid, username, connection);
+		}
+	}
 
-            connection.setConnectionState(ConnectionState.PLAY);
-            connectionManager.createPlayer(playerUuid, username, connection);
-        }
-    }
+	@Override
+	public void read(PacketReader reader) {
+		this.username = reader.readSizedString();
+	}
 
-    @Override
-    public void read(PacketReader reader) {
-        this.username = reader.readSizedString();
-    }
 }

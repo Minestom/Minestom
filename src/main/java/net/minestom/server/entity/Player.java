@@ -716,6 +716,7 @@ public class Player extends LivingEntity implements CommandSender {
                 break;
             case SET_ACTION_BAR:
                 titlePacket.actionBarText = text.toString();
+                break;
             default:
                 throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
         }
