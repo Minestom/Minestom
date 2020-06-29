@@ -101,7 +101,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         LOGGER.debug("Loading PrismarineJS blocks data");
         List<PrismarineJSItem> prismarineJSItems = parseItemsFromPrismarineJS(gson, paths.getItemsFile());
 
-        SortedSet<ItemContainer> items = Collections.synchronizedSortedSet(new TreeSet<>(ItemContainer::compareTo));
+        TreeSet<ItemContainer> items = new TreeSet<>(ItemContainer::compareTo);
         for(var prismarineJSItem : prismarineJSItems) {
             items.add(new ItemContainer(prismarineJSItem.id, NamespaceID.from(prismarineJSItem.name), prismarineJSItem.stackSize, getBlock(prismarineJSItem.name.toUpperCase())));
         }
@@ -138,7 +138,12 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         generator.addMethod("isBlock", "()", "boolean", "return correspondingBlock != null && this != AIR;");
         generator.addMethod("getBlock", "()", "Block", "return correspondingBlock;");
 
-        generator.addMethod("fromId", "(short blockId)", "static "+className, "return "+getClassName()+"Map.map.getOrDefault(blockId, AIR);");
+        generator.addMethod("fromId", "(short id)", "static "+className,
+                "if(id >= 0 && id < values().length) {",
+                "\treturn values()[id];",
+                "}",
+                "return AIR;"
+        );
 
         // hard coded methods
         generator.addMethod("isHelmet", "()", "boolean", "return toString().endsWith(\"HELMET\");");
@@ -197,8 +202,6 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
                 "        }\n" +
                 "\n" +
                 "        return isFood();");
-
-        generator.appendToConstructor(getClassName()+"Map.map.put((short)ordinal(), this);");
     }
 
     @Override
@@ -212,23 +215,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     }
 
     @Override
-    protected void postGeneration() throws IOException {
-        File classFolder = new File(targetFolder, getRelativeFolderPath());
-        if(!classFolder.exists()) {
-            classFolder.mkdirs();
-        }
-
-        StringBuilder mapClass = new StringBuilder();
-        mapClass.append("package "+getPackageName()+";\n")
-                .append("import "+Short2ObjectOpenHashMap.class.getCanonicalName()+";\n")
-                .append("final class "+getClassName()+"Map {\n")
-                .append("\tstatic final Short2ObjectOpenHashMap<"+getClassName()+"> map = new Short2ObjectOpenHashMap<>();\n")
-                .append("}\n");
-        LOGGER.debug("Writing map to file: "+getRelativeFolderPath()+"/"+getClassName()+"Map.java");
-        try(Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, getClassName()+"Map.java")))) {
-            writer.write(mapClass.toString());
-        }
-    }
+    protected void postGeneration() throws IOException {}
 
     @Override
     protected void postWrite(EnumGenerator generator) {}

@@ -16,7 +16,6 @@ import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.RegistryMain;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageFolder;
@@ -123,12 +122,6 @@ public class MinecraftServer {
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
-        RegistryMain.registerEntities();
-        RegistryMain.registerSounds();
-        RegistryMain.registerParticles();
-        RegistryMain.registerStats();
-        RegistryMain.registerEnchantments();
-        RegistryMain.registerPotions();
 
         minecraftServer = new MinecraftServer();
 

@@ -899,7 +899,6 @@ public enum Material {
 		this.namespaceID = namespaceID;
 		this.maxDefaultStackSize = maxDefaultStackSize;
 		this.correspondingBlock = correspondingBlock;
-		MaterialMap.map.put((short)ordinal(), this);
 	}
 
 	public short getId() {
@@ -922,8 +921,11 @@ public enum Material {
 		return correspondingBlock;
 	}
 
-	public static Material fromId(short blockId) {
-		return MaterialMap.map.getOrDefault(blockId, AIR);
+	public static Material fromId(short id) {
+		if(id >= 0 && id < values().length) {
+			return values()[id];
+		}
+		return AIR;
 	}
 
 	public boolean isHelmet() {
