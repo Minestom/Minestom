@@ -1,5 +1,7 @@
 package net.minestom.server.chat;
 
+import net.minestom.server.utils.validate.Check;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,39 +9,22 @@ public class ChatColor {
 
     public static final ChatColor NO_COLOR = new ChatColor();
 
-    public static final ChatColor BLACK = new ChatColor("black", 0);
-    public static final ChatColor DARK_BLUE = new ChatColor("dark_blue", 1);
-    public static final ChatColor DARK_GREEN = new ChatColor("dark_green", 2);
-    public static final ChatColor DARK_CYAN = new ChatColor("dark_cyan", 3);
-    public static final ChatColor DARK_RED = new ChatColor("dark_red", 4);
-    public static final ChatColor PURPLE = new ChatColor("dark_purple", 5);
-    public static final ChatColor GOLD = new ChatColor("gold", 6);
-    public static final ChatColor GRAY = new ChatColor("gray", 7);
-    public static final ChatColor DARK_GRAY = new ChatColor("dark_gray", 8);
-    public static final ChatColor BLUE = new ChatColor("blue", 9);
-    public static final ChatColor BRIGHT_GREEN = new ChatColor("green", 10);
-    public static final ChatColor CYAN = new ChatColor("aqua", 11);
-    public static final ChatColor RED = new ChatColor("red", 12);
-    public static final ChatColor PINK = new ChatColor("light_purple", 13);
-    public static final ChatColor YELLOW = new ChatColor("yellow", 14);
-    public static final ChatColor WHITE = new ChatColor("white", 15);
-
-    /*public static final ChatColor BLACK = fromRGB(0, 0, 0);
-    public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170);
-    public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0);
-    public static final ChatColor DARK_CYAN = fromRGB(0, 170, 170);
-    public static final ChatColor DARK_RED = fromRGB(170, 0, 0);
-    public static final ChatColor PURPLE = fromRGB(170, 0, 170);
-    public static final ChatColor GOLD = fromRGB(255, 170, 0);
-    public static final ChatColor GRAY = fromRGB(170, 170, 170);
-    public static final ChatColor DARK_GRAY = fromRGB(85, 85, 85);
-    public static final ChatColor BLUE = fromRGB(85, 85, 255);
-    public static final ChatColor BRIGHT_GREEN = fromRGB(85, 255, 85);
-    public static final ChatColor CYAN = fromRGB(85, 255, 255);
-    public static final ChatColor RED = fromRGB(255, 85, 85);
-    public static final ChatColor PINK = fromRGB(255, 85, 255);
-    public static final ChatColor YELLOW = fromRGB(255, 255, 85);
-    public static final ChatColor WHITE = fromRGB(255, 255, 255);*/
+    public static final ChatColor BLACK = fromRGB(0, 0, 0, 0);
+    public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170, 1);
+    public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0, 2);
+    public static final ChatColor DARK_CYAN = fromRGB(0, 170, 170, 3);
+    public static final ChatColor DARK_RED = fromRGB(170, 0, 0, 4);
+    public static final ChatColor PURPLE = fromRGB(170, 0, 170, 5);
+    public static final ChatColor GOLD = fromRGB(255, 170, 0, 6);
+    public static final ChatColor GRAY = fromRGB(170, 170, 170, 7);
+    public static final ChatColor DARK_GRAY = fromRGB(85, 85, 85, 8);
+    public static final ChatColor BLUE = fromRGB(85, 85, 255, 9);
+    public static final ChatColor BRIGHT_GREEN = fromRGB(85, 255, 85, 10);
+    public static final ChatColor CYAN = fromRGB(85, 255, 255, 11);
+    public static final ChatColor RED = fromRGB(255, 85, 85, 12);
+    public static final ChatColor PINK = fromRGB(255, 85, 255, 13);
+    public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14);
+    public static final ChatColor WHITE = fromRGB(255, 255, 255, 15);
     private static Map<String, ChatColor> colorCode = new HashMap<>();
     private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
 
@@ -82,21 +67,13 @@ public class ChatColor {
     private boolean empty;
     private int red, green, blue;
     private int id;
-    // 1.15
-    private String name;
 
-    // 1.15
-    private ChatColor(String name, int id) {
-        this.name = name;
-        this.id = id;
-    }
-
-    // 1.16
-    private ChatColor(int r, int g, int b) {
+    private ChatColor(int r, int g, int b, int id) {
         this.empty = false;
         this.red = r;
         this.green = g;
         this.blue = b;
+        this.id = id;
     }
 
     private ChatColor() {
@@ -104,7 +81,11 @@ public class ChatColor {
     }
 
     public static ChatColor fromRGB(int r, int g, int b) {
-        return new ChatColor(r, g, b);
+        return fromRGB(r, g, b, -1);
+    }
+
+    private static ChatColor fromRGB(int r, int g, int b, int id) {
+        return new ChatColor(r, g, b, id);
     }
 
     public static ChatColor fromName(String name) {
@@ -132,20 +113,12 @@ public class ChatColor {
     }
 
     public int getId() {
+        Check.stateCondition(id == -1, "Please use one of the ChatColor constant instead");
         return id;
-    }
-
-    // 1.15
-    public String getName() {
-        return name;
     }
 
     @Override
     public String toString() {
-        // 1.15
-        if (name != null)
-            return "{#" + name + "}";
-        // 1.16
         if (empty)
             return "";
 

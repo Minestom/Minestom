@@ -156,11 +156,11 @@ public class ColoredText {
                     String colorCode = formatString.substring(1);
                     ChatColor color = ChatColor.fromName(colorCode);
                     if (color == ChatColor.NO_COLOR) {
-                        // Use rgb formatting
-                        currentColor = colorCode;
+                        // Use rgb formatting (#ffffff)
+                        currentColor = "#" + colorCode;
                     } else {
-                        // Use color name formatiing
-                        currentColor = color.getName();
+                        // Use color name formatting (white)
+                        currentColor = colorCode;
                     }
                     continue;
                 }
