@@ -3,11 +3,9 @@
 //==============================
 package net.minestom.server.instance.block;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.instance.block.BlockAlternative;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.states.*;
 @SuppressWarnings({"deprecation"})
 

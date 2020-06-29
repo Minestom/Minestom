@@ -26,14 +26,18 @@ public class BlockEnumGenerator {
     public static final String BURGER_URL_BASE_URL = "https://pokechu22.github.io/Burger/";
 
     public static void main(String[] args) throws IOException {
+        String targetVersion;
+        if(args.length < 1) {
+            System.err.println("Usage: <MC version> [target folder]");
+            return;
+        }
+
+        targetVersion = args[0];
+
         try {
-            ResourceGatherer.ensureResourcesArePresent(null); // TODO
+            ResourceGatherer.ensureResourcesArePresent(targetVersion, null); // TODO
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        String targetVersion = "1.15.2";
-        if(args.length >= 1) {
-            targetVersion = args[0];
         }
 
         String targetPart = DEFAULT_TARGET_PATH;
@@ -79,11 +83,9 @@ public class BlockEnumGenerator {
         EnumGenerator blockGenerator = new EnumGenerator(packageName, className);
         blockGenerator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
         blockGenerator.addImport(NamespaceID.class.getCanonicalName());
-        blockGenerator.addImport(BlockAlternative.class.getCanonicalName());
         blockGenerator.addImport(List.class.getCanonicalName());
         blockGenerator.addImport(ArrayList.class.getCanonicalName());
         blockGenerator.addImport(Arrays.class.getCanonicalName());
-        blockGenerator.addImport(Short2ObjectOpenHashMap.class.getCanonicalName());
         blockGenerator.addImport(blockGenerator.getPackage()+".states.*");
         blockGenerator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
         blockGenerator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity", "boolean singleState");
