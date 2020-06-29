@@ -9,7 +9,6 @@ import net.minestom.server.gamedata.loottables.entries.ItemType;
 import net.minestom.server.gamedata.loottables.tabletypes.BlockType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.RegistryMain;
 import net.minestom.server.utils.NamespaceID;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,7 +24,6 @@ public class TestLootTables {
 
     @Before
     public void init() {
-        RegistryMain.registerItems();
         tableManager = new LootTableManager();
         tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());
         tableManager.registerTableType(NamespaceID.from("minecraft:block"), new BlockType());

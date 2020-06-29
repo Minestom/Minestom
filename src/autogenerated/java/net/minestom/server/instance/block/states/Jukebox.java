@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Jukebox {
 	public static void initStates() {
-		JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3964, "has_record=true"));
-		JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3965, "has_record=false"));
+		JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3962, "has_record=true"));
+		JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3963, "has_record=false"));
 	}
 }

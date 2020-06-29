@@ -7,17 +7,17 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Dropper {
 	public static void initStates() {
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6835, "facing=north", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6836, "facing=north", "triggered=false"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6837, "facing=east", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6838, "facing=east", "triggered=false"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6839, "facing=south", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6840, "facing=south", "triggered=false"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6841, "facing=west", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6842, "facing=west", "triggered=false"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6843, "facing=up", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6844, "facing=up", "triggered=false"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6845, "facing=down", "triggered=true"));
-		DROPPER.addBlockAlternative(new BlockAlternative((short) 6846, "facing=down", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6299, "facing=north", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6300, "facing=north", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6301, "facing=east", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6302, "facing=east", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6303, "facing=south", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6304, "facing=south", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6305, "facing=west", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6306, "facing=west", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6307, "facing=up", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6308, "facing=up", "triggered=false"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6309, "facing=down", "triggered=true"));
+		DROPPER.addBlockAlternative(new BlockAlternative((short) 6310, "facing=down", "triggered=false"));
 	}
 }

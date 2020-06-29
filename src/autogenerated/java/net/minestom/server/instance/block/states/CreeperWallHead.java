@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CreeperWallHead {
 	public static void initStates() {
-		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6586, "facing=north"));
-		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6587, "facing=south"));
-		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6588, "facing=west"));
-		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6589, "facing=east"));
+		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6050, "facing=north"));
+		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6051, "facing=south"));
+		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6052, "facing=west"));
+		CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6053, "facing=east"));
 	}
 }

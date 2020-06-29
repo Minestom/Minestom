@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class QuartzSlab {
 	public static void initStates() {
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8390, "type=top", "waterlogged=true"));
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8391, "type=top", "waterlogged=false"));
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8392, "type=bottom", "waterlogged=true"));
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8393, "type=bottom", "waterlogged=false"));
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8394, "type=double", "waterlogged=true"));
-		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 8395, "type=double", "waterlogged=false"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7854, "type=top", "waterlogged=true"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7855, "type=top", "waterlogged=false"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7856, "type=bottom", "waterlogged=true"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7857, "type=bottom", "waterlogged=false"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7858, "type=double", "waterlogged=true"));
+		QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 7859, "type=double", "waterlogged=false"));
 	}
 }

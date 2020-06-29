@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class MelonStem {
 	public static void initStates() {
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4780, "age=0"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4781, "age=1"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4782, "age=2"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4783, "age=3"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4784, "age=4"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4785, "age=5"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4786, "age=6"));
-		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4787, "age=7"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4764, "age=0"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4765, "age=1"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4766, "age=2"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4767, "age=3"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4768, "age=4"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4769, "age=5"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4770, "age=6"));
+		MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4771, "age=7"));
 	}
 }

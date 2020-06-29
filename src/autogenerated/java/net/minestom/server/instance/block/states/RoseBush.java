@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RoseBush {
 	public static void initStates() {
-		ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7889, "half=upper"));
-		ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7890, "half=lower"));
+		ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7353, "half=upper"));
+		ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7354, "half=lower"));
 	}
 }

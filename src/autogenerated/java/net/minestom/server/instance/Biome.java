@@ -12,7 +12,7 @@ public enum Biome {
 	TAIGA("minecraft:taiga"),
 	SWAMP("minecraft:swamp"),
 	RIVER("minecraft:river"),
-	NETHER_WASTES("minecraft:nether_wastes"),
+	NETHER("minecraft:nether"),
 	THE_END("minecraft:the_end"),
 	FROZEN_OCEAN("minecraft:frozen_ocean"),
 	FROZEN_RIVER("minecraft:frozen_river"),
@@ -79,10 +79,6 @@ public enum Biome {
 	MODIFIED_BADLANDS_PLATEAU("minecraft:modified_badlands_plateau"),
 	BAMBOO_JUNGLE("minecraft:bamboo_jungle"),
 	BAMBOO_JUNGLE_HILLS("minecraft:bamboo_jungle_hills"),
-	SOUL_SAND_VALLEY("minecraft:soul_sand_valley"),
-	CRIMSON_FOREST("minecraft:crimson_forest"),
-	WARPED_FOREST("minecraft:warped_forest"),
-	BASALT_DELTAS("minecraft:basalt_deltas"),
 ;
 	private String namespaceID;
 

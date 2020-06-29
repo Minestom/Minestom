@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class JunglePressurePlate {
 	public static void initStates() {
-		JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3879, "powered=true"));
-		JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3880, "powered=false"));
+		JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3877, "powered=true"));
+		JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3878, "powered=false"));
 	}
 }

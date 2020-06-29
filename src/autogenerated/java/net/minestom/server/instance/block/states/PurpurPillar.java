@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PurpurPillar {
 	public static void initStates() {
-		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9135, "axis=x"));
-		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9136, "axis=y"));
-		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9137, "axis=z"));
+		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 8599, "axis=x"));
+		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 8600, "axis=y"));
+		PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 8601, "axis=z"));
 	}
 }

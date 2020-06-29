@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class MagentaWallBanner {
 	public static void initStates() {
-		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8161, "facing=north"));
-		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8162, "facing=south"));
-		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8163, "facing=west"));
-		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8164, "facing=east"));
+		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7625, "facing=north"));
+		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7626, "facing=south"));
+		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7627, "facing=west"));
+		MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7628, "facing=east"));
 	}
 }

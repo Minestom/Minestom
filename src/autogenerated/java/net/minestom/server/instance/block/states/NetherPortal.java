@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class NetherPortal {
 	public static void initStates() {
-		NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4014, "axis=x"));
-		NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4015, "axis=z"));
+		NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4000, "axis=x"));
+		NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4001, "axis=z"));
 	}
 }

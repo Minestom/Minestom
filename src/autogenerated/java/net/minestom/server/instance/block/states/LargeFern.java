@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class LargeFern {
 	public static void initStates() {
-		LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7895, "half=upper"));
-		LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7896, "half=lower"));
+		LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7359, "half=upper"));
+		LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7360, "half=lower"));
 	}
 }

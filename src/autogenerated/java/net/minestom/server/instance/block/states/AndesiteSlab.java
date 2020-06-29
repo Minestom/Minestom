@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AndesiteSlab {
 	public static void initStates() {
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10843, "type=top", "waterlogged=true"));
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10844, "type=top", "waterlogged=false"));
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10845, "type=bottom", "waterlogged=true"));
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10846, "type=bottom", "waterlogged=false"));
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10847, "type=double", "waterlogged=true"));
-		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10848, "type=double", "waterlogged=false"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10307, "type=top", "waterlogged=true"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10308, "type=top", "waterlogged=false"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10309, "type=bottom", "waterlogged=true"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10310, "type=bottom", "waterlogged=false"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10311, "type=double", "waterlogged=true"));
+		ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10312, "type=double", "waterlogged=false"));
 	}
 }

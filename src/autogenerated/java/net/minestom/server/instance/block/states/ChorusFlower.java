@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class ChorusFlower {
 	public static void initStates() {
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9128, "age=0"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9129, "age=1"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9130, "age=2"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9131, "age=3"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9132, "age=4"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9133, "age=5"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8592, "age=0"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8593, "age=1"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8594, "age=2"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8595, "age=3"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8596, "age=4"));
+		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 8597, "age=5"));
 	}
 }

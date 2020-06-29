@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class ZombieWallHead {
 	public static void initStates() {
-		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6546, "facing=north"));
-		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6547, "facing=south"));
-		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6548, "facing=west"));
-		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6549, "facing=east"));
+		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6010, "facing=north"));
+		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6011, "facing=south"));
+		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6012, "facing=west"));
+		ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6013, "facing=east"));
 	}
 }

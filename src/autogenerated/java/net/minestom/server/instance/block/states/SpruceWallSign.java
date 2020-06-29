@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class SpruceWallSign {
 	public static void initStates() {
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3743, "facing=north", "waterlogged=true"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3744, "facing=north", "waterlogged=false"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3745, "facing=south", "waterlogged=true"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3746, "facing=south", "waterlogged=false"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3747, "facing=west", "waterlogged=true"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3748, "facing=west", "waterlogged=false"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3749, "facing=east", "waterlogged=true"));
-		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3750, "facing=east", "waterlogged=false"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3741, "facing=north", "waterlogged=true"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3742, "facing=north", "waterlogged=false"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3743, "facing=south", "waterlogged=true"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3744, "facing=south", "waterlogged=false"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3745, "facing=west", "waterlogged=true"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3746, "facing=west", "waterlogged=false"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3747, "facing=east", "waterlogged=true"));
+		SPRUCE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3748, "facing=east", "waterlogged=false"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class StonePressurePlate {
 	public static void initStates() {
-		STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3807, "powered=true"));
-		STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3808, "powered=false"));
+		STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3805, "powered=true"));
+		STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3806, "powered=false"));
 	}
 }

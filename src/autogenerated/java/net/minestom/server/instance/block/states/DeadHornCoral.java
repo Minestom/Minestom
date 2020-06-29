@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DeadHornCoral {
 	public static void initStates() {
-		DEAD_HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9528, "waterlogged=true"));
-		DEAD_HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9529, "waterlogged=false"));
+		DEAD_HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 8992, "waterlogged=true"));
+		DEAD_HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 8993, "waterlogged=false"));
 	}
 }

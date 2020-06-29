@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Stonecutter {
 	public static void initStates() {
-		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14850, "facing=north"));
-		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14851, "facing=south"));
-		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14852, "facing=west"));
-		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14853, "facing=east"));
+		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 11194, "facing=north"));
+		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 11195, "facing=south"));
+		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 11196, "facing=west"));
+		STONECUTTER.addBlockAlternative(new BlockAlternative((short) 11197, "facing=east"));
 	}
 }

@@ -31,8 +31,6 @@ public enum Particle {
 	FIREWORK("minecraft:firework"),
 	FISHING("minecraft:fishing"),
 	FLAME("minecraft:flame"),
-	SOUL_FIRE_FLAME("minecraft:soul_fire_flame"),
-	SOUL("minecraft:soul"),
 	FLASH("minecraft:flash"),
 	HAPPY_VILLAGER("minecraft:happy_villager"),
 	COMPOSTER("minecraft:composter"),
@@ -68,14 +66,6 @@ public enum Particle {
 	FALLING_HONEY("minecraft:falling_honey"),
 	LANDING_HONEY("minecraft:landing_honey"),
 	FALLING_NECTAR("minecraft:falling_nectar"),
-	ASH("minecraft:ash"),
-	CRIMSON_SPORE("minecraft:crimson_spore"),
-	WARPED_SPORE("minecraft:warped_spore"),
-	DRIPPING_OBSIDIAN_TEAR("minecraft:dripping_obsidian_tear"),
-	FALLING_OBSIDIAN_TEAR("minecraft:falling_obsidian_tear"),
-	LANDING_OBSIDIAN_TEAR("minecraft:landing_obsidian_tear"),
-	REVERSE_PORTAL("minecraft:reverse_portal"),
-	WHITE_ASH("minecraft:white_ash"),
 ;
 	private String namespaceID;
 

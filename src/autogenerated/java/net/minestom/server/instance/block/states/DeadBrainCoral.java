@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DeadBrainCoral {
 	public static void initStates() {
-		DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9522, "waterlogged=true"));
-		DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9523, "waterlogged=false"));
+		DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 8986, "waterlogged=true"));
+		DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 8987, "waterlogged=false"));
 	}
 }

@@ -7,17 +7,17 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Barrel {
 	public static void initStates() {
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14791, "facing=north", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14792, "facing=north", "open=false"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14793, "facing=east", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14794, "facing=east", "open=false"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14795, "facing=south", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14796, "facing=south", "open=false"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14797, "facing=west", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14798, "facing=west", "open=false"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14799, "facing=up", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14800, "facing=up", "open=false"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14801, "facing=down", "open=true"));
-		BARREL.addBlockAlternative(new BlockAlternative((short) 14802, "facing=down", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11135, "facing=north", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11136, "facing=north", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11137, "facing=east", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11138, "facing=east", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11139, "facing=south", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11140, "facing=south", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11141, "facing=west", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11142, "facing=west", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11143, "facing=up", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11144, "facing=up", "open=false"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11145, "facing=down", "open=true"));
+		BARREL.addBlockAlternative(new BlockAlternative((short) 11146, "facing=down", "open=false"));
 	}
 }

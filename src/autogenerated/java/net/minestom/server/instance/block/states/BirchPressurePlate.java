@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BirchPressurePlate {
 	public static void initStates() {
-		BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3877, "powered=true"));
-		BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3878, "powered=false"));
+		BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3875, "powered=true"));
+		BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3876, "powered=false"));
 	}
 }

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Snow {
 	public static void initStates() {
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3921, "layers=1"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3922, "layers=2"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3923, "layers=3"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3924, "layers=4"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3925, "layers=5"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3926, "layers=6"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3927, "layers=7"));
-		SNOW.addBlockAlternative(new BlockAlternative((short) 3928, "layers=8"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3919, "layers=1"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3920, "layers=2"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3921, "layers=3"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3922, "layers=4"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3923, "layers=5"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3924, "layers=6"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3925, "layers=7"));
+		SNOW.addBlockAlternative(new BlockAlternative((short) 3926, "layers=8"));
 	}
 }

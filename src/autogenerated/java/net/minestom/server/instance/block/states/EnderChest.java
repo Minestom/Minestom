@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class EnderChest {
 	public static void initStates() {
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5251, "facing=north", "waterlogged=true"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5252, "facing=north", "waterlogged=false"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5253, "facing=south", "waterlogged=true"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5254, "facing=south", "waterlogged=false"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5255, "facing=west", "waterlogged=true"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5256, "facing=west", "waterlogged=false"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5257, "facing=east", "waterlogged=true"));
-		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5258, "facing=east", "waterlogged=false"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5235, "facing=north", "waterlogged=true"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5236, "facing=north", "waterlogged=false"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5237, "facing=south", "waterlogged=true"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5238, "facing=south", "waterlogged=false"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5239, "facing=west", "waterlogged=true"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5240, "facing=west", "waterlogged=false"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5241, "facing=east", "waterlogged=true"));
+		ENDER_CHEST.addBlockAlternative(new BlockAlternative((short) 5242, "facing=east", "waterlogged=false"));
 	}
 }

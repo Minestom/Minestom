@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CarvedPumpkin {
 	public static void initStates() {
-		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4016, "facing=north"));
-		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4017, "facing=south"));
-		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4018, "facing=west"));
-		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4019, "facing=east"));
+		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4002, "facing=north"));
+		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4003, "facing=south"));
+		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4004, "facing=west"));
+		CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4005, "facing=east"));
 	}
 }

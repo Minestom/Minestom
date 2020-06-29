@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class OakLog {
 	public static void initStates() {
-		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 73, "axis=x"));
-		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 74, "axis=y"));
-		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 75, "axis=z"));
+		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 72, "axis=x"));
+		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 73, "axis=y"));
+		OAK_LOG.addBlockAlternative(new BlockAlternative((short) 74, "axis=z"));
 	}
 }

@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BirchLog {
 	public static void initStates() {
-		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 79, "axis=x"));
-		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 80, "axis=y"));
-		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 81, "axis=z"));
+		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 78, "axis=x"));
+		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 79, "axis=y"));
+		BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 80, "axis=z"));
 	}
 }

@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class SandstoneSlab {
 	public static void initStates() {
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8348, "type=top", "waterlogged=true"));
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8349, "type=top", "waterlogged=false"));
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8350, "type=bottom", "waterlogged=true"));
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8351, "type=bottom", "waterlogged=false"));
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8352, "type=double", "waterlogged=true"));
-		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8353, "type=double", "waterlogged=false"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7812, "type=top", "waterlogged=true"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7813, "type=top", "waterlogged=false"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7814, "type=bottom", "waterlogged=true"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7815, "type=bottom", "waterlogged=false"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7816, "type=double", "waterlogged=true"));
+		SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 7817, "type=double", "waterlogged=false"));
 	}
 }

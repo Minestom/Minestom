@@ -23,7 +23,6 @@ public enum StatisticType {
 	HORSE_ONE_CM("minecraft:horse_one_cm"),
 	AVIATE_ONE_CM("minecraft:aviate_one_cm"),
 	SWIM_ONE_CM("minecraft:swim_one_cm"),
-	STRIDER_ONE_CM("minecraft:strider_one_cm"),
 	JUMP("minecraft:jump"),
 	DROP("minecraft:drop"),
 	DAMAGE_DEALT("minecraft:damage_dealt"),
@@ -76,8 +75,6 @@ public enum StatisticType {
 	RAID_WIN("minecraft:raid_win"),
 	INTERACT_WITH_ANVIL("minecraft:interact_with_anvil"),
 	INTERACT_WITH_GRINDSTONE("minecraft:interact_with_grindstone"),
-	TARGET_HIT("minecraft:target_hit"),
-	INTERACT_WITH_SMITHING_TABLE("minecraft:interact_with_smithing_table"),
 ;
 	private String namespaceID;
 

@@ -7,17 +7,17 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CommandBlock {
 	public static void initStates() {
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5644, "conditional=true", "facing=north"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5645, "conditional=true", "facing=east"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5646, "conditional=true", "facing=south"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5647, "conditional=true", "facing=west"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5648, "conditional=true", "facing=up"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5649, "conditional=true", "facing=down"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5650, "conditional=false", "facing=north"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5651, "conditional=false", "facing=east"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5652, "conditional=false", "facing=south"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5653, "conditional=false", "facing=west"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5654, "conditional=false", "facing=up"));
-		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5655, "conditional=false", "facing=down"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5628, "conditional=true", "facing=north"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5629, "conditional=true", "facing=east"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5630, "conditional=true", "facing=south"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5631, "conditional=true", "facing=west"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5632, "conditional=true", "facing=up"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5633, "conditional=true", "facing=down"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5634, "conditional=false", "facing=north"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5635, "conditional=false", "facing=east"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5636, "conditional=false", "facing=south"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5637, "conditional=false", "facing=west"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5638, "conditional=false", "facing=up"));
+		COMMAND_BLOCK.addBlockAlternative(new BlockAlternative((short) 5639, "conditional=false", "facing=down"));
 	}
 }

@@ -7,21 +7,21 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CyanBanner {
 	public static void initStates() {
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8041, "rotation=0"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8042, "rotation=1"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8043, "rotation=2"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8044, "rotation=3"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8045, "rotation=4"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8046, "rotation=5"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8047, "rotation=6"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8048, "rotation=7"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8049, "rotation=8"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8050, "rotation=9"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8051, "rotation=10"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8052, "rotation=11"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8053, "rotation=12"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8054, "rotation=13"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8055, "rotation=14"));
-		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 8056, "rotation=15"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7505, "rotation=0"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7506, "rotation=1"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7507, "rotation=2"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7508, "rotation=3"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7509, "rotation=4"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7510, "rotation=5"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7511, "rotation=6"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7512, "rotation=7"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7513, "rotation=8"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7514, "rotation=9"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7515, "rotation=10"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7516, "rotation=11"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7517, "rotation=12"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7518, "rotation=13"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7519, "rotation=14"));
+		CYAN_BANNER.addBlockAlternative(new BlockAlternative((short) 7520, "rotation=15"));
 	}
 }

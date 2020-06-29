@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class FireCoralWallFan {
 	public static void initStates() {
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9624, "facing=north", "waterlogged=true"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9625, "facing=north", "waterlogged=false"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9626, "facing=south", "waterlogged=true"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9627, "facing=south", "waterlogged=false"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9628, "facing=west", "waterlogged=true"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9629, "facing=west", "waterlogged=false"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9630, "facing=east", "waterlogged=true"));
-		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9631, "facing=east", "waterlogged=false"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9088, "facing=north", "waterlogged=true"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9089, "facing=north", "waterlogged=false"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9090, "facing=south", "waterlogged=true"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9091, "facing=south", "waterlogged=false"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9092, "facing=west", "waterlogged=true"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9093, "facing=west", "waterlogged=false"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9094, "facing=east", "waterlogged=true"));
+		FIRE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9095, "facing=east", "waterlogged=false"));
 	}
 }

@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class LimeShulkerBox {
 	public static void initStates() {
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9308, "facing=north"));
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9309, "facing=east"));
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9310, "facing=south"));
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9311, "facing=west"));
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9312, "facing=up"));
-		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9313, "facing=down"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8772, "facing=north"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8773, "facing=east"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8774, "facing=south"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8775, "facing=west"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8776, "facing=up"));
+		LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8777, "facing=down"));
 	}
 }

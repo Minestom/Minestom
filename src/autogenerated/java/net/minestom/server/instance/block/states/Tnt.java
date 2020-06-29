@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Tnt {
 	public static void initStates() {
-		TNT.addBlockAlternative(new BlockAlternative((short) 1430, "unstable=true"));
-		TNT.addBlockAlternative(new BlockAlternative((short) 1431, "unstable=false"));
+		TNT.addBlockAlternative(new BlockAlternative((short) 1429, "unstable=true"));
+		TNT.addBlockAlternative(new BlockAlternative((short) 1430, "unstable=false"));
 	}
 }

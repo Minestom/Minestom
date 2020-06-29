@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BlackWallBanner {
 	public static void initStates() {
-		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8213, "facing=north"));
-		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8214, "facing=south"));
-		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8215, "facing=west"));
-		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8216, "facing=east"));
+		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7677, "facing=north"));
+		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7678, "facing=south"));
+		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7679, "facing=west"));
+		BLACK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7680, "facing=east"));
 	}
 }
