@@ -7,6 +7,7 @@ import net.minestom.codegen.items.ItemEnumGenerator;
 import net.minestom.codegen.particles.ParticleEnumGenerator;
 import net.minestom.codegen.potions.PotionEnumGenerator;
 import net.minestom.codegen.sounds.SoundEnumGenerator;
+import net.minestom.codegen.stats.BiomesEnumGenerator;
 import net.minestom.codegen.stats.StatsEnumGenerator;
 
 import java.io.IOException;
@@ -22,5 +23,6 @@ public class AllGenerators {
         SoundEnumGenerator.main(args);
         ParticleEnumGenerator.main(args);
         StatsEnumGenerator.main(args);
+        BiomesEnumGenerator.main(args);
     }
 }
