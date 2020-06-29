@@ -82,12 +82,12 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
 
     @Override
     public String getPackageName() {
-        return "net.minestom.server.instance.item";
+        return "net.minestom.server.item";
     }
 
     @Override
     public String getClassName() {
-        return "TmpMaterial";
+        return "Material";
     }
 
     @Override
@@ -146,7 +146,48 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         generator.addMethod("isLeggings", "()", "boolean", "return toString().endsWith(\"LEGGINGS\");");
         generator.addMethod("isBoots", "()", "boolean", "return toString().endsWith(\"BOOTS\");");
         generator.addMethod("isArmor", "()", "boolean", "return isChestplate() || isHelmet() || isLeggings() || isBoots();");
-        generator.addMethod("isFood", "()", "boolean", "return false; // TODO");
+        generator.addMethod("isFood", "()", "boolean", "switch (this) {\n" +
+                "            case APPLE:\n" +
+                "            case MUSHROOM_STEW:\n" +
+                "            case BREAD:\n" +
+                "            case PORKCHOP:\n" +
+                "            case COOKED_PORKCHOP:\n" +
+                "            case GOLDEN_APPLE:\n" +
+                "            case ENCHANTED_GOLDEN_APPLE:\n" +
+                "            case COD:\n" +
+                "            case SALMON:\n" +
+                "            case TROPICAL_FISH:\n" +
+                "            case PUFFERFISH:\n" +
+                "            case COOKED_COD:\n" +
+                "            case COOKED_SALMON:\n" +
+                "            case CAKE:\n" +
+                "            case COOKIE:\n" +
+                "            case MELON_SLICE:\n" +
+                "            case DRIED_KELP:\n" +
+                "            case BEEF:\n" +
+                "            case COOKED_BEEF:\n" +
+                "            case CHICKEN:\n" +
+                "            case COOKED_CHICKEN:\n" +
+                "            case ROTTEN_FLESH:\n" +
+                "            case SPIDER_EYE:\n" +
+                "            case CARROT:\n" +
+                "            case POTATO:\n" +
+                "            case BAKED_POTATO:\n" +
+                "            case POISONOUS_POTATO:\n" +
+                "            case PUMPKIN_PIE:\n" +
+                "            case RABBIT:\n" +
+                "            case COOKED_RABBIT:\n" +
+                "            case RABBIT_STEW:\n" +
+                "            case MUTTON:\n" +
+                "            case COOKED_MUTTON:\n" +
+                "            case BEETROOT:\n" +
+                "            case BEETROOT_SOUP:\n" +
+                "            case SWEET_BERRIES:\n" +
+                "            case HONEY_BOTTLE:\n" +
+                "                return true;\n" +
+                "            default:\n" +
+                "                return false;\n" +
+                "        }");
         generator.addMethod("hasState", "()", "boolean", "switch (this) {\n" +
                 "            case BOW:\n" +
                 "            case TRIDENT:\n" +

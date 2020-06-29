@@ -123,7 +123,6 @@ public class MinecraftServer {
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
-        RegistryMain.registerItems();
         RegistryMain.registerEntities();
         RegistryMain.registerSounds();
         RegistryMain.registerParticles();

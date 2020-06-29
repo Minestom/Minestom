@@ -5,7 +5,7 @@ package net.minestom.server.instance.item;
 import net.minestom.server.instance.block.Block;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 
-public enum TmpMaterial {
+public enum Material {
 	AIR("minecraft:air", 0, Block.AIR),
 	STONE("minecraft:stone", 64, Block.STONE),
 	GRANITE("minecraft:granite", 64, Block.GRANITE),
@@ -895,11 +895,11 @@ public enum TmpMaterial {
 	private int maxDefaultStackSize;
 	private Block correspondingBlock;
 
-	TmpMaterial(String namespaceID, int maxDefaultStackSize, Block correspondingBlock) {
+	Material(String namespaceID, int maxDefaultStackSize, Block correspondingBlock) {
 		this.namespaceID = namespaceID;
 		this.maxDefaultStackSize = maxDefaultStackSize;
 		this.correspondingBlock = correspondingBlock;
-		TmpMaterialMap.map.put((short)ordinal(), this);
+		MaterialMap.map.put((short)ordinal(), this);
 	}
 
 	public short getId() {
@@ -922,8 +922,8 @@ public enum TmpMaterial {
 		return correspondingBlock;
 	}
 
-	public static TmpMaterial fromId(short blockId) {
-		return TmpMaterialMap.map.getOrDefault(blockId, AIR);
+	public static Material fromId(short blockId) {
+		return MaterialMap.map.getOrDefault(blockId, AIR);
 	}
 
 	public boolean isHelmet() {
@@ -947,7 +947,48 @@ public enum TmpMaterial {
 	}
 
 	public boolean isFood() {
-		return false; // TODO
+		switch (this) {
+            case APPLE:
+            case MUSHROOM_STEW:
+            case BREAD:
+            case PORKCHOP:
+            case COOKED_PORKCHOP:
+            case GOLDEN_APPLE:
+            case ENCHANTED_GOLDEN_APPLE:
+            case COD:
+            case SALMON:
+            case TROPICAL_FISH:
+            case PUFFERFISH:
+            case COOKED_COD:
+            case COOKED_SALMON:
+            case CAKE:
+            case COOKIE:
+            case MELON_SLICE:
+            case DRIED_KELP:
+            case BEEF:
+            case COOKED_BEEF:
+            case CHICKEN:
+            case COOKED_CHICKEN:
+            case ROTTEN_FLESH:
+            case SPIDER_EYE:
+            case CARROT:
+            case POTATO:
+            case BAKED_POTATO:
+            case POISONOUS_POTATO:
+            case PUMPKIN_PIE:
+            case RABBIT:
+            case COOKED_RABBIT:
+            case RABBIT_STEW:
+            case MUTTON:
+            case COOKED_MUTTON:
+            case BEETROOT:
+            case BEETROOT_SOUP:
+            case SWEET_BERRIES:
+            case HONEY_BOTTLE:
+                return true;
+            default:
+                return false;
+        }
 	}
 
 	public boolean hasState() {

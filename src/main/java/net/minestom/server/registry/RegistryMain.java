@@ -49,27 +49,6 @@ public class RegistryMain {
         writePotionsClass(potions);
     }
 
-    public static void registerItems() {
-        List<RegistryItem> items = parseItems(ITEMS_PATH);
-
-        for (RegistryItem registryItem : items) {
-            Material material = Material.valueOf(registryItem.name);
-            try {
-                Block block = Block.valueOf(registryItem.name);
-                material.setIdentifier(registryItem.itemId, block);
-            } catch (IllegalArgumentException e) {
-                switch (material) {
-                    case REDSTONE:
-                        material.setIdentifier(registryItem.itemId, Block.REDSTONE_WIRE);
-                        break;
-                    default:
-                        material.setIdentifier(registryItem.itemId, null);
-                        break;
-                }
-            }
-        }
-    }
-
     public static void registerEntities() {
         List<RegistryEntityType> registryEntityTypes = parseEntities(ENTITIES_PATH);
 
