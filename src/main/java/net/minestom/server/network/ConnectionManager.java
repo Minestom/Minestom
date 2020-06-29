@@ -1,8 +1,10 @@
 package net.minestom.server.network;
 
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketConsumer;
+import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
 
 import java.util.*;
@@ -48,20 +50,41 @@ public final class ConnectionManager {
     }
 
     /**
+     * Send a rich message to all online players who validate the condition {@code condition}
+     *
+     * @param richMessage the rich message to send
+     * @param condition   the condition to receive the message
+     */
+    public void broadcastMessage(RichMessage richMessage, Function<Player, Boolean> condition) {
+        Collection<Player> recipients = getRecipients(condition);
+
+        if (!recipients.isEmpty()) {
+            String jsonText = richMessage.toString();
+            broadcastJson(jsonText, recipients);
+        }
+    }
+
+    /**
+     * Send a rich message to all online players without exception
+     *
+     * @param richMessage the rich message to send
+     */
+    public void broadcastMessage(RichMessage richMessage) {
+        broadcastMessage(richMessage, null);
+    }
+
+    /**
      * Send a message to all online players who validate the condition {@code condition}
      *
      * @param coloredText the message to send
      * @param condition   the condition to receive the message
      */
     public void broadcastMessage(ColoredText coloredText, Function<Player, Boolean> condition) {
-        if (condition == null) {
-            getOnlinePlayers().forEach(player -> player.sendMessage(coloredText));
-        } else {
-            getOnlinePlayers().forEach(player -> {
-                boolean result = condition.apply(player);
-                if (result)
-                    player.sendMessage(coloredText);
-            });
+        Collection<Player> recipients = getRecipients(condition);
+
+        if (!recipients.isEmpty()) {
+            String jsonText = coloredText.toString();
+            broadcastJson(jsonText, recipients);
         }
     }
 
@@ -72,6 +95,30 @@ public final class ConnectionManager {
      */
     public void broadcastMessage(ColoredText coloredText) {
         broadcastMessage(coloredText, null);
+    }
+
+    private void broadcastJson(String json, Collection<Player> recipients) {
+        ChatMessagePacket chatMessagePacket =
+                new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
+        PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
+    }
+
+    private Collection<Player> getRecipients(Function<Player, Boolean> condition) {
+        Collection<Player> recipients;
+
+        // Get the recipients
+        if (condition == null) {
+            recipients = getOnlinePlayers();
+        } else {
+            recipients = new ArrayList<>();
+            getOnlinePlayers().forEach(player -> {
+                boolean result = condition.apply(player);
+                if (result)
+                    recipients.add(player);
+            });
+        }
+
+        return recipients;
     }
 
     /**

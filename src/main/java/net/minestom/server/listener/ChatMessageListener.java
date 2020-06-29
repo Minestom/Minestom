@@ -6,7 +6,9 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerCommandEvent;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
+import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -50,8 +52,15 @@ public class ChatMessageListener {
                 textObject = buildDefaultChatMessage(playerChatEvent);
             }
 
-            for (Player recipient : playerChatEvent.getRecipients()) {
-                recipient.sendMessage(textObject);
+            Collection<Player> recipients = playerChatEvent.getRecipients();
+            if (!recipients.isEmpty()) {
+                String jsonMessage = textObject.toString();
+
+                // Send the message with the correct player UUID
+                ChatMessagePacket chatMessagePacket =
+                        new ChatMessagePacket(jsonMessage, ChatMessagePacket.Position.CHAT, player.getUuid());
+
+                PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
             }
 
         });

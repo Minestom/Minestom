@@ -10,12 +10,16 @@ public class ChatMessagePacket implements ServerPacket {
 
     private String jsonMessage;
     private Position position;
-    //TODO use real uuid
-    private UUID uuid = UUID.randomUUID();
+    private UUID uuid;
 
-    public ChatMessagePacket(String jsonMessage, Position position) {
+    public ChatMessagePacket(String jsonMessage, Position position, UUID uuid) {
         this.jsonMessage = jsonMessage;
         this.position = position;
+        this.uuid = uuid;
+    }
+
+    public ChatMessagePacket(String jsonMessage, Position position) {
+        this(jsonMessage, position, new UUID(0, 0));
     }
 
     @Override

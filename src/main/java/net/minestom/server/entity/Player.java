@@ -568,28 +568,28 @@ public class Player extends LivingEntity implements CommandSender {
         }
     }
 
-	@Override
-	public Consumer<PacketWriter> getMetadataConsumer() {
-		return packet -> {
-			super.getMetadataConsumer().accept(packet);
-			fillMetadataIndex(packet, 14);
-			fillMetadataIndex(packet, 16);
-		};
-	}
+    @Override
+    public Consumer<PacketWriter> getMetadataConsumer() {
+        return packet -> {
+            super.getMetadataConsumer().accept(packet);
+            fillMetadataIndex(packet, 14);
+            fillMetadataIndex(packet, 16);
+        };
+    }
 
-	@Override
-	protected void fillMetadataIndex(PacketWriter packet, int index) {
-		super.fillMetadataIndex(packet, index);
-		if (index == 14) {
-			packet.writeByte((byte) 14);
-			packet.writeByte(METADATA_FLOAT);
-			packet.writeFloat(additionalHearts);
-		} else if (index == 16) {
-			packet.writeByte((byte) 16);
-			packet.writeByte(METADATA_BYTE);
-			packet.writeByte(getSettings().getDisplayedSkinParts());
-		}
-	}
+    @Override
+    protected void fillMetadataIndex(PacketWriter packet, int index) {
+        super.fillMetadataIndex(packet, index);
+        if (index == 14) {
+            packet.writeByte((byte) 14);
+            packet.writeByte(METADATA_FLOAT);
+            packet.writeFloat(additionalHearts);
+        } else if (index == 16) {
+            packet.writeByte((byte) 16);
+            packet.writeByte(METADATA_BYTE);
+            packet.writeByte(getSettings().getDisplayedSkinParts());
+        }
+    }
 
     /**
      * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
@@ -620,16 +620,16 @@ public class Player extends LivingEntity implements CommandSender {
      * @param coloredText the text to send
      */
     public void sendMessage(ColoredText coloredText) {
-        playerConnection.sendPacket(new ChatMessagePacket(coloredText.toString(), ChatMessagePacket.Position.CHAT));
+        sendJsonMessage(coloredText.toString());
     }
 
     /**
-     * Send a message to the player
+     * Send a rich message to the player
      *
      * @param richMessage the rich text to send
      */
     public void sendMessage(RichMessage richMessage) {
-        playerConnection.sendPacket(new ChatMessagePacket(richMessage.toString(), ChatMessagePacket.Position.CHAT));
+        sendJsonMessage(richMessage.toString());
     }
 
     /**
@@ -640,7 +640,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void sendLegacyMessage(String text, char colorChar) {
         ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
-        sendMessage(coloredText);
+        sendJsonMessage(coloredText.toString());
     }
 
     /**
@@ -650,7 +650,13 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void sendLegacyMessage(String text) {
         ColoredText coloredText = ColoredText.ofLegacy(text, Chat.COLOR_CHAR);
-        sendMessage(coloredText);
+        sendJsonMessage(coloredText.toString());
+    }
+
+    public void sendJsonMessage(String json) {
+        ChatMessagePacket chatMessagePacket =
+                new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT);
+        playerConnection.sendPacket(chatMessagePacket);
     }
 
     public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
@@ -1975,15 +1981,15 @@ public class Player extends LivingEntity implements CommandSender {
             connection.sendPacket(getPassengersPacket());
         }
 
-		// Team
-		if (team != null)
-			connection.sendPacket(team.getTeamsCreationPacket());
+        // Team
+        if (team != null)
+            connection.sendPacket(team.getTeamsCreationPacket());
 
-		EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-		entityHeadLookPacket.entityId = getEntityId();
-		entityHeadLookPacket.yaw = position.getYaw();
-		connection.sendPacket(entityHeadLookPacket);
-	}
+        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+        entityHeadLookPacket.entityId = getEntityId();
+        entityHeadLookPacket.yaw = position.getYaw();
+        connection.sendPacket(entityHeadLookPacket);
+    }
 
     @Override
     public ItemStack getItemInMainHand() {
@@ -2132,28 +2138,28 @@ public class Player extends LivingEntity implements CommandSender {
             return mainHand;
         }
 
-		/**
-		 * Change the player settings internally
-		 * <p>
-		 * WARNING: the player will not be noticed by this change, probably unsafe
-		 *
-		 * @param locale             the player locale
-		 * @param viewDistance       the player view distance
-		 * @param chatMode           the player chat mode
-		 * @param chatColors         the player chat colors
-		 * @param displayedSkinParts the player displayed skin parts
-		 * @param mainHand           the player main handœ
-		 */
-		public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
-			this.locale = locale;
-			this.viewDistance = viewDistance;
-			this.chatMode = chatMode;
-			this.chatColors = chatColors;
-			this.displayedSkinParts = displayedSkinParts;
-			this.mainHand = mainHand;
-			sendMetadataIndex(16);
-		}
+        /**
+         * Change the player settings internally
+         * <p>
+         * WARNING: the player will not be noticed by this change, probably unsafe
+         *
+         * @param locale             the player locale
+         * @param viewDistance       the player view distance
+         * @param chatMode           the player chat mode
+         * @param chatColors         the player chat colors
+         * @param displayedSkinParts the player displayed skin parts
+         * @param mainHand           the player main handœ
+         */
+        public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
+            this.locale = locale;
+            this.viewDistance = viewDistance;
+            this.chatMode = chatMode;
+            this.chatColors = chatColors;
+            this.displayedSkinParts = displayedSkinParts;
+            this.mainHand = mainHand;
+            sendMetadataIndex(16);
+        }
 
-	}
+    }
 
 }
