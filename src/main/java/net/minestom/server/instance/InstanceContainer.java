@@ -400,7 +400,7 @@ public class InstanceContainer extends Instance {
     protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
-            Arrays.fill(biomes, Biome.VOID);
+            Arrays.fill(biomes, Biome.THE_VOID);
         } else {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }

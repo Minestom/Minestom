@@ -1,0 +1,91 @@
+package net.minestom.server.instance.block.states;
+import net.minestom.server.instance.block.BlockAlternative;
+import static net.minestom.server.instance.block.Block.*;
+/**
+ * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+ */
+@Deprecated(forRemoval = false, since = "forever")
+public class BrickStairs {
+	public static void initStates() {
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4836, "facing=north", "half=top", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4837, "facing=north", "half=top", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4838, "facing=north", "half=top", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4839, "facing=north", "half=top", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4840, "facing=north", "half=top", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4841, "facing=north", "half=top", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4842, "facing=north", "half=top", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4843, "facing=north", "half=top", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4844, "facing=north", "half=top", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4845, "facing=north", "half=top", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4846, "facing=north", "half=bottom", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4847, "facing=north", "half=bottom", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4848, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4849, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4850, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4851, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4852, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4853, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4854, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4855, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4856, "facing=south", "half=top", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4857, "facing=south", "half=top", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4858, "facing=south", "half=top", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4859, "facing=south", "half=top", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4860, "facing=south", "half=top", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4861, "facing=south", "half=top", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4862, "facing=south", "half=top", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4863, "facing=south", "half=top", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4864, "facing=south", "half=top", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4865, "facing=south", "half=top", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4866, "facing=south", "half=bottom", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4867, "facing=south", "half=bottom", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4868, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4869, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4870, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4871, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4872, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4873, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4874, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4875, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4876, "facing=west", "half=top", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4877, "facing=west", "half=top", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4878, "facing=west", "half=top", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4879, "facing=west", "half=top", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4880, "facing=west", "half=top", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4881, "facing=west", "half=top", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4882, "facing=west", "half=top", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4883, "facing=west", "half=top", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4884, "facing=west", "half=top", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4885, "facing=west", "half=top", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4886, "facing=west", "half=bottom", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4887, "facing=west", "half=bottom", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4888, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4889, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4890, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4891, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4892, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4893, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4894, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4895, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4896, "facing=east", "half=top", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4897, "facing=east", "half=top", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4898, "facing=east", "half=top", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4899, "facing=east", "half=top", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4900, "facing=east", "half=top", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4901, "facing=east", "half=top", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4902, "facing=east", "half=top", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4903, "facing=east", "half=top", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4904, "facing=east", "half=top", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4905, "facing=east", "half=top", "shape=outer_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4906, "facing=east", "half=bottom", "shape=straight", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4907, "facing=east", "half=bottom", "shape=straight", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4908, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4909, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4910, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4911, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4912, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4913, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4914, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		BRICK_STAIRS.addBlockAlternative(new BlockAlternative((short) 4915, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=false"));
+	}
+}
