@@ -915,7 +915,7 @@ public enum TmpMaterial {
 	}
 
 	public boolean isBlock() {
-		return correspondingBlock != null;
+		return correspondingBlock != null && this != AIR;
 	}
 
 	public Block getBlock() {
@@ -924,5 +924,41 @@ public enum TmpMaterial {
 
 	public static TmpMaterial fromId(short blockId) {
 		return TmpMaterialMap.map.getOrDefault(blockId, AIR);
+	}
+
+	public boolean isHelmet() {
+		return toString().endsWith("HELMET");
+	}
+
+	public boolean isChestplate() {
+		return toString().endsWith("CHESTPLATE");
+	}
+
+	public boolean isLeggings() {
+		return toString().endsWith("LEGGINGS");
+	}
+
+	public boolean isBoots() {
+		return toString().endsWith("BOOTS");
+	}
+
+	public boolean isArmor() {
+		return isChestplate() || isHelmet() || isLeggings() || isBoots();
+	}
+
+	public boolean isFood() {
+		return false; // TODO
+	}
+
+	public boolean hasState() {
+		switch (this) {
+            case BOW:
+            case TRIDENT:
+            case CROSSBOW:
+            case SHIELD:
+                return true;
+        }
+
+        return isFood();
 	}
 }

@@ -135,9 +135,28 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         generator.addMethod("getId", "()", "short", "return (short)ordinal();");
         generator.addMethod("getName", "()", "String", "return namespaceID;");
         generator.addMethod("getMaxDefaultStackSize", "()", "int", "return maxDefaultStackSize;");
-        generator.addMethod("isBlock", "()", "boolean", "return correspondingBlock != null;");
+        generator.addMethod("isBlock", "()", "boolean", "return correspondingBlock != null && this != AIR;");
         generator.addMethod("getBlock", "()", "Block", "return correspondingBlock;");
+
         generator.addMethod("fromId", "(short blockId)", "static "+className, "return "+getClassName()+"Map.map.getOrDefault(blockId, AIR);");
+
+        // hard coded methods
+        generator.addMethod("isHelmet", "()", "boolean", "return toString().endsWith(\"HELMET\");");
+        generator.addMethod("isChestplate", "()", "boolean", "return toString().endsWith(\"CHESTPLATE\");");
+        generator.addMethod("isLeggings", "()", "boolean", "return toString().endsWith(\"LEGGINGS\");");
+        generator.addMethod("isBoots", "()", "boolean", "return toString().endsWith(\"BOOTS\");");
+        generator.addMethod("isArmor", "()", "boolean", "return isChestplate() || isHelmet() || isLeggings() || isBoots();");
+        generator.addMethod("isFood", "()", "boolean", "return false; // TODO");
+        generator.addMethod("hasState", "()", "boolean", "switch (this) {\n" +
+                "            case BOW:\n" +
+                "            case TRIDENT:\n" +
+                "            case CROSSBOW:\n" +
+                "            case SHIELD:\n" +
+                "                return true;\n" +
+                "        }\n" +
+                "\n" +
+                "        return isFood();");
+
         generator.appendToConstructor(getClassName()+"Map.map.put((short)ordinal(), this);");
     }
 
