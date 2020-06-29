@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ColoredText {
 
@@ -164,8 +166,27 @@ public class ColoredText {
                 }
                 // Translatable component
                 if (formatString.startsWith("@")) {
-                    String translatableCode = formatString.substring(1);
-                    objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor));
+                    final String translatableCode = formatString.substring(1);
+                    final boolean hasArgs = translatableCode.contains(",");
+                    if (!hasArgs) {
+                        objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor));
+                    } else {
+                        // Arguments parsing
+                        // ex: {@translatable.key,arg1,arg2,etc}
+                        final String[] split = translatableCode.split(Pattern.quote(","));
+                        final String finalTranslatableCode = split[0];
+                        final String[] arguments = Arrays.copyOfRange(split, 1, split.length);
+
+                        JsonObject translatableObject = getMessagePart(MessageType.TRANSLATABLE, finalTranslatableCode, currentColor);
+                        if (arguments.length > 0) {
+                            JsonArray argArray = new JsonArray();
+                            for (String arg : arguments) {
+                                argArray.add(getMessagePart(MessageType.RAW, arg, currentColor));
+                            }
+                            translatableObject.add("with", argArray);
+                            objects.add(translatableObject);
+                        }
+                    }
                     continue;
                 }
                 // Keybind component
@@ -186,6 +207,14 @@ public class ColoredText {
         return objects;
     }
 
+    /**
+     * Get the object representing a message (raw/keybind/translatable)
+     *
+     * @param messageType the message type
+     * @param message     the message
+     * @param color       the last color
+     * @return a json object representing a message
+     */
     private JsonObject getMessagePart(MessageType messageType, String message, String color) {
         JsonObject object = new JsonObject();
         switch (messageType) {
