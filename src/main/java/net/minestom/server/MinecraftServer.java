@@ -142,7 +142,7 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent("1.15.2", null); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent("1.16.1", null); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }

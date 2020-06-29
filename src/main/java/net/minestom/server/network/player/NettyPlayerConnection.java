@@ -2,12 +2,10 @@ package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -25,6 +23,8 @@ public class NettyPlayerConnection extends PlayerConnection {
 	private final SocketChannel channel;
 	@Getter
 	private boolean encrypted = false;
+	@Getter
+	private boolean compressed = false;
 
 	public NettyPlayerConnection(SocketChannel channel) {
 		super();
@@ -39,6 +39,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
     public void enableCompression(int threshold) {
+		this.compressed = true;
         sendPacket(new SetCompressionPacket(threshold));
         channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
     }
@@ -46,7 +47,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
 	public void sendPacket(ByteBuf buffer, boolean copy) {
 		//System.out.println(getConnectionState() + " out");
-		if (encrypted && copy) {
+		if ((encrypted || compressed) && copy) {
 			buffer = buffer.copy();
 			buffer.retain();
 			channel.writeAndFlush(buffer);
@@ -58,7 +59,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
 	public void writePacket(ByteBuf buffer, boolean copy) {
-		if (encrypted && copy) {
+		if ((encrypted || compressed) && copy) {
 			buffer = buffer.copy();
 			buffer.retain();
 			channel.write(buffer);

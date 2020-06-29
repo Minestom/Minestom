@@ -28,6 +28,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 				//toLowerCase b/c there is a hack to change caps in your name
 				if (pl.getUsername().toLowerCase().equals(username.toLowerCase())) {
 					connection.sendPacket(new LoginDisconnect(ColoredText.of(ChatColor.RED, "You are already on this server").toString()));
+					connection.disconnect();
 					return;
 				}
 			}
