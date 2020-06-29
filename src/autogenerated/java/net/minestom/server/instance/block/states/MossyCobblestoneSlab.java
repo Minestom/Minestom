@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class MossyCobblestoneSlab {
 	public static void initStates() {
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10277, "type=top", "waterlogged=true"));
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10278, "type=top", "waterlogged=false"));
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10279, "type=bottom", "waterlogged=true"));
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10280, "type=bottom", "waterlogged=false"));
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10281, "type=double", "waterlogged=true"));
-		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10282, "type=double", "waterlogged=false"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10813, "type=top", "waterlogged=true"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10814, "type=top", "waterlogged=false"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10815, "type=bottom", "waterlogged=true"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10816, "type=bottom", "waterlogged=false"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10817, "type=double", "waterlogged=true"));
+		MOSSY_COBBLESTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10818, "type=double", "waterlogged=false"));
 	}
 }

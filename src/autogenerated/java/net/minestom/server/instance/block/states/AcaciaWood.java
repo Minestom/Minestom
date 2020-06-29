@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AcaciaWood {
 	public static void initStates() {
-		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 120, "axis=x"));
-		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 121, "axis=y"));
-		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 122, "axis=z"));
+		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 121, "axis=x"));
+		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 122, "axis=y"));
+		ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 123, "axis=z"));
 	}
 }

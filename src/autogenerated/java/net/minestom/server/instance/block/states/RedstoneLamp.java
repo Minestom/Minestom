@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RedstoneLamp {
 	public static void initStates() {
-		REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5140, "lit=true"));
-		REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5141, "lit=false"));
+		REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5156, "lit=true"));
+		REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5157, "lit=false"));
 	}
 }

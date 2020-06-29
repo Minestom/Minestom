@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AcaciaLog {
 	public static void initStates() {
-		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 84, "axis=x"));
-		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 85, "axis=y"));
-		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 86, "axis=z"));
+		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 85, "axis=x"));
+		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 86, "axis=y"));
+		ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 87, "axis=z"));
 	}
 }

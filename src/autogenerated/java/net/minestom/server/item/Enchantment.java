@@ -15,6 +15,7 @@ public enum Enchantment {
 	DEPTH_STRIDER("minecraft:depth_strider"),
 	FROST_WALKER("minecraft:frost_walker"),
 	BINDING_CURSE("minecraft:binding_curse"),
+	SOUL_SPEED("minecraft:soul_speed"),
 	SHARPNESS("minecraft:sharpness"),
 	SMITE("minecraft:smite"),
 	BANE_OF_ARTHROPODS("minecraft:bane_of_arthropods"),

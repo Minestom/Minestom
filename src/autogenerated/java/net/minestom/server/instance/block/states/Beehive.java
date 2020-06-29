@@ -7,29 +7,29 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Beehive {
 	public static void initStates() {
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11311, "facing=north", "honey_level=0"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11312, "facing=north", "honey_level=1"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11313, "facing=north", "honey_level=2"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11314, "facing=north", "honey_level=3"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11315, "facing=north", "honey_level=4"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11316, "facing=north", "honey_level=5"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11317, "facing=south", "honey_level=0"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11318, "facing=south", "honey_level=1"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11319, "facing=south", "honey_level=2"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11320, "facing=south", "honey_level=3"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11321, "facing=south", "honey_level=4"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11322, "facing=south", "honey_level=5"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11323, "facing=west", "honey_level=0"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11324, "facing=west", "honey_level=1"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11325, "facing=west", "honey_level=2"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11326, "facing=west", "honey_level=3"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11327, "facing=west", "honey_level=4"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11328, "facing=west", "honey_level=5"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11329, "facing=east", "honey_level=0"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11330, "facing=east", "honey_level=1"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11331, "facing=east", "honey_level=2"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11332, "facing=east", "honey_level=3"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11333, "facing=east", "honey_level=4"));
-		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 11334, "facing=east", "honey_level=5"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15800, "facing=north", "honey_level=0"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15801, "facing=north", "honey_level=1"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15802, "facing=north", "honey_level=2"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15803, "facing=north", "honey_level=3"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15804, "facing=north", "honey_level=4"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15805, "facing=north", "honey_level=5"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15806, "facing=south", "honey_level=0"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15807, "facing=south", "honey_level=1"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15808, "facing=south", "honey_level=2"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15809, "facing=south", "honey_level=3"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15810, "facing=south", "honey_level=4"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15811, "facing=south", "honey_level=5"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15812, "facing=west", "honey_level=0"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15813, "facing=west", "honey_level=1"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15814, "facing=west", "honey_level=2"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15815, "facing=west", "honey_level=3"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15816, "facing=west", "honey_level=4"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15817, "facing=west", "honey_level=5"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15818, "facing=east", "honey_level=0"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15819, "facing=east", "honey_level=1"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15820, "facing=east", "honey_level=2"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15821, "facing=east", "honey_level=3"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15822, "facing=east", "honey_level=4"));
+		BEEHIVE.addBlockAlternative(new BlockAlternative((short) 15823, "facing=east", "honey_level=5"));
 	}
 }

@@ -7,12 +7,12 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Cake {
 	public static void initStates() {
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4010, "bites=0"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4011, "bites=1"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4012, "bites=2"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4013, "bites=3"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4014, "bites=4"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4015, "bites=5"));
-		CAKE.addBlockAlternative(new BlockAlternative((short) 4016, "bites=6"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4024, "bites=0"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4025, "bites=1"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4026, "bites=2"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4027, "bites=3"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4028, "bites=4"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4029, "bites=5"));
+		CAKE.addBlockAlternative(new BlockAlternative((short) 4030, "bites=6"));
 	}
 }

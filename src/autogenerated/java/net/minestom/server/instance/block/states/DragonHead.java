@@ -7,21 +7,21 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DragonHead {
 	public static void initStates() {
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6054, "rotation=0"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6055, "rotation=1"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6056, "rotation=2"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6057, "rotation=3"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6058, "rotation=4"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6059, "rotation=5"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6060, "rotation=6"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6061, "rotation=7"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6062, "rotation=8"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6063, "rotation=9"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6064, "rotation=10"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6065, "rotation=11"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6066, "rotation=12"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6067, "rotation=13"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6068, "rotation=14"));
-		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6069, "rotation=15"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6590, "rotation=0"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6591, "rotation=1"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6592, "rotation=2"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6593, "rotation=3"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6594, "rotation=4"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6595, "rotation=5"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6596, "rotation=6"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6597, "rotation=7"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6598, "rotation=8"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6599, "rotation=9"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6600, "rotation=10"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6601, "rotation=11"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6602, "rotation=12"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6603, "rotation=13"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6604, "rotation=14"));
+		DRAGON_HEAD.addBlockAlternative(new BlockAlternative((short) 6605, "rotation=15"));
 	}
 }

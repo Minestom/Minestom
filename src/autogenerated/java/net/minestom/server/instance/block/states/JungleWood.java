@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class JungleWood {
 	public static void initStates() {
-		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 117, "axis=x"));
-		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 118, "axis=y"));
-		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 119, "axis=z"));
+		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 118, "axis=x"));
+		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 119, "axis=y"));
+		JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 120, "axis=z"));
 	}
 }

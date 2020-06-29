@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Conduit {
 	public static void initStates() {
-		CONDUIT.addBlockAlternative(new BlockAlternative((short) 9113, "waterlogged=true"));
-		CONDUIT.addBlockAlternative(new BlockAlternative((short) 9114, "waterlogged=false"));
+		CONDUIT.addBlockAlternative(new BlockAlternative((short) 9649, "waterlogged=true"));
+		CONDUIT.addBlockAlternative(new BlockAlternative((short) 9650, "waterlogged=false"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RedstoneOre {
 	public static void initStates() {
-		REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3883, "lit=true"));
-		REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3884, "lit=false"));
+		REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3885, "lit=true"));
+		REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3886, "lit=false"));
 	}
 }

@@ -7,14 +7,14 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Composter {
 	public static void initStates() {
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11278, "level=0"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11279, "level=1"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11280, "level=2"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11281, "level=3"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11282, "level=4"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11283, "level=5"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11284, "level=6"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11285, "level=7"));
-		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 11286, "level=8"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15751, "level=0"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15752, "level=1"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15753, "level=2"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15754, "level=3"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15755, "level=4"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15756, "level=5"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15757, "level=6"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15758, "level=7"));
+		COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15759, "level=8"));
 	}
 }

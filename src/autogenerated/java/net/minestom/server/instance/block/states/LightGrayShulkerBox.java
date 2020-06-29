@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class LightGrayShulkerBox {
 	public static void initStates() {
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8790, "facing=north"));
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8791, "facing=east"));
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8792, "facing=south"));
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8793, "facing=west"));
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8794, "facing=up"));
-		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 8795, "facing=down"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9326, "facing=north"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9327, "facing=east"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9328, "facing=south"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9329, "facing=west"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9330, "facing=up"));
+		LIGHT_GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9331, "facing=down"));
 	}
 }

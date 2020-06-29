@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class StrippedSpruceLog {
 	public static void initStates() {
-		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 90, "axis=x"));
-		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 91, "axis=y"));
-		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 92, "axis=z"));
+		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 91, "axis=x"));
+		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 92, "axis=y"));
+		STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 93, "axis=z"));
 	}
 }

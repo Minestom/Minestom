@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PrismarineSlab {
 	public static void initStates() {
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7308, "type=top", "waterlogged=true"));
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7309, "type=top", "waterlogged=false"));
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7310, "type=bottom", "waterlogged=true"));
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7311, "type=bottom", "waterlogged=false"));
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7312, "type=double", "waterlogged=true"));
-		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7313, "type=double", "waterlogged=false"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7844, "type=top", "waterlogged=true"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7845, "type=top", "waterlogged=false"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7846, "type=bottom", "waterlogged=true"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7847, "type=bottom", "waterlogged=false"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7848, "type=double", "waterlogged=true"));
+		PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7849, "type=double", "waterlogged=false"));
 	}
 }

@@ -37,6 +37,7 @@ public abstract class MinestomEnumGenerator<Container> implements CodeGenerator 
             writer.write(code);
         }
 
+        LOGGER.debug("Post generation tasks...");
         postGeneration();
     }
 

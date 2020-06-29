@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class OrangeWallBanner {
 	public static void initStates() {
-		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7621, "facing=north"));
-		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7622, "facing=south"));
-		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7623, "facing=west"));
-		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 7624, "facing=east"));
+		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8157, "facing=north"));
+		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8158, "facing=south"));
+		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8159, "facing=west"));
+		ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8160, "facing=east"));
 	}
 }

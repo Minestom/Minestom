@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PolishedGraniteSlab {
 	public static void initStates() {
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10253, "type=top", "waterlogged=true"));
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10254, "type=top", "waterlogged=false"));
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10255, "type=bottom", "waterlogged=true"));
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10256, "type=bottom", "waterlogged=false"));
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10257, "type=double", "waterlogged=true"));
-		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10258, "type=double", "waterlogged=false"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10789, "type=top", "waterlogged=true"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10790, "type=top", "waterlogged=false"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10791, "type=bottom", "waterlogged=true"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10792, "type=bottom", "waterlogged=false"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10793, "type=double", "waterlogged=true"));
+		POLISHED_GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10794, "type=double", "waterlogged=false"));
 	}
 }
