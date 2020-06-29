@@ -1,0 +1,91 @@
+package net.minestom.server.instance.block.states;
+import net.minestom.server.instance.block.BlockAlternative;
+import static net.minestom.server.instance.block.Block.*;
+/**
+ * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+ */
+@Deprecated(forRemoval = false, since = "forever")
+public class AndesiteStairs {
+	public static void initStates() {
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9933, "facing=north", "half=top", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9934, "facing=north", "half=top", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9935, "facing=north", "half=top", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9936, "facing=north", "half=top", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9937, "facing=north", "half=top", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9938, "facing=north", "half=top", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9939, "facing=north", "half=top", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9940, "facing=north", "half=top", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9941, "facing=north", "half=top", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9942, "facing=north", "half=top", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9943, "facing=north", "half=bottom", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9944, "facing=north", "half=bottom", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9945, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9946, "facing=north", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9947, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9948, "facing=north", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9949, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9950, "facing=north", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9951, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9952, "facing=north", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9953, "facing=south", "half=top", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9954, "facing=south", "half=top", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9955, "facing=south", "half=top", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9956, "facing=south", "half=top", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9957, "facing=south", "half=top", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9958, "facing=south", "half=top", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9959, "facing=south", "half=top", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9960, "facing=south", "half=top", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9961, "facing=south", "half=top", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9962, "facing=south", "half=top", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9963, "facing=south", "half=bottom", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9964, "facing=south", "half=bottom", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9965, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9966, "facing=south", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9967, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9968, "facing=south", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9969, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9970, "facing=south", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9971, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9972, "facing=south", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9973, "facing=west", "half=top", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9974, "facing=west", "half=top", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9975, "facing=west", "half=top", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9976, "facing=west", "half=top", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9977, "facing=west", "half=top", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9978, "facing=west", "half=top", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9979, "facing=west", "half=top", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9980, "facing=west", "half=top", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9981, "facing=west", "half=top", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9982, "facing=west", "half=top", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9983, "facing=west", "half=bottom", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9984, "facing=west", "half=bottom", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9985, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9986, "facing=west", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9987, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9988, "facing=west", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9989, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9990, "facing=west", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9991, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9992, "facing=west", "half=bottom", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9993, "facing=east", "half=top", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9994, "facing=east", "half=top", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9995, "facing=east", "half=top", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9996, "facing=east", "half=top", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9997, "facing=east", "half=top", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9998, "facing=east", "half=top", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 9999, "facing=east", "half=top", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10000, "facing=east", "half=top", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10001, "facing=east", "half=top", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10002, "facing=east", "half=top", "shape=outer_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10003, "facing=east", "half=bottom", "shape=straight", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10004, "facing=east", "half=bottom", "shape=straight", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10005, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10006, "facing=east", "half=bottom", "shape=inner_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10007, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10008, "facing=east", "half=bottom", "shape=inner_right", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10009, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10010, "facing=east", "half=bottom", "shape=outer_left", "waterlogged=false"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10011, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=true"));
+		ANDESITE_STAIRS.addBlockAlternative(new BlockAlternative((short) 10012, "facing=east", "half=bottom", "shape=outer_right", "waterlogged=false"));
+	}
+}

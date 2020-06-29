@@ -8,7 +8,7 @@
 
     <Loggers>
         <Root level="trace">
-            <AppenderRef ref="STDOUT" level="info"/>
+            <AppenderRef ref="STDOUT" level="debug"/>
         </Root>
     </Loggers>
 </Configuration>
