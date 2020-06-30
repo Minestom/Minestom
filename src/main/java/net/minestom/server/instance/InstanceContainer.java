@@ -391,11 +391,16 @@ public class InstanceContainer extends Instance {
 
     @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        chunkLoader.loadOrCreateChunk(this, chunkX, chunkZ, chunk -> {
+        boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
             if (callback != null)
                 callback.accept(chunk);
         });
+
+        if(!loaded) {
+            // Not found, create a new chunk
+            createChunk(chunkX, chunkZ, callback);
+        }
     }
 
     @Override

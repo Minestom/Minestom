@@ -39,15 +39,15 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public void loadOrCreateChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public boolean loadChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
         byte[] bytes = storageFolder == null ? null : storageFolder.get(getChunkKey(chunkX, chunkZ));
 
         if (bytes == null) {
-            // Not found, create a new chunk
-            instance.createChunk(chunkX, chunkZ, callback);
+            return false;
         } else {
             // Found, load from result bytes
             ChunkReader.readChunk(bytes, instance, chunkX, chunkZ, callback);
+            return true;
         }
     }
 
