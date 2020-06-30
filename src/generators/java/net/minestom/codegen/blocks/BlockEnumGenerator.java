@@ -254,6 +254,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
         generator.addMethod("getBlockEntityName", "()", "NamespaceID", "return blockEntity;");
         generator.addMethod("isSolid", "()", "boolean", "return isSolid;");
+        generator.addMethod("isLiquid", "()", "boolean", "return this == WATER || this == LAVA;");
         generator.addMethod("getHardness", "()", "double", "return hardness;");
         generator.addMethod("getResistance", "()", "double", "return resistance;");
         generator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");

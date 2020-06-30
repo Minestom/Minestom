@@ -1160,6 +1160,10 @@ public enum Block {
 		return isSolid;
 	}
 
+	public boolean isLiquid() {
+		return this == WATER || this == LAVA;
+	}
+
 	public double getHardness() {
 		return hardness;
 	}
