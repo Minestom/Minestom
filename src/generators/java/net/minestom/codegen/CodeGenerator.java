@@ -13,4 +13,8 @@ public interface CodeGenerator {
      */
     String generate() throws IOException;
 
+    static String decapitalize(String text) {
+        char first = text.charAt(0);
+        return ""+Character.toLowerCase(first)+text.substring(1);
+    }
 }

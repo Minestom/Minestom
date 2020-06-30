@@ -24,5 +24,6 @@ public class AllGenerators {
         ParticleEnumGenerator.main(args);
         StatsEnumGenerator.main(args);
         BiomesEnumGenerator.main(args);
+        RegistriesGenerator.main(args);
     }
 }

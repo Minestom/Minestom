@@ -3,6 +3,9 @@
 //==============================
 package net.minestom.server.item;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.NamespaceID;
+@SuppressWarnings({"deprecation"})
 
 public enum Material {
 	AIR("minecraft:air", 0, Block.AIR),
@@ -898,6 +901,7 @@ public enum Material {
 		this.namespaceID = namespaceID;
 		this.maxDefaultStackSize = maxDefaultStackSize;
 		this.correspondingBlock = correspondingBlock;
+		Registries.materials.put(NamespaceID.from(namespaceID), this);
 	}
 
 	public short getId() {

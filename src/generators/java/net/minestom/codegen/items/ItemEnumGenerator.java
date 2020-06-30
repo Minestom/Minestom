@@ -10,6 +10,7 @@ import net.minestom.codegen.PrismarinePaths;
 import net.minestom.codegen.blocks.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import org.slf4j.Logger;
@@ -130,7 +131,12 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     protected void prepare(EnumGenerator generator) {
         String className = getClassName();
         generator.addImport(Block.class.getCanonicalName());
+        generator.addImport(Registries.class.getCanonicalName());
+        generator.addImport(NamespaceID.class.getCanonicalName());
+        generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
         generator.setParams("String namespaceID", "int maxDefaultStackSize", "Block correspondingBlock");
+        generator.appendToConstructor("Registries.materials.put(NamespaceID.from(namespaceID), this);");
+
         generator.addMethod("getId", "()", "short", "return (short)ordinal();");
         generator.addMethod("getName", "()", "String", "return namespaceID;");
         generator.addMethod("getMaxDefaultStackSize", "()", "int", "return maxDefaultStackSize;");

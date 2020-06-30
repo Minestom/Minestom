@@ -2,6 +2,7 @@ package net.minestom.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 import java.io.File;
@@ -63,9 +64,14 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
 
     @Override
     protected void prepare(EnumGenerator generator) {
+        generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
+        generator.addImport(Registries.class.getCanonicalName());
+        generator.addImport(NamespaceID.class.getCanonicalName());
         generator.setParams("String namespaceID");
         generator.addMethod("getId", "()", "int", "return ordinal();");
         generator.addMethod("getNamespaceID", "()", "String", "return namespaceID;");
+
+        generator.appendToConstructor("Registries."+CodeGenerator.decapitalize(getClassName())+"s.put(NamespaceID.from(namespaceID), this);");
     }
 
     @Override
