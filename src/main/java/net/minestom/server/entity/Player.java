@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.bossbar.BossBar;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.RichMessage;
 import net.minestom.server.collision.BoundingBox;
@@ -643,12 +643,12 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a legacy message with the default color char {@link Chat#COLOR_CHAR}
+     * Send a legacy message with the default color char {@link ChatParser#COLOR_CHAR}
      *
      * @param text the text with the legacy color formatting
      */
     public void sendLegacyMessage(String text) {
-        ColoredText coloredText = ColoredText.ofLegacy(text, Chat.COLOR_CHAR);
+        ColoredText coloredText = ColoredText.ofLegacy(text, ChatParser.COLOR_CHAR);
         sendJsonMessage(coloredText.toString());
     }
 

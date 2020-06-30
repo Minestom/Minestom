@@ -30,7 +30,7 @@ public class SerializableData extends Data {
     public Data clone() {
         SerializableData data = new SerializableData();
         data.data = new ConcurrentHashMap<>(this.data);
-        data.dataType = new ConcurrentHashMap<>(dataType);
+        data.dataType = new ConcurrentHashMap<>(this.dataType);
         return data;
     }
 
