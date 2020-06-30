@@ -244,7 +244,7 @@ public class Player extends LivingEntity implements CommandSender {
         UpdateTagListEvent event = new UpdateTagListEvent(tags);
         callEvent(UpdateTagListEvent.class,event);
 
-        sendPacketToViewersAndSelf(tags);
+        getPlayerConnection().sendPacket(tags);
 
         // Some client update
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
