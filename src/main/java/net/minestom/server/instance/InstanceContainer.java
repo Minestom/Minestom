@@ -54,6 +54,7 @@ public class InstanceContainer extends Instance {
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+    private IChunkLoader chunkLoader;
 
     private boolean autoChunkLoad;
 
@@ -61,9 +62,12 @@ public class InstanceContainer extends Instance {
         super(uniqueId, dimension);
 
         this.storageFolder = storageFolder;
+        chunkLoader = new MinestomBasicChunkLoader(storageFolder);
 
-        if (storageFolder == null)
+        if (storageFolder == null) {
             return;
+        }
+
         // Retrieve instance data
         this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
 
@@ -358,7 +362,7 @@ public class InstanceContainer extends Instance {
     @Override
     public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the chunk if no StorageFolder has been defined");
-        CHUNK_LOADER_IO.saveChunk(chunk, getStorageFolder(), callback);
+        chunkLoader.saveChunk(chunk, callback);
     }
 
     @Override
@@ -385,15 +389,14 @@ public class InstanceContainer extends Instance {
 
     @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        if (storageFolder != null) {
-            // Load from file if possible
-            CHUNK_LOADER_IO.loadChunk(this, chunkX, chunkZ, getStorageFolder(), chunk -> {
-                cacheChunk(chunk);
-                if (callback != null)
-                    callback.accept(chunk);
-            });
-        } else {
-            // Folder isn't defined, create new chunk
+        boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
+            cacheChunk(chunk);
+            if (callback != null)
+                callback.accept(chunk);
+        });
+
+        if(!loaded) {
+            // Not found, create a new chunk
             createChunk(chunkX, chunkZ, callback);
         }
     }
@@ -518,6 +521,14 @@ public class InstanceContainer extends Instance {
     @Override
     public void setStorageFolder(StorageFolder storageFolder) {
         this.storageFolder = storageFolder;
+    }
+
+    public IChunkLoader getChunkLoader() {
+        return chunkLoader;
+    }
+
+    public void setChunkLoader(IChunkLoader chunkLoader) {
+        this.chunkLoader = chunkLoader;
     }
 
     private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockId) {

@@ -15,6 +15,7 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
+import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -27,15 +28,18 @@ import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.TagsPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -115,7 +119,6 @@ public class PlayerInit {
         });
 
         connectionManager.addPlayerInitialization(player -> {
-
             player.addEventCallback(EntityAttackEvent.class, event -> {
                 Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {

@@ -3,6 +3,7 @@ package net.minestom.codegen;
 import net.minestom.codegen.blocks.BlockEnumGenerator;
 import net.minestom.codegen.enchantment.EnchantmentEnumGenerator;
 import net.minestom.codegen.entitytypes.EntityTypeEnumGenerator;
+import net.minestom.codegen.fluids.FluidEnumGenerator;
 import net.minestom.codegen.items.ItemEnumGenerator;
 import net.minestom.codegen.particles.ParticleEnumGenerator;
 import net.minestom.codegen.potions.PotionEnumGenerator;
@@ -24,5 +25,7 @@ public class AllGenerators {
         ParticleEnumGenerator.main(args);
         StatsEnumGenerator.main(args);
         BiomesEnumGenerator.main(args);
+        FluidEnumGenerator.main(args);
+        RegistriesGenerator.main(args);
     }
 }

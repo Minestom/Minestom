@@ -9,6 +9,7 @@ import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.codegen.PrismarinePaths;
 import net.minestom.server.instance.block.BlockAlternative;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import org.slf4j.Logger;
@@ -240,6 +241,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
     protected void prepare(EnumGenerator generator) {
         String className = getClassName();
         generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
+        generator.addImport(Registries.class.getCanonicalName());
         generator.addImport(NamespaceID.class.getCanonicalName());
         generator.addImport(List.class.getCanonicalName());
         generator.addImport(ArrayList.class.getCanonicalName());
@@ -252,6 +254,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
         generator.addMethod("getBlockEntityName", "()", "NamespaceID", "return blockEntity;");
         generator.addMethod("isSolid", "()", "boolean", "return isSolid;");
+        generator.addMethod("isLiquid", "()", "boolean", "return this == WATER || this == LAVA;");
         generator.addMethod("getHardness", "()", "double", "return hardness;");
         generator.addMethod("getResistance", "()", "double", "return resistance;");
         generator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");
@@ -272,6 +275,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.appendToConstructor("if(singleState) {");
         generator.appendToConstructor("\taddBlockAlternative(new BlockAlternative(defaultID));");
         generator.appendToConstructor("}");
+        generator.appendToConstructor("Registries.blocks.put(NamespaceID.from(namespaceID), this);");
     }
 
     @Override

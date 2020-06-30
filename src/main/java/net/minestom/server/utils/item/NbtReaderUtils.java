@@ -11,6 +11,7 @@ import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.Registries;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -81,8 +82,7 @@ public class NbtReaderUtils {
 
                 if (stringName.equals("Potion")) {
                     String potionId = reader.readShortSizedString();
-                    potionId = potionId.replace("minecraft:", "").toUpperCase();
-                    PotionType potionType = PotionType.valueOf(potionId);
+                    PotionType potionType = Registries.getPotionType(potionId);
 
                     item.addPotionType(potionType);
 
@@ -109,8 +109,7 @@ public class NbtReaderUtils {
                         String id = reader.readShortSizedString();
 
                         // Convert id
-                        id = id.replace("minecraft:", "").toUpperCase();
-                        Enchantment enchantment = Enchantment.valueOf(id);
+                        Enchantment enchantment = Registries.getEnchantment(id);
 
                         if (isEnchantment) {
                             item.setEnchantment(enchantment, lvl);

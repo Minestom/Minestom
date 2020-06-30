@@ -35,7 +35,6 @@ import java.util.function.Consumer;
 
 public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
 
-    protected static final ChunkLoader CHUNK_LOADER_IO = new ChunkLoader();
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private Dimension dimension;
