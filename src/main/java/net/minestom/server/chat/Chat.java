@@ -1,5 +1,6 @@
 package net.minestom.server.chat;
 
+
 import net.kyori.text.Component;
 import net.kyori.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.text.serializer.legacy.LegacyComponentSerializer;

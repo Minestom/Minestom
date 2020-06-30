@@ -28,9 +28,10 @@ public class SerializableData extends Data {
 
     @Override
     public Data clone() {
-        SerializableData cloned = (SerializableData) super.clone();
-        cloned.dataType = new ConcurrentHashMap<>(dataType);
-        return super.clone();
+        SerializableData data = new SerializableData();
+        data.data = new ConcurrentHashMap<>(this.data);
+        data.dataType = new ConcurrentHashMap<>(dataType);
+        return data;
     }
 
     public byte[] getSerializedData() throws IOException {
