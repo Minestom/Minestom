@@ -12,7 +12,10 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.PacketWriterUtils;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageFolder;
@@ -37,7 +40,6 @@ import java.util.function.Consumer;
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
  */
-// TODO save data + other things such as UUID
 public class InstanceContainer extends Instance {
 
     private static final String UUID_KEY = "uuid";

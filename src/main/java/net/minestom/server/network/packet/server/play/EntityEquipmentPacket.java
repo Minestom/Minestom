@@ -15,7 +15,6 @@ public class EntityEquipmentPacket implements ServerPacket {
     @Override
     public void write(PacketWriter writer) {
         writer.writeVarInt(entityId);
-        //TODO make better
         writer.writeByte((byte) slot.ordinal());
         writer.writeItemStack(itemStack);
     }

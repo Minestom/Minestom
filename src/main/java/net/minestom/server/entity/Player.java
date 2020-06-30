@@ -171,7 +171,6 @@ public class Player extends LivingEntity implements CommandSender {
      * Init the player and spawn him
      */
     protected void init() {
-        // TODO complete login sequence with optionals packets
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
         joinGamePacket.gameMode = gameMode;

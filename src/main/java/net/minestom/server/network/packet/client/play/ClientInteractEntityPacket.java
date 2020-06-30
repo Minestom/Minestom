@@ -12,6 +12,7 @@ public class ClientInteractEntityPacket extends ClientPlayPacket {
     public float y;
     public float z;
     public Player.Hand hand;
+    public boolean sneaking;
 
     @Override
     public void read(PacketReader reader) {
@@ -31,7 +32,7 @@ public class ClientInteractEntityPacket extends ClientPlayPacket {
                 this.hand = Player.Hand.values()[reader.readVarInt()];
                 break;
         }
-        reader.readBoolean(); //TODO use
+        this.sneaking = reader.readBoolean();
     }
 
     public enum Type {

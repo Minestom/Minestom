@@ -39,7 +39,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
 						String string3 = new BigInteger(MojangCrypt.digestData("", MinecraftServer.getKeyPair().getPublic(), getSecretKey())).toString(16);
 						GameProfile gameProfile = MinecraftServer.getSessionService().hasJoinedServer(new GameProfile(null, connection.getLoginUsername()), string3);
 						((NettyPlayerConnection) connection).setEncryptionKey(getSecretKey());
-						int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
+						final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
 
 						if (threshold > 0) {
 							connection.enableCompression(threshold);
