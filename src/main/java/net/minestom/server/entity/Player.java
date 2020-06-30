@@ -17,6 +17,7 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
+import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -38,15 +39,13 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
+import net.minestom.server.utils.*;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 import net.minestom.server.world.LevelType;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -236,6 +235,16 @@ public class Player extends LivingEntity implements CommandSender {
             }
         }
         // Recipes end
+
+        // Send server tags
+        TagsPacket tags = new TagsPacket();
+        TagManager tagManager = MinecraftServer.getTagManager();
+        tagManager.addRequiredTagsToPacket(tags);
+
+        UpdateTagListEvent event = new UpdateTagListEvent(tags);
+        callEvent(UpdateTagListEvent.class,event);
+
+        sendPacketToViewersAndSelf(tags);
 
         // Some client update
         playerConnection.sendPacket(getPropertiesPacket()); // Send default properties

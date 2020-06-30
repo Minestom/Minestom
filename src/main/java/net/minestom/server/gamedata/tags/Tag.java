@@ -13,14 +13,16 @@ import java.util.Set;
  */
 public class Tag {
 
-    public static final Tag EMPTY = new Tag();
+    public static final Tag EMPTY = new Tag(NamespaceID.from("minestom:empty"));
+    private final NamespaceID name;
 
     private Set<NamespaceID> values;
 
     /**
      * Creates a new empty tag
      */
-    public Tag() {
+    public Tag(NamespaceID name) {
+        this.name = name;
         values = new HashSet<>();
         lockValues();
     }
@@ -32,7 +34,8 @@ public class Tag {
      *                      appends the contents of that pack to the one being constructed
      * @param container
      */
-    public Tag(TagManager manager, String type, Tag lowerPriority, TagContainer container) throws FileNotFoundException {
+    public Tag(TagManager manager, NamespaceID name, String type, Tag lowerPriority, TagContainer container) throws FileNotFoundException {
+        this.name = name;
         values = new HashSet<>();
         if(!container.replace) {
             values.addAll(lowerPriority.values);
@@ -69,5 +72,20 @@ public class Tag {
      */
     public Set<NamespaceID> getValues() {
         return values;
+    }
+
+    /**
+     * Returns the name of this tag
+     * @return
+     */
+    public NamespaceID getName() {
+        return name;
+    }
+
+    public enum BasicTypes {
+        BLOCKS,
+        ITEMS,
+        FLUIDS,
+        ENTITY_TYPES
     }
 }

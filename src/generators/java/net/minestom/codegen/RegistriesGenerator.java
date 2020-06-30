@@ -1,6 +1,7 @@
 package net.minestom.codegen;
 
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
@@ -37,6 +38,7 @@ public class RegistriesGenerator implements CodeGenerator {
             PotionType.class.getCanonicalName(),
             Sound.class.getCanonicalName(),
             StatisticType.class.getCanonicalName(),
+            Fluid.class.getCanonicalName(),
     };
     private static final String[] defaults = {
             "AIR",
@@ -47,7 +49,8 @@ public class RegistriesGenerator implements CodeGenerator {
             null,
             null,
             null,
-            null
+            null,
+            "EMPTY"
     };
 
     @Override
