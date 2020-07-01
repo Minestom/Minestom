@@ -502,6 +502,10 @@ public class InventoryClickProcessor {
             slot = slot - inventorySlot + PlayerInventoryUtils.OFFSET;
         }
 
+        // Reset the didCloseInventory field
+        // Wait for inventory conditions + events to possibly close the inventory
+        player.UNSAFE_changeDidCloseInventory(false);
+
         List<InventoryCondition> inventoryConditions = isPlayerInventory ?
                 player.getInventory().getInventoryConditions() : inventory.getInventoryConditions();
         if (!inventoryConditions.isEmpty()) {

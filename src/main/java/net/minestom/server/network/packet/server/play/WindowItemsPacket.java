@@ -7,13 +7,12 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class WindowItemsPacket implements ServerPacket {
 
-    public int windowId;
-    public short count;
+    public byte windowId;
     public ItemStack[] items;
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeVarInt(windowId);
+        writer.writeByte(windowId);
 
         if (items == null) {
             writer.writeShort((short) 0);

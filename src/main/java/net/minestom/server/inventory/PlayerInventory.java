@@ -334,7 +334,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = 0;
-        windowItemsPacket.count = INVENTORY_SIZE;
         windowItemsPacket.items = convertedSlots;
         return windowItemsPacket;
     }
