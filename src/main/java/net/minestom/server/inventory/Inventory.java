@@ -90,8 +90,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public synchronized boolean addItemStack(ItemStack itemStack) {
         StackingRule stackingRule = itemStack.getStackingRule();
-        for (int i = 0; i < getItemStacks().length; i++) {
-            ItemStack item = getItemStacks()[i];
+        for (int i = 0; i < getSize(); i++) {
+            ItemStack item = getItemStack(i);
             StackingRule itemStackingRule = item.getStackingRule();
             if (itemStackingRule.canBeStacked(itemStack, item)) {
                 int itemAmount = itemStackingRule.getAmount(item);
@@ -216,7 +216,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
         itemStack = ItemStackUtils.notNull(itemStack);
-        this.itemStacks[slot] = itemStack;
+        setItemStackInternal(slot, itemStack);
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = getWindowId();
         setSlotPacket.slot = (short) slot;
@@ -224,11 +224,15 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         sendPacketToViewers(setSlotPacket);
     }
 
+    protected void setItemStackInternal(int slot, ItemStack itemStack) {
+        itemStacks[slot] = itemStack;
+    }
+
     private WindowItemsPacket createWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
-        windowItemsPacket.count = (short) itemStacks.length;
-        windowItemsPacket.items = itemStacks;
+        windowItemsPacket.count = (short) getSize();
+        windowItemsPacket.items = getItemStacks();
         return windowItemsPacket;
     }
 
@@ -329,7 +333,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         } else {
             clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
                     // Window loop
-                    new InventoryClickLoopHandler(0, itemStacks.length, 1,
+                    new InventoryClickLoopHandler(0, getSize(), 1,
                             i -> i,
                             index -> isClickInWindow(index) ? getItemStack(index) : playerInventory.getItemStack(index, offset),
                             (index, itemStack) -> {
@@ -463,9 +467,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         InventoryClickResult clickResult = clickProcessor.doubleClick(this, player, slot, cursor,
                 // Start by looping through the opened inventory
-                new InventoryClickLoopHandler(0, itemStacks.length, 1,
+                new InventoryClickLoopHandler(0, getSize(), 1,
                         i -> i,
-                        index -> itemStacks[index],
+                        index -> getItemStack(index),
                         (index, itemStack) -> setItemStack(index, itemStack)),
                 // Looping through player inventory
                 new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE - 9, 1,
