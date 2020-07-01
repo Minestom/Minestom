@@ -8,6 +8,7 @@ import net.minestom.server.utils.time.UpdateOption;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SchedulerManager {
@@ -59,6 +60,10 @@ public class SchedulerManager {
                 task.getRunnable().run();
             }
         });
+        batchesPool.shutdown();
+        try {
+            batchesPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {}
     }
 
     public void removeTask(int taskId) {
