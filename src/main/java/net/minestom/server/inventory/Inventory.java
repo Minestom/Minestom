@@ -231,7 +231,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private WindowItemsPacket createWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
-        windowItemsPacket.count = (short) getSize();
         windowItemsPacket.items = getItemStacks();
         return windowItemsPacket;
     }
