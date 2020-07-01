@@ -17,13 +17,16 @@ import java.util.UUID;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
+    private static final String ALREADY_CONNECTED_JSON =
+            ColoredText.of(ChatColor.RED, "You are already on this server").toString();
+
     public String username;
 
     @Override
     public void process(PlayerConnection connection, ConnectionManager connectionManager) {
         if (MojangAuth.isUsingMojangAuth()) {
             if (connectionManager.getPlayer(username) != null) {
-                connection.sendPacket(new LoginDisconnect(ColoredText.of(ChatColor.RED, "You are already on this server").toString()));
+                connection.sendPacket(new LoginDisconnect(ALREADY_CONNECTED_JSON));
                 connection.disconnect();
                 return;
             }

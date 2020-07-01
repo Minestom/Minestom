@@ -96,4 +96,7 @@ public class NbtWriter {
         packet.writeShortSizedString(name);
     }
 
+    public PacketWriter getPacketWriter() {
+        return packet;
+    }
 }

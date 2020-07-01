@@ -214,7 +214,7 @@ public final class Chunk implements Viewable {
         refreshBlockValue(x, y, z, blockId, customBlockId);
     }
 
-    public Data getData(int x, byte y, int z) {
+    public Data getData(int x, int y, int z) {
         int index = getBlockIndex(x, y, z);
         return getData(index);
     }

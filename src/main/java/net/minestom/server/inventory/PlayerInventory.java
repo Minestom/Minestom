@@ -277,8 +277,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         }
 
         // Refresh slot
-        update();
-        //refreshSlot(slot); seems to break things concerning +64 stacks
+        refreshSlot(slot); // Use #update() if any problem occurs
     }
 
     /**

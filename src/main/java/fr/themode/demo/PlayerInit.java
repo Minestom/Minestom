@@ -6,7 +6,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
-import net.minestom.server.chat.*;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.EntityZombie;
@@ -215,7 +216,6 @@ public class PlayerInit {
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     player.sendMessage("CLICK PLAYER INVENTORY");
                     System.out.println("slot player: " + slot);
-                    p.closeInventory();
                 });
 
                 /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
@@ -238,10 +238,12 @@ public class PlayerInit {
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName(ColoredText.of(ChatColor.BLUE + "Item name"));
-                item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line"));
+                item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
                 item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
+
+                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
 
                 //player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
 
@@ -275,22 +277,8 @@ public class PlayerInit {
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
 
-                ColoredText coloredText1 = ColoredText.of(ChatColor.BLUE, "I am colored")
-                        .append(ChatColor.BLUE, "I am the next")
-                        .appendFormat("I am {#blue}here");
-
-                ColoredText coloredText2 =
-                        ColoredText.ofFormat(
-                                "I am {#green}colo{#red}red {#white}{&key.jump} keybind, {@attack.fall} translatable");
-
-
-                RichMessage richMessage1 = RichMessage.of(coloredText1)
-                        .setClickEvent(ChatClickEvent.runCommand("/test"))
-                        .setHoverEvent(ChatHoverEvent.showText("I'm a text"))
-                        .append(coloredText2)
-                        .setHoverEvent(ChatHoverEvent.showText("I'm a second text"));
-
-                player.sendMessage(richMessage1);
+                player.sendLegacyMessage("&aIm &bHere", '&');
+                player.sendMessage(ColoredText.of("{#ff55ff}test"));
 
             });
 

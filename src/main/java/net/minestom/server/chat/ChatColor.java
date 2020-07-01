@@ -123,8 +123,17 @@ public class ChatColor {
             return "";
 
         String redH = Integer.toHexString(red);
+        if (redH.length() == 1)
+            redH = "0" + redH;
+
         String greenH = Integer.toHexString(green);
+        if (greenH.length() == 1)
+            greenH = "0" + greenH;
+
         String blueH = Integer.toHexString(blue);
+        if (blueH.length() == 1)
+            blueH = "0" + blueH;
+
         return "{#" + redH + greenH + blueH + "}";
     }
 }

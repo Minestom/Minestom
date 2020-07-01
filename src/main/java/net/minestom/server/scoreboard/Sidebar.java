@@ -1,7 +1,7 @@
 package net.minestom.server.scoreboard;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.Chat;
+import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
@@ -208,7 +208,7 @@ public class Sidebar implements Viewable {
         }
 
         private void createTeam() {
-            this.entityName = Chat.COLOR_CHAR + Integer.toHexString(colorName);
+            this.entityName = ChatParser.COLOR_CHAR + Integer.toHexString(colorName);
 
             this.sidebarTeam = new SidebarTeam(teamName, content, ColoredText.of(""), entityName);
         }
