@@ -1276,6 +1276,10 @@ public enum Block {
 		return defaultID;
 	}
 
+	public String getName() {
+		return namespaceID;
+	}
+
 	public boolean isAir() {
 		return isAir;
 	}

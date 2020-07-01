@@ -27,6 +27,7 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.world.Difficulty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,6 +252,10 @@ public class MinecraftServer {
         nettyServer.stop();
         schedulerManager.shutdown();
         storageManager.getLoadedFolders().forEach(StorageFolder::close);
+        LOGGER.info("Shutting down all thread pools.");
+        MinestomThread.shutdownAll();
+        benchmarkManager.disable();
+        commandManager.stopConsoleThread();
         LOGGER.info("Minestom server stopped successfully.");
     }
 

@@ -13,6 +13,7 @@ import java.util.*;
 
 public class CommandManager {
 
+    private boolean running;
     private String commandPrefix = "/";
 
     private ConsoleSender consoleSender = new ConsoleSender();
@@ -21,18 +22,26 @@ public class CommandManager {
     private Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
     public CommandManager() {
+        running = true;
         // Setup console thread
-        new Thread(() -> {
+        Thread consoleThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
-            while (true) {
-                String command = scanner.nextLine();
-                if (!command.startsWith(commandPrefix))
-                    continue;
-                command = command.replaceFirst(commandPrefix, "");
-                execute(consoleSender, command);
-
+            while (running) {
+                if(scanner.hasNext()) {
+                    String command = scanner.nextLine();
+                    if (!command.startsWith(commandPrefix))
+                        continue;
+                    command = command.replaceFirst(commandPrefix, "");
+                    execute(consoleSender, command);
+                }
             }
-        }, "ConsoleCommand-Thread").start();
+        }, "ConsoleCommand-Thread");
+        consoleThread.setDaemon(true);
+        consoleThread.start();
+    }
+
+    public void stopConsoleThread() {
+        running = false;
     }
 
     public void register(Command<CommandSender> command) {

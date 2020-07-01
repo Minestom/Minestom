@@ -250,6 +250,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
         generator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity", "boolean singleState");
         generator.addMethod("getBlockId", "()", "short", "return defaultID;");
+        generator.addMethod("getName", "()", "String", "return namespaceID;");
         generator.addMethod("isAir", "()", "boolean", "return isAir;");
         generator.addMethod("hasBlockEntity", "()", "boolean", "return blockEntity != null;");
         generator.addMethod("getBlockEntityName", "()", "NamespaceID", "return blockEntity;");
