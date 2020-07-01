@@ -253,9 +253,9 @@ public class MinecraftServer {
         schedulerManager.shutdown();
         storageManager.getLoadedFolders().forEach(StorageFolder::close);
         LOGGER.info("Shutting down all thread pools.");
-        MinestomThread.shutdownAll();
         benchmarkManager.disable();
         commandManager.stopConsoleThread();
+        MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
     }
 

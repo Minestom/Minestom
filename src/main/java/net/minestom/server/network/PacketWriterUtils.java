@@ -29,7 +29,7 @@ public class PacketWriterUtils {
             if (players.isEmpty())
                 return;
 
-            ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+            final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             for (Player player : players) {
                 PlayerConnection playerConnection = player.getPlayerConnection();
                 if (PlayerUtils.isNettyClient(player)) {
@@ -44,13 +44,7 @@ public class PacketWriterUtils {
 
     public static void writeAndSend(PlayerConnection playerConnection, ServerPacket serverPacket) {
         batchesPool.execute(() -> {
-            if (PlayerUtils.isNettyClient(playerConnection)) {
-                ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-                playerConnection.writePacket(buffer, false);
-                buffer.release();
-            } else {
-                playerConnection.sendPacket(serverPacket);
-            }
+            playerConnection.sendPacket(serverPacket);
         });
     }
 
