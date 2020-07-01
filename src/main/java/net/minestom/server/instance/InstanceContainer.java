@@ -5,6 +5,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.instance.InstanceChunkLoadEvent;
+import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
@@ -279,9 +281,11 @@ public class InstanceContainer extends Instance {
     public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
+            // Chunk already loaded
             if (callback != null)
                 callback.accept(chunk);
         } else {
+            // Retrieve chunk from somewhere else (file or create a new use using the ChunkGenerator)
             retrieveChunk(chunkX, chunkZ, callback);
         }
     }
@@ -320,6 +324,8 @@ public class InstanceContainer extends Instance {
         for (Player viewer : chunk.getViewers()) {
             chunk.removeViewer(viewer);
         }
+
+        callChunkUnloadEvent(chunkX, chunkZ);
 
         // Remove all entities in chunk
         getChunkEntities(chunk).forEach(entity -> {
@@ -393,11 +399,12 @@ public class InstanceContainer extends Instance {
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
+            callChunkLoadEvent(chunkX, chunkZ);
             if (callback != null)
                 callback.accept(chunk);
         });
 
-        if(!loaded) {
+        if (!loaded) {
             // Not found, create a new chunk
             createChunk(chunkX, chunkZ, callback);
         }
@@ -419,6 +426,8 @@ public class InstanceContainer extends Instance {
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         }
+        
+        callChunkLoadEvent(chunkX, chunkZ);
     }
 
     public void sendChunkUpdate(Chunk chunk) {
@@ -545,5 +554,15 @@ public class InstanceContainer extends Instance {
         wrlock.lock();
         currentlyChangingBlocks.clear();
         wrlock.unlock();
+    }
+
+    private void callChunkLoadEvent(int chunkX, int chunkZ) {
+        InstanceChunkLoadEvent chunkLoadEvent = new InstanceChunkLoadEvent(this, chunkX, chunkZ);
+        callEvent(InstanceChunkLoadEvent.class, chunkLoadEvent);
+    }
+
+    private void callChunkUnloadEvent(int chunkX, int chunkZ) {
+        InstanceChunkUnloadEvent chunkUnloadEvent = new InstanceChunkUnloadEvent(this, chunkX, chunkZ);
+        callEvent(InstanceChunkUnloadEvent.class, chunkUnloadEvent);
     }
 }

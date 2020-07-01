@@ -1,4 +1,4 @@
-package net.minestom.server.event.entity;
+package net.minestom.server.event.instance;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
