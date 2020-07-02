@@ -16,7 +16,7 @@ import java.util.Random;
 public class NoiseTestGenerator extends ChunkGenerator {
 
     private Random random = new Random();
-    private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolationType(InterpolationType.LINEAR).setSeed(141414).setFrequency(0.5).build();
+    private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(141414).setFrequency(0.5).build();
 
     @Override
     public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {

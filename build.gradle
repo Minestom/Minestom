@@ -51,7 +51,7 @@ dependencies {
     api 'com.github.TheMode:CommandBuilder:f893cfbfe4'
 
     // https://jitpack.io/#Articdive/Jnoise
-    api 'com.github.Articdive:Jnoise:1.0-SNAPSHOT'
+    api 'com.github.Articdive:Jnoise:145c910a1e'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
     api group: 'org.rocksdb', name: 'rocksdbjni', version: '6.8.1'

@@ -82,7 +82,7 @@ public class PlayerSkin {
 
         try {
             final String response = URLUtils.getText(url);
-            JsonObject jsonObject = (new JsonParser()).parse(response).getAsJsonObject();
+            JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
             final String uuid = jsonObject.get("id").getAsString();
             return fromUuid(uuid);
         } catch (IOException e) {
