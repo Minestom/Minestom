@@ -57,8 +57,8 @@ public class DeclareRecipesPacket implements ServerPacket {
 
 
         private void write(PacketWriter writer) {
-            writer.writeSizedString(recipeId);
             writer.writeSizedString(recipeType);
+            writer.writeSizedString(recipeId);
 
             switch (recipeType) {
                 case "crafting_shapeless":
