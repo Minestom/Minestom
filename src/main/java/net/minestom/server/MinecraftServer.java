@@ -18,7 +18,9 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.netty.NettyServer;
+import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
@@ -28,11 +30,11 @@ import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
@@ -106,6 +108,7 @@ public class MinecraftServer {
 
     // Data
     private static ResponseDataConsumer responseDataConsumer;
+    private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static LootTableManager lootTableManager;
     private static TagManager tagManager;
@@ -151,6 +154,28 @@ public class MinecraftServer {
         minecraftServer = new MinecraftServer();
 
         return minecraftServer;
+    }
+
+    /**
+     * Get the current server brand name
+     *
+     * @return the server brand name
+     */
+    public static String getBrandName() {
+        return brandName;
+    }
+
+    /**
+     * Change the server brand name, update the name to all connected players
+     *
+     * @param brandName
+     */
+    public static void setBrandName(String brandName) {
+        Check.notNull(brandName, "The brand name cannot be null");
+        MinecraftServer.brandName = brandName;
+
+        PluginMessagePacket brandMessage = PluginMessagePacket.getBrandPacket();
+        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), brandMessage);
     }
 
     public static Difficulty getDifficulty() {

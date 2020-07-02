@@ -1,90 +1,52 @@
 package net.minestom.server.network.packet;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.buffer.BufferWrapper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-// TODO delete
 public class PacketWriter {
 
-    private ByteArrayOutputStream output = new ByteArrayOutputStream();
-    private DataOutputStream data = new DataOutputStream(output);
-
-    public PacketWriter() {
-    }
+    private ByteBuf buffer = Unpooled.buffer();
 
     public void writeBoolean(boolean b) {
-        try {
-            data.writeBoolean(b);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeBoolean(b);
     }
 
     public void writeByte(byte b) {
-        try {
-            data.writeByte(b);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeByte(b);
     }
 
     public void writeChar(char s) {
-        try {
-            data.writeChar(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeChar(s);
     }
 
     public void writeShort(short s) {
-        try {
-            data.writeShort(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeShort(s);
     }
 
     public void writeInt(int i) {
-        try {
-            data.writeInt(i);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeInt(i);
     }
 
     public void writeLong(long l) {
-        try {
-            data.writeLong(l);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeLong(l);
     }
 
     public void writeFloat(float f) {
-        try {
-            data.writeFloat(f);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeFloat(f);
     }
 
     public void writeDouble(double d) {
-        try {
-            data.writeDouble(d);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeDouble(d);
     }
 
     public void writeVarInt(int i) {
@@ -121,11 +83,7 @@ public class PacketWriter {
     }
 
     public void writeBytes(byte[] bytes) {
-        try {
-            data.write(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buffer.writeBytes(bytes);
     }
 
     public void writeStringArray(String[] array) {
@@ -171,7 +129,10 @@ public class PacketWriter {
     }
 
     public byte[] toByteArray() {
-        return output.toByteArray();
+        byte[] bytes = new byte[buffer.readableBytes()];
+        int readerIndex = buffer.readerIndex();
+        buffer.getBytes(readerIndex, bytes);
+        return bytes;
     }
 
 }

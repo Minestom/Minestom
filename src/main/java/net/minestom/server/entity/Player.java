@@ -39,13 +39,15 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Dimension;
 import net.minestom.server.world.LevelType;
 
-import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -180,7 +182,10 @@ public class Player extends LivingEntity implements CommandSender {
         joinGamePacket.reducedDebugInfo = false;
         playerConnection.sendPacket(joinGamePacket);
 
-        // TODO minecraft:brand plugin message
+        // Server brand name
+        {
+            playerConnection.sendPacket(PluginMessagePacket.getBrandPacket());
+        }
 
         ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
         serverDifficultyPacket.difficulty = MinecraftServer.getDifficulty();
@@ -241,7 +246,7 @@ public class Player extends LivingEntity implements CommandSender {
         tagManager.addRequiredTagsToPacket(tags);
 
         UpdateTagListEvent event = new UpdateTagListEvent(tags);
-        callEvent(UpdateTagListEvent.class,event);
+        callEvent(UpdateTagListEvent.class, event);
 
         getPlayerConnection().sendPacket(tags);
 
