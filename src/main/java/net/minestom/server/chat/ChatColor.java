@@ -7,8 +7,16 @@ import java.util.Map;
 
 public class ChatColor {
 
+    // Special
     public static final ChatColor NO_COLOR = new ChatColor();
+    public static final ChatColor RESET = new ChatColor("reset");
+    public static final ChatColor BOLD = new ChatColor("bold");
+    public static final ChatColor ITALIC = new ChatColor("italic");
+    public static final ChatColor UNDERLINED = new ChatColor("underlined");
+    public static final ChatColor STRIKETHROUGH = new ChatColor("strikethrough");
+    public static final ChatColor OBFUSCATED = new ChatColor("obfuscated");
 
+    // Color
     public static final ChatColor BLACK = fromRGB(0, 0, 0, 0);
     public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170, 1);
     public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0, 2);
@@ -29,6 +37,14 @@ public class ChatColor {
     private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
 
     static {
+
+        colorCode.put("reset", RESET);
+        colorCode.put("bold", BOLD);
+        colorCode.put("italic", ITALIC);
+        colorCode.put("underlined", UNDERLINED);
+        colorCode.put("strikethrough", STRIKETHROUGH);
+        colorCode.put("obfuscated", OBFUSCATED);
+
         colorCode.put("black", BLACK);
         colorCode.put("dark_blue", DARK_BLUE);
         colorCode.put("dark_green", DARK_GREEN);
@@ -45,6 +61,13 @@ public class ChatColor {
         colorCode.put("pink", PINK);
         colorCode.put("yellow", YELLOW);
         colorCode.put("white", WHITE);
+
+        legacyColorCodesMap.put('k', OBFUSCATED);
+        legacyColorCodesMap.put('l', BOLD);
+        legacyColorCodesMap.put('m', STRIKETHROUGH);
+        legacyColorCodesMap.put('n', UNDERLINED);
+        legacyColorCodesMap.put('o', ITALIC);
+        legacyColorCodesMap.put('r', RESET);
 
         legacyColorCodesMap.put('0', BLACK);
         legacyColorCodesMap.put('1', DARK_BLUE);
@@ -68,6 +91,11 @@ public class ChatColor {
     private int red, green, blue;
     private int id;
 
+    // Special
+    private String codeName;
+
+    private boolean special;
+
     private ChatColor(int r, int g, int b, int id) {
         this.empty = false;
         this.red = r;
@@ -76,8 +104,14 @@ public class ChatColor {
         this.id = id;
     }
 
+    private ChatColor(String codeName) {
+        this.codeName = codeName;
+        this.special = true;
+    }
+
     private ChatColor() {
         this.empty = true;
+        this.special = true;
     }
 
     public static ChatColor fromRGB(int r, int g, int b) {
@@ -112,6 +146,19 @@ public class ChatColor {
         return blue;
     }
 
+    public boolean isSpecial() {
+        return special;
+    }
+
+    /**
+     * Get the code name is the color is "special"
+     *
+     * @return the special code name
+     */
+    protected String getCodeName() {
+        return codeName;
+    }
+
     public int getId() {
         Check.stateCondition(id == -1, "Please use one of the ChatColor constant instead");
         return id;
@@ -122,18 +169,31 @@ public class ChatColor {
         if (empty)
             return "";
 
-        String redH = Integer.toHexString(red);
-        if (redH.length() == 1)
-            redH = "0" + redH;
+        final String header = "{#";
+        final String footer = "}";
 
-        String greenH = Integer.toHexString(green);
-        if (greenH.length() == 1)
-            greenH = "0" + greenH;
+        String code;
 
-        String blueH = Integer.toHexString(blue);
-        if (blueH.length() == 1)
-            blueH = "0" + blueH;
+        if (codeName != null) {
+            // Special color (reset/bold/etc...)
+            code = codeName;
+        } else {
+            // RGB color
+            String redH = Integer.toHexString(red);
+            if (redH.length() == 1)
+                redH = "0" + redH;
 
-        return "{#" + redH + greenH + blueH + "}";
+            String greenH = Integer.toHexString(green);
+            if (greenH.length() == 1)
+                greenH = "0" + greenH;
+
+            String blueH = Integer.toHexString(blue);
+            if (blueH.length() == 1)
+                blueH = "0" + blueH;
+
+            code = redH + greenH + blueH;
+        }
+
+        return header + code + footer;
     }
 }

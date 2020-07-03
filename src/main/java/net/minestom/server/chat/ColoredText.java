@@ -123,6 +123,7 @@ public class ColoredText {
         int formatEnd = 0;
 
         String currentColor = "";
+        SpecialComponentContainer specialComponentContainer = new SpecialComponentContainer();
 
         for (int i = 0; i < message.length(); i++) {
             // Last char or null
@@ -134,7 +135,7 @@ public class ColoredText {
                 formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
                 String rawMessage = message.substring(formatEnd, i);
                 if (!rawMessage.isEmpty()) {
-                    objects.add(getMessagePart(MessageType.RAW, rawMessage, currentColor));
+                    objects.add(getMessagePart(MessageType.RAW, rawMessage, currentColor, specialComponentContainer));
                 }
 
                 inFormat = true;
@@ -158,6 +159,23 @@ public class ColoredText {
                     if (color == ChatColor.NO_COLOR) {
                         // Use rgb formatting (#ffffff)
                         currentColor = "#" + colorCode;
+                    } else if (color.isSpecial()) {
+                        // Check for special color (reset/bold/etc...)
+                        if (color == ChatColor.RESET) {
+                            // Remove all additional component
+                            currentColor = "";
+                            specialComponentContainer.reset();
+                        } else if (color == ChatColor.BOLD) {
+                            specialComponentContainer.bold = true;
+                        } else if (color == ChatColor.ITALIC) {
+                            specialComponentContainer.italic = true;
+                        } else if (color == ChatColor.UNDERLINED) {
+                            specialComponentContainer.underlined = true;
+                        } else if (color == ChatColor.STRIKETHROUGH) {
+                            specialComponentContainer.strikethrough = true;
+                        } else if (color == ChatColor.OBFUSCATED) {
+                            specialComponentContainer.obfuscated = true;
+                        }
                     } else {
                         // Use color name formatting (white)
                         currentColor = colorCode;
@@ -169,7 +187,7 @@ public class ColoredText {
                     final String translatableCode = formatString.substring(1);
                     final boolean hasArgs = translatableCode.contains(",");
                     if (!hasArgs) {
-                        objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor));
+                        objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor, specialComponentContainer));
                     } else {
                         // Arguments parsing
                         // ex: {@translatable.key,arg1,arg2,etc}
@@ -177,11 +195,11 @@ public class ColoredText {
                         final String finalTranslatableCode = split[0];
                         final String[] arguments = Arrays.copyOfRange(split, 1, split.length);
 
-                        JsonObject translatableObject = getMessagePart(MessageType.TRANSLATABLE, finalTranslatableCode, currentColor);
+                        JsonObject translatableObject = getMessagePart(MessageType.TRANSLATABLE, finalTranslatableCode, currentColor, specialComponentContainer);
                         if (arguments.length > 0) {
                             JsonArray argArray = new JsonArray();
                             for (String arg : arguments) {
-                                argArray.add(getMessagePart(MessageType.RAW, arg, currentColor));
+                                argArray.add(getMessagePart(MessageType.RAW, arg, currentColor, specialComponentContainer));
                             }
                             translatableObject.add("with", argArray);
                             objects.add(translatableObject);
@@ -192,7 +210,7 @@ public class ColoredText {
                 // Keybind component
                 if (formatString.startsWith("&")) {
                     String keybindCode = formatString.substring(1);
-                    objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor));
+                    objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
                     continue;
                 }
             }
@@ -201,7 +219,7 @@ public class ColoredText {
         // Add the remaining of the message as a raw message when any
         if (formatEnd < message.length()) {
             String lastRawMessage = message.substring(formatEnd + 1);
-            objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor));
+            objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor, specialComponentContainer));
         }
 
         return objects;
@@ -215,7 +233,8 @@ public class ColoredText {
      * @param color       the last color
      * @return a json object representing a message
      */
-    private JsonObject getMessagePart(MessageType messageType, String message, String color) {
+    private JsonObject getMessagePart(MessageType messageType, String message, String color,
+                                      SpecialComponentContainer specialComponentContainer) {
         JsonObject object = new JsonObject();
         switch (messageType) {
             case RAW:
@@ -231,6 +250,27 @@ public class ColoredText {
         if (!color.isEmpty()) {
             object.addProperty("color", color);
         }
+
+        if (specialComponentContainer.bold) {
+            object.addProperty("bold", "true");
+        }
+
+        if (specialComponentContainer.italic) {
+            object.addProperty("italic", "true");
+        }
+
+        if (specialComponentContainer.underlined) {
+            object.addProperty("underlined", "true");
+        }
+
+        if (specialComponentContainer.strikethrough) {
+            object.addProperty("strikethrough", "true");
+        }
+
+        if (specialComponentContainer.obfuscated) {
+            object.addProperty("obfuscated", "true");
+        }
+
         return object;
     }
 
@@ -241,6 +281,22 @@ public class ColoredText {
     public ColoredText appendLegacy(String message, char colorChar) {
         String legacy = toLegacy(message, colorChar);
         return appendFormat(legacy);
+    }
+
+    private static class SpecialComponentContainer {
+        boolean bold = false;
+        boolean italic = false;
+        boolean underlined = false;
+        boolean strikethrough = false;
+        boolean obfuscated = false;
+
+        private void reset() {
+            this.bold = false;
+            this.italic = false;
+            this.underlined = false;
+            this.strikethrough = false;
+            this.obfuscated = false;
+        }
     }
 
 }
