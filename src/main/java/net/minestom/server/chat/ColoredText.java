@@ -251,27 +251,17 @@ public class ColoredText {
             object.addProperty("color", color);
         }
 
-        if (specialComponentContainer.bold) {
-            object.addProperty("bold", "true");
-        }
-
-        if (specialComponentContainer.italic) {
-            object.addProperty("italic", "true");
-        }
-
-        if (specialComponentContainer.underlined) {
-            object.addProperty("underlined", "true");
-        }
-
-        if (specialComponentContainer.strikethrough) {
-            object.addProperty("strikethrough", "true");
-        }
-
-        if (specialComponentContainer.obfuscated) {
-            object.addProperty("obfuscated", "true");
-        }
+        object.addProperty("bold", getBoolean(specialComponentContainer.bold));
+        object.addProperty("italic", getBoolean(specialComponentContainer.italic));
+        object.addProperty("underlined", getBoolean(specialComponentContainer.underlined));
+        object.addProperty("strikethrough", getBoolean(specialComponentContainer.strikethrough));
+        object.addProperty("obfuscated", getBoolean(specialComponentContainer.obfuscated));
 
         return object;
+    }
+
+    private String getBoolean(boolean value) {
+        return value ? "true" : "false";
     }
 
     private enum MessageType {
