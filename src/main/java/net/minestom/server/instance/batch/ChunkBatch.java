@@ -63,7 +63,7 @@ public class ChunkBatch implements InstanceBatch {
     public void flushChunkGenerator(ChunkGenerator chunkGenerator, Consumer<Chunk> callback) {
         batchesPool.execute(() -> {
             final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
-            final boolean hasPopulator = populators != null && populators.isEmpty();
+            final boolean hasPopulator = populators != null && !populators.isEmpty();
 
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
             singleThreadFlush(hasPopulator ? null : callback);
