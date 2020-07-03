@@ -62,19 +62,19 @@ public class ChunkBatch implements InstanceBatch {
 
     public void flushChunkGenerator(ChunkGenerator chunkGenerator, Consumer<Chunk> callback) {
         batchesPool.execute(() -> {
-            List<ChunkPopulator> populators = chunkGenerator.getPopulators();
-            boolean hasPopulator = populators != null && populators.isEmpty();
+            final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
+            final boolean hasPopulator = populators != null && populators.isEmpty();
 
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
             singleThreadFlush(hasPopulator ? null : callback);
 
             clearData(); // So the populators won't place those blocks again
 
-            if (populators != null && !populators.isEmpty()) {
+            if (hasPopulator) {
                 Iterator<ChunkPopulator> populatorIterator = populators.iterator();
                 while (populatorIterator.hasNext()) {
                     ChunkPopulator chunkPopulator = populatorIterator.next();
-                    chunkPopulator.populateChunk(this, chunk.getChunkX(), chunk.getChunkZ());
+                    chunkPopulator.populateChunk(this, chunk);
                 }
                 singleThreadFlush(callback);
             }
