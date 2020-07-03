@@ -4,11 +4,16 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.thread.DefaultThreadProvider;
+import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.thread.MinestomThread;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.concurrent.ExecutorService;
 
@@ -19,6 +24,8 @@ public final class UpdateManager {
 
     private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
+
+    private ThreadProvider threadProvider = new DefaultThreadProvider();
 
     /**
      * Should only be created in MinecraftServer
@@ -52,11 +59,17 @@ public final class UpdateManager {
                     }
                 }
 
-                // Entities update
-                entityManager.update();
+                // Server tick
+                threadProvider.start();
+                for (Instance instance : instanceManager.getInstances()) {
+                    for (Chunk chunk : instance.getChunks()) {
+                        threadProvider.linkThread(instance, chunk);
+                    }
+                }
+                threadProvider.end();
 
-                // Blocks update
-                instanceManager.updateBlocks();
+                // Waiting players update
+                entityManager.updateWaitingPlayers();
 
                 // Scheduler
                 schedulerManager.update();
@@ -73,6 +86,26 @@ public final class UpdateManager {
             }
 
         });
+    }
+
+    /**
+     * Get the current thread provider
+     *
+     * @return the current thread provider
+     */
+    public ThreadProvider getThreadProvider() {
+        return threadProvider;
+    }
+
+    /**
+     * Change the server thread provider
+     *
+     * @param threadProvider the new thread provider
+     * @throws NullPointerException if {@param threadProvider} is null
+     */
+    public void setThreadProvider(ThreadProvider threadProvider) {
+        Check.notNull(threadProvider, "The thread provider cannot be null");
+        this.threadProvider = threadProvider;
     }
 
     public void stop() {

@@ -50,23 +50,16 @@ public class MinecraftServer {
 
     public static final String THREAD_NAME_MAIN_UPDATE = "Ms-MainUpdate";
 
+    public static final String THREAD_NAME_TICK = "Ms-Tick";
+
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
 
-    public static final String THREAD_NAME_BLOCK_UPDATE = "Ms-BlockUpdatePool";
-    public static final int THREAD_COUNT_BLOCK_UPDATE = 2;
-
-    public static final String THREAD_NAME_ENTITIES = "Ms-EntitiesPool";
-    public static final int THREAD_COUNT_ENTITIES = 2;
-
     public static final String THREAD_NAME_ENTITIES_PATHFINDING = "Ms-EntitiesPathFinding";
     public static final int THREAD_COUNT_ENTITIES_PATHFINDING = 2;
-
-    public static final String THREAD_NAME_PLAYERS_ENTITIES = "Ms-PlayersPool";
-    public static final int THREAD_COUNT_PLAYERS_ENTITIES = 2;
 
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
     public static final int THREAD_COUNT_SCHEDULER = 1;

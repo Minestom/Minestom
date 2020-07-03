@@ -15,13 +15,18 @@ import static net.minestom.server.MinecraftServer.*;
 public class BenchmarkManager {
 
     public static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-    private static List<String> threads = Arrays.asList(THREAD_NAME_MAIN_UPDATE, THREAD_NAME_PACKET_WRITER,
-            THREAD_NAME_BLOCK_BATCH, THREAD_NAME_BLOCK_UPDATE, THREAD_NAME_ENTITIES, THREAD_NAME_ENTITIES_PATHFINDING,
-            THREAD_NAME_PLAYERS_ENTITIES, THREAD_NAME_SCHEDULER);
+    private static List<String> threads = new ArrayList<>();
 
     static {
         threadMXBean.setThreadContentionMonitoringEnabled(true);
         threadMXBean.setThreadCpuTimeEnabled(true);
+
+        threads.add(THREAD_NAME_MAIN_UPDATE);
+        threads.add(THREAD_NAME_PACKET_WRITER);
+        threads.add(THREAD_NAME_BLOCK_BATCH);
+        threads.add(THREAD_NAME_ENTITIES_PATHFINDING);
+        threads.add(THREAD_NAME_SCHEDULER);
+        threads.add(THREAD_NAME_TICK);
     }
 
     private Map<Long, Long> lastCpuTimeMap = new HashMap<>();
@@ -33,8 +38,6 @@ public class BenchmarkManager {
 
     private boolean enabled = false;
     private volatile boolean stop = false;
-
-    private UpdateOption updateOption;
     private Thread thread;
 
     private long time;
@@ -42,7 +45,6 @@ public class BenchmarkManager {
     public void enable(UpdateOption updateOption) {
         Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
 
-        this.updateOption = updateOption;
         time = updateOption.getTimeUnit().toMilliseconds(updateOption.getValue());
 
         this.thread = new Thread(null, () -> {

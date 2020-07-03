@@ -278,7 +278,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         // Refresh slot
         update();
-        //refreshSlot(slot); problem with ghost item when clicking on a slot which has a different internal id
+        //problem with ghost item when clicking on a slot which has a different internal id
+        //refreshSlot(slot);
     }
 
     /**
