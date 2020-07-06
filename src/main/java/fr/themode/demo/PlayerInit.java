@@ -240,16 +240,16 @@ public class PlayerInit {
 
                 player.setGlowing(true);
 
+                for (int i = 0; i < 9; i++) {
+                    player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
+                }
+
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName(ColoredText.of(ChatColor.BLUE + "Item name"));
                 item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
                 item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
-
-                for (int i = 0; i < 9; i++) {
-                    player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
-                }
 
                 player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
 

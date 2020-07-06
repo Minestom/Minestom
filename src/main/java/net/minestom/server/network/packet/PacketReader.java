@@ -115,7 +115,12 @@ public class PacketReader extends InputStream {
 
     @Override
     public int read() {
-        return readByte();
+        return readByte() & 0xFF;
+    }
+
+    @Override
+    public int available() {
+        return buffer.readableBytes();
     }
 
     public NBT readTag() throws IOException, NBTException {
