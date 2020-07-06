@@ -152,7 +152,7 @@ public class Utils {
             NBT itemNBT = reader.readTag();
             if(itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
                 NBTCompound nbt = (NBTCompound) itemNBT;
-                if(nbt.containsKey("Damage")) item.setDamage(nbt.getShort("Damage"));
+                if(nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
                 if(nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
                 if(nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
                 if(nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
@@ -280,7 +280,7 @@ public class Utils {
 
             // Start damage
             {
-                itemNBT.setShort("Damage", itemStack.getDamage());
+                itemNBT.setInt("Damage", itemStack.getDamage());
             }
             // End damage
 

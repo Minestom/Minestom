@@ -23,7 +23,7 @@ public class ItemStack implements DataContainer {
     private short materialId;
 
     private byte amount;
-    private short damage;
+    private int damage;
 
     private ColoredText displayName;
     private boolean unbreakable;
@@ -47,7 +47,7 @@ public class ItemStack implements DataContainer {
             this.stackingRule = defaultStackingRule;
     }
 
-    public ItemStack(short materialId, byte amount, short damage) {
+    public ItemStack(short materialId, byte amount, int damage) {
         this.materialId = materialId;
         this.amount = amount;
         this.damage = damage;
@@ -126,7 +126,7 @@ public class ItemStack implements DataContainer {
         }
     }
 
-    public short getDamage() {
+    public int getDamage() {
         return damage;
     }
 
@@ -154,7 +154,7 @@ public class ItemStack implements DataContainer {
         this.amount = amount;
     }
 
-    public void setDamage(short damage) {
+    public void setDamage(int damage) {
         this.damage = damage;
     }
 
