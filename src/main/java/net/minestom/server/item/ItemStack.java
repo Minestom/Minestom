@@ -496,14 +496,16 @@ public class ItemStack implements DataContainer {
         ItemStack itemStack = new ItemStack(materialId, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
-        itemStack.setLore(getLore());
+        itemStack.setLore(new ArrayList<>(getLore()));
         itemStack.setStackingRule(getStackingRule());
 
         itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
         itemStack.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
         itemStack.attributes = new ArrayList<>(attributes);
         itemStack.potionTypes = new HashSet<>(potionTypes);
+
         itemStack.hideFlag = hideFlag;
+        itemStack.customModelData = customModelData;
 
         Data data = getData();
         if (data != null)
