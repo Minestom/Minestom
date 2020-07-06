@@ -83,9 +83,12 @@ public class FakePlayerController {
     }
 
     public void respawn() {
-        ClientStatusPacket statusPacket = new ClientStatusPacket();
+        // Sending the respawn packet for some reason
+        // Is related to FakePlayer#showPlayer and the tablist option (probably because of the scheduler)
+        /*ClientStatusPacket statusPacket = new ClientStatusPacket();
         statusPacket.action = ClientStatusPacket.Action.PERFORM_RESPAWN;
-        addToQueue(statusPacket);
+        addToQueue(statusPacket);*/
+        fakePlayer.respawn();
     }
 
     public void setHeldItem(short slot) {
