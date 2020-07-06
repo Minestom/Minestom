@@ -10,13 +10,15 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerController;
 import net.minestom.server.entity.type.EntityZombie;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -29,18 +31,15 @@ import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.TagsPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.Dimension;
 
-import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -65,11 +64,11 @@ public class PlayerInit {
 
         // Load some chunks beforehand
         int loopStart = -2;
-        int loopEnd = 2;
+        int loopEnd = 10;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                netherTest.loadChunk(x, z);
+                //netherTest.loadChunk(x, z);
             }
 
 
@@ -163,14 +162,18 @@ public class PlayerInit {
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
                 zombie.setInstance(player.getInstance());
 
-                /*FakePlayer fakePlayer = new FakePlayer(UUID.randomUUID(), "test");
-                fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
-                    fakePlayer.getController().respawn();
-                });
-                fakePlayer.setArrowCount(25);
-                FakePlayerController controller = fakePlayer.getController();
-                controller.sendChatMessage("I am a bot!");*/
+                FakePlayer.initPlayer(UUID.randomUUID(), "test", false, fakePlayer -> {
+                    //fakePlayer.setInstance(player.getInstance());
+                    fakePlayer.teleport(player.getPosition());
 
+                    fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
+                        fakePlayer.getController().respawn();
+                    });
+
+                    fakePlayer.setArrowCount(25);
+                    FakePlayerController controller = fakePlayer.getController();
+                    controller.sendChatMessage("I am a bot!");
+                });
                 //Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
 
             });
@@ -243,9 +246,13 @@ public class PlayerInit {
                 item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
 
-                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
+                for (int i = 0; i < 9; i++) {
+                    player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
+                }
 
-                //player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
+                player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
+
+                player.getInventory().setItemStack(41, ItemStack.getAirItem());
 
                 inventory.addItemStack(item.clone());
                 //player.openInventory(inventory);
@@ -278,7 +285,12 @@ public class PlayerInit {
             belowNameScoreboard.updateScore(this, 50);*/
 
                 player.sendLegacyMessage("&aIm &bHere", '&');
-                player.sendMessage(ColoredText.of("{#ff55ff}test"));
+                player.sendMessage(ColoredText.of("{#ff55ff}" + ChatColor.RESET + "test"));
+
+                /*RichMessage richMessage = RichMessage.of(ColoredText.of("Hey the item"))
+                        .setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.IRON_HELMET, (byte) 1)));
+                System.out.println(richMessage.toString());
+                player.sendMessage(richMessage);*/
 
             });
 

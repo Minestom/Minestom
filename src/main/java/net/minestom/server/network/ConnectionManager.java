@@ -186,7 +186,7 @@ public final class ConnectionManager {
      * Add a new player in the players list
      * Is currently used at
      * {@link net.minestom.server.network.packet.client.login.LoginStartPacket#process(PlayerConnection, ConnectionManager)}
-     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#FakePlayer(UUID, String, boolean)}
+     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#initPlayer(UUID, String, boolean, Consumer)}
      *
      * @param player the player to add
      */
