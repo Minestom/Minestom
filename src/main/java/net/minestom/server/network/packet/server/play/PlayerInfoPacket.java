@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -71,7 +72,7 @@ public class PlayerInfoPacket implements ServerPacket {
         public ArrayList<Property> properties;
         public GameMode gameMode;
         public int ping;
-        public String displayName;
+        public ColoredText displayName;
 
         public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
             super(uuid);
@@ -94,7 +95,7 @@ public class PlayerInfoPacket implements ServerPacket {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayName);
+                writer.writeSizedString(displayName.toString());
         }
 
         public static class Property {
@@ -157,9 +158,9 @@ public class PlayerInfoPacket implements ServerPacket {
 
     public static class UpdateDisplayName extends PlayerInfo {
 
-        public String displayName;
+        public ColoredText displayName;
 
-        public UpdateDisplayName(UUID uuid, String displayName) {
+        public UpdateDisplayName(UUID uuid, ColoredText displayName) {
             super(uuid);
             this.displayName = displayName;
         }
@@ -169,7 +170,7 @@ public class PlayerInfoPacket implements ServerPacket {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayName);
+                writer.writeSizedString(displayName.toString());
         }
     }
 

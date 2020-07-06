@@ -162,9 +162,10 @@ public class PlayerInit {
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
                 zombie.setInstance(player.getInstance());
 
-                FakePlayer.initPlayer(UUID.randomUUID(), "test", false, fakePlayer -> {
+                FakePlayer.initPlayer(UUID.randomUUID(), "test", fakePlayer -> {
                     //fakePlayer.setInstance(player.getInstance());
                     fakePlayer.teleport(player.getPosition());
+                    fakePlayer.setSkin(PlayerSkin.fromUsername("TheMode911"));
 
                     fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
                         fakePlayer.getController().respawn();
