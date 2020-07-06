@@ -483,7 +483,8 @@ public class ItemStack implements DataContainer {
     public boolean hasNbtTag() {
         return hasDisplayName() || hasLore() || isUnbreakable() ||
                 !enchantmentMap.isEmpty() || !storedEnchantmentMap.isEmpty() ||
-                !attributes.isEmpty() || !potionTypes.isEmpty() || customModelData != 0;
+                !attributes.isEmpty() || !potionTypes.isEmpty() ||
+                hideFlag != 0 || customModelData != 0;
     }
 
     /**
