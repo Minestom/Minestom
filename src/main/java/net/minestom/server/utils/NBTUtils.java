@@ -38,7 +38,9 @@ public class NBTUtils {
                 item = Material.STONE;
             }
             ItemStack stack = new ItemStack(item, tag.getByte("Count"));
-            loadDataIntoItem(stack, tag);
+            if(tag.containsKey("tag")) {
+                loadDataIntoItem(stack, tag.getCompound("tag"));
+            }
             destination.setItemStack(tag.getByte("Slot"), stack);
         }
     }
@@ -48,7 +50,10 @@ public class NBTUtils {
             ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
-            saveDataIntoNBT(stack, nbt);
+            NBTCompound tag = new NBTCompound();
+            saveDataIntoNBT(stack, tag);
+
+            nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
             nbt.setByte("Count", stack.getAmount());
             nbt.setString("id", stack.getMaterial().getName());
