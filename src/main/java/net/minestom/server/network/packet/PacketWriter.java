@@ -7,15 +7,20 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.buffer.BufferWrapper;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class PacketWriter {
+public class PacketWriter extends OutputStream {
 
     private ByteBuf buffer = Unpooled.buffer();
+    private NBTWriter nbtWriter = new NBTWriter(this, false);
 
     public void writeBoolean(boolean b) {
         buffer.writeBoolean(b);
@@ -128,6 +133,15 @@ public class PacketWriter {
         Utils.writeItemStack(this, itemStack);
     }
 
+    public void writeNBT(String name, NBT tag) {
+        try {
+            nbtWriter.writeNamed("", tag);
+        } catch (IOException e) {
+            // should not throw, as nbtWriter points to this PacketWriter
+            e.printStackTrace();
+        }
+    }
+
     public byte[] toByteArray() {
         byte[] bytes = new byte[buffer.readableBytes()];
         int readerIndex = buffer.readerIndex();
@@ -135,4 +149,8 @@ public class PacketWriter {
         return bytes;
     }
 
+    @Override
+    public void write(int b) {
+        writeByte((byte) b);
+    }
 }

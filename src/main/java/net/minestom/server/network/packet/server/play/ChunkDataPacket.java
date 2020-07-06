@@ -15,7 +15,7 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.buffer.BufferUtils;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.nbt.NbtWriter;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Set;
 
@@ -44,8 +44,6 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        NbtWriter nbtWriter = new NbtWriter(writer);
-
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
         writer.writeBoolean(fullChunk);
@@ -81,10 +79,11 @@ public class ChunkDataPacket implements ServerPacket {
         }
 
         {
-            nbtWriter.writeCompound("", compound -> {
-                compound.writeLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9));
-                compound.writeLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9));
-            });
+            writer.writeNBT("",
+                    new NBTCompound()
+                            .setLongArray("MOTION_BLOCKING", Utils.encodeBlocks(motionBlocking, 9))
+                            .setLongArray("WORLD_SURFACE", Utils.encodeBlocks(worldSurface, 9))
+            );
         }
 
         // Biome data
@@ -104,18 +103,18 @@ public class ChunkDataPacket implements ServerPacket {
         for (int index : blockEntities) {
             final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
 
-            nbtWriter.writeCompound("", compound -> {
-                compound.writeDouble("x", blockPosition.getX());
-                compound.writeDouble("y", blockPosition.getY());
-                compound.writeDouble("z", blockPosition.getZ());
+            NBTCompound nbt = new NBTCompound()
+                    .setDouble("x", blockPosition.getX())
+                    .setDouble("y", blockPosition.getY())
+                    .setDouble("z", blockPosition.getZ());
 
-                final short customBlockId = customBlocksId[index];
-                final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-                if (customBlock != null) {
-                    Data data = blocksData.get(index);
-                    customBlock.writeBlockEntity(blockPosition, data, compound);
-                }
-            });
+            final short customBlockId = customBlocksId[index];
+            final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+            if (customBlock != null) {
+                Data data = blocksData.get(index);
+                customBlock.writeBlockEntity(blockPosition, data, nbt);
+            }
+            writer.writeNBT("", nbt);
         }
     }
 

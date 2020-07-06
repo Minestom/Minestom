@@ -7,8 +7,8 @@ import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.nbt.NbtWriter;
 import net.minestom.server.utils.time.UpdateOption;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
  * TODO
@@ -188,12 +188,14 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Allows custom block to write block entity data to a given NBT compound
+     * Allows custom block to write block entity data to a given NBT compound.
+     * Used to send block entity data to the client over the network.
+     * Can also be used to save block entity data on disk for compatible chunk savers
      *
      * @param position  position of the block
      * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
      */
-    public void writeBlockEntity(BlockPosition position, Data blockData, NbtWriter nbt) {
+    public void writeBlockEntity(BlockPosition position, Data blockData, NBTCompound nbt) {
     }
 
     /**

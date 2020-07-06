@@ -5,6 +5,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 public class InventoryData extends DataType<Inventory> {
 
