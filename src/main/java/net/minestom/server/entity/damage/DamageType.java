@@ -35,8 +35,7 @@ public class DamageType {
     }
 
     public RichMessage buildChatMessage(Player killed) {
-        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + "}"))
-                .append(ColoredText.ofFormat(killed.getUsername()));
+        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + ","+killed.getUsername()+"}"));
         return richMessage;
     }
 

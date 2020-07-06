@@ -6,13 +6,18 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.nbt.NBTReader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
-// TODO delete
-public class PacketReader {
+public class PacketReader extends InputStream {
 
     private ByteBuf buffer;
+    private NBTReader nbtReader = new NBTReader(this, false);
 
     public PacketReader(ByteBuf buffer) {
         this.buffer = buffer;
@@ -105,5 +110,14 @@ public class PacketReader {
 
     public ByteBuf getBuffer() {
         return buffer;
+    }
+
+    @Override
+    public int read() {
+        return readByte();
+    }
+
+    public NBT readTag() throws IOException, NBTException {
+        return nbtReader.read();
     }
 }

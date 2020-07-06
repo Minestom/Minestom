@@ -9,12 +9,18 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.entity.EntityManager;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
+import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
@@ -22,10 +28,14 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.sound.Sound;
+import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
@@ -115,6 +125,21 @@ public class MinecraftServer {
     private static MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
+        // warmup/force-init registries
+        // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
+        // That can happen with PotionType for instance, if no code tries to access a PotionType field
+        // TODO: automate (probably with code generation)
+        Block.values();
+        Material.values();
+        PotionType.values();
+        Enchantment.values();
+        EntityType.values();
+        Sound.values();
+        Particle.values();
+        StatisticType.values();
+        Biome.values();
+        Fluid.values();
+
         connectionManager = new ConnectionManager();
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();

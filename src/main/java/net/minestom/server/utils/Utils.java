@@ -1,22 +1,29 @@
 package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.buffer.BufferWrapper;
-import net.minestom.server.utils.item.NbtReaderUtils;
-import net.minestom.server.utils.nbt.NBT;
-import net.minestom.server.utils.nbt.NbtWriter;
+import org.jglrxavpok.hephaistos.nbt.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Utils {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
     public static int getVarIntSize(int input) {
         return (input & 0xFFFFFF80) == 0
@@ -110,18 +117,18 @@ public class Utils {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    private static void writeEnchant(NbtWriter writer, String listName, Map<Enchantment, Short> enchantmentMap) {
-        writer.writeList(listName, NBT.NBT_COMPOUND, enchantmentMap.size(), () -> {
-            for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
-                Enchantment enchantment = entry.getKey();
-                short level = entry.getValue();
+    private static void writeEnchant(NBTCompound nbt, String listName, Map<Enchantment, Short> enchantmentMap) {
+        NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
+        for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
+            Enchantment enchantment = entry.getKey();
+            short level = entry.getValue();
 
-                writer.writeShort("lvl", level);
-
-                writer.writeString("id", "minecraft:" + enchantment.name().toLowerCase());
-
-            }
-        });
+            enchantList.add(new NBTCompound()
+                    .setShort("lvl", level)
+                    .setString("id", "minecraft:" + enchantment.name().toLowerCase())
+            );
+        }
+        nbt.set(listName, enchantList);
     }
 
     public static ItemStack readItemStack(PacketReader reader) {
@@ -141,16 +148,89 @@ public class Utils {
 
         ItemStack item = new ItemStack((short) id, count);
 
-        byte nbt = reader.readByte(); // Should be compound start (0x0A) or 0 if there isn't NBT data
+        try {
+            NBT itemNBT = reader.readTag();
+            if(itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
+                NBTCompound nbt = (NBTCompound) itemNBT;
+                if(nbt.containsKey("Damage")) item.setDamage(nbt.getShort("Damage"));
+                if(nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
+                if(nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
+                if(nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
+                if(nbt.containsKey("display")) {
+                    NBTCompound display = nbt.getCompound("display");
+                    if(display.containsKey("Name")) item.setDisplayName(ColoredText.of(display.getString("Name")));
+                    if(display.containsKey("Lore")) {
+                        NBTList<NBTString> loreList = display.getList("Lore");
+                        ArrayList<ColoredText> lore = new ArrayList<>();
+                        for(NBTString s : loreList) {
+                            lore.add(ColoredText.of(s.getValue()));
+                        }
+                        item.setLore(lore);
+                    }
+                }
 
-        if (nbt == 0x00) {
-            return item;
-        } else if (nbt == 0x0A) {
-            reader.readShort(); // Ignored, should be empty (main compound name)
-            NbtReaderUtils.readItemStackNBT(reader, item);
+                if(nbt.containsKey("Enchantments")) {
+                    loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
+                }
+                if(nbt.containsKey("StoredEnchantments")) {
+                    loadEnchantments(nbt.getList("StoredEnchantments"), item::setStoredEnchantment);
+                }
+                if(nbt.containsKey("AttributeModifiers")) {
+                    NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
+                    for (NBTCompound attributeNBT : attributes) {
+                        // TODO: 1.16 changed how UUIDs are stored, is this part affected?
+                        long uuidMost = attributeNBT.getLong("UUIDMost");
+                        long uuidLeast = attributeNBT.getLong("UUIDLeast");
+                        UUID uuid = new UUID(uuidMost, uuidLeast);
+                        double value = attributeNBT.getDouble("Amount");
+                        String slot = attributeNBT.getString("Slot");
+                        String attributeName = attributeNBT.getString("AttributeName");
+                        int operation = attributeNBT.getInt("Operation");
+                        String name = attributeNBT.getString("Name");
+
+                        final Attribute attribute = Attribute.fromKey(attributeName);
+                        // Wrong attribute name, stop here
+                        if (attribute == null)
+                            break;
+                        final AttributeOperation attributeOperation = AttributeOperation.byId(operation);
+                        // Wrong attribute operation, stop here
+                        if (attributeOperation == null)
+                            break;
+                        final AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+                        // Wrong attribute slot, stop here
+                        if (attributeSlot == null)
+                            break;
+
+                        // Add attribute
+                        final ItemAttribute itemAttribute =
+                                new ItemAttribute(uuid, name, attribute, attributeOperation, value, attributeSlot);
+                        item.addAttribute(itemAttribute);
+                    }
+                }
+            }
+        } catch (IOException | NBTException e) {
+            e.printStackTrace();
         }
 
         return item;
+    }
+
+    @FunctionalInterface
+    private interface EnchantmentSetter {
+        void applyEnchantment(Enchantment name, short level);
+    }
+
+    private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
+        for(NBTCompound enchantment : enchantments) {
+            short level = enchantment.getShort("lvl");
+            String id = enchantment.getString("id");
+            Enchantment enchant = Registries.getEnchantment(id);
+            if(enchant != null) {
+                setter.applyEnchantment(enchant, level);
+            } else {
+                LOGGER.warn("Unknown enchantment type: "+id);
+            }
+        }
     }
 
     public static void writeBlocks(BufferWrapper buffer, short[] blocksId, int bitsPerEntry) {
@@ -178,28 +258,6 @@ public class Utils {
         }
     }
 
-    /*public static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
-        long maxEntryValue = (1L << bitsPerEntry) - 1;
-
-        int length = (int) Math.ceil(blocks.length * bitsPerEntry / 64.0);
-        long[] data = new long[length];
-
-        for (int index = 0; index < blocks.length; index++) {
-            int value = blocks[index];
-            int bitIndex = index * bitsPerEntry;
-            int startIndex = bitIndex / 64;
-            int endIndex = ((index + 1) * bitsPerEntry - 1) / 64;
-            int startBitSubIndex = bitIndex % 64;
-            data[startIndex] = data[startIndex] & ~(maxEntryValue << startBitSubIndex) | ((long) value & maxEntryValue) << startBitSubIndex;
-            if (startIndex != endIndex) {
-                int endBitSubIndex = 64 - startBitSubIndex;
-                data[endIndex] = data[endIndex] >>> endBitSubIndex << endBitSubIndex | ((long) value & maxEntryValue) >> endBitSubIndex;
-            }
-        }
-
-        return data;
-    }*/
-
     public static void writeItemStack(PacketWriter packet, ItemStack itemStack) {
         if (itemStack == null || itemStack.isAir()) {
             packet.writeBoolean(false);
@@ -209,126 +267,116 @@ public class Utils {
             packet.writeByte(itemStack.getAmount());
 
             if (!itemStack.hasNbtTag()) {
-                packet.writeByte((byte) 0x00); // No nbt
+                packet.writeByte((byte) NBTTypes.TAG_End); // No nbt
                 return;
             }
 
-            NbtWriter mainWriter = new NbtWriter(packet);
+            NBTCompound itemNBT = new NBTCompound();
 
-            mainWriter.writeCompound("", writer -> {
-                // Unbreakable
-                if (itemStack.isUnbreakable()) {
-                    writer.writeInt("Unbreakable", 1);
+            // Unbreakable
+            if (itemStack.isUnbreakable()) {
+                itemNBT.setInt("Unbreakable", 1);
+            }
+
+            // Start damage
+            {
+                itemNBT.setShort("Damage", itemStack.getDamage());
+            }
+            // End damage
+
+            // Display
+            boolean hasDisplayName = itemStack.hasDisplayName();
+            boolean hasLore = itemStack.hasLore();
+
+            if (hasDisplayName || hasLore) {
+                NBTCompound displayNBT = new NBTCompound();
+                if (hasDisplayName) {
+                    final String name = itemStack.getDisplayName().toString();
+                    displayNBT.setString("Name", name);
                 }
 
-                // Start damage
-                {
-                    writer.writeShort("Damage", itemStack.getDamage());
-                }
-                // End damage
+                if (hasLore) {
+                    final ArrayList<ColoredText> lore = itemStack.getLore();
 
-                // Display
-                boolean hasDisplayName = itemStack.hasDisplayName();
-                boolean hasLore = itemStack.hasLore();
-
-                if (hasDisplayName || hasLore) {
-                    writer.writeCompound("display", displayWriter -> {
-                        if (hasDisplayName) {
-                            final String name = itemStack.getDisplayName().toString();
-                            displayWriter.writeString("Name", name);
-                        }
-
-                        if (hasLore) {
-                            final ArrayList<ColoredText> lore = itemStack.getLore();
-
-                            displayWriter.writeList("Lore", NBT.NBT_STRING, lore.size(), () -> {
-                                for (ColoredText line : lore) {
-                                    packet.writeShortSizedString(line.toString());
-                                }
-                            });
-
-                        }
-                    });
-                }
-                // End display
-
-                // Start enchantment
-                {
-                    Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
-                    if (!enchantmentMap.isEmpty()) {
-                        writeEnchant(writer, "Enchantments", enchantmentMap);
+                    final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
+                    for (ColoredText line : lore) {
+                        loreNBT.add(new NBTString(line.toString()));
                     }
-
-                    Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
-                    if (!storedEnchantmentMap.isEmpty()) {
-                        writeEnchant(writer, "StoredEnchantments", storedEnchantmentMap);
-                    }
+                    displayNBT.set("Lore", loreNBT);
                 }
-                // End enchantment
 
-                // Start attribute
-                {
-                    List<ItemAttribute> itemAttributes = itemStack.getAttributes();
-                    if (!itemAttributes.isEmpty()) {
-                        packet.writeByte((byte) 0x09); // Type id (list)
-                        packet.writeShortSizedString("AttributeModifiers");
+                itemNBT.set("display", displayNBT);
+            }
+            // End display
 
-                        packet.writeByte((byte) 0x0A); // Compound
-                        packet.writeInt(itemAttributes.size());
-
-                        for (ItemAttribute itemAttribute : itemAttributes) {
-                            UUID uuid = itemAttribute.getUuid();
-
-                            writer.writeLong("UUIDMost", uuid.getMostSignificantBits());
-
-                            writer.writeLong("UUIDLeast", uuid.getLeastSignificantBits());
-
-                            writer.writeDouble("Amount", itemAttribute.getValue());
-
-                            writer.writeString("Slot", itemAttribute.getSlot().name().toLowerCase());
-
-                            writer.writeString("itemAttribute", itemAttribute.getAttribute().getKey());
-
-                            writer.writeInt("Operation", itemAttribute.getOperation().getId());
-
-                            writer.writeString("Name", itemAttribute.getInternalName());
-                        }
-                        packet.writeByte((byte) 0x00); // End compound
-                    }
+            // Start enchantment
+            {
+                Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
+                if (!enchantmentMap.isEmpty()) {
+                    writeEnchant(itemNBT, "Enchantments", enchantmentMap);
                 }
-                // End attribute
 
-                // Start potion
-                {
-                    Set<PotionType> potionTypes = itemStack.getPotionTypes();
-                    if (!potionTypes.isEmpty()) {
-                        for (PotionType potionType : potionTypes) {
-                            packet.writeByte((byte) 0x08); // type id (string)
-                            packet.writeShortSizedString("Potion");
-                            packet.writeShortSizedString("minecraft:" + potionType.name().toLowerCase());
-                        }
+                Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
+                if (!storedEnchantmentMap.isEmpty()) {
+                    writeEnchant(itemNBT, "StoredEnchantments", storedEnchantmentMap);
+                }
+            }
+            // End enchantment
+
+            // Start attribute
+            {
+                List<ItemAttribute> itemAttributes = itemStack.getAttributes();
+                if (!itemAttributes.isEmpty()) {
+                    NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
+
+                    for (ItemAttribute itemAttribute : itemAttributes) {
+                        UUID uuid = itemAttribute.getUuid();
+
+                        attributesNBT.add(
+                                new NBTCompound()
+                                        .setLong("UUIDMost", uuid.getMostSignificantBits())
+                                        .setLong("UUIDLeast", uuid.getLeastSignificantBits())
+                                        .setDouble("Amount", itemAttribute.getValue())
+                                        .setString("Slot", itemAttribute.getSlot().name().toLowerCase())
+                                        .setString("itemAttribute", itemAttribute.getAttribute().getKey())
+                                        .setInt("Operation", itemAttribute.getOperation().getId())
+                                        .setString("Name", itemAttribute.getInternalName())
+                        );
+                    }
+                    itemNBT.set("AttributeModifiers", attributesNBT);
+                }
+            }
+            // End attribute
+
+            // Start potion
+            {
+                Set<PotionType> potionTypes = itemStack.getPotionTypes();
+                if (!potionTypes.isEmpty()) {
+                    for (PotionType potionType : potionTypes) {
+                        itemNBT.setString("Potion", potionType.getNamespaceID());
                     }
                 }
-                // End potion
+            }
+            // End potion
 
-                // Start hide flags
-                {
-                    int hideFlag = itemStack.getHideFlag();
-                    if (hideFlag != 0) {
-                        writer.writeInt("HideFlags", hideFlag);
-                    }
+            // Start hide flags
+            {
+                int hideFlag = itemStack.getHideFlag();
+                if (hideFlag != 0) {
+                    itemNBT.setInt("HideFlags", hideFlag);
                 }
-                // End hide flags
+            }
+            // End hide flags
 
-                // Start custom model data
-                {
-                    int customModelData = itemStack.getCustomModelData();
-                    if (customModelData != 0) {
-                        writer.writeInt("CustomModelData", customModelData);
-                    }
+            // Start custom model data
+            {
+                int customModelData = itemStack.getCustomModelData();
+                if (customModelData != 0) {
+                    itemNBT.setInt("CustomModelData", customModelData);
                 }
-                // End custom model data
-            });
+            }
+            // End custom model data
+            packet.writeNBT("", itemNBT);
         }
     }
 
