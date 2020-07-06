@@ -882,9 +882,8 @@ public class Player extends LivingEntity implements CommandSender {
     public void setDisplayName(ColoredText displayName) {
         this.displayName = displayName;
 
-        String jsonDisplayName = displayName != null ? displayName.toString() : null;
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), jsonDisplayName));
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
         sendPacketToViewersAndSelf(infoPacket);
     }
 
@@ -1937,12 +1936,11 @@ public class Player extends LivingEntity implements CommandSender {
         final String textures = skin == null ? "" : skin.getTextures();
         final String signature = skin == null ? null : skin.getSignature();
 
-        String jsonDisplayName = displayName != null ? displayName.toString() : null;
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
                 new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
-        addPlayer.displayName = jsonDisplayName;
+        addPlayer.displayName = displayName;
 
         PlayerInfoPacket.AddPlayer.Property prop =
                 new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
