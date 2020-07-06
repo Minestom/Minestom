@@ -35,6 +35,7 @@ public class ItemStack implements DataContainer {
     private Set<PotionType> potionTypes;
 
     private int hideFlag;
+    private int customModelData;
 
     private StackingRule stackingRule;
     private Data data;
@@ -389,6 +390,24 @@ public class ItemStack implements DataContainer {
     }
 
     /**
+     * Get the item custom model data
+     *
+     * @return the item custom model data
+     */
+    public int getCustomModelData() {
+        return customModelData;
+    }
+
+    /**
+     * Change the item custom model data
+     *
+     * @param customModelData the new item custom data model
+     */
+    public void setCustomModelData(int customModelData) {
+        this.customModelData = customModelData;
+    }
+
+    /**
      * Add flags to the item
      *
      * @param flags the flags to add
@@ -464,7 +483,7 @@ public class ItemStack implements DataContainer {
     public boolean hasNbtTag() {
         return hasDisplayName() || hasLore() || isUnbreakable() ||
                 !enchantmentMap.isEmpty() || !storedEnchantmentMap.isEmpty() ||
-                !attributes.isEmpty() || !potionTypes.isEmpty();
+                !attributes.isEmpty() || !potionTypes.isEmpty() || customModelData != 0;
     }
 
     /**
