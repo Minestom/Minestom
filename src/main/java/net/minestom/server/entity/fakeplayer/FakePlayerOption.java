@@ -5,7 +5,7 @@ import net.minestom.server.network.ConnectionManager;
 public class FakePlayerOption {
 
     private boolean registered = false;
-    private boolean inTabList = true;
+    private boolean inTabList = false;
 
     /**
      * Get if the player is registered internally as a Player
@@ -44,7 +44,6 @@ public class FakePlayerOption {
      * @param inTabList should the player be in the tab-list
      */
     public void setInTabList(boolean inTabList) {
-        throw new UnsupportedOperationException("Tablist option doesn't work (yet?), need to find how to do it");
-        //this.inTabList = inTabList;
+        this.inTabList = inTabList;
     }
 }

@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.network.player.FakePlayerConnection;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -75,5 +76,20 @@ public class FakePlayer extends Player {
 
     public FakePlayerController getController() {
         return fakePlayerController;
+    }
+
+    @Override
+    protected void showPlayer(PlayerConnection connection) {
+        super.showPlayer(connection);
+        if (!option.isInTabList()) {
+            // Remove from tab-list
+            MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
+                @Override
+                public void run() {
+                    connection.sendPacket(getRemovePlayerToList());
+                }
+            }, new UpdateOption(20, TimeUnit.TICK));
+        }
+
     }
 }
