@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
@@ -113,12 +114,12 @@ public class NBTUtils {
         if(nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
         if(nbt.containsKey("display")) {
             NBTCompound display = nbt.getCompound("display");
-            if(display.containsKey("Name")) item.setDisplayName(ColoredText.of(display.getString("Name")));
+            if(display.containsKey("Name")) item.setDisplayName(ChatParser.toColoredText(display.getString("Name")));
             if(display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
                 ArrayList<ColoredText> lore = new ArrayList<>();
                 for(NBTString s : loreList) {
-                    lore.add(ColoredText.of(s.getValue()));
+                    lore.add(ChatParser.toColoredText(s.getValue()));
                 }
                 item.setLore(lore);
             }
