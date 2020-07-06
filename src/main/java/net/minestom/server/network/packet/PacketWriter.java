@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.buffer.BufferWrapper;
@@ -130,7 +131,7 @@ public class PacketWriter extends OutputStream {
     }
 
     public void writeItemStack(ItemStack itemStack) {
-        Utils.writeItemStack(this, itemStack);
+        NBTUtils.writeItemStack(this, itemStack);
     }
 
     public void writeNBT(String name, NBT tag) {

@@ -515,4 +515,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             update(player);
         }
     }
+
+    public void clear() {
+        // TODO: optimize by sending whole inventory at once? (will need to change to setItemStackInternal)
+        for (int i = 0; i < getSize(); i++) {
+            setItemStack(i, ItemStack.getAirItem());
+        }
+    }
 }

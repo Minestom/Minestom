@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -105,7 +106,7 @@ public class PacketReader extends InputStream {
     }
 
     public ItemStack readSlot() {
-        return Utils.readItemStack(this);
+        return NBTUtils.readItemStack(this);
     }
 
     public ByteBuf getBuffer() {
