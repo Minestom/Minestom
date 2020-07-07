@@ -26,6 +26,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -34,6 +35,7 @@ import net.minestom.server.world.Dimension;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -44,6 +46,7 @@ import java.util.function.Consumer;
  */
 public class InstanceContainer extends Instance {
 
+    private ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING);
     private static final String UUID_KEY = "uuid";
     private static final String DATA_KEY = "data";
 
@@ -375,10 +378,15 @@ public class InstanceContainer extends Instance {
     public void saveChunksToStorageFolder(Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
         if(chunkLoader.supportsParallelSaving()) {
-            getChunks().parallelStream().forEach(c -> {
+            getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
                 saveChunkToStorageFolder(c, null);
-            });
-            callback.run();
+            }));
+            try {
+                parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
+                callback.run();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             Iterator<Chunk> chunks = getChunks().iterator();
             while (chunks.hasNext()) {

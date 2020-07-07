@@ -74,6 +74,9 @@ public class MinecraftServer {
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
     public static final int THREAD_COUNT_SCHEDULER = 1;
 
+    public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
+    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
+
     // Config
     public static final int CHUNK_VIEW_DISTANCE = 10;
     public static final int ENTITY_VIEW_DISTANCE = 5;
