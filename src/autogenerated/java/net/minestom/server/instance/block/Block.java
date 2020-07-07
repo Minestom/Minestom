@@ -155,7 +155,7 @@ public enum Block {
 	TORCH("minecraft:torch", (short) 1435, 0.0, 0.0, false, false, null, true),
 	WALL_TORCH("minecraft:wall_torch", (short) 1436, 0.0, 0.0, false, false, null, false),
 	FIRE("minecraft:fire", (short) 1471, 0.0, 0.0, false, false, null, false),
-	SOUL_FIRE("minecraft:soul_fire", (short) 1952, 0.0, 0.0, false, true, null, true),
+	SOUL_FIRE("minecraft:soul_fire", (short) 1952, 0.0, 0.0, false, false, null, true),
 	SPAWNER("minecraft:spawner", (short) 1953, 5.0, 5.0, false, true, NamespaceID.from("minecraft:mob_spawner"), true),
 	OAK_STAIRS("minecraft:oak_stairs", (short) 1965, 0.0, 0.0, false, true, null, false),
 	CHEST("minecraft:chest", (short) 2035, 2.5, 2.5, false, true, NamespaceID.from("minecraft:chest"), false),
@@ -209,8 +209,8 @@ public enum Block {
 	SOUL_SOIL("minecraft:soul_soil", (short) 4001, 0.5, 0.5, false, true, null, true),
 	BASALT("minecraft:basalt", (short) 4003, 1.25, 4.2, false, true, null, false),
 	POLISHED_BASALT("minecraft:polished_basalt", (short) 4006, 1.25, 4.2, false, true, null, false),
-	SOUL_TORCH("minecraft:soul_torch", (short) 4008, 0.0, 0.0, false, true, null, true),
-	SOUL_WALL_TORCH("minecraft:soul_wall_torch", (short) 4009, 0.0, 0.0, false, true, null, false),
+	SOUL_TORCH("minecraft:soul_torch", (short) 4008, 0.0, 0.0, false, false, null, true),
+	SOUL_WALL_TORCH("minecraft:soul_wall_torch", (short) 4009, 0.0, 0.0, false, false, null, false),
 	GLOWSTONE("minecraft:glowstone", (short) 4013, 0.3, 0.3, false, true, null, true),
 	NETHER_PORTAL("minecraft:nether_portal", (short) 4014, 0.0, -1.0, false, false, null, false),
 	CARVED_PUMPKIN("minecraft:carved_pumpkin", (short) 4016, 1.0, 1.0, false, true, null, false),
@@ -699,28 +699,28 @@ public enum Block {
 	WARPED_HYPHAE("minecraft:warped_hyphae", (short) 14965, 2.0, 2.0, false, true, null, false),
 	STRIPPED_WARPED_HYPHAE("minecraft:stripped_warped_hyphae", (short) 14968, 2.0, 2.0, false, true, null, false),
 	WARPED_NYLIUM("minecraft:warped_nylium", (short) 14970, 0.4, 0.4, false, true, null, true),
-	WARPED_FUNGUS("minecraft:warped_fungus", (short) 14971, 0.0, 0.0, false, true, null, true),
+	WARPED_FUNGUS("minecraft:warped_fungus", (short) 14971, 0.0, 0.0, false, false, null, true),
 	WARPED_WART_BLOCK("minecraft:warped_wart_block", (short) 14972, 1.0, 1.0, false, true, null, true),
-	WARPED_ROOTS("minecraft:warped_roots", (short) 14973, 0.0, 0.0, false, true, null, true),
-	NETHER_SPROUTS("minecraft:nether_sprouts", (short) 14974, 0.0, 0.0, false, true, null, true),
+	WARPED_ROOTS("minecraft:warped_roots", (short) 14973, 0.0, 0.0, false, false, null, true),
+	NETHER_SPROUTS("minecraft:nether_sprouts", (short) 14974, 0.0, 0.0, false, false, null, true),
 	CRIMSON_STEM("minecraft:crimson_stem", (short) 14976, 2.0, 2.0, false, true, null, false),
 	STRIPPED_CRIMSON_STEM("minecraft:stripped_crimson_stem", (short) 14979, 2.0, 2.0, false, true, null, false),
 	CRIMSON_HYPHAE("minecraft:crimson_hyphae", (short) 14982, 2.0, 2.0, false, true, null, false),
 	STRIPPED_CRIMSON_HYPHAE("minecraft:stripped_crimson_hyphae", (short) 14985, 2.0, 2.0, false, true, null, false),
 	CRIMSON_NYLIUM("minecraft:crimson_nylium", (short) 14987, 0.4, 0.4, false, true, null, true),
-	CRIMSON_FUNGUS("minecraft:crimson_fungus", (short) 14988, 0.0, 0.0, false, true, null, true),
+	CRIMSON_FUNGUS("minecraft:crimson_fungus", (short) 14988, 0.0, 0.0, false, false, null, true),
 	SHROOMLIGHT("minecraft:shroomlight", (short) 14989, 1.0, 1.0, false, true, null, true),
-	WEEPING_VINES("minecraft:weeping_vines", (short) 14990, 0.0, 0.0, false, true, null, false),
-	WEEPING_VINES_PLANT("minecraft:weeping_vines_plant", (short) 15016, 0.0, 0.0, false, true, null, true),
-	TWISTING_VINES("minecraft:twisting_vines", (short) 15017, 0.0, 0.0, false, true, null, false),
-	TWISTING_VINES_PLANT("minecraft:twisting_vines_plant", (short) 15043, 0.0, 0.0, false, true, null, true),
-	CRIMSON_ROOTS("minecraft:crimson_roots", (short) 15044, 0.0, 0.0, false, true, null, true),
+	WEEPING_VINES("minecraft:weeping_vines", (short) 14990, 0.0, 0.0, false, false, null, false),
+	WEEPING_VINES_PLANT("minecraft:weeping_vines_plant", (short) 15016, 0.0, 0.0, false, false, null, true),
+	TWISTING_VINES("minecraft:twisting_vines", (short) 15017, 0.0, 0.0, false, false, null, false),
+	TWISTING_VINES_PLANT("minecraft:twisting_vines_plant", (short) 15043, 0.0, 0.0, false, false, null, true),
+	CRIMSON_ROOTS("minecraft:crimson_roots", (short) 15044, 0.0, 0.0, false, false, null, true),
 	CRIMSON_PLANKS("minecraft:crimson_planks", (short) 15045, 2.0, 3.0, false, true, null, true),
 	WARPED_PLANKS("minecraft:warped_planks", (short) 15046, 2.0, 3.0, false, true, null, true),
 	CRIMSON_SLAB("minecraft:crimson_slab", (short) 15050, 2.0, 3.0, false, true, null, false),
 	WARPED_SLAB("minecraft:warped_slab", (short) 15056, 2.0, 3.0, false, true, null, false),
-	CRIMSON_PRESSURE_PLATE("minecraft:crimson_pressure_plate", (short) 15060, 0.5, 0.5, false, true, null, false),
-	WARPED_PRESSURE_PLATE("minecraft:warped_pressure_plate", (short) 15062, 0.5, 0.5, false, true, null, false),
+	CRIMSON_PRESSURE_PLATE("minecraft:crimson_pressure_plate", (short) 15060, 0.5, 0.5, false, false, null, false),
+	WARPED_PRESSURE_PLATE("minecraft:warped_pressure_plate", (short) 15062, 0.5, 0.5, false, false, null, false),
 	CRIMSON_FENCE("minecraft:crimson_fence", (short) 15094, 2.0, 3.0, false, true, null, false),
 	WARPED_FENCE("minecraft:warped_fence", (short) 15126, 2.0, 3.0, false, true, null, false),
 	CRIMSON_TRAPDOOR("minecraft:crimson_trapdoor", (short) 15142, 3.0, 3.0, false, true, null, false),
@@ -729,14 +729,14 @@ public enum Block {
 	WARPED_FENCE_GATE("minecraft:warped_fence_gate", (short) 15294, 2.0, 3.0, false, true, null, false),
 	CRIMSON_STAIRS("minecraft:crimson_stairs", (short) 15330, 0.0, 0.0, false, true, null, false),
 	WARPED_STAIRS("minecraft:warped_stairs", (short) 15410, 0.0, 0.0, false, true, null, false),
-	CRIMSON_BUTTON("minecraft:crimson_button", (short) 15488, 0.5, 0.5, false, true, null, false),
-	WARPED_BUTTON("minecraft:warped_button", (short) 15512, 0.5, 0.5, false, true, null, false),
+	CRIMSON_BUTTON("minecraft:crimson_button", (short) 15488, 0.5, 0.5, false, false, null, false),
+	WARPED_BUTTON("minecraft:warped_button", (short) 15512, 0.5, 0.5, false, false, null, false),
 	CRIMSON_DOOR("minecraft:crimson_door", (short) 15538, 3.0, 3.0, false, true, null, false),
 	WARPED_DOOR("minecraft:warped_door", (short) 15602, 3.0, 3.0, false, true, null, false),
-	CRIMSON_SIGN("minecraft:crimson_sign", (short) 15656, 1.0, 1.0, false, true, NamespaceID.from("minecraft:sign"), false),
-	WARPED_SIGN("minecraft:warped_sign", (short) 15688, 1.0, 1.0, false, true, NamespaceID.from("minecraft:sign"), false),
-	CRIMSON_WALL_SIGN("minecraft:crimson_wall_sign", (short) 15720, 1.0, 1.0, false, true, NamespaceID.from("minecraft:sign"), false),
-	WARPED_WALL_SIGN("minecraft:warped_wall_sign", (short) 15728, 1.0, 1.0, false, true, NamespaceID.from("minecraft:sign"), false),
+	CRIMSON_SIGN("minecraft:crimson_sign", (short) 15656, 1.0, 1.0, false, false, NamespaceID.from("minecraft:sign"), false),
+	WARPED_SIGN("minecraft:warped_sign", (short) 15688, 1.0, 1.0, false, false, NamespaceID.from("minecraft:sign"), false),
+	CRIMSON_WALL_SIGN("minecraft:crimson_wall_sign", (short) 15720, 1.0, 1.0, false, false, NamespaceID.from("minecraft:sign"), false),
+	WARPED_WALL_SIGN("minecraft:warped_wall_sign", (short) 15728, 1.0, 1.0, false, false, NamespaceID.from("minecraft:sign"), false),
 	STRUCTURE_BLOCK("minecraft:structure_block", (short) 15735, 0.0, 3600000.0, false, true, NamespaceID.from("minecraft:structure_block"), false),
 	JIGSAW("minecraft:jigsaw", (short) 15749, 0.0, 3600000.0, false, true, NamespaceID.from("minecraft:jigsaw"), false),
 	COMPOSTER("minecraft:composter", (short) 15751, 0.6, 0.6, false, true, null, false),
@@ -768,8 +768,8 @@ public enum Block {
 	GILDED_BLACKSTONE("minecraft:gilded_blackstone", (short) 16664, 0.0, 0.0, false, true, null, true),
 	POLISHED_BLACKSTONE_STAIRS("minecraft:polished_blackstone_stairs", (short) 16676, 0.0, 0.0, false, true, null, false),
 	POLISHED_BLACKSTONE_SLAB("minecraft:polished_blackstone_slab", (short) 16748, 0.0, 0.0, false, true, null, false),
-	POLISHED_BLACKSTONE_PRESSURE_PLATE("minecraft:polished_blackstone_pressure_plate", (short) 16752, 0.5, 0.5, false, true, null, false),
-	POLISHED_BLACKSTONE_BUTTON("minecraft:polished_blackstone_button", (short) 16762, 0.5, 0.5, false, true, null, false),
+	POLISHED_BLACKSTONE_PRESSURE_PLATE("minecraft:polished_blackstone_pressure_plate", (short) 16752, 0.5, 0.5, false, false, null, false),
+	POLISHED_BLACKSTONE_BUTTON("minecraft:polished_blackstone_button", (short) 16762, 0.5, 0.5, false, false, null, false),
 	POLISHED_BLACKSTONE_WALL("minecraft:polished_blackstone_wall", (short) 16780, 0.0, 0.0, false, true, null, false),
 	CHISELED_NETHER_BRICKS("minecraft:chiseled_nether_bricks", (short) 17101, 2.0, 6.0, false, true, null, true),
 	CRACKED_NETHER_BRICKS("minecraft:cracked_nether_bricks", (short) 17102, 2.0, 6.0, false, true, null, true),
@@ -1315,6 +1315,19 @@ public enum Block {
 	public void addBlockAlternative(BlockAlternative alternative) {
 		alternatives.add(alternative);
 		BlockMap.blocksMap.put(alternative.getId(), this);
+	}
+
+	public BlockAlternative getAlternative(short blockId) {
+		for (BlockAlternative alt : alternatives) {
+			if (alt.getId() == blockId) {
+				return alt;
+			}
+		}
+		return null;
+	}
+
+	public List<BlockAlternative> getAlternatives() {
+		return alternatives;
 	}
 
 	public short withProperties(String... properties) {

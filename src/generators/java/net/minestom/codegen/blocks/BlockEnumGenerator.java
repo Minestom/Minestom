@@ -271,6 +271,14 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
                 "}",
                 "return defaultID;"
         };
+        generator.addMethod("getAlternative", "(short blockId)", "BlockAlternative",
+                "for (BlockAlternative alt : alternatives) {",
+                "\tif (alt.getId() == blockId) {",
+                "\t\treturn alt;",
+                "\t}",
+                "}",
+                "return null;");
+        generator.addMethod("getAlternatives", "()", "List<BlockAlternative>", "return alternatives;");
         generator.addMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
         generator.addMethod("fromId", "(short blockId)", "static "+className, "return BlockMap.blocksMap.getOrDefault(blockId, AIR);");
         generator.appendToConstructor("if(singleState) {");

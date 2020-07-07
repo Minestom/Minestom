@@ -1,6 +1,8 @@
 package net.minestom.server.instance.block;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockAlternative {
 
@@ -18,6 +20,15 @@ public class BlockAlternative {
 
     public String[] getProperties() {
         return properties;
+    }
+
+    public Map<String, String> createPropertiesMap() {
+        Map<String, String> map = new HashMap<>();
+        for(String p : properties) {
+            String[] parts = p.split("=");
+            map.put(parts[0], parts[1]);
+        }
+        return map;
     }
 
     @Override
