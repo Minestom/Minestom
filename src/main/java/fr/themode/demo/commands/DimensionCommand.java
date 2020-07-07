@@ -30,7 +30,7 @@ public class DimensionCommand implements CommandProcessor {
         Instance instance = player.getInstance();
 
         Dimension targetDimension = Dimension.NETHER;
-        if (instance.getDimension() == Dimension.NETHER) {
+        if (instance.getDimension() == targetDimension) {
             targetDimension = Dimension.OVERWORLD;
         }
 

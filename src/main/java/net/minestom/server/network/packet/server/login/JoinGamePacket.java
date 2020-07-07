@@ -38,31 +38,17 @@ public class JoinGamePacket implements ServerPacket {
 
 		//array of worlds
 		writer.writeVarInt(1);
-		writer.writeSizedString(identifier);
-		// TODO: modifiable
-		NBTCompound dimension = new NBTCompound()
-				.setString("name", "test:normal")
-				.setFloat("ambient_light", 1F)
-				.setString("infiniburn", "")
-				.setByte("natural", (byte) 0x01)
-				.setByte("has_ceiling", (byte) 0x01)
-				.setByte("has_skylight", (byte) 0x01)
-				.setByte("shrunk", (byte) 0x00)
-				.setByte("ultrawarm", (byte) 0x00)
-				.setByte("has_raids", (byte) 0x00)
-				.setByte("respawn_anchor_works", (byte) 0x00)
-				.setByte("bed_works", (byte) 0x01)
-				.setByte("piglin_safe", (byte) 0x01)
-				.setInt("logical_height", 255)
-		;
+		writer.writeSizedString("test:spawn_name");
+
 		NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
-		dimensionList.add(dimension);
+		// TODO: custom list
+		dimensionList.add(Dimension.OVERWORLD.toNBT());
+		dimensionList.add(Dimension.NETHER.toNBT());
+		dimensionList.add(Dimension.END.toNBT());
 		writer.writeNBT("", new NBTCompound().set("dimension", dimensionList));
 
-
-		//writer.writeInt(dimension.getId());
-		writer.writeSizedString("test:normal");
-		writer.writeSizedString(identifier);
+		writer.writeSizedString(dimension.getName().toString());
+		writer.writeSizedString(identifier+"_"+dimension.getName().getPath());
 		writer.writeLong(hashedSeed);
 		writer.writeByte(maxPlayers);
 		writer.writeVarInt(viewDistance);
@@ -71,7 +57,7 @@ public class JoinGamePacket implements ServerPacket {
 		//debug
 		writer.writeBoolean(false);
 		//is flat
-		writer.writeBoolean(true);
+		writer.writeBoolean(levelType == LevelType.FLAT);
 	}
 
 	@Override

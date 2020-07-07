@@ -62,6 +62,10 @@ public class PlayerInit {
         netherTest.enableAutoChunkLoad(true);
         netherTest.setChunkGenerator(noiseTestGenerator);
 
+        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.END);
+        end.enableAutoChunkLoad(true);
+        end.setChunkGenerator(noiseTestGenerator);
+
         // Load some chunks beforehand
         int loopStart = -2;
         int loopEnd = 10;
@@ -69,6 +73,7 @@ public class PlayerInit {
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
                 //netherTest.loadChunk(x, z);
+                end.loadChunk(x, z);
             }
 
 
