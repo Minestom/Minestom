@@ -374,11 +374,18 @@ public class InstanceContainer extends Instance {
     @Override
     public void saveChunksToStorageFolder(Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
-        Iterator<Chunk> chunks = getChunks().iterator();
-        while (chunks.hasNext()) {
-            Chunk chunk = chunks.next();
-            boolean isLast = !chunks.hasNext();
-            saveChunkToStorageFolder(chunk, isLast ? callback : null);
+        if(chunkLoader.supportsParallelSaving()) {
+            getChunks().parallelStream().forEach(c -> {
+                saveChunkToStorageFolder(c, null);
+            });
+            callback.run();
+        } else {
+            Iterator<Chunk> chunks = getChunks().iterator();
+            while (chunks.hasNext()) {
+                Chunk chunk = chunks.next();
+                boolean isLast = !chunks.hasNext();
+                saveChunkToStorageFolder(chunk, isLast ? callback : null);
+            }
         }
     }
 
