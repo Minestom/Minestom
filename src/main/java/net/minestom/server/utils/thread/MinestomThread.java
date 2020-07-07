@@ -14,14 +14,31 @@ public class MinestomThread extends ThreadPoolExecutor {
 
     private static final List<MinestomThread> executors = new LinkedList<>();
 
+    /**
+     * Creates a non-local thread pool executor
+     * @param nThreads
+     * @param name
+     */
     public MinestomThread(int nThreads, String name) {
+        this(nThreads, name, false);
+    }
+
+    /**
+     *
+     * @param nThreads
+     * @param name
+     * @param local set to true if this executor is only used inside a method and should *not* be kept in the internal list of executors
+     */
+    public MinestomThread(int nThreads, String name, boolean local) {
         super(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), r -> {
             Thread thread = new Thread(r);
             thread.setDaemon(true);
             thread.setName(thread.getName().replace("Thread", name));
             return thread;
         });
-        executors.add(this);
+        if(!local) {
+            executors.add(this);
+        }
     }
 
     public static void shutdownAll() {

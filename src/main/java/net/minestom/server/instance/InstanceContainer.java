@@ -46,7 +46,6 @@ import java.util.function.Consumer;
  */
 public class InstanceContainer extends Instance {
 
-    private ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING);
     private static final String UUID_KEY = "uuid";
     private static final String DATA_KEY = "data";
 
@@ -378,10 +377,12 @@ public class InstanceContainer extends Instance {
     public void saveChunksToStorageFolder(Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
         if(chunkLoader.supportsParallelSaving()) {
+            ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
                 saveChunkToStorageFolder(c, null);
             }));
             try {
+                parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
                 callback.run();
             } catch (InterruptedException e) {
