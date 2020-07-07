@@ -384,7 +384,8 @@ public class InstanceContainer extends Instance {
             try {
                 parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
-                callback.run();
+                if(callback != null)
+                    callback.run();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
