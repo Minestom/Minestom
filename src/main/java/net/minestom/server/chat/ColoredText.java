@@ -83,7 +83,14 @@ public class ColoredText {
         return getJsonObject().toString();
     }
 
-    protected JsonObject getJsonObject() {
+    /**
+     * Get the Json representation of this colored text
+     * <p>
+     * Used to send a message
+     *
+     * @return the Json representation of the text
+     */
+    public JsonObject getJsonObject() {
         List<JsonObject> components = getComponents();
 
         // No message, return empty object
@@ -250,6 +257,7 @@ public class ColoredText {
         if (!color.isEmpty()) {
             object.addProperty("color", color);
         }
+
 
         object.addProperty("bold", getBoolean(specialComponentContainer.bold));
         object.addProperty("italic", getBoolean(specialComponentContainer.italic));

@@ -2,6 +2,7 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 
 public class ChatHoverEvent {
@@ -26,19 +27,24 @@ public class ChatHoverEvent {
         return new ChatHoverEvent("show_text", text.getJsonObject());
     }
 
-
     public static ChatHoverEvent showText(String text) {
         return new ChatHoverEvent("show_text", text);
     }
 
     public static ChatHoverEvent showItem(ItemStack itemStack) {
-        throw new UnsupportedOperationException("Feature in progress");
-        //return new ChatHoverEvent("show_item", parsedItem);
+        return new ChatHoverEvent("show_item", "{id:4}");
     }
 
     public static ChatHoverEvent showEntity(Entity entity) {
-        throw new UnsupportedOperationException("Feature in progress");
-        //return new ChatHoverEvent("show_entity", parsedEntity);
+        final String id = entity.getUuid().toString();
+        final String type = EntityType.fromId(entity.getEntityType())
+                .getNamespaceID().replace("minecraft:", "");
+        // TODO name
+
+        JsonObject object = new JsonObject();
+        object.addProperty("id", id);
+        object.addProperty("type", type);
+        return new ChatHoverEvent("show_entity", object);
     }
 
     protected String getAction() {

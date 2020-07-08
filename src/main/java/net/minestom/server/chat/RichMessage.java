@@ -62,15 +62,17 @@ public class RichMessage {
     }
 
     private JsonObject getJsonObject() {
+        List<RichComponent> cacheComponents = new ArrayList<>(components);
+
         // No component, return empty json object
-        if (components.isEmpty())
+        if (cacheComponents.isEmpty())
             return new JsonObject();
 
-        RichComponent firstComponent = components.remove(0);
+        RichComponent firstComponent = cacheComponents.remove(0);
         List<JsonObject> firstComponentObjects = getComponentObject(firstComponent);
         JsonObject mainObject = firstComponentObjects.remove(0);
 
-        if (components.isEmpty() && firstComponentObjects.isEmpty())
+        if (cacheComponents.isEmpty() && firstComponentObjects.isEmpty())
             return mainObject;
 
         JsonArray extraArray = new JsonArray();
@@ -78,7 +80,7 @@ public class RichMessage {
             extraArray.add(firstComponentObject);
         }
 
-        for (RichComponent component : components) {
+        for (RichComponent component : cacheComponents) {
             List<JsonObject> componentObjects = getComponentObject(component);
             for (JsonObject componentObject : componentObjects) {
                 extraArray.add(componentObject);
