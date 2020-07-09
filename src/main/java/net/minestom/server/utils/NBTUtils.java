@@ -8,6 +8,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.NBTConsumer;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.PacketReader;
@@ -28,18 +29,19 @@ public class NBTUtils {
 
     /**
      * Loads all the items from the 'items' list into the given inventory
+     *
      * @param items
      * @param destination
      */
     public static void loadAllItems(NBTList<NBTCompound> items, Inventory destination) {
         destination.clear();
-        for(NBTCompound tag : items) {
+        for (NBTCompound tag : items) {
             Material item = Registries.getMaterial(tag.getString("id"));
-            if(item == Material.AIR) {
+            if (item == Material.AIR) {
                 item = Material.STONE;
             }
             ItemStack stack = new ItemStack(item, tag.getByte("Count"));
-            if(tag.containsKey("tag")) {
+            if (tag.containsKey("tag")) {
                 loadDataIntoItem(stack, tag.getCompound("tag"));
             }
             destination.setItemStack(tag.getByte("Slot"), stack);
@@ -96,7 +98,7 @@ public class NBTUtils {
 
         try {
             NBT itemNBT = reader.readTag();
-            if(itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
+            if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
                 NBTCompound nbt = (NBTCompound) itemNBT;
                 loadDataIntoItem(item, nbt);
             }
@@ -108,30 +110,30 @@ public class NBTUtils {
     }
 
     private static void loadDataIntoItem(ItemStack item, NBTCompound nbt) {
-        if(nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
-        if(nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
-        if(nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
-        if(nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
-        if(nbt.containsKey("display")) {
+        if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
+        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
+        if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
+        if (nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
+        if (nbt.containsKey("display")) {
             NBTCompound display = nbt.getCompound("display");
-            if(display.containsKey("Name")) item.setDisplayName(ChatParser.toColoredText(display.getString("Name")));
-            if(display.containsKey("Lore")) {
+            if (display.containsKey("Name")) item.setDisplayName(ChatParser.toColoredText(display.getString("Name")));
+            if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
                 ArrayList<ColoredText> lore = new ArrayList<>();
-                for(NBTString s : loreList) {
+                for (NBTString s : loreList) {
                     lore.add(ChatParser.toColoredText(s.getValue()));
                 }
                 item.setLore(lore);
             }
         }
 
-        if(nbt.containsKey("Enchantments")) {
+        if (nbt.containsKey("Enchantments")) {
             loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
         }
-        if(nbt.containsKey("StoredEnchantments")) {
+        if (nbt.containsKey("StoredEnchantments")) {
             loadEnchantments(nbt.getList("StoredEnchantments"), item::setStoredEnchantment);
         }
-        if(nbt.containsKey("AttributeModifiers")) {
+        if (nbt.containsKey("AttributeModifiers")) {
             NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
             for (NBTCompound attributeNBT : attributes) {
                 // TODO: 1.16 changed how UUIDs are stored, is this part affected?
@@ -166,14 +168,14 @@ public class NBTUtils {
     }
 
     private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
-        for(NBTCompound enchantment : enchantments) {
+        for (NBTCompound enchantment : enchantments) {
             short level = enchantment.getShort("lvl");
             String id = enchantment.getString("id");
             Enchantment enchant = Registries.getEnchantment(id);
-            if(enchant != null) {
+            if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {
-                LOGGER.warn("Unknown enchantment type: "+id);
+                LOGGER.warn("Unknown enchantment type: " + id);
             }
         }
     }
@@ -192,7 +194,16 @@ public class NBTUtils {
             }
 
             NBTCompound itemNBT = new NBTCompound();
+
+            // Vanilla compound
             saveDataIntoNBT(itemStack, itemNBT);
+
+            // Custom item nbt
+            NBTConsumer nbtConsumer = itemStack.getNBTConsumer();
+            if (nbtConsumer != null) {
+                nbtConsumer.accept(itemNBT);
+            }
+
             // End custom model data
             packet.writeNBT("", itemNBT);
         }

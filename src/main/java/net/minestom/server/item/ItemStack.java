@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import com.google.gson.JsonObject;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -39,6 +40,8 @@ public class ItemStack implements DataContainer {
 
     private StackingRule stackingRule;
     private Data data;
+
+    private NBTConsumer nbtConsumer;
 
     {
         if (defaultStackingRule == null)
@@ -513,6 +516,29 @@ public class ItemStack implements DataContainer {
         return itemStack;
     }
 
+    /**
+     * Convert the item into a readable Json object
+     * <p>
+     * Mainly used to show an item in a message hover
+     *
+     * @return a {@link JsonObject} containing the item data
+     */
+    public synchronized JsonObject toJsonObject() {
+        JsonObject object = new JsonObject();
+        object.addProperty("id", getMaterialId());
+        object.addProperty("Damage", getDamage());
+        object.addProperty("Count", getAmount());
+
+        if (hasDisplayName() || hasLore()) {
+            JsonObject tagObject = new JsonObject();
+            if (hasDisplayName()) {
+                tagObject.addProperty("display", getDisplayName().toString());
+            }
+        }
+
+        return object;
+    }
+
     @Override
     public Data getData() {
         return data;
@@ -521,6 +547,24 @@ public class ItemStack implements DataContainer {
     @Override
     public void setData(Data data) {
         this.data = data;
+    }
+
+    /**
+     * Get the nbt consumer called when the item is serialized into a packet
+     *
+     * @return the item nbt consumer, null if not any
+     */
+    public NBTConsumer getNBTConsumer() {
+        return nbtConsumer;
+    }
+
+    /**
+     * Change the item nbt consumer
+     *
+     * @param nbtConsumer the new item nbt consumer
+     */
+    public void setNBTConsumer(NBTConsumer nbtConsumer) {
+        this.nbtConsumer = nbtConsumer;
     }
 
     /**
