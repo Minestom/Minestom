@@ -1,13 +1,10 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.math.IntRange;
 
 import java.util.regex.Pattern;
 
-public class ArgumentIntRange extends Argument<IntRange> {
-
-    public static final int FORMAT_ERROR = -1;
+public class ArgumentIntRange extends ArgumentRange<IntRange> {
 
     public ArgumentIntRange(String id) {
         super(id);
@@ -20,7 +17,14 @@ public class ArgumentIntRange extends Argument<IntRange> {
             return SUCCESS; // Is a single number
         } catch (NumberFormatException e) {
             String[] split = value.split(Pattern.quote(".."));
-            if (split.length == 2) {
+            if (split.length == 1) {
+                try {
+                    Integer.valueOf(split[0]); // min
+                    return SUCCESS;
+                } catch (NumberFormatException e2) {
+                    return FORMAT_ERROR;
+                }
+            } else if (split.length == 2) {
                 try {
                     Integer.valueOf(split[0]); // min
                     Integer.valueOf(split[1]); // max
@@ -37,18 +41,31 @@ public class ArgumentIntRange extends Argument<IntRange> {
     @Override
     public IntRange parse(String value) {
         if (value.contains("..")) {
+            final int index = value.indexOf('.');
             String[] split = value.split(Pattern.quote(".."));
-            final int min = Integer.valueOf(split[0]);
-            final int max = Integer.valueOf(split[1]);
+
+            final int min;
+            final int max;
+            if (index == 0) {
+                // Format ..NUMBER
+                min = Integer.MIN_VALUE;
+                max = Integer.valueOf(split[0]);
+            } else {
+                if (split.length == 2) {
+                    // Format NUMBER..NUMBER
+                    min = Integer.valueOf(split[0]);
+                    max = Integer.valueOf(split[1]);
+                } else {
+                    // Format NUMBER..
+                    min = Integer.valueOf(split[0]);
+                    max = Integer.MAX_VALUE;
+                }
+            }
+
             return new IntRange(min, max);
         } else {
             final int number = Integer.valueOf(value);
             return new IntRange(number, number);
         }
-    }
-
-    @Override
-    public int getConditionResult(IntRange value) {
-        return SUCCESS;
     }
 }
