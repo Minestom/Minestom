@@ -77,7 +77,7 @@ public class ChickenCreature extends EntityChicken {
                 move(x, 0, z, updateView);
             }
         } else {
-            //move(-0.5f * speed, 0, 0.5f * speed, true);
+            //move(-0.5f * speed, 0, 0.5f * speed, false);
         }
     }
 }

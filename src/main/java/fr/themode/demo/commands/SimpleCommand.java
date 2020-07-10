@@ -54,21 +54,23 @@ public class SimpleCommand implements CommandProcessor {
 
         ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
         chickenCreature.setInstance(instance);
-/*
-        PFPathingEntity pathingEntity = new PFPathingEntity(chickenCreature);
+
+        /*PFPathingEntity pathingEntity = new PFPathingEntity(chickenCreature);
         PFInstanceSpace instanceSpace = new PFInstanceSpace(instance);
 
         final HydrazinePathFinder pathFinder = new HydrazinePathFinder(pathingEntity, instanceSpace);
 
         final PathObject path = pathFinder.initiatePathTo(-10, 42, -10);
 
+        System.out.println("path: "+path);
+
         for (Iterator<Vec3i> it = path.iterator(); it.hasNext(); ) {
             Vec3i ite = it.next();
 
             System.out.println("test: " + ite);
 
-        }
-*/
+        }*/
+
         return true;
     }
 

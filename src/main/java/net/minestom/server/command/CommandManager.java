@@ -1,8 +1,12 @@
 package net.minestom.server.command;
 
-import fr.themode.command.Command;
-import fr.themode.command.CommandDispatcher;
-import fr.themode.command.condition.CommandCondition;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandDispatcher;
+import net.minestom.server.command.builder.CommandSyntax;
+import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
+import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
+import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -27,7 +31,7 @@ public class CommandManager {
         Thread consoleThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (running) {
-                if(scanner.hasNext()) {
+                if (scanner.hasNext()) {
                     String command = scanner.nextLine();
                     if (!command.startsWith(commandPrefix))
                         continue;
@@ -98,10 +102,10 @@ public class CommandManager {
     }
 
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
-        return buildPacket(player);
+        return buildPacket2(player);
     }
 
-    private DeclareCommandsPacket buildPacket(Player player) {
+    /*private DeclareCommandsPacket buildPacket(Player player) {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<String> commands = new ArrayList<>();
@@ -170,20 +174,21 @@ public class CommandManager {
         declareCommandsPacket.rootIndex = nodes.size() - 1;
 
         return declareCommandsPacket;
-    }
+    }*/
 
-    /*private void refreshPacket2() {
+    private DeclareCommandsPacket buildPacket2(Player player) {
+        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         ArrayList<Integer> rootChildren = new ArrayList<>();
 
-        for (Command<Player> command : dispatcher.getCommands()) {
+        for (Command<CommandSender> command : dispatcher.getCommands()) {
             ArrayList<Integer> cmdChildren = new ArrayList<>();
 
             String name = command.getName();
 
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = 0b1;
+            literalNode.flags = 0b1; // literal
             literalNode.name = name;
 
             rootChildren.add(nodes.size());
@@ -218,11 +223,13 @@ public class CommandManager {
 
         declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
         declareCommandsPacket.rootIndex = nodes.size() - 1;
+
+        return declareCommandsPacket;
     }
 
     private DeclareCommandsPacket.Node toNode(Argument argument) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-        argumentNode.flags = 0b1010;
+        argumentNode.flags = getFlag(NodeType.ARGUMENT, true, false, false);
         argumentNode.name = argument.getId();
 
         if (argument instanceof ArgumentBoolean) {
@@ -270,5 +277,33 @@ public class CommandManager {
         }
 
         return argumentNode;
-    }*/
+    }
+
+    private byte getFlag(NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
+        byte result = (byte) type.mask;
+
+        if (executable) {
+            result |= 0x4;
+        }
+
+        if (redirect) {
+            result |= 0x8;
+        }
+
+        if (suggestionType) {
+            result |= 0x1;
+        }
+        return result;
+    }
+
+    private enum NodeType {
+        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
+
+        private int mask;
+
+        NodeType(int mask) {
+            this.mask = mask;
+        }
+
+    }
 }

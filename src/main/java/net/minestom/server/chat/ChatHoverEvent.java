@@ -32,7 +32,7 @@ public class ChatHoverEvent {
     }
 
     public static ChatHoverEvent showItem(ItemStack itemStack) {
-        return new ChatHoverEvent("show_item", "{id:4}");
+        return new ChatHoverEvent("show_item", "{id:35,Damage:5,Count:2,tag:{display:{Name:Testing}}}");
     }
 
     public static ChatHoverEvent showEntity(Entity entity) {

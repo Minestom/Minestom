@@ -3,16 +3,16 @@ package fr.themode.demo;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.fakeplayer.FakePlayerController;
-import net.minestom.server.entity.type.EntityZombie;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -26,8 +26,6 @@ import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
@@ -158,9 +156,9 @@ public class PlayerInit {
                 chickenCreature.setInstance(player.getInstance());
                 chickenCreature.setAttribute(Attribute.MOVEMENT_SPEED, 0.4f);*/
 
-                EntityZombie zombie = new EntityZombie(player.getPosition());
+                /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
-                zombie.setInstance(player.getInstance());
+                zombie.setInstance(player.getInstance());*/
 
                 FakePlayer.initPlayer(UUID.randomUUID(), "test", fakePlayer -> {
                     //fakePlayer.setInstance(player.getInstance());
@@ -245,10 +243,10 @@ public class PlayerInit {
                 }
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
-                item.setDisplayName(ColoredText.of(ChatColor.BLUE + "Item name"));
-                item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
-                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
+                item.setDisplayName(ColoredText.of("Item name"));
+                //item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
+                //item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                //item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
                 player.getInventory().addItemStack(item);
 
                 player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
@@ -285,13 +283,13 @@ public class PlayerInit {
             setBelowNameScoreboard(belowNameScoreboard);
             belowNameScoreboard.updateScore(this, 50);*/
 
-                player.sendLegacyMessage("&aIm &bHere", '&');
-                player.sendMessage(ColoredText.of("{#ff55ff}" + ChatColor.RESET + "test"));
+                //player.sendLegacyMessage("&aIm &bHere", '&');
+                //player.sendMessage(ColoredText.of("{#ff55ff}" + ChatColor.RESET + "test"));
 
-                /*RichMessage richMessage = RichMessage.of(ColoredText.of("Hey the item"))
-                        .setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.IRON_HELMET, (byte) 1)));
+                RichMessage richMessage = RichMessage.of(ColoredText.of("Hey the item"))
+                        .setHoverEvent(ChatHoverEvent.showItem(item));
                 System.out.println(richMessage.toString());
-                player.sendMessage(richMessage);*/
+                player.sendMessage(richMessage);
 
             });
 

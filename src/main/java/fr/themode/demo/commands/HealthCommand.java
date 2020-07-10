@@ -1,11 +1,11 @@
 package fr.themode.demo.commands;
 
-import fr.themode.command.Arguments;
-import fr.themode.command.Command;
-import fr.themode.command.arguments.Argument;
-import fr.themode.command.arguments.ArgumentType;
-import fr.themode.command.arguments.number.ArgumentNumber;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.Arguments;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.entity.Player;
 
 public class HealthCommand extends Command<CommandSender> {
@@ -24,7 +24,7 @@ public class HealthCommand extends Command<CommandSender> {
         addCallback(this::modeCallback, arg0);
         addCallback(this::valueCallback, arg1);
 
-        addSyntax(this::execute, arg0);
+        //addSyntax(this::execute, arg0);
         addSyntax(this::execute2, arg0, arg1);
     }
 
