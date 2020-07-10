@@ -24,8 +24,8 @@ public class HealthCommand extends Command<CommandSender> {
         addCallback(this::modeCallback, arg0);
         addCallback(this::valueCallback, arg1);
 
-        //addSyntax(this::execute, arg0);
         addSyntax(this::execute2, arg0, arg1);
+        addSyntax(this::execute, arg0);
     }
 
     private boolean condition(CommandSender sender) {

@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -102,7 +103,7 @@ public class CommandManager {
     }
 
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
-        return buildPacket2(player);
+        return buildPacket(player);
     }
 
     /*private DeclareCommandsPacket buildPacket(Player player) {
@@ -176,44 +177,64 @@ public class CommandManager {
         return declareCommandsPacket;
     }*/
 
-    private DeclareCommandsPacket buildPacket2(Player player) {
+    private DeclareCommandsPacket buildPacket(Player player) {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
+        // Contains the children of the main node (all commands name)
         ArrayList<Integer> rootChildren = new ArrayList<>();
 
         for (Command<CommandSender> command : dispatcher.getCommands()) {
+            // Check if player should see this command
+            CommandCondition<Player> commandCondition = command.getCondition();
+            if (commandCondition != null) {
+                // Do not show command if return false
+                if (!commandCondition.apply(player)) {
+                    continue;
+                }
+            }
+
+            // The main root of this command
             ArrayList<Integer> cmdChildren = new ArrayList<>();
+            Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
-            String name = command.getName();
+            List<String> names = new ArrayList<>();
+            names.add(command.getName());
+            for (String alias : command.getAliases()) {
+                names.add(alias);
+            }
+            for (String name : names) {
+                createCommand(nodes, cmdChildren, name, syntaxes, rootChildren);
+            }
 
+        }
+        
+        final List<String> simpleCommands = new ArrayList<>();
+        for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
+            // Do not show command if return false
+            if (!commandProcessor.hasAccess(player))
+                continue;
+
+            simpleCommands.add(commandProcessor.getCommandName());
+            String[] aliases = commandProcessor.getAliases();
+            if (aliases == null || aliases.length == 0)
+                continue;
+            for (String alias : aliases) {
+                simpleCommands.add(alias);
+            }
+        }
+
+        for (String simpleCommand : simpleCommands) {
+            // TODO server suggestion
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = 0b1; // literal
-            literalNode.name = name;
+            literalNode.flags = getFlag(NodeType.LITERAL, true, false, false);
+            literalNode.name = simpleCommand;
+            literalNode.children = new int[0];
+            //literalNode.suggestionsType = "minecraft:ask_server";
 
             rootChildren.add(nodes.size());
             nodes.add(literalNode);
-
-            for (CommandSyntax syntax : command.getSyntaxes()) {
-                ArrayList<Integer> argChildren = cmdChildren;
-
-                for (Argument argument : syntax.getArguments()) {
-
-                    DeclareCommandsPacket.Node argumentNode = toNode(argument);
-
-                    argChildren.add(nodes.size());
-                    nodes.add(argumentNode);
-                    System.out.println("size: " + argChildren.size());
-                    argumentNode.children = ArrayUtils.toArray(argChildren);
-                    argChildren = new ArrayList<>();
-                }
-
-            }
-            System.out.println("test " + cmdChildren.size() + " : " + cmdChildren.get(0));
-            literalNode.children = ArrayUtils.toArray(cmdChildren);
-
         }
-
 
         DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
         rootNode.flags = 0;
@@ -227,54 +248,170 @@ public class CommandManager {
         return declareCommandsPacket;
     }
 
-    private DeclareCommandsPacket.Node toNode(Argument argument) {
-        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-        argumentNode.flags = getFlag(NodeType.ARGUMENT, true, false, false);
-        argumentNode.name = argument.getId();
+    private void createCommand(List<DeclareCommandsPacket.Node> nodes, ArrayList<Integer> cmdChildren, String name, Collection<CommandSyntax> syntaxes, ArrayList<Integer> rootChildren) {
+
+        DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
+
+        rootChildren.add(nodes.size());
+        nodes.add(literalNode);
+
+        for (CommandSyntax syntax : syntaxes) {
+            // Represent the last nodes computed in the last iteration
+            List<DeclareCommandsPacket.Node> lastNodes = null;
+
+            // Represent the children of the last node
+            ArrayList<Integer> argChildren = null;
+
+            final Argument[] arguments = syntax.getArguments();
+            for (int i = 0; i < arguments.length; i++) {
+                final Argument argument = arguments[i];
+                final boolean isFirst = i == 0;
+                final boolean isLast = i == arguments.length - 1;
+
+
+                List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
+                for (DeclareCommandsPacket.Node node : argumentNodes) {
+                    final int childId = nodes.size();
+
+                    if (isFirst) {
+                        // Add to main command child
+                        cmdChildren.add(childId);
+                    } else {
+                        // Add to previous argument children
+                        argChildren.add(childId);
+                    }
+
+                    if (lastNodes != null) {
+                        int[] children = ArrayUtils.toArray(argChildren);
+                        lastNodes.forEach(n -> n.children = children);
+                    }
+
+                    nodes.add(node);
+                }
+
+                //System.out.println("debug: " + argument.getId() + " : " + isFirst + " : " + isLast);
+                //System.out.println("debug2: " + i);
+                //System.out.println("size: " + (argChildren != null ? argChildren.size() : "NULL"));
+
+                if (isLast) {
+                    // Last argument doesn't have children
+                    int[] children = new int[0];
+                    argumentNodes.forEach(node -> node.children = children);
+                } else {
+                    // Create children list which will be filled during next iteration
+                    argChildren = new ArrayList<>();
+                    lastNodes = argumentNodes;
+                }
+            }
+
+        }
+        int[] children = ArrayUtils.toArray(cmdChildren);
+        //System.out.println("test " + children.length + " : " + children[0]);
+        literalNode.children = children;
+        if (children.length > 0) {
+            literalNode.redirectedNode = children[0];
+        }
+    }
+
+    private DeclareCommandsPacket.Node createMainNode(String name, boolean executable) {
+        DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
+        literalNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
+        literalNode.name = name;
+
+        return literalNode;
+    }
+
+    private List<DeclareCommandsPacket.Node> toNodes(Argument argument, boolean executable) {
+        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         if (argument instanceof ArgumentBoolean) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             argumentNode.parser = "brigadier:bool";
             argumentNode.properties = packetWriter -> packetWriter.writeByte((byte) 0);
         } else if (argument instanceof ArgumentDouble) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             ArgumentDouble argumentDouble = (ArgumentDouble) argument;
             argumentNode.parser = "brigadier:double";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeDouble(argumentDouble.min);
-                packetWriter.writeDouble(argumentDouble.max);
+                packetWriter.writeDouble(argumentDouble.getMin());
+                packetWriter.writeDouble(argumentDouble.getMax());
             };
         } else if (argument instanceof ArgumentFloat) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             ArgumentFloat argumentFloat = (ArgumentFloat) argument;
             argumentNode.parser = "brigadier:float";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeFloat(argumentFloat.min);
-                packetWriter.writeFloat(argumentFloat.max);
+                packetWriter.writeFloat(argumentFloat.getMin());
+                packetWriter.writeFloat(argumentFloat.getMax());
             };
         } else if (argument instanceof ArgumentInteger) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             ArgumentInteger argumentInteger = (ArgumentInteger) argument;
             argumentNode.parser = "brigadier:integer";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeInt(argumentInteger.min);
-                packetWriter.writeInt(argumentInteger.max);
+                packetWriter.writeInt(argumentInteger.getMin());
+                packetWriter.writeInt(argumentInteger.getMax());
             };
         } else if (argument instanceof ArgumentWord) {
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(0); // Single word
-            };
+
+            ArgumentWord argumentWord = (ArgumentWord) argument;
+
+            final boolean hasRestriction = argumentWord.hasRestrictions();
+            if (hasRestriction) {
+                for (String restrictionWord : argumentWord.getRestrictions()) {
+                    DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+                    nodes.add(argumentNode);
+
+                    argumentNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
+                    argumentNode.name = restrictionWord;
+
+                    argumentNode.parser = "brigadier:string";
+                    argumentNode.properties = packetWriter -> {
+                        packetWriter.writeVarInt(0); // Single word
+                    };
+                }
+            } else {
+
+                DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
+                argumentNode.parser = "brigadier:string";
+                argumentNode.properties = packetWriter -> {
+                    packetWriter.writeVarInt(0); // Single word
+                };
+            }
         } else if (argument instanceof ArgumentString) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             argumentNode.parser = "brigadier:string";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(1); // Quotable phrase
             };
         } else if (argument instanceof ArgumentStringArray) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+
             argumentNode.parser = "brigadier:string";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(2); // Greedy phrase
             };
         }
+
+        return nodes;
+    }
+
+    private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,
+                                                          Argument argument, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+        nodes.add(argumentNode);
+
+        argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, false);
+        argumentNode.name = argument.getId();
 
         return argumentNode;
     }
@@ -291,7 +428,7 @@ public class CommandManager {
         }
 
         if (suggestionType) {
-            result |= 0x1;
+            result |= 0x10;
         }
         return result;
     }

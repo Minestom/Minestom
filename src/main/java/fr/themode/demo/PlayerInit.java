@@ -6,9 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -285,11 +283,6 @@ public class PlayerInit {
 
                 //player.sendLegacyMessage("&aIm &bHere", '&');
                 //player.sendMessage(ColoredText.of("{#ff55ff}" + ChatColor.RESET + "test"));
-
-                RichMessage richMessage = RichMessage.of(ColoredText.of("Hey the item"))
-                        .setHoverEvent(ChatHoverEvent.showItem(item));
-                System.out.println(richMessage.toString());
-                player.sendMessage(richMessage);
 
             });
 

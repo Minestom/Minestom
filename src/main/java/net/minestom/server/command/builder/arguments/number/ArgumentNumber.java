@@ -10,7 +10,7 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
     public static final int NOT_NUMBER_ERROR = 1;
     public static final int RANGE_ERROR = 2;
 
-    public T min, max;
+    protected T min, max;
 
     public ArgumentNumber(String id) {
         super(id, false);
@@ -32,7 +32,15 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
         return this;
     }
 
-    public String parseValue(String value) {
+    public T getMin() {
+        return min;
+    }
+
+    public T getMax() {
+        return max;
+    }
+
+    protected String parseValue(String value) {
         if (value.startsWith("0b")) {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
@@ -44,7 +52,7 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
         return value;
     }
 
-    public int getRadix(String value) {
+    protected int getRadix(String value) {
         if (value.startsWith("0b")) {
             return 2;
         } else if (value.startsWith("0x")) {
@@ -53,7 +61,7 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
         return 10;
     }
 
-    public String removeScientificNotation(String value) {
+    protected String removeScientificNotation(String value) {
         try {
             return new BigDecimal(value).toPlainString();
         } catch (NumberFormatException e) {

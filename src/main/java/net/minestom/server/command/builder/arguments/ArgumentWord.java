@@ -45,4 +45,12 @@ public class ArgumentWord extends Argument<String> {
 
         return SUCCESS;
     }
+
+    public boolean hasRestrictions() {
+        return restrictions != null && restrictions.length > 0;
+    }
+
+    public String[] getRestrictions() {
+        return restrictions;
+    }
 }
