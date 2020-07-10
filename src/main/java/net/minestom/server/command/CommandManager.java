@@ -5,6 +5,8 @@ import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
@@ -333,7 +335,7 @@ public class CommandManager {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
-        testNode.parser = "minecraft:entity_summon";
+        testNode.parser = "minecraft:range";
 
         if (true) {
             return nodes;
@@ -440,6 +442,12 @@ public class CommandManager {
         } else if (argument instanceof ArgumentEntityType) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
             argumentNode.parser = "minecraft:entity_summon";
+        } else if (argument instanceof ArgumentIntRange) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:int_range";
+        } else if (argument instanceof ArgumentFloatRange) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:float_range";
         }
 
         return nodes;

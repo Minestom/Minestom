@@ -6,6 +6,8 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.utils.math.FloatRange;
+import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.HashMap;
@@ -73,6 +75,14 @@ public class Arguments {
 
     public EntityType getEntityType(String id) {
         return (EntityType) getObject(id);
+    }
+
+    public IntRange getIntRange(String id) {
+        return (IntRange) getObject(id);
+    }
+
+    public FloatRange getFloatRange(String id) {
+        return (FloatRange) getObject(id);
     }
 
     public Object getObject(String id) {

@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
@@ -73,6 +75,14 @@ public class ArgumentType {
 
     public static ArgumentEntityType EntityType(String id) {
         return new ArgumentEntityType(id);
+    }
+
+    public static ArgumentIntRange IntRange(String id) {
+        return new ArgumentIntRange(id);
+    }
+
+    public static ArgumentFloatRange FloatRange(String id) {
+        return new ArgumentFloatRange(id);
     }
 
 }
