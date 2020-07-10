@@ -1,6 +1,12 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.structure.Structure;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.Enchantment;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.potion.PotionType;
+import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +49,30 @@ public class Arguments {
 
     public String[] getStringArray(String id) {
         return (String[]) getObject(id);
+    }
+
+    public ChatColor getColor(String id) {
+        return (ChatColor) getObject(id);
+    }
+
+    public UpdateOption getTime(String id) {
+        return (UpdateOption) getObject(id);
+    }
+
+    public Enchantment getEnchantment(String id) {
+        return (Enchantment) getObject(id);
+    }
+
+    public Particle getParticle(String id) {
+        return (Particle) getObject(id);
+    }
+
+    public PotionType getPotion(String id) {
+        return (PotionType) getObject(id);
+    }
+
+    public EntityType getEntityType(String id) {
+        return (EntityType) getObject(id);
     }
 
     public Object getObject(String id) {

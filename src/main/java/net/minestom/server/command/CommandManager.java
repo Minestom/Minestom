@@ -4,9 +4,16 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotion;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -15,6 +22,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class CommandManager {
 
@@ -208,7 +216,7 @@ public class CommandManager {
             }
 
         }
-        
+
         final List<String> simpleCommands = new ArrayList<>();
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
             // Do not show command if return false
@@ -324,6 +332,13 @@ public class CommandManager {
     private List<DeclareCommandsPacket.Node> toNodes(Argument argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
+        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
+        testNode.parser = "minecraft:entity_summon";
+
+        if (true) {
+            return nodes;
+        }*/
+
         if (argument instanceof ArgumentBoolean) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
 
@@ -335,9 +350,11 @@ public class CommandManager {
             ArgumentDouble argumentDouble = (ArgumentDouble) argument;
             argumentNode.parser = "brigadier:double";
             argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeDouble(argumentDouble.getMin());
-                packetWriter.writeDouble(argumentDouble.getMax());
+                packetWriter.writeByte(getNumberProperties(argumentDouble));
+                if (argumentDouble.hasMin())
+                    packetWriter.writeDouble(argumentDouble.getMin());
+                if (argumentDouble.hasMax())
+                    packetWriter.writeDouble(argumentDouble.getMax());
             };
         } else if (argument instanceof ArgumentFloat) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
@@ -345,9 +362,11 @@ public class CommandManager {
             ArgumentFloat argumentFloat = (ArgumentFloat) argument;
             argumentNode.parser = "brigadier:float";
             argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeFloat(argumentFloat.getMin());
-                packetWriter.writeFloat(argumentFloat.getMax());
+                packetWriter.writeByte(getNumberProperties(argumentFloat));
+                if (argumentFloat.hasMin())
+                    packetWriter.writeFloat(argumentFloat.getMin());
+                if (argumentFloat.hasMax())
+                    packetWriter.writeFloat(argumentFloat.getMax());
             };
         } else if (argument instanceof ArgumentInteger) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
@@ -355,36 +374,39 @@ public class CommandManager {
             ArgumentInteger argumentInteger = (ArgumentInteger) argument;
             argumentNode.parser = "brigadier:integer";
             argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte((byte) 0b11);
-                packetWriter.writeInt(argumentInteger.getMin());
-                packetWriter.writeInt(argumentInteger.getMax());
+                packetWriter.writeByte(getNumberProperties(argumentInteger));
+                if (argumentInteger.hasMin())
+                    packetWriter.writeInt(argumentInteger.getMin());
+                if (argumentInteger.hasMax())
+                    packetWriter.writeInt(argumentInteger.getMax());
             };
         } else if (argument instanceof ArgumentWord) {
 
             ArgumentWord argumentWord = (ArgumentWord) argument;
 
+            // Add the single word properties + parser
+            final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
+                node.parser = "brigadier:string";
+                node.properties = packetWriter -> {
+                    packetWriter.writeVarInt(0); // Single word
+                };
+            };
+
             final boolean hasRestriction = argumentWord.hasRestrictions();
             if (hasRestriction) {
+                // Create a node for each restrictions as literal
                 for (String restrictionWord : argumentWord.getRestrictions()) {
                     DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
                     nodes.add(argumentNode);
 
                     argumentNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
                     argumentNode.name = restrictionWord;
-
-                    argumentNode.parser = "brigadier:string";
-                    argumentNode.properties = packetWriter -> {
-                        packetWriter.writeVarInt(0); // Single word
-                    };
+                    wordConsumer.accept(argumentNode);
                 }
             } else {
-
+                // Can be any word, add only one argument node
                 DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
-
-                argumentNode.parser = "brigadier:string";
-                argumentNode.properties = packetWriter -> {
-                    packetWriter.writeVarInt(0); // Single word
-                };
+                wordConsumer.accept(argumentNode);
             }
         } else if (argument instanceof ArgumentString) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
@@ -400,9 +422,36 @@ public class CommandManager {
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(2); // Greedy phrase
             };
+        } else if (argument instanceof ArgumentColor) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:color";
+        } else if (argument instanceof ArgumentTime) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:time";
+        } else if (argument instanceof ArgumentEnchantment) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:item_enchantment";
+        } else if (argument instanceof ArgumentParticle) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:particle";
+        } else if (argument instanceof ArgumentPotion) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:mob_effect";
+        } else if (argument instanceof ArgumentEntityType) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:entity_summon";
         }
 
         return nodes;
+    }
+
+    private byte getNumberProperties(ArgumentNumber argumentNumber) {
+        byte result = 0;
+        if (argumentNumber.hasMin())
+            result += 1;
+        if (argumentNumber.hasMax())
+            result += 2;
+        return result;
     }
 
     private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,

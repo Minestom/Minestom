@@ -10,6 +10,7 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
     public static final int NOT_NUMBER_ERROR = 1;
     public static final int RANGE_ERROR = 2;
 
+    protected boolean hasMin, hasMax;
     protected T min, max;
 
     public ArgumentNumber(String id) {
@@ -18,22 +19,34 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
 
     public ArgumentNumber min(T value) {
         this.min = value;
+        this.hasMin = true;
         return this;
     }
 
     public ArgumentNumber max(T value) {
         this.max = value;
+        this.hasMax = true;
         return this;
     }
 
     public ArgumentNumber between(T min, T max) {
         this.min = min;
         this.max = max;
+        this.hasMin = true;
+        this.hasMax = true;
         return this;
+    }
+
+    public boolean hasMin() {
+        return hasMin;
     }
 
     public T getMin() {
         return min;
+    }
+
+    public boolean hasMax() {
+        return hasMax;
     }
 
     public T getMax() {

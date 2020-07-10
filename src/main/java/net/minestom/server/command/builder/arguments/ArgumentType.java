@@ -1,5 +1,11 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentColor;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
+import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotion;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -41,6 +47,32 @@ public class ArgumentType {
 
     public static ArgumentStringArray StringArray(String id) {
         return new ArgumentStringArray(id);
+    }
+
+    // Minecraft specific
+
+    public static ArgumentColor Color(String id) {
+        return new ArgumentColor(id);
+    }
+
+    public static ArgumentTime Time(String id) {
+        return new ArgumentTime(id);
+    }
+
+    public static ArgumentEnchantment Enchantment(String id) {
+        return new ArgumentEnchantment(id);
+    }
+
+    public static ArgumentParticle Particle(String id) {
+        return new ArgumentParticle(id);
+    }
+
+    public static ArgumentPotion Potion(String id) {
+        return new ArgumentPotion(id);
+    }
+
+    public static ArgumentEntityType EntityType(String id) {
+        return new ArgumentEntityType(id);
     }
 
 }

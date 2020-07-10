@@ -4,12 +4,14 @@ import net.minestom.server.MinecraftServer;
 
 public enum TimeUnit {
 
-    TICK, HOUR, MINUTE, SECOND, MILLISECOND;
+    TICK, DAY, HOUR, MINUTE, SECOND, MILLISECOND;
 
     public long toMilliseconds(long value) {
         switch (this) {
             case TICK:
                 return MinecraftServer.TICK_MS * value;
+            case DAY:
+                return value * 86_400_000;
             case HOUR:
                 return value * 3_600_000;
             case MINUTE:

@@ -23,6 +23,10 @@ public abstract class Argument<T> {
         this(id, allowSpace, false);
     }
 
+    public Argument(String id) {
+        this(id, false, false);
+    }
+
     /**
      * Used to provide the appropriate error concerning the args received
      *
