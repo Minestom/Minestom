@@ -3,6 +3,10 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.arguments.Argument;
 
+/**
+ * Represent an argument which will give you a {@link ChatColor}
+ * Chat format: red, white, reset, etc...
+ */
 public class ArgumentColor extends Argument<ChatColor> {
 
     public static final int UNDEFINED_COLOR = -2;

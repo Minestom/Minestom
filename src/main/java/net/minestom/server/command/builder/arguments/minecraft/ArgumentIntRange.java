@@ -4,6 +4,10 @@ import net.minestom.server.utils.math.IntRange;
 
 import java.util.regex.Pattern;
 
+/**
+ * Represent an argument which will give you a {@link IntRange}
+ * Chat format: ..3, 3.., 5..10
+ */
 public class ArgumentIntRange extends ArgumentRange<IntRange> {
 
     public ArgumentIntRange(String id) {
@@ -19,7 +23,7 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
             String[] split = value.split(Pattern.quote(".."));
             if (split.length == 1) {
                 try {
-                    Integer.valueOf(split[0]); // min
+                    Integer.valueOf(split[0]);
                     return SUCCESS;
                 } catch (NumberFormatException e2) {
                     return FORMAT_ERROR;

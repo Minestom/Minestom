@@ -4,6 +4,11 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.Entity;
 
 // TODO
+
+/**
+ * Represent the target selector argument
+ * https://minecraft.gamepedia.com/Commands#Target_selectors
+ */
 public class ArgumentEntity extends Argument<Entity> {
 
     public ArgumentEntity(String id, boolean allowSpace) {

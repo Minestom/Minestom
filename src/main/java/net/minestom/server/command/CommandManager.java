@@ -334,12 +334,13 @@ public class CommandManager {
     private List<DeclareCommandsPacket.Node> toNodes(Argument argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
-        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
-        testNode.parser = "minecraft:range";
+        DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
+        testNode.parser = "minecraft:entity";
+        testNode.properties = packetWriter -> packetWriter.writeByte((byte) 0x0);
 
         if (true) {
             return nodes;
-        }*/
+        }
 
         if (argument instanceof ArgumentBoolean) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);

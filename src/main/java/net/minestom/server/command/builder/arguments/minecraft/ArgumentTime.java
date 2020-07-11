@@ -7,6 +7,10 @@ import net.minestom.server.utils.time.UpdateOption;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represent an argument giving a time (day/second/tick)
+ * Chat format: 50d, 25s, 75t
+ */
 public class ArgumentTime extends Argument<UpdateOption> {
 
     public static final int INVALID_TIME_FORMAT = -2;
