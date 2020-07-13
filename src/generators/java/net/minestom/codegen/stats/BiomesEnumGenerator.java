@@ -36,7 +36,7 @@ public class BiomesEnumGenerator extends BasicEnumGenerator {
     }
 
     private BiomesEnumGenerator(File targetFolder) throws IOException {
-        super(targetFolder);
+        super(targetFolder, false);
     }
 
     @Override
