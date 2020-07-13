@@ -56,11 +56,11 @@ dependencies {
     api group: 'org.rocksdb', name: 'rocksdbjni', version: '6.8.1'
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    api group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.2'
+    api group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
 
     // SLF4J is the base for logging so we can easily switch to any logging system later on.
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    api group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.2'
+    api group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.3'
 
     api 'com.mojang:authlib:1.5.21'
 
