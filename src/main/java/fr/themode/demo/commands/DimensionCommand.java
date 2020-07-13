@@ -5,7 +5,7 @@ import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 
 import java.util.Optional;
 
@@ -29,19 +29,19 @@ public class DimensionCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
-        Dimension targetDimension = Dimension.NETHER;
-        if (instance.getDimension() == Dimension.NETHER) {
-            targetDimension = Dimension.OVERWORLD;
+        DimensionType targetDimensionType = DimensionType.NETHER;
+        if (instance.getDimensionType() == targetDimensionType) {
+            targetDimensionType = DimensionType.OVERWORLD;
         }
 
-        Dimension finalTargetDimension = targetDimension;
-        Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimension() == finalTargetDimension).findFirst();
+        DimensionType finalTargetDimensionType = targetDimensionType;
+        Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType() == finalTargetDimensionType).findFirst();
         if (targetInstance.isPresent()) {
-            player.sendMessage("You were in " + instance.getDimension());
+            player.sendMessage("You were in " + instance.getDimensionType());
             player.setInstance(targetInstance.get());
-            player.sendMessage("You are now in " + targetDimension);
+            player.sendMessage("You are now in " + targetDimensionType);
         } else {
-            player.sendMessage("Could not find instance with dimension " + targetDimension);
+            player.sendMessage("Could not find instance with dimension " + targetDimensionType);
         }
 
         return true;

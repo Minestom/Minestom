@@ -25,7 +25,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,7 +37,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
-    private Dimension dimension;
+    private DimensionType dimensionType;
 
     private WorldBorder worldBorder;
 
@@ -57,9 +57,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private Data data;
     private ExplosionSupplier explosionSupplier;
 
-    public Instance(UUID uniqueId, Dimension dimension) {
+    public Instance(UUID uniqueId, DimensionType dimensionType) {
         this.uniqueId = uniqueId;
-        this.dimension = dimension;
+        this.dimensionType = dimensionType;
 
         this.worldBorder = new WorldBorder(this);
     }
@@ -265,8 +265,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the dimension of the instance
      */
-    public Dimension getDimension() {
-        return dimension;
+    public DimensionType getDimensionType() {
+        return dimensionType;
     }
 
     /**

@@ -30,7 +30,7 @@ import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,8 +62,8 @@ public class InstanceContainer extends Instance {
 
     private boolean autoChunkLoad;
 
-    public InstanceContainer(UUID uniqueId, Dimension dimension, StorageFolder storageFolder) {
-        super(uniqueId, dimension);
+    public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
+        super(uniqueId, dimensionType);
 
         this.storageFolder = storageFolder;
         chunkLoader = new MinestomBasicChunkLoader(storageFolder);

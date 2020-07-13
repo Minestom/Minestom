@@ -42,6 +42,7 @@ import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
+import net.minestom.server.world.DimensionTypeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,6 +109,7 @@ public class MinecraftServer {
     private static TeamManager teamManager;
     private static SchedulerManager schedulerManager;
     private static BenchmarkManager benchmarkManager;
+    private static DimensionTypeManager dimensionTypeManager;
 
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
@@ -157,6 +159,7 @@ public class MinecraftServer {
         teamManager = new TeamManager();
         schedulerManager = new SchedulerManager();
         benchmarkManager = new BenchmarkManager();
+        dimensionTypeManager = new DimensionTypeManager();
 
         updateManager = new UpdateManager();
 
@@ -271,6 +274,10 @@ public class MinecraftServer {
 
     public static LootTableManager getLootTableManager() {
         return lootTableManager;
+    }
+
+    public static DimensionTypeManager getDimensionTypeManager() {
+        return dimensionTypeManager;
     }
 
     public static TagManager getTagManager() {
