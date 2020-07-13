@@ -7,7 +7,10 @@ import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 
@@ -589,5 +592,32 @@ public class ItemStack implements DataContainer {
 
     private byte getBitModifier(ItemFlag hideFlag) {
         return (byte) (1 << hideFlag.ordinal());
+    }
+
+    public NBTCompound toNBT() {
+        NBTCompound compound = new NBTCompound()
+                .setByte("Count", amount)
+                .setString("id", Material.fromId(materialId).getName());
+        if(hasNbtTag()) {
+            NBTCompound additionalTag = new NBTCompound();
+            NBTUtils.saveDataIntoNBT(this, additionalTag);
+            compound.set("tag", additionalTag);
+        }
+        return compound;
+    }
+
+    public static ItemStack fromNBT(NBTCompound nbt) {
+        if(!nbt.containsKey("id") || !nbt.containsKey("Count"))
+            throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
+        short materialID = Registries.getMaterial(nbt.getString("id")).getId();
+        byte count = nbt.getByte("Count");
+
+        ItemStack s = new ItemStack(materialID, count);
+
+        NBTCompound tag = nbt.getCompound("tag");
+        if(tag != null) {
+            NBTUtils.loadDataIntoItem(s, tag);
+        }
+        return s;
     }
 }

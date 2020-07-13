@@ -25,7 +25,7 @@ import java.util.*;
 // for lack of a better name
 public class NBTUtils {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Utils.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(NBTUtils.class);
 
     /**
      * Loads all the items from the 'items' list into the given inventory
@@ -109,7 +109,7 @@ public class NBTUtils {
         return item;
     }
 
-    private static void loadDataIntoItem(ItemStack item, NBTCompound nbt) {
+    public static void loadDataIntoItem(ItemStack item, NBTCompound nbt) {
         if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
         if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
@@ -209,7 +209,7 @@ public class NBTUtils {
         }
     }
 
-    private static void saveDataIntoNBT(ItemStack itemStack, NBTCompound itemNBT) {
+    public static void saveDataIntoNBT(ItemStack itemStack, NBTCompound itemNBT) {
         // Unbreakable
         if (itemStack.isUnbreakable()) {
             itemNBT.setInt("Unbreakable", 1);
