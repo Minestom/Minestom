@@ -4,12 +4,12 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 
 public class RespawnPacket implements ServerPacket {
 
-    public Dimension dimension;
+    public DimensionType dimensionType;
     public long hashedSeed;
     public GameMode gameMode;
     public LevelType levelType;
@@ -17,10 +17,10 @@ public class RespawnPacket implements ServerPacket {
     @Override
     public void write(PacketWriter writer) {
         //TODO add api
-        writer.writeSizedString(dimension.getName().toString());
+        writer.writeSizedString(dimensionType.getName().toString());
 
         // Warning: must be different for each dimension type! Otherwise the client seems to cache the world name
-        writer.writeSizedString("test:spawn_"+dimension.getName().getPath()); // TODO: replace by instance name?
+        writer.writeSizedString("test:spawn_"+ dimensionType.getName().getPath()); // TODO: replace by instance name?
 
         writer.writeLong(hashedSeed);
         writer.writeByte(gameMode.getId());

@@ -1,10 +1,11 @@
 package net.minestom.server.network.packet.server.login;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
@@ -14,7 +15,7 @@ public class JoinGamePacket implements ServerPacket {
 
 	public int entityId;
 	public GameMode gameMode = GameMode.SURVIVAL;
-	public Dimension dimension = Dimension.OVERWORLD;
+	public DimensionType dimensionType = DimensionType.OVERWORLD;
 	public long hashedSeed;
 	public byte maxPlayers = 0; // Unused
 	//TODO remove
@@ -41,14 +42,13 @@ public class JoinGamePacket implements ServerPacket {
 		writer.writeSizedString("test:spawn_name");
 
 		NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
-		// TODO: custom list
-		dimensionList.add(Dimension.OVERWORLD.toNBT());
-		dimensionList.add(Dimension.NETHER.toNBT());
-		dimensionList.add(Dimension.END.toNBT());
+		for(DimensionType type : MinecraftServer.getDimensionTypeManager().unmodifiableList()) {
+			dimensionList.add(type.toNBT());
+		}
 		writer.writeNBT("", new NBTCompound().set("dimension", dimensionList));
 
-		writer.writeSizedString(dimension.getName().toString());
-		writer.writeSizedString(identifier+"_"+dimension.getName().getPath());
+		writer.writeSizedString(dimensionType.getName().toString());
+		writer.writeSizedString(identifier+"_"+ dimensionType.getName().getPath());
 		writer.writeLong(hashedSeed);
 		writer.writeByte(maxPlayers);
 		writer.writeVarInt(viewDistance);

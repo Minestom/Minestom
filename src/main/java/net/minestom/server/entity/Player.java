@@ -45,7 +45,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 
 import java.util.*;
@@ -67,7 +67,7 @@ public class Player extends LivingEntity implements CommandSender {
     private ColoredText displayName;
     private PlayerSkin skin;
 
-    private Dimension dimension;
+    private DimensionType dimensionType;
     private GameMode gameMode;
     private LevelType levelType;
     private int teleportId = 0;
@@ -157,7 +157,7 @@ public class Player extends LivingEntity implements CommandSender {
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
-        this.dimension = Dimension.OVERWORLD;
+        this.dimensionType = DimensionType.OVERWORLD;
         this.levelType = LevelType.FLAT;
         refreshPosition(0, 0, 0);
 
@@ -175,7 +175,7 @@ public class Player extends LivingEntity implements CommandSender {
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
         joinGamePacket.gameMode = gameMode;
-        joinGamePacket.dimension = dimension;
+        joinGamePacket.dimensionType = dimensionType;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = levelType;
         joinGamePacket.viewDistance = MinecraftServer.CHUNK_VIEW_DISTANCE;
@@ -464,7 +464,7 @@ public class Player extends LivingEntity implements CommandSender {
         setOnFire(false);
         refreshHealth();
         RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimension = getDimension();
+        respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
         getPlayerConnection().sendPacket(respawnPacket);
@@ -544,9 +544,9 @@ public class Player extends LivingEntity implements CommandSender {
         viewableChunks.clear();
 
         if (this.instance != null) {
-            Dimension instanceDimension = instance.getDimension();
-            if (dimension != instanceDimension)
-                sendDimension(instanceDimension);
+            DimensionType instanceDimensionType = instance.getDimensionType();
+            if (dimensionType != instanceDimensionType)
+                sendDimension(instanceDimensionType);
         }
 
         long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
@@ -912,7 +912,7 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimension = getDimension();
+        respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
 
@@ -1242,8 +1242,8 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return the player current dimension
      */
-    public Dimension getDimension() {
-        return dimension;
+    public DimensionType getDimensionType() {
+        return dimensionType;
     }
 
     public PlayerInventory getInventory() {
@@ -1297,15 +1297,15 @@ public class Player extends LivingEntity implements CommandSender {
      * Change the dimension of the player
      * Mostly unsafe since it requires sending chunks after
      *
-     * @param dimension the new player dimension
+     * @param dimensionType the new player dimension
      */
-    public void sendDimension(Dimension dimension) {
-        Check.notNull(dimension, "Dimension cannot be null!");
-        Check.argCondition(dimension.equals(getDimension()), "The dimension need to be different than the current one!");
+    public void sendDimension(DimensionType dimensionType) {
+        Check.notNull(dimensionType, "Dimension cannot be null!");
+        Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension need to be different than the current one!");
 
-        this.dimension = dimension;
+        this.dimensionType = dimensionType;
         RespawnPacket respawnPacket = new RespawnPacket();
-        respawnPacket.dimension = dimension;
+        respawnPacket.dimensionType = dimensionType;
         respawnPacket.gameMode = gameMode;
         respawnPacket.levelType = levelType;
         playerConnection.sendPacket(respawnPacket);

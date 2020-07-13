@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,21 +18,21 @@ public final class InstanceManager {
         return instanceContainer;
     }
 
-    public InstanceContainer createInstanceContainer(Dimension dimension, StorageFolder storageFolder) {
-        InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimension, storageFolder);
+    public InstanceContainer createInstanceContainer(DimensionType dimensionType, StorageFolder storageFolder) {
+        InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimensionType, storageFolder);
         return createInstanceContainer(instance);
     }
 
     public InstanceContainer createInstanceContainer(StorageFolder storageFolder) {
-        return createInstanceContainer(Dimension.OVERWORLD, storageFolder);
+        return createInstanceContainer(DimensionType.OVERWORLD, storageFolder);
     }
 
-    public InstanceContainer createInstanceContainer(Dimension dimension) {
-        return createInstanceContainer(dimension, null);
+    public InstanceContainer createInstanceContainer(DimensionType dimensionType) {
+        return createInstanceContainer(dimensionType, null);
     }
 
     public InstanceContainer createInstanceContainer() {
-        return createInstanceContainer(Dimension.OVERWORLD);
+        return createInstanceContainer(DimensionType.OVERWORLD);
     }
 
     public SharedInstance createSharedInstance(SharedInstance sharedInstance) {

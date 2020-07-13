@@ -38,7 +38,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-import net.minestom.server.world.Dimension;
+import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -54,15 +54,15 @@ public class PlayerInit {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.OVERWORLD);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
-        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.NETHER);
+        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
         netherTest.setChunkGenerator(noiseTestGenerator);
 
-        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(Dimension.END);
+        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.END);
         end.enableAutoChunkLoad(true);
         end.setChunkGenerator(noiseTestGenerator);
 

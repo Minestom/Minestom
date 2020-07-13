@@ -13,9 +13,9 @@ import java.util.Optional;
  */
 @Data
 @Builder(builderMethodName = "hiddenBuilder", access = AccessLevel.PRIVATE)
-public class Dimension {
+public class DimensionType {
 
-    public static final Dimension OVERWORLD = Dimension.builder(NamespaceID.from("minecraft:overworld"))
+    public static final DimensionType OVERWORLD = DimensionType.builder(NamespaceID.from("minecraft:overworld"))
             .ultrawarm(false)
             .natural(true)
             .shrunk(false)
@@ -31,7 +31,7 @@ public class Dimension {
             .infiniburn(NamespaceID.from("minecraft:infiniburn_overworld"))
             .build();
 
-    public static final Dimension NETHER = Dimension.builder(NamespaceID.from("minecraft:the_nether"))
+    public static final DimensionType NETHER = DimensionType.builder(NamespaceID.from("minecraft:the_nether"))
             .ultrawarm(true)
             .natural(false)
             .shrunk(true)
@@ -47,7 +47,7 @@ public class Dimension {
             .infiniburn(NamespaceID.from("minecraft:infiniburn_nether"))
             .build();
 
-    public static final Dimension END = Dimension.builder(NamespaceID.from("minecraft:the_end"))
+    public static final DimensionType END = DimensionType.builder(NamespaceID.from("minecraft:the_end"))
             .ultrawarm(false)
             .natural(false)
             .shrunk(false)
@@ -103,7 +103,7 @@ public class Dimension {
         return name.toString();
     }
 
-    public static DimensionBuilder builder(NamespaceID name) {
+    public static DimensionTypeBuilder builder(NamespaceID name) {
         return hiddenBuilder().name(name);
     }
 
