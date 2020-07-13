@@ -44,24 +44,22 @@ public class PlayerDiggingListener {
                     CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                     if (customBlock != null) {
                         int breakTime = customBlock.getBreakDelay(player, blockPosition);
-                        if (breakTime >= 0) {
-                            // Custom block has a custom break time, allow for digging event
-                            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, customBlock);
-                            player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
-                            if (!playerStartDiggingEvent.isCancelled()) {
-                                // Start digging the block
+
+                        // Custom block has a custom break time, allow for digging event
+                        PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, customBlock);
+                        player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                        if (!playerStartDiggingEvent.isCancelled()) {
+                            // Start digging the block
+                            if (breakTime >= 0) {
                                 player.setTargetBlock(customBlock, blockPosition, breakTime);
-                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
-                            } else {
-                                // Unsuccessful digging
-                                sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
-                                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+                                addEffect(player);
                             }
-                            addEffect(player);
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                    ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                         } else {
-                            // Does not have a custom break time, remove effect and keep vanilla time
-                            breakBlock(instance, player, blockPosition);
+                            // Unsuccessful digging
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                                    ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                         }
                     } else {
                         // Player is not mining a custom block, be sure that he doesn't have the effect
