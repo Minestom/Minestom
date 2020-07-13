@@ -35,8 +35,11 @@ sourceSets {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // Junit Testing Framework
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
+    // Netty
     api 'io.netty:netty-handler:4.1.45.Final'
     api 'io.netty:netty-codec:4.1.45.Final'
     implementation 'io.netty:netty-transport-native-epoll:4.1.45.Final:linux-x86_64'
@@ -44,23 +47,22 @@ dependencies {
     api 'com.github.jhg023:Pbbl:1.0.2'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
-    api group: 'it.unimi.dsi', name: 'fastutil', version: '8.3.0'
+    api 'it.unimi.dsi:fastutil:8.3.0'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    api 'com.google.code.gson:gson:2.8.6'
 
+    // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
-    api 'com.github.Articdive:Jnoise:145c910a1e'
+    api 'com.github.Articdive:Jnoise:1.0.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api group: 'org.rocksdb', name: 'rocksdbjni', version: '6.8.1'
+    api 'org.rocksdb:rocksdbjni:6.8.1'
 
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    api group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
-
-    // SLF4J is the base for logging so we can easily switch to any logging system later on.
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    api group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.3'
+    // Logging
+    api 'org.apache.logging.log4j:log4j-core:2.13.3'
+    // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
 
     api 'com.mojang:authlib:1.5.21'
 
