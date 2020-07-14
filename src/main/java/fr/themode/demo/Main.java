@@ -3,13 +3,10 @@ package fr.themode.demo;
 import fr.themode.demo.blocks.BurningTorchBlock;
 import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
-import fr.themode.demo.commands.DimensionCommand;
-import fr.themode.demo.commands.GamemodeCommand;
-import fr.themode.demo.commands.HealthCommand;
-import fr.themode.demo.commands.SimpleCommand;
+import fr.themode.demo.commands.EntitySelectorCommand;
+import fr.themode.demo.commands.TestCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -32,10 +29,12 @@ public class Main {
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new HealthCommand());
-        commandManager.register(new SimpleCommand());
-        commandManager.register(new GamemodeCommand());
-        commandManager.register(new DimensionCommand());
+        commandManager.register(new EntitySelectorCommand());
+        commandManager.register(new TestCommand());
+        //commandManager.register(new HealthCommand());
+        //commandManager.register(new SimpleCommand());
+        //commandManager.register(new GamemodeCommand());
+        //commandManager.register(new DimensionCommand());
 
         /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
@@ -64,7 +63,7 @@ public class Main {
 
         PlayerInit.init();
 
-        MojangAuth.init();
+        //MojangAuth.init();
 
         minecraftServer.start("localhost", 25565, PlayerInit.getResponseDataConsumer());
     }

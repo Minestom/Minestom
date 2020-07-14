@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Command<S> {
+public class Command {
 
     private String name;
     private String[] aliases;
@@ -31,15 +31,15 @@ public class Command<S> {
         return condition;
     }
 
-    public void setCondition(CommandCondition<S> commandCondition) {
+    public void setCondition(CommandCondition commandCondition) {
         this.condition = commandCondition;
     }
 
-    public void addCallback(ArgumentCallback<S> callback, Argument argument) {
+    public void addCallback(ArgumentCallback callback, Argument argument) {
         argument.setCallback(callback);
     }
 
-    public void addSyntax(CommandExecutor<S> executor, Argument... args) {
+    public void addSyntax(CommandExecutor executor, Argument... args) {
         CommandSyntax syntax = new CommandSyntax(args);
         syntax.setExecutor(executor);
         this.syntaxes.add(syntax);
@@ -57,7 +57,7 @@ public class Command<S> {
         return defaultExecutor;
     }
 
-    public void setDefaultExecutor(CommandExecutor<S> executor) {
+    public void setDefaultExecutor(CommandExecutor executor) {
         this.defaultExecutor = executor;
     }
 

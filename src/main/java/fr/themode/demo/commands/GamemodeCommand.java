@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Command that make a player change gamemode
  */
-public class GamemodeCommand extends Command<CommandSender> {
+public class GamemodeCommand extends Command {
     public GamemodeCommand() {
         super("gamemode", "g", "gm");
 

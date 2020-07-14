@@ -4,10 +4,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentColor;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentFloatRange;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentTime;
+import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
@@ -33,7 +30,7 @@ public class CommandManager {
 
     private ConsoleSender consoleSender = new ConsoleSender();
 
-    private CommandDispatcher<CommandSender> dispatcher = new CommandDispatcher<>();
+    private CommandDispatcher dispatcher = new CommandDispatcher();
     private Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
     public CommandManager() {
@@ -59,7 +56,7 @@ public class CommandManager {
         running = false;
     }
 
-    public void register(Command<CommandSender> command) {
+    public void register(Command command) {
         this.dispatcher.register(command);
     }
 
@@ -194,9 +191,9 @@ public class CommandManager {
         // Contains the children of the main node (all commands name)
         ArrayList<Integer> rootChildren = new ArrayList<>();
 
-        for (Command<CommandSender> command : dispatcher.getCommands()) {
+        for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
-            CommandCondition<Player> commandCondition = command.getCondition();
+            CommandCondition commandCondition = command.getCondition();
             if (commandCondition != null) {
                 // Do not show command if return false
                 if (!commandCondition.apply(player)) {
@@ -334,13 +331,13 @@ public class CommandManager {
     private List<DeclareCommandsPacket.Node> toNodes(Argument argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
-        DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
+        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
         testNode.parser = "minecraft:entity";
         testNode.properties = packetWriter -> packetWriter.writeByte((byte) 0x0);
 
         if (true) {
             return nodes;
-        }
+        }*/
 
         if (argument instanceof ArgumentBoolean) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
@@ -449,6 +446,20 @@ public class CommandManager {
         } else if (argument instanceof ArgumentFloatRange) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
             argumentNode.parser = "minecraft:float_range";
+        } else if (argument instanceof ArgumentEntities) {
+            ArgumentEntities argumentEntities = (ArgumentEntities) argument;
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            argumentNode.parser = "minecraft:entity";
+            argumentNode.properties = packetWriter -> {
+                byte mask = 0;
+                if (argumentEntities.isOnlySingleEntity()) {
+                    mask += 1;
+                }
+                if (argumentEntities.isOnlyPlayers()) {
+                    mask += 2;
+                }
+                packetWriter.writeByte(mask);
+            };
         }
 
         return nodes;

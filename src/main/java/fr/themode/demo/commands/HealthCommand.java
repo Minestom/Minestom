@@ -8,7 +8,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.entity.Player;
 
-public class HealthCommand extends Command<CommandSender> {
+public class HealthCommand extends Command {
 
     public HealthCommand() {
         super("health", "h", "healthbar");

@@ -1,17 +1,18 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class CommandDispatcher<S> {
+public class CommandDispatcher {
 
-    private Map<String, Command<S>> commandMap = new HashMap<>();
-    private Set<Command<S>> commands = new HashSet<>();
+    private Map<String, Command> commandMap = new HashMap<>();
+    private Set<Command> commands = new HashSet<>();
 
-    public void register(Command<S> command) {
+    public void register(Command command) {
         this.commandMap.put(command.getName(), command);
         for (String alias : command.getAliases()) {
             this.commandMap.put(alias, command);
@@ -29,7 +30,7 @@ public class CommandDispatcher<S> {
 
         String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(spaceRegex);
 
-        Command<S> command = findCommand(commandName);
+        Command command = findCommand(commandName);
         // TODO change return
         if (command == null)
             return null;
@@ -37,20 +38,20 @@ public class CommandDispatcher<S> {
         return findCommandResult(command, args);
     }
 
-    public void execute(S source, String commandString) {
+    public void execute(CommandSender source, String commandString) {
         CommandResult result = parse(commandString);
         result.execute(source);
     }
 
-    public Set<Command<S>> getCommands() {
+    public Set<Command> getCommands() {
         return Collections.unmodifiableSet(commands);
     }
 
-    private Command<S> findCommand(String commandName) {
+    private Command findCommand(String commandName) {
         return commandMap.containsKey(commandName) ? commandMap.get(commandName) : null;
     }
 
-    private CommandResult findCommandResult(Command<S> command, String[] args) {
+    private CommandResult findCommandResult(Command command, String[] args) {
         CommandResult result = new CommandResult();
         result.command = command;
 
@@ -215,7 +216,7 @@ public class CommandDispatcher<S> {
     private class CommandResult {
 
         // Command
-        private Command<S> command;
+        private Command command;
 
         // Command Executor
         private CommandExecutor executor;
@@ -226,7 +227,7 @@ public class CommandDispatcher<S> {
         private String value;
         private int error;
 
-        public void execute(S source) {
+        public void execute(CommandSender source) {
             // Condition check
             CommandCondition condition = command.getCondition();
             if (condition != null) {

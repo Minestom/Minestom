@@ -5,8 +5,8 @@ import net.minestom.server.utils.math.FloatRange;
 import java.util.regex.Pattern;
 
 /**
- * Represent an argument which will give you a {@link FloatRange}
- * Chat format: ..3, 3.., 5..10
+ * Represent an argument which will give you an {@link FloatRange}
+ * Chat format: ..3, 3.., 5..10, 15
  */
 public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
 
@@ -69,7 +69,7 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
             return new FloatRange(min, max);
         } else {
             final float number = Float.valueOf(value);
-            return new FloatRange(number, number);
+            return new FloatRange(number);
         }
     }
 }

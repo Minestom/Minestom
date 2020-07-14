@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder;
 
-public interface CommandExecutor<S> {
-    void apply(S source, Arguments args);
+import net.minestom.server.command.CommandSender;
+
+public interface CommandExecutor {
+    void apply(CommandSender source, Arguments args);
 }

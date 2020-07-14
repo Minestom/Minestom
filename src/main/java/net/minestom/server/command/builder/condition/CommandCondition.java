@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.condition;
 
-public interface CommandCondition<S> {
-    boolean apply(S source);
+import net.minestom.server.command.CommandSender;
+
+public interface CommandCondition {
+    boolean apply(CommandSender source);
 }

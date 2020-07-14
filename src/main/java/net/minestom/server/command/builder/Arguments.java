@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.structure.Structure;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.particle.Particle;
@@ -10,6 +11,7 @@ import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,6 +85,10 @@ public class Arguments {
 
     public FloatRange getFloatRange(String id) {
         return (FloatRange) getObject(id);
+    }
+
+    public ArrayList<Entity> getEntities(String id) {
+        return (ArrayList<Entity>) getObject(id);
     }
 
     public Object getObject(String id) {

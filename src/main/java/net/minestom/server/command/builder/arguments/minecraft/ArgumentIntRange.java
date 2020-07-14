@@ -5,8 +5,8 @@ import net.minestom.server.utils.math.IntRange;
 import java.util.regex.Pattern;
 
 /**
- * Represent an argument which will give you a {@link IntRange}
- * Chat format: ..3, 3.., 5..10
+ * Represent an argument which will give you an {@link IntRange}
+ * Chat format: ..3, 3.., 5..10, 15
  */
 public class ArgumentIntRange extends ArgumentRange<IntRange> {
 
@@ -69,7 +69,7 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
             return new IntRange(min, max);
         } else {
             final int number = Integer.valueOf(value);
-            return new IntRange(number, number);
+            return new IntRange(number);
         }
     }
 }

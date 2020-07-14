@@ -9,6 +9,10 @@ public class IntRange {
         this.max = max;
     }
 
+    public IntRange(int value) {
+        this(value, value);
+    }
+
     public int getMin() {
         return min;
     }

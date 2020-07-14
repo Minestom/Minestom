@@ -9,6 +9,10 @@ public class FloatRange {
         this.max = max;
     }
 
+    public FloatRange(float value) {
+        this(value, value);
+    }
+
     public float getMin() {
         return min;
     }

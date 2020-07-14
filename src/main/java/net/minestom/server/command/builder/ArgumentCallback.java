@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder;
 
-public interface ArgumentCallback<S> {
-    void apply(S source, String value, int error);
+import net.minestom.server.command.CommandSender;
+
+public interface ArgumentCallback {
+    void apply(CommandSender source, String value, int error);
 }

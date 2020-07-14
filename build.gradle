@@ -68,7 +68,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     // Pathfinding
-    implementation 'com.github.MadMartian:hydrazine-path-finding:1.1.0'
+    api 'com.github.MadMartian:hydrazine-path-finding:1.1.0'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     api 'com.github.jglrxavpok:Hephaistos:v1.0.3'
