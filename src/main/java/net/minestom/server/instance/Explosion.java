@@ -74,8 +74,17 @@ public abstract class Explosion {
             packet.records[i*3+2] = z;
         }
 
+        postExplosion(instance, blocks);
+
         instance.getPlayers().forEach(player -> {
             player.sendPacketToViewersAndSelf(packet);
         });
     }
+
+    /**
+     * Called after removing blocks and preparing the packet, but before sending it.
+     * @param instance the instance in which the explosion occurs
+     * @param blocks the block positions returned by prepare
+     */
+    protected void postExplosion(Instance instance, List<BlockPosition> blocks) {}
 }
