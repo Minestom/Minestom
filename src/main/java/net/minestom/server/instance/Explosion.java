@@ -74,7 +74,7 @@ public abstract class Explosion {
             packet.records[i*3+2] = z;
         }
 
-        postExplosion(instance, blocks);
+        postExplosion(instance, blocks, packet);
 
         instance.getPlayers().forEach(player -> {
             player.sendPacketToViewersAndSelf(packet);
@@ -85,6 +85,10 @@ public abstract class Explosion {
      * Called after removing blocks and preparing the packet, but before sending it.
      * @param instance the instance in which the explosion occurs
      * @param blocks the block positions returned by prepare
+     * @param packet the explosion packet to sent to the client. Be careful with what you're doing.
+     *               It is initialized with the center and radius of the explosion. The positions in 'blocks' are also
+     *               stored in the packet before this call, but you are free to modify 'records' to modify the blocks sent to the client.
+     *               Just be careful, you might just crash the server or the client. Or you're lucky, both at the same time.
      */
-    protected void postExplosion(Instance instance, List<BlockPosition> blocks) {}
+    protected void postExplosion(Instance instance, List<BlockPosition> blocks, ExplosionPacket packet) {}
 }
