@@ -79,6 +79,8 @@ public abstract class Explosion {
         instance.getPlayers().forEach(player -> {
             player.sendPacketToViewersAndSelf(packet);
         });
+
+        postSend(instance, blocks);
     }
 
     /**
@@ -91,4 +93,12 @@ public abstract class Explosion {
      *               Just be careful, you might just crash the server or the client. Or you're lucky, both at the same time.
      */
     protected void postExplosion(Instance instance, List<BlockPosition> blocks, ExplosionPacket packet) {}
+
+    /**
+     * Called after sending the explosion packet. Can be used to (re)set blocks that have been destroyed.
+     * This is necessary to do after the packet being sent, because the client sets the positions received to air.
+     * @param instance the instance in which the explosion occurs
+     * @param blocks the block positions returned by prepare
+     */
+    protected void postSend(Instance instance, List<BlockPosition> blocks) {}
 }
