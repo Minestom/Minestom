@@ -363,6 +363,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     public short getBlockId(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
         return chunk.getBlockId(x, y, z);
     }
 
@@ -376,6 +377,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
         return chunk.getCustomBlock(x, y, z);
     }
 
@@ -384,13 +386,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
-        short blockId = getBlockId(blockPosition);
+        final short blockId = getBlockId(blockPosition);
+        final Block block = Block.fromId(blockId);
 
         BlockActionPacket blockActionPacket = new BlockActionPacket();
         blockActionPacket.blockPosition = blockPosition;
         blockActionPacket.actionId = actionId;
         blockActionPacket.actionParam = actionParam;
-        blockActionPacket.blockId = blockId; // FIXME: block id and not block state?
+        blockActionPacket.blockId = block.getBlockId();
 
         Chunk chunk = getChunkAt(blockPosition);
         chunk.sendPacketToViewers(blockActionPacket);
@@ -398,6 +401,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     public Data getBlockData(int x, int y, int z) {
         Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
         return chunk.getData(x, (byte) y, z);
     }
 
