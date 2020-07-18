@@ -38,7 +38,7 @@ public class BlockPlacementListener {
             return;
 
         // Interact at block
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(blockPosition, hand);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(blockPosition, hand, blockFace);
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
             CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {

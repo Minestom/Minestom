@@ -2,12 +2,14 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 
 public class PlayerBlockInteractEvent extends CancellableEvent {
 
     private BlockPosition blockPosition;
     private Player.Hand hand;
+    private final BlockFace blockFace;
 
     /**
      * Does this interaction block the normal item use?
@@ -15,9 +17,10 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      */
     private boolean blocksItemUse;
 
-    public PlayerBlockInteractEvent(BlockPosition blockPosition, Player.Hand hand) {
+    public PlayerBlockInteractEvent(BlockPosition blockPosition, Player.Hand hand, BlockFace blockFace) {
         this.blockPosition = blockPosition;
         this.hand = hand;
+        this.blockFace = blockFace;
     }
 
     public boolean isBlockingItemUse() {
@@ -34,5 +37,9 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
 
     public Player.Hand getHand() {
         return hand;
+    }
+
+    public BlockFace getBlockFace() {
+        return blockFace;
     }
 }
