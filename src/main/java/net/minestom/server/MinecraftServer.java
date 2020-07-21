@@ -284,7 +284,7 @@ public class MinecraftServer {
         return tagManager;
     }
 
-    public void start(String address, int port, boolean bungeecordEnabled, ResponseDataConsumer responseDataConsumer) {
+    public void start(String address, int port, ResponseDataConsumer responseDataConsumer, boolean bungeecordEnabled) {
         LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
         updateManager.start(bungeecordEnabled);
@@ -292,10 +292,10 @@ public class MinecraftServer {
         LOGGER.info("Minestom server started successfully.");
     }
 
-    public void start(String address, int port) { start(address, port, false, null); }
+    public void start(String address, int port) { start(address, port, null, false); }
 
     public void start(String address, int port, boolean bungeecordEnabled) {
-        start(address, port, bungeecordEnabled, null);
+        start(address, port, null, bungeecordEnabled);
     }
 
     /**
