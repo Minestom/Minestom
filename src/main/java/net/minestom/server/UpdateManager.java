@@ -46,19 +46,6 @@ public final class UpdateManager {
             while (!stopRequested) {
                 currentTime = System.nanoTime();
 
-                // Keep Alive Handling
-                final long time = System.currentTimeMillis();
-                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
-                for (Player player : connectionManager.getOnlinePlayers()) {
-                    final long lastKeepAlive = time - player.getLastKeepAlive();
-                    if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
-                        player.refreshKeepAlive(time);
-                        player.getPlayerConnection().sendPacket(keepAlivePacket);
-                    } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                        player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
-                    }
-                }
-
                 // Server tick
                 threadProvider.start();
                 for (Instance instance : instanceManager.getInstances()) {
@@ -73,6 +60,19 @@ public final class UpdateManager {
 
                 // Scheduler
                 schedulerManager.update();
+
+                // Keep Alive Handling
+                final long time = System.currentTimeMillis();
+                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
+                for (Player player : connectionManager.getOnlinePlayers()) {
+                    final long lastKeepAlive = time - player.getLastKeepAlive();
+                    if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+                        player.refreshKeepAlive(time);
+                        player.getPlayerConnection().sendPacket(keepAlivePacket);
+                    } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                        player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
+                    }
+                }
 
                 // Sleep until next tick
                 long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
