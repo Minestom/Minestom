@@ -56,14 +56,31 @@ public class CommandManager {
         running = false;
     }
 
+    /**
+     * Register a command with all the auto-completion features
+     *
+     * @param command the command to register
+     */
     public void register(Command command) {
         this.dispatcher.register(command);
     }
 
+    /**
+     * Register a simple command without auto-completion
+     *
+     * @param commandProcessor the command to register
+     */
     public void register(CommandProcessor commandProcessor) {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
     }
 
+    /**
+     * Execute a command for a sender
+     *
+     * @param sender  the sender of the command
+     * @param command the raw command string (without the command prefix)
+     * @return
+     */
     public boolean execute(CommandSender sender, String command) {
         Check.notNull(sender, "Source cannot be null");
         Check.notNull(command, "Command string cannot be null");
@@ -81,15 +98,18 @@ public class CommandManager {
         }
 
         try {
+            // Check for rich-command
             this.dispatcher.execute(sender, command);
             return true;
         } catch (NullPointerException e) {
+            // Check for legacy-command
             String[] splitted = command.split(" ");
             String commandName = splitted[0];
             CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
             if (commandProcessor == null)
                 return false;
 
+            // Execute the legacy-command
             String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
 
             return commandProcessor.process(sender, commandName, args);
@@ -97,18 +117,43 @@ public class CommandManager {
         }
     }
 
+    /**
+     * Get the current command prefix (what should always be before the command name, ie: '/')
+     *
+     * @return the command prefix
+     */
     public String getCommandPrefix() {
         return commandPrefix;
     }
 
+    /**
+     * Change the command prefix
+     * <p>
+     * This field can be changed half-way, but the client auto-completion still expect the '/' char
+     *
+     * @param commandPrefix the new command prefix
+     */
     public void setCommandPrefix(String commandPrefix) {
         this.commandPrefix = commandPrefix;
     }
 
+    /**
+     * Get the console sender (which is used as a {@link CommandSender})
+     *
+     * @return the console sender
+     */
     public ConsoleSender getConsoleSender() {
         return consoleSender;
     }
 
+    /**
+     * Get the declare commands packet for a specific player
+     * <p>
+     * Can be used to update the player auto-completion list
+     *
+     * @param player the player to get the commands packet
+     * @return the {@link DeclareCommandsPacket} for {@code player}
+     */
     public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
         return buildPacket(player);
     }
