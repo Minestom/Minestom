@@ -5,6 +5,9 @@ import net.minestom.server.utils.validate.Check;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represent a color in a text
+ */
 public class ChatColor {
 
     // Special
@@ -114,6 +117,14 @@ public class ChatColor {
         this.special = true;
     }
 
+    /**
+     * Create an RGB color
+     *
+     * @param r the red component
+     * @param g the green component
+     * @param b the blue component
+     * @return a chat color with the specified RGB color
+     */
     public static ChatColor fromRGB(int r, int g, int b) {
         return fromRGB(r, g, b, -1);
     }
@@ -122,10 +133,22 @@ public class ChatColor {
         return new ChatColor(r, g, b, id);
     }
 
+    /**
+     * Get a color based on its name (eg: white, black, aqua, etc...)
+     *
+     * @param name the color name
+     * @return the color associated with the name, {@link #NO_COLOR} if not found
+     */
     public static ChatColor fromName(String name) {
         return colorCode.getOrDefault(name.toLowerCase(), NO_COLOR);
     }
 
+    /**
+     * Get a color based on its legacy color code (eg: 1, 2, 3,... f)
+     *
+     * @param colorCode the color legacy code
+     * @return the color associated with the code
+     */
     public static ChatColor fromLegacyColorCodes(char colorCode) {
         return legacyColorCodesMap.getOrDefault(colorCode, NO_COLOR);
     }
@@ -134,18 +157,38 @@ public class ChatColor {
         return empty;
     }
 
+    /**
+     * Get the red component of the color
+     *
+     * @return the red component of the color
+     */
     public int getRed() {
         return red;
     }
 
+    /**
+     * Get the green component of the color
+     *
+     * @return the green component of the color
+     */
     public int getGreen() {
         return green;
     }
 
+    /**
+     * Get the blue component of the color
+     *
+     * @return the blue component of the color
+     */
     public int getBlue() {
         return blue;
     }
 
+    /**
+     * Get if the color is special (eg: no color, bold, reset, etc...)
+     *
+     * @return true if the color is special, false otherwise
+     */
     public boolean isSpecial() {
         return special;
     }

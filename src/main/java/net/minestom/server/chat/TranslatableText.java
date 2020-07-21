@@ -1,5 +1,8 @@
 package net.minestom.server.chat;
 
+/**
+ * Represent a translatable component which can be used in {@link ColoredText}
+ */
 public class TranslatableText {
 
     private String code;
@@ -10,10 +13,23 @@ public class TranslatableText {
         this.arguments = arguments;
     }
 
+    /**
+     * Get the translatable component of the specific code
+     *
+     * @param code the translatable code
+     * @return the translatable component linked to the code
+     */
     public static TranslatableText of(String code) {
         return new TranslatableText(code, null);
     }
 
+    /**
+     * Get the translatable component and the specific code with arguments
+     *
+     * @param code      the translatable code
+     * @param arguments the translatable component arguments in order
+     * @return the translatable component linked to the code and arguments
+     */
     public static TranslatableText of(String code, String... arguments) {
         return new TranslatableText(code, arguments);
     }

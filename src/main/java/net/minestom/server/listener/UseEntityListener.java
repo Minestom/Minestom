@@ -10,7 +10,7 @@ import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket
 public class UseEntityListener {
 
     public static void useEntityListener(ClientInteractEntityPacket packet, Player player) {
-        Entity entity = Entity.getEntity(packet.targetId);
+        final Entity entity = Entity.getEntity(packet.targetId);
         if (entity == null)
             return;
         ClientInteractEntityPacket.Type type = packet.type;

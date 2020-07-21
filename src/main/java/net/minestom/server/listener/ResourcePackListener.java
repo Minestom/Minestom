@@ -8,7 +8,7 @@ import net.minestom.server.resourcepack.ResourcePackStatus;
 public class ResourcePackListener {
 
     public static void listener(ClientResourcePackStatusPacket packet, Player player) {
-        ResourcePackStatus result = packet.result;
+        final ResourcePackStatus result = packet.result;
         PlayerResourcePackStatusEvent resourcePackStatusEvent = new PlayerResourcePackStatusEvent(player, result);
         player.callEvent(PlayerResourcePackStatusEvent.class, resourcePackStatusEvent);
     }

@@ -9,8 +9,6 @@ import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
-import java.util.function.Consumer;
-
 public class PlayerPositionListener {
 
     public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
@@ -18,48 +16,39 @@ public class PlayerPositionListener {
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
-        Position playerPosition = player.getPosition();
-        float x = playerPosition.getX();
-        float y = playerPosition.getY();
-        float z = playerPosition.getZ();
-        float yaw = packet.yaw;
-        float pitch = packet.pitch;
-        processMovement(player, x, y, z, yaw, pitch, (position) -> {
-            player.refreshPosition(position.getX(), position.getY(), position.getZ());
-            player.refreshView(position.getYaw(), position.getPitch());
-            player.refreshOnGround(packet.onGround);
-        });
+        final Position playerPosition = player.getPosition();
+        final float x = playerPosition.getX();
+        final float y = playerPosition.getY();
+        final float z = playerPosition.getZ();
+        final float yaw = packet.yaw;
+        final float pitch = packet.pitch;
+        final boolean onGround = packet.onGround;
+        processMovement(player, x, y, z, yaw, pitch, onGround);
     }
 
     public static void playerPositionListener(ClientPlayerPositionPacket packet, Player player) {
-        Position playerPosition = player.getPosition();
-        float x = (float) packet.x;
-        float y = (float) packet.y;
-        float z = (float) packet.z;
-        float yaw = playerPosition.getYaw();
-        float pitch = playerPosition.getPitch();
-        processMovement(player, x, y, z, yaw, pitch, (position) -> {
-            player.refreshPosition(position.getX(), position.getY(), position.getZ());
-            player.refreshView(position.getYaw(), position.getPitch());
-            player.refreshOnGround(packet.onGround);
-        });
+        final Position playerPosition = player.getPosition();
+        final float x = (float) packet.x;
+        final float y = (float) packet.y;
+        final float z = (float) packet.z;
+        final float yaw = playerPosition.getYaw();
+        final float pitch = playerPosition.getPitch();
+        final boolean onGround = packet.onGround;
+        processMovement(player, x, y, z, yaw, pitch, onGround);
     }
 
     public static void playerPositionAndLookListener(ClientPlayerPositionAndRotationPacket packet, Player player) {
-        float x = (float) packet.x;
-        float y = (float) packet.y;
-        float z = (float) packet.z;
-        float yaw = packet.yaw;
-        float pitch = packet.pitch;
-        processMovement(player, x, y, z, yaw, pitch, (position) -> {
-            player.refreshPosition(position.getX(), position.getY(), position.getZ());
-            player.refreshView(position.getYaw(), position.getPitch());
-            player.refreshOnGround(packet.onGround);
-        });
+        final float x = (float) packet.x;
+        final float y = (float) packet.y;
+        final float z = (float) packet.z;
+        final float yaw = packet.yaw;
+        final float pitch = packet.pitch;
+        final boolean onGround = packet.onGround;
+        processMovement(player, x, y, z, yaw, pitch, onGround);
     }
 
     private static void processMovement(Player player, float x, float y, float z,
-                                        float yaw, float pitch, Consumer<Position> consumer) {
+                                        float yaw, float pitch, boolean onGround) {
 
         // Try to move in an unloaded chunk, prevent it
         if (ChunkUtils.isChunkUnloaded(player.getInstance(), x, z)) {
@@ -71,7 +60,11 @@ public class PlayerPositionListener {
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
         if (!playerMoveEvent.isCancelled()) {
-            consumer.accept(playerMoveEvent.getNewPosition());
+            // Move the player
+            newPosition = playerMoveEvent.getNewPosition();
+            player.refreshPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
+            player.refreshView(newPosition.getYaw(), newPosition.getPitch());
+            player.refreshOnGround(onGround);
         } else {
             player.teleport(player.getPosition());
         }

@@ -15,8 +15,8 @@ import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        Inventory inventory;
-        byte windowId = packet.windowId;
+        final Inventory inventory;
+        final byte windowId = packet.windowId;
         if (windowId == 0) {
             inventory = null;
         } else {
@@ -26,10 +26,10 @@ public class WindowListener {
         InventoryClickHandler clickHandler = inventory == null ?
                 player.getInventory() : player.getOpenInventory();
 
-        short slot = packet.slot;
-        byte button = packet.button;
-        short actionNumber = packet.actionNumber;
-        int mode = packet.mode;
+        final short slot = packet.slot;
+        final byte button = packet.button;
+        final short actionNumber = packet.actionNumber;
+        final int mode = packet.mode;
 
         // System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
 

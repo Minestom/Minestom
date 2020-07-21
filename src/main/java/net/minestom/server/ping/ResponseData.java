@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represent the data sent to the player when refreshing his server list
+ */
 public class ResponseData {
 
     private JsonObject jsonObject = new JsonObject();

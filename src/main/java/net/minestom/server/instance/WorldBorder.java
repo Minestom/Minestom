@@ -5,6 +5,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.WorldBorderPacket;
 import net.minestom.server.utils.Position;
 
+/**
+ * Represent the world border of an instance
+ */
 public class WorldBorder {
 
     private Instance instance;
@@ -35,12 +38,23 @@ public class WorldBorder {
 
     }
 
+    /**
+     * Change the X and Z position of the center
+     *
+     * @param centerX the X center
+     * @param centerZ the Z center
+     */
     public void setCenter(float centerX, float centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
         refreshCenter();
     }
 
+    /**
+     * Get the center X of the world border
+     *
+     * @return the X center
+     */
     public float getCenterX() {
         return centerX;
     }
@@ -50,6 +64,11 @@ public class WorldBorder {
         refreshCenter();
     }
 
+    /**
+     * Get the center Z of the world border
+     *
+     * @return the Z center
+     */
     public float getCenterZ() {
         return centerZ;
     }
@@ -112,8 +131,10 @@ public class WorldBorder {
     }
 
     /**
-     * @return the current world border diameter
+     * Get the diameter of the world border
      * It takes lerp in consideration
+     *
+     * @return the current world border diameter
      */
     public double getDiameter() {
         return currentDiameter;
@@ -178,6 +199,7 @@ public class WorldBorder {
 
     /**
      * Used to update in real-time the current diameter time
+     * Called in the instance tick update
      */
     protected void update() {
         if (lerpStartTime == 0) {
@@ -207,6 +229,8 @@ public class WorldBorder {
     }
 
     /**
+     * Get the instance linked to this world border
+     *
      * @return the instance of this world border
      */
     public Instance getInstance() {

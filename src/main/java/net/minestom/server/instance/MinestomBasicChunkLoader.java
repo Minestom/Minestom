@@ -19,16 +19,16 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
     @Override
     public void saveChunk(Chunk chunk, Runnable callback) {
-        if(storageFolder == null) {
+        if (storageFolder == null) {
             callback.run();
             LOGGER.warn("No folder to save chunk!");
             return;
         }
-        int chunkX = chunk.getChunkX();
-        int chunkZ = chunk.getChunkZ();
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
 
         try {
-            byte[] data = chunk.getSerializedData();
+            final byte[] data = chunk.getSerializedData();
             storageFolder.set(getChunkKey(chunkX, chunkZ), data);
 
             if (callback != null)
@@ -40,7 +40,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
     @Override
     public boolean loadChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        byte[] bytes = storageFolder == null ? null : storageFolder.get(getChunkKey(chunkX, chunkZ));
+        final byte[] bytes = storageFolder == null ? null : storageFolder.get(getChunkKey(chunkX, chunkZ));
 
         if (bytes == null) {
             return false;

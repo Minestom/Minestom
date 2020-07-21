@@ -18,14 +18,14 @@ import net.minestom.server.utils.BlockPosition;
 public class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
-        ClientPlayerDiggingPacket.Status status = packet.status;
-        BlockPosition blockPosition = packet.blockPosition;
+        final ClientPlayerDiggingPacket.Status status = packet.status;
+        final BlockPosition blockPosition = packet.blockPosition;
 
-        PlayerInventory playerInventory = player.getInventory();
-        ItemStack mainHand = playerInventory.getItemInMainHand();
-        ItemStack offHand = playerInventory.getItemInOffHand();
+        final PlayerInventory playerInventory = player.getInventory();
+        final ItemStack mainHand = playerInventory.getItemInMainHand();
+        final ItemStack offHand = playerInventory.getItemInOffHand();
 
-        Instance instance = player.getInstance();
+        final Instance instance = player.getInstance();
 
         if (instance == null)
             return;

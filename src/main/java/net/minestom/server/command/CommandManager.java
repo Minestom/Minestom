@@ -37,7 +37,7 @@ public class CommandManager {
         running = true;
         // Setup console thread
         Thread consoleThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
+            final Scanner scanner = new Scanner(System.in);
             while (running) {
                 if (scanner.hasNext()) {
                     String command = scanner.nextLine();
@@ -103,14 +103,14 @@ public class CommandManager {
             return true;
         } catch (NullPointerException e) {
             // Check for legacy-command
-            String[] splitted = command.split(" ");
-            String commandName = splitted[0];
-            CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
+            final String[] splitted = command.split(" ");
+            final String commandName = splitted[0];
+            final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
             if (commandProcessor == null)
                 return false;
 
             // Execute the legacy-command
-            String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
+            final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
 
             return commandProcessor.process(sender, commandName, args);
 

@@ -50,31 +50,31 @@ public class BlockPlacementListener {
             }
         });
 
-        if(playerBlockInteractEvent.isBlockingItemUse()) {
+        if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
         }
 
         // Check if item at hand is a block
-        ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
-        Material material = Material.fromId(usedItem.getMaterialId());
-        if(material == Material.AIR) {
+        final ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
+        final Material material = Material.fromId(usedItem.getMaterialId());
+        if (material == Material.AIR) {
             return;
         }
 
         // Get the newly placed block position
-        int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
-        int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
-        int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
+        final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
+        final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
+        final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
 
         blockPosition.add(offsetX, offsetY, offsetZ);
 
 
-        Chunk chunk = instance.getChunkAt(blockPosition);
+        final Chunk chunk = instance.getChunkAt(blockPosition);
         boolean refreshChunk = false;
 
         if (material.isBlock()) {
-            Block block = material.getBlock();
-            Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Block block = material.getBlock();
+            final Set<Entity> entities = instance.getChunkEntities(chunk);
             boolean intersect = false;
             if (block.isSolid()) {
                 for (Entity entity : entities) {
@@ -86,8 +86,8 @@ public class BlockPlacementListener {
 
             if (!intersect) {
                 // BlockPlacementRule check
-                BlockManager blockManager = MinecraftServer.getBlockManager();
-                BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
+                final BlockManager blockManager = MinecraftServer.getBlockManager();
+                final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
                 short blockid = block.getBlockId();
                 if (blockPlacementRule != null) {
                     blockid = blockPlacementRule.blockPlace(instance, block, blockFace, player);

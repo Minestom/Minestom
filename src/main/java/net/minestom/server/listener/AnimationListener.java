@@ -9,7 +9,7 @@ public class AnimationListener {
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         AnimationEvent animationEvent = new AnimationEvent(player, packet.hand);
         player.callCancellableEvent(AnimationEvent.class, animationEvent, () -> {
-            Player.Hand hand = animationEvent.getHand();
+            final Player.Hand hand = animationEvent.getHand();
             switch (hand) {
                 case MAIN:
                     player.swingMainHand();

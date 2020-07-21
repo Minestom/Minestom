@@ -20,7 +20,7 @@ public class StatusListener {
                 List<StatisticsPacket.Statistic> statisticList = new ArrayList<>();
                 StatisticsPacket statisticsPacket = new StatisticsPacket();
 
-                Map<PlayerStatistic, Integer> playerStatisticValueMap = player.getStatisticValueMap();
+                final Map<PlayerStatistic, Integer> playerStatisticValueMap = player.getStatisticValueMap();
                 for (Map.Entry<PlayerStatistic, Integer> entry : playerStatisticValueMap.entrySet()) {
                     PlayerStatistic playerStatistic = entry.getKey();
                     int value = entry.getValue();

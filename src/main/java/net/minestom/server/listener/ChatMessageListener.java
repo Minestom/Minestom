@@ -6,6 +6,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerCommandEvent;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
@@ -15,18 +16,20 @@ import java.util.function.Function;
 
 public class ChatMessageListener {
 
+    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
     public static void listener(ClientChatMessagePacket packet, Player player) {
         String message = packet.message;
 
-        CommandManager commandManager = MinecraftServer.getCommandManager();
-        String cmdPrefix = commandManager.getCommandPrefix();
+        String cmdPrefix = COMMAND_MANAGER.getCommandPrefix();
         if (message.startsWith(cmdPrefix)) {
             // The message is a command
             message = message.replaceFirst(cmdPrefix, "");
 
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, message);
             player.callCancellableEvent(PlayerCommandEvent.class, playerCommandEvent, () -> {
-                commandManager.execute(player, playerCommandEvent.getCommand());
+                COMMAND_MANAGER.execute(player, playerCommandEvent.getCommand());
             });
 
             // Do not call chat event
@@ -34,13 +37,13 @@ public class ChatMessageListener {
         }
 
 
-        Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, message);
 
         // Call the event
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
 
-            Function<PlayerChatEvent, RichMessage> formatFunction = playerChatEvent.getChatFormatFunction();
+            final Function<PlayerChatEvent, RichMessage> formatFunction = playerChatEvent.getChatFormatFunction();
 
             RichMessage textObject;
 
@@ -52,9 +55,9 @@ public class ChatMessageListener {
                 textObject = buildDefaultChatMessage(playerChatEvent);
             }
 
-            Collection<Player> recipients = playerChatEvent.getRecipients();
+            final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
-                String jsonMessage = textObject.toString();
+                final String jsonMessage = textObject.toString();
 
                 // Send the message with the correct player UUID
                 ChatMessagePacket chatMessagePacket =
@@ -68,11 +71,11 @@ public class ChatMessageListener {
     }
 
     private static RichMessage buildDefaultChatMessage(PlayerChatEvent chatEvent) {
-        String username = chatEvent.getSender().getUsername();
+        final String username = chatEvent.getSender().getUsername();
 
-        ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
+        final ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
 
-        RichMessage richMessage = RichMessage.of(usernameText)
+        final RichMessage richMessage = RichMessage.of(usernameText)
                 .setHoverEvent(ChatHoverEvent.showText(ColoredText.of(ChatColor.GRAY + "Its " + username)))
                 .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + " "))
                 .append(ColoredText.of(" " + chatEvent.getMessage()));

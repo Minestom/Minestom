@@ -7,6 +7,10 @@ import net.minestom.server.utils.validate.Check;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represent multiple {@link ColoredText} batched together with the possibility to add
+ * click & hover events
+ */
 public class RichMessage {
 
     private List<RichComponent> components = new ArrayList<>();

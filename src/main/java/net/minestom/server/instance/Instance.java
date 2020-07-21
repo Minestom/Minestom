@@ -33,6 +33,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
+/**
+ * Instances are what are called "worlds" in Minecraft
+ * <p>
+ * An instance has entities and chunks, each instance contains its own entity list but the
+ * chunk implementation has to be defined, see {@link InstanceContainer}
+ */
 public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
@@ -119,6 +125,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void unloadChunk(Chunk chunk);
 
     /**
+     * Get the specified chunk
+     *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
@@ -126,6 +134,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
+     * Save a chunk into the defined storage folder
+     *
      * @param chunk    the chunk to save
      * @param callback called when the chunk is done saving
      * @throws NullPointerException if {@link #getStorageFolder()} returns null
@@ -133,17 +143,23 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void saveChunkToStorageFolder(Chunk chunk, Runnable callback);
 
     /**
+     * Save multiple chunks into the defined storage folder
+     *
      * @param callback called when the chunks are done saving
      * @throws NullPointerException if {@link #getStorageFolder()} returns null
      */
     public abstract void saveChunksToStorageFolder(Runnable callback);
 
     /**
+     * Create a new block batch linked to this instance
+     *
      * @return a BlockBatch linked to the instance
      */
     public abstract BlockBatch createBlockBatch();
 
     /**
+     * Create a new chunk batch linked to this instance and the specified chunk
+     *
      * @param chunk the chunk to modify
      * @return a ChunkBatch linked to {@code chunk}
      * @throws NullPointerException if {@code chunk} is null
@@ -151,26 +167,36 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract ChunkBatch createChunkBatch(Chunk chunk);
 
     /**
+     * Get the instance chunk generator
+     *
      * @return the chunk generator of the instance
      */
     public abstract ChunkGenerator getChunkGenerator();
 
     /**
+     * Change the instance chunk generator
+     *
      * @param chunkGenerator the new chunk generator of the instance
      */
     public abstract void setChunkGenerator(ChunkGenerator chunkGenerator);
 
     /**
+     * Get all the instance's chunks
+     *
      * @return an unmodifiable containing all the loaded chunks of the instance
      */
     public abstract Collection<Chunk> getChunks();
 
     /**
+     * Get the instance storage folder
+     *
      * @return the storage folder of the instance
      */
     public abstract StorageFolder getStorageFolder();
 
     /**
+     * Change the instance storage folder
+     *
      * @param storageFolder the new storage folder of the instance
      */
     public abstract void setStorageFolder(StorageFolder storageFolder);

@@ -19,7 +19,7 @@ public class KeepAliveListener {
         player.refreshAnswerKeepAlive(true);
 
         // Update latency
-        int latency = (int) (System.currentTimeMillis() - packet.id);
+        final int latency = (int) (System.currentTimeMillis() - packet.id);
         player.refreshLatency(latency);
     }
 }

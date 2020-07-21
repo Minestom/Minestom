@@ -5,6 +5,9 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 
 import java.util.function.Consumer;
 
+/**
+ * Small utils class to create particle packet
+ */
 public class ParticleCreator {
 
     public static ParticlePacket createParticlePacket(Particle particle, boolean distance,

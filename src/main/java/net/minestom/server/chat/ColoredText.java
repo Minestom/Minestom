@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Represent a text with one or multiple colors
+ */
 public class ColoredText {
 
     private String message;

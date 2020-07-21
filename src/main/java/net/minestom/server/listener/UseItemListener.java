@@ -13,23 +13,23 @@ import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        PlayerInventory inventory = player.getInventory();
-        Player.Hand hand = packet.hand;
-        ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        final PlayerInventory inventory = player.getInventory();
+        final Player.Hand hand = packet.hand;
+        final ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 
-        Material material = Material.fromId(itemStack.getMaterialId());
+        final Material material = Material.fromId(itemStack.getMaterialId());
 
         // Equip armor with right click
         if (material.isArmor()) {
-            PlayerInventory playerInventory = player.getInventory();
+            final PlayerInventory playerInventory = player.getInventory();
             if (useItemEvent.isCancelled()) {
                 playerInventory.update();
                 return;
             }
 
-            ArmorEquipEvent.ArmorSlot armorSlot;
+            final ArmorEquipEvent.ArmorSlot armorSlot;
             if (material.isHelmet()) {
                 armorSlot = ArmorEquipEvent.ArmorSlot.HELMET;
             } else if (material.isChestplate()) {
@@ -41,7 +41,7 @@ public class UseItemListener {
             }
             ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, itemStack, armorSlot);
             player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-            ItemStack armorItem = armorEquipEvent.getArmorItem();
+            final ItemStack armorItem = armorEquipEvent.getArmorItem();
 
             if (hand == Player.Hand.MAIN) {
                 playerInventory.setItemInMainHand(ItemStack.getAirItem());
@@ -66,7 +66,7 @@ public class UseItemListener {
         }
 
         ArmAnimationEvent armAnimationEvent = null;
-        boolean offhand = hand == Player.Hand.OFF;
+        final boolean offhand = hand == Player.Hand.OFF;
         boolean riptideSpinAttack = false;
 
         if (material == Material.BOW) {
