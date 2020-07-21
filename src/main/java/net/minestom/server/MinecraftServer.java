@@ -298,6 +298,10 @@ public class MinecraftServer {
         start(address, port, null, bungeecordEnabled);
     }
 
+    public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+        start(address, port, responseDataConsumer, false);
+    }
+
     /**
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
