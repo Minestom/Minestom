@@ -33,7 +33,7 @@ public final class UpdateManager {
     protected UpdateManager() {
     }
 
-    public void start() {
+    public void start(final boolean bungeecordEnabled) {
         mainUpdate.execute(() -> {
 
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
@@ -47,15 +47,17 @@ public final class UpdateManager {
                 currentTime = System.nanoTime();
 
                 // Keep Alive Handling
-                final long time = System.currentTimeMillis();
-                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
-                for (Player player : connectionManager.getOnlinePlayers()) {
-                    final long lastKeepAlive = time - player.getLastKeepAlive();
-                    if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
-                        player.refreshKeepAlive(time);
-                        player.getPlayerConnection().sendPacket(keepAlivePacket);
-                    } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                        player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
+                if(!bungeecordEnabled) {
+                    final long time = System.currentTimeMillis();
+                    final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
+                    for (Player player : connectionManager.getOnlinePlayers()) {
+                        final long lastKeepAlive = time - player.getLastKeepAlive();
+                        if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+                            player.refreshKeepAlive(time);
+                            player.getPlayerConnection().sendPacket(keepAlivePacket);
+                        } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                            player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
+                        }
                     }
                 }
 
