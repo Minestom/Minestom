@@ -53,6 +53,7 @@ public class PlayerInit {
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setTimeRate(150);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);

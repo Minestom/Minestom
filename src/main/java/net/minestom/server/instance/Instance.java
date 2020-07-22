@@ -18,12 +18,15 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
@@ -46,6 +49,15 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private DimensionType dimensionType;
 
     private WorldBorder worldBorder;
+
+    // Tick since the creation of the instance
+    private long worldAge;
+
+    // The time of the instance
+    private long time;
+    private int timeRate = 1;
+    private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.TICK);
+    private long lastTimeUpdate;
 
     private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
@@ -293,6 +305,83 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public DimensionType getDimensionType() {
         return dimensionType;
+    }
+
+    /**
+     * Get the age of this instance in tick
+     *
+     * @return the age of this instance in tick
+     */
+    public long getWorldAge() {
+        return worldAge;
+    }
+
+    /**
+     * Get the current time in the instance (sun/moon)
+     *
+     * @return the time in the instance
+     */
+    public long getTime() {
+        return time;
+    }
+
+    /**
+     * Change the current time in the instance, from 0 to 24000
+     * <p>
+     * 0 = sunrise
+     * 6000 = noon
+     * 12000 = sunset
+     * 18000 = midnight
+     * <p>
+     * This method is unaffected by {@link #getTimeRate()}
+     *
+     * @param time the new time of the instance
+     */
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    /**
+     * Get the rate of the time passing, it is 1 by default
+     *
+     * @return the time rate of the instance
+     */
+    public int getTimeRate() {
+        return timeRate;
+    }
+
+    /**
+     * Change the time rate of the instance
+     * <p>
+     * 1 is the default value and can be set to 0 to be completely disabled (constant time)
+     *
+     * @param timeRate the new time rate of the instance
+     * @throws IllegalStateException if {@code timeRate} is lower than 0
+     */
+    public void setTimeRate(int timeRate) {
+        Check.stateCondition(timeRate < 0, "The time rate cannot be lower than 0");
+        this.timeRate = timeRate;
+    }
+
+    /**
+     * Get the rate at which the client is updated with the current instance time
+     *
+     * @return the client update rate for time related packet
+     */
+    public UpdateOption getTimeUpdate() {
+        return timeUpdate;
+    }
+
+    /**
+     * Change the rate at which the client is updated about the time
+     * <p>
+     * Setting it to null means that the client will never know about time change
+     * (but will still change server-side)
+     *
+     * @param timeUpdate the new update rate concerning time
+     */
+    public void setTimeUpdate(UpdateOption timeUpdate) {
+        this.timeUpdate = timeUpdate;
     }
 
     /**
@@ -660,7 +749,21 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             }
             nextTick.clear();
         }
-        worldBorder.update();
+        {
+            // time
+            this.worldAge++;
+
+            this.time += 1 * timeRate;
+
+            if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
+                TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
+                timeUpdatePacket.worldAge = worldAge;
+                timeUpdatePacket.timeOfDay = this.time;
+                PacketWriterUtils.writeAndSend(getPlayers(), timeUpdatePacket);
+            }
+
+        }
+        this.worldBorder.update();
     }
 
     /**
