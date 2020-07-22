@@ -270,7 +270,7 @@ public class Player extends LivingEntity implements CommandSender {
             return false;
 
         // Compute final heart based on health and additional hearts
-        boolean result = super.damage(type, value);
+        final boolean result = super.damage(type, value);
         if (result) {
             lastDamageSource = type;
         }
@@ -301,7 +301,7 @@ public class Player extends LivingEntity implements CommandSender {
         // Target block stage
         if (targetCustomBlock != null) {
             final byte animationCount = 10;
-            long since = time - targetBlockTime;
+            final long since = time - targetBlockTime;
             byte stage = (byte) (since / (blockBreakTime / animationCount));
             stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
             if (stage != targetLastStage) {
@@ -315,12 +315,12 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Experience orb pickup
-        Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-        Set<Entity> entities = instance.getChunkEntities(chunk);
+        final Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
+        final Set<Entity> entities = instance.getChunkEntities(chunk);
         for (Entity entity : entities) {
             if (entity instanceof ExperienceOrb) {
-                ExperienceOrb experienceOrb = (ExperienceOrb) entity;
-                BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
+                final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
+                final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                 if (expandedBoundingBox.intersect(itemBoundingBox)) {
                     synchronized (experienceOrb) {
                         if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
@@ -344,11 +344,11 @@ public class Player extends LivingEntity implements CommandSender {
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
 
                 // Refresh hand
-                boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
                 refreshActiveHand(false, isOffHand, false);
 
-                ItemStack foodItem = itemUpdateStateEvent.getItemStack();
-                boolean isFood = foodItem.getMaterial().isFood();
+                final ItemStack foodItem = itemUpdateStateEvent.getItemStack();
+                final boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
@@ -508,7 +508,7 @@ public class Player extends LivingEntity implements CommandSender {
         if (player == this)
             return false;
 
-        boolean result = super.addViewer(player);
+        final boolean result = super.addViewer(player);
         if (!result)
             return false;
 
@@ -537,7 +537,7 @@ public class Player extends LivingEntity implements CommandSender {
         Check.notNull(instance, "instance cannot be null!");
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
-        boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
+        final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
         for (Chunk viewableChunk : viewableChunks) {
             viewableChunk.removeViewer(this);
         }
@@ -549,14 +549,14 @@ public class Player extends LivingEntity implements CommandSender {
                 sendDimension(instanceDimensionType);
         }
 
-        long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
-        int length = visibleChunks.length;
+        final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+        final int length = visibleChunks.length;
 
         AtomicInteger counter = new AtomicInteger(0);
         for (int i = 0; i < length; i++) {
-            int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
-            int chunkX = chunkPos[0];
-            int chunkZ = chunkPos[1];
+            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
+            final int chunkX = chunkPos[0];
+            final int chunkZ = chunkPos[1];
             Consumer<Chunk> callback = (chunk) -> {
                 if (chunk != null) {
                     viewableChunks.add(chunk);
@@ -564,7 +564,7 @@ public class Player extends LivingEntity implements CommandSender {
                     instance.sendChunk(this, chunk);
                     updateViewPosition(chunk);
                 }
-                boolean isLast = counter.get() == length - 1;
+                final boolean isLast = counter.get() == length - 1;
                 if (isLast) {
                     // This is the last chunk to be loaded , spawn player
                     super.setInstance(instance);
@@ -606,7 +606,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
-     * Setting {@code destroyStage} to -1 reset the break animation
+     * Setting {@code destroyStage} to -1 resets the break animation
      *
      * @param blockPosition the position of the block
      * @param destroyStage  the destroy stage
@@ -899,6 +899,8 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Change the player skin
+     * <p>
+     * This does remove the player for all viewers to spawn it again with the correct new skin
      *
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      */
@@ -908,8 +910,8 @@ public class Player extends LivingEntity implements CommandSender {
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
 
-        PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+        final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
+        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
@@ -1007,7 +1009,6 @@ public class Player extends LivingEntity implements CommandSender {
     public void setResourcePack(ResourcePack resourcePack) {
         Check.notNull(resourcePack, "The resource pack cannot be null");
         final String url = resourcePack.getUrl();
-        Check.notNull(url, "The resource pack url cannot be null");
         final String hash = resourcePack.getHash();
 
         ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
@@ -1157,15 +1158,24 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(setExperiencePacket);
     }
 
+    /**
+     * Called when the player changes chunk (move from one to another)
+     * <p>
+     * It does remove and add the player from the chunks viewers list when removed or added
+     * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}
+     *
+     * @param lastChunk the last player chunk
+     * @param newChunk  the current/new player chunk
+     */
     protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {
-        long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
-        long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
-        int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
-        int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
+        final long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
+        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.CHUNK_VIEW_DISTANCE);
+        final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
+        final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
         // Unload old chunks
         for (int index : oldChunks) {
-            int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunks[index]);
+            final int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunks[index]);
             UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkPos[0];
             unloadChunkPacket.chunkZ = chunkPos[1];
@@ -1180,8 +1190,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Load new chunks
         for (int i = 0; i < newChunks.length; i++) {
-            int index = newChunks[i];
-            int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
+            final int index = newChunks[i];
+            final int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
@@ -1567,7 +1577,8 @@ public class Player extends LivingEntity implements CommandSender {
         this.permissionLevel = permissionLevel;
 
         // Magic values: https://wiki.vg/Entity_statuses#Player
-        byte permissionLevelStatus = (byte) (24 + permissionLevel);
+        // TODO remove magic values
+        final byte permissionLevelStatus = (byte) (24 + permissionLevel);
         triggerStatus(permissionLevelStatus);
     }
 
@@ -1580,7 +1591,8 @@ public class Player extends LivingEntity implements CommandSender {
         this.reducedDebugScreenInformation = reduced;
 
         // Magic values: https://wiki.vg/Entity_statuses#Player
-        byte debugScreenStatus = (byte) (reduced ? 22 : 23);
+        // TODO remove magic values
+        final byte debugScreenStatus = (byte) (reduced ? 22 : 23);
         triggerStatus(debugScreenStatus);
     }
 

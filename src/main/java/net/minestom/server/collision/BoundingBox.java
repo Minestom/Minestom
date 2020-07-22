@@ -57,9 +57,9 @@ public class BoundingBox {
         float minZ = z;
         float maxZ = z + offsetZ;
 
-        boolean checkX = getMinX() < maxX && getMaxX() > minX;
-        boolean checkY = getMinY() < maxY && getMaxY() > minY;
-        boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
+        final boolean checkX = getMinX() < maxX && getMaxX() > minX;
+        final boolean checkY = getMinY() < maxY && getMaxY() > minY;
+        final boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
 
         return checkX && checkY && checkZ;
     }
@@ -75,6 +75,8 @@ public class BoundingBox {
     }
 
     /**
+     * Create a new bounding box linked to the same entity with expanded size
+     *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset
@@ -85,6 +87,8 @@ public class BoundingBox {
     }
 
     /**
+     * Create a new bounding box linked to the same entity with contracted size
+     *
      * @param x the X offset
      * @param y the Y offset
      * @param z the Z offset

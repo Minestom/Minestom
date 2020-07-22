@@ -1,15 +1,29 @@
 package net.minestom.server.reader;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.network.packet.PacketReader;
 
+/**
+ * Class used to convert an array of bytes to a {@link SerializableData}
+ * <p>
+ * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
+ */
 public class DataReader {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
+    /**
+     * Convert a buffer into a {@link SerializableData}
+     * <p>
+     * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
+     *
+     * @param buffer the data
+     * @return a {@link SerializableData} based on the data input
+     */
     public static SerializableData readData(ByteBuf buffer) {
         SerializableData data = new SerializableData();
         try {
@@ -48,6 +62,17 @@ public class DataReader {
         }
 
         return data;
+    }
+
+    /**
+     * Convert a bytes array to a {@link SerializableData}
+     *
+     * @param data the data
+     * @return a {@link SerializableData} based on the data input
+     * @see #readData(ByteBuf)
+     */
+    public static SerializableData readData(byte[] data) {
+        return readData(Unpooled.wrappedBuffer(data));
     }
 
 }

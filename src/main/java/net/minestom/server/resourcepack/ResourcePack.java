@@ -1,5 +1,7 @@
 package net.minestom.server.resourcepack;
 
+import net.minestom.server.utils.validate.Check;
+
 /**
  * Represent a resource pack which can be send to a player
  */
@@ -9,6 +11,7 @@ public class ResourcePack {
     private String hash;
 
     public ResourcePack(String url, String hash) {
+        Check.notNull(url, "The resource pack url cannot be null");
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;

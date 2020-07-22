@@ -351,7 +351,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         if (chunk == null)
             return new HashSet<>();
 
-        long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         return Collections.unmodifiableSet(getEntitiesInChunk(index));
     }
 

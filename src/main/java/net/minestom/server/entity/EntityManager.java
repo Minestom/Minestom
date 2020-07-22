@@ -33,7 +33,7 @@ public final class EntityManager {
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(playerCache);
             playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
-            Instance spawningInstance = loginEvent.getSpawningInstance();
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
@@ -68,8 +68,8 @@ public final class EntityManager {
         // Add him to the list and change his username/uuid if changed
         this.waitingPlayers.add(player);
 
-        String username = playerPreLoginEvent.getUsername();
-        UUID uuid = playerPreLoginEvent.getPlayerUuid();
+        final String username = playerPreLoginEvent.getUsername();
+        final UUID uuid = playerPreLoginEvent.getPlayerUuid();
 
         player.setUsername(username);
         player.setUuid(uuid);

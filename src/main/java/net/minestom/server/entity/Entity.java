@@ -929,10 +929,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             }
         }
 
-        Instance instance = getInstance();
+        final Instance instance = getInstance();
         if (instance != null) {
-            Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
-            Chunk newChunk = instance.getChunkAt(x, z);
+            final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
+            final Chunk newChunk = instance.getChunkAt(x, z);
             if (lastChunk != null && newChunk != null && lastChunk != newChunk) {
                 synchronized (instance) {
                     instance.removeEntityFromChunk(this, lastChunk);
@@ -952,24 +952,24 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     private void updateView(Chunk lastChunk, Chunk newChunk) {
-        boolean isPlayer = this instanceof Player;
+        final boolean isPlayer = this instanceof Player;
 
         if (isPlayer)
             ((Player) this).onChunkChange(lastChunk, newChunk); // Refresh loaded chunk
 
         // Refresh entity viewable list
-        long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
-        long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
+        final long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
+        final long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
 
-        int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
+        final int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
         for (int index : oldChunksEntity) {
-            int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
-            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            final int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
+            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
             if (chunk == null)
                 continue;
             instance.getChunkEntities(chunk).forEach(ent -> {
                 if (ent instanceof Player) {
-                    Player player = (Player) ent;
+                    final Player player = (Player) ent;
                     if (isAutoViewable())
                         removeViewer(player);
                     if (isPlayer) {
@@ -981,10 +981,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             });
         }
 
-        int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
+        final int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
         for (int index : newChunksEntity) {
-            int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
-            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            final int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
+            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
             if (chunk == null)
                 continue;
             instance.getChunkEntities(chunk).forEach(ent -> {
@@ -1066,12 +1066,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      */
     public boolean sameChunk(Position position) {
         Check.notNull(position, "Position cannot be null");
-        Position pos = getPosition();
-        int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
-        int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getZ()));
+        final Position pos = getPosition();
+        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
+        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getZ()));
 
-        int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
-        int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
+        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
+        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
 
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }

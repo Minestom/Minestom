@@ -14,8 +14,8 @@ import java.util.Iterator;
  */
 public class PlayerSkin {
 
-    private String textures;
-    private String signature;
+    private final String textures;
+    private final String signature;
 
     public PlayerSkin(String textures, String signature) {
         this.textures = textures;

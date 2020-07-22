@@ -453,7 +453,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
 
-        int length = Attribute.values().length;
+        final int length = Attribute.values().length;
         EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[length];
         for (int i = 0; i < length; i++) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();

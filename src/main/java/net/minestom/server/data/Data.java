@@ -29,14 +29,38 @@ public class Data {
 
     protected ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
 
+    /**
+     * Set a value to a specific key
+     *
+     * @param key   the key
+     * @param value the value object
+     * @param type  the value type
+     * @param <T>   the value generic
+     */
     public <T> void set(String key, T value, Class<T> type) {
         this.data.put(key, value);
     }
 
+    /**
+     * Retrieve a value based on its key
+     *
+     * @param key the key
+     * @param <T> the value type
+     * @return the data associated with the key
+     * @throws NullPointerException if the key is not found
+     */
     public <T> T get(String key) {
         return (T) data.get(key);
     }
 
+    /**
+     * Retrieve a value based on its key, give a default value if not found
+     *
+     * @param key          the key
+     * @param defaultValue the value to return if the key is not found
+     * @param <T>          the value type
+     * @return {@link #get(String)} if found, {@code defaultValue} otherwise
+     */
     public <T> T getOrDefault(String key, T defaultValue) {
         return (T) data.getOrDefault(key, defaultValue);
     }

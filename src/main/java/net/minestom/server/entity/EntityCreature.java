@@ -63,24 +63,24 @@ public abstract class EntityCreature extends LivingEntity {
      * @param updateView should the entity move its head toward the position?
      */
     public void move(float x, float y, float z, boolean updateView) {
-        Position position = getPosition();
+        final Position position = getPosition();
         Position newPosition = new Position();
         // Calculate collisions boxes
         onGround = CollisionUtils.handlePhysics(this, new Vector(x, y, z), newPosition, new Vector());
         // Refresh target position
-        float newX = newPosition.getX();
-        float newY = newPosition.getY();
-        float newZ = newPosition.getZ();
+        final float newX = newPosition.getX();
+        final float newY = newPosition.getY();
+        final float newZ = newPosition.getZ();
 
         // Creatures cannot move in unload chunk
         if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
             return;
 
-        float lastYaw = position.getYaw();
-        float radians = (float) Math.atan2(newZ - position.getZ(), newX - position.getX());
+        final float lastYaw = position.getYaw();
+        final float radians = (float) Math.atan2(newZ - position.getZ(), newX - position.getX());
 
-        float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
-        float pitch = position.getPitch(); // TODO
+        final float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
+        final float pitch = position.getPitch(); // TODO
 
         final short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
         final short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
@@ -289,14 +289,14 @@ public abstract class EntityCreature extends LivingEntity {
      * @param speed     define how far the entity will move
      */
     public void moveTowards(Position direction, float speed) {
-        float radians = (float) Math.atan2(direction.getZ() - position.getZ(), direction.getX() - position.getX());
-        float speedX = (float) (Math.cos(radians) * speed);
-        float speedZ = (float) (Math.sin(radians) * speed);
+        final float radians = (float) Math.atan2(direction.getZ() - position.getZ(), direction.getX() - position.getX());
+        final float speedX = (float) (Math.cos(radians) * speed);
+        final float speedZ = (float) (Math.sin(radians) * speed);
         move(speedX, 0, speedZ, true);
     }
 
     private void setNextPathPosition() {
-        BlockPosition blockPosition = blockPositions.pollFirst();
+        final BlockPosition blockPosition = blockPositions.pollFirst();
 
         if (blockPosition == null) {
             this.blockPositions = null;
@@ -312,7 +312,7 @@ public abstract class EntityCreature extends LivingEntity {
     private void pathProgress() {
         if (blockPositions != null) {
             if (targetPosition != null) {
-                float distance = getPosition().getDistance(targetPosition);
+                final float distance = getPosition().getDistance(targetPosition);
                 //System.out.println("test: "+distance);
                 if (distance < 1f) {
                     setNextPathPosition();

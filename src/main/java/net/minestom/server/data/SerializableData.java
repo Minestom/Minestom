@@ -16,6 +16,17 @@ public class SerializableData extends Data {
 
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
+    /**
+     * Set a value to a specific key
+     * <p>
+     * WARNING: the type needs to be registered in {@link DataManager}
+     *
+     * @param key   the key
+     * @param value the value object
+     * @param type  the value type
+     * @param <T>   the value generic
+     * @throws UnsupportedOperationException if {@code type} is not registered in {@link DataManager}
+     */
     @Override
     public <T> void set(String key, T value, Class<T> type) {
         if (DATA_MANAGER.getDataType(type) == null) {
@@ -34,6 +45,15 @@ public class SerializableData extends Data {
         return data;
     }
 
+    /**
+     * Serialize the data into an array of bytes
+     * <p>
+     * Use {@link net.minestom.server.reader.DataReader#readData(byte[])}
+     * to convert it back
+     *
+     * @return the array representation of this data object
+     * @throws IOException if an error occur when serializing the data
+     */
     public byte[] getSerializedData() throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(output);

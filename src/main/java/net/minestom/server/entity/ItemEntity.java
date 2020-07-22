@@ -68,8 +68,8 @@ public class ItemEntity extends ObjectEntity {
                 (mergeUpdateOption == null || !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
             this.lastMergeCheck = time;
 
-            Chunk chunk = instance.getChunkAt(getPosition());
-            Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Chunk chunk = instance.getChunkAt(getPosition());
+            final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
 

@@ -30,7 +30,7 @@ public abstract class ObjectEntity extends Entity {
 
     @Override
     public boolean addViewer(Player player) {
-        boolean result = super.addViewer(player);
+        final boolean result = super.addViewer(player);
         if (!result)
             return false;
 
