@@ -334,11 +334,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * 18000 = midnight
      * <p>
      * This method is unaffected by {@link #getTimeRate()}
+     * <p>
+     * It does send the new time to all players in the instance, unaffected by {@link #getTimeUpdate()}
      *
      * @param time the new time of the instance
      */
     public void setTime(long time) {
         this.time = time;
+        PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());
     }
 
     /**
@@ -382,6 +385,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void setTimeUpdate(UpdateOption timeUpdate) {
         this.timeUpdate = timeUpdate;
+    }
+
+    private TimeUpdatePacket getTimePacket() {
+        TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
+        timeUpdatePacket.worldAge = worldAge;
+        timeUpdatePacket.timeOfDay = time;
+        return timeUpdatePacket;
     }
 
     /**
@@ -756,10 +766,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             this.time += 1 * timeRate;
 
             if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
-                TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
-                timeUpdatePacket.worldAge = worldAge;
-                timeUpdatePacket.timeOfDay = this.time;
-                PacketWriterUtils.writeAndSend(getPlayers(), timeUpdatePacket);
+                PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());
                 this.lastTimeUpdate = time;
             }
 
