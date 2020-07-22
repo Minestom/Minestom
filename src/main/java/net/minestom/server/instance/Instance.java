@@ -760,6 +760,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 timeUpdatePacket.worldAge = worldAge;
                 timeUpdatePacket.timeOfDay = this.time;
                 PacketWriterUtils.writeAndSend(getPlayers(), timeUpdatePacket);
+                this.lastTimeUpdate = time;
             }
 
         }

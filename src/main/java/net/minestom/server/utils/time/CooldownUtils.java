@@ -3,7 +3,7 @@ package net.minestom.server.utils.time;
 public class CooldownUtils {
 
     public static boolean hasCooldown(long currentTime, long lastUpdate, TimeUnit timeUnit, int cooldown) {
-        long cooldownMs = timeUnit.toMilliseconds(cooldown);
+        final long cooldownMs = timeUnit.toMilliseconds(cooldown);
         return currentTime - lastUpdate < cooldownMs;
     }
 
