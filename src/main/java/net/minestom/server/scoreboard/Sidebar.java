@@ -6,6 +6,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
+import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
@@ -84,7 +85,7 @@ public class Sidebar implements Viewable {
     }
 
     public void updateLineContent(String id, ColoredText content) {
-        ScoreboardLine scoreboardLine = getLine(id);
+        final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
             sendPacketToViewers(scoreboardLine.sidebarTeam.updatePrefix(content));
@@ -92,7 +93,7 @@ public class Sidebar implements Viewable {
     }
 
     public void updateLineScore(String id, int score) {
-        ScoreboardLine scoreboardLine = getLine(id);
+        final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.line = score;
             sendPacketToViewers(scoreboardLine.getLineScoreUpdatePacket(objectiveName, score));
@@ -111,7 +112,7 @@ public class Sidebar implements Viewable {
         synchronized (lines) {
             Iterator<ScoreboardLine> iterator = lines.iterator();
             while (iterator.hasNext()) {
-                ScoreboardLine line = iterator.next();
+                final ScoreboardLine line = iterator.next();
                 if (line.id.equals(id)) {
 
                     // Remove the line for current viewers
@@ -126,7 +127,7 @@ public class Sidebar implements Viewable {
 
     @Override
     public boolean addViewer(Player player) {
-        boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
@@ -247,5 +248,75 @@ public class Sidebar implements Viewable {
         }
 
     }
+
+    private static class SidebarTeam {
+
+        private String teamName;
+        private ColoredText prefix, suffix;
+        private String entityName;
+
+        private ColoredText teamDisplayName = ColoredText.of("displaynametest");
+        private byte friendlyFlags = 0x00;
+        private TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
+        private TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
+        private int teamColor = 2;
+
+
+        private SidebarTeam(String teamName, ColoredText prefix, ColoredText suffix, String entityName) {
+            this.teamName = teamName;
+            this.prefix = prefix;
+            this.suffix = suffix;
+            this.entityName = entityName;
+        }
+
+        private TeamsPacket getCreationPacket() {
+            TeamsPacket teamsPacket = new TeamsPacket();
+            teamsPacket.teamName = teamName;
+            teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
+            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.friendlyFlags = friendlyFlags;
+            teamsPacket.nameTagVisibility = nameTagVisibility;
+            teamsPacket.collisionRule = collisionRule;
+            teamsPacket.teamColor = teamColor;
+            teamsPacket.teamPrefix = prefix.toString();
+            teamsPacket.teamSuffix = suffix.toString();
+            teamsPacket.entities = new String[]{entityName};
+            return teamsPacket;
+        }
+
+        private TeamsPacket getDestructionPacket() {
+            TeamsPacket teamsPacket = new TeamsPacket();
+            teamsPacket.teamName = teamName;
+            teamsPacket.action = TeamsPacket.Action.REMOVE_TEAM;
+            return teamsPacket;
+        }
+
+        private TeamsPacket updatePrefix(ColoredText prefix) {
+            TeamsPacket teamsPacket = new TeamsPacket();
+            teamsPacket.teamName = teamName;
+            teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
+            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.friendlyFlags = friendlyFlags;
+            teamsPacket.nameTagVisibility = nameTagVisibility;
+            teamsPacket.collisionRule = collisionRule;
+            teamsPacket.teamColor = teamColor;
+            teamsPacket.teamPrefix = prefix.toString();
+            teamsPacket.teamSuffix = suffix.toString();
+            return teamsPacket;
+        }
+
+        private String getEntityName() {
+            return entityName;
+        }
+
+        private ColoredText getPrefix() {
+            return prefix;
+        }
+
+        private void refreshPrefix(ColoredText prefix) {
+            this.prefix = prefix;
+        }
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package net.minestom.server.network;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
@@ -47,7 +46,7 @@ public class PacketProcessor {
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
         );
 
-        ConnectionState connectionState = playerConnection.getConnectionState();
+        final ConnectionState connectionState = playerConnection.getConnectionState();
 
         //if (!printBlackList.contains(id)) {
         //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
@@ -67,20 +66,18 @@ public class PacketProcessor {
 
         switch (connectionState) {
             case PLAY:
-                Player player = playerConnection.getPlayer();
+                final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packet.packetId);
                 playPacket.read(packetReader);
-                //System.out.println("play");
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
-                ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
+                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
                 loginPacket.read(packetReader);
-                //System.out.println("login");
                 loginPacket.process(playerConnection, connectionManager);
                 break;
             case STATUS:
-                ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
+                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
                 statusPacket.read(packetReader);
 
                 statusPacket.process(playerConnection, connectionManager);
@@ -90,10 +87,6 @@ public class PacketProcessor {
 
     public PlayerConnection getPlayerConnection(ChannelHandlerContext channel) {
         return connectionPlayerConnectionMap.get(channel);
-    }
-
-    public boolean hasPlayerConnection(ChannelHandlerContext channel) {
-        return connectionPlayerConnectionMap.containsKey(channel);
     }
 
     public void removePlayerConnection(ChannelHandlerContext channel) {

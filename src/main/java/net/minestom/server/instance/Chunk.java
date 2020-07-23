@@ -102,7 +102,7 @@ public final class Chunk implements Viewable {
     }
 
     private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         if (blockId != 0
                 || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
             this.blocksId[index] = blockId;
@@ -149,7 +149,7 @@ public final class Chunk implements Viewable {
     }
 
     public void setBlockData(int x, int y, int z, Data data) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         if (data != null) {
             this.blocksData.put(index, data);
         } else {
@@ -158,39 +158,39 @@ public final class Chunk implements Viewable {
     }
 
     public short getBlockId(int x, int y, int z) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return 0; // TODO: custom invalid block
         }
-        short id = blocksId[index];
+        final short id = blocksId[index];
         return id;
     }
 
     public short getCustomBlockId(int x, int y, int z) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return 0; // TODO: custom invalid block
         }
-        short id = customBlocksId[index];
+        final short id = customBlocksId[index];
         return id;
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksId.length)) {
             return null; // TODO: custom invalid block
         }
-        short id = customBlocksId[index];
+        final short id = customBlocksId[index];
         return id != 0 ? BLOCK_MANAGER.getCustomBlock(id) : null;
     }
 
     protected CustomBlock getCustomBlock(int index) {
-        int[] pos = ChunkUtils.indexToChunkPosition(index);
+        final int[] pos = ChunkUtils.indexToChunkPosition(index);
         return getCustomBlock(pos[0], pos[1], pos[2]);
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
-        int blockIndex = getBlockIndex(x, y, z);
+        final int blockIndex = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
             return;
         }
@@ -200,7 +200,7 @@ public final class Chunk implements Viewable {
     }
 
     protected void refreshBlockId(int x, int y, int z, short blockId) {
-        int blockIndex = getBlockIndex(x, y, z);
+        final int blockIndex = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
             return;
         }
@@ -209,13 +209,13 @@ public final class Chunk implements Viewable {
     }
 
     protected void refreshBlockValue(int x, int y, int z, short blockId) {
-        CustomBlock customBlock = getCustomBlock(x, y, z);
-        short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
+        final CustomBlock customBlock = getCustomBlock(x, y, z);
+        final short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
         refreshBlockValue(x, y, z, blockId, customBlockId);
     }
 
     public Data getData(int x, int y, int z) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         return getData(index);
     }
 
@@ -243,12 +243,12 @@ public final class Chunk implements Viewable {
             this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
             final int[] blockPos = ChunkUtils.indexToPosition(index, chunkX, chunkZ);
-            int x = blockPos[0];
-            int y = blockPos[1];
-            int z = blockPos[2];
+            final int x = blockPos[0];
+            final int y = blockPos[1];
+            final int z = blockPos[2];
 
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
-            Data data = getData(index);
+            final BlockPosition blockPosition = new BlockPosition(x, y, z);
+            final Data data = getData(index);
             customBlock.update(instance, blockPosition, data);
         }
     }
@@ -270,7 +270,7 @@ public final class Chunk implements Viewable {
     }
 
     private boolean isBlockEntity(short blockId) {
-        Block block = Block.fromId(blockId);
+        final Block block = Block.fromId(blockId);
         return block.hasBlockEntity();
     }
 
@@ -294,16 +294,15 @@ public final class Chunk implements Viewable {
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (short y = 0; y < CHUNK_SIZE_Y; y++) {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
-                    int index = getBlockIndex(x, y, z);
+                    final int index = getBlockIndex(x, y, z);
 
-                    short blockId = blocksId[index];
-                    short customBlockId = customBlocksId[index];
+                    final short blockId = blocksId[index];
+                    final short customBlockId = customBlocksId[index];
 
                     if (blockId == 0 && customBlockId == 0)
                         continue;
 
-                    Data data = blocksData.get(index);
-                    boolean hasData = data != null;
+                    final Data data = blocksData.get(index);
 
                     // Chunk coordinates
                     dos.writeInt(x);
@@ -315,10 +314,10 @@ public final class Chunk implements Viewable {
                     dos.writeShort(customBlockId);
 
                     // Data
-                    hasData = (data != null && (data instanceof SerializableData)) && hasData;
+                    final boolean hasData = (data != null && (data instanceof SerializableData));
                     dos.writeBoolean(hasData);
                     if (hasData) {
-                        byte[] d = ((SerializableData) data).getSerializedData();
+                        final byte[] d = ((SerializableData) data).getSerializedData();
                         dos.writeInt(d.length);
                         dos.write(d);
                     }
@@ -326,7 +325,7 @@ public final class Chunk implements Viewable {
             }
         }
 
-        byte[] result = output.toByteArray();
+        final byte[] result = output.toByteArray();
         return result;
     }
 
@@ -359,7 +358,7 @@ public final class Chunk implements Viewable {
 
     // Write the packet in the current thread
     public void refreshDataPacket() {
-        ByteBuf buffer = PacketUtils.writePacket(getFreshFullDataPacket());
+        final ByteBuf buffer = PacketUtils.writePacket(getFreshFullDataPacket());
         setFullDataPacket(buffer);
     }
 
@@ -389,7 +388,7 @@ public final class Chunk implements Viewable {
     // UNSAFE
     @Override
     public boolean addViewer(Player player) {
-        boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player);
 
         PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
@@ -399,7 +398,7 @@ public final class Chunk implements Viewable {
     // UNSAFE
     @Override
     public boolean removeViewer(Player player) {
-        boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player);
 
         PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);

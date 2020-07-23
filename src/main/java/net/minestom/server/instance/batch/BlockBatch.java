@@ -62,9 +62,9 @@ public class BlockBatch implements InstanceBatch {
         int counter = 0;
         for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
             counter++;
-            Chunk chunk = entry.getKey();
-            List<BlockData> dataList = entry.getValue();
-            boolean isLast = counter == data.size();
+            final Chunk chunk = entry.getKey();
+            final List<BlockData> dataList = entry.getValue();
+            final boolean isLast = counter == data.size();
             batchesPool.execute(() -> {
                 synchronized (chunk) {
                     if (!chunk.isLoaded())

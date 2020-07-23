@@ -19,7 +19,7 @@ public class PacketWriterUtils {
 
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<ByteBuf> consumer) {
         batchesPool.execute(() -> {
-            ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+            final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             consumer.accept(buffer);
         });
     }
@@ -31,7 +31,7 @@ public class PacketWriterUtils {
 
             final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             for (Player player : players) {
-                PlayerConnection playerConnection = player.getPlayerConnection();
+                final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (PlayerUtils.isNettyClient(player)) {
                     playerConnection.writePacket(buffer, true);
                 } else {

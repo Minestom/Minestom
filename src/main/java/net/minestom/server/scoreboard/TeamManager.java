@@ -3,6 +3,7 @@ package net.minestom.server.scoreboard;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+// TODO
 public final class TeamManager {
 
     // Represents all registered teams

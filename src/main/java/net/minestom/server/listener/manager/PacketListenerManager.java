@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketListenerManager {
 
-    private static ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     private Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
@@ -51,7 +51,7 @@ public class PacketListenerManager {
 
         final Class clazz = packet.getClass();
 
-        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
+        final PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
@@ -59,8 +59,8 @@ public class PacketListenerManager {
         }
 
 
-        PacketController packetController = new PacketController(packetListenerConsumer);
-        for (PacketConsumer packetConsumer : connectionManager.getPacketConsumers()) {
+        final PacketController packetController = new PacketController(packetListenerConsumer);
+        for (PacketConsumer packetConsumer : CONNECTION_MANAGER.getPacketConsumers()) {
             packetConsumer.accept(player, packetController, packet);
         }
 

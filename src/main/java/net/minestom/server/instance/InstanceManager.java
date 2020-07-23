@@ -36,7 +36,7 @@ public final class InstanceManager {
     }
 
     public SharedInstance createSharedInstance(SharedInstance sharedInstance) {
-        InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
+        final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
         Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
         instanceContainer.addSharedInstance(sharedInstance);
@@ -47,7 +47,7 @@ public final class InstanceManager {
     public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
         Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
 
-        SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
+        final SharedInstance sharedInstance = new SharedInstance(UUID.randomUUID(), instanceContainer);
         return createSharedInstance(sharedInstance);
     }
 

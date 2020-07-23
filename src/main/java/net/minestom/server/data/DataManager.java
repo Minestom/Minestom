@@ -70,6 +70,8 @@ public final class DataManager {
     }
 
     /**
+     * Get the data type associated with a class
+     *
      * @param clazz the data class
      * @param <T>   the data type
      * @return the {@link DataType} associated to the class

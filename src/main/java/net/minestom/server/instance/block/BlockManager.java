@@ -18,8 +18,8 @@ public class BlockManager {
      * @param customBlock the custom block to register
      */
     public void registerCustomBlock(CustomBlock customBlock) {
-        String identifier = customBlock.getIdentifier();
-        short id = customBlock.getCustomBlockId();
+        final String identifier = customBlock.getIdentifier();
+        final short id = customBlock.getCustomBlockId();
         this.customBlocksInternalId.put(id, customBlock);
         this.customBlocksId.put(identifier, customBlock);
     }
@@ -36,7 +36,7 @@ public class BlockManager {
      * @return the block placement rule associated with the id, null if not any
      */
     public BlockPlacementRule getBlockPlacementRule(short blockId) {
-        Block block = Block.fromId(blockId); // Convert block alternative
+        final Block block = Block.fromId(blockId); // Convert block alternative
         blockId = block.getBlockId();
         return this.placementRules.get(blockId);
     }

@@ -32,7 +32,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private static volatile byte lastInventoryId;
 
     private byte id;
-    private InventoryType inventoryType;
+    private final InventoryType inventoryType;
     private String title;
 
     private int size;
@@ -169,14 +169,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean addViewer(Player player) {
-        boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player);
         PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
         return result;
     }
 
     @Override
     public boolean removeViewer(Player player) {
-        boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player);
         this.cursorPlayersItem.remove(player);
         this.clickProcessor.clearCache(player);
         return result;
@@ -253,13 +253,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean leftClick(Player player, int slot) {
-        PlayerInventory playerInventory = player.getInventory();
-        ItemStack cursor = getCursorItem(player);
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
+        final PlayerInventory playerInventory = player.getInventory();
+        final ItemStack cursor = getCursorItem(player);
+        final boolean isInWindow = isClickInWindow(slot);
+        final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(this, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(this, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh()) {
             updateFromClick(clickResult, player);
@@ -281,12 +281,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean rightClick(Player player, int slot) {
-        PlayerInventory playerInventory = player.getInventory();
-        ItemStack cursor = getCursorItem(player);
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
+        final PlayerInventory playerInventory = player.getInventory();
+        final ItemStack cursor = getCursorItem(player);
+        final boolean isInWindow = isClickInWindow(slot);
+        final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(this, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.rightClick(this, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh()) {
             updateFromClick(clickResult, player);
@@ -308,13 +308,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean shiftClick(Player player, int slot) {
-        PlayerInventory playerInventory = player.getInventory();
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
-        ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
+        final PlayerInventory playerInventory = player.getInventory();
+        final boolean isInWindow = isClickInWindow(slot);
+        final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
+        final ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
 
 
-        InventoryClickResult clickResult;
+        final InventoryClickResult clickResult;
 
         if (isInWindow) {
             clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
@@ -360,12 +360,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean changeHeld(Player player, int slot, int key) {
-        PlayerInventory playerInventory = player.getInventory();
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
-        ItemStack heldItem = playerInventory.getItemStack(key);
+        final PlayerInventory playerInventory = player.getInventory();
+        final boolean isInWindow = isClickInWindow(slot);
+        final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
+        final ItemStack heldItem = playerInventory.getItemStack(key);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(this, player, slot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(this, player, slot, key, clicked, heldItem);
 
         if (clickResult.doRefresh()) {
             updateFromClick(clickResult, player);
@@ -395,13 +395,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean drop(Player player, int mode, int slot, int button) {
-        PlayerInventory playerInventory = player.getInventory();
-        boolean isInWindow = isClickInWindow(slot);
-        ItemStack clicked = slot == -999 ?
+        final PlayerInventory playerInventory = player.getInventory();
+        final boolean isInWindow = isClickInWindow(slot);
+        final ItemStack clicked = slot == -999 ?
                 null : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset));
-        ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = getCursorItem(player);
 
-        InventoryClickResult clickResult = clickProcessor.drop(this, player,
+        final InventoryClickResult clickResult = clickProcessor.drop(this, player,
                 mode, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh()) {
@@ -424,14 +424,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean dragging(Player player, int slot, int button) {
-        PlayerInventory playerInventory = player.getInventory();
-        boolean isInWindow = isClickInWindow(slot);
+        final PlayerInventory playerInventory = player.getInventory();
+        final boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = null;
-        ItemStack cursor = getCursorItem(player);
+        final ItemStack cursor = getCursorItem(player);
         if (slot != -999)
             clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
 
-        InventoryClickResult clickResult = clickProcessor.dragging(this, player,
+        final InventoryClickResult clickResult = clickProcessor.dragging(this, player,
                 slot, button,
                 clicked, cursor,
 
@@ -460,11 +460,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public boolean doubleClick(Player player, int slot) {
-        PlayerInventory playerInventory = player.getInventory();
-        ItemStack cursor = getCursorItem(player);
+        final PlayerInventory playerInventory = player.getInventory();
+        final ItemStack cursor = getCursorItem(player);
 
 
-        InventoryClickResult clickResult = clickProcessor.doubleClick(this, player, slot, cursor,
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, player, slot, cursor,
                 // Start by looping through the opened inventory
                 new InventoryClickLoopHandler(0, getSize(), 1,
                         i -> i,

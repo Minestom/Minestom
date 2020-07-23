@@ -26,25 +26,25 @@ public class ChunkReader {
                 biomes[i] = Biome.fromId(stream.readByte());
             }
 
-            Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
+            final Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
 
             chunkBatch = instance.createChunkBatch(chunk);
 
             while (true) {
-                int x = stream.readInt();
-                int y = stream.readInt();
-                int z = stream.readInt();
+                final int x = stream.readInt();
+                final int y = stream.readInt();
+                final int z = stream.readInt();
 
-                short blockId = stream.readShort();
-                short customBlockId = stream.readShort();
+                final short blockId = stream.readShort();
+                final short customBlockId = stream.readShort();
 
-                boolean hasData = stream.readBoolean();
+                final boolean hasData = stream.readBoolean();
                 Data data = null;
 
                 // Data deserializer
                 if (hasData) {
-                    int dataLength = stream.readInt();
-                    byte[] dataArray = stream.readNBytes(dataLength);
+                    final int dataLength = stream.readInt();
+                    final byte[] dataArray = stream.readNBytes(dataLength);
                     data = DataReader.readData(Unpooled.wrappedBuffer(dataArray));
                 }
 

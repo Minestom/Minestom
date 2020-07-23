@@ -110,7 +110,7 @@ public abstract class CustomBlock {
      * @return true if {@link #getUpdateOption()} is not null, false otherwise
      */
     public boolean hasUpdate() {
-        UpdateOption updateOption = getUpdateOption();
+        final UpdateOption updateOption = getUpdateOption();
         if (updateOption == null)
             return false;
 

@@ -56,10 +56,10 @@ public final class ConnectionManager {
      * @param condition   the condition to receive the message
      */
     public void broadcastMessage(RichMessage richMessage, Function<Player, Boolean> condition) {
-        Collection<Player> recipients = getRecipients(condition);
+        final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
-            String jsonText = richMessage.toString();
+            final String jsonText = richMessage.toString();
             broadcastJson(jsonText, recipients);
         }
     }
@@ -80,10 +80,10 @@ public final class ConnectionManager {
      * @param condition   the condition to receive the message
      */
     public void broadcastMessage(ColoredText coloredText, Function<Player, Boolean> condition) {
-        Collection<Player> recipients = getRecipients(condition);
+        final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
-            String jsonText = coloredText.toString();
+            final String jsonText = coloredText.toString();
             broadcastJson(jsonText, recipients);
         }
     }
@@ -112,7 +112,7 @@ public final class ConnectionManager {
         } else {
             recipients = new ArrayList<>();
             getOnlinePlayers().forEach(player -> {
-                boolean result = condition.apply(player);
+                final boolean result = condition.apply(player);
                 if (result)
                     recipients.add(player);
             });
@@ -186,7 +186,7 @@ public final class ConnectionManager {
      * Add a new player in the players list
      * Is currently used at
      * {@link net.minestom.server.network.packet.client.login.LoginStartPacket#process(PlayerConnection, ConnectionManager)}
-     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#initPlayer(UUID, String, boolean, Consumer)}
+     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#initPlayer(UUID, String, Consumer)}
      *
      * @param player the player to add
      */
@@ -203,7 +203,7 @@ public final class ConnectionManager {
      * @param connection the new player connection
      */
     public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
-        Player player = new Player(uuid, username, connection);
+        final Player player = new Player(uuid, username, connection);
         createPlayer(player);
     }
 
@@ -214,7 +214,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      */
     public void removePlayer(PlayerConnection connection) {
-        Player player = this.connectionPlayerMap.get(connection);
+        final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
 

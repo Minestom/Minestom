@@ -20,7 +20,7 @@ public class ItemStack implements DataContainer {
 
     private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(127);
 
-    private Material material;
+    private final Material material;
 
     private static StackingRule defaultStackingRule;
     private ItemMeta itemMeta;
@@ -190,6 +190,18 @@ public class ItemStack implements DataContainer {
      */
     public ItemMeta getItemMeta() {
         return itemMeta;
+    }
+
+    /**
+     * Change the item meta linked to this item
+     * <p>
+     * WARNING: be sure to have nbt data useful for this item, items should automatically get the appropriate
+     * item meta
+     *
+     * @param itemMeta the new item meta
+     */
+    public void setItemMeta(ItemMeta itemMeta) {
+        this.itemMeta = itemMeta;
     }
 
     /**

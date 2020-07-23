@@ -19,21 +19,43 @@ public class SchedulerManager {
     private List<Task> tasks = new CopyOnWriteArrayList<>();
     private List<Task> shutdownTasks = new CopyOnWriteArrayList<>();
 
+    /**
+     * Add a task with a custom update option and a precise call count
+     *
+     * @param runnable     the task to execute
+     * @param updateOption the update option of the task
+     * @param maxCallCount the number of time this task should be executed
+     * @return the task id
+     */
     public int addTask(TaskRunnable runnable, UpdateOption updateOption, int maxCallCount) {
-        int id = COUNTER.incrementAndGet();
+        final int id = COUNTER.incrementAndGet();
         runnable.setId(id);
 
-        Task task = new Task(runnable, updateOption, maxCallCount);
+        final Task task = new Task(runnable, updateOption, maxCallCount);
         task.refreshLastUpdateTime(System.currentTimeMillis());
         this.tasks.add(task);
 
         return id;
     }
 
+    /**
+     * Add a task which will be repeated without interruption
+     *
+     * @param runnable     the task to execute
+     * @param updateOption the update option of the task
+     * @return the task id
+     */
     public int addRepeatingTask(TaskRunnable runnable, UpdateOption updateOption) {
         return addTask(runnable, updateOption, 0);
     }
 
+    /**
+     * Add a task which will be executed only once
+     *
+     * @param runnable     the task to execute
+     * @param updateOption the update option of the task
+     * @return the task id
+     */
     public int addDelayedTask(TaskRunnable runnable, UpdateOption updateOption) {
         return addTask(runnable, updateOption, 1);
     }
@@ -42,18 +64,21 @@ public class SchedulerManager {
      * Adds a task to run when the server shutdowns
      *
      * @param runnable the task to perform
-     * @return
+     * @return the task id
      */
     public int addShutdownTask(TaskRunnable runnable) {
-        int id = SHUTDOWN_COUNTER.incrementAndGet();
+        final int id = SHUTDOWN_COUNTER.incrementAndGet();
         runnable.setId(id);
 
-        Task task = new Task(runnable, null, 1);
+        final Task task = new Task(runnable, null, 1);
         this.shutdownTasks.add(task);
 
         return id;
     }
 
+    /**
+     * Shutdown all the tasks and call tasks added from {@link #addShutdownTask(TaskRunnable)}
+     */
     public void shutdown() {
         batchesPool.execute(() -> {
             for (Task task : shutdownTasks) {
@@ -63,24 +88,30 @@ public class SchedulerManager {
         batchesPool.shutdown();
         try {
             batchesPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
     }
 
+    /**
+     * Force the end of a task
+     *
+     * @param taskId the id of the task to remove
+     */
     public void removeTask(int taskId) {
         this.tasks.removeIf(task -> task.getId() == taskId);
     }
 
     public void update() {
-        long time = System.currentTimeMillis();
+        final long time = System.currentTimeMillis();
         batchesPool.execute(() -> {
             for (Task task : tasks) {
-                UpdateOption updateOption = task.getUpdateOption();
-                long lastUpdate = task.getLastUpdateTime();
-                boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
+                final UpdateOption updateOption = task.getUpdateOption();
+                final long lastUpdate = task.getLastUpdateTime();
+                final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
                 if (!hasCooldown) {
-                    TaskRunnable runnable = task.getRunnable();
-                    int maxCallCount = task.getMaxCallCount();
-                    int callCount = runnable.getCallCount() + 1;
+                    final TaskRunnable runnable = task.getRunnable();
+                    final int maxCallCount = task.getMaxCallCount();
+                    final int callCount = runnable.getCallCount() + 1;
                     runnable.setCallCount(callCount);
 
                     runnable.run();

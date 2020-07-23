@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class BlockAlternative {
 
-    private short id;
-    private String[] properties;
+    private final short id;
+    private final String[] properties;
 
     public BlockAlternative(short id, String... properties) {
         this.id = id;
@@ -24,7 +24,7 @@ public class BlockAlternative {
 
     public Map<String, String> createPropertiesMap() {
         Map<String, String> map = new HashMap<>();
-        for(String p : properties) {
+        for (String p : properties) {
             String[] parts = p.split("=");
             map.put(parts[0], parts[1]);
         }

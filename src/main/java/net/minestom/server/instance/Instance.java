@@ -267,7 +267,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
-        ByteBuf chunkData = chunk.getFullDataPacket();
+        final ByteBuf chunkData = chunk.getFullDataPacket();
         players.forEach(player -> {
             if (!PlayerUtils.isNettyClient(player))
                 return;
@@ -471,14 +471,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public void loadChunk(Position position, Consumer<Chunk> callback) {
-        int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
-        int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
+        final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadChunk(chunkX, chunkZ, callback);
     }
 
     public void loadOptionalChunk(Position position, Consumer<Chunk> callback) {
-        int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
-        int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
+        final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
@@ -487,8 +487,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public short getBlockId(int x, int y, int z) {
-        Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
+        final Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getBlockId(x, y, z);
     }
 
@@ -501,8 +501,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
-        Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
+        final Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getCustomBlock(x, y, z);
     }
 
@@ -520,13 +520,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         blockActionPacket.actionParam = actionParam;
         blockActionPacket.blockId = block.getBlockId();
 
-        Chunk chunk = getChunkAt(blockPosition);
+        final Chunk chunk = getChunkAt(blockPosition);
         chunk.sendPacketToViewers(blockActionPacket);
     }
 
     public Data getBlockData(int x, int y, int z) {
-        Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ": " + z + " is not loaded");
+        final Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getData(x, (byte) y, z);
     }
 
@@ -535,8 +535,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public Chunk getChunkAt(double x, double z) {
-        int chunkX = ChunkUtils.getChunkCoordinate((int) x);
-        int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
+        final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
         return getChunk(chunkX, chunkZ);
     }
 
@@ -609,17 +609,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to add
      */
     public void addEntity(Entity entity) {
-        Instance lastInstance = entity.getInstance();
+        final Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
-            long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
-            boolean isPlayer = entity instanceof Player;
+            final long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
+            final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {
-                Player player = (Player) entity;
+                final Player player = (Player) entity;
                 sendChunks(player);
                 getWorldBorder().init(player);
             }
@@ -638,7 +638,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 });
             }
 
-            Chunk chunk = getChunkAt(entity.getPosition());
+            final Chunk chunk = getChunkAt(entity.getPosition());
             addEntityToChunk(entity, chunk);
         });
     }
@@ -651,7 +651,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to remove
      */
     public void removeEntity(Entity entity) {
-        Instance entityInstance = entity.getInstance();
+        final Instance entityInstance = entity.getInstance();
         if (entityInstance == null || entityInstance != this)
             return;
 
@@ -662,7 +662,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 entity.getViewers().forEach(p -> entity.removeViewer(p));
             }
 
-            Chunk chunk = getChunkAt(entity.getPosition());
+            final Chunk chunk = getChunkAt(entity.getPosition());
             removeEntityFromChunk(entity, chunk);
         });
     }
@@ -679,7 +679,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         Check.notNull(chunk,
                 "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
         Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
-        long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         synchronized (chunkEntities) {
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
@@ -708,7 +708,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public void removeEntityFromChunk(Entity entity, Chunk chunk) {
         synchronized (chunkEntities) {
             if (chunk != null) {
-                long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+                final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
                 Set<Entity> entities = getEntitiesInChunk(chunkIndex);
                 entities.remove(entity);
                 if (entities.isEmpty()) {
@@ -800,7 +800,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
     public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
-        ExplosionSupplier explosionSupplier = getExplosionSupplier();
+        final ExplosionSupplier explosionSupplier = getExplosionSupplier();
         if (explosionSupplier == null)
             throw new IllegalStateException("Tried to create an explosion with no explosion supplier");
         Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);

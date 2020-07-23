@@ -75,7 +75,7 @@ public class InstanceContainer extends Instance {
         // Retrieve instance data
         this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
 
-        Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
+        final Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
         setData(data);
     }
 
@@ -86,23 +86,23 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setBlock(x, y, z, customBlock.getBlockId(), customBlock, data);
     }
 
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setBlock(x, y, z, blockId, customBlock, data);
     }
 
     private synchronized void setBlock(int x, int y, int z, short blockId, CustomBlock customBlock, Data data) {
-        Chunk chunk = getChunkAt(x, z);
+        final Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
-            boolean isCustomBlock = customBlock != null;
+            final boolean isCustomBlock = customBlock != null;
 
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
+            final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
             if (isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
@@ -110,7 +110,7 @@ public class InstanceContainer extends Instance {
                 return;
             }
             setAlreadyChanged(blockPosition, blockId);
-            int index = ChunkUtils.getBlockIndex(x, y, z);
+            final int index = ChunkUtils.getBlockIndex(x, y, z);
 
             // Call the destroy listener if previous block was a custom block
             callBlockDestroy(chunk, index, blockPosition);
@@ -149,7 +149,7 @@ public class InstanceContainer extends Instance {
      * @return
      */
     private boolean isAlreadyChanged(BlockPosition blockPosition, short blockId) {
-        Block changedBlock = currentlyChangingBlocks.get(blockPosition);
+        final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
         return changedBlock.getBlockId() == blockId;
@@ -157,7 +157,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void refreshBlockId(BlockPosition blockPosition, short blockId) {
-        Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
+        final Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
         synchronized (chunk) {
             chunk.refreshBlockId(blockPosition.getX(), blockPosition.getY(),
                     blockPosition.getZ(), blockId);
@@ -167,22 +167,22 @@ public class InstanceContainer extends Instance {
     }
 
     private void callBlockDestroy(Chunk chunk, int index, BlockPosition blockPosition) {
-        CustomBlock previousBlock = chunk.getCustomBlock(index);
+        final CustomBlock previousBlock = chunk.getCustomBlock(index);
         if (previousBlock != null) {
-            Data previousData = chunk.getData(index);
+            final Data previousData = chunk.getData(index);
             previousBlock.onDestroy(this, blockPosition, previousData);
             chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
         }
     }
 
     private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
-        CustomBlock actualBlock = chunk.getCustomBlock(index);
-        Data previousData = chunk.getData(index);
+        final CustomBlock actualBlock = chunk.getCustomBlock(index);
+        final Data previousData = chunk.getData(index);
         actualBlock.onPlace(this, blockPosition, previousData);
     }
 
     private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
-        BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
+        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
         if (blockPlacementRule != null) {
             return blockPlacementRule.blockRefresh(this, blockPosition, blockId);
         }
@@ -195,13 +195,13 @@ public class InstanceContainer extends Instance {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
                     if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
                         continue;
-                    int neighborX = blockPosition.getX() + offsetX;
-                    int neighborY = blockPosition.getY() + offsetY;
-                    int neighborZ = blockPosition.getZ() + offsetZ;
-                    short neighborId = getBlockId(neighborX, neighborY, neighborZ);
-                    BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
+                    final int neighborX = blockPosition.getX() + offsetX;
+                    final int neighborY = blockPosition.getY() + offsetY;
+                    final int neighborZ = blockPosition.getZ() + offsetZ;
+                    final short neighborId = getBlockId(neighborX, neighborY, neighborZ);
+                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
                     if (neighborBlockPlacementRule != null) {
-                        short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
+                        final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
                                 new BlockPosition(neighborX, neighborY, neighborZ), neighborId);
                         if (neighborId != newNeighborId) {
                             refreshBlockId(neighborX, neighborY, neighborZ, newNeighborId);
@@ -209,7 +209,7 @@ public class InstanceContainer extends Instance {
                     }
 
                     // Update neighbors
-                    CustomBlock customBlock = getCustomBlock(neighborX, neighborY, neighborZ);
+                    final CustomBlock customBlock = getCustomBlock(neighborX, neighborY, neighborZ);
                     if (customBlock != null) {
                         boolean directNeighbor = false; // only if directly connected to neighbor (no diagonals)
                         if (offsetX != 0 ^ offsetZ != 0) {
@@ -228,17 +228,17 @@ public class InstanceContainer extends Instance {
     public boolean breakBlock(Player player, BlockPosition blockPosition) {
         player.resetTargetBlock();
 
-        Chunk chunk = getChunkAt(blockPosition);
+        final Chunk chunk = getChunkAt(blockPosition);
 
         // Chunk unloaded, stop here
         if (ChunkUtils.isChunkUnloaded(chunk))
             return false;
 
-        int x = blockPosition.getX();
-        int y = blockPosition.getY();
-        int z = blockPosition.getZ();
+        final int x = blockPosition.getX();
+        final int y = blockPosition.getY();
+        final int z = blockPosition.getZ();
 
-        short blockId = getBlockId(x, y, z);
+        final short blockId = getBlockId(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
         if (blockId == 0) {
@@ -246,11 +246,11 @@ public class InstanceContainer extends Instance {
             return false;
         }
 
-        CustomBlock customBlock = getCustomBlock(x, y, z);
+        final CustomBlock customBlock = getCustomBlock(x, y, z);
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, blockId, customBlock, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
-        boolean result = !blockBreakEvent.isCancelled();
+        final boolean result = !blockBreakEvent.isCancelled();
         if (result) {
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockId(), blockBreakEvent.getResultCustomBlockId());
@@ -271,7 +271,7 @@ public class InstanceContainer extends Instance {
 
         } else {
             // Cancelled so we need to refresh player chunk section
-            int section = ChunkUtils.getSectionAt(blockPosition.getY());
+            final int section = ChunkUtils.getSectionAt(blockPosition.getY());
             sendChunkSectionUpdate(chunk, section, player);
         }
         return result;
@@ -279,7 +279,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        Chunk chunk = getChunk(chunkX, chunkZ);
+        final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
             if (callback != null)
@@ -292,7 +292,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        Chunk chunk = getChunk(chunkX, chunkZ);
+        final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
             if (callback != null)
@@ -311,10 +311,10 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void unloadChunk(Chunk chunk) {
-        int chunkX = chunk.getChunkX();
-        int chunkZ = chunk.getChunkZ();
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
 
-        long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
 
         UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
         unloadChunkPacket.chunkX = chunkX;
@@ -342,7 +342,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        final Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
     }
 
@@ -376,7 +376,7 @@ public class InstanceContainer extends Instance {
     @Override
     public void saveChunksToStorageFolder(Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
-        if(chunkLoader.supportsParallelSaving()) {
+        if (chunkLoader.supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
                 saveChunkToStorageFolder(c, null);
@@ -384,7 +384,7 @@ public class InstanceContainer extends Instance {
             try {
                 parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
-                if(callback != null)
+                if (callback != null)
                     callback.run();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -392,8 +392,8 @@ public class InstanceContainer extends Instance {
         } else {
             Iterator<Chunk> chunks = getChunks().iterator();
             while (chunks.hasNext()) {
-                Chunk chunk = chunks.next();
-                boolean isLast = !chunks.hasNext();
+                final Chunk chunk = chunks.next();
+                final boolean isLast = !chunks.hasNext();
                 saveChunkToStorageFolder(chunk, isLast ? callback : null);
             }
         }
@@ -412,7 +412,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
+        final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
             callChunkLoadEvent(chunkX, chunkZ);
             if (callback != null)
@@ -434,14 +434,14 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
+        final Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
         cacheChunk(chunk);
         if (chunkGenerator != null) {
-            ChunkBatch chunkBatch = createChunkBatch(chunk);
+            final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         }
-        
+
         callChunkLoadEvent(chunkX, chunkZ);
     }
 
@@ -466,7 +466,7 @@ public class InstanceContainer extends Instance {
         if (!PlayerUtils.isNettyClient(player))
             return;
 
-        ByteBuf data = chunk.getFullDataPacket();
+        final ByteBuf data = chunk.getFullDataPacket();
         if (data == null || !chunk.packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), packet -> {
                 chunk.setFullDataPacket(packet);
@@ -476,6 +476,7 @@ public class InstanceContainer extends Instance {
             sendChunkUpdate(player, chunk);
         }
 
+        // TODO do not hardcore
         if (MinecraftServer.isFixLighting()) {
             UpdateLightPacket updateLightPacket = new UpdateLightPacket();
             updateLightPacket.chunkX = chunk.getChunkX();
@@ -521,7 +522,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(Chunk chunk) {
-        long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         this.chunks.put(index, chunk);
     }
 
@@ -567,14 +568,14 @@ public class InstanceContainer extends Instance {
     @Override
     public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
         Instance instance = this;
-        CustomBlock toUpdate = getCustomBlock(position);
+        final CustomBlock toUpdate = getCustomBlock(position);
         if (toUpdate == null) {
             return;
         }
         MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
             @Override
             public void run() {
-                CustomBlock currentBlock = instance.getCustomBlock(position);
+                final CustomBlock currentBlock = instance.getCustomBlock(position);
                 if (currentBlock == null)
                     return;
                 if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed

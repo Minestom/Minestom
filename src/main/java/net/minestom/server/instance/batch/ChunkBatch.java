@@ -73,7 +73,7 @@ public class ChunkBatch implements InstanceBatch {
             if (hasPopulator) {
                 Iterator<ChunkPopulator> populatorIterator = populators.iterator();
                 while (populatorIterator.hasNext()) {
-                    ChunkPopulator chunkPopulator = populatorIterator.next();
+                    final ChunkPopulator chunkPopulator = populatorIterator.next();
                     chunkPopulator.populateChunk(this, chunk);
                 }
                 singleThreadFlush(callback);

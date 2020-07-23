@@ -68,7 +68,7 @@ public class PotionMeta implements ItemMeta {
     @Override
     public ItemMeta clone() {
         PotionMeta potionMeta = new PotionMeta();
-        potionMeta.potionTypes = new HashSet<>(potionTypes);
+        potionMeta.potionTypes.addAll(potionTypes);
 
         return potionMeta;
     }

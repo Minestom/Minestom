@@ -330,7 +330,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
 
         for (int i = 0; i < items.length; i++) {
-            int slot = convertToPacketSlot(i);
+            final int slot = convertToPacketSlot(i);
             convertedSlots[slot] = items[i];
         }
 
@@ -342,10 +342,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean leftClick(Player player, int slot) {
-        ItemStack cursor = getCursorItem();
-        ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
+        final ItemStack cursor = getCursorItem();
+        final ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
 
-        InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
@@ -361,10 +361,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean rightClick(Player player, int slot) {
-        ItemStack cursor = getCursorItem();
-        ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack cursor = getCursorItem();
+        final ItemStack clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.rightClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, slot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
@@ -386,10 +386,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean drop(Player player, int mode, int slot, int button) {
-        ItemStack cursor = getCursorItem();
-        ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
+        final ItemStack cursor = getCursorItem();
+        final ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.drop(null, player,
+        final InventoryClickResult clickResult = clickProcessor.drop(null, player,
                 mode, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh())
@@ -405,11 +405,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean shiftClick(Player player, int slot) {
-        ItemStack cursor = getCursorItem();
-        ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack cursor = getCursorItem();
+        final ItemStack clicked = getItemStack(slot, OFFSET);
 
-        boolean hotbarClick = convertToPacketSlot(slot) < 9;
-        InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
+        final boolean hotbarClick = convertToPacketSlot(slot) < 9;
+        final InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
                 new InventoryClickLoopHandler(0, items.length, 1,
                         i -> {
                             if (hotbarClick) {
@@ -437,10 +437,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         if (!getCursorItem().isAir())
             return false;
 
-        ItemStack heldItem = getItemStack(key);
-        ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack heldItem = getItemStack(key);
+        final ItemStack clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.changeHeld(null, player, slot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(null, player, slot, key, clicked, heldItem);
 
         if (clickResult.doRefresh()) {
             sendSlotRefresh((short) slot, clicked);
@@ -460,12 +460,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean dragging(Player player, int slot, int button) {
-        ItemStack cursor = getCursorItem();
+        final ItemStack cursor = getCursorItem();
         ItemStack clicked = null;
         if (slot != -999)
             clicked = getItemStack(slot, OFFSET);
 
-        InventoryClickResult clickResult = clickProcessor.dragging(null, player,
+        final InventoryClickResult clickResult = clickProcessor.dragging(null, player,
                 slot, button,
                 clicked, cursor, s -> getItemStack(s, OFFSET),
                 (s, item) -> setItemStack(s, OFFSET, item));
@@ -484,9 +484,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     @Override
     public boolean doubleClick(Player player, int slot) {
-        ItemStack cursor = getCursorItem();
+        final ItemStack cursor = getCursorItem();
 
-        InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
                 new InventoryClickLoopHandler(0, items.length, 1,
                         i -> i < 9 ? i + 9 : i - 9,
                         index -> items[index],

@@ -42,6 +42,7 @@ public abstract class Explosion {
 
     /**
      * Prepares the list of blocks that will be broken. Also pushes and damage entities affected by this explosion
+     *
      * @param instance instance to perform this explosion in
      * @return list of blocks that will be broken.
      */
@@ -49,6 +50,7 @@ public abstract class Explosion {
 
     /**
      * Performs the explosion and send the corresponding packet
+     *
      * @param instance instance to perform this explosion in
      */
     public void apply(Instance instance) {
@@ -62,16 +64,16 @@ public abstract class Explosion {
         packet.playerMotionY = 0.0f; // TODO: figure out why this is here
         packet.playerMotionZ = 0.0f; // TODO: figure out why this is here
 
-        packet.records = new byte[3*blocks.size()];
+        packet.records = new byte[3 * blocks.size()];
         for (int i = 0; i < blocks.size(); i++) {
-            BlockPosition pos = blocks.get(i);
+            final BlockPosition pos = blocks.get(i);
             instance.setBlock(pos, Block.AIR);
-            byte x = (byte) (pos.getX()-Math.floor(getCenterX()));
-            byte y = (byte) (pos.getY()-Math.floor(getCenterY()));
-            byte z = (byte) (pos.getZ()-Math.floor(getCenterZ()));
-            packet.records[i*3+0] = x;
-            packet.records[i*3+1] = y;
-            packet.records[i*3+2] = z;
+            final byte x = (byte) (pos.getX() - Math.floor(getCenterX()));
+            final byte y = (byte) (pos.getY() - Math.floor(getCenterY()));
+            final byte z = (byte) (pos.getZ() - Math.floor(getCenterZ()));
+            packet.records[i * 3 + 0] = x;
+            packet.records[i * 3 + 1] = y;
+            packet.records[i * 3 + 2] = z;
         }
 
         postExplosion(instance, blocks, packet);
@@ -85,20 +87,24 @@ public abstract class Explosion {
 
     /**
      * Called after removing blocks and preparing the packet, but before sending it.
+     *
      * @param instance the instance in which the explosion occurs
-     * @param blocks the block positions returned by prepare
-     * @param packet the explosion packet to sent to the client. Be careful with what you're doing.
-     *               It is initialized with the center and radius of the explosion. The positions in 'blocks' are also
-     *               stored in the packet before this call, but you are free to modify 'records' to modify the blocks sent to the client.
-     *               Just be careful, you might just crash the server or the client. Or you're lucky, both at the same time.
+     * @param blocks   the block positions returned by prepare
+     * @param packet   the explosion packet to sent to the client. Be careful with what you're doing.
+     *                 It is initialized with the center and radius of the explosion. The positions in 'blocks' are also
+     *                 stored in the packet before this call, but you are free to modify 'records' to modify the blocks sent to the client.
+     *                 Just be careful, you might just crash the server or the client. Or you're lucky, both at the same time.
      */
-    protected void postExplosion(Instance instance, List<BlockPosition> blocks, ExplosionPacket packet) {}
+    protected void postExplosion(Instance instance, List<BlockPosition> blocks, ExplosionPacket packet) {
+    }
 
     /**
      * Called after sending the explosion packet. Can be used to (re)set blocks that have been destroyed.
      * This is necessary to do after the packet being sent, because the client sets the positions received to air.
+     *
      * @param instance the instance in which the explosion occurs
-     * @param blocks the block positions returned by prepare
+     * @param blocks   the block positions returned by prepare
      */
-    protected void postSend(Instance instance, List<BlockPosition> blocks) {}
+    protected void postSend(Instance instance, List<BlockPosition> blocks) {
+    }
 }

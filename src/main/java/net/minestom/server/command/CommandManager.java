@@ -52,6 +52,11 @@ public class CommandManager {
         consoleThread.start();
     }
 
+    /**
+     * Stop the console responsive for the console commands processing
+     * <p>
+     * WARNING: it cannot be re-run later
+     */
     public void stopConsoleThread() {
         running = false;
     }
@@ -334,7 +339,7 @@ public class CommandManager {
                     }
 
                     if (lastNodes != null) {
-                        int[] children = ArrayUtils.toArray(argChildren);
+                        final int[] children = ArrayUtils.toArray(argChildren);
                         lastNodes.forEach(n -> n.children = children);
                     }
 
@@ -347,7 +352,7 @@ public class CommandManager {
 
                 if (isLast) {
                     // Last argument doesn't have children
-                    int[] children = new int[0];
+                    final int[] children = new int[0];
                     argumentNodes.forEach(node -> node.children = children);
                 } else {
                     // Create children list which will be filled during next iteration
@@ -357,7 +362,7 @@ public class CommandManager {
             }
 
         }
-        int[] children = ArrayUtils.toArray(cmdChildren);
+        final int[] children = ArrayUtils.toArray(cmdChildren);
         //System.out.println("test " + children.length + " : " + children[0]);
         literalNode.children = children;
         if (children.length > 0) {

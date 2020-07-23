@@ -53,7 +53,7 @@ public class NBTUtils {
 
     public static void saveAllItems(NBTList<NBTCompound> list, Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
-            ItemStack stack = inventory.getItemStack(i);
+            final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
             NBTCompound tag = new NBTCompound();
@@ -71,8 +71,8 @@ public class NBTUtils {
     private static void writeEnchant(NBTCompound nbt, String listName, Map<Enchantment, Short> enchantmentMap) {
         NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
         for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            short level = entry.getValue();
+            final Enchantment enchantment = entry.getKey();
+            final short level = entry.getValue();
 
             enchantList.add(new NBTCompound()
                     .setShort("lvl", level)
@@ -177,9 +177,9 @@ public class NBTUtils {
 
     private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
         for (NBTCompound enchantment : enchantments) {
-            short level = enchantment.getShort("lvl");
-            String id = enchantment.getString("id");
-            Enchantment enchant = Registries.getEnchantment(id);
+            final short level = enchantment.getShort("lvl");
+            final String id = enchantment.getString("id");
+            final Enchantment enchant = Registries.getEnchantment(id);
             if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {
@@ -207,7 +207,7 @@ public class NBTUtils {
             saveDataIntoNBT(itemStack, itemNBT);
 
             // Custom item nbt
-            NBTConsumer nbtConsumer = itemStack.getNBTConsumer();
+            final NBTConsumer nbtConsumer = itemStack.getNBTConsumer();
             if (nbtConsumer != null) {
                 nbtConsumer.accept(itemNBT);
             }

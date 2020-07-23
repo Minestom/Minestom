@@ -52,7 +52,7 @@ public class Team {
     }
 
     public void addPlayer(Player player) {
-        String newElement = player.getUsername();
+        final String newElement = player.getUsername();
 
         TeamsPacket addPlayerPacket = new TeamsPacket();
         addPlayerPacket.teamName = teamName;

@@ -28,7 +28,7 @@ public class DataReader {
         SerializableData data = new SerializableData();
         try {
             while (true) {
-                short typeLength = buffer.readShort();
+                final short typeLength = buffer.readShort();
 
                 if (typeLength == 0xff) {
                     // End of data
@@ -40,8 +40,8 @@ public class DataReader {
                     typeCache[i] = buffer.readByte();
                 }
 
-                String className = new String(typeCache);
-                Class type = Class.forName(className);
+                final String className = new String(typeCache);
+                final Class type = Class.forName(className);
 
                 short nameLength = buffer.readShort();
                 byte[] nameCache = new byte[nameLength];
@@ -49,11 +49,11 @@ public class DataReader {
                     nameCache[i] = buffer.readByte();
                 }
 
-                ByteBuf valueCache = buffer.readBytes(buffer.readInt());
+                final ByteBuf valueCache = buffer.readBytes(buffer.readInt());
 
-                String name = new String(nameCache);
+                final String name = new String(nameCache);
                 PacketReader packetReader = new PacketReader(valueCache);
-                Object value = DATA_MANAGER.getDataType(type).decode(packetReader);
+                final Object value = DATA_MANAGER.getDataType(type).decode(packetReader);
 
                 data.set(name, value, type);
             }
