@@ -38,7 +38,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.DimensionType;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -55,7 +54,7 @@ public class PlayerInit {
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -267,7 +266,10 @@ public class PlayerInit {
                     mapDataPacket.z = 0;
 
                     final byte[] data = new byte[127 * 127];
-                    Arrays.fill(data, (byte) 10);
+                    for (int i = 0; i < data.length; i++) {
+                        final byte color = (byte) (i % 2 == 0 ? 5 : 10);
+                        data[i] = color;
+                    }
 
                     mapDataPacket.data = data;
 

@@ -3,8 +3,7 @@ package fr.themode.demo;
 import fr.themode.demo.blocks.BurningTorchBlock;
 import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
-import fr.themode.demo.commands.EntitySelectorCommand;
-import fr.themode.demo.commands.TestCommand;
+import fr.themode.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -31,10 +30,10 @@ public class Main {
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new EntitySelectorCommand());
         commandManager.register(new TestCommand());
-        //commandManager.register(new HealthCommand());
-        //commandManager.register(new SimpleCommand());
-        //commandManager.register(new GamemodeCommand());
-        //commandManager.register(new DimensionCommand());
+        commandManager.register(new HealthCommand());
+        commandManager.register(new SimpleCommand());
+        commandManager.register(new GamemodeCommand());
+        commandManager.register(new DimensionCommand());
 
         /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
