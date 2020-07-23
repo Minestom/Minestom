@@ -12,18 +12,18 @@ import net.minestom.server.item.NBTConsumer;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.ItemMeta;
-import net.minestom.server.item.metadata.MapMeta;
-import net.minestom.server.item.metadata.PotionMeta;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 // for lack of a better name
 public class NBTUtils {
@@ -172,19 +172,7 @@ public class NBTUtils {
         final ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null)
             return;
-        final Class metaType = itemMeta.getClass();
-        if (metaType == PotionMeta.class) {
-            final PotionMeta potionMeta = (PotionMeta) itemMeta;
-            if (nbt.containsKey("Potion")) {
-                potionMeta.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
-            }
-        } else if (metaType == MapMeta.class) {
-            final MapMeta mapMeta = (MapMeta) itemMeta;
-            if (nbt.containsKey("map")) {
-                mapMeta.setMapId(nbt.getInt("map"));
-            }
-        }
-
+        itemMeta.read(nbt);
     }
 
     private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
@@ -324,26 +312,14 @@ public class NBTUtils {
                 itemNBT.setInt("CustomModelData", customModelData);
             }
         }
+        // End custom model data
 
         // Start custom meta
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            final Class metaType = itemMeta.getClass();
-            if (metaType == PotionMeta.class) {
-                final Set<PotionType> potionTypes = ((PotionMeta) itemMeta).getPotionTypes();
-                if (!potionTypes.isEmpty()) {
-                    for (PotionType potionType : potionTypes) {
-                        itemNBT.setString("Potion", potionType.getNamespaceID());
-                    }
-                }
-            } else if (metaType == MapMeta.class) {
-                final int mapId = ((MapMeta) itemMeta).getMapId();
-                if (mapId != 0) {
-                    itemNBT.setInt("map", mapId);
-                }
-            }
-
+            itemMeta.write(itemNBT);
         }
+        // End custom meta
     }
 
     @FunctionalInterface

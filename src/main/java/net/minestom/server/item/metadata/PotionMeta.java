@@ -1,12 +1,14 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.registry.Registries;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PotionMeta extends ItemMeta {
+public class PotionMeta implements ItemMeta {
 
     private Set<PotionType> potionTypes = new HashSet<>();
 
@@ -45,6 +47,22 @@ public class PotionMeta extends ItemMeta {
     @Override
     public boolean isSimilar(ItemMeta itemMeta) {
         return itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).potionTypes.equals(potionTypes);
+    }
+
+    @Override
+    public void read(NBTCompound compound) {
+        if (compound.containsKey("Potion")) {
+            addPotionType(Registries.getPotionType(compound.getString("Potion")));
+        }
+    }
+
+    @Override
+    public void write(NBTCompound compound) {
+        if (!potionTypes.isEmpty()) {
+            for (PotionType potionType : potionTypes) {
+                compound.setString("Potion", potionType.getNamespaceID());
+            }
+        }
     }
 
     @Override

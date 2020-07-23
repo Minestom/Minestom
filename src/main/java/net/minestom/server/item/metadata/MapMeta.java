@@ -1,6 +1,8 @@
 package net.minestom.server.item.metadata;
 
-public class MapMeta extends ItemMeta {
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+
+public class MapMeta implements ItemMeta {
 
     private int mapId;
 
@@ -20,6 +22,20 @@ public class MapMeta extends ItemMeta {
     @Override
     public boolean isSimilar(ItemMeta itemMeta) {
         return itemMeta instanceof MapMeta && ((MapMeta) itemMeta).getMapId() == mapId;
+    }
+
+    @Override
+    public void read(NBTCompound compound) {
+        if (compound.containsKey("map")) {
+            this.mapId = compound.getInt("map");
+        }
+    }
+
+    @Override
+    public void write(NBTCompound compound) {
+        if (mapId != 0) {
+            compound.setInt("map", mapId);
+        }
     }
 
     @Override
