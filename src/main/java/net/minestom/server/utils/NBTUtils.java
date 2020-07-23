@@ -11,6 +11,9 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.NBTConsumer;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.item.metadata.ItemMeta;
+import net.minestom.server.item.metadata.MapMeta;
+import net.minestom.server.item.metadata.PotionMeta;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.potion.PotionType;
@@ -80,24 +83,24 @@ public class NBTUtils {
     }
 
     public static ItemStack readItemStack(PacketReader reader) {
-        boolean present = reader.readBoolean();
+        final boolean present = reader.readBoolean();
 
         if (!present) {
             return ItemStack.getAirItem();
         }
 
-        int id = reader.readVarInt();
+        final int id = reader.readVarInt();
         if (id == -1) {
             // Drop mode
             return ItemStack.getAirItem();
         }
 
-        byte count = reader.readByte();
-
-        ItemStack item = new ItemStack((short) id, count);
+        final Material material = Material.fromId((short) id);
+        final byte count = reader.readByte();
+        ItemStack item = new ItemStack(material, count);
 
         try {
-            NBT itemNBT = reader.readTag();
+            final NBT itemNBT = reader.readTag();
             if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
                 NBTCompound nbt = (NBTCompound) itemNBT;
                 loadDataIntoItem(item, nbt);
@@ -113,7 +116,6 @@ public class NBTUtils {
         if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
         if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
-        if (nbt.containsKey("Potion")) item.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
         if (nbt.containsKey("display")) {
             NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) item.setDisplayName(ChatParser.toColoredText(display.getString("Name")));
@@ -165,6 +167,24 @@ public class NBTUtils {
                 item.addAttribute(itemAttribute);
             }
         }
+
+        // Meta specific field
+        final ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta == null)
+            return;
+        final Class metaType = itemMeta.getClass();
+        if (metaType == PotionMeta.class) {
+            final PotionMeta potionMeta = (PotionMeta) itemMeta;
+            if (nbt.containsKey("Potion")) {
+                potionMeta.addPotionType(Registries.getPotionType(nbt.getString("Potion")));
+            }
+        } else if (metaType == MapMeta.class) {
+            final MapMeta mapMeta = (MapMeta) itemMeta;
+            if (nbt.containsKey("map")) {
+                mapMeta.setMapId(nbt.getInt("map"));
+            }
+        }
+
     }
 
     private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
@@ -185,7 +205,7 @@ public class NBTUtils {
             packet.writeBoolean(false);
         } else {
             packet.writeBoolean(true);
-            packet.writeVarInt(itemStack.getMaterialId());
+            packet.writeVarInt(itemStack.getMaterial().getId());
             packet.writeByte(itemStack.getAmount());
 
             if (!itemStack.hasNbtTag()) {
@@ -217,13 +237,16 @@ public class NBTUtils {
 
         // Start damage
         {
-            itemNBT.setInt("Damage", itemStack.getDamage());
+            final int damage = itemStack.getDamage();
+            if (damage > 0) {
+                itemNBT.setInt("Damage", damage);
+            }
         }
         // End damage
 
         // Display
-        boolean hasDisplayName = itemStack.hasDisplayName();
-        boolean hasLore = itemStack.hasLore();
+        final boolean hasDisplayName = itemStack.hasDisplayName();
+        final boolean hasLore = itemStack.hasLore();
 
         if (hasDisplayName || hasLore) {
             NBTCompound displayNBT = new NBTCompound();
@@ -248,12 +271,12 @@ public class NBTUtils {
 
         // Start enchantment
         {
-            Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
+            final Map<Enchantment, Short> enchantmentMap = itemStack.getEnchantmentMap();
             if (!enchantmentMap.isEmpty()) {
                 writeEnchant(itemNBT, "Enchantments", enchantmentMap);
             }
 
-            Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
+            final Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
             if (!storedEnchantmentMap.isEmpty()) {
                 writeEnchant(itemNBT, "StoredEnchantments", storedEnchantmentMap);
             }
@@ -262,12 +285,12 @@ public class NBTUtils {
 
         // Start attribute
         {
-            List<ItemAttribute> itemAttributes = itemStack.getAttributes();
+            final List<ItemAttribute> itemAttributes = itemStack.getAttributes();
             if (!itemAttributes.isEmpty()) {
                 NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
 
                 for (ItemAttribute itemAttribute : itemAttributes) {
-                    UUID uuid = itemAttribute.getUuid();
+                    final UUID uuid = itemAttribute.getUuid();
 
                     attributesNBT.add(
                             new NBTCompound()
@@ -285,20 +308,9 @@ public class NBTUtils {
         }
         // End attribute
 
-        // Start potion
-        {
-            Set<PotionType> potionTypes = itemStack.getPotionTypes();
-            if (!potionTypes.isEmpty()) {
-                for (PotionType potionType : potionTypes) {
-                    itemNBT.setString("Potion", potionType.getNamespaceID());
-                }
-            }
-        }
-        // End potion
-
         // Start hide flags
         {
-            int hideFlag = itemStack.getHideFlag();
+            final int hideFlag = itemStack.getHideFlag();
             if (hideFlag != 0) {
                 itemNBT.setInt("HideFlags", hideFlag);
             }
@@ -307,10 +319,30 @@ public class NBTUtils {
 
         // Start custom model data
         {
-            int customModelData = itemStack.getCustomModelData();
+            final int customModelData = itemStack.getCustomModelData();
             if (customModelData != 0) {
                 itemNBT.setInt("CustomModelData", customModelData);
             }
+        }
+
+        // Start custom meta
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            final Class metaType = itemMeta.getClass();
+            if (metaType == PotionMeta.class) {
+                final Set<PotionType> potionTypes = ((PotionMeta) itemMeta).getPotionTypes();
+                if (!potionTypes.isEmpty()) {
+                    for (PotionType potionType : potionTypes) {
+                        itemNBT.setString("Potion", potionType.getNamespaceID());
+                    }
+                }
+            } else if (metaType == MapMeta.class) {
+                final int mapId = ((MapMeta) itemMeta).getMapId();
+                if (mapId != 0) {
+                    itemNBT.setInt("map", mapId);
+                }
+            }
+
         }
     }
 

@@ -19,7 +19,7 @@ public class UseItemListener {
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 
-        final Material material = Material.fromId(itemStack.getMaterialId());
+        final Material material = itemStack.getMaterial();
 
         // Equip armor with right click
         if (material.isArmor()) {

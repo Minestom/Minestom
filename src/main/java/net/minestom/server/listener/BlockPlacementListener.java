@@ -28,23 +28,23 @@ import java.util.Set;
 public class BlockPlacementListener {
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
-        PlayerInventory playerInventory = player.getInventory();
-        Player.Hand hand = packet.hand;
-        BlockFace blockFace = packet.blockFace;
-        BlockPosition blockPosition = packet.blockPosition;
+        final PlayerInventory playerInventory = player.getInventory();
+        final Player.Hand hand = packet.hand;
+        final BlockFace blockFace = packet.blockFace;
+        final BlockPosition blockPosition = packet.blockPosition;
 
-        Instance instance = player.getInstance();
+        final Instance instance = player.getInstance();
         if (instance == null)
             return;
 
         // Interact at block
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(blockPosition, hand, blockFace);
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
-            CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+            final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {
-                Data data = instance.getBlockData(blockPosition);
-                boolean blocksItem = customBlock.onInteract(player, hand, blockPosition, data);
-                if(blocksItem) {
+                final Data data = instance.getBlockData(blockPosition);
+                final boolean blocksItem = customBlock.onInteract(player, hand, blockPosition, data);
+                if (blocksItem) {
                     playerBlockInteractEvent.setBlockingItemUse(true);
                 }
             }
@@ -56,7 +56,7 @@ public class BlockPlacementListener {
 
         // Check if item at hand is a block
         final ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
-        final Material material = Material.fromId(usedItem.getMaterialId());
+        final Material material = usedItem.getMaterial();
         if (material == Material.AIR) {
             return;
         }
@@ -104,7 +104,7 @@ public class BlockPlacementListener {
                 player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
                 if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
                     short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
-                    if(customBlockId != 0) {
+                    if (customBlockId != 0) {
                         instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId(), playerBlockPlaceEvent.getCustomBlockId());
                     } else {
                         instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());

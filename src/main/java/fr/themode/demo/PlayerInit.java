@@ -26,7 +26,9 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.MapDataPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
@@ -36,6 +38,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.DimensionType;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,7 +56,6 @@ public class PlayerInit {
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
-        instanceContainer.setTimeRate(150);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -238,16 +240,45 @@ public class PlayerInit {
                 player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 41f, 0));
 
-                player.setHeldItemSlot((byte) 5);
+                //player.setHeldItemSlot((byte) 5);
 
                 player.setGlowing(true);
 
-                for (int i = 0; i < 9; i++) {
+                /*for (int i = 0; i < 9; i++) {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
+                }*/
+
+                ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
+                MapMeta mapMeta = (MapMeta) map.getItemMeta();
+                mapMeta.setMapId(1);
+                player.getInventory().setItemStack(0, map);
+
+                {
+                    // Map test
+                    MapDataPacket mapDataPacket = new MapDataPacket();
+                    mapDataPacket.mapId = 1;
+                    mapDataPacket.scale = 1;
+                    mapDataPacket.trackingPosition = false;
+                    mapDataPacket.locked = false;
+                    mapDataPacket.icons = null;
+                    mapDataPacket.columns = (byte) 127;
+                    mapDataPacket.rows = (byte) 127;
+                    mapDataPacket.x = 0;
+                    mapDataPacket.z = 0;
+
+                    final byte[] data = new byte[127 * 127];
+                    Arrays.fill(data, (byte) 10);
+
+                    mapDataPacket.data = data;
+
+                    player.getPlayerConnection().sendPacket(mapDataPacket);
+
                 }
+
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
                 item.setDisplayName(ColoredText.of("Item name"));
+                item.setDamage(5);
                 //item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
                 //item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 //item.setEnchantment(Enchantment.SHARPNESS, (short) 50);

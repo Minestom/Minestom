@@ -1837,16 +1837,16 @@ public class Player extends LivingEntity implements CommandSender {
      * null if there is no item to update the state
      */
     public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
-        Material mainHandMat = Material.fromId(getItemInMainHand().getMaterialId());
-        Material offHandMat = Material.fromId(getItemInOffHand().getMaterialId());
-        boolean isOffhand = offHandMat.hasState();
+        final Material mainHandMat = getItemInMainHand().getMaterial();
+        final Material offHandMat = getItemInOffHand().getMaterial();
+        final boolean isOffhand = offHandMat.hasState();
 
-        ItemStack updatedItem = isOffhand ? getItemInOffHand() :
+        final ItemStack updatedItem = isOffhand ? getItemInOffHand() :
                 mainHandMat.hasState() ? getItemInMainHand() : null;
         if (updatedItem == null) // No item with state, cancel
             return null;
 
-        boolean isFood = updatedItem.getMaterial().isFood();
+        final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
             return null;
@@ -1921,8 +1921,8 @@ public class Player extends LivingEntity implements CommandSender {
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
-        int playerRange = getSettings().viewDistance;
+        final int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
+        final int playerRange = getSettings().viewDistance;
         if (playerRange == 0) {
             return serverRange; // Didn't receive settings packet yet (is the case on login)
         } else {

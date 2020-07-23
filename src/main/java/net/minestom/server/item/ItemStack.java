@@ -5,8 +5,10 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.item.metadata.ItemMeta;
+import net.minestom.server.item.metadata.MapMeta;
+import net.minestom.server.item.metadata.PotionMeta;
 import net.minestom.server.item.rule.VanillaStackingRule;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
@@ -18,16 +20,26 @@ public class ItemStack implements DataContainer {
 
     private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(127);
 
-    public static ItemStack getAirItem() {
-        return new ItemStack((short) 0, (byte) 0);
-    }
+    private Material material;
 
     private static StackingRule defaultStackingRule;
-
-    private short materialId;
+    private ItemMeta itemMeta;
 
     private byte amount;
     private int damage;
+
+    public ItemStack(Material material, byte amount, int damage) {
+        this.material = material;
+        this.amount = amount;
+        this.damage = damage;
+        this.lore = new ArrayList<>();
+
+        this.enchantmentMap = new HashMap<>();
+        this.storedEnchantmentMap = new HashMap<>();
+        this.attributes = new ArrayList<>();
+
+        this.itemMeta = findMeta();
+    }
 
     private ColoredText displayName;
     private boolean unbreakable;
@@ -36,7 +48,6 @@ public class ItemStack implements DataContainer {
     private Map<Enchantment, Short> enchantmentMap;
     private Map<Enchantment, Short> storedEnchantmentMap;
     private List<ItemAttribute> attributes;
-    private Set<PotionType> potionTypes;
 
     private int hideFlag;
     private int customModelData;
@@ -53,24 +64,12 @@ public class ItemStack implements DataContainer {
             this.stackingRule = defaultStackingRule;
     }
 
-    public ItemStack(short materialId, byte amount, int damage) {
-        this.materialId = materialId;
-        this.amount = amount;
-        this.damage = damage;
-        this.lore = new ArrayList<>();
-
-        this.enchantmentMap = new HashMap<>();
-        this.storedEnchantmentMap = new HashMap<>();
-        this.attributes = new ArrayList<>();
-        this.potionTypes = new HashSet<>();
-    }
-
-    public ItemStack(short materialId, byte amount) {
-        this(materialId, amount, (short) 0);
-    }
-
     public ItemStack(Material material, byte amount) {
-        this(material.getId(), amount);
+        this(material, amount, (short) 0);
+    }
+
+    public static ItemStack getAirItem() {
+        return new ItemStack(Material.AIR, (byte) 0);
     }
 
     /**
@@ -93,13 +92,28 @@ public class ItemStack implements DataContainer {
         ItemStack.defaultStackingRule = defaultStackingRule;
     }
 
+    public static ItemStack fromNBT(NBTCompound nbt) {
+        if (!nbt.containsKey("id") || !nbt.containsKey("Count"))
+            throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
+        final Material material = Registries.getMaterial(nbt.getString("id"));
+        final byte count = nbt.getByte("Count");
+
+        ItemStack s = new ItemStack(material, count);
+
+        NBTCompound tag = nbt.getCompound("tag");
+        if (tag != null) {
+            NBTUtils.loadDataIntoItem(s, tag);
+        }
+        return s;
+    }
+
     /**
      * Get if the item is air
      *
      * @return true if the material is air, false otherwise
      */
     public boolean isAir() {
-        return materialId == Material.AIR.getId();
+        return material == Material.AIR;
     }
 
     /**
@@ -119,15 +133,18 @@ public class ItemStack implements DataContainer {
             final boolean dataCheck = (data == null && itemData == null) ||
                     (data != null && itemData != null && data.equals(itemData));
 
-            return itemStack.getMaterialId() == materialId &&
+            final boolean sameMeta = (itemStack.itemMeta == null && itemMeta == null) ||
+                    (itemStack.itemMeta != null && itemMeta != null && (itemStack.itemMeta.isSimilar(itemMeta)));
+
+            return itemStack.getMaterial() == material &&
                     displayNameCheck &&
                     itemStack.isUnbreakable() == unbreakable &&
                     itemStack.getDamage() == damage &&
                     itemStack.enchantmentMap.equals(enchantmentMap) &&
                     itemStack.storedEnchantmentMap.equals(storedEnchantmentMap) &&
                     itemStack.attributes.equals(attributes) &&
-                    itemStack.potionTypes.equals(potionTypes) &&
                     itemStack.hideFlag == hideFlag &&
+                    sameMeta &&
                     dataCheck;
         }
     }
@@ -165,21 +182,14 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item internal material id
+     * Get the special meta object for this item
+     * <p>
+     * Can be null if not any
      *
-     * @return the item material id
+     * @return the item meta
      */
-    public short getMaterialId() {
-        return materialId;
-    }
-
-    /**
-     * Get the item material
-     *
-     * @return the item material
-     */
-    public Material getMaterial() {
-        return Material.fromId(getMaterialId());
+    public ItemMeta getItemMeta() {
+        return itemMeta;
     }
 
     /**
@@ -351,33 +361,6 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item potion types
-     *
-     * @return an unmodifiable {@link Set} containing the item potion types
-     */
-    public Set<PotionType> getPotionTypes() {
-        return Collections.unmodifiableSet(potionTypes);
-    }
-
-    /**
-     * Add a potion type to the item
-     *
-     * @param potionType the potion type to add
-     */
-    public void addPotionType(PotionType potionType) {
-        this.potionTypes.add(potionType);
-    }
-
-    /**
-     * Remove a potion type to the item
-     *
-     * @param potionType the potion type to remove
-     */
-    public void removePotionType(PotionType potionType) {
-        this.potionTypes.remove(potionType);
-    }
-
-    /**
      * Get the item hide flag
      *
      * @return the item hide flag
@@ -482,15 +465,24 @@ public class ItemStack implements DataContainer {
     }
 
     /**
+     * Get the item material
+     *
+     * @return the item material
+     */
+    public Material getMaterial() {
+        return material;
+    }
+
+    /**
      * Get if the item has any nbt tag
      *
      * @return true if the item has nbt tag, false otherwise
      */
     public boolean hasNbtTag() {
-        return hasDisplayName() || hasLore() || isUnbreakable() ||
+        return hasDisplayName() || hasLore() || damage != 0 || isUnbreakable() ||
                 !enchantmentMap.isEmpty() || !storedEnchantmentMap.isEmpty() ||
-                !attributes.isEmpty() || !potionTypes.isEmpty() ||
-                hideFlag != 0 || customModelData != 0;
+                !attributes.isEmpty() ||
+                hideFlag != 0 || customModelData != 0 || (itemMeta != null && itemMeta.hasNbt());
     }
 
     /**
@@ -499,7 +491,7 @@ public class ItemStack implements DataContainer {
      * @return a cloned item stack
      */
     public synchronized ItemStack clone() {
-        ItemStack itemStack = new ItemStack(materialId, amount, damage);
+        ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
         itemStack.setLore(new ArrayList<>(getLore()));
@@ -508,38 +500,17 @@ public class ItemStack implements DataContainer {
         itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
         itemStack.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
         itemStack.attributes = new ArrayList<>(attributes);
-        itemStack.potionTypes = new HashSet<>(potionTypes);
 
         itemStack.hideFlag = hideFlag;
         itemStack.customModelData = customModelData;
 
-        Data data = getData();
+        if (itemMeta != null)
+            itemStack.itemMeta = itemMeta.clone();
+
+        final Data data = getData();
         if (data != null)
             itemStack.setData(data.clone());
         return itemStack;
-    }
-
-    /**
-     * Convert the item into a readable Json object
-     * <p>
-     * Mainly used to show an item in a message hover
-     *
-     * @return a {@link JsonObject} containing the item data
-     */
-    public synchronized JsonObject toJsonObject() {
-        JsonObject object = new JsonObject();
-        object.addProperty("id", getMaterialId());
-        object.addProperty("Damage", getDamage());
-        object.addProperty("Count", getAmount());
-
-        if (hasDisplayName() || hasLore()) {
-            JsonObject tagObject = new JsonObject();
-            if (hasDisplayName()) {
-                tagObject.addProperty("display", getDisplayName().toString());
-            }
-        }
-
-        return object;
     }
 
     @Override
@@ -594,30 +565,53 @@ public class ItemStack implements DataContainer {
         return (byte) (1 << hideFlag.ordinal());
     }
 
+    /**
+     * Convert the item into a readable Json object
+     * <p>
+     * Mainly used to show an item in a message hover
+     *
+     * @return a {@link JsonObject} containing the item data
+     */
+    public synchronized JsonObject toJsonObject() {
+        JsonObject object = new JsonObject();
+        object.addProperty("id", material.getId());
+        object.addProperty("Damage", getDamage());
+        object.addProperty("Count", getAmount());
+
+        if (hasDisplayName() || hasLore()) {
+            JsonObject tagObject = new JsonObject();
+            if (hasDisplayName()) {
+                tagObject.addProperty("display", getDisplayName().toString());
+            }
+        }
+
+        return object;
+    }
+
+    /**
+     * Find the item meta based on the material type
+     *
+     * @return the item meta
+     */
+    private ItemMeta findMeta() {
+        if (material == Material.POTION)
+            return new PotionMeta();
+
+        if (material == Material.FILLED_MAP)
+            return new MapMeta();
+
+        return null;
+    }
+
     public NBTCompound toNBT() {
         NBTCompound compound = new NBTCompound()
                 .setByte("Count", amount)
-                .setString("id", Material.fromId(materialId).getName());
-        if(hasNbtTag()) {
+                .setString("id", material.getName());
+        if (hasNbtTag()) {
             NBTCompound additionalTag = new NBTCompound();
             NBTUtils.saveDataIntoNBT(this, additionalTag);
             compound.set("tag", additionalTag);
         }
         return compound;
-    }
-
-    public static ItemStack fromNBT(NBTCompound nbt) {
-        if(!nbt.containsKey("id") || !nbt.containsKey("Count"))
-            throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
-        short materialID = Registries.getMaterial(nbt.getString("id")).getId();
-        byte count = nbt.getByte("Count");
-
-        ItemStack s = new ItemStack(materialID, count);
-
-        NBTCompound tag = nbt.getCompound("tag");
-        if(tag != null) {
-            NBTUtils.loadDataIntoItem(s, tag);
-        }
-        return s;
     }
 }
