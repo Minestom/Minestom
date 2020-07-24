@@ -18,7 +18,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -70,11 +69,14 @@ public class BlockPlacementListener {
 
 
         final Chunk chunk = instance.getChunkAt(blockPosition);
+        // The concerned chunk will be send to the player if an error occur
+        // This will ensure that the player has the correct version of the chunk
         boolean refreshChunk = false;
 
         if (material.isBlock()) {
             final Block block = material.getBlock();
             final Set<Entity> entities = instance.getChunkEntities(chunk);
+            // Check if the player is trying to place a block in an entity
             boolean intersect = false;
             if (block.isSolid()) {
                 for (Entity entity : entities) {
@@ -88,36 +90,29 @@ public class BlockPlacementListener {
                 // BlockPlacementRule check
                 final BlockManager blockManager = MinecraftServer.getBlockManager();
                 final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
-                short blockid = block.getBlockId();
-                if (blockPlacementRule != null) {
-                    blockid = blockPlacementRule.blockPlace(instance, block, blockFace, player);
-                }
-                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockid, (short) 0, blockPosition, packet.hand);
+                final short blockId = blockPlacementRule == null ? block.getBlockId() :
+                        blockPlacementRule.blockPlace(instance, block, blockFace, player);
+
+                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockId, (short) 0, blockPosition, packet.hand);
                 playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                 // BlockPlacementRule check
-                boolean canPlace = true;
-                if (blockPlacementRule != null) {
-                    canPlace = blockPlacementRule.canPlace(instance, blockPosition);
-                }
+                final boolean canPlace = blockPlacementRule == null || blockPlacementRule.canPlace(instance, blockPosition);
 
                 player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
                 if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
-                    short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
+                    final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                     if (customBlockId != 0) {
                         instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId(), playerBlockPlaceEvent.getCustomBlockId());
                     } else {
                         instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());
                     }
                     if (playerBlockPlaceEvent.doesConsumeBlock()) {
+                        // Consume the block in the player's hand
+                        final ItemStack newUsedItem = usedItem.consume(1);
 
-                        StackingRule stackingRule = usedItem.getStackingRule();
-                        ItemStack newUsedItem = stackingRule.apply(usedItem, stackingRule.getAmount(usedItem) - 1);
-
-                        if (hand == Player.Hand.OFF) {
-                            playerInventory.setItemInOffHand(newUsedItem);
-                        } else { // Main
-                            playerInventory.setItemInMainHand(newUsedItem);
+                        if (newUsedItem != null) {
+                            playerInventory.setItemInHand(hand, newUsedItem);
                         }
                     }
                 } else {
@@ -127,6 +122,7 @@ public class BlockPlacementListener {
                 refreshChunk = true;
             }
         } else {
+            // Player didn't try to place a block but interacted with one
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace.toDirection());
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;

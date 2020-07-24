@@ -573,6 +573,21 @@ public class ItemStack implements DataContainer {
         this.stackingRule = stackingRule;
     }
 
+    /**
+     * Consume this item by a specific amount
+     * <p>
+     * Will return null if the amount's amount isn't enough
+     *
+     * @param amount the quantity to consume
+     * @return the new item with the updated amount, null if the item cannot be consumed by this much
+     */
+    public ItemStack consume(int amount) {
+        final int currentAmount = stackingRule.getAmount(this);
+        if (currentAmount < amount)
+            return null;
+        return stackingRule.apply(this, currentAmount - amount);
+    }
+
     private byte getBitModifier(ItemFlag hideFlag) {
         return (byte) (1 << hideFlag.ordinal());
     }
