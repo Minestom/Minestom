@@ -657,11 +657,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
-            if (entity.isAutoViewable()) {
-                // Remove this entity from players viewable list and send delete entities packet
-                entity.getViewers().forEach(p -> entity.removeViewer(p));
-            }
+            // Remove this entity from players viewable list and send delete entities packet
+            entity.getViewers().forEach(p -> entity.removeViewer(p));
 
+            // Remove the entity from cache
             final Chunk chunk = getChunkAt(entity.getPosition());
             removeEntityFromChunk(entity, chunk);
         });
@@ -731,7 +730,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     private Set<Entity> getEntitiesInChunk(long index) {
-        Set<Entity> entities = chunkEntities.getOrDefault(index, new CopyOnWriteArraySet<>());
+        final Set<Entity> entities = chunkEntities.getOrDefault(index, new CopyOnWriteArraySet<>());
         return entities;
     }
 
@@ -803,7 +802,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         final ExplosionSupplier explosionSupplier = getExplosionSupplier();
         if (explosionSupplier == null)
             throw new IllegalStateException("Tried to create an explosion with no explosion supplier");
-        Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
+        final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
         explosion.apply(this);
     }
 
