@@ -77,7 +77,7 @@ public class ItemEntity extends ObjectEntity {
                     if (entity == this)
                         continue;
 
-                    ItemEntity itemEntity = (ItemEntity) entity;
+                    final ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable() || !itemEntity.isMergeable())
                         continue;
 

@@ -9,7 +9,7 @@ import net.minestom.server.item.ItemStack;
  */
 public class PlayerSwapItemEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private ItemStack mainHandItem;
     private ItemStack offHandItem;
 

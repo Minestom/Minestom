@@ -10,7 +10,7 @@ import net.minestom.server.utils.item.ItemStackUtils;
  */
 public class PlayerAddItemStackEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private ItemStack itemStack;
 
     public PlayerAddItemStackEvent(Player player, ItemStack itemStack) {

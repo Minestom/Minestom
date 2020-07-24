@@ -9,8 +9,8 @@ import net.minestom.server.resourcepack.ResourcePackStatus;
  */
 public class PlayerResourcePackStatusEvent extends Event {
 
-    private Player player;
-    private ResourcePackStatus status;
+    private final Player player;
+    private final ResourcePackStatus status;
 
     public PlayerResourcePackStatusEvent(Player player, ResourcePackStatus status) {
         this.player = player;

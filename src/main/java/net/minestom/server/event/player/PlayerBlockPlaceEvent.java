@@ -62,7 +62,9 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * @return the custom block id to place
+     * Get the custom block id
+     *
+     * @return the custom block id
      */
     public short getCustomBlockId() {
         return customBlockId;
@@ -81,41 +83,53 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * @return the visual block id to place
+     * Get the visual block id
+     *
+     * @return the visual block id
      */
     public short getBlockId() {
         return blockId;
     }
 
     /**
-     * @param blockId the visual block id to place
+     * Change the visual block id
+     *
+     * @param blockId the new visual block id
      */
     public void setBlockId(short blockId) {
         this.blockId = blockId;
     }
 
     /**
-     * @return the player who is placing the block
+     * Get the player who is placing the block
+     *
+     * @return the player
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * @return the position of the block to place
+     * Get the block position
+     *
+     * @return the block position
      */
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
 
     /**
-     * @return the hand with which the player is trying to place
+     * Get the hand with which the player is trying to place
+     *
+     * @return the hand used
      */
     public Player.Hand getHand() {
         return hand;
     }
 
     /**
+     * Should the block be consumed if not cancelled
+     *
      * @param consumeBlock true if the block should be consumer (-1 amount), false otherwise
      */
     public void consumeBlock(boolean consumeBlock) {
@@ -123,6 +137,8 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
+     * Should the block be consumed if not cancelled
+     *
      * @return true if the block will be consumed, false otherwise
      */
     public boolean doesConsumeBlock() {

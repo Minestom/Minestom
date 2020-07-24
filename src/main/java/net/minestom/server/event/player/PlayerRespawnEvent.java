@@ -10,7 +10,7 @@ import net.minestom.server.utils.Position;
  */
 public class PlayerRespawnEvent extends Event {
 
-    private Player player;
+    private final Player player;
     private Position respawnPosition;
 
     public PlayerRespawnEvent(Player player, Position respawnPosition) {

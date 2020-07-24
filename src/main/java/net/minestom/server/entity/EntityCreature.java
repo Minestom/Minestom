@@ -268,12 +268,18 @@ public abstract class EntityCreature extends LivingEntity {
     /**
      * Retrieve the path to {@code position} and ask the entity to follow the path
      * <p>
+     * Can be set to null to reset the pathfinder
+     * <p>
      * The position is cloned, if you want the entity to continually follow this position object
      * you need to call this when you want the path to update
      *
-     * @param position the position to find the path to
+     * @param position the position to find the path to, null to reset the pathfinder
      */
     public void setPathTo(Position position) {
+        if (position == null) {
+            this.pathFinder.reset();
+            return;
+        }
         position = position.clone();
         this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
     }
@@ -298,16 +304,5 @@ public abstract class EntityCreature extends LivingEntity {
         ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
         callEvent(ArmorEquipEvent.class, armorEquipEvent);
         return armorEquipEvent.getArmorItem();
-    }
-
-    /**
-     * Get the pathfinding entity
-     * <p>
-     * Used internally by the pathfinder
-     *
-     * @return the pathfinding entity
-     */
-    public PFPathingEntity getPathingEntity() {
-        return pathingEntity;
     }
 }

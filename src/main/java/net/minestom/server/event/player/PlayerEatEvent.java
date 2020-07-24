@@ -9,8 +9,8 @@ import net.minestom.server.item.ItemStack;
  */
 public class PlayerEatEvent extends Event {
 
-    private Player player;
-    private ItemStack foodItem;
+    private final Player player;
+    private final ItemStack foodItem;
 
     public PlayerEatEvent(Player player, ItemStack foodItem) {
         this.player = player;

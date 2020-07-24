@@ -248,7 +248,7 @@ public class InstanceContainer extends Instance {
 
         final CustomBlock customBlock = getCustomBlock(x, y, z);
 
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(blockPosition, blockId, customBlock, (short) 0, (short) 0);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockId, customBlock, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         final boolean result = !blockBreakEvent.isCancelled();
         if (result) {

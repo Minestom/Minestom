@@ -11,9 +11,9 @@ import net.minestom.server.utils.Direction;
  */
 public class PlayerUseItemOnBlockEvent extends Event {
 
-    private Player player;
-    private Player.Hand hand;
-    private ItemStack itemStack;
+    private final Player player;
+    private final Player.Hand hand;
+    private final ItemStack itemStack;
     private final BlockPosition position;
     private final Direction blockFace;
 

@@ -8,7 +8,7 @@ import net.minestom.server.event.Event;
  */
 public class PlayerStartFlyingEvent extends Event {
 
-    private Player player;
+    private final Player player;
 
     public PlayerStartFlyingEvent(Player player) {
         this.player = player;

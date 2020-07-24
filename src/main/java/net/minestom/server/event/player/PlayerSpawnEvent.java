@@ -7,6 +7,7 @@ import net.minestom.server.instance.Instance;
  * Called when a new instance is set for a player
  */
 public class PlayerSpawnEvent extends EntitySpawnEvent {
+
     private final boolean firstSpawn;
 
     public PlayerSpawnEvent(Instance spawnInstance, boolean firstSpawn) {
