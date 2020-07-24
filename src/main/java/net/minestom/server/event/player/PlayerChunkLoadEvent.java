@@ -8,8 +8,8 @@ import net.minestom.server.event.Event;
  */
 public class PlayerChunkLoadEvent extends Event {
 
-    private Player player;
-    private int chunkX, chunkZ;
+    private final Player player;
+    private final int chunkX, chunkZ;
 
     public PlayerChunkLoadEvent(Player player, int chunkX, int chunkZ) {
         this.player = player;

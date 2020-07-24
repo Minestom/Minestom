@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
@@ -7,6 +8,8 @@ import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.pathfinding.PFBlockDescription;
+import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
@@ -62,6 +65,9 @@ public final class Chunk implements Viewable {
 
     // Block entities
     private Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
+
+    // Path finding
+    private PFColumnarSpace columnarSpace;
 
     // Cache
     private boolean loaded = true;
@@ -146,6 +152,12 @@ public final class Chunk implements Viewable {
         }
 
         this.packetUpdated = false;
+
+        if (columnarSpace != null) {
+            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
+            final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromId(blockId));
+            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
+        }
     }
 
     public void setBlockData(int x, int y, int z, Data data) {
@@ -276,6 +288,26 @@ public final class Chunk implements Viewable {
 
     public Set<Integer> getBlockEntities() {
         return blockEntities;
+    }
+
+    /**
+     * Get the columnar space linked to this chunk
+     * <p>
+     * Used internally by the pathfinder
+     *
+     * @return this chunk columnar space
+     */
+    public PFColumnarSpace getColumnarSpace() {
+        return columnarSpace;
+    }
+
+    /**
+     * Change this chunk columnar space
+     *
+     * @param columnarSpace the new columnar space
+     */
+    public void setColumnarSpace(PFColumnarSpace columnarSpace) {
+        this.columnarSpace = columnarSpace;
     }
 
     public void setFullDataPacket(ByteBuf fullDataPacket) {

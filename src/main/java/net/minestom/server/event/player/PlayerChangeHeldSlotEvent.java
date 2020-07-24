@@ -10,7 +10,7 @@ import net.minestom.server.utils.validate.Check;
  */
 public class PlayerChangeHeldSlotEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private byte slot;
 
     public PlayerChangeHeldSlotEvent(Player player, byte slot) {

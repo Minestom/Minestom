@@ -57,11 +57,18 @@ public class PlayerPositionListener {
         }
 
         Position newPosition = new Position(x, y, z, yaw, pitch);
+        final Position cachedPosition = newPosition.clone();
+
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
         if (!playerMoveEvent.isCancelled()) {
             // Move the player
             newPosition = playerMoveEvent.getNewPosition();
+            if (!newPosition.equals(cachedPosition)) {
+                // Position changed, teleport the player
+                player.teleport(newPosition);
+            }
+            // Change the internal data
             player.refreshPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
             player.refreshView(newPosition.getYaw(), newPosition.getPitch());
             player.refreshOnGround(onGround);

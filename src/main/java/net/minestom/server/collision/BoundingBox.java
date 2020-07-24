@@ -9,9 +9,8 @@ import net.minestom.server.utils.Vector;
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
 public class BoundingBox {
-// TODO:
 
-    private Entity entity;
+    private final Entity entity;
     private float x, y, z;
 
     public BoundingBox(Entity entity, float x, float y, float z) {
@@ -41,27 +40,30 @@ public class BoundingBox {
      */
     public boolean intersect(BlockPosition blockPosition) {
 
-        final float x = blockPosition.getX();
-        final float y = blockPosition.getY();
-        final float z = blockPosition.getZ();
-
         final float offsetX = 1;
-        final float offsetZ = 1;
-
-        float minX = x;
-        float maxX = x + offsetX;
-
-        float minY = y;
-        float maxY = y + 0.99999f;
-
-        float minZ = z;
-        float maxZ = z + offsetZ;
+        final float x = blockPosition.getX();
+        final float minX = x;
+        final float maxX = x + offsetX;
 
         final boolean checkX = getMinX() < maxX && getMaxX() > minX;
-        final boolean checkY = getMinY() < maxY && getMaxY() > minY;
-        final boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
+        if (!checkX)
+            return false;
 
-        return checkX && checkY && checkZ;
+        final float y = blockPosition.getY();
+        final float minY = y;
+        final float maxY = y + 0.99999f;
+
+        final boolean checkY = getMinY() < maxY && getMaxY() > minY;
+        if (!checkY)
+            return false;
+
+        final float offsetZ = 1;
+        final float z = blockPosition.getZ();
+        final float minZ = z;
+        final float maxZ = z + offsetZ;
+
+        final boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
+        return checkZ;
     }
 
     public boolean intersect(float x, float y, float z) {

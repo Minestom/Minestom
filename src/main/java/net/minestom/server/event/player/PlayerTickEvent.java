@@ -8,7 +8,7 @@ import net.minestom.server.event.Event;
  */
 public class PlayerTickEvent extends Event {
 
-    private Player player;
+    private final Player player;
 
     public PlayerTickEvent(Player player) {
         this.player = player;

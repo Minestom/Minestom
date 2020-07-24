@@ -1,5 +1,11 @@
 package net.minestom.server.utils;
 
+import java.util.Objects;
+
+/**
+ * Represent a position
+ * The instance is not contained
+ */
 public class Position {
 
     private float x, y, z;
@@ -21,6 +27,14 @@ public class Position {
         this(0, 0, 0);
     }
 
+    /**
+     * Add offsets to the current position
+     *
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return the same object position
+     */
     public Position add(float x, float y, float z) {
         this.x += x;
         this.y += y;
@@ -28,6 +42,14 @@ public class Position {
         return this;
     }
 
+    /**
+     * Remove offsets to the current position
+     *
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return the same object position
+     */
     public Position subtract(float x, float y, float z) {
         this.x -= x;
         this.y -= y;
@@ -35,6 +57,12 @@ public class Position {
         return this;
     }
 
+    /**
+     * Get the distance between 2 positions
+     *
+     * @param position the second position
+     * @return the distance between {@code this} and {@code position}
+     */
     public float getDistance(Position position) {
         return (float) Math.sqrt(MathUtils.square(position.getX() - getX()) +
                 MathUtils.square(position.getY() - getY()) +
@@ -97,12 +125,22 @@ public class Position {
         return this;
     }
 
+    /**
+     * Set the x/y/z field of this position to the value of {@code position}
+     *
+     * @param position the vector to copy the values from
+     */
     public void copy(Vector position) {
         this.x = position.getX();
         this.y = position.getY();
         this.z = position.getZ();
     }
 
+    /**
+     * Set the x/y/z field of this position to the value of {@code position}
+     *
+     * @param position the position to copy the values from
+     */
     public void copy(Position position) {
         this.x = position.getX();
         this.y = position.getY();
@@ -111,8 +149,36 @@ public class Position {
         this.pitch = position.getPitch();
     }
 
+    /**
+     * Clone this position object with the same values
+     *
+     * @return a new {@link Position} object with the same coordinates
+     */
     public Position clone() {
         return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
+    }
+
+    /**
+     * Get if the two objects are position and have the same values
+     *
+     * @param o the position to check the equality
+     * @return true if the two objects are position with the same values, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return Float.compare(position.x, x) == 0 &&
+                Float.compare(position.y, y) == 0 &&
+                Float.compare(position.z, z) == 0 &&
+                Float.compare(position.yaw, yaw) == 0 &&
+                Float.compare(position.pitch, pitch) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, yaw, pitch);
     }
 
     public float getX() {

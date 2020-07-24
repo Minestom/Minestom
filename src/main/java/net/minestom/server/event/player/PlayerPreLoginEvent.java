@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 public class PlayerPreLoginEvent extends Event {
 
-    private Player player;
+    private final Player player;
     private String username;
     private UUID playerUuid;
 

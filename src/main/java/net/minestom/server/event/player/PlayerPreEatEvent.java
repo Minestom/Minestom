@@ -11,8 +11,8 @@ import net.minestom.server.item.ItemStack;
  */
 public class PlayerPreEatEvent extends CancellableEvent {
 
-    private Player player;
-    private ItemStack foodItem;
+    private final Player player;
+    private final ItemStack foodItem;
     private long eatingTime;
 
     public PlayerPreEatEvent(Player player, ItemStack foodItem, long eatingTime) {

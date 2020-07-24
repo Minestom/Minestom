@@ -9,9 +9,9 @@ import net.minestom.server.event.Event;
  */
 public class PlayerEntityInteractEvent extends Event {
 
-    private Player player;
-    private Entity entityTarget;
-    private Player.Hand hand;
+    private final Player player;
+    private final Entity entityTarget;
+    private final Player.Hand hand;
 
     public PlayerEntityInteractEvent(Player player, Entity entityTarget, Player.Hand hand) {
         this.player = player;

@@ -79,9 +79,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
         // Items picking
         if (canPickupItem()) {
-            Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-            Set<Entity> entities = instance.getChunkEntities(chunk);
-            BoundingBox livingBoundingBox = expandedBoundingBox;
+            final Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
+            final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
 
@@ -89,16 +88,16 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     if (this instanceof Player && !entity.isViewer((Player) this))
                         continue;
 
-                    ItemEntity itemEntity = (ItemEntity) entity;
+                    final ItemEntity itemEntity = (ItemEntity) entity;
                     if (!itemEntity.isPickable())
                         continue;
 
-                    BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                    if (livingBoundingBox.intersect(itemBoundingBox)) {
+                    final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
+                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
                         synchronized (itemEntity) {
                             if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
                                 continue;
-                            ItemStack item = itemEntity.getItemStack();
+                            final ItemStack item = itemEntity.getItemStack();
                             PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
                             callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
                                 CollectItemPacket collectItemPacket = new CollectItemPacket();
@@ -259,7 +258,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             setHealth(getHealth() - damage);
 
             // play damage sound
-            Sound sound = type.getSound(this);
+            final Sound sound = type.getSound(this);
             if (sound != null) {
                 SoundCategory soundCategory;
                 if (this instanceof Player) {
@@ -351,7 +350,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     // Equipments
     public void syncEquipments(PlayerConnection connection) {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+            final EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
             if (entityEquipmentPacket == null)
                 return;
             connection.sendPacket(entityEquipmentPacket);
@@ -365,7 +364,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     public void syncEquipment(EntityEquipmentPacket.Slot slot) {
-        EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
+        final EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
         if (entityEquipmentPacket == null)
             return;
 
@@ -373,7 +372,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
-        ItemStack itemStack = getEquipment(slot);
+        final ItemStack itemStack = getEquipment(slot);
 
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
         equipmentPacket.entityId = getEntityId();
@@ -458,8 +457,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         for (int i = 0; i < length; i++) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
 
-            Attribute attribute = Attribute.values()[i];
-            float value = getAttributeValue(attribute);
+            final Attribute attribute = Attribute.values()[i];
+            final float value = getAttributeValue(attribute);
 
             property.attribute = attribute;
             property.value = value;

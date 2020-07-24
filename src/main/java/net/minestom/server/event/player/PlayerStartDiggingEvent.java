@@ -13,9 +13,9 @@ import net.minestom.server.utils.BlockPosition;
  */
 public class PlayerStartDiggingEvent extends CancellableEvent {
 
-    private Player player;
-    private BlockPosition blockPosition;
-    private CustomBlock customBlock;
+    private final Player player;
+    private final BlockPosition blockPosition;
+    private final CustomBlock customBlock;
 
     public PlayerStartDiggingEvent(Player player, BlockPosition blockPosition, CustomBlock customBlock) {
         this.player = player;

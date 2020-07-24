@@ -14,7 +14,7 @@ import java.util.function.Function;
  */
 public class PlayerChatEvent extends CancellableEvent {
 
-    private Player sender;
+    private final Player sender;
     private Collection<Player> recipients;
     private String message;
     private Function<PlayerChatEvent, RichMessage> chatFormat;
@@ -26,6 +26,8 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
+     * Change the chat format
+     *
      * @param chatFormat the custom chat format
      */
     public void setChatFormat(Function<PlayerChatEvent, RichMessage> chatFormat) {
@@ -33,7 +35,9 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * @return the sender of the message
+     * Get the message sender
+     *
+     * @return the sender
      */
     public Player getSender() {
         return sender;
@@ -50,6 +54,8 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
+     * Get the message sent
+     *
      * @return the sender's message
      */
     public String getMessage() {

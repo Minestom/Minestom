@@ -8,7 +8,7 @@ import net.minestom.server.event.CancellableEvent;
  */
 public class PlayerCommandEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private String command;
 
     public PlayerCommandEvent(Player player, String command) {
@@ -17,13 +17,17 @@ public class PlayerCommandEvent extends CancellableEvent {
     }
 
     /**
-     * @return the player who want to execute the command
+     * Get the player who sent the command
+     *
+     * @return the player
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
+     * Get the command used (command name + arguments)
+     *
      * @return the command that the player wants to execute
      */
     public String getCommand() {

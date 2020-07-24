@@ -9,7 +9,7 @@ import net.minestom.server.utils.Position;
  */
 public class PlayerMoveEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private Position newPosition;
 
     public PlayerMoveEvent(Player player, Position newPosition) {
@@ -33,5 +33,14 @@ public class PlayerMoveEvent extends CancellableEvent {
      */
     public Position getNewPosition() {
         return newPosition;
+    }
+
+    /**
+     * Change the target position
+     *
+     * @param newPosition the new target position
+     */
+    public void setNewPosition(Position newPosition) {
+        this.newPosition = newPosition;
     }
 }

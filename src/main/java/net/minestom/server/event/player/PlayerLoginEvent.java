@@ -11,7 +11,7 @@ import net.minestom.server.instance.Instance;
  */
 public class PlayerLoginEvent extends Event {
 
-    private Player player;
+    private final Player player;
     private Instance spawningInstance;
 
     public PlayerLoginEvent(Player player) {

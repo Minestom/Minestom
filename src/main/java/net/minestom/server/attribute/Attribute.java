@@ -5,7 +5,7 @@ public enum Attribute {
     MAX_HEALTH("generic.max_health", 20, 1024),
     FOLLOW_RANGE("generic.follow_range", 32, 2048),
     KNOCKBACK_RESISTANCE("generic.knockback_resistance", 0, 1),
-    MOVEMENT_SPEED("generic.movement_speed", 0.7f, 1024),
+    MOVEMENT_SPEED("generic.movement_speed", 0.25f, 1024),
     ATTACK_DAMAGE("generic.attack_damage", 2, 2048),
     ATTACK_SPEED("generic.attack_speed", 4, 1024),
     FLYING_SPEED("generic.flying_speed", 0.4f, 1024),

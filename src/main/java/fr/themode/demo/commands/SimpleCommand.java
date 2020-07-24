@@ -5,6 +5,7 @@ import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -52,24 +53,10 @@ public class SimpleCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
-        ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+        ChickenCreature chickenCreature = new ChickenCreature(new Position(-10, 40, -10));
         chickenCreature.setInstance(instance);
 
-        /*PFPathingEntity pathingEntity = new PFPathingEntity(chickenCreature);
-        PFInstanceSpace instanceSpace = new PFInstanceSpace(instance);
-
-        final HydrazinePathFinder pathFinder = new HydrazinePathFinder(pathingEntity, instanceSpace);
-
-        final PathObject path = pathFinder.initiatePathTo(-10, 42, -10);
-
-        System.out.println("path: "+path);
-
-        for (Iterator<Vec3i> it = path.iterator(); it.hasNext(); ) {
-            Vec3i ite = it.next();
-
-            System.out.println("test: " + ite);
-
-        }*/
+        chickenCreature.setPathTo(player.getPosition());
 
         return true;
     }

@@ -8,9 +8,9 @@ import net.minestom.server.event.Event;
  */
 public class PlayerPluginMessageEvent extends Event {
 
-    private Player player;
-    private String identifier;
-    private byte[] message;
+    private final Player player;
+    private final String identifier;
+    private final byte[] message;
 
     public PlayerPluginMessageEvent(Player player, String identifier, byte[] message) {
         this.player = player;

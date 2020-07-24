@@ -9,8 +9,8 @@ import net.minestom.server.event.Event;
  */
 public class EntityAttackEvent extends Event {
 
-    private Entity source;
-    private Entity target;
+    private final Entity source;
+    private final Entity target;
 
     public EntityAttackEvent(Entity source, Entity target) {
         this.source = source;

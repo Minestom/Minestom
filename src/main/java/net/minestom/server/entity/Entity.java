@@ -319,7 +319,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
 
         if (scheduledRemoveTime != 0) { // Any entity with scheduled remove does not update
-            boolean finished = time >= scheduledRemoveTime;
+            final boolean finished = time >= scheduledRemoveTime;
             if (finished) {
                 remove();
             }
@@ -377,7 +377,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 }
 
                 Vector newVelocityOut = new Vector();
-                Vector deltaPos = new Vector(
+                final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
                         getVelocity().getY() / tps,
                         getVelocity().getZ() / tps
@@ -386,8 +386,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
                 // World border collision
                 {
-                    WorldBorder worldBorder = instance.getWorldBorder();
-                    WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
+                    final WorldBorder worldBorder = instance.getWorldBorder();
+                    final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
                     switch (collisionAxis) {
                         case NONE:
                             // Apply velocity + gravity
@@ -434,20 +434,20 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             }
 
             // handle block contacts
-            int minX = (int) Math.floor(boundingBox.getMinX());
-            int maxX = (int) Math.ceil(boundingBox.getMaxX());
-            int minY = (int) Math.floor(boundingBox.getMinY());
-            int maxY = (int) Math.ceil(boundingBox.getMaxY());
-            int minZ = (int) Math.floor(boundingBox.getMinZ());
-            int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
-            BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
+            final int minX = (int) Math.floor(boundingBox.getMinX());
+            final int maxX = (int) Math.ceil(boundingBox.getMaxX());
+            final int minY = (int) Math.floor(boundingBox.getMinY());
+            final int maxY = (int) Math.ceil(boundingBox.getMaxY());
+            final int minZ = (int) Math.floor(boundingBox.getMinZ());
+            final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
+            final BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
                         chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, x, z);
                         if (chunkUnloaded)
                             continue;
-                        CustomBlock customBlock = instance.getCustomBlock(x, y, z);
+                        final CustomBlock customBlock = instance.getCustomBlock(x, y, z);
                         if (customBlock != null) {
                             tmpPosition.setX(x);
                             tmpPosition.setY(y);

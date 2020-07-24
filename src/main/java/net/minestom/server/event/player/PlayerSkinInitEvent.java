@@ -9,7 +9,7 @@ import net.minestom.server.event.Event;
  */
 public class PlayerSkinInitEvent extends Event {
 
-    private Player player;
+    private final Player player;
     private PlayerSkin skin;
 
     public PlayerSkinInitEvent(Player player) {
@@ -19,7 +19,7 @@ public class PlayerSkinInitEvent extends Event {
     /**
      * Get the player whose the skin is getting initialized
      *
-     * @return
+     * @return the player
      */
     public Player getPlayer() {
         return player;

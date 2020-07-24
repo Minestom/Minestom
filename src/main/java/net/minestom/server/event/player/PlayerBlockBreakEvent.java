@@ -1,10 +1,13 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 
 public class PlayerBlockBreakEvent extends CancellableEvent {
+
+    private final Player player;
 
     private BlockPosition blockPosition;
 
@@ -14,9 +17,11 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     private short resultBlockId;
     private short resultCustomBlockId;
 
-    public PlayerBlockBreakEvent(BlockPosition blockPosition,
+    public PlayerBlockBreakEvent(Player player, BlockPosition blockPosition,
                                  short blockId, CustomBlock customBlock,
                                  short resultBlockId, short resultCustomBlockId) {
+        this.player = player;
+
         this.blockPosition = blockPosition;
 
         this.blockId = blockId;
@@ -24,6 +29,15 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
 
         this.resultBlockId = resultBlockId;
         this.resultCustomBlockId = resultCustomBlockId;
+    }
+
+    /**
+     * Get the player who breaks the block
+     *
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     /**
