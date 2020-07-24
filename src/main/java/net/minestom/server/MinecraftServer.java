@@ -69,9 +69,6 @@ public class MinecraftServer {
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
 
-    public static final String THREAD_NAME_ENTITIES_PATHFINDING = "Ms-EntitiesPathFinding";
-    public static final int THREAD_COUNT_ENTITIES_PATHFINDING = 2;
-
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
     public static final int THREAD_COUNT_SCHEDULER = 1;
 

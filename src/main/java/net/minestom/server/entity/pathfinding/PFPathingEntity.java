@@ -1,4 +1,4 @@
-package net.minestom.server.entity.pathfinding.hydrazine;
+package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.model.IPathingEntity;
 import com.extollit.linalg.immutable.Vec3d;
@@ -75,7 +75,7 @@ public class PFPathingEntity implements IPathingEntity {
     public void moveTo(Vec3d position) {
         final Position entityPosition = entity.getPosition();
         final float entityY = entityPosition.getY();
-        final float speed = entity.getAttributeValue(Attribute.MOVEMENT_SPEED) / 5;
+        final float speed = entity.getAttributeValue(Attribute.MOVEMENT_SPEED);
         final float x = (float) position.x;
         final float y = (float) position.y;
         final float z = (float) position.z;

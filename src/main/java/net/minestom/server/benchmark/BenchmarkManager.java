@@ -24,7 +24,6 @@ public class BenchmarkManager {
         threads.add(THREAD_NAME_MAIN_UPDATE);
         threads.add(THREAD_NAME_PACKET_WRITER);
         threads.add(THREAD_NAME_BLOCK_BATCH);
-        threads.add(THREAD_NAME_ENTITIES_PATHFINDING);
         threads.add(THREAD_NAME_SCHEDULER);
         threads.add(THREAD_NAME_TICK);
     }

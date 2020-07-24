@@ -1,4 +1,4 @@
-package net.minestom.server.entity.pathfinding.hydrazine;
+package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.model.IBlockDescription;
 import net.minestom.server.instance.block.Block;

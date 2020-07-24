@@ -5,7 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.*;
-import net.minestom.server.entity.pathfinding.hydrazine.PFInstanceSpace;
+import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.handler.EventHandler;

@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.PathObject;
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.entity.pathfinding.hydrazine.PFPathingEntity;
+import net.minestom.server.entity.pathfinding.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Instance;
@@ -52,8 +52,12 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         path = pathFinder.update();
-        if (path != null)
+        if (path != null) {
             path.update(pathingEntity);
+            if (path.done()) {
+                pathFinder.reset();
+            }
+        }
     }
 
     @Override
@@ -261,6 +265,14 @@ public abstract class EntityCreature extends LivingEntity {
         setVelocity(velocity);
     }
 
+    /**
+     * Retrieve the path to {@code position} and ask the entity to follow the path
+     * <p>
+     * The position is cloned, if you want the entity to continually follow this position object
+     * you need to call this when you want the path to update
+     *
+     * @param position the position to find the path to
+     */
     public void setPathTo(Position position) {
         position = position.clone();
         this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
