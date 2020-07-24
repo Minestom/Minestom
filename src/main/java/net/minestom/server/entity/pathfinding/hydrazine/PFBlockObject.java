@@ -37,7 +37,7 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isImpeding() {
-        return false;
+        return block.isSolid();
     }
 
     @Override

@@ -26,9 +26,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.MapDataPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
@@ -54,7 +52,7 @@ public class PlayerInit {
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -247,7 +245,7 @@ public class PlayerInit {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
                 }*/
 
-                ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
+                /*ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
                 MapMeta mapMeta = (MapMeta) map.getItemMeta();
                 mapMeta.setMapId(1);
                 player.getInventory().setItemStack(0, map);
@@ -275,7 +273,7 @@ public class PlayerInit {
 
                     player.getPlayerConnection().sendPacket(mapDataPacket);
 
-                }
+                }*/
 
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);

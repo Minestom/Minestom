@@ -9,12 +9,17 @@ import java.util.Map;
 
 public class BlockManager {
 
+    // custom block id -> custom block
     private Short2ObjectMap<CustomBlock> customBlocksInternalId = new Short2ObjectOpenHashMap<>();
+    // custom block identifier -> custom block
     private Map<String, CustomBlock> customBlocksId = new HashMap<>();
 
+    // block id -> block placement rule
     private Short2ObjectOpenHashMap<BlockPlacementRule> placementRules = new Short2ObjectOpenHashMap<>();
 
     /**
+     * Register a custom block
+     *
      * @param customBlock the custom block to register
      */
     public void registerCustomBlock(CustomBlock customBlock) {
@@ -25,6 +30,8 @@ public class BlockManager {
     }
 
     /**
+     * Register a block placement rule
+     *
      * @param blockPlacementRule the block placement rule to register
      */
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
@@ -32,6 +39,8 @@ public class BlockManager {
     }
 
     /**
+     * Get the block placement rule of the specific block
+     *
      * @param blockId the block id to check
      * @return the block placement rule associated with the id, null if not any
      */
@@ -42,6 +51,8 @@ public class BlockManager {
     }
 
     /**
+     * Get the block placement rule of the specific block
+     *
      * @param block the block to check
      * @return the block placement rule associated with the block, null if not any
      */
@@ -50,6 +61,8 @@ public class BlockManager {
     }
 
     /**
+     * Get the CustomBlock with the specific identifier {@link CustomBlock#getIdentifier()}
+     *
      * @param identifier the custom block identifier
      * @return the {@link CustomBlock} associated with the identifier, null if not any
      */
@@ -58,6 +71,8 @@ public class BlockManager {
     }
 
     /**
+     * Get the CustomBlock with the specific custom block id {@link CustomBlock#getCustomBlockId()}
+     *
      * @param id the custom block id
      * @return the {@link CustomBlock} associated with the id, null if not any
      */

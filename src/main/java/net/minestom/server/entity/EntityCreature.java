@@ -1,28 +1,26 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.attribute.Attribute;
+import com.extollit.gaming.ai.path.HydrazinePathFinder;
+import com.extollit.gaming.ai.path.model.PathObject;
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.entity.pathfinding.EntityPathFinder;
+import net.minestom.server.entity.pathfinding.hydrazine.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
-import java.util.LinkedList;
-import java.util.function.Consumer;
-
 public abstract class EntityCreature extends LivingEntity {
 
-    private EntityPathFinder pathFinder = new EntityPathFinder(this);
-    private LinkedList<BlockPosition> blockPositions;
-    private Position targetPosition;
+    private PFPathingEntity pathingEntity = new PFPathingEntity(this);
+    private HydrazinePathFinder pathFinder;
+    private PathObject path;
 
     // Equipments
     private ItemStack mainHandItem;
@@ -53,7 +51,15 @@ public abstract class EntityCreature extends LivingEntity {
         super.update(time);
 
         // Path finding
-        pathProgress();
+        path = pathFinder.update();
+        if (path != null)
+            path.update(pathingEntity);
+    }
+
+    @Override
+    public void setInstance(Instance instance) {
+        super.setInstance(instance);
+        this.pathFinder = new HydrazinePathFinder(pathingEntity, instance.getInstanceSpace());
     }
 
     /**
@@ -128,7 +134,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public boolean addViewer(Player player) {
-        boolean result = super.addViewer(player);
+        final boolean result = super.addViewer(player);
         if (!result)
             return false;
 
@@ -251,34 +257,13 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        Vector velocity = new Vector(0, height * 5, 0);
+        final Vector velocity = new Vector(0, height * 5, 0);
         setVelocity(velocity);
     }
 
-    public void setPathTo(Position position, int maxCheck, Consumer<Boolean> resultConsumer) {
-        pathFinder.getPath(position, maxCheck, blockPositions -> {
-            if (blockPositions == null || blockPositions.isEmpty()) {
-                // Didn't find path
-                if (resultConsumer != null)
-                    resultConsumer.accept(false);
-                return;
-            }
-            blockPositions.pollFirst(); // Remove first entry (where the entity is)
-
-            this.blockPositions = blockPositions;
-            setNextPathPosition();
-
-            if (resultConsumer != null)
-                resultConsumer.accept(true);
-        });
-    }
-
-    public void setPathTo(Position position, int maxCheck) {
-        setPathTo(position, maxCheck, null);
-    }
-
     public void setPathTo(Position position) {
-        setPathTo(position, 1000, null);
+        position = position.clone();
+        this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
     }
 
     /**
@@ -295,42 +280,22 @@ public abstract class EntityCreature extends LivingEntity {
         move(speedX, 0, speedZ, true);
     }
 
-    private void setNextPathPosition() {
-        final BlockPosition blockPosition = blockPositions.pollFirst();
-
-        if (blockPosition == null) {
-            this.blockPositions = null;
-            this.targetPosition = null;
-            return;
-        }
-
-        this.targetPosition = blockPosition.toPosition();//.add(0.5f, 0, 0.5f);
-        if (blockPosition.getY() > getPosition().getY())
-            jump(1);
-    }
-
-    private void pathProgress() {
-        if (blockPositions != null) {
-            if (targetPosition != null) {
-                final float distance = getPosition().getDistance(targetPosition);
-                //System.out.println("test: "+distance);
-                if (distance < 1f) {
-                    setNextPathPosition();
-                    pathProgress();
-                    //System.out.println("END TARGET");
-                } else {
-                    moveTowards(targetPosition, getAttributeValue(Attribute.MOVEMENT_SPEED));
-                    //System.out.println("MOVE TOWARD " + targetPosition);
-                }
-            }
-        }
-    }
-
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
         itemStack = ItemStackUtils.notNull(itemStack);
 
         ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
         callEvent(ArmorEquipEvent.class, armorEquipEvent);
         return armorEquipEvent.getArmorItem();
+    }
+
+    /**
+     * Get the pathfinding entity
+     * <p>
+     * Used internally by the pathfinder
+     *
+     * @return the pathfinding entity
+     */
+    public PFPathingEntity getPathingEntity() {
+        return pathingEntity;
     }
 }

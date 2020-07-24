@@ -28,7 +28,7 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isImpeding() {
-        return false;
+        return block.isSolid();
     }
 
     @Override

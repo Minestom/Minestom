@@ -73,8 +73,16 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position) {
-        float speed = entity.getAttributeValue(Attribute.MOVEMENT_SPEED);
-        entity.moveTowards(new Position((float) position.x, (float) position.y, (float) position.z), speed);
+        final Position entityPosition = entity.getPosition();
+        final float entityY = entityPosition.getY();
+        final float speed = entity.getAttributeValue(Attribute.MOVEMENT_SPEED) / 5;
+        final float x = (float) position.x;
+        final float y = (float) position.y;
+        final float z = (float) position.z;
+        entity.moveTowards(new Position(x, y, z), speed);
+        if (entityY < y) {
+            entity.jump(1);
+        }
     }
 
     @Override
