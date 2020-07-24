@@ -53,7 +53,7 @@ public class SimpleCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
-        ChickenCreature chickenCreature = new ChickenCreature(new Position(-10, 42, -10));
+        ChickenCreature chickenCreature = new ChickenCreature(new Position(-10, 40, -10));
         chickenCreature.setInstance(instance);
 
         chickenCreature.setPathTo(player.getPosition());

@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.PathObject;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -15,6 +16,7 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 
 public abstract class EntityCreature extends LivingEntity {
 
@@ -56,6 +58,11 @@ public abstract class EntityCreature extends LivingEntity {
             path.update(pathingEntity);
             if (path.done()) {
                 pathFinder.reset();
+            } else {
+                final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+                Position targetPosition = pathingEntity.getTargetPosition();
+                //targetPosition = new Position(-5, 40, -5);
+                moveTowards(targetPosition, speed);
             }
         }
     }
@@ -292,10 +299,45 @@ public abstract class EntityCreature extends LivingEntity {
      * @param speed     define how far the entity will move
      */
     public void moveTowards(Position direction, float speed) {
-        final float radians = (float) Math.atan2(direction.getZ() - position.getZ(), direction.getX() - position.getX());
+        Check.notNull(direction, "The direction cannot be null");
+        final float currentX = position.getX();
+        final float currentZ = position.getZ();
+        final float targetX = direction.getX();
+        final float targetZ = direction.getZ();
+
+        final float radians = (float) Math.atan2(targetZ - currentZ, targetX - currentX);
         final float speedX = (float) (Math.cos(radians) * speed);
         final float speedZ = (float) (Math.sin(radians) * speed);
-        move(speedX, 0, speedZ, true);
+
+        float finalX = speedX;
+        float finalZ = speedZ;
+
+        //System.out.println("TEST X: " + targetX + " : " + currentX + " : " + speedX);
+        //System.out.println("TEST Z: "+targetZ+" : "+currentZ+" : "+speedZ);
+
+        // X checks
+        /*if (targetX > currentX && currentX + speedX > targetX) {
+            // Try to go further +X
+            finalX = targetX;
+            System.out.println("CHECK 1");
+        } else if (targetX < currentX && currentX + speedX < targetX) {
+            // Try to go further -X
+            finalX = targetX;
+            System.out.println("CHECK 2");
+        }
+
+        // Z checks
+        if (targetZ > currentZ && currentZ + speedZ >= targetZ) {
+            // Try to go further +X
+            finalZ = targetZ;
+            System.out.println("CHECK 3");
+        } else if (targetZ < currentZ && currentZ + speedZ < targetZ) {
+            // Try to go further -X
+            finalZ = targetX;
+            System.out.println("CHECK 4");
+        }*/
+
+        move(finalX, 0, finalZ, true);
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {

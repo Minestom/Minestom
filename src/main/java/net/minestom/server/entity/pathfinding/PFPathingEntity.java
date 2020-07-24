@@ -12,8 +12,14 @@ public class PFPathingEntity implements IPathingEntity {
 
     private EntityCreature entity;
 
+    private Position targetPosition;
+
     public PFPathingEntity(EntityCreature entity) {
         this.entity = entity;
+    }
+
+    public Position getTargetPosition() {
+        return targetPosition;
     }
 
     @Override
@@ -73,21 +79,20 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position) {
-        final Position entityPosition = entity.getPosition();
-        final float entityY = entityPosition.getY();
-        final float speed = entity.getAttributeValue(Attribute.MOVEMENT_SPEED);
         final float x = (float) position.x;
         final float y = (float) position.y;
         final float z = (float) position.z;
-        entity.moveTowards(new Position(x, y, z), speed);
+        this.targetPosition = new Position(x, y, z);
+
+        final float entityY = entity.getPosition().getY();
         if (entityY < y) {
-            entity.jump(1);
+            //entity.jump(1);
         }
     }
 
     @Override
     public Vec3d coordinates() {
-        Position position = entity.getPosition();
+        final Position position = entity.getPosition();
         return new Vec3d(position.getX(), position.getY(), position.getZ());
     }
 

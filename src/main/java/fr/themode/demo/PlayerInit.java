@@ -52,7 +52,7 @@ public class PlayerInit {
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -240,7 +240,7 @@ public class PlayerInit {
                 //player.setHeldItemSlot((byte) 5);
 
                 player.setGlowing(true);
-
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
                 /*for (int i = 0; i < 9; i++) {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
                 }*/
