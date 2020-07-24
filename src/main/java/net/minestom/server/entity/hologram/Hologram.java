@@ -1,12 +1,16 @@
 package net.minestom.server.entity.hologram;
 
+import net.minestom.server.Viewable;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.EntityArmorStand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
 
-public class Hologram {
+import java.util.Set;
+
+public class Hologram implements Viewable {
 
     private static final float OFFSET_Y = -0.9875f;
 
@@ -60,9 +64,34 @@ public class Hologram {
         return removed;
     }
 
+    /**
+     * Get the hologram entity (armor stand)
+     *
+     * @return the hologram entity
+     */
+    public HologramEntity getEntity() {
+        return entity;
+    }
+
+    @Override
+    public boolean addViewer(Player player) {
+        return entity.addViewer(player);
+    }
+
+    @Override
+    public boolean removeViewer(Player player) {
+        return entity.removeViewer(player);
+    }
+
+    @Override
+    public Set<Player> getViewers() {
+        return entity.getViewers();
+    }
+
     private void checkRemoved() {
         Check.stateCondition(isRemoved(), "You cannot interact with a removed Hologram");
     }
+
 
     private class HologramEntity extends EntityArmorStand {
 
