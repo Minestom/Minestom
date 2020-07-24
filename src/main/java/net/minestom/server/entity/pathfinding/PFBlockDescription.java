@@ -18,7 +18,7 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isClimbable() {
-        return false;
+        return block == Block.LADDER;
     }
 
     @Override
@@ -43,6 +43,6 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isIncinerating() {
-        return false;
+        return block == Block.LAVA || block == Block.FIRE;
     }
 }

@@ -21,16 +21,21 @@ public class PFInstanceSpace implements IInstanceSpace {
 
     @Override
     public IBlockObject blockObjectAt(int x, int y, int z) {
-        short blockId = instance.getBlockId(x, y, z);
-        Block block = Block.fromId(blockId);
+        final short blockId = instance.getBlockId(x, y, z);
+        final Block block = Block.fromId(blockId);
         return new PFBlockObject(block);
     }
 
     @Override
     public IColumnarSpace columnarSpaceAt(int cx, int cz) {
-        Chunk chunk = instance.getChunk(cx, cz);
-        PFColumnarSpace columnarSpace =
-                chunkSpaceMap.computeIfAbsent(chunk, c -> new PFColumnarSpace(this, c));
+        final Chunk chunk = instance.getChunk(cx, cz);
+        final PFColumnarSpace columnarSpace =
+                chunkSpaceMap.computeIfAbsent(chunk, c -> {
+                    final PFColumnarSpace cs = new PFColumnarSpace(this, c);
+                    c.setColumnarSpace(cs);
+                    return cs;
+                });
+
         return columnarSpace;
     }
 
