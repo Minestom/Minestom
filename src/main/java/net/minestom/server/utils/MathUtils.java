@@ -39,6 +39,10 @@ public class MathUtils {
         return Direction.HORIZONTAL[directionIndex];
     }
 
+    public static float clampFloat(float t, float a, float b) {
+        return Math.max(a, Math.min(t, b));
+    }
+
     public static boolean isBetween(byte number, byte min, byte max) {
         return number >= min && number <= max;
     }

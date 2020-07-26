@@ -1,8 +1,8 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.animation.ArmAnimationEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
@@ -65,20 +65,20 @@ public class UseItemListener {
             }
         }
 
-        ArmAnimationEvent armAnimationEvent = null;
+        PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
         final boolean offhand = hand == Player.Hand.OFF;
         boolean riptideSpinAttack = false;
 
         if (material == Material.BOW) {
-            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.BOW);
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BOW;
         } else if (material == Material.CROSSBOW) {
-            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.CROSSBOW);
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.CROSSBOW;
         } else if (material == Material.SHIELD) {
-            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.SHIELD);
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.SHIELD;
         } else if (material == Material.TRIDENT) {
-            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.TRIDENT);
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.TRIDENT;
         } else if (material.isFood()) {
-            armAnimationEvent = new ArmAnimationEvent(ArmAnimationEvent.ArmAnimationType.EAT);
+            itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
             PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, player.getDefaultEatingTime());
@@ -87,11 +87,13 @@ public class UseItemListener {
             });
         }
 
-        if (armAnimationEvent != null)
-            player.callCancellableEvent(ArmAnimationEvent.class, armAnimationEvent, () -> {
+        if (itemAnimationType != null) {
+            PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
+            player.callCancellableEvent(PlayerItemAnimationEvent.class, playerItemAnimationEvent, () -> {
                 player.refreshActiveHand(true, offhand, riptideSpinAttack);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
+        }
     }
 
 }
