@@ -9,23 +9,39 @@ public class PacketController {
         this.packetListenerConsumer = packetListenerConsumer;
     }
 
+    /**
+     * Get if the packet is cancelled
+     *
+     * @return true if the packet will be cancelled, false otherwise
+     */
     public boolean isCancel() {
         return cancel;
     }
 
     /**
-     * @param cancel true if the packet should be cancelled
+     * Used to cancel the packet
+     *
+     * @param cancel true if the packet should be cancelled, false otherwise
      */
     public void setCancel(boolean cancel) {
         this.cancel = cancel;
     }
 
+    /**
+     * Get the listener associated with the packet
+     *
+     * @return the packet's listener
+     */
     public PacketListenerConsumer getPacketListenerConsumer() {
         return packetListenerConsumer;
     }
 
     /**
-     * @param packetListenerConsumer the new listener (do not override the default listener)
+     * Change the packet listener, setting it to null cancel the listener
+     * <p>
+     * WARNING: this will overwrite the default minestom listener
+     *
+     * @param packetListenerConsumer the new packet listener
      */
     public void setPacketListenerConsumer(PacketListenerConsumer packetListenerConsumer) {
         this.packetListenerConsumer = packetListenerConsumer;

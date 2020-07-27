@@ -468,7 +468,7 @@ public class Player extends LivingEntity implements CommandSender {
         respawnPacket.gameMode = getGameMode();
         respawnPacket.levelType = getLevelType();
         getPlayerConnection().sendPacket(respawnPacket);
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this, getRespawnPoint());
+        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         callEvent(PlayerRespawnEvent.class, respawnEvent);
         refreshIsDead(false);
 
@@ -2171,7 +2171,7 @@ public class Player extends LivingEntity implements CommandSender {
          * @param chatMode           the player chat mode
          * @param chatColors         the player chat colors
          * @param displayedSkinParts the player displayed skin parts
-         * @param mainHand           the player main handœ
+         * @param mainHand           the player main hand
          */
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
             this.locale = locale;

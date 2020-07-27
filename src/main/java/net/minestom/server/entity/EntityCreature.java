@@ -11,6 +11,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -300,44 +301,19 @@ public abstract class EntityCreature extends LivingEntity {
      */
     public void moveTowards(Position direction, float speed) {
         Check.notNull(direction, "The direction cannot be null");
-        final float currentX = position.getX();
-        final float currentZ = position.getZ();
-        final float targetX = direction.getX();
-        final float targetZ = direction.getZ();
+        final float x = getPosition().getX();
+        final float y = getPosition().getY();
+        final float z = getPosition().getZ();
 
-        final float radians = (float) Math.atan2(targetZ - currentZ, targetX - currentX);
-        final float speedX = (float) (Math.cos(radians) * speed);
-        final float speedZ = (float) (Math.sin(radians) * speed);
+        float dx = (direction.getX() - x);
+        float dy = (direction.getY() - y);
+        float dz = (direction.getZ() - z);
 
-        float finalX = speedX;
-        float finalZ = speedZ;
+        dx = MathUtils.clampFloat(dx, -speed, speed);
+        dy = MathUtils.clampFloat(dy, -speed, speed);
+        dz = MathUtils.clampFloat(dz, -speed, speed);
 
-        //System.out.println("TEST X: " + targetX + " : " + currentX + " : " + speedX);
-        //System.out.println("TEST Z: "+targetZ+" : "+currentZ+" : "+speedZ);
-
-        // X checks
-        /*if (targetX > currentX && currentX + speedX > targetX) {
-            // Try to go further +X
-            finalX = targetX;
-            System.out.println("CHECK 1");
-        } else if (targetX < currentX && currentX + speedX < targetX) {
-            // Try to go further -X
-            finalX = targetX;
-            System.out.println("CHECK 2");
-        }
-
-        // Z checks
-        if (targetZ > currentZ && currentZ + speedZ >= targetZ) {
-            // Try to go further +X
-            finalZ = targetZ;
-            System.out.println("CHECK 3");
-        } else if (targetZ < currentZ && currentZ + speedZ < targetZ) {
-            // Try to go further -X
-            finalZ = targetX;
-            System.out.println("CHECK 4");
-        }*/
-
-        move(finalX, 0, finalZ, true);
+        move(dx, dy, dz, true);
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {

@@ -17,41 +17,41 @@ public class PacketListenerManager {
     private Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager() {
-        addListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
-        addListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
-        addListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
-        addListener(ClientCloseWindow.class, WindowListener::closeWindowListener);
-        addListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
-        addListener(ClientEntityActionPacket.class, EntityActionListener::listener);
-        addListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
-        addListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
-        addListener(ClientSteerVehiclePacket.class, PlayerVehicleListener::steerVehicleListener);
-        addListener(ClientVehicleMovePacket.class, PlayerVehicleListener::vehicleMoveListener);
-        addListener(ClientSteerBoatPacket.class, PlayerVehicleListener::boatSteerListener);
-        addListener(ClientPlayerPacket.class, PlayerPositionListener::playerPacketListener);
-        addListener(ClientPlayerRotationPacket.class, PlayerPositionListener::playerLookListener);
-        addListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
-        addListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
-        addListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
-        addListener(ClientAnimationPacket.class, AnimationListener::animationListener);
-        addListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
-        addListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
-        addListener(ClientStatusPacket.class, StatusListener::listener);
-        addListener(ClientSettingsPacket.class, SettingsListener::listener);
-        addListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
-        addListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
-        addListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
-        addListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
-        addListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
-        addListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
-        addListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
+        setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
+        setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
+        setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
+        setListener(ClientCloseWindow.class, WindowListener::closeWindowListener);
+        setListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
+        setListener(ClientEntityActionPacket.class, EntityActionListener::listener);
+        setListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
+        setListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
+        setListener(ClientSteerVehiclePacket.class, PlayerVehicleListener::steerVehicleListener);
+        setListener(ClientVehicleMovePacket.class, PlayerVehicleListener::vehicleMoveListener);
+        setListener(ClientSteerBoatPacket.class, PlayerVehicleListener::boatSteerListener);
+        setListener(ClientPlayerPacket.class, PlayerPositionListener::playerPacketListener);
+        setListener(ClientPlayerRotationPacket.class, PlayerPositionListener::playerLookListener);
+        setListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
+        setListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
+        setListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
+        setListener(ClientAnimationPacket.class, AnimationListener::animationListener);
+        setListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
+        setListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
+        setListener(ClientStatusPacket.class, StatusListener::listener);
+        setListener(ClientSettingsPacket.class, SettingsListener::listener);
+        setListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
+        setListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
+        setListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
+        setListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
+        setListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
+        setListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
+        setListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
 
         final Class clazz = packet.getClass();
 
-        final PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
+        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
@@ -67,6 +67,9 @@ public class PacketListenerManager {
         if (packetController.isCancel())
             return;
 
+        // Get the new listener (or the same) from the packet controller
+        packetListenerConsumer = packetController.getPacketListenerConsumer();
+
         // Call the listener if not null
         // (can be null because no listener is set, or because it has been changed by the controller)
         if (packetListenerConsumer != null) {
@@ -74,7 +77,16 @@ public class PacketListenerManager {
         }
     }
 
-    public <T extends ClientPlayPacket> void addListener(Class<T> packetClass, PacketListenerConsumer<T> consumer) {
+    /**
+     * Set the listener of a packet
+     * <p>
+     * WARNING: this will overwrite the default minestom listener, this is not reversible
+     *
+     * @param packetClass the class of the packet
+     * @param consumer    the new packet's listener
+     * @param <T>         the type of the packet
+     */
+    public <T extends ClientPlayPacket> void setListener(Class<T> packetClass, PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
     }
 

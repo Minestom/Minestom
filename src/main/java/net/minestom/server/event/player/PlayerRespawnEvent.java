@@ -13,9 +13,9 @@ public class PlayerRespawnEvent extends Event {
     private final Player player;
     private Position respawnPosition;
 
-    public PlayerRespawnEvent(Player player, Position respawnPosition) {
+    public PlayerRespawnEvent(Player player) {
         this.player = player;
-        this.respawnPosition = respawnPosition;
+        this.respawnPosition = player.getRespawnPoint();
     }
 
     /**
@@ -29,6 +29,8 @@ public class PlayerRespawnEvent extends Event {
 
     /**
      * Get the respawn position
+     * <p>
+     * Is by default {@link Player#getRespawnPoint()}
      *
      * @return the respawn position
      */
