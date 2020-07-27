@@ -11,13 +11,21 @@ import net.minestom.server.utils.time.UpdateOption;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
- * TODO
- * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (accumulation)
+ * Represent the handler of a custom block type.
+ * <p>
+ * There should be only one instance of this class for each custom block type,
+ * every individual blocks will execute the callbacks present there. Each of which contains the
+ * custom block position and the instance concerned
  */
 public abstract class CustomBlock {
 
-    private short blockId;
-    private String identifier;
+    /**
+     * TODO
+     * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (accumulation)
+     */
+
+    private final short blockId;
+    private final String identifier;
 
     /**
      * @param blockId    the visual block id
@@ -179,9 +187,9 @@ public abstract class CustomBlock {
     /**
      * Called when a scheduled update on this block happens. By default, calls 'update'
      *
-     * @param instance
-     * @param position
-     * @param blockData
+     * @param instance  the instance of the block
+     * @param position  the position of the block
+     * @param blockData the data of the block
      */
     public void scheduledUpdate(Instance instance, BlockPosition position, Data blockData) {
         update(instance, position, blockData);
@@ -214,7 +222,7 @@ public abstract class CustomBlock {
      * Return the loot table associated to this block. Return null to use vanilla behavior
      *
      * @param tableManager
-     * @return
+     * @return the loot table associated to this block
      */
     public LootTable getLootTable(LootTableManager tableManager) {
         return null;
