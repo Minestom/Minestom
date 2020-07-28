@@ -1,5 +1,6 @@
 package net.minestom.server.inventory;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
@@ -9,13 +10,14 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
@@ -47,6 +49,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
     private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
+    // Cached windows packet
+    private ByteBuf windowItemsBuffer;
+    // True if the buffer above is up to date, false otherwise
+    private boolean windowItemsBufferUpdated;
+
     public Inventory(InventoryType inventoryType, String title) {
         this.id = generateId();
         this.inventoryType = inventoryType;
@@ -68,14 +75,29 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return newInventoryId;
     }
 
+    /**
+     * Get the inventory type
+     *
+     * @return the inventory type
+     */
     public InventoryType getInventoryType() {
         return inventoryType;
     }
 
+    /**
+     * Get the inventory title
+     *
+     * @return the inventory title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Change the inventory title
+     *
+     * @param title the new inventory title
+     */
     public void setTitle(String title) {
         this.title = title;
 
@@ -89,6 +111,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         update();
     }
 
+    /**
+     * Get this window id
+     * <p>
+     * This is the id that the client will send to identify the affected inventory
+     *
+     * @return the window id
+     */
     public byte getWindowId() {
         return id;
     }
@@ -103,16 +132,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public synchronized boolean addItemStack(ItemStack itemStack) {
-        StackingRule stackingRule = itemStack.getStackingRule();
+        final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < getSize(); i++) {
             ItemStack item = getItemStack(i);
-            StackingRule itemStackingRule = item.getStackingRule();
+            final StackingRule itemStackingRule = item.getStackingRule();
             if (itemStackingRule.canBeStacked(itemStack, item)) {
-                int itemAmount = itemStackingRule.getAmount(item);
+                final int itemAmount = itemStackingRule.getAmount(item);
                 if (itemAmount == stackingRule.getMaxSize())
                     continue;
-                int itemStackAmount = itemStackingRule.getAmount(itemStack);
-                int totalAmount = itemStackAmount + itemAmount;
+                final int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                final int totalAmount = itemStackAmount + itemAmount;
                 if (!stackingRule.canApply(itemStack, totalAmount)) {
                     item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
 
@@ -160,7 +189,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Refresh the inventory for all viewers
      */
     public void update() {
-        PacketWriterUtils.writeAndSend(getViewers(), createWindowItemsPacket());
+        final ByteBuf packetBuffer = getWindowItemsBuffer();
+        getViewers().forEach(player -> {
+            final PlayerConnection playerConnection = player.getPlayerConnection();
+            playerConnection.sendPacket(packetBuffer, true);
+        });
     }
 
     /**
@@ -173,7 +206,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!getViewers().contains(player))
             return;
 
-        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+        final ByteBuf packetBuffer = getWindowItemsBuffer();
+        playerConnection.sendPacket(packetBuffer, true);
     }
 
     @Override
@@ -184,7 +219,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public boolean addViewer(Player player) {
         final boolean result = this.viewers.add(player);
-        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
+        update(player);
         return result;
     }
 
@@ -228,6 +263,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.cursorPlayersItem.put(player, cursorItem);
     }
 
+    /**
+     * Insert safely an item into the inventory
+     * <p>
+     * This will update the slot for all viewers
+     *
+     * @param slot      the internal slot id
+     * @param itemStack the item to insert
+     */
     private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
         itemStack = ItemStackUtils.notNull(itemStack);
         setItemStackInternal(slot, itemStack);
@@ -236,13 +279,47 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         setSlotPacket.slot = (short) slot;
         setSlotPacket.itemStack = itemStack;
         sendPacketToViewers(setSlotPacket);
+
+        // The inventory changed, buffer will be updated once requested again
+        this.windowItemsBufferUpdated = false;
     }
 
     protected void setItemStackInternal(int slot, ItemStack itemStack) {
         itemStacks[slot] = itemStack;
     }
 
-    private WindowItemsPacket createWindowItemsPacket() {
+    /**
+     * Get the window items packet as a buffer containing all the
+     * current inventory's items
+     * <p>
+     * The cached window items buffer will be updated if needed
+     *
+     * @return a {@link WindowItemsPacket} buffer
+     */
+    private ByteBuf getWindowItemsBuffer() {
+        if (!windowItemsBufferUpdated) {
+            refreshWindowItemsBuffer();
+        }
+
+        return windowItemsBuffer;
+    }
+
+    /**
+     * Refresh the inventory {@link WindowItemsPacket} buffer
+     */
+    private void refreshWindowItemsBuffer() {
+        final WindowItemsPacket windowItemsPacket = createNewWindowItemsPacket();
+        final ByteBuf packetBuffer = PacketUtils.writePacket(windowItemsPacket);
+        this.windowItemsBuffer = packetBuffer;
+        this.windowItemsBufferUpdated = true;
+    }
+
+    /**
+     * Create a complete new {@link WindowItemsPacket}
+     *
+     * @return a new {@link WindowItemsPacket} packet
+     */
+    private WindowItemsPacket createNewWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
         windowItemsPacket.items = getItemStacks();
