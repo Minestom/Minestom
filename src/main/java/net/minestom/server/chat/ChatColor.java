@@ -20,22 +20,22 @@ public class ChatColor {
     public static final ChatColor OBFUSCATED = new ChatColor("obfuscated");
 
     // Color
-    public static final ChatColor BLACK = fromRGB(0, 0, 0, 0);
-    public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170, 1);
-    public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0, 2);
-    public static final ChatColor DARK_CYAN = fromRGB(0, 170, 170, 3);
-    public static final ChatColor DARK_RED = fromRGB(170, 0, 0, 4);
-    public static final ChatColor PURPLE = fromRGB(170, 0, 170, 5);
-    public static final ChatColor GOLD = fromRGB(255, 170, 0, 6);
-    public static final ChatColor GRAY = fromRGB(170, 170, 170, 7);
-    public static final ChatColor DARK_GRAY = fromRGB(85, 85, 85, 8);
-    public static final ChatColor BLUE = fromRGB(85, 85, 255, 9);
-    public static final ChatColor BRIGHT_GREEN = fromRGB(85, 255, 85, 10);
-    public static final ChatColor CYAN = fromRGB(85, 255, 255, 11);
-    public static final ChatColor RED = fromRGB(255, 85, 85, 12);
-    public static final ChatColor PINK = fromRGB(255, 85, 255, 13);
-    public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14);
-    public static final ChatColor WHITE = fromRGB(255, 255, 255, 15);
+    public static final ChatColor BLACK = fromRGB(0, 0, 0, 0, "black");
+    public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170, 1, "dark_blue");
+    public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0, 2, "dark_green");
+    public static final ChatColor DARK_CYAN = fromRGB(0, 170, 170, 3, "dark_cyan");
+    public static final ChatColor DARK_RED = fromRGB(170, 0, 0, 4, "dark_red");
+    public static final ChatColor PURPLE = fromRGB(170, 0, 170, 5, "purple");
+    public static final ChatColor GOLD = fromRGB(255, 170, 0, 6, "gold");
+    public static final ChatColor GRAY = fromRGB(170, 170, 170, 7, "gray");
+    public static final ChatColor DARK_GRAY = fromRGB(85, 85, 85, 8, "dark_gray");
+    public static final ChatColor BLUE = fromRGB(85, 85, 255, 9, "blue");
+    public static final ChatColor BRIGHT_GREEN = fromRGB(85, 255, 85, 10, "green");
+    public static final ChatColor CYAN = fromRGB(85, 255, 255, 11, "cyan");
+    public static final ChatColor RED = fromRGB(255, 85, 85, 12, "red");
+    public static final ChatColor PINK = fromRGB(255, 85, 255, 13, "pink");
+    public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14, "yellow");
+    public static final ChatColor WHITE = fromRGB(255, 255, 255, 15, "white");
     private static Map<String, ChatColor> colorCode = new HashMap<>();
     private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
 
@@ -94,17 +94,17 @@ public class ChatColor {
     private int red, green, blue;
     private int id;
 
-    // Special
     private String codeName;
 
     private boolean special;
 
-    private ChatColor(int r, int g, int b, int id) {
+    private ChatColor(int r, int g, int b, int id, String codeName) {
         this.empty = false;
         this.red = r;
         this.green = g;
         this.blue = b;
         this.id = id;
+        this.codeName = codeName;
     }
 
     private ChatColor(String codeName) {
@@ -126,11 +126,11 @@ public class ChatColor {
      * @return a chat color with the specified RGB color
      */
     public static ChatColor fromRGB(int r, int g, int b) {
-        return fromRGB(r, g, b, -1);
+        return fromRGB(r, g, b, -1, null);
     }
 
-    private static ChatColor fromRGB(int r, int g, int b, int id) {
-        return new ChatColor(r, g, b, id);
+    private static ChatColor fromRGB(int r, int g, int b, int id, String codeName) {
+        return new ChatColor(r, g, b, id, codeName);
     }
 
     /**
@@ -218,7 +218,7 @@ public class ChatColor {
         String code;
 
         if (codeName != null) {
-            // Special color (reset/bold/etc...)
+            // color or special code (white/red/reset/bold/etc...)
             code = codeName;
         } else {
             // RGB color
