@@ -10,6 +10,7 @@ import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.PacketWriterUtils;
+import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
@@ -75,7 +76,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return title;
     }
 
-    public String setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
 
         OpenWindowPacket packet = new OpenWindowPacket();
