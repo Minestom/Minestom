@@ -11,7 +11,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -62,7 +61,9 @@ public abstract class EntityCreature extends LivingEntity {
             } else {
                 final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
                 Position targetPosition = pathingEntity.getTargetPosition();
-                //targetPosition = new Position(-5, 40, -5);
+                //targetPosition = new Position(-5.5f, 40f, -5.5f);
+                //System.out.println("target: " + targetPosition);
+                //System.out.println("current: " + getPosition());
                 moveTowards(targetPosition, speed);
             }
         }
@@ -90,7 +91,7 @@ public abstract class EntityCreature extends LivingEntity {
         final float newY = newPosition.getY();
         final float newZ = newPosition.getZ();
 
-        // Creatures cannot move in unload chunk
+        // Creatures cannot move in unloaded chunk
         if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
             return;
 
@@ -301,19 +302,16 @@ public abstract class EntityCreature extends LivingEntity {
      */
     public void moveTowards(Position direction, float speed) {
         Check.notNull(direction, "The direction cannot be null");
-        final float x = getPosition().getX();
-        final float y = getPosition().getY();
-        final float z = getPosition().getZ();
+        final float currentX = position.getX();
+        final float currentZ = position.getZ();
+        final float targetX = direction.getX();
+        final float targetZ = direction.getZ();
 
-        float dx = (direction.getX() - x);
-        float dy = (direction.getY() - y);
-        float dz = (direction.getZ() - z);
+        final float radians = (float) Math.atan2(targetZ - currentZ, targetX - currentX);
+        final float speedX = (float) (Math.cos(radians) * speed);
+        final float speedZ = (float) (Math.sin(radians) * speed);
 
-        dx = MathUtils.clampFloat(dx, -speed, speed);
-        dy = MathUtils.clampFloat(dy, -speed, speed);
-        dz = MathUtils.clampFloat(dz, -speed, speed);
-
-        move(dx, dy, dz, true);
+        move(speedX, 0, speedZ, true);
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {

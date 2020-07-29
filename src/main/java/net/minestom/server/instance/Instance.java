@@ -458,22 +458,64 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         return Collections.unmodifiableSet(getEntitiesInChunk(index));
     }
 
+    /**
+     * Refresh the visual block id at the position
+     * <p>
+     * WARNING: the custom block id at the position will not change
+     *
+     * @param x       the X position
+     * @param y       the Y position
+     * @param z       the Z position
+     * @param blockId the new visual block id
+     */
     public void refreshBlockId(int x, int y, int z, short blockId) {
         refreshBlockId(new BlockPosition(x, y, z), blockId);
     }
 
+    /**
+     * Refresh the visual block id at the position
+     * <p>
+     * WARNING: the custom block id at the position will not change
+     *
+     * @param x     the X position
+     * @param y     the Y position
+     * @param z     the Z position
+     * @param block the new visual block
+     */
     public void refreshBlockId(int x, int y, int z, Block block) {
         refreshBlockId(x, y, z, block.getBlockId());
     }
 
+    /**
+     * Refresh the visual block id at the position
+     * <p>
+     * WARNING: the custom block id at the position will not change
+     *
+     * @param blockPosition the block position
+     * @param block         the new visual block
+     */
     public void refreshBlockId(BlockPosition blockPosition, Block block) {
         refreshBlockId(blockPosition, block.getBlockId());
     }
 
+    /**
+     * Load the chunk at the given position without any callback
+     * <p>
+     * WARNING: this is a non-blocking task
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     */
     public void loadChunk(int chunkX, int chunkZ) {
         loadChunk(chunkX, chunkZ, null);
     }
 
+    /**
+     * Load the chunk at the given position with a callback
+     *
+     * @param position the chunk position
+     * @param callback the callback to run when the chunk is loaded
+     */
     public void loadChunk(Position position, Consumer<Chunk> callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
@@ -486,30 +528,72 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
+    /**
+     * Unload the chunk at the given position
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     */
     public void unloadChunk(int chunkX, int chunkZ) {
         unloadChunk(getChunk(chunkX, chunkZ));
     }
 
+    /**
+     * Give the visual block id at the given position
+     *
+     * @param x the X position
+     * @param y the Y position
+     * @param z the Z position
+     * @return the visual block id at the position
+     */
     public short getBlockId(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getBlockId(x, y, z);
     }
 
+    /**
+     * Give the visual block id at the given position
+     *
+     * @param x the X position
+     * @param y the Y position
+     * @param z the Z position
+     * @return the visual block id at the position
+     */
     public short getBlockId(float x, float y, float z) {
         return getBlockId(Math.round(x), Math.round(y), Math.round(z));
     }
 
+    /**
+     * Give the visual block id at the given position
+     *
+     * @param blockPosition the block position
+     * @return the visual block id at the position
+     */
     public short getBlockId(BlockPosition blockPosition) {
         return getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
+    /**
+     * Get the custom block object at the given position, or null if not any
+     *
+     * @param x the X position
+     * @param y the Y position
+     * @param z the Z position
+     * @return the custom block object at the position, null if not any
+     */
     public CustomBlock getCustomBlock(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getCustomBlock(x, y, z);
     }
 
+    /**
+     * Get the custom block object at the given position, or null if not any
+     *
+     * @param blockPosition the block position
+     * @return the custom block object at the position, null if not any
+     */
     public CustomBlock getCustomBlock(BlockPosition blockPosition) {
         return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
@@ -528,38 +612,86 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         chunk.sendPacketToViewers(blockActionPacket);
     }
 
+    /**
+     * Get the block data at the given position, or null if not any
+     *
+     * @param x the X position
+     * @param y the Y position
+     * @param z the Z position
+     * @return the block data at the position, null if not any
+     */
     public Data getBlockData(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         return chunk.getData(x, (byte) y, z);
     }
 
+    /**
+     * Get the block data at the given position, or null if not any
+     *
+     * @param blockPosition the block position
+     * @return the block data at the position, null if not any
+     */
     public Data getBlockData(BlockPosition blockPosition) {
         return getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
+    /**
+     * Get the chunk at the given position, null if not loaded
+     *
+     * @param x the X position
+     * @param z the Z position
+     * @return the chunk at the given position, null if not loaded
+     */
     public Chunk getChunkAt(double x, double z) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
         return getChunk(chunkX, chunkZ);
     }
 
+    /**
+     * Check if the chunk at the position is loaded
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return true if the chunk is loaded, false otherwise
+     */
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
         return getChunk(chunkX, chunkZ) != null;
     }
 
+    /**
+     * Get the chunk at the given position, null if not loaded
+     *
+     * @param blockPosition the chunk position
+     * @return the chunk at the given position, null if not loaded
+     */
     public Chunk getChunkAt(BlockPosition blockPosition) {
         return getChunkAt(blockPosition.getX(), blockPosition.getZ());
     }
 
+    /**
+     * Get the chunk at the given position, null if not loaded
+     *
+     * @param position the chunk position
+     * @return the chunk at the given position, null if not loaded
+     */
     public Chunk getChunkAt(Position position) {
         return getChunkAt(position.getX(), position.getZ());
     }
 
+    /**
+     * Save a chunk to the instance storage folder without any callback
+     *
+     * @param chunk the chunk to save
+     */
     public void saveChunkToStorageFolder(Chunk chunk) {
         saveChunkToStorageFolder(chunk, null);
     }
 
+    /**
+     * Save all chunks to the instance storage folder without any callback
+     */
     public void saveChunksToStorageFolder() {
         saveChunksToStorageFolder(null);
     }
