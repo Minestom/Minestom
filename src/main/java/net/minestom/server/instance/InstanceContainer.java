@@ -21,7 +21,6 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageFolder;
-import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -572,18 +571,16 @@ public class InstanceContainer extends Instance {
         if (toUpdate == null) {
             return;
         }
-        MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
-            @Override
-            public void run() {
-                final CustomBlock currentBlock = instance.getCustomBlock(position);
-                if (currentBlock == null)
-                    return;
-                if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
-                    return;
-                }
-                currentBlock.scheduledUpdate(instance, position, getBlockData(position));
+
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            final CustomBlock currentBlock = instance.getCustomBlock(position);
+            if (currentBlock == null)
+                return;
+            if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
+                return;
             }
-        }, new UpdateOption(time, unit));
+            currentBlock.scheduledUpdate(instance, position, getBlockData(position));
+        }).delay(time, unit).buildTask();
     }
 
     @Override

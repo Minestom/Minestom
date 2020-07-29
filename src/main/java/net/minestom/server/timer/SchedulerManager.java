@@ -2,90 +2,91 @@ package net.minestom.server.timer;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.thread.MinestomThread;
-import net.minestom.server.utils.time.CooldownUtils;
-import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * An object which manages all the {@link Task}'s
+ */
 public class SchedulerManager {
 
-    private static final AtomicInteger COUNTER = new AtomicInteger();
-    private static final AtomicInteger SHUTDOWN_COUNTER = new AtomicInteger();
-    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
-    private List<Task> tasks = new CopyOnWriteArrayList<>();
-    private List<Task> shutdownTasks = new CopyOnWriteArrayList<>();
+    // A counter for all normal tasks
+    private final AtomicInteger counter;
+    // A counter for all shutdown tasks
+    private final AtomicInteger shutdownCounter;
+    //A threaded execution
+    private final ExecutorService batchesPool;
+    // A single threaded scheduled execution
+    private final ScheduledExecutorService timerExecutionService;
+    // A list with all normal registered tasks
+    private final List<Task> tasks;
+    // A list with all registered shutdown tasks
+    private final List<Task> shutdownTasks;
 
     /**
-     * Add a task with a custom update option and a precise call count
-     *
-     * @param runnable     the task to execute
-     * @param updateOption the update option of the task
-     * @param maxCallCount the number of time this task should be executed
-     * @return the task id
+     * Default constructor
      */
-    public int addTask(TaskRunnable runnable, UpdateOption updateOption, int maxCallCount) {
-        final int id = COUNTER.incrementAndGet();
-        runnable.setId(id);
+    public SchedulerManager() {
+        this.counter = new AtomicInteger();
+        this.shutdownCounter = new AtomicInteger();
 
-        final Task task = new Task(runnable, updateOption, maxCallCount);
-        task.refreshLastUpdateTime(System.currentTimeMillis());
-        this.tasks.add(task);
-
-        return id;
+        this.batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
+        this.timerExecutionService = Executors.newSingleThreadScheduledExecutor();
+        this.tasks = new CopyOnWriteArrayList<>();
+        this.shutdownTasks = new CopyOnWriteArrayList<>();
     }
 
     /**
-     * Add a task which will be repeated without interruption
+     * Initializes a new {@link TaskBuilder} for creating a task.
      *
-     * @param runnable     the task to execute
-     * @param updateOption the update option of the task
-     * @return the task id
+     * @param runnable The task to run when scheduled
+     * @return the task builder
      */
-    public int addRepeatingTask(TaskRunnable runnable, UpdateOption updateOption) {
-        return addTask(runnable, updateOption, 0);
+    public TaskBuilder buildTask(Runnable runnable) {
+        return new TaskBuilder(this, runnable);
     }
 
     /**
-     * Add a task which will be executed only once
+     * Initializes a new {@link TaskBuilder} for creating a shutdown task
      *
-     * @param runnable     the task to execute
-     * @param updateOption the update option of the task
-     * @return the task id
+     * @param runnable The shutdown task to run when scheduled
+     * @return the task builder
      */
-    public int addDelayedTask(TaskRunnable runnable, UpdateOption updateOption) {
-        return addTask(runnable, updateOption, 1);
+    public TaskBuilder buildShutdownTask(Runnable runnable) {
+        return new TaskBuilder(this, runnable, true);
     }
 
     /**
-     * Adds a task to run when the server shutdowns
+     * Removes/Forces the end of a task
      *
-     * @param runnable the task to perform
-     * @return the task id
+     * @param task The task to remove
      */
-    public int addShutdownTask(TaskRunnable runnable) {
-        final int id = SHUTDOWN_COUNTER.incrementAndGet();
-        runnable.setId(id);
-
-        final Task task = new Task(runnable, null, 1);
-        this.shutdownTasks.add(task);
-
-        return id;
+    public void removeTask(Task task) {
+        this.tasks.removeIf(toRemove -> toRemove.equals(task));
     }
 
     /**
-     * Shutdown all the tasks and call tasks added from {@link #addShutdownTask(TaskRunnable)}
+     * Removes/Forces the end of a task
+     *
+     * @param task The task to remove
+     */
+    public void removeShutdownTask(Task task) {
+        this.tasks.removeIf(toRemove -> toRemove.equals(task));
+    }
+
+    /**
+     * Shutdowns all normal tasks and call the registered shutdown tasks
      */
     public void shutdown() {
-        batchesPool.execute(() -> {
-            for (Task task : shutdownTasks) {
-                task.getRunnable().run();
-            }
-        });
-        batchesPool.shutdown();
+        MinecraftServer.getLOGGER().info("Executing all shutdown tasks..");
+        for (Task task : this.getShutdownTasks()) {
+            task.schedule();
+        }
+        MinecraftServer.getLOGGER().info("Shutting down the scheduled execution service and batches pool.");
+        this.timerExecutionService.shutdown();
+        this.batchesPool.shutdown();
         try {
             batchesPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
@@ -93,37 +94,56 @@ public class SchedulerManager {
     }
 
     /**
-     * Force the end of a task
+     * Increments the current counter value.
      *
-     * @param taskId the id of the task to remove
+     * @return the updated counter value
      */
-    public void removeTask(int taskId) {
-        this.tasks.removeIf(task -> task.getId() == taskId);
+    public int getCounterIdentifier() {
+        return this.counter.incrementAndGet();
     }
 
-    public void update() {
-        final long time = System.currentTimeMillis();
-        batchesPool.execute(() -> {
-            for (Task task : tasks) {
-                final UpdateOption updateOption = task.getUpdateOption();
-                final long lastUpdate = task.getLastUpdateTime();
-                final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
-                if (!hasCooldown) {
-                    final TaskRunnable runnable = task.getRunnable();
-                    final int maxCallCount = task.getMaxCallCount();
-                    final int callCount = runnable.getCallCount() + 1;
-                    runnable.setCallCount(callCount);
-
-                    runnable.run();
-
-                    task.refreshLastUpdateTime(time);
-
-                    if (callCount == maxCallCount) {
-                        tasks.remove(task);
-                    }
-                }
-            }
-        });
+    /**
+     * Increments the current shutdown counter value
+     *
+     * @return the updated shutdown counter value
+     */
+    public int getShutdownCounterIdentifier() {
+        return this.shutdownCounter.incrementAndGet();
     }
 
+    /**
+     * Gets a {@link List} with all registered tasks
+     *
+     * @return a {@link List} with all registered tasks
+     */
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * Gets a {@link List} with all registered shutdown tasks
+     *
+     * @return a {@link List} with all registered shutdown tasks
+     */
+    public List<Task> getShutdownTasks() {
+        return shutdownTasks;
+    }
+
+    /**
+     * Gets the execution service for all registered tasks
+     *
+     * @return the execution service for all registered tasks
+     */
+    public ExecutorService getBatchesPool() {
+        return batchesPool;
+    }
+
+    /**
+     * Gets the scheduled execution service for all registered tasks
+     *
+     * @return the scheduled execution service for all registered tasks
+     */
+    public ScheduledExecutorService getTimerExecutionService() {
+        return timerExecutionService;
+    }
 }

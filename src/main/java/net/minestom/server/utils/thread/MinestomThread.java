@@ -1,9 +1,5 @@
 package net.minestom.server.utils.thread;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.timer.TaskRunnable;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
