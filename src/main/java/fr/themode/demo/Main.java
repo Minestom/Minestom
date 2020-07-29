@@ -13,9 +13,6 @@ import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 
 public class Main {
 
@@ -55,11 +52,6 @@ public class Main {
         storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-            System.out.println(simpleDateFormat.format(new Date()));
-        }).repeat(1, TimeUnit.SECOND).buildTask();
 
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).buildTask();
