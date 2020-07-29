@@ -36,6 +36,7 @@ public class Main {
         commandManager.register(new SimpleCommand());
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
+        commandManager.register(new ShutdownCommand());
 
         /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
