@@ -86,7 +86,7 @@ public class PFPathingEntity implements IPathingEntity {
 
         final float entityY = entity.getPosition().getY();
         if (entityY < y) {
-            //entity.jump(1);
+            entity.jump(1);
         }
     }
 

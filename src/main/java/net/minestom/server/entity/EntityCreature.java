@@ -62,7 +62,7 @@ public abstract class EntityCreature extends LivingEntity {
                 final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
                 Position targetPosition = pathingEntity.getTargetPosition();
                 //targetPosition = new Position(-5.5f, 40f, -5.5f);
-                //System.out.println("target: " + targetPosition);
+                //System.out.println("target: " + targetPosition + " : " + (System.currentTimeMillis() - time));
                 //System.out.println("current: " + getPosition());
                 moveTowards(targetPosition, speed);
             }
@@ -270,7 +270,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     public void jump(float height) {
         // FIXME magic value
-        final Vector velocity = new Vector(0, height * 5, 0);
+        final Vector velocity = new Vector(0, height * 2.5f, 0);
         setVelocity(velocity);
     }
 

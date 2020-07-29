@@ -3,7 +3,6 @@ package net.minestom.server.chat;
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 
 /**
@@ -78,10 +77,20 @@ public class ChatHoverEvent {
         JsonObject tagJson = new JsonObject();
 
         // General tags
-        tagJson.addProperty("Damage", itemStack.getDamage());
-        tagJson.addProperty("Unbreakable", itemStack.isUnbreakable());
+        itemJson.addProperty("Damage", itemStack.getDamage());
+        {
+            final boolean unbreakable = itemStack.isUnbreakable();
+            if (unbreakable) {
+                tagJson.addProperty("Unbreakable", itemStack.isUnbreakable());
+            }
+        }
         // TODO: CanDestroy
-        tagJson.addProperty("CustomModelData", itemStack.getCustomModelData());
+        {
+            final int customModelData = itemStack.getCustomModelData();
+            if (customModelData != 0) {
+                tagJson.addProperty("CustomModelData", itemStack.getCustomModelData());
+            }
+        }
 
         // TODO: BlockTags
 
@@ -102,17 +111,26 @@ public class ChatHoverEvent {
         // TODO: Charged
 
         // Display
-        JsonObject displayJson = new JsonObject();
-        // TODO: Color (Leather armour)
-        // This is done as this contains a json text component describing the item's name.
-        // We replace it in the last step, as adding it now would replace it with lenient JSON which MC doesn't want.
-        displayJson.addProperty("Name", "%item_name%");
-        // TODO: Lore
+        JsonObject displayJson = null;
+        if (itemStack.hasDisplayName() || itemStack.hasLore()) {
+            displayJson = new JsonObject();
+            // TODO: Color (Leather armour)
+            if (itemStack.hasDisplayName()) {
+                // This is done as this contains a json text component describing the item's name.
+                // We replace it in the last step, as adding it now would replace it with lenient JSON which MC doesn't want.
+                displayJson.addProperty("Name", "%item_name%");
+            }
+            if (itemStack.hasLore()) {
+                // TODO: Lore
+            }
+        }
 
         // HideFlags
         if (!itemStack.getItemFlags().isEmpty()) {
-            int bitField = itemStack.getItemFlags().stream().mapToInt(ItemFlag::getBitFieldPart).sum();
-            tagJson.addProperty("HideFlags", bitField);
+            final int hideFlag = itemStack.getHideFlag();
+            if (hideFlag != 0) {
+                tagJson.addProperty("HideFlags", hideFlag);
+            }
         }
 
         // WrittenBooks
@@ -141,7 +159,7 @@ public class ChatHoverEvent {
         // Maps
         // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Maps
 
-        // Suspcious Stew
+        // Suspicious Stew
         // TODO: Effects
 
         // Debug Sticks
@@ -153,14 +171,18 @@ public class ChatHoverEvent {
         // TODO: LodestonePos
 
 
-        tagJson.add("display", displayJson);
+        if (displayJson != null) {
+            tagJson.add("display", displayJson);
+        }
         itemJson.add("tag", tagJson);
 
 
-        final String item = itemJson.toString()
-                .replaceAll("\"(\\w+)\":", "$1:")
-                // TODO: Since embedded JSON is wrapped using (')s we should be able to use Regex to ignore any keys wrapped by (')s.
-                .replaceAll("\"%item_name%\"", '\'' + itemStack.getDisplayName().getJsonObject().toString() + '\'');
+        String item = itemJson.toString();
+        item = item.replaceAll("\"(\\w+)\":", "$1:");
+        if (itemStack.hasDisplayName()) {
+            // TODO: Since embedded JSON is wrapped using (')s we should be able to use Regex to ignore any keys wrapped by (')s.
+            item = item.replaceAll("\"%item_name%\"", '\'' + itemStack.getDisplayName().getJsonObject().toString() + '\'');
+        }
 
         System.out.println(item);
         // Use regex to remove the qoutes around the keys (MC wants this).
