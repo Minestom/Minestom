@@ -18,19 +18,26 @@ public final class ConnectionManager {
     private Set<Player> players = new CopyOnWriteArraySet<>();
     private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
-    private List<PacketConsumer> packetConsumers = new CopyOnWriteArrayList<>();
+    // All the consumers to call once a packet is received
+    private List<PacketConsumer> receivePacketConsumers = new CopyOnWriteArrayList<>();
+    // The uuid provider once a player login
     private UuidProvider uuidProvider;
+    // The consumers to call once a player connect, mostly used to init events
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     /**
+     * Get the {@link Player} linked to a {@link PlayerConnection}
+     *
      * @param connection the player connection
-     * @return the {@link Player} linked to the conneciton
+     * @return the player linked to the connection
      */
     public Player getPlayer(PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
     /**
+     * Get all online players
+     *
      * @return an unmodifiable collection containing all the online players
      */
     public Collection<Player> getOnlinePlayers() {
@@ -38,6 +45,10 @@ public final class ConnectionManager {
     }
 
     /**
+     * Get the first player which validate {@link String#equalsIgnoreCase(String)}
+     * <p>
+     * This can cause issue if two or more players have the same username
+     *
      * @param username the player username (ignoreCase)
      * @return the first player who validate the username condition
      */
@@ -122,27 +133,28 @@ public final class ConnectionManager {
     }
 
     /**
-     * Those are all the listeners which are called for each packet received
+     * Get all the listeners which are called for each packet received
      *
      * @return an unmodifiable list of packet's consumers
      */
-    public List<PacketConsumer> getPacketConsumers() {
-        return Collections.unmodifiableList(packetConsumers);
+    public List<PacketConsumer> getReceivePacketConsumers() {
+        return Collections.unmodifiableList(receivePacketConsumers);
     }
 
     /**
-     * Add a new packet listener
+     * Add a consumer to call once a packet is received
      *
      * @param packetConsumer the packet consumer
      */
-    public void addPacketConsumer(PacketConsumer packetConsumer) {
-        this.packetConsumers.add(packetConsumer);
+    public void onPacketReceive(PacketConsumer packetConsumer) {
+        this.receivePacketConsumers.add(packetConsumer);
     }
 
     /**
      * Shouldn't be override if already defined
      *
      * @param uuidProvider the new player connection uuid provider
+     * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
     public void setUuidProvider(UuidProvider uuidProvider) {
         this.uuidProvider = uuidProvider;

@@ -6,7 +6,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -32,7 +34,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
@@ -51,7 +52,7 @@ public class PlayerInit {
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -109,7 +110,7 @@ public class PlayerInit {
             }
         }).repeat(10, TimeUnit.TICK).buildTask();
 
-        connectionManager.addPacketConsumer((player, packetController, packet) -> {
+        connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
             //System.out.println("PACKET: "+packet.getClass().getSimpleName());
             packetController.setCancel(false);
@@ -230,13 +231,13 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 41f, 0));
 
                 //player.setHeldItemSlot((byte) 5);
 
                 player.setGlowing(true);
-                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
+                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
                 /*for (int i = 0; i < 9; i++) {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
                 }*/
@@ -293,6 +294,9 @@ public class PlayerInit {
                 WorldBorder worldBorder = instance.getWorldBorder();
                 worldBorder.setDiameter(30);
 
+                RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + "test item"));
+                richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.DIAMOND, (byte) 1)));
+                player.sendMessage(richMessage);
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());
                 //entityBoat.setInstance(player.getInstance());

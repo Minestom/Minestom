@@ -60,7 +60,7 @@ public class PacketListenerManager {
 
 
         final PacketController packetController = new PacketController(packetListenerConsumer);
-        for (PacketConsumer packetConsumer : CONNECTION_MANAGER.getPacketConsumers()) {
+        for (PacketConsumer packetConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
             packetConsumer.accept(player, packetController, packet);
         }
 
