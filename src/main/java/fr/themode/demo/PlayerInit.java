@@ -28,7 +28,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -86,32 +85,29 @@ public class PlayerInit {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
-        MinecraftServer.getSchedulerManager().addRepeatingTask(new TaskRunnable() {
-            @Override
-            public void run() {
-                long ramUsage = benchmarkManager.getUsedMemory();
-                ramUsage /= 1e6; // bytes to MB
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            long ramUsage = benchmarkManager.getUsedMemory();
+            ramUsage /= 1e6; // bytes to MB
 
-                String benchmarkMessage = "";
-                for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
-                    String name = resultEntry.getKey();
-                    ThreadResult result = resultEntry.getValue();
-                    benchmarkMessage += ChatColor.GRAY + name;
-                    benchmarkMessage += ": ";
-                    benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
-                    benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
-                    benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
-                    benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
-                    benchmarkMessage += "\n";
-                }
-
-                for (Player player : connectionManager.getOnlinePlayers()) {
-                    ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
-                    ColoredText footer = ColoredText.of(benchmarkMessage);
-                    player.sendHeaderFooter(header, footer);
-                }
+            String benchmarkMessage = "";
+            for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
+                String name = resultEntry.getKey();
+                ThreadResult result = resultEntry.getValue();
+                benchmarkMessage += ChatColor.GRAY + name;
+                benchmarkMessage += ": ";
+                benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
+                benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
+                benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+                benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
+                benchmarkMessage += "\n";
             }
-        }, new UpdateOption(10, TimeUnit.TICK));
+
+            for (Player player : connectionManager.getOnlinePlayers()) {
+                ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
+                ColoredText footer = ColoredText.of(benchmarkMessage);
+                player.sendHeaderFooter(header, footer);
+            }
+        }).repeat(10, TimeUnit.TICK).buildTask();
 
         connectionManager.addPacketConsumer((player, packetController, packet) -> {
             // Listen to all received packet

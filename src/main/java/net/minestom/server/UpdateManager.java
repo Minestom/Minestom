@@ -39,7 +39,6 @@ public final class UpdateManager {
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
             final EntityManager entityManager = MinecraftServer.getEntityManager();
             final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-            final SchedulerManager schedulerManager = MinecraftServer.getSchedulerManager();
 
             final long tickDistance = MinecraftServer.TICK_MS * 1000000;
             long currentTime;
@@ -57,9 +56,6 @@ public final class UpdateManager {
 
                 // Waiting players update
                 entityManager.updateWaitingPlayers();
-
-                // Scheduler
-                schedulerManager.update();
 
                 // Keep Alive Handling
                 final long time = System.currentTimeMillis();

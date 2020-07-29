@@ -10,9 +10,11 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
-import net.minestom.server.timer.TaskRunnable;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Main {
@@ -53,12 +55,13 @@ public class Main {
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 
-        MinecraftServer.getSchedulerManager().addShutdownTask(new TaskRunnable() {
-            @Override
-            public void run() {
-                System.out.println("Good night");
-            }
-        });
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+            System.out.println(simpleDateFormat.format(new Date()));
+        }).repeat(1, TimeUnit.SECOND).buildTask();
+
+
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).buildTask();
 
         PlayerInit.init();
 
