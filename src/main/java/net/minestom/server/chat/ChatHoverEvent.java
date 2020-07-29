@@ -3,6 +3,7 @@ package net.minestom.server.chat;
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemFlag;
 import net.minestom.server.item.ItemStack;
 
 /**
@@ -24,6 +25,22 @@ public class ChatHoverEvent {
         this.action = action;
         this.valueObject = valueObject;
         this.isJson = true;
+    }
+
+    protected String getAction() {
+        return action;
+    }
+
+    protected String getValue() {
+        return value;
+    }
+
+    protected JsonObject getValueObject() {
+        return valueObject;
+    }
+
+    protected boolean isJson() {
+        return isJson;
     }
 
     /**
@@ -53,7 +70,101 @@ public class ChatHoverEvent {
      * @return the chat hover event
      */
     public static ChatHoverEvent showItem(ItemStack itemStack) {
-        return new ChatHoverEvent("show_item", "{id:35,Damage:5,Count:2,tag:{display:{Name:Testing}}}");
+        JsonObject itemJson = new JsonObject();
+        // Basic Item structure
+        itemJson.addProperty("id", itemStack.getMaterial().getName());
+        itemJson.addProperty("Count", itemStack.getAmount());
+
+        JsonObject tagJson = new JsonObject();
+
+        // General tags
+        tagJson.addProperty("Damage", itemStack.getDamage());
+        tagJson.addProperty("Unbreakable", itemStack.isUnbreakable());
+        // TODO: CanDestroy
+        tagJson.addProperty("CustomModelData", itemStack.getCustomModelData());
+
+        // TODO: BlockTags
+
+        // Enchantments
+        // TODO: Enchantments
+        // TODO: StoredEnchantments
+        // TODO: RepairCost
+
+        // TODO: Attribute modifiers
+
+        // Potion Effects
+        // TODO: CustomPotionEffects
+        // TODO: Potion
+        // TODO: CustomPotionColor
+
+        // Crossbows
+        // TODO: ChargedProjectiles
+        // TODO: Charged
+
+        // Display
+        JsonObject displayJson = new JsonObject();
+        // TODO: Color (Leather armour)
+        // This is done as this contains a json text component describing the item's name.
+        // We replace it in the last step, as adding it now would replace it with lenient JSON which MC doesn't want.
+        displayJson.addProperty("Name", "%item_name%");
+        // TODO: Lore
+
+        // HideFlags
+        if (!itemStack.getItemFlags().isEmpty()) {
+            int bitField = itemStack.getItemFlags().stream().mapToInt(ItemFlag::getBitFieldPart).sum();
+            tagJson.addProperty("HideFlags", bitField);
+        }
+
+        // WrittenBooks
+        // TODO: Resolved
+        // TODO: Generation
+        // TODO: Author
+        // TODO: Title
+        // TODO: Pages
+
+        // Book and Quills
+        // TODO: Pages
+
+        // Player Heads
+        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Player_Heads
+
+        // Fireworks
+        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Fireworks
+
+        // Armorstands and Spawn Eggs
+        // TODO: EntityTag
+
+        // Buckets of Fish
+        // TODO: BucketVariantTag
+        // TODO: ENtityTag
+
+        // Maps
+        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Maps
+
+        // Suspcious Stew
+        // TODO: Effects
+
+        // Debug Sticks
+        // TODO: DebugProperty
+
+        // Compasses
+        // TODO: LodestoneTracked
+        // TODO: LodestoneDimension
+        // TODO: LodestonePos
+
+
+        tagJson.add("display", displayJson);
+        itemJson.add("tag", tagJson);
+
+
+        final String item = itemJson.toString()
+                .replaceAll("\"(\\w+)\":", "$1:")
+                // TODO: Since embedded JSON is wrapped using (')s we should be able to use Regex to ignore any keys wrapped by (')s.
+                .replaceAll("\"%item_name%\"", '\'' + itemStack.getDisplayName().getJsonObject().toString() + '\'');
+
+        System.out.println(item);
+        // Use regex to remove the qoutes around the keys (MC wants this).
+        return new ChatHoverEvent("show_item", item);
     }
 
     /**
@@ -72,21 +183,5 @@ public class ChatHoverEvent {
         object.addProperty("id", id);
         object.addProperty("type", type);
         return new ChatHoverEvent("show_entity", object);
-    }
-
-    protected String getAction() {
-        return action;
-    }
-
-    protected String getValue() {
-        return value;
-    }
-
-    protected JsonObject getValueObject() {
-        return valueObject;
-    }
-
-    protected boolean isJson() {
-        return isJson;
     }
 }
