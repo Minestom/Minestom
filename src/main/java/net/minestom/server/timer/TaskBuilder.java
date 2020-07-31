@@ -88,11 +88,11 @@ public class TaskBuilder {
     }
 
     /**
-     * Builds this task for execution
+     * Schedule this task for execution
      *
      * @return the built task
      */
-    public Task buildTask() {
+    public Task schedule() {
         Task task = new Task(
                 this.schedulerManager,
                 this.runnable,

@@ -6,7 +6,6 @@ import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -42,7 +41,7 @@ public class FakePlayer extends Player {
         final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
 
         fakePlayer.addEventCallback(PlayerLoginEvent.class, event -> {
-            MinecraftServer.getSchedulerManager().buildTask(() -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).buildTask();
+            MinecraftServer.getSchedulerManager().buildTask(() -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule();
         });
     }
 
@@ -77,7 +76,7 @@ public class FakePlayer extends Player {
         super.showPlayer(connection);
         if (!option.isInTabList()) {
             // Remove from tab-list
-            MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.TICK).buildTask();
+            MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.TICK).schedule();
         }
 
     }

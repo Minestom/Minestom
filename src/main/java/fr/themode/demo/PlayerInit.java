@@ -108,7 +108,7 @@ public class PlayerInit {
                 ColoredText footer = ColoredText.of(benchmarkMessage);
                 player.sendHeaderFooter(header, footer);
             }
-        }).repeat(10, TimeUnit.TICK).buildTask();
+        }).repeat(10, TimeUnit.TICK).schedule();
 
         connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
