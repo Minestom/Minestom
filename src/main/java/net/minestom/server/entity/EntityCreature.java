@@ -59,9 +59,12 @@ public abstract class EntityCreature extends LivingEntity {
                 pathFinder.reset();
             } else {
                 final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
-                Position targetPosition = pathingEntity.getTargetPosition();
+                final Position targetPosition = pathingEntity.getTargetPosition();
                 moveTowards(targetPosition, speed);
             }
+        } else {
+            // TODO not call this every tick (code above with #done() is never called)
+            pathFinder.reset();
         }
 
         super.update(time);
