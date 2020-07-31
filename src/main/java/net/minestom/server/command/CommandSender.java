@@ -55,17 +55,17 @@ public interface CommandSender {
 
     /**
      * Checks if the given permission is possessed by this command sender.
-     * Simple shortcut to <pre>getAllPermissions().contains(permission)</pre> for readability.
+     * Simple shortcut to <pre>getAllPermissions().contains(permission) && permission.isValidFor(this)</pre> for readability.
      * @param p permission to check against
      * @return
      */
     default boolean hasPermission(Permission p) {
-        return getAllPermissions().contains(p);
+        return getAllPermissions().contains(p) && p.isValidFor(this);
     }
 
     /**
      * Checks if the given permission is possessed by this command sender.
-     * Will call {@link #hasPermission(Permission)} on all permissions that are an instance of permissionClass.
+     * Will call {@link Permission#isValidFor(Permission)} on all permissions that are an instance of permissionClass.
      * If no matching permission is found, this result returns false.
      *
      * @param permissionClass
