@@ -5,10 +5,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.item.metadata.EnchantedBookMeta;
-import net.minestom.server.item.metadata.ItemMeta;
-import net.minestom.server.item.metadata.MapMeta;
-import net.minestom.server.item.metadata.PotionMeta;
+import net.minestom.server.item.metadata.*;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
@@ -580,9 +577,15 @@ public class ItemStack implements DataContainer {
 
         if (material == Material.FILLED_MAP)
             return new MapMeta();
-        
+
+        if (material == Material.COMPASS)
+            return new CompassMeta();
+
         if (material == Material.ENCHANTED_BOOK)
             return new EnchantedBookMeta();
+
+        if (material == Material.CROSSBOW)
+            return new CrossbowMeta();
 
         return null;
     }
