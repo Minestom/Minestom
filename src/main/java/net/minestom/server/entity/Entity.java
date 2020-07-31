@@ -428,7 +428,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 sendSynchronization();
 
                 if (shouldSendVelocityUpdate(time)) {
-                    sendPacketToViewersAndSelf(getVelocityPacket());
+                    sendVelocityPacket();
                     lastVelocityUpdateTime = time;
                 }
             }
@@ -480,6 +480,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         if (shouldRemove()) {
             remove();
         }
+    }
+
+    /**
+     * Equivalent to <code>sendPacketsToViewers(getVelocityPacket());</code>
+     */
+    public void sendVelocityPacket() {
+        sendPacketsToViewers(getVelocityPacket());
     }
 
     /**

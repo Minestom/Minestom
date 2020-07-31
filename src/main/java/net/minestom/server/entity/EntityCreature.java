@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.PathObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
@@ -50,8 +51,6 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void update(long time) {
-        super.update(time);
-
         // Path finding
         path = pathFinder.update();
         if (path != null) {
@@ -61,12 +60,11 @@ public abstract class EntityCreature extends LivingEntity {
             } else {
                 final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
                 Position targetPosition = pathingEntity.getTargetPosition();
-                //targetPosition = new Position(-5.5f, 40f, -5.5f);
-                //System.out.println("target: " + targetPosition + " : " + (System.currentTimeMillis() - time));
-                //System.out.println("current: " + getPosition());
                 moveTowards(targetPosition, speed);
             }
         }
+
+        super.update(time);
     }
 
     @Override
@@ -306,12 +304,23 @@ public abstract class EntityCreature extends LivingEntity {
         final float currentZ = position.getZ();
         final float targetX = direction.getX();
         final float targetZ = direction.getZ();
+        final float dz = targetZ - currentZ;
+        final float dx = targetX - currentX;
 
-        final float radians = (float) Math.atan2(targetZ - currentZ, targetX - currentX);
+        // the purpose of these few lines is to slow down entities when they reach their destination
+        float distSquared = dx * dx + dz * dz;
+        if(speed > distSquared) {
+            speed = distSquared;
+        }
+
+        final float radians = (float) Math.atan2(dz, dx);
         final float speedX = (float) (Math.cos(radians) * speed);
         final float speedZ = (float) (Math.sin(radians) * speed);
 
-        move(speedX, 0, speedZ, true);
+        // TODO: is a hard set an issue if there are other external forces at play?
+        final float tps = MinecraftServer.TICK_PER_SECOND;
+        velocity.setX(speedX * tps);
+        velocity.setZ(speedZ * tps);
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
