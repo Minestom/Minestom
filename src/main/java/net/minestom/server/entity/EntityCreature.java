@@ -80,6 +80,7 @@ public abstract class EntityCreature extends LivingEntity {
      * @param updateView should the entity move its head toward the position?
      */
     public void move(float x, float y, float z, boolean updateView) {
+        // TODO: remove ? Entity#tick already performs this behaviour, and syncs it properly
         final Position position = getPosition();
         Position newPosition = new Position();
         // Calculate collisions boxes
