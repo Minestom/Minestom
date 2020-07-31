@@ -287,8 +287,8 @@ public abstract class EntityCreature extends LivingEntity {
      * @param position the position to find the path to, null to reset the pathfinder
      */
     public void setPathTo(Position position) {
+        this.pathFinder.reset();
         if (position == null) {
-            this.pathFinder.reset();
             return;
         }
         position = position.clone();
