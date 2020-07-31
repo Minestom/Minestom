@@ -96,13 +96,12 @@ public class ColoredText {
      */
     @Override
     public String toString() {
-        if (updated) {
-            return compiledJson;
+        if (!updated) {
+            this.compiledJson = getJsonObject().toString();
+            this.updated = true;
         }
-
-        this.compiledJson = getJsonObject().toString();
-        this.updated = true;
-        return getJsonObject().toString();
+        
+        return compiledJson;
     }
 
     /**
