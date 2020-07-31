@@ -5,6 +5,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.item.metadata.EnchantedBookMeta;
 import net.minestom.server.item.metadata.ItemMeta;
 import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.item.metadata.PotionMeta;
@@ -36,7 +37,6 @@ public class ItemStack implements DataContainer {
         this.lore = new ArrayList<>();
 
         this.enchantmentMap = new HashMap<>();
-        this.storedEnchantmentMap = new HashMap<>();
         this.attributes = new ArrayList<>();
 
         this.itemMeta = findMeta();
@@ -47,7 +47,6 @@ public class ItemStack implements DataContainer {
     private ArrayList<ColoredText> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
-    private Map<Enchantment, Short> storedEnchantmentMap;
     private List<ItemAttribute> attributes;
 
     private int hideFlag;
@@ -142,7 +141,6 @@ public class ItemStack implements DataContainer {
                     itemStack.isUnbreakable() == unbreakable &&
                     itemStack.getDamage() == damage &&
                     itemStack.enchantmentMap.equals(enchantmentMap) &&
-                    itemStack.storedEnchantmentMap.equals(storedEnchantmentMap) &&
                     itemStack.attributes.equals(attributes) &&
                     itemStack.hideFlag == hideFlag &&
                     sameMeta &&
@@ -303,50 +301,6 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the stored enchantment map
-     * Stored enchantments are used on enchanted book
-     *
-     * @return an unmodifiable map containing the item stored enchantments
-     */
-    public Map<Enchantment, Short> getStoredEnchantmentMap() {
-        return Collections.unmodifiableMap(storedEnchantmentMap);
-    }
-
-    /**
-     * Set a stored enchantment level
-     *
-     * @param enchantment the enchantment type
-     * @param level       the enchantment level
-     */
-    public void setStoredEnchantment(Enchantment enchantment, short level) {
-        if (level < 1) {
-            removeStoredEnchantment(enchantment);
-            return;
-        }
-
-        this.storedEnchantmentMap.put(enchantment, level);
-    }
-
-    /**
-     * Remove a stored enchantment
-     *
-     * @param enchantment the enchantment type
-     */
-    public void removeStoredEnchantment(Enchantment enchantment) {
-        this.storedEnchantmentMap.remove(enchantment);
-    }
-
-    /**
-     * Get a stored enchantment level
-     *
-     * @param enchantment the enchantment type
-     * @return the stored enchantment level, 0 if not present
-     */
-    public int getStoredEnchantmentLevel(Enchantment enchantment) {
-        return this.storedEnchantmentMap.getOrDefault(enchantment, (short) 0);
-    }
-
-    /**
      * Get the item attributes
      *
      * @return an unmodifiable {@link List} containing the item attributes
@@ -493,7 +447,7 @@ public class ItemStack implements DataContainer {
      */
     public boolean hasNbtTag() {
         return hasDisplayName() || hasLore() || damage != 0 || isUnbreakable() ||
-                !enchantmentMap.isEmpty() || !storedEnchantmentMap.isEmpty() ||
+                !enchantmentMap.isEmpty() ||
                 !attributes.isEmpty() ||
                 hideFlag != 0 || customModelData != 0 || (itemMeta != null && itemMeta.hasNbt());
     }
@@ -511,7 +465,6 @@ public class ItemStack implements DataContainer {
         itemStack.setStackingRule(getStackingRule());
 
         itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
-        itemStack.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
         itemStack.attributes = new ArrayList<>(attributes);
 
         itemStack.hideFlag = hideFlag;
@@ -627,6 +580,9 @@ public class ItemStack implements DataContainer {
 
         if (material == Material.FILLED_MAP)
             return new MapMeta();
+        
+        if (material == Material.ENCHANTED_BOOK)
+            return new EnchantedBookMeta();
 
         return null;
     }
