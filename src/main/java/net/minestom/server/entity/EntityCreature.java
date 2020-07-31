@@ -295,6 +295,7 @@ public abstract class EntityCreature extends LivingEntity {
     /**
      * Used to move the entity toward {@code direction} in the X and Z axis
      * Gravity is still applied but the entity will not attempt to jump
+     * Also update the yaw/pitch of the entity to look along 'direction'
      *
      * @param direction the targeted position
      * @param speed     define how far the entity will move
@@ -318,10 +319,21 @@ public abstract class EntityCreature extends LivingEntity {
         final float speedX = (float) (Math.cos(radians) * speed);
         final float speedZ = (float) (Math.sin(radians) * speed);
 
+        lookAlong(dx, direction.getY(), dz);
+
         // TODO: is a hard set an issue if there are other external forces at play?
         final float tps = MinecraftServer.TICK_PER_SECOND;
         velocity.setX(speedX * tps);
         velocity.setZ(speedZ * tps);
+    }
+
+    private void lookAlong(float dx, float dy, float dz) {
+        final float horizontalAngle = (float) Math.atan2(dz, dx);
+        final float yaw = (float) (horizontalAngle * (180.0 / Math.PI)) - 90;
+        final float pitch = (float) Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
+
+        getPosition().setYaw(yaw);
+        getPosition().setPitch(pitch);
     }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
