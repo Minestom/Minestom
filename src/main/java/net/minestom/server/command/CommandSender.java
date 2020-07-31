@@ -65,7 +65,7 @@ public interface CommandSender {
 
     /**
      * Checks if the given permission is possessed by this command sender.
-     * Will call {@link Permission#isValidFor(Permission)} on all permissions that are an instance of permissionClass.
+     * Will call {@link Permission#isValidFor(CommandSender)} on all permissions that are an instance of permissionClass.
      * If no matching permission is found, this result returns false.
      *
      * @param permissionClass
