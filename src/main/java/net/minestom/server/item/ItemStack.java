@@ -16,6 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 
+// TODO should we cache a ByteBuf of this item for faster packet write
 public class ItemStack implements DataContainer {
 
     private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(127);

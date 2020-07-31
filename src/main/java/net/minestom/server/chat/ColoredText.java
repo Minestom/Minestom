@@ -100,7 +100,7 @@ public class ColoredText {
             this.compiledJson = getJsonObject().toString();
             this.updated = true;
         }
-        
+
         return compiledJson;
     }
 
