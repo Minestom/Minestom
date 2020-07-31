@@ -19,7 +19,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.WorldBorder;
@@ -52,7 +51,7 @@ public class PlayerInit {
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
@@ -63,12 +62,12 @@ public class PlayerInit {
         end.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        int loopStart = -2;
-        int loopEnd = 10;
+        final int loopStart = -10;
+        final int loopEnd = 10;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                //netherTest.loadChunk(x, z);
+                netherTest.loadChunk(x, z);
                 end.loadChunk(x, z);
             }
 
@@ -350,7 +349,7 @@ public class PlayerInit {
                 System.out.println("PLAYER EAT EVENT");
             });
 
-            player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
+            /*player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
                 Instance instance = player.getInstance();
 
                 Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
@@ -362,7 +361,7 @@ public class PlayerInit {
                 if (chunk.getViewers().isEmpty()) {
                     player.getInstance().unloadChunk(chunk);
                 }
-            });
+            });*/
 
         });
     }

@@ -311,7 +311,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // the purpose of these few lines is to slow down entities when they reach their destination
         float distSquared = dx * dx + dz * dz;
-        if(speed > distSquared) {
+        if (speed > distSquared) {
             speed = distSquared;
         }
 
@@ -325,6 +325,17 @@ public abstract class EntityCreature extends LivingEntity {
         final float tps = MinecraftServer.TICK_PER_SECOND;
         velocity.setX(speedX * tps);
         velocity.setZ(speedZ * tps);
+    }
+
+    /**
+     * Get the pathing entity
+     * <p>
+     * Used by the pathfinder
+     *
+     * @return the pathing entity
+     */
+    public PFPathingEntity getPathingEntity() {
+        return pathingEntity;
     }
 
     private void lookAlong(float dx, float dy, float dz) {
