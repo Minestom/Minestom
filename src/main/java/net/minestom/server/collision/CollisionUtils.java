@@ -22,22 +22,23 @@ public class CollisionUtils {
      * @return whether this entity is on the ground
      */
     public static boolean handlePhysics(Entity entity, Vector deltaPosition, Position positionOut, Vector velocityOut) {
-        Instance instance = entity.getInstance();
-        Position currentPosition = entity.getPosition();
-        BoundingBox boundingBox = entity.getBoundingBox();
+        // TODO handle collisions with nearby entities (should it be done here?)
+        final Instance instance = entity.getInstance();
+        final Position currentPosition = entity.getPosition();
+        final BoundingBox boundingBox = entity.getBoundingBox();
 
         Vector intermediaryPosition = new Vector();
-        boolean yCollision = stepAxis(instance, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+        final boolean yCollision = stepAxis(instance, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
                 intermediaryPosition,
                 deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
         );
 
-        boolean xCollision = stepAxis(instance, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+        final boolean xCollision = stepAxis(instance, intermediaryPosition, X_AXIS, deltaPosition.getX(),
                 intermediaryPosition,
                 deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace()
         );
 
-        boolean zCollision = stepAxis(instance, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+        final boolean zCollision = stepAxis(instance, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
                 intermediaryPosition,
                 deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace()
         );
