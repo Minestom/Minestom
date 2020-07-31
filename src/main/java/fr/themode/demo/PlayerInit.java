@@ -295,6 +295,8 @@ public class PlayerInit {
 
                 RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + "test item"));
                 richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.DIAMOND, (byte) 1)));
+                richMessage.setInsertion("Test Insert");
+                System.out.println(richMessage.toString());
                 player.sendMessage(richMessage);
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());

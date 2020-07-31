@@ -64,6 +64,19 @@ public class RichMessage {
     }
 
     /**
+     * Set the insertion string of the current rich component
+     *
+     * @param insertion the string to insert in the chat box
+     * @return the rich message
+     */
+    public RichMessage setInsertion(String insertion) {
+        Check.notNull(insertion, "the insertion cannot be null");
+
+        currentComponent.setInsertion(insertion);
+        return this;
+    }
+
+    /**
      * Add a new rich component to the message
      *
      * @param coloredText     the text composing the rich component
@@ -142,14 +155,15 @@ public class RichMessage {
      * @return a list of processed components
      */
     private List<JsonObject> getComponentObject(RichComponent component) {
-        ColoredText coloredText = component.getText();
-        List<JsonObject> componentObjects = coloredText.getComponents();
+        final ColoredText coloredText = component.getText();
+        final List<JsonObject> componentObjects = coloredText.getComponents();
 
-        ChatClickEvent clickEvent = component.getClickEvent();
-        ChatHoverEvent hoverEvent = component.getHoverEvent();
+        final ChatClickEvent clickEvent = component.getClickEvent();
+        final ChatHoverEvent hoverEvent = component.getHoverEvent();
+        final String insertion = component.getInsertion();
 
         // Nothing to process
-        if (clickEvent == null && hoverEvent == null) {
+        if (clickEvent == null && hoverEvent == null && insertion == null) {
             return componentObjects;
         }
 
@@ -174,6 +188,10 @@ public class RichMessage {
                     hoverObject = getEventObject(hoverEvent.getAction(), hoverEvent.getValue());
                 }
                 componentObject.add("hoverEvent", hoverObject);
+            }
+            // Add insertion if any
+            if (insertion != null) {
+                componentObject.addProperty("insertion", insertion);
             }
         }
 
@@ -200,6 +218,7 @@ public class RichMessage {
         private FormatRetention formatRetention;
         private ChatClickEvent clickEvent;
         private ChatHoverEvent hoverEvent;
+        private String insertion;
 
         private RichComponent(ColoredText text, FormatRetention formatRetention) {
             this.text = text;
@@ -228,6 +247,14 @@ public class RichMessage {
 
         public void setHoverEvent(ChatHoverEvent hoverEvent) {
             this.hoverEvent = hoverEvent;
+        }
+
+        public String getInsertion() {
+            return insertion;
+        }
+
+        public void setInsertion(String insertion) {
+            this.insertion = insertion;
         }
     }
 
