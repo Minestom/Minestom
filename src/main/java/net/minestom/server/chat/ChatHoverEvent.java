@@ -127,7 +127,15 @@ public class ChatHoverEvent {
         JsonObject displayJson = null;
         if (itemStack.hasDisplayName() || itemStack.hasLore()) {
             displayJson = new JsonObject();
-            // TODO: Color (Leather armour)
+
+            // Leather armor
+            {
+                if (hasMeta && itemMeta instanceof LeatherArmorMeta) {
+                    final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
+                    // TODO: Color
+                }
+            }
+
             if (itemStack.hasDisplayName()) {
                 // This is done as this contains a json text component describing the item's name.
                 // We replace it in the last step, as adding it now would replace it with lenient JSON which MC doesn't want.
@@ -147,20 +155,35 @@ public class ChatHoverEvent {
         }
 
         // WrittenBooks
-        // TODO: Resolved
-        // TODO: Generation
-        // TODO: Author
-        // TODO: Title
-        // TODO: Pages
+        {
+            if (hasMeta && itemMeta instanceof WrittenBookMeta) {
+                final WrittenBookMeta writtenBookMeta = (WrittenBookMeta) itemMeta;
+                // TODO: Resolved
+                // TODO: Generation
+                // TODO: Author
+                // TODO: Title
+                // TODO: Pages
+            }
+        }
 
         // Book and Quills
-        // TODO: Pages
+        {
+            if (hasMeta && itemMeta instanceof WritableBookMeta) {
+                final WritableBookMeta writableBookMeta = (WritableBookMeta) itemMeta;
+                // TODO: Pages
+            }
+        }
 
         // Player Heads
         // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Player_Heads
 
         // Fireworks
-        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Fireworks
+        {
+            if (hasMeta && itemMeta instanceof FireworkMeta) {
+                final FireworkMeta fireworkMeta = (FireworkMeta) itemMeta;
+                // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Fireworks
+            }
+        }
 
         // Armorstands and Spawn Eggs
         // TODO: EntityTag
