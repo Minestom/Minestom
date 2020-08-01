@@ -587,6 +587,12 @@ public class ItemStack implements DataContainer {
         if (material == Material.CROSSBOW)
             return new CrossbowMeta();
 
+        if (material == Material.WRITABLE_BOOK)
+            return new WritableBookMeta();
+
+        if (material == Material.WRITTEN_BOOK)
+            return new WrittenBookMeta();
+
         return null;
     }
 
