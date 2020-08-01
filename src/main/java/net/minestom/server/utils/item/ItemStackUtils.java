@@ -22,7 +22,7 @@ public class ItemStackUtils {
      * @return true if the item is visible, false otherwise
      */
     public static boolean isVisible(ItemStack itemStack) {
-        return itemStack == null || itemStack.isAir();
+        return itemStack != null && !itemStack.isAir();
     }
 
 }
