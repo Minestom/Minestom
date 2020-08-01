@@ -378,7 +378,7 @@ public class CommandManager {
         return literalNode;
     }
 
-    private List<DeclareCommandsPacket.Node> toNodes(Argument argument, boolean executable) {
+    private List<DeclareCommandsPacket.Node> toNodes(Argument<?> argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
@@ -515,7 +515,7 @@ public class CommandManager {
         return nodes;
     }
 
-    private byte getNumberProperties(ArgumentNumber argumentNumber) {
+    private byte getNumberProperties(ArgumentNumber<? extends Number> argumentNumber) {
         byte result = 0;
         if (argumentNumber.hasMin())
             result += 1;
@@ -525,7 +525,7 @@ public class CommandManager {
     }
 
     private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,
-                                                          Argument argument, boolean executable) {
+                                                          Argument<?> argument, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         nodes.add(argumentNode);
 
