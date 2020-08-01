@@ -7,7 +7,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities;
 import net.minestom.server.entity.Entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class EntitySelectorCommand extends Command {
 
@@ -21,6 +21,6 @@ public class EntitySelectorCommand extends Command {
     }
 
     private void executor(CommandSender commandSender, Arguments arguments) {
-        ArrayList<Entity> entities = arguments.getEntities("entities");
+        List<Entity> entities = arguments.getEntities("entities");
     }
 }
