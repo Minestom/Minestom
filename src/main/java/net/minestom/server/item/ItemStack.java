@@ -593,6 +593,12 @@ public class ItemStack implements DataContainer {
         if (material == Material.WRITTEN_BOOK)
             return new WrittenBookMeta();
 
+        if (material == Material.LEATHER_HELMET ||
+                material == Material.LEATHER_CHESTPLATE ||
+                material == Material.LEATHER_LEGGINGS ||
+                material == Material.LEATHER_BOOTS)
+            return new LeatherArmorMeta();
+
         return null;
     }
 
