@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
-public abstract class ArgumentNumber<T> extends Argument<T> {
+public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
 
     public static final int NOT_NUMBER_ERROR = 1;
     public static final int RANGE_ERROR = 2;
@@ -17,19 +17,19 @@ public abstract class ArgumentNumber<T> extends Argument<T> {
         super(id, false);
     }
 
-    public ArgumentNumber min(T value) {
+    public ArgumentNumber<T> min(T value) {
         this.min = value;
         this.hasMin = true;
         return this;
     }
 
-    public ArgumentNumber max(T value) {
+    public ArgumentNumber<T> max(T value) {
         this.max = value;
         this.hasMax = true;
         return this;
     }
 
-    public ArgumentNumber between(T min, T max) {
+    public ArgumentNumber<T> between(T min, T max) {
         this.min = min;
         this.max = max;
         this.hasMin = true;

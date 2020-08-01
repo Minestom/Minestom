@@ -11,13 +11,13 @@ import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Arguments {
 
-    private Map<String, Object> args = new HashMap<>();
+    private final Map<String, Object> args = new HashMap<>();
 
     public Structure getStructure(String id) {
         return (Structure) getObject(id);
@@ -87,8 +87,8 @@ public class Arguments {
         return (FloatRange) getObject(id);
     }
 
-    public ArrayList<Entity> getEntities(String id) {
-        return (ArrayList<Entity>) getObject(id);
+    public List<Entity> getEntities(String id) {
+        return (List<Entity>) getObject(id);
     }
 
     public Object getObject(String id) {
