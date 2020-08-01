@@ -34,10 +34,20 @@ public class EntityBat extends EntityCreature {
         }
     }
 
+    /**
+     * Get if the bat is hanging
+     *
+     * @return true if the bat is hanging, false otherwise
+     */
     public boolean isHanging() {
         return hanging;
     }
 
+    /**
+     * Make the bat hanging or cancel
+     *
+     * @param hanging true to make the bat hanging, false otherwise
+     */
     public void setHanging(boolean hanging) {
         this.hanging = hanging;
     }

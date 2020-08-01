@@ -136,15 +136,14 @@ public class NBTUtils {
         if (nbt.containsKey("AttributeModifiers")) {
             NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
             for (NBTCompound attributeNBT : attributes) {
-                // TODO: 1.16 changed how UUIDs are stored, is this part affected?
-                long uuidMost = attributeNBT.getLong("UUIDMost");
-                long uuidLeast = attributeNBT.getLong("UUIDLeast");
-                UUID uuid = new UUID(uuidMost, uuidLeast);
-                double value = attributeNBT.getDouble("Amount");
-                String slot = attributeNBT.getString("Slot");
-                String attributeName = attributeNBT.getString("AttributeName");
-                int operation = attributeNBT.getInt("Operation");
-                String name = attributeNBT.getString("Name");
+                final long uuidMost = attributeNBT.getLong("UUIDMost");
+                final long uuidLeast = attributeNBT.getLong("UUIDLeast");
+                final UUID uuid = new UUID(uuidMost, uuidLeast);
+                final double value = attributeNBT.getDouble("Amount");
+                final String slot = attributeNBT.getString("Slot");
+                final String attributeName = attributeNBT.getString("AttributeName");
+                final int operation = attributeNBT.getInt("Operation");
+                final String name = attributeNBT.getString("Name");
 
                 final Attribute attribute = Attribute.fromKey(attributeName);
                 // Wrong attribute name, stop here

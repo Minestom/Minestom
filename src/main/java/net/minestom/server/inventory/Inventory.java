@@ -161,6 +161,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
+    public void clear() {
+        // Clear the item array
+        for (int i = 0; i < getSize(); i++) {
+            setItemStackInternal(i, ItemStack.getAirItem());
+        }
+        // Send the cleared inventory to viewers
+        update();
+    }
+
+    @Override
     public ItemStack getItemStack(int slot) {
         return itemStacks[slot];
     }
@@ -606,14 +616,5 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         } else {
             update(player);
         }
-    }
-
-    public void clear() {
-        // Clear the item array
-        for (int i = 0; i < getSize(); i++) {
-            setItemStackInternal(i, ItemStack.getAirItem());
-        }
-        // Send the cleared inventory to viewers
-        update();
     }
 }

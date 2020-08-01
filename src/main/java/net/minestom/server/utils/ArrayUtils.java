@@ -34,10 +34,10 @@ public class ArrayUtils {
         int[] indexes = new int[Math.max(a.length, b.length)];
 
         for (int i = 0; i < a.length; i++) {
-            long aValue = a[i];
+            final long aValue = a[i];
             boolean contains = false;
             for (int n = 0; n < b.length; n++) {
-                long bValue = b[n];
+                final long bValue = b[n];
                 if (bValue == aValue) {
                     contains = true;
                     break;

@@ -34,10 +34,20 @@ public class EntitySpider extends EntityCreature {
         }
     }
 
+    /**
+     * Get if the spider is climbing
+     *
+     * @return true if the spider is climbing, false otherwise
+     */
     public boolean isClimbing() {
         return climbing;
     }
 
+    /**
+     * Make the spider climbs
+     *
+     * @param climbing true to make the spider climbs, false otherwise
+     */
     public void setClimbing(boolean climbing) {
         this.climbing = climbing;
         sendMetadataIndex(15);
