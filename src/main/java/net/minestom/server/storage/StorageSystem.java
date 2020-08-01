@@ -11,9 +11,10 @@ public interface StorageSystem {
     /**
      * Called when a folder is opened with this StorageSystem
      *
-     * @param folderPath the name of the folder
+     * @param folderPath     the name of the folder
+     * @param storageOptions the storage option
      */
-    void open(String folderPath);
+    void open(String folderPath, StorageOptions storageOptions);
 
     /**
      * @param key
