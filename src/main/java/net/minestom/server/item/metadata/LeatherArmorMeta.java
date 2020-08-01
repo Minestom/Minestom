@@ -25,7 +25,46 @@ public class LeatherArmorMeta implements ItemMeta {
      * Reset the color to the default leather one
      */
     public void reset() {
+        this.r = 0;
+        this.g = 0;
+        this.b = 0;
         this.modified = false;
+    }
+
+    /**
+     * Get the red component
+     *
+     * @return the red component
+     */
+    public int getRed() {
+        return r;
+    }
+
+    /**
+     * Get the green component
+     *
+     * @return the green component
+     */
+    public int getGreen() {
+        return g;
+    }
+
+    /**
+     * Get the blue component
+     *
+     * @return the blue component
+     */
+    public int getBlue() {
+        return b;
+    }
+
+    /**
+     * Get if the color of this armor piece have been changed
+     *
+     * @return true if the color has been changed, false otherwise
+     */
+    public boolean isModified() {
+        return modified;
     }
 
     @Override

@@ -132,7 +132,9 @@ public class ChatHoverEvent {
             {
                 if (hasMeta && itemMeta instanceof LeatherArmorMeta) {
                     final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
-                    // TODO: Color
+                    if (leatherArmorMeta.isModified()) {
+                        // TODO: Color
+                    }
                 }
             }
 
