@@ -27,7 +27,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
@@ -580,7 +579,7 @@ public class InstanceContainer extends Instance {
                 return;
             }
             currentBlock.scheduledUpdate(instance, position, getBlockData(position));
-        }).delay(time, unit).buildTask();
+        }).delay(time, unit).schedule();
     }
 
     @Override

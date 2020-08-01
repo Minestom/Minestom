@@ -51,17 +51,17 @@ public class ChatColor {
         colorCode.put("black", BLACK);
         colorCode.put("dark_blue", DARK_BLUE);
         colorCode.put("dark_green", DARK_GREEN);
-        colorCode.put("dark_cyan", DARK_CYAN);
+        colorCode.put("dark_aqua", DARK_CYAN);
         colorCode.put("dark_red", DARK_RED);
-        colorCode.put("purple", PURPLE);
+        colorCode.put("dark_purple", PURPLE);
         colorCode.put("gold", GOLD);
         colorCode.put("gray", GRAY);
         colorCode.put("dark_gray", DARK_GRAY);
         colorCode.put("blue", BLUE);
-        colorCode.put("bright_green", BRIGHT_GREEN);
-        colorCode.put("cyan", CYAN);
+        colorCode.put("green", BRIGHT_GREEN);
+        colorCode.put("aqua", CYAN);
         colorCode.put("red", RED);
-        colorCode.put("pink", PINK);
+        colorCode.put("light_purple", PINK);
         colorCode.put("yellow", YELLOW);
         colorCode.put("white", WHITE);
 

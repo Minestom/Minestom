@@ -7,9 +7,9 @@ public class SerializerUtils {
     }
 
     public static BlockPosition longToBlockPosition(long value) {
-        int x = (int) (value >> 38);
-        int y = (int) (value & 0xFFF);
-        int z = (int) (value << 26 >> 38);
+        final int x = (int) (value >> 38);
+        final int y = (int) (value & 0xFFF);
+        final int z = (int) (value << 26 >> 38);
         return new BlockPosition(x, y, z);
     }
 

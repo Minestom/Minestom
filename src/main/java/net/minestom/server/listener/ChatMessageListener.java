@@ -1,7 +1,10 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.*;
+import net.minestom.server.chat.ChatClickEvent;
+import net.minestom.server.chat.ChatHoverEvent;
+import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -76,7 +79,7 @@ public class ChatMessageListener {
         final ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
 
         final RichMessage richMessage = RichMessage.of(usernameText)
-                .setHoverEvent(ChatHoverEvent.showText(ColoredText.of(ChatColor.GRAY + "Its " + username)))
+                .setHoverEvent(ChatHoverEvent.showText("Click to send a message to " + username))
                 .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + " "))
                 .append(ColoredText.of(" " + chatEvent.getMessage()));
 

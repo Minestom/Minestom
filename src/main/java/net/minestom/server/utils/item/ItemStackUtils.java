@@ -15,4 +15,14 @@ public class ItemStackUtils {
         return itemStack == null ? ItemStack.getAirItem() : itemStack;
     }
 
+    /**
+     * Used to check if the item stack is a visible item (not null and not air)
+     *
+     * @param itemStack the item to check
+     * @return true if the item is visible, false otherwise
+     */
+    public static boolean isVisible(ItemStack itemStack) {
+        return itemStack != null && !itemStack.isAir();
+    }
+
 }

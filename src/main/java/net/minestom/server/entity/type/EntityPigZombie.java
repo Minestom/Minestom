@@ -40,10 +40,20 @@ public class EntityPigZombie extends EntityCreature {
         }
     }
 
+    /**
+     * Get if the pig zombie is a baby
+     *
+     * @return true if it is a baby, false otherwise
+     */
     public boolean isBaby() {
         return baby;
     }
 
+    /**
+     * Set the pig zombie a baby or adult
+     *
+     * @param baby true to make it a baby, false otherwise
+     */
     public void setBaby(boolean baby) {
         this.baby = baby;
         sendMetadataIndex(15);

@@ -8,14 +8,14 @@ import net.minestom.server.utils.Position;
 
 public class PFPathingEntity implements IPathingEntity {
 
-    private static final float SEARCH_RANGE = 32;
-
     private EntityCreature entity;
 
+    private float searchRange;
     private Position targetPosition;
 
     public PFPathingEntity(EntityCreature entity) {
         this.entity = entity;
+        this.searchRange = entity.getAttributeValue(Attribute.FOLLOW_RANGE);
     }
 
     public Position getTargetPosition() {
@@ -29,7 +29,16 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public float searchRange() {
-        return SEARCH_RANGE;
+        return searchRange;
+    }
+
+    /**
+     * Change the search range of the entity
+     *
+     * @param searchRange the new entity's search range
+     */
+    public void setSearchRange(float searchRange) {
+        this.searchRange = searchRange;
     }
 
     @Override
@@ -86,7 +95,7 @@ public class PFPathingEntity implements IPathingEntity {
 
         final float entityY = entity.getPosition().getY();
         if (entityY < y) {
-            //entity.jump(1);
+            entity.jump(1);
         }
     }
 

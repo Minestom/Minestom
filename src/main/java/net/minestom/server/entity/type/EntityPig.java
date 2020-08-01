@@ -34,10 +34,20 @@ public class EntityPig extends EntityCreature {
         }
     }
 
+    /**
+     * Get if the pig has a saddle
+     *
+     * @return true if the pig has a saddle, false otherwise
+     */
     public boolean hasSaddle() {
         return saddle;
     }
 
+    /**
+     * Set a saddle to the pig
+     *
+     * @param saddle true to add a saddle, false to remove it
+     */
     public void setSaddle(boolean saddle) {
         this.saddle = saddle;
         sendMetadataIndex(16);

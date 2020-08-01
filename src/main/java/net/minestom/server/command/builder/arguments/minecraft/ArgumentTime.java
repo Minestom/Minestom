@@ -29,7 +29,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
         value = value.substring(0, value.length() - 1);
         try {
             // Check if value is a number
-            Integer.valueOf(value);
+            Integer.parseInt(value);
 
             return SUCCESS;
         } catch (NumberFormatException e) {
@@ -49,7 +49,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
             timeUnit = TimeUnit.TICK;
         }
         value = value.substring(0, value.length() - 1);
-        final int time = Integer.valueOf(value);
+        final int time = Integer.parseInt(value);
 
         return new UpdateOption(time, timeUnit);
     }

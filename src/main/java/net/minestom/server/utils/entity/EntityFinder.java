@@ -1,7 +1,10 @@
 package net.minestom.server.utils.entity;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.utils.math.IntRange;
+
+import java.util.ArrayList;
 
 /**
  * Represent a query which can be call to find one or multiple entities
@@ -40,6 +43,15 @@ public class EntityFinder {
 
     public void setOnlyPlayers(boolean onlyPlayers) {
         this.onlyPlayers = onlyPlayers;
+    }
+
+    /**
+     * Find a list of entities (could be empty) based on the conditions
+     *
+     * @return all entities validating the conditions
+     */
+    public ArrayList<Entity> find() {
+        return new ArrayList<>();
     }
 
     public enum EntitySort {

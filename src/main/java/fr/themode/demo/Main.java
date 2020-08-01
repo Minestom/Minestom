@@ -54,7 +54,7 @@ public class Main {
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 
 
-        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).buildTask();
+        MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
         PlayerInit.init();
 

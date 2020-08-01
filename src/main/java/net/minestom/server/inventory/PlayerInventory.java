@@ -122,6 +122,16 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
+    public void clear() {
+        // Clear the item array
+        for (int i = 0; i < getSize(); i++) {
+            setItemStackInternal(i, ItemStack.getAirItem());
+        }
+        // Send the cleared inventory to the inventory's owner
+        update();
+    }
+
+    @Override
     public int getSize() {
         return INVENTORY_SIZE;
     }
@@ -280,6 +290,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         update();
         //problem with ghost item when clicking on a slot which has a different internal id
         //refreshSlot(slot);
+    }
+
+    protected void setItemStackInternal(int slot, ItemStack itemStack) {
+        items[slot] = itemStack;
     }
 
     /**
