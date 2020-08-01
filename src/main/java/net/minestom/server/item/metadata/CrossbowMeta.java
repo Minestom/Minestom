@@ -82,6 +82,24 @@ public class CrossbowMeta implements ItemMeta {
         return projectile3;
     }
 
+    /**
+     * Get if the crossbow is currently charged
+     *
+     * @return true if the crossbow is charged, false otherwise
+     */
+    public boolean isCharged() {
+        return charged;
+    }
+
+    /**
+     * Make the bow charged or uncharged
+     *
+     * @param charged true to make the crossbow charged, false otherwise
+     */
+    public void setCharged(boolean charged) {
+        this.charged = charged;
+    }
+
     @Override
     public boolean hasNbt() {
         return ItemStackUtils.isVisible(projectile1);
