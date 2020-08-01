@@ -2,8 +2,8 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.metadata.*;
 
 /**
  * Represent a hover event for a specific portion of the message
@@ -69,6 +69,9 @@ public class ChatHoverEvent {
      * @return the chat hover event
      */
     public static ChatHoverEvent showItem(ItemStack itemStack) {
+        final ItemMeta itemMeta = itemStack.getItemMeta();
+        final boolean hasMeta = itemMeta != null;
+
         JsonObject itemJson = new JsonObject();
         // Basic Item structure
         itemJson.addProperty("id", itemStack.getMaterial().getName());
@@ -102,19 +105,39 @@ public class ChatHoverEvent {
         // TODO: Attribute modifiers
 
         // Potion Effects
-        // TODO: CustomPotionEffects
-        // TODO: Potion
-        // TODO: CustomPotionColor
+        {
+            if (hasMeta && itemMeta instanceof PotionMeta) {
+                final PotionMeta potionMeta = (PotionMeta) itemMeta;
+                // TODO: CustomPotionEffects
+                // TODO: Potion
+                // TODO: CustomPotionColor
+            }
+        }
 
         // Crossbows
-        // TODO: ChargedProjectiles
-        // TODO: Charged
+        {
+            if (hasMeta && itemMeta instanceof CrossbowMeta) {
+                final CrossbowMeta crossbowMeta = (CrossbowMeta) itemMeta;
+                // TODO: ChargedProjectiles
+                // TODO: Charged
+            }
+        }
 
         // Display
         JsonObject displayJson = null;
         if (itemStack.hasDisplayName() || itemStack.hasLore()) {
             displayJson = new JsonObject();
-            // TODO: Color (Leather armour)
+
+            // Leather armor
+            {
+                if (hasMeta && itemMeta instanceof LeatherArmorMeta) {
+                    final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
+                    if (leatherArmorMeta.isModified()) {
+                        // TODO: Color
+                    }
+                }
+            }
+
             if (itemStack.hasDisplayName()) {
                 // This is done as this contains a json text component describing the item's name.
                 // We replace it in the last step, as adding it now would replace it with lenient JSON which MC doesn't want.
@@ -134,20 +157,35 @@ public class ChatHoverEvent {
         }
 
         // WrittenBooks
-        // TODO: Resolved
-        // TODO: Generation
-        // TODO: Author
-        // TODO: Title
-        // TODO: Pages
+        {
+            if (hasMeta && itemMeta instanceof WrittenBookMeta) {
+                final WrittenBookMeta writtenBookMeta = (WrittenBookMeta) itemMeta;
+                // TODO: Resolved
+                // TODO: Generation
+                // TODO: Author
+                // TODO: Title
+                // TODO: Pages
+            }
+        }
 
         // Book and Quills
-        // TODO: Pages
+        {
+            if (hasMeta && itemMeta instanceof WritableBookMeta) {
+                final WritableBookMeta writableBookMeta = (WritableBookMeta) itemMeta;
+                // TODO: Pages
+            }
+        }
 
         // Player Heads
         // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Player_Heads
 
         // Fireworks
-        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Fireworks
+        {
+            if (hasMeta && itemMeta instanceof FireworkMeta) {
+                final FireworkMeta fireworkMeta = (FireworkMeta) itemMeta;
+                // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Fireworks
+            }
+        }
 
         // Armorstands and Spawn Eggs
         // TODO: EntityTag
@@ -157,7 +195,12 @@ public class ChatHoverEvent {
         // TODO: ENtityTag
 
         // Maps
-        // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Maps
+        {
+            if (hasMeta && itemMeta instanceof MapMeta) {
+                final MapMeta mapMeta = (MapMeta) itemMeta;
+                // TODO: Alot check https://minecraft.gamepedia.com/Player.dat_format#Item_structure#Maps
+            }
+        }
 
         // Suspicious Stew
         // TODO: Effects
@@ -166,9 +209,14 @@ public class ChatHoverEvent {
         // TODO: DebugProperty
 
         // Compasses
-        // TODO: LodestoneTracked
-        // TODO: LodestoneDimension
-        // TODO: LodestonePos
+        {
+            if (hasMeta && itemMeta instanceof CompassMeta) {
+                final CompassMeta compassMeta = (CompassMeta) itemMeta;
+                // TODO: LodestoneTracked
+                // TODO: LodestoneDimension
+                // TODO: LodestonePos
+            }
+        }
 
 
         if (displayJson != null) {
@@ -196,14 +244,15 @@ public class ChatHoverEvent {
      * @return the chat hover event
      */
     public static ChatHoverEvent showEntity(Entity entity) {
-        final String id = entity.getUuid().toString();
+        // TODO
+        /*final String id = entity.getUuid().toString();
         final String type = EntityType.fromId(entity.getEntityType())
                 .getNamespaceID().replace("minecraft:", "");
-        // TODO name
 
         JsonObject object = new JsonObject();
         object.addProperty("id", id);
         object.addProperty("type", type);
-        return new ChatHoverEvent("show_entity", object);
+        return new ChatHoverEvent("show_entity", object);*/
+        throw new UnsupportedOperationException("Entity hover isn't implemented yet");
     }
 }

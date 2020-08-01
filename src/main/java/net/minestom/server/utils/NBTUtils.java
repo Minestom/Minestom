@@ -68,7 +68,7 @@ public class NBTUtils {
         }
     }
 
-    private static void writeEnchant(NBTCompound nbt, String listName, Map<Enchantment, Short> enchantmentMap) {
+    public static void writeEnchant(NBTCompound nbt, String listName, Map<Enchantment, Short> enchantmentMap) {
         NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
         for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
             final Enchantment enchantment = entry.getKey();
@@ -132,9 +132,7 @@ public class NBTUtils {
         if (nbt.containsKey("Enchantments")) {
             loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
         }
-        if (nbt.containsKey("StoredEnchantments")) {
-            loadEnchantments(nbt.getList("StoredEnchantments"), item::setStoredEnchantment);
-        }
+
         if (nbt.containsKey("AttributeModifiers")) {
             NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
             for (NBTCompound attributeNBT : attributes) {
@@ -175,7 +173,7 @@ public class NBTUtils {
         itemMeta.read(nbt);
     }
 
-    private static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
+    public static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
         for (NBTCompound enchantment : enchantments) {
             final short level = enchantment.getShort("lvl");
             final String id = enchantment.getString("id");
@@ -263,11 +261,6 @@ public class NBTUtils {
             if (!enchantmentMap.isEmpty()) {
                 writeEnchant(itemNBT, "Enchantments", enchantmentMap);
             }
-
-            final Map<Enchantment, Short> storedEnchantmentMap = itemStack.getStoredEnchantmentMap();
-            if (!storedEnchantmentMap.isEmpty()) {
-                writeEnchant(itemNBT, "StoredEnchantments", storedEnchantmentMap);
-            }
         }
         // End enchantment
 
@@ -323,7 +316,7 @@ public class NBTUtils {
     }
 
     @FunctionalInterface
-    private interface EnchantmentSetter {
+    public interface EnchantmentSetter {
         void applyEnchantment(Enchantment name, short level);
     }
 }

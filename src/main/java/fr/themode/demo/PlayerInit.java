@@ -19,7 +19,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.WorldBorder;
@@ -63,12 +62,12 @@ public class PlayerInit {
         end.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        int loopStart = -2;
-        int loopEnd = 10;
+        final int loopStart = -10;
+        final int loopEnd = 10;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                //netherTest.loadChunk(x, z);
+                netherTest.loadChunk(x, z);
                 end.loadChunk(x, z);
             }
 
@@ -108,7 +107,7 @@ public class PlayerInit {
                 ColoredText footer = ColoredText.of(benchmarkMessage);
                 player.sendHeaderFooter(header, footer);
             }
-        }).repeat(10, TimeUnit.TICK).buildTask();
+        }).repeat(10, TimeUnit.TICK).schedule();
 
         connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
@@ -296,6 +295,8 @@ public class PlayerInit {
 
                 RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + "test item"));
                 richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.DIAMOND, (byte) 1)));
+                richMessage.setInsertion("Test Insert");
+                System.out.println(richMessage.toString());
                 player.sendMessage(richMessage);
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());
@@ -350,7 +351,7 @@ public class PlayerInit {
                 System.out.println("PLAYER EAT EVENT");
             });
 
-            player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
+            /*player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
                 Instance instance = player.getInstance();
 
                 Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
@@ -362,7 +363,7 @@ public class PlayerInit {
                 if (chunk.getViewers().isEmpty()) {
                     player.getInstance().unloadChunk(chunk);
                 }
-            });
+            });*/
 
         });
     }

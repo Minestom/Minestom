@@ -15,8 +15,14 @@ public class ColoredText {
 
     private String message;
 
+    // true if the compiled string is up-to-date, false otherwise
+    private boolean updated;
+    // the compiled json string of this colored text (can be outdated)
+    private String compiledJson;
+
     private ColoredText(String message) {
         this.message = message;
+        refreshUpdate();
     }
 
     public static ColoredText of(ChatColor color, String message) {
@@ -39,6 +45,7 @@ public class ColoredText {
 
     public ColoredText append(ChatColor color, String message) {
         this.message += color + message;
+        refreshUpdate();
         return this;
     }
 
@@ -48,6 +55,7 @@ public class ColoredText {
 
     public ColoredText appendFormat(String message) {
         this.message += message;
+        refreshUpdate();
         return this;
     }
 
@@ -81,9 +89,19 @@ public class ColoredText {
         return message;
     }
 
+    /**
+     * Compile this text and cache it for further execution
+     *
+     * @return the raw json string of this colored text
+     */
     @Override
     public String toString() {
-        return getJsonObject().toString();
+        if (!updated) {
+            this.compiledJson = getJsonObject().toString();
+            this.updated = true;
+        }
+
+        return compiledJson;
     }
 
     /**
@@ -273,6 +291,10 @@ public class ColoredText {
 
     private String getBoolean(boolean value) {
         return value ? "true" : "false";
+    }
+
+    private void refreshUpdate() {
+        this.updated = false;
     }
 
     private enum MessageType {
