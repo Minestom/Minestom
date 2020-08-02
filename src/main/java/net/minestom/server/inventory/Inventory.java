@@ -161,6 +161,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
+    public void clear() {
+        // Clear the item array
+        for (int i = 0; i < getSize(); i++) {
+            setItemStackInternal(i, ItemStack.getAirItem());
+        }
+        // Send the cleared inventory to viewers
+        update();
+    }
+
+    @Override
     public ItemStack getItemStack(int slot) {
         return itemStacks[slot];
     }
@@ -286,6 +296,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     protected void setItemStackInternal(int slot, ItemStack itemStack) {
         itemStacks[slot] = itemStack;
+        this.windowItemsBufferUpdated = false;
     }
 
     /**
@@ -604,13 +615,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             player.getInventory().update();
         } else {
             update(player);
-        }
-    }
-
-    public void clear() {
-        // TODO: optimize by sending whole inventory at once? (will need to change to setItemStackInternal)
-        for (int i = 0; i < getSize(); i++) {
-            setItemStack(i, ItemStack.getAirItem());
         }
     }
 }

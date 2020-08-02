@@ -596,6 +596,9 @@ public class ItemStack implements DataContainer {
         if (material == Material.FIREWORK_ROCKET)
             return new FireworkMeta();
 
+        if (material == Material.PLAYER_HEAD)
+            return new PlayerHeadMeta();
+
         if (material == Material.LEATHER_HELMET ||
                 material == Material.LEATHER_CHESTPLATE ||
                 material == Material.LEATHER_LEGGINGS ||

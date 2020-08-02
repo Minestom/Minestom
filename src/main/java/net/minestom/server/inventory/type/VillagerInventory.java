@@ -20,7 +20,7 @@ public class VillagerInventory extends Inventory {
 
     public void addTrade(TradeListPacket.Trade trade) {
         TradeListPacket.Trade[] oldTrades = getTrades();
-        int length = oldTrades.length + 1;
+        final int length = oldTrades.length + 1;
         TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
         System.arraycopy(oldTrades, 0, trades, 0, oldTrades.length);
         trades[length] = trade;
@@ -30,7 +30,7 @@ public class VillagerInventory extends Inventory {
 
     public void removeTrade(int index) {
         TradeListPacket.Trade[] oldTrades = getTrades();
-        int length = oldTrades.length - 1;
+        final int length = oldTrades.length - 1;
         TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
         ArrayUtils.removeElement(trades, index);
         this.tradeListPacket.trades = trades;

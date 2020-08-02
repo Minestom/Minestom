@@ -23,14 +23,32 @@ public class StorageManager {
      * WARNING: a storage folder needs to be created with an unique storage system linked
      * you cannot open the save folder with two or more different StorageSystem implementation
      *
-     * @param folderPath    the path to the folder
-     * @param storageSystem the storage system used in the specified folder
+     * @param folderPath     the path to the folder
+     * @param storageOptions the storage option
+     * @param storageSystem  the storage system used in the specified folder
      * @return the specified storage folder
      */
-    public StorageFolder getFolder(String folderPath, StorageSystem storageSystem) {
+    public StorageFolder getFolder(String folderPath, StorageOptions storageOptions, StorageSystem storageSystem) {
+        Check.notNull(storageOptions, "The storage option cannot be null");
         StorageFolder storageFolder =
-                folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath));
+                folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath, storageOptions));
         return storageFolder;
+    }
+
+    /**
+     * Used to get an access to the specified folder
+     * The default StorageSystem provider will be used
+     *
+     * @param folderPath     the path to the folder
+     * @param storageOptions the storage option
+     * @return the specified storage default with the default
+     * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
+     */
+    public StorageFolder getFolder(String folderPath, StorageOptions storageOptions) {
+        Check.notNull(defaultStorageSystemSupplier,
+                "You need to either define a default storage system or specify your storage system for this specific folder");
+        StorageSystem storageSystem = defaultStorageSystemSupplier.get();
+        return getFolder(folderPath, storageOptions, storageSystem);
     }
 
     /**
@@ -42,11 +60,7 @@ public class StorageManager {
      * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
      */
     public StorageFolder getFolder(String folderPath) {
-        Check.notNull(defaultStorageSystemSupplier,
-                "You need to either define a default storage system or specify your storage system for this specific folder");
-
-        StorageSystem storageSystem = defaultStorageSystemSupplier.get();
-        return getFolder(folderPath, storageSystem);
+        return getFolder(folderPath, new StorageOptions());
     }
 
     /**
@@ -71,7 +85,7 @@ public class StorageManager {
     }
 
     /**
-     * Get all folders which have been loaded by {@link #getFolder(String)} or {@link #getFolder(String, StorageSystem)}
+     * Get all folders which have been loaded by {@link #getFolder(String)} or {@link #getFolder(String, StorageOptions, StorageSystem)}
      *
      * @return an unmodifiable list of all the loaded StorageFolder
      */

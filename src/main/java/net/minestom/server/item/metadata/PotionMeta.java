@@ -4,71 +4,56 @@ import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 public class PotionMeta implements ItemMeta {
 
-    private Set<PotionType> potionTypes = new HashSet<>();
+    private PotionType potionType;
 
     /**
-     * Get the item potion types
+     * Get the potion type
      *
-     * @return an unmodifiable {@link Set} containing the item potion types
+     * @return the potion type
      */
-    public Set<PotionType> getPotionTypes() {
-        return Collections.unmodifiableSet(potionTypes);
+    public PotionType getPotionType() {
+        return potionType;
     }
 
     /**
-     * Add a potion type to the item
+     * Change the potion type
      *
-     * @param potionType the potion type to add
+     * @param potionType the new potion type
      */
-    public void addPotionType(PotionType potionType) {
-        this.potionTypes.add(potionType);
-    }
-
-    /**
-     * Remove a potion type to the item
-     *
-     * @param potionType the potion type to remove
-     */
-    public void removePotionType(PotionType potionType) {
-        this.potionTypes.remove(potionType);
+    public void setPotionType(PotionType potionType) {
+        this.potionType = potionType;
     }
 
     @Override
     public boolean hasNbt() {
-        return !potionTypes.isEmpty();
+        return potionType != null;
     }
 
     @Override
     public boolean isSimilar(ItemMeta itemMeta) {
-        return itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).potionTypes.equals(potionTypes);
+        return itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).potionType == potionType;
     }
 
     @Override
     public void read(NBTCompound compound) {
         if (compound.containsKey("Potion")) {
-            addPotionType(Registries.getPotionType(compound.getString("Potion")));
+            this.potionType = Registries.getPotionType(compound.getString("Potion"));
         }
     }
 
     @Override
     public void write(NBTCompound compound) {
-        if (!potionTypes.isEmpty()) {
-            for (PotionType potionType : potionTypes) {
-                compound.setString("Potion", potionType.getNamespaceID());
-            }
+        if (potionType != null) {
+            compound.setString("Potion", potionType.getNamespaceID());
         }
     }
 
     @Override
     public ItemMeta clone() {
         PotionMeta potionMeta = new PotionMeta();
-        potionMeta.potionTypes.addAll(potionTypes);
+        potionMeta.potionType = potionType;
 
         return potionMeta;
     }

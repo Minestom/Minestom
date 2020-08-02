@@ -27,6 +27,11 @@ public interface InventoryModifier {
     boolean addItemStack(ItemStack itemStack);
 
     /**
+     * Clear the inventory
+     */
+    void clear();
+
+    /**
      * Get the item at the specified slot
      *
      * @param slot the slot to check

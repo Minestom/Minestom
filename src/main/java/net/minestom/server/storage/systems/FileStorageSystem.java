@@ -1,9 +1,8 @@
 package net.minestom.server.storage.systems;
 
+import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.storage.StorageSystem;
-import org.rocksdb.Options;
-import org.rocksdb.RocksDB;
-import org.rocksdb.RocksDBException;
+import org.rocksdb.*;
 
 import java.io.File;
 
@@ -25,8 +24,13 @@ public class FileStorageSystem implements StorageSystem {
     }
 
     @Override
-    public void open(String folderPath) {
+    public void open(String folderPath, StorageOptions storageOptions) {
         Options options = new Options().setCreateIfMissing(true);
+
+        if (storageOptions.hasCompression()) {
+            options.setCompressionType(CompressionType.ZSTD_COMPRESSION);
+            options.setCompressionOptions(new CompressionOptions().setLevel(1));
+        }
 
         try {
             this.rocksDB = RocksDB.open(options, folderPath);

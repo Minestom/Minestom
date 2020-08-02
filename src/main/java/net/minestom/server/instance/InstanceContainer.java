@@ -365,6 +365,15 @@ public class InstanceContainer extends Instance {
         saveChunksToStorageFolder(callback);
     }
 
+    /**
+     * Save the instance without callback
+     *
+     * @see #saveInstance(Runnable)
+     */
+    public void saveInstance() {
+        saveInstance(null);
+    }
+
     @Override
     public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
         Check.notNull(getStorageFolder(), "You cannot save the chunk if no StorageFolder has been defined");

@@ -24,15 +24,15 @@ public class StorageFolder {
 
     private Map<String, SerializableData> cachedData;
 
-    protected StorageFolder(StorageSystem storageSystem, String folderPath) {
+    protected StorageFolder(StorageSystem storageSystem, String folderPath, StorageOptions storageOptions) {
         this.storageSystem = storageSystem;
         this.folderPath = folderPath;
 
         this.cachedData = new HashMap<>();
 
-        this.storageSystem.open(folderPath);
+        this.storageSystem.open(folderPath, storageOptions);
     }
-    
+
     public byte[] get(String key) {
         return storageSystem.get(key);
     }

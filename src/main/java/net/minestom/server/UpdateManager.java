@@ -9,9 +9,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.thread.DefaultThreadProvider;
+import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 
@@ -25,7 +24,12 @@ public final class UpdateManager {
     private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
 
-    private ThreadProvider threadProvider = new DefaultThreadProvider();
+    private ThreadProvider threadProvider;
+
+    {
+        threadProvider = new PerInstanceThreadProvider();
+        //threadProvider = new PerGroupChunkProvider();
+    }
 
     /**
      * Should only be created in MinecraftServer
@@ -46,6 +50,7 @@ public final class UpdateManager {
                 currentTime = System.nanoTime();
 
                 // Server tick
+                //long testTime = System.nanoTime();
                 threadProvider.start();
                 for (Instance instance : instanceManager.getInstances()) {
                     for (Chunk chunk : instance.getChunks()) {
@@ -53,6 +58,8 @@ public final class UpdateManager {
                     }
                 }
                 threadProvider.end();
+                threadProvider.update();
+                //System.out.println("time: " + (System.nanoTime() - testTime));
 
                 // Waiting players update
                 entityManager.updateWaitingPlayers();
