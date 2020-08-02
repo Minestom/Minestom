@@ -145,24 +145,49 @@ public class ItemEntity extends ObjectEntity {
         return 1;
     }
 
+    /**
+     * Get the item stack on ground
+     *
+     * @return the item stack
+     */
     public ItemStack getItemStack() {
         return itemStack;
     }
 
+    /**
+     * Change the item stack on ground
+     *
+     * @param itemStack the item stack
+     */
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
         sendMetadataIndex(7); // Refresh the ItemStack for viewers
     }
 
+    /**
+     * Get if the item is currently pickable
+     * <p>
+     * {@link #setPickable(boolean)} needs to be true and the delay {@link #getPickupDelay()}
+     * to be long gone
+     *
+     * @return true if the item is pickable, false otherwise
+     */
     public boolean isPickable() {
         return pickable && (System.currentTimeMillis() - getSpawnTime() >= pickupDelay);
     }
 
+    /**
+     * Make the item pickable
+     *
+     * @param pickable true to make the item pickable, false otherwise
+     */
     public void setPickable(boolean pickable) {
         this.pickable = pickable;
     }
 
     /**
+     * Get if the item is mergeable
+     *
      * @return true if the entity is mergeable, false otherwise
      */
     public boolean isMergeable() {
@@ -179,16 +204,28 @@ public class ItemEntity extends ObjectEntity {
         this.mergeable = mergeable;
     }
 
+    /**
+     * Get the merge range
+     *
+     * @return the merge range
+     */
     public float getMergeRange() {
         return mergeRange;
     }
 
+    /**
+     * Change the merge range
+     *
+     * @param mergeRange the merge range
+     */
     public void setMergeRange(float mergeRange) {
         this.mergeRange = mergeRange;
     }
 
     /**
-     * @return the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}
+     * Get the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}
+     *
+     * @return the pickup delay
      */
     public long getPickupDelay() {
         return pickupDelay;

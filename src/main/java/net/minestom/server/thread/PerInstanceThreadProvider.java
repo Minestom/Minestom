@@ -1,23 +1,16 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 
-public class DefaultThreadProvider extends ThreadProvider {
-
-    private ExecutorService pool;
-    private int threadCount;
+/**
+ * Separate work between instance (1 instance = 1 thread execution)
+ */
+public class PerInstanceThreadProvider extends ThreadProvider {
 
     private Map<Instance, GroupedInstanceChunk> groupMap = new HashMap<>();
-
-    {
-        setThreadCount(5);
-    }
 
     @Override
     public void start() {
@@ -28,14 +21,17 @@ public class DefaultThreadProvider extends ThreadProvider {
     public void linkThread(Instance instance, Chunk chunk) {
         InstanceChunk instanceChunk = new InstanceChunk(instance, chunk);
 
-        GroupedInstanceChunk groupedInstanceChunk = groupMap.getOrDefault(instance, new GroupedInstanceChunk());
+        GroupedInstanceChunk groupedInstanceChunk = groupMap.computeIfAbsent(instance, inst -> new GroupedInstanceChunk());
         groupedInstanceChunk.instanceChunks.add(instanceChunk);
-
-        this.groupMap.put(instance, groupedInstanceChunk);
     }
 
     @Override
     public void end() {
+
+    }
+
+    @Override
+    public void update() {
         final long time = System.currentTimeMillis();
 
         for (Map.Entry<Instance, GroupedInstanceChunk> entry : groupMap.entrySet()) {
@@ -54,20 +50,6 @@ public class DefaultThreadProvider extends ThreadProvider {
                 }
             });
         }
-
-    }
-
-    public int getThreadCount() {
-        return threadCount;
-    }
-
-    public synchronized void setThreadCount(int threadCount) {
-        this.threadCount = threadCount;
-        refreshPool();
-    }
-
-    private void refreshPool() {
-        this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
     }
 
     /**

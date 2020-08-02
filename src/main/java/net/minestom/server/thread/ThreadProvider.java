@@ -1,16 +1,34 @@
 package net.minestom.server.thread;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
 /**
- * Used to link chunks to a certain thread
+ * Used to link chunks into multiple groups
+ * Then executed into a thread pool
  */
 public abstract class ThreadProvider {
+
+    /**
+     * The thread pool of this thread provider
+     */
+    protected ExecutorService pool;
+    /**
+     * The amount of threads in the thread pool
+     */
+    private int threadCount;
+
+    {
+        // Default thread count in the pool
+        setThreadCount(5);
+    }
 
     /**
      * Called to prepare the thread provider, to provide threads for the next server tick
@@ -27,10 +45,36 @@ public abstract class ThreadProvider {
 
     /**
      * Inform the server that all chunks have been assigned to a thread
-     * <p>
-     * Should execute the server tick for all chunks based on their linked thread
      */
     public abstract void end();
+
+    /**
+     * Perform a server tick for all chunks based on their linked thread
+     */
+    public abstract void update();
+
+    /**
+     * Get the current size of the thread pool
+     *
+     * @return the thread pool's size
+     */
+    public int getThreadCount() {
+        return threadCount;
+    }
+
+    /**
+     * Change the amount of threads in the thread pool
+     *
+     * @param threadCount the new amount of threads
+     */
+    public synchronized void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
+        refreshPool();
+    }
+
+    private void refreshPool() {
+        this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
+    }
 
     /**
      * INSTANCE UPDATE

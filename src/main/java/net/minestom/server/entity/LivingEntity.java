@@ -220,6 +220,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Damage the entity by a value, the type of the damage also has to be specified
+     *
      * @param type  the damage type
      * @param value the amount of damage
      * @return true if damage has been applied, false if it didn't
@@ -348,7 +350,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     // Equipments
-    public void syncEquipments(PlayerConnection connection) {
+    protected void syncEquipments(PlayerConnection connection) {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             final EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
             if (entityEquipmentPacket == null)
@@ -357,7 +359,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
-    public void syncEquipments() {
+    protected void syncEquipments() {
         for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
             syncEquipment(slot);
         }
