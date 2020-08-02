@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
  */
 public class ColoredText {
 
+    // the raw text
     private String message;
 
     // true if the compiled string is up-to-date, false otherwise
@@ -63,7 +64,7 @@ public class ColoredText {
         String result = "";
 
         for (int i = 0; i < message.length(); i++) {
-            char c = message.charAt(i);
+            final char c = message.charAt(i);
             if (c == colorChar) {
                 final boolean hasNextChar = i < message.length();
                 if (hasNextChar) {
@@ -85,6 +86,16 @@ public class ColoredText {
         return result;
     }
 
+    public ColoredText appendLegacy(String message, char colorChar) {
+        String legacy = toLegacy(message, colorChar);
+        return appendFormat(legacy);
+    }
+
+    /**
+     * Get the raw  text
+     *
+     * @return the raw text
+     */
     public String getMessage() {
         return message;
     }
@@ -112,7 +123,7 @@ public class ColoredText {
      * @return the Json representation of the text
      */
     public JsonObject getJsonObject() {
-        List<JsonObject> components = getComponents();
+        final List<JsonObject> components = getComponents();
 
         // No message, return empty object
         if (components.isEmpty()) {
@@ -155,9 +166,9 @@ public class ColoredText {
 
         for (int i = 0; i < message.length(); i++) {
             // Last char or null
-            Character p = i == 0 ? null : message.charAt(i - 1);
+            final Character p = i == 0 ? null : message.charAt(i - 1);
             // Current char
-            char c = message.charAt(i);
+            final char c = message.charAt(i);
             if ((p == null || (p != '/')) && c == '{' && !inFormat) {
 
                 formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
@@ -237,7 +248,7 @@ public class ColoredText {
                 }
                 // Keybind component
                 if (formatString.startsWith("&")) {
-                    String keybindCode = formatString.substring(1);
+                    final String keybindCode = formatString.substring(1);
                     objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
                     continue;
                 }
@@ -246,7 +257,7 @@ public class ColoredText {
 
         // Add the remaining of the message as a raw message when any
         if (formatEnd < message.length()) {
-            String lastRawMessage = message.substring(formatEnd + 1);
+            final String lastRawMessage = message.substring(formatEnd + 1);
             objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor, specialComponentContainer));
         }
 
@@ -301,23 +312,26 @@ public class ColoredText {
         RAW, KEYBIND, TRANSLATABLE
     }
 
-    public ColoredText appendLegacy(String message, char colorChar) {
-        String legacy = toLegacy(message, colorChar);
-        return appendFormat(legacy);
-    }
-
     private static class SpecialComponentContainer {
         boolean bold = false;
+
         boolean italic = false;
+
         boolean underlined = false;
+
         boolean strikethrough = false;
+
         boolean obfuscated = false;
 
         private void reset() {
             this.bold = false;
+
             this.italic = false;
+
             this.underlined = false;
+
             this.strikethrough = false;
+
             this.obfuscated = false;
         }
     }

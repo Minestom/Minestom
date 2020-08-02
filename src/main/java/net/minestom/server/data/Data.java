@@ -100,7 +100,7 @@ public class Data {
      */
     public Data clone() {
         Data data = new Data();
-        data.data = new ConcurrentHashMap<>(this.data);
+        data.data.putAll(this.data);
         return data;
     }
 

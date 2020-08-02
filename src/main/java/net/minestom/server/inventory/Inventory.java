@@ -276,7 +276,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     /**
      * Insert safely an item into the inventory
      * <p>
-     * This will update the slot for all viewers
+     * This will update the slot for all viewers and warn the inventory that
+     * the window items packet is not up-to-date
      *
      * @param slot      the internal slot id
      * @param itemStack the item to insert
@@ -294,6 +295,15 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.windowItemsBufferUpdated = false;
     }
 
+    /**
+     * Insert an item into the inventory without notifying viewers
+     * <p>
+     * This will also warn the inventory that the cached window items packet is
+     * not up-to-date
+     *
+     * @param slot      the internal slot
+     * @param itemStack the item to insert
+     */
     protected void setItemStackInternal(int slot, ItemStack itemStack) {
         itemStacks[slot] = itemStack;
         this.windowItemsBufferUpdated = false;
@@ -337,6 +347,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return windowItemsPacket;
     }
 
+    /**
+     * Send a window property to all viewers
+     *
+     * @param property the property to send
+     * @param value    the value of the property
+     * @see <a href="https://wiki.vg/Protocol#Window_Property</a>
+     */
     protected void sendProperty(InventoryProperty property, short value) {
         WindowPropertyPacket windowPropertyPacket = new WindowPropertyPacket();
         windowPropertyPacket.windowId = getWindowId();
@@ -345,6 +362,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         sendPacketToViewers(windowPropertyPacket);
     }
 
+    /**
+     * Change the internal player's cursor item
+     * <p>
+     * WARNING: the player will not be notified by the change
+     *
+     * @param player    the player to change the cursor item
+     * @param itemStack the cursor item
+     */
     private void setCursorPlayerItem(Player player, ItemStack itemStack) {
         this.cursorPlayersItem.put(player, itemStack);
     }
@@ -596,6 +621,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return !clickResult.isCancel();
     }
 
+    /**
+     * Refresh a slot for all viewers
+     * <p>
+     * WARNING: this does not update the items in the inventory, this is only visual
+     *
+     * @param slot      the packet slot
+     * @param itemStack the item stack to set at the slot
+     */
     private void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = getWindowId();

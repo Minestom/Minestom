@@ -86,8 +86,8 @@ public class CollisionUtils {
         }
 
         float sign = Math.signum(stepAmount);
-        int blockLength = (int) stepAmount;
-        float remainingLength = stepAmount - blockLength;
+        final int blockLength = (int) stepAmount;
+        final float remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
@@ -130,7 +130,7 @@ public class CollisionUtils {
      * @return
      */
     private static boolean stepOnce(Instance instance, Vector axis, float amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
-        float sign = Math.signum(amount);
+        final float sign = Math.signum(amount);
         for (int cornerIndex = 0; cornerIndex < cornersCopy.length; cornerIndex++) {
             Vector corner = cornersCopy[cornerIndex];
             BlockPosition blockPos = cornerPositions[cornerIndex];
@@ -138,8 +138,8 @@ public class CollisionUtils {
             blockPos.setX((int) Math.floor(corner.getX()));
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
-            short blockId = instance.getBlockId(blockPos);
-            Block block = Block.fromId(blockId);
+            final short blockId = instance.getBlockId(blockPos);
+            final Block block = Block.fromId(blockId);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block

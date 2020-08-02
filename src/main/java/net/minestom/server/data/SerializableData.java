@@ -40,8 +40,8 @@ public class SerializableData extends Data {
     @Override
     public Data clone() {
         SerializableData data = new SerializableData();
-        data.data = new ConcurrentHashMap<>(this.data);
-        data.dataType = new ConcurrentHashMap<>(this.dataType);
+        data.data.putAll(this.data);
+        data.dataType.putAll(this.dataType);
         return data;
     }
 
@@ -59,22 +59,22 @@ public class SerializableData extends Data {
         DataOutputStream dos = new DataOutputStream(output);
 
         for (Map.Entry<String, Object> entry : data.entrySet()) {
-            String key = entry.getKey();
-            Class type = dataType.get(key);
-            Object value = entry.getValue();
-            DataType dataType = DATA_MANAGER.getDataType(type);
+            final String key = entry.getKey();
+            final Class type = dataType.get(key);
+            final Object value = entry.getValue();
+            final DataType dataType = DATA_MANAGER.getDataType(type);
 
-            byte[] encodedType = PrimitiveConversion.getObjectClassString(type.getName()).getBytes(); // Data type (fix for primitives)
+            final byte[] encodedType = PrimitiveConversion.getObjectClassString(type.getName()).getBytes(); // Data type (fix for primitives)
             dos.writeShort(encodedType.length);
             dos.write(encodedType);
 
-            byte[] encodedName = key.getBytes(); // Data name
+            final byte[] encodedName = key.getBytes(); // Data name
             dos.writeShort(encodedName.length);
             dos.write(encodedName);
 
             PacketWriter packetWriter = new PacketWriter();
             dataType.encode(packetWriter, value); // Encode
-            byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
+            final byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
             dos.writeInt(encodedValue.length);
             dos.write(encodedValue);
         }

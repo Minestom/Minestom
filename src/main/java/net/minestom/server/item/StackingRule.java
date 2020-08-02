@@ -50,6 +50,11 @@ public abstract class StackingRule {
      */
     public abstract int getAmount(ItemStack itemStack);
 
+    /**
+     * Get the max size of a stack
+     *
+     * @return the max size of a stack
+     */
     public int getMaxSize() {
         return maxSize;
     }

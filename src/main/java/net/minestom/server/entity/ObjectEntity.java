@@ -12,9 +12,10 @@ public abstract class ObjectEntity extends Entity {
     }
 
     /**
-     * Objects data can be found <a href="https://wiki.vg/Object_Data">here</a>
+     * Get the data of this object entity
      *
      * @return an object data
+     * @see <a href="https://wiki.vg/Object_Data">here</a>
      */
     public abstract int getObjectData();
 
@@ -34,7 +35,7 @@ public abstract class ObjectEntity extends Entity {
         if (!result)
             return false;
 
-        PlayerConnection playerConnection = player.getPlayerConnection();
+        final PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
         spawnEntityPacket.entityId = getEntityId();

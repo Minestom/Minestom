@@ -60,6 +60,7 @@ public final class DataManager {
      * @param clazz    the data class
      * @param dataType the data type associated
      * @param <T>      the data type
+     * @throws IllegalStateException if the type {@code clazz} is already registered
      */
     public <T> void registerType(Class<T> clazz, DataType<T> dataType) {
         clazz = PrimitiveConversion.getObjectClass(clazz);

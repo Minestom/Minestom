@@ -33,6 +33,16 @@ public class BoundingBox {
     }
 
     /**
+     * Used to know if this bounding box intersects with the bounding box of an entity
+     *
+     * @param entity the entity to check the bounding box
+     * @return true if this bounding box intersects with the entity, false otherwise
+     */
+    public boolean intersect(Entity entity) {
+        return intersect(entity.getBoundingBox());
+    }
+
+    /**
      * Used to know if the bounding box intersects with a block (can be air)
      *
      * @param blockPosition the position to check
@@ -192,7 +202,7 @@ public class BoundingBox {
 
     @Override
     public String toString() {
-        String result = "BoudingBox";
+        String result = "BoundingBox";
         result += "\n";
         result += "[" + getMinX() + " : " + getMaxX() + "]";
         result += "\n";

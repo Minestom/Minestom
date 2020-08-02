@@ -51,8 +51,8 @@ public class PlayerSkin {
 
         try {
             final String response = URLUtils.getText(url);
-            JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
-            JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
+            final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+            final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
 
             Iterator<JsonElement> iterator = propertiesArray.iterator();
             while (iterator.hasNext()) {
