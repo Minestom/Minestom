@@ -2,7 +2,9 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
  * Represent a hover event for a specific portion of the message
@@ -68,7 +70,8 @@ public class ChatHoverEvent {
      * @return the chat hover event
      */
     public static ChatHoverEvent showItem(ItemStack itemStack) {
-        return new ChatHoverEvent("show_item", itemStack.toNBT().toSNBT());
+        final String json = itemStack.toNBT().toSNBT();
+        return new ChatHoverEvent("show_item", json);
     }
 
     /**
@@ -78,15 +81,9 @@ public class ChatHoverEvent {
      * @return the chat hover event
      */
     public static ChatHoverEvent showEntity(Entity entity) {
-        // TODO
-        /*final String id = entity.getUuid().toString();
-        final String type = EntityType.fromId(entity.getEntityType())
-                .getNamespaceID().replace("minecraft:", "");
-
-        JsonObject object = new JsonObject();
-        object.addProperty("id", id);
-        object.addProperty("type", type);
-        return new ChatHoverEvent("show_entity", object);*/
-        throw new UnsupportedOperationException("Entity hover isn't implemented yet");
+        NBTCompound compound = new NBTCompound()
+                .setString("id", entity.getUuid().toString())
+                .setString("type", EntityType.fromId(entity.getEntityType()).getNamespaceID());
+        return new ChatHoverEvent("show_entity", compound.toSNBT());
     }
 }
