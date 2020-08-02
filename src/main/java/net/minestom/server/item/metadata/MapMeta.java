@@ -6,6 +6,12 @@ public class MapMeta implements ItemMeta {
 
     private int mapId;
 
+    public MapMeta() {}
+
+    public MapMeta(int id) {
+        this.mapId = id;
+    }
+
     public int getMapId() {
         return mapId;
     }

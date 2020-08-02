@@ -37,8 +37,9 @@ public class MapDataPacket implements ServerPacket {
         }
 
         writer.writeByte(columns);
-        if (columns <= 0)
+        if (columns <= 0) {
             return;
+        }
 
         writer.writeByte(rows);
         writer.writeByte(x);
