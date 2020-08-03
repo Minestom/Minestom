@@ -776,7 +776,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 });
             }
 
-            final Chunk chunk = getChunkAt(entity.getPosition());
+            final Position entityPosition = entity.getPosition();
+            final Chunk chunk = getChunkAt(entityPosition);
+            Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
             addEntityToChunk(entity, chunk);
         });
     }

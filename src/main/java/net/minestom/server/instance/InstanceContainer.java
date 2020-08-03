@@ -453,6 +453,10 @@ public class InstanceContainer extends Instance {
             final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
+        } else {
+            // No chunk generator, execute the callback with the empty chunk
+            if (callback != null)
+                callback.accept(chunk);
         }
 
         callChunkLoadEvent(chunkX, chunkZ);
