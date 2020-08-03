@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -20,7 +21,6 @@ public class AdvancementsPacket implements ServerPacket {
         for (AdvancementMapping advancementMapping : advancementMappings) {
             advancementMapping.write(writer);
         }
-
         writer.writeStringArray(identifiersToRemove);
 
         writer.writeVarInt(progressMappings.length);
@@ -34,10 +34,28 @@ public class AdvancementsPacket implements ServerPacket {
         return ServerPacketIdentifier.ADVANCEMENTS;
     }
 
+    /**
+     * Describes the frame around the Advancement.
+     * Also describes the type of advancement it is for "toast" notifications.
+     */
     public enum FrameType {
-        TASK, CHALLENGE, GOAL
+        /**
+         * A simple rounded square as the frame.
+         */
+        TASK,
+        /**
+         * A spike in all 8 directions as the frame.
+         */
+        CHALLENGE,
+        /**
+         * A square with a outward rounded edge on the top and bottom as the frame.
+         */
+        GOAL
     }
 
+    /**
+     * AdvancementMapping maps the namespaced ID to the Advancement.
+     */
     public static class AdvancementMapping {
 
         public String key;
@@ -51,22 +69,21 @@ public class AdvancementsPacket implements ServerPacket {
     }
 
     public static class Advancement {
-
-        public boolean hasParent;
-        public String identifier;
-        public boolean hasDisplay;
+        public String parentIdentifier;
         public DisplayData displayData;
         public String[] criterions;
         public Requirement[] requirements;
 
         private void write(PacketWriter writer) {
-            writer.writeBoolean(hasParent);
-            if (identifier != null) {
-                writer.writeSizedString(identifier);
+            // hasParent
+            writer.writeBoolean(parentIdentifier != null);
+            if (parentIdentifier != null) {
+                writer.writeSizedString(parentIdentifier);
             }
 
-            writer.writeBoolean(hasDisplay);
-            if (hasDisplay) {
+            // hasDisplay
+            writer.writeBoolean(displayData != null);
+            if (displayData != null) {
                 displayData.write(writer);
             }
 
@@ -81,8 +98,8 @@ public class AdvancementsPacket implements ServerPacket {
     }
 
     public static class DisplayData {
-        public String title;
-        public String description;
+        public ColoredText title;
+        public ColoredText description;
         public ItemStack icon;
         public FrameType frameType;
         public int flags;
@@ -91,8 +108,8 @@ public class AdvancementsPacket implements ServerPacket {
         public float y;
 
         private void write(PacketWriter writer) {
-            writer.writeSizedString(title);
-            writer.writeSizedString(description);
+            writer.writeSizedString(title.toString());
+            writer.writeSizedString(description.toString());
             writer.writeItemStack(icon);
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);

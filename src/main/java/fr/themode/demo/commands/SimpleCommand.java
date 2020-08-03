@@ -1,10 +1,17 @@
 package fr.themode.demo.commands;
 
 import fr.themode.demo.entity.ChickenCreature;
+import net.minestom.server.advancements.notifications.AdvancementNotification;
+import net.minestom.server.advancements.notifications.AdvancementNotificationManager;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.utils.Position;
 
 public class SimpleCommand implements CommandProcessor {
@@ -58,6 +65,12 @@ public class SimpleCommand implements CommandProcessor {
 
         chickenCreature.setPathTo(player.getPosition());
 
+        new AdvancementNotificationManager().sendAdvancementNotification(
+                new AdvancementNotification(
+                        ColoredText.of(ChatColor.BRIGHT_GREEN + "Welcome to Minestom!"),
+                        new ItemStack(Material.ACACIA_BOAT, (byte) 1), AdvancementsPacket.FrameType.GOAL)
+                , player
+        );
         return true;
     }
 

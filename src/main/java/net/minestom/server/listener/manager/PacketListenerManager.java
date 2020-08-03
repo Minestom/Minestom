@@ -45,6 +45,7 @@ public class PacketListenerManager {
         setListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
         setListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
         setListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
+        setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
     }
 
     public <T extends ClientPlayPacket> void process(T packet, Player player) {
