@@ -1,5 +1,7 @@
 package net.minestom.server.event.entity;
 
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.CancellableEvent;
 
@@ -10,10 +12,12 @@ public class EntityDamageEvent extends CancellableEvent {
 
     private DamageType damageType;
     private float damage;
+    private LivingEntity entity;
 
-    public EntityDamageEvent(DamageType damageType, float damage) {
+    public EntityDamageEvent(DamageType damageType, float damage, LivingEntity entity) {
         this.damageType = damageType;
         this.damage = damage;
+        this.entity = entity;
     }
 
     /**
@@ -35,5 +39,9 @@ public class EntityDamageEvent extends CancellableEvent {
      */
     public void setDamage(float damage) {
         this.damage = damage;
+    }
+
+    public LivingEntity getEntity() {
+        return entity;
     }
 }

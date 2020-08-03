@@ -83,7 +83,7 @@ public class ChatHoverEvent {
     public static ChatHoverEvent showEntity(Entity entity) {
         NBTCompound compound = new NBTCompound()
                 .setString("id", entity.getUuid().toString())
-                .setString("type", EntityType.fromId(entity.getEntityType()).getNamespaceID());
+                .setString("type", entity.getEntityType().getNamespaceID());
         return new ChatHoverEvent("show_entity", compound.toSNBT());
     }
 }

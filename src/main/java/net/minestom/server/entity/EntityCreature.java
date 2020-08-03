@@ -161,7 +161,7 @@ public abstract class EntityCreature extends LivingEntity {
         SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
         spawnLivingEntityPacket.entityId = getEntityId();
         spawnLivingEntityPacket.entityUuid = getUuid();
-        spawnLivingEntityPacket.entityType = getEntityType();
+        spawnLivingEntityPacket.entityType = getEntityType().getId();
         spawnLivingEntityPacket.position = getPosition();
         spawnLivingEntityPacket.headPitch = 0;
 
