@@ -8,7 +8,6 @@ import net.minestom.server.chat.RichMessage;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
-import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
@@ -30,10 +29,7 @@ public class ChatMessageListener {
             // The message is a command
             message = message.replaceFirst(cmdPrefix, "");
 
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, message);
-            player.callCancellableEvent(PlayerCommandEvent.class, playerCommandEvent, () -> {
-                COMMAND_MANAGER.execute(player, playerCommandEvent.getCommand());
-            });
+            COMMAND_MANAGER.execute(player, message);
 
             // Do not call chat event
             return;

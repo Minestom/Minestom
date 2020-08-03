@@ -1,6 +1,5 @@
 package net.minestom.server.inventory;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
@@ -17,7 +16,6 @@ import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
@@ -50,9 +48,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     // Cached windows packet
-    private ByteBuf windowItemsBuffer;
-    // True if the buffer above is up to date, false otherwise
-    private boolean windowItemsBufferUpdated;
 
     public Inventory(InventoryType inventoryType, String title) {
         this.id = generateId();
@@ -199,11 +194,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * Refresh the inventory for all viewers
      */
     public void update() {
-        final ByteBuf packetBuffer = getWindowItemsBuffer();
-        getViewers().forEach(player -> {
-            final PlayerConnection playerConnection = player.getPlayerConnection();
-            playerConnection.sendPacket(packetBuffer, true);
-        });
+        sendPacketToViewers(createNewWindowItemsPacket());
     }
 
     /**
@@ -217,8 +208,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        final ByteBuf packetBuffer = getWindowItemsBuffer();
-        playerConnection.sendPacket(packetBuffer, true);
+        playerConnection.sendPacket(createNewWindowItemsPacket());
     }
 
     @Override
@@ -290,9 +280,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         setSlotPacket.slot = (short) slot;
         setSlotPacket.itemStack = itemStack;
         sendPacketToViewers(setSlotPacket);
-
-        // The inventory changed, buffer will be updated once requested again
-        this.windowItemsBufferUpdated = false;
     }
 
     /**
@@ -306,33 +293,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      */
     protected void setItemStackInternal(int slot, ItemStack itemStack) {
         itemStacks[slot] = itemStack;
-        this.windowItemsBufferUpdated = false;
-    }
-
-    /**
-     * Get the window items packet as a buffer containing all the
-     * current inventory's items
-     * <p>
-     * The cached window items buffer will be updated if needed
-     *
-     * @return a {@link WindowItemsPacket} buffer
-     */
-    private ByteBuf getWindowItemsBuffer() {
-        if (!windowItemsBufferUpdated) {
-            refreshWindowItemsBuffer();
-        }
-
-        return windowItemsBuffer;
-    }
-
-    /**
-     * Refresh the inventory {@link WindowItemsPacket} buffer
-     */
-    private void refreshWindowItemsBuffer() {
-        final WindowItemsPacket windowItemsPacket = createNewWindowItemsPacket();
-        final ByteBuf packetBuffer = PacketUtils.writePacket(windowItemsPacket);
-        this.windowItemsBuffer = packetBuffer;
-        this.windowItemsBufferUpdated = true;
     }
 
     /**
