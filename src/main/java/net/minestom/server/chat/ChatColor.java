@@ -1,5 +1,7 @@
 package net.minestom.server.chat;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.HashMap;
@@ -36,10 +38,29 @@ public class ChatColor {
     public static final ChatColor PINK = fromRGB(255, 85, 255, 13, "pink");
     public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14, "yellow");
     public static final ChatColor WHITE = fromRGB(255, 255, 255, 15, "white");
+
+    private static Int2ObjectMap<ChatColor> idColorMap = new Int2ObjectOpenHashMap<>();
     private static Map<String, ChatColor> colorCode = new HashMap<>();
     private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
 
     static {
+
+        idColorMap.put(0, BLACK);
+        idColorMap.put(1, DARK_BLUE);
+        idColorMap.put(2, DARK_GREEN);
+        idColorMap.put(3, DARK_CYAN);
+        idColorMap.put(4, DARK_RED);
+        idColorMap.put(5, PURPLE);
+        idColorMap.put(6, GOLD);
+        idColorMap.put(7, GRAY);
+        idColorMap.put(8, DARK_GRAY);
+        idColorMap.put(9, BLUE);
+        idColorMap.put(10, BRIGHT_GREEN);
+        idColorMap.put(11, CYAN);
+        idColorMap.put(12, RED);
+        idColorMap.put(13, PINK);
+        idColorMap.put(14, YELLOW);
+        idColorMap.put(15, WHITE);
 
         colorCode.put("reset", RESET);
         colorCode.put("bold", BOLD);
@@ -141,6 +162,16 @@ public class ChatColor {
      */
     public static ChatColor fromName(String name) {
         return colorCode.getOrDefault(name.toLowerCase(), NO_COLOR);
+    }
+
+    /**
+     * Get a color based on its numerical id (0;15)
+     *
+     * @param id the id of the color
+     * @return the color associated with the id, {@link #NO_COLOR} if not found
+     */
+    public static ChatColor fromId(int id) {
+        return idColorMap.getOrDefault(id, NO_COLOR);
     }
 
     /**
