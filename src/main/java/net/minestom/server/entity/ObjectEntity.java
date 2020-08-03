@@ -7,7 +7,7 @@ import net.minestom.server.utils.Position;
 public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(EntityType entityType, Position spawnPosition) {
-        super(entityType.getId(), spawnPosition);
+        super(entityType, spawnPosition);
         setGravity(0.02f);
     }
 
@@ -40,7 +40,7 @@ public abstract class ObjectEntity extends Entity {
         SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
         spawnEntityPacket.entityId = getEntityId();
         spawnEntityPacket.uuid = getUuid();
-        spawnEntityPacket.type = getEntityType();
+        spawnEntityPacket.type = getEntityType().getId();
         spawnEntityPacket.position = getPosition();
         spawnEntityPacket.data = getObjectData();
         playerConnection.sendPacket(spawnEntityPacket);

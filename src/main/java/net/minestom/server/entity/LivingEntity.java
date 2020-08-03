@@ -55,7 +55,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private long fireDamagePeriod = 1000L;
 
     public LivingEntity(EntityType entityType, Position spawnPosition) {
-        super(entityType.getId(), spawnPosition);
+        super(entityType, spawnPosition);
         setupAttributes();
         setGravity(0.02f);
     }
@@ -233,7 +233,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(type, value);
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(type, value, this);
         callCancellableEvent(EntityDamageEvent.class, entityDamageEvent, () -> {
             float damage = entityDamageEvent.getDamage();
 

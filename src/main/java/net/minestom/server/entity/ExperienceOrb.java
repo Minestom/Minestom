@@ -8,7 +8,7 @@ public class ExperienceOrb extends Entity {
     private short experienceCount;
 
     public ExperienceOrb(short experienceCount) {
-        super(23);
+        super(EntityType.EXPERIENCE_ORB);
         setGravity(0.02f);
         setBoundingBox(0.5f, 0.5f, 0.5f);
         this.experienceCount = experienceCount;

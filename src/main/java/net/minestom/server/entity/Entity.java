@@ -79,7 +79,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean shouldRemove;
     private long scheduledRemoveTime;
-    private int entityType;
+    private EntityType entityType;
     private long lastUpdate;
     private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
     protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
@@ -113,7 +113,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    public Entity(int entityType, Position spawnPosition) {
+    public Entity(EntityType entityType, Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
@@ -131,7 +131,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         nextTick.add(callback);
     }
 
-    public Entity(int entityType) {
+    public Entity(EntityType entityType) {
         this(entityType, new Position());
     }
 
@@ -547,7 +547,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      *
      * @return the entity type id
      */
-    public int getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
