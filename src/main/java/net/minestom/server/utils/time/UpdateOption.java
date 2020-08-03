@@ -2,16 +2,12 @@ package net.minestom.server.utils.time;
 
 public class UpdateOption {
 
-    private int value;
-    private TimeUnit timeUnit;
+    private final int value;
+    private final TimeUnit timeUnit;
 
     public UpdateOption(int value, TimeUnit timeUnit) {
         this.value = value;
         this.timeUnit = timeUnit;
-    }
-
-    public UpdateOption() {
-        this(0, null);
     }
 
     public int getValue() {

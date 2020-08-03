@@ -79,12 +79,12 @@ public class Position {
     public Vector getDirection() {
         Vector vector = new Vector();
 
-        float rotX = this.getYaw();
-        float rotY = this.getPitch();
+        final float rotX = this.getYaw();
+        final float rotY = this.getPitch();
 
         vector.setY((float) -Math.sin(Math.toRadians(rotY)));
 
-        double xz = Math.cos(Math.toRadians(rotY));
+        final double xz = Math.cos(Math.toRadians(rotY));
 
         vector.setX((float) (-xz * Math.sin(Math.toRadians(rotX))));
         vector.setZ((float) (xz * Math.cos(Math.toRadians(rotX))));
@@ -114,12 +114,12 @@ public class Position {
             return this;
         }
 
-        double theta = Math.atan2(-x, z);
+        final double theta = Math.atan2(-x, z);
         yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
 
-        float x2 = MathUtils.square(x);
-        float z2 = MathUtils.square(z);
-        float xz = (float) Math.sqrt(x2 + z2);
+        final float x2 = MathUtils.square(x);
+        final float z2 = MathUtils.square(z);
+        final float xz = (float) Math.sqrt(x2 + z2);
         pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
 
         return this;
@@ -181,50 +181,110 @@ public class Position {
         return Objects.hash(x, y, z, yaw, pitch);
     }
 
+    /**
+     * Get the position X
+     *
+     * @return the position X
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * Change the position X
+     *
+     * @param x the new position X
+     */
     public void setX(float x) {
         this.x = x;
     }
 
+    /**
+     * Get the position Y
+     *
+     * @return the position Y
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * Change the position Y
+     *
+     * @param y the new position Y
+     */
     public void setY(float y) {
         this.y = y;
     }
 
+    /**
+     * Get the position Z
+     *
+     * @return the position Z
+     */
     public float getZ() {
         return z;
     }
 
+    /**
+     * Change the position Z
+     *
+     * @param z the new position Z
+     */
     public void setZ(float z) {
         this.z = z;
     }
 
+    /**
+     * Get the position yaw
+     *
+     * @return the yaw
+     */
     public float getYaw() {
         return yaw;
     }
 
+    /**
+     * Change the position yaw
+     *
+     * @param yaw the new yaw
+     */
     public void setYaw(float yaw) {
         this.yaw = yaw;
     }
 
+    /**
+     * Get the position pitch
+     *
+     * @return the pitch
+     */
     public float getPitch() {
         return pitch;
     }
 
+    /**
+     * Change the position pitch
+     *
+     * @param pitch the new pitch
+     */
     public void setPitch(float pitch) {
         this.pitch = pitch;
     }
 
+    /**
+     * Convert this position to a {@link BlockPosition}
+     *
+     * @return the converted {@link BlockPosition}
+     */
     public BlockPosition toBlockPosition() {
         return new BlockPosition(x, y, z);
     }
 
+    /**
+     * Convert this position to a {@link Vector}
+     *
+     * @return the converted {@link Vector}
+     */
     public Vector toVector() {
         return new Vector(x, y, z);
     }

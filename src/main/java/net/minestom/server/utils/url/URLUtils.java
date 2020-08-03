@@ -14,8 +14,8 @@ public class URLUtils {
         //add headers to the connection, or check the status if desired..
 
         // handle error response code it occurs
-        int responseCode = connection.getResponseCode();
-        InputStream inputStream;
+        final int responseCode = connection.getResponseCode();
+        final InputStream inputStream;
         if (200 <= responseCode && responseCode <= 299) {
             inputStream = connection.getInputStream();
         } else {
