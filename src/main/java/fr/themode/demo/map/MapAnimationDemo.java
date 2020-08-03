@@ -63,17 +63,12 @@ public class MapAnimationDemo {
         int y = (int) (Math.sin(time*speed) * 10 + 64) - 10;
         renderer.fillRoundRect(x, y, 50, 20, 10, 10);
 
+        renderer.setColor(Color.ORANGE);
+        renderer.drawString("Hi :-)", x+16, y+15);
+
         MapDataPacket mapDataPacket = new MapDataPacket();
         mapDataPacket.mapId = MAP_ID;
-        mapDataPacket.columns = 128;
-        mapDataPacket.rows = 128;
-        mapDataPacket.icons = new MapDataPacket.Icon[0];
-        mapDataPacket.x = 0;
-        mapDataPacket.z = 0;
-        mapDataPacket.scale = 0;
-        mapDataPacket.locked = true;
-        mapDataPacket.trackingPosition = true;
-        mapDataPacket.data = framebuffer.toMapColors();
+        framebuffer.preparePacket(mapDataPacket, 32, 32, 64+32, 64+32);
         MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> {
             p.getPlayerConnection().sendPacket(mapDataPacket);
         });
