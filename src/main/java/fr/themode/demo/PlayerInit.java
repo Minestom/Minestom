@@ -28,6 +28,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -227,6 +228,63 @@ public class PlayerInit {
                 scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
 
                 scoreboard.setTitle("test");*/
+
+                // Testing advancements
+                AdvancementsPacket advancementsPacket = new AdvancementsPacket();
+                advancementsPacket.resetAdvancements = true;
+
+                AdvancementsPacket.AdvancementMapping firstMapping = new AdvancementsPacket.AdvancementMapping();
+                {
+                    AdvancementsPacket.Advancement firstAdvancement = new AdvancementsPacket.Advancement();
+                    firstMapping.key = "minestom:advancement";
+                    firstMapping.value = firstAdvancement;
+
+                    AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
+                    displayData.x = 0.0F;
+                    displayData.y = 0.0F;
+                    displayData.title = ColoredText.of("Hello");
+                    displayData.description = ColoredText.of("Hello");
+                    displayData.icon = new ItemStack(Material.DIRT, (byte) 1);
+                    displayData.frameType = AdvancementsPacket.FrameType.TASK;
+                    displayData.flags = 0x1;
+                    displayData.backgroundTexture = "minecraft:textures/block/red_wool.png";
+
+                    firstAdvancement.displayData = displayData;
+                    firstAdvancement.criterions = new String[]{};
+                    firstAdvancement.requirements = new AdvancementsPacket.Requirement[]{};
+
+                }
+                // This advancement will be to the bottom right of the firstAdvancement
+                // The background of this advancement is apparentely ignored!
+                AdvancementsPacket.AdvancementMapping secondMapping = new AdvancementsPacket.AdvancementMapping();
+                {
+                    AdvancementsPacket.Advancement secondAdvancement = new AdvancementsPacket.Advancement();
+                    secondMapping.key = "minestom:advance";
+                    secondMapping.value = secondAdvancement;
+
+                    secondAdvancement.parentIdentifier = "minestom:advancement";
+
+                    AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
+                    displayData.x = 2.0F;
+                    displayData.y = 2.0F;
+                    displayData.title = ColoredText.of("Hello World");
+                    displayData.description = ColoredText.of("Hello World");
+                    displayData.icon = new ItemStack(Material.DIAMOND, (byte) 1);
+                    displayData.frameType = AdvancementsPacket.FrameType.GOAL;
+                    displayData.flags = 0x2;
+
+                    secondAdvancement.displayData = displayData;
+                    secondAdvancement.criterions = new String[]{};
+                    secondAdvancement.requirements = new AdvancementsPacket.Requirement[]{};
+                }
+
+
+                advancementsPacket.identifiersToRemove = new String[]{};
+                advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{firstMapping, secondMapping};
+                advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
+
+
+                player.getPlayerConnection().sendPacket(advancementsPacket);
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
