@@ -14,8 +14,8 @@ public class MapDataPacket implements ServerPacket {
 
     public Icon[] icons;
 
-    public byte columns;
-    public byte rows;
+    public short columns;
+    public short rows;
     public byte x;
     public byte z;
     public byte[] data;
@@ -36,12 +36,12 @@ public class MapDataPacket implements ServerPacket {
             writer.writeVarInt(0);
         }
 
-        writer.writeByte(columns);
+        writer.writeByte((byte)columns);
         if (columns <= 0) {
             return;
         }
 
-        writer.writeByte(rows);
+        writer.writeByte((byte)rows);
         writer.writeByte(x);
         writer.writeByte(z);
         if (data != null && data.length > 0) {

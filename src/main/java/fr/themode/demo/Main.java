@@ -35,6 +35,7 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
+        commandManager.register(new TestItemFrame());
 
         MapAnimationDemo.init();
 

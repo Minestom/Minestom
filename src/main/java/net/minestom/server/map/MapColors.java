@@ -1,5 +1,9 @@
 package net.minestom.server.map;
 
+import net.minestom.server.utils.thread.MinestomThread;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public enum MapColors {
@@ -68,6 +72,50 @@ public enum MapColors {
     private final int green;
     private final int blue;
 
+    private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
+    // only used if mappingStrategy == ColorMappingStrategy.PRECISE
+    private static PreciseMapColor[] rgbArray = null;
+
+    private static final ColorMappingStrategy mappingStrategy;
+    private static final String MAPPING_ARGUMENT = "minestom.map.rgbmapping";
+    // only used if MAPPING_ARGUMENT is "approximate"
+    private static final String REDUCTION_ARGUMENT = "minestom.map.rgbreduction";
+    private static final int colorReduction;
+
+    static {
+        ColorMappingStrategy strategy;
+        String strategyStr = System.getProperty(MAPPING_ARGUMENT);
+        if(strategyStr == null) {
+            strategy = ColorMappingStrategy.LAZY;
+        } else {
+            try {
+                strategy = ColorMappingStrategy.valueOf(strategyStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.err.println("Unknown color mapping strategy: "+strategyStr);
+                System.err.println("Defaulting to LAZY.");
+                strategy = ColorMappingStrategy.LAZY;
+            }
+        }
+        mappingStrategy = strategy;
+
+        int reduction = 10;
+        String reductionStr = System.getProperty(REDUCTION_ARGUMENT);
+        if(reductionStr != null) {
+            try {
+                reduction = Integer.parseInt(reductionStr);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid integer in reduction argument: "+reductionStr);
+                e.printStackTrace();
+            }
+
+            if(reduction < 0 || reduction >= 255) {
+                System.err.println("Reduction was found to be invalid: "+reduction+". Must in 0-255, defaulting to 10.");
+                reduction = 10;
+            }
+        }
+        colorReduction = reduction;
+    }
+
     MapColors(int red, int green, int blue) {
         this.red = red;
         this.green = green;
@@ -121,8 +169,101 @@ public enum MapColors {
         return blue;
     }
 
-    public PreciseMapColor closestColor(int rgb) {
-        throw new UnsupportedOperationException("TODO");
+    private static void fillRGBMap() {
+        for(MapColors base : values()) {
+            if(base == NONE)
+                continue;
+            for(Multiplier m : Multiplier.values()) {
+                PreciseMapColor preciseMapColor = new PreciseMapColor(base, m);
+                int rgb = preciseMapColor.toRGB();
+
+                if(mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
+                    rgb = reduceColor(rgb);
+                }
+                rgbMap.put(rgb, preciseMapColor);
+            }
+        }
+    }
+
+    private static void fillRGBArray() {
+        rgbArray = new PreciseMapColor[0xFFFFFF+1];
+        MinestomThread threads = new MinestomThread(Runtime.getRuntime().availableProcessors(), "RGBMapping", true);
+        for (int rgb = 0; rgb <= 0xFFFFFF; rgb++) {
+            int finalRgb = rgb;
+            threads.execute(() -> rgbArray[finalRgb] = mapColor(finalRgb));
+        }
+        try {
+            threads.shutdown();
+            threads.awaitTermination(100, TimeUnit.MINUTES);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        System.out.println("done mapping."); // todo: remove, debug only
+    }
+
+    public static PreciseMapColor closestColor(int argb) {
+        int noAlpha = argb & 0xFFFFFF;
+        if (mappingStrategy == ColorMappingStrategy.PRECISE) {
+            if(rgbArray == null) {
+                synchronized (MapColors.class) {
+                    if(rgbArray == null) {
+                        fillRGBArray();
+                    }
+                }
+            }
+            return rgbArray[noAlpha];
+        }
+        if(rgbMap.isEmpty()) {
+            synchronized (rgbMap) {
+                if(rgbMap.isEmpty()) {
+                    fillRGBMap();
+                }
+            }
+        }
+        if(mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
+            noAlpha = reduceColor(noAlpha);
+        }
+        return rgbMap.computeIfAbsent(noAlpha, MapColors::mapColor);
+    }
+
+    private static int reduceColor(int rgb) {
+        int red = (rgb >> 16) & 0xFF;
+        int green = (rgb >> 8) & 0xFF;
+        int blue = rgb & 0xFF;
+
+        red = red/colorReduction;
+        green = green/colorReduction;
+        blue = blue/colorReduction;
+        return (red << 16) | (green << 8) | blue;
+    }
+
+    private static PreciseMapColor mapColor(int rgb) {
+        PreciseMapColor closest = null;
+        int closestDistance = Integer.MAX_VALUE;
+        for(MapColors base : values()) {
+            if (base == NONE)
+                continue;
+            for (Multiplier m : Multiplier.values()) {
+                int rgbKey = PreciseMapColor.toRGB(base, m);
+                int redKey = (rgbKey >> 16) & 0xFF;
+                int greenKey = (rgbKey >> 8) & 0xFF;
+                int blueKey = rgbKey & 0xFF;
+
+                int red = (rgb >> 16) & 0xFF;
+                int green = (rgb >> 8) & 0xFF;
+                int blue = rgb & 0xFF;
+
+                int dr = redKey - red;
+                int dg = greenKey - green;
+                int db = blueKey - blue;
+                int dist = (dr * dr + dg * dg + db * db);
+                if (dist < closestDistance) {
+                    closest = new PreciseMapColor(base, m);
+                    closestDistance = dist;
+                }
+            }
+        }
+        return closest;
     }
 
     public static class PreciseMapColor {
@@ -145,23 +286,69 @@ public enum MapColors {
         public byte getIndex() {
             return multiplier.apply(baseColor);
         }
+
+        public int toRGB() {
+            return toRGB(baseColor, multiplier);
+        }
+
+        public static int toRGB(MapColors baseColor, Multiplier multiplier) {
+            double r = baseColor.red();
+            double g = baseColor.green();
+            double b = baseColor.blue();
+
+            r *= multiplier.multiplier();
+            g *= multiplier.multiplier();
+            b *= multiplier.multiplier();
+
+            int red = (int) r;
+            int green = (int) g;
+            int blue = (int) b;
+            return (red << 16) | (green << 8) | blue;
+        }
     }
 
     enum Multiplier {
-        x1_00(MapColors::baseColor),
-        x0_53(MapColors::multiply53),
-        x0_71(MapColors::multiply71),
-        x0_86(MapColors::multiply86),
+        x1_00(MapColors::baseColor, 1.00),
+        x0_53(MapColors::multiply53, 0.53),
+        x0_71(MapColors::multiply71, 0.71),
+        x0_86(MapColors::multiply86, 0.86),
         ;
 
         private final Function<MapColors, Byte> indexGetter;
+        private final double multiplier;
 
-        Multiplier(Function<MapColors, Byte> indexGetter) {
+        Multiplier(Function<MapColors, Byte> indexGetter, double multiplier) {
             this.indexGetter = indexGetter;
+            this.multiplier = multiplier;
+        }
+
+        public double multiplier() {
+            return multiplier;
         }
 
         public byte apply(MapColors baseColor) {
             return indexGetter.apply(baseColor);
         }
+    }
+
+    /**
+     * How does Minestom compute RGB->MapColor transitions?
+     */
+    public enum ColorMappingStrategy {
+        /**
+         * If already computed, send the result. Otherwise, compute the closest color in a RGB Map, and add it to the map
+         */
+        LAZY,
+
+        /**
+         * All colors are already in the map after the first call. Heavy hit on the memory:
+         * (2^24) * 4 bytes at the min (~64MB)
+         */
+        PRECISE,
+
+        /**
+         * RGB components are divided by 10 before issuing a lookup (as with the PRECISE strategy), but saves on memory usage
+         */
+        APPROXIMATE;
     }
 }
