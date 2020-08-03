@@ -1,5 +1,9 @@
 package net.minestom.server.inventory.click;
 
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -10,15 +14,17 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class InventoryClickProcessor {
 
     // Dragging maps
-    private Map<Player, Set<Integer>> leftDraggingMap = new HashMap<>();
-    private Map<Player, Set<Integer>> rightDraggingMap = new HashMap<>();
+    private Map<Player, IntSet> leftDraggingMap = new HashMap<>();
+    private Map<Player, IntSet> rightDraggingMap = new HashMap<>();
 
     public InventoryClickResult leftClick(Inventory inventory, Player player, int slot, ItemStack clicked, ItemStack cursor) {
         final InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.LEFT_CLICK, clicked, cursor);
@@ -182,9 +188,9 @@ public class InventoryClickProcessor {
         ItemStack resultClicked = clicked.clone();
 
         for (InventoryClickLoopHandler loopHandler : loopHandlers) {
-            Function<Integer, Integer> indexModifier = loopHandler.getIndexModifier();
-            Function<Integer, ItemStack> itemGetter = loopHandler.getItemGetter();
-            BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
+            final Int2IntFunction indexModifier = loopHandler.getIndexModifier();
+            final Int2ObjectFunction<ItemStack> itemGetter = loopHandler.getItemGetter();
+            final BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
 
             for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {
                 final int index = indexModifier.apply(i);
@@ -248,7 +254,7 @@ public class InventoryClickProcessor {
     public InventoryClickResult dragging(Inventory inventory, Player player,
                                          int slot, int button,
                                          ItemStack clicked, ItemStack cursor,
-                                         Function<Integer, ItemStack> itemGetter,
+                                         Int2ObjectFunction<ItemStack> itemGetter,
                                          BiConsumer<Integer, ItemStack> itemSetter) {
         InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
 
@@ -258,15 +264,15 @@ public class InventoryClickProcessor {
             // Start or end left/right drag
             if (button == 0) {
                 // Start left
-                this.leftDraggingMap.put(player, new HashSet<>());
+                this.leftDraggingMap.put(player, new IntOpenHashSet());
             } else if (button == 4) {
                 // Start right
-                this.rightDraggingMap.put(player, new HashSet<>());
+                this.rightDraggingMap.put(player, new IntOpenHashSet());
             } else if (button == 2) {
                 // End left
                 if (!leftDraggingMap.containsKey(player))
                     return null;
-                Set<Integer> slots = leftDraggingMap.get(player);
+                final Set<Integer> slots = leftDraggingMap.get(player);
                 final int slotCount = slots.size();
                 final int cursorAmount = stackingRule.getAmount(cursor);
                 if (slotCount > cursorAmount)
@@ -310,7 +316,7 @@ public class InventoryClickProcessor {
                 // End right
                 if (!rightDraggingMap.containsKey(player))
                     return null;
-                Set<Integer> slots = rightDraggingMap.get(player);
+                final Set<Integer> slots = rightDraggingMap.get(player);
                 final int size = slots.size();
                 int cursorAmount = stackingRule.getAmount(cursor);
                 if (size > cursorAmount)
@@ -381,8 +387,8 @@ public class InventoryClickProcessor {
             return null;
 
         for (InventoryClickLoopHandler loopHandler : loopHandlers) {
-            final Function<Integer, Integer> indexModifier = loopHandler.getIndexModifier();
-            final Function<Integer, ItemStack> itemGetter = loopHandler.getItemGetter();
+            final Int2IntFunction indexModifier = loopHandler.getIndexModifier();
+            final Int2ObjectFunction<ItemStack> itemGetter = loopHandler.getItemGetter();
             final BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
 
             for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {

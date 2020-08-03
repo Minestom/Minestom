@@ -7,7 +7,7 @@ package net.minestom.server.item;
  */
 public abstract class StackingRule {
 
-    private int maxSize;
+    private final int maxSize;
 
     public StackingRule(int maxSize) {
         this.maxSize = maxSize;

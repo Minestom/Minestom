@@ -1,5 +1,6 @@
 package net.minestom.server.scoreboard;
 
+import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -12,7 +13,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -32,7 +32,7 @@ public class Sidebar implements Viewable {
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     private ConcurrentLinkedQueue<ScoreboardLine> lines = new ConcurrentLinkedQueue<>();
-    private LinkedList<Integer> availableColors = new LinkedList<>();
+    private IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
 
     private String objectiveName;
 
@@ -202,9 +202,9 @@ public class Sidebar implements Viewable {
             return line;
         }
 
-        private void retrieveName(LinkedList<Integer> colors) {
+        private void retrieveName(IntLinkedOpenHashSet colors) {
             synchronized (colors) {
-                this.colorName = colors.pollFirst();
+                this.colorName = colors.removeFirstInt();
             }
         }
 
@@ -214,7 +214,7 @@ public class Sidebar implements Viewable {
             this.sidebarTeam = new SidebarTeam(teamName, content, ColoredText.of(""), entityName);
         }
 
-        private void returnName(LinkedList<Integer> colors) {
+        private void returnName(IntLinkedOpenHashSet colors) {
             synchronized (colors) {
                 colors.add(colorName);
             }

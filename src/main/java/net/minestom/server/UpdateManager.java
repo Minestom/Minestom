@@ -9,7 +9,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.thread.PerInstanceThreadProvider;
+import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
@@ -27,7 +27,8 @@ public final class UpdateManager {
     private ThreadProvider threadProvider;
 
     {
-        threadProvider = new PerInstanceThreadProvider();
+        threadProvider = new SingleThreadProvider();
+        //threadProvider = new PerInstanceThreadProvider();
         //threadProvider = new PerGroupChunkProvider();
     }
 

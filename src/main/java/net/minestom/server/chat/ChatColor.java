@@ -41,9 +41,9 @@ public class ChatColor {
     public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14, "yellow");
     public static final ChatColor WHITE = fromRGB(255, 255, 255, 15, "white");
 
-    private static Int2ObjectMap<ChatColor> idColorMap = new Int2ObjectOpenHashMap<>();
-    private static Map<String, ChatColor> colorCode = new HashMap<>();
-    private static Char2ObjectMap<ChatColor> legacyColorCodesMap = new Char2ObjectOpenHashMap<>();
+    private static final Int2ObjectMap<ChatColor> idColorMap = new Int2ObjectOpenHashMap<>();
+    private static final Map<String, ChatColor> colorCode = new HashMap<>();
+    private static final Char2ObjectMap<ChatColor> legacyColorCodesMap = new Char2ObjectOpenHashMap<>();
 
     static {
 

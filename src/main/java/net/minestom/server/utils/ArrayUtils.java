@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
-import java.util.ArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+
 import java.util.function.Supplier;
 
 public class ArrayUtils {
@@ -54,7 +55,7 @@ public class ArrayUtils {
         return result;
     }
 
-    public static int[] toArray(ArrayList<Integer> list) {
+    public static int[] toArray(IntList list) {
         int[] array = new int[list.size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = list.get(i);

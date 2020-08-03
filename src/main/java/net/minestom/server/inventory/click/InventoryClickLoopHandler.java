@@ -1,22 +1,23 @@
 package net.minestom.server.inventory.click;
 
+import it.unimi.dsi.fastutil.ints.Int2IntFunction;
+import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import net.minestom.server.item.ItemStack;
 
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public class InventoryClickLoopHandler {
 
     private int start;
     private int end;
     private int step;
-    private Function<Integer, Integer> indexModifier;
-    private Function<Integer, ItemStack> itemGetter;
+    private Int2IntFunction indexModifier;
+    private Int2ObjectFunction<ItemStack> itemGetter;
     private BiConsumer<Integer, ItemStack> itemSetter;
 
     public InventoryClickLoopHandler(int start, int end, int step,
-                                     Function<Integer, Integer> indexModifier,
-                                     Function<Integer, ItemStack> itemGetter,
+                                     Int2IntFunction indexModifier,
+                                     Int2ObjectFunction<ItemStack> itemGetter,
                                      BiConsumer<Integer, ItemStack> itemSetter) {
         this.start = start;
         this.end = end;
@@ -38,11 +39,11 @@ public class InventoryClickLoopHandler {
         return step;
     }
 
-    public Function<Integer, Integer> getIndexModifier() {
+    public Int2IntFunction getIndexModifier() {
         return indexModifier;
     }
 
-    public Function<Integer, ItemStack> getItemGetter() {
+    public Int2ObjectFunction<ItemStack> getItemGetter() {
         return itemGetter;
     }
 

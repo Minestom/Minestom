@@ -397,7 +397,7 @@ public class InstanceContainer extends Instance {
                 e.printStackTrace();
             }
         } else {
-            Iterator<Chunk> chunks = getChunks().iterator();
+            final Iterator<Chunk> chunks = getChunks().iterator();
             while (chunks.hasNext()) {
                 final Chunk chunk = chunks.next();
                 final boolean isLast = !chunks.hasNext();
@@ -453,7 +453,7 @@ public class InstanceContainer extends Instance {
     }
 
     public void sendChunkUpdate(Chunk chunk) {
-        Set<Player> chunkViewers = chunk.getViewers();
+        final Set<Player> chunkViewers = chunk.getViewers();
         if (!chunkViewers.isEmpty()) {
             sendChunkUpdate(chunkViewers, chunk);
         }

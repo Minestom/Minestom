@@ -2,8 +2,8 @@ package net.minestom.server.stat;
 
 public class PlayerStatistic {
 
-    private StatisticCategory category;
-    private int statisticId;
+    private final StatisticCategory category;
+    private final int statisticId;
 
     public PlayerStatistic(StatisticCategory category, int statisticId) {
         this.category = category;

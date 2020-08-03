@@ -89,11 +89,14 @@ public class CommandDispatcher {
 
             boolean useRemaining = false;
             for (int argCount = 0; argCount < syntax.getArguments().length; argCount++) {
-                Argument argument = syntax.getArguments()[argCount];
+                final Argument argument = syntax.getArguments()[argCount];
                 useRemaining = argument.useRemaining();
 
+                // the correction result of the argument
                 int correctionResult = Argument.SUCCESS;
+                // true if the arg is valid, false otherwise
                 boolean correct = false;
+                // the raw string representing the correct argument syntax
                 String argValue = "";
 
                 if (useRemaining) {

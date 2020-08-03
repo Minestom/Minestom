@@ -1,5 +1,7 @@
 package net.minestom.server.command;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
@@ -174,7 +176,7 @@ public class CommandManager {
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
         // Contains the children of the main node (all commands name)
-        ArrayList<Integer> rootChildren = new ArrayList<>();
+        IntList rootChildren = new IntArrayList();
 
         for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
@@ -187,8 +189,8 @@ public class CommandManager {
             }
 
             // The main root of this command
-            ArrayList<Integer> cmdChildren = new ArrayList<>();
-            Collection<CommandSyntax> syntaxes = command.getSyntaxes();
+            IntList cmdChildren = new IntArrayList();
+            final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
             List<String> names = new ArrayList<>();
             names.add(command.getName());
@@ -249,7 +251,7 @@ public class CommandManager {
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
      */
-    private void createCommand(List<DeclareCommandsPacket.Node> nodes, ArrayList<Integer> cmdChildren, String name, Collection<CommandSyntax> syntaxes, ArrayList<Integer> rootChildren) {
+    private void createCommand(List<DeclareCommandsPacket.Node> nodes, IntList cmdChildren, String name, Collection<CommandSyntax> syntaxes, IntList rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
@@ -261,7 +263,7 @@ public class CommandManager {
             List<DeclareCommandsPacket.Node> lastNodes = null;
 
             // Represent the children of the last node
-            ArrayList<Integer> argChildren = null;
+            IntList argChildren = null;
 
             final Argument[] arguments = syntax.getArguments();
             for (int i = 0; i < arguments.length; i++) {
@@ -300,7 +302,7 @@ public class CommandManager {
                     argumentNodes.forEach(node -> node.children = children);
                 } else {
                     // Create children list which will be filled during next iteration
-                    argChildren = new ArrayList<>();
+                    argChildren = new IntArrayList();
                     lastNodes = argumentNodes;
                 }
             }

@@ -1,5 +1,8 @@
 package net.minestom.server.utils;
 
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleList;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,21 +10,22 @@ import java.util.Random;
 
 /**
  * Produces a random element from a given set, with weights applied
+ *
  * @param <E>
  */
 public class WeightedRandom<E extends WeightedRandomItem> {
 
     private final List<E> entries;
-    private final List<Double> weightSums;
+    private final DoubleList weightSums;
     private final double totalWeight;
 
     public WeightedRandom(Collection<E> items) {
-        if(items.isEmpty())
+        if (items.isEmpty())
             throw new IllegalArgumentException("items must not be empty");
         this.entries = new ArrayList<>(items);
-        this.weightSums = new ArrayList<>(items.size());
+        this.weightSums = new DoubleArrayList(items.size());
         double sum = 0.0;
-        for(E item : items) {
+        for (E item : items) {
             sum += item.getWeight();
             weightSums.add(sum);
         }
@@ -30,17 +34,18 @@ public class WeightedRandom<E extends WeightedRandomItem> {
 
     /**
      * Gets a random element from this set
+     *
      * @param rng Random Number Generator to generate random numbers with
      * @return
      */
     public E get(Random rng) {
-        double p = rng.nextDouble()*totalWeight;
+        final double p = rng.nextDouble() * totalWeight;
         for (int i = 0; i < entries.size(); i++) {
-            double weightSum = weightSums.get(i);
-            if(weightSum >= p) {
+            final double weightSum = weightSums.get(i);
+            if (weightSum >= p) {
                 return entries.get(i);
             }
         }
-        return entries.get(entries.size()-1);
+        return entries.get(entries.size() - 1);
     }
 }

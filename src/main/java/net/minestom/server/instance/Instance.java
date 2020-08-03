@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -68,7 +70,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
-    protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+    protected Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
     protected UUID uniqueId;
 
     protected List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());

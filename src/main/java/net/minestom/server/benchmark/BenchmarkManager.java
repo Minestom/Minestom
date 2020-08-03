@@ -1,5 +1,7 @@
 package net.minestom.server.benchmark;
 
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -7,7 +9,10 @@ import net.minestom.server.utils.validate.Check;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.MinecraftServer.*;
@@ -28,10 +33,10 @@ public class BenchmarkManager {
         threads.add(THREAD_NAME_TICK);
     }
 
-    private Map<Long, Long> lastCpuTimeMap = new HashMap<>();
-    private Map<Long, Long> lastUserTimeMap = new HashMap<>();
-    private Map<Long, Long> lastWaitedMap = new HashMap<>();
-    private Map<Long, Long> lastBlockedMap = new HashMap<>();
+    private final Long2LongMap lastCpuTimeMap = new Long2LongOpenHashMap();
+    private final Long2LongMap lastUserTimeMap = new Long2LongOpenHashMap();
+    private final Long2LongMap lastWaitedMap = new Long2LongOpenHashMap();
+    private final Long2LongMap lastBlockedMap = new Long2LongOpenHashMap();
 
     private Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
 
