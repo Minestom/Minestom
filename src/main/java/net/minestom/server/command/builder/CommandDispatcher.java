@@ -20,21 +20,28 @@ public class CommandDispatcher {
         this.commands.add(command);
     }
 
+    /**
+     * Parse the given command
+     *
+     * @param commandString the command (containing the command name and the args if any)
+     * @return the result of the parsing, null if the command doesn't exist
+     */
     public CommandResult parse(String commandString) {
         commandString = commandString.trim();
 
         // Split space
-        String spaceRegex = " ";
-        String[] splitted = commandString.split(spaceRegex);
-        String commandName = splitted[0];
+        final String spaceRegex = " ";
+        final String[] splitted = commandString.split(spaceRegex);
+        final String commandName = splitted[0];
 
-        String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(spaceRegex);
+        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(spaceRegex);
 
-        Command command = findCommand(commandName);
-        // TODO change return
+        final Command command = findCommand(commandName);
+        // Check if the command exists
         if (command == null)
             return null;
 
+        // Find the used syntax, or check which argument is wrong
         return findCommandResult(command, args);
     }
 
@@ -67,15 +74,15 @@ public class CommandDispatcher {
 
 
         // Find syntax
-        Collection<CommandSyntax> syntaxes = command.getSyntaxes();
+        final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
         List<CommandSyntax> validSyntaxes = new ArrayList<>();
         Map<CommandSyntax, String[]> syntaxesValues = new HashMap<>();
 
         TreeMap<Integer, CommandSuggestionHolder> syntaxesSuggestions = new TreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            Argument[] arguments = syntax.getArguments();
-            String[] argsValues = new String[arguments.length];
+            final Argument[] arguments = syntax.getArguments();
+            final String[] argsValues = new String[arguments.length];
 
             boolean syntaxCorrect = true;
             int argIndex = 0;
@@ -91,7 +98,7 @@ public class CommandDispatcher {
 
                 if (useRemaining) {
                     for (int i = argIndex; i < args.length; i++) {
-                        String arg = args[i];
+                        final String arg = args[i];
                         if (argValue.length() > 0)
                             argValue += " ";
                         argValue += arg;
@@ -104,7 +111,7 @@ public class CommandDispatcher {
                     }
                 } else {
                     for (int i = argIndex; i < args.length; i++) {
-                        String arg = args[i];
+                        final String arg = args[i];
 
                         argValue += arg;
 
@@ -153,14 +160,14 @@ public class CommandDispatcher {
 
         // Verify args conditions of finalSyntax
         if (finalSyntax != null) {
-            Argument[] arguments = finalSyntax.getArguments();
-            String[] argsValues = syntaxesValues.get(finalSyntax);
+            final Argument[] arguments = finalSyntax.getArguments();
+            final String[] argsValues = syntaxesValues.get(finalSyntax);
             for (int i = 0; i < arguments.length; i++) {
-                Argument argument = arguments[i];
-                String argValue = argsValues[i];
+                final Argument argument = arguments[i];
+                final String argValue = argsValues[i];
                 // Finally parse it
-                Object parsedValue = argument.parse(argValue);
-                int conditionResult = argument.getConditionResult(parsedValue);
+                final Object parsedValue = argument.parse(argValue);
+                final int conditionResult = argument.getConditionResult(parsedValue);
                 if (conditionResult == Argument.SUCCESS) {
                     executorArgs.setArg(argument.getId(), parsedValue);
                 } else {
@@ -177,12 +184,12 @@ public class CommandDispatcher {
         if (finalSyntax == null) {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
-                int max = syntaxesSuggestions.firstKey();
-                CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-                CommandSyntax syntax = suggestionHolder.syntax;
-                String argValue = suggestionHolder.argValue;
-                int correctionResult = suggestionHolder.correctionResult;
-                int argIndex = suggestionHolder.argIndex;
+                final int max = syntaxesSuggestions.firstKey();
+                final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
+                final CommandSyntax syntax = suggestionHolder.syntax;
+                final String argValue = suggestionHolder.argValue;
+                final int correctionResult = suggestionHolder.correctionResult;
+                final int argIndex = suggestionHolder.argIndex;
 
                 if (argValue.length() > 0) {
                     Argument argument = syntax.getArguments()[argIndex];
@@ -227,18 +234,29 @@ public class CommandDispatcher {
         private String value;
         private int error;
 
+        /**
+         * Execute the command for the given source
+         * <p>
+         * The command will not be executed if the {@link CommandCondition} of the command
+         * is not validated
+         *
+         * @param source the command source
+         */
         public void execute(CommandSender source) {
             // Condition check
-            CommandCondition condition = command.getCondition();
+            final CommandCondition condition = command.getCondition();
             if (condition != null) {
-                boolean result = condition.apply(source);
+                final boolean result = condition.apply(source);
                 if (!result)
                     return;
             }
             // Condition is respected
             if (executor != null) {
+                // An executor has been found
                 executor.apply(source, arguments);
             } else if (callback != null) {
+                // No syntax has been validated but the faulty argument has been found
+                // Execute the faulty argument callback
                 callback.apply(source, value, error);
             }
         }

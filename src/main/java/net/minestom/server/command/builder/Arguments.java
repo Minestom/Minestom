@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.command.builder.structure.Structure;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.Enchantment;
@@ -15,13 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class used to retrieve argument data
+ */
 public class Arguments {
 
     private final Map<String, Object> args = new HashMap<>();
-
-    public Structure getStructure(String id) {
-        return (Structure) getObject(id);
-    }
 
     public boolean getBoolean(String id) {
         return (boolean) getObject(id);

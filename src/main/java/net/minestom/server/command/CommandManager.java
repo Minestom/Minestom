@@ -163,77 +163,12 @@ public class CommandManager {
         return buildPacket(player);
     }
 
-    /*private DeclareCommandsPacket buildPacket(Player player) {
-        DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
-
-        List<String> commands = new ArrayList<>();
-        for (Command<CommandSender> command : dispatcher.getCommands()) {
-            CommandCondition<Player> commandCondition = command.getCondition();
-            if (commandCondition != null) {
-                // Do not show command if return false
-                if (!commandCondition.apply(player)) {
-                    continue;
-                }
-            }
-            commands.add(command.getName());
-            for (String alias : command.getAliases()) {
-                commands.add(alias);
-            }
-        }
-
-        for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
-            // Do not show command if return false
-            if (!commandProcessor.hasAccess(player))
-                continue;
-
-            commands.add(commandProcessor.getCommandName());
-            String[] aliases = commandProcessor.getAliases();
-            if (aliases == null || aliases.length == 0)
-                continue;
-            for (String alias : aliases) {
-                commands.add(alias);
-            }
-        }
-
-
-        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
-        ArrayList<Integer> rootChildren = new ArrayList<>();
-
-        DeclareCommandsPacket.Node argNode = new DeclareCommandsPacket.Node();
-        argNode.flags = 0b10;
-        argNode.name = "arg";
-        argNode.parser = "brigadier:string";
-        argNode.properties = packetWriter -> {
-            packetWriter.writeVarInt(0);
-        };
-        int argOffset = nodes.size();
-        nodes.add(argNode);
-        argNode.children = new int[]{argOffset};
-
-        for (String commandName : commands) {
-
-            DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = 0b1;
-            literalNode.name = commandName;
-            literalNode.children = new int[]{argOffset};
-
-            rootChildren.add(nodes.size());
-            nodes.add(literalNode);
-
-        }
-
-        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
-        rootNode.flags = 0;
-        rootNode.children = ArrayUtils.toArray(rootChildren);
-
-        nodes.add(rootNode);
-
-        declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
-        declareCommandsPacket.rootIndex = nodes.size() - 1;
-
-        return declareCommandsPacket;
-    }*/
-
+    /**
+     * Build the {@link DeclareCommandsPacket} for a player
+     *
+     * @param player the player to build the packet for
+     * @return the commands packet for the specific player
+     */
     private DeclareCommandsPacket buildPacket(Player player) {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
@@ -243,7 +178,7 @@ public class CommandManager {
 
         for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
-            CommandCondition commandCondition = command.getCondition();
+            final CommandCondition commandCondition = command.getCondition();
             if (commandCondition != null) {
                 // Do not show command if return false
                 if (!commandCondition.apply(player)) {
@@ -273,7 +208,7 @@ public class CommandManager {
                 continue;
 
             simpleCommands.add(commandProcessor.getCommandName());
-            String[] aliases = commandProcessor.getAliases();
+            final String[] aliases = commandProcessor.getAliases();
             if (aliases == null || aliases.length == 0)
                 continue;
             for (String alias : aliases) {
@@ -305,6 +240,15 @@ public class CommandManager {
         return declareCommandsPacket;
     }
 
+    /**
+     * Add a command's syntaxes to the nodes list
+     *
+     * @param nodes        the nodes of the packet
+     * @param cmdChildren  the main root of this command
+     * @param name         the name of the command (or the alias)
+     * @param syntaxes     the syntaxes of the command
+     * @param rootChildren the children of the main node (all commands name)
+     */
     private void createCommand(List<DeclareCommandsPacket.Node> nodes, ArrayList<Integer> cmdChildren, String name, Collection<CommandSyntax> syntaxes, ArrayList<Integer> rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
@@ -378,9 +322,17 @@ public class CommandManager {
         return literalNode;
     }
 
+    /**
+     * Convert an argument to a node with the correct brigadier parser
+     *
+     * @param argument   the argument to convert
+     * @param executable true if this is the last argument, false otherwise
+     * @return the list of nodes that the argument require
+     */
     private List<DeclareCommandsPacket.Node> toNodes(Argument<?> argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
+        // You can uncomment this to test any brigadier parser on the client
         /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
         testNode.parser = "minecraft:entity";
         testNode.properties = packetWriter -> packetWriter.writeByte((byte) 0x0);
@@ -524,6 +476,14 @@ public class CommandManager {
         return result;
     }
 
+    /**
+     * Build an argument nod and add it to the nodes list
+     *
+     * @param nodes      the current nodes list
+     * @param argument   the argument
+     * @param executable true if this will be the last argument, false otherwise
+     * @return the created {@link DeclareCommandsPacket.Node}
+     */
     private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,
                                                           Argument<?> argument, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();

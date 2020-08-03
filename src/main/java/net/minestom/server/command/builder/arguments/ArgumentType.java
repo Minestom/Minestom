@@ -10,11 +10,10 @@ import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 
+/**
+ * Class listing all the basic arguments
+ */
 public class ArgumentType {
-
-    public static ArgumentStructure Structure(String id) {
-        return new ArgumentStructure(id);
-    }
 
     public static ArgumentBoolean Boolean(String id) {
         return new ArgumentBoolean(id);

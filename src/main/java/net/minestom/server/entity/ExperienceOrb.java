@@ -3,9 +3,6 @@ package net.minestom.server.entity;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 import net.minestom.server.network.player.PlayerConnection;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class ExperienceOrb extends Entity {
 
     private short experienceCount;
@@ -29,7 +26,11 @@ public class ExperienceOrb extends Entity {
 
     @Override
     public boolean addViewer(Player player) {
-        PlayerConnection playerConnection = player.getPlayerConnection();
+        final boolean result = super.addViewer(player); // Add player to viewers list
+        if (!result)
+            return false;
+
+        final PlayerConnection playerConnection = player.getPlayerConnection();
 
         SpawnExperienceOrbPacket experienceOrbPacket = new SpawnExperienceOrbPacket();
         experienceOrbPacket.entityId = getEntityId();
@@ -39,27 +40,29 @@ public class ExperienceOrb extends Entity {
         playerConnection.sendPacket(experienceOrbPacket);
         playerConnection.sendPacket(getVelocityPacket());
 
-        return super.addViewer(player); // Add player to viewers list
+        return result;
     }
 
     /**
-     * @return the experience amount contained in the entity
+     * Get the experience count
+     *
+     * @return the experience count
      */
     public short getExperienceCount() {
         return experienceCount;
     }
 
     /**
-     * @param experienceCount the new experience amount
+     * Change the experience count
+     *
+     * @param experienceCount the new experience count
      */
     public void setExperienceCount(short experienceCount) {
         // Remove the entity in order to respawn it with the correct experience count
-        Set<Player> viewerCache = new HashSet<>(getViewers());
-
-        viewerCache.forEach(player -> removeViewer(player));
+        getViewers().forEach(player -> removeViewer(player));
 
         this.experienceCount = experienceCount;
 
-        viewerCache.forEach(player -> addViewer(player));
+        getViewers().forEach(player -> addViewer(player));
     }
 }

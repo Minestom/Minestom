@@ -15,7 +15,9 @@ public class EntityDamage extends DamageType {
     }
 
     /**
-     * @return the source of the damage
+     * Get the source of the damage
+     *
+     * @return the source
      */
     public Entity getSource() {
         return source;

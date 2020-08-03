@@ -7,7 +7,7 @@ import net.minestom.server.entity.Entity;
  */
 public class EntityProjectileDamage extends DamageType {
 
-    private Entity shooter;
+    private final Entity shooter;
     private final Entity projectile;
 
     public EntityProjectileDamage(Entity shooter, Entity projectile) {
@@ -16,10 +16,20 @@ public class EntityProjectileDamage extends DamageType {
         this.projectile = projectile;
     }
 
+    /**
+     * Get the projectile responsive for the damage
+     *
+     * @return the projectile
+     */
     public Entity getProjectile() {
         return projectile;
     }
 
+    /**
+     * Get the shooter of the projectile
+     *
+     * @return the shooter of the projectile, null if not any
+     */
     public Entity getShooter() {
         return shooter;
     }
