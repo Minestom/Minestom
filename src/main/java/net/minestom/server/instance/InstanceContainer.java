@@ -196,7 +196,13 @@ public class InstanceContainer extends Instance {
                     final int neighborX = blockPosition.getX() + offsetX;
                     final int neighborY = blockPosition.getY() + offsetY;
                     final int neighborZ = blockPosition.getZ() + offsetZ;
-                    final short neighborId = getBlockId(neighborX, neighborY, neighborZ);
+                    final Chunk chunk = getChunkAt(neighborX, neighborZ);
+
+                    // Do not try to get neighbour in an unloaded chunk
+                    if (chunk == null)
+                        continue;
+
+                    final short neighborId = chunk.getBlockId(neighborX, neighborY, neighborZ);
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
                     if (neighborBlockPlacementRule != null) {
                         final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
