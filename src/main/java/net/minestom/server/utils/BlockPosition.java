@@ -25,6 +25,14 @@ public class BlockPosition {
         this(position.getX(), position.getY(), position.getZ());
     }
 
+    /**
+     * Add offsets to this block position
+     *
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return the instance of this block position
+     */
     public BlockPosition add(int x, int y, int z) {
         this.x += x;
         this.y += y;
@@ -32,6 +40,14 @@ public class BlockPosition {
         return this;
     }
 
+    /**
+     * Subtract offsets to this block position
+     *
+     * @param x the X offset
+     * @param y the Y offset
+     * @param z the Z offset
+     * @return the instance of this block position
+     */
     public BlockPosition subtract(int x, int y, int z) {
         this.x -= x;
         this.y -= y;
@@ -39,40 +55,92 @@ public class BlockPosition {
         return this;
     }
 
+    /**
+     * Get the block X
+     *
+     * @return the block X
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Change the X field
+     * <p>
+     * WARNING: this will not change the block position
+     *
+     * @param x the new X field
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Get the block Y
+     *
+     * @return the block Y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Change the Y field
+     * <p>
+     * WARNING: this will not change the block position
+     *
+     * @param y the new Y field
+     */
     public void setY(int y) {
         this.y = y;
     }
 
+    /**
+     * Get the block Z
+     *
+     * @return the block Z
+     */
     public int getZ() {
         return z;
     }
 
+    /**
+     * Change the Z field
+     * <p>
+     * WARNING: this will not change the block position
+     *
+     * @param z the new Z field
+     */
     public void setZ(int z) {
         this.z = z;
     }
 
+    /**
+     * Get the distance to another block position
+     *
+     * @param blockPosition the block position to check the distance
+     * @return the distance between 'this' and {@code blockPosition}
+     */
     public int getDistance(BlockPosition blockPosition) {
         return Math.abs(getX() - blockPosition.getX()) +
                 Math.abs(getY() - blockPosition.getY()) +
                 Math.abs(getZ() - blockPosition.getZ());
     }
 
+    /**
+     * Clone this block position
+     *
+     * @return the cloned block position
+     */
     public BlockPosition clone() {
         return new BlockPosition(x, y, z);
     }
 
+    /**
+     * Convert this block position to a {@link Position}
+     *
+     * @return the converted {@link Position}
+     */
     public Position toPosition() {
         return new Position(x, y, z);
     }
