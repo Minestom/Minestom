@@ -1,5 +1,7 @@
 package net.minestom.server.chat;
 
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.validate.Check;
@@ -41,7 +43,7 @@ public class ChatColor {
 
     private static Int2ObjectMap<ChatColor> idColorMap = new Int2ObjectOpenHashMap<>();
     private static Map<String, ChatColor> colorCode = new HashMap<>();
-    private static Map<Character, ChatColor> legacyColorCodesMap = new HashMap<>();
+    private static Char2ObjectMap<ChatColor> legacyColorCodesMap = new Char2ObjectOpenHashMap<>();
 
     static {
 
