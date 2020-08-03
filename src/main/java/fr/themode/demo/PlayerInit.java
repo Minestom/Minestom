@@ -3,6 +3,7 @@ package fr.themode.demo;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.FrameType;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
@@ -11,10 +12,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.fakeplayer.FakePlayerController;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -27,6 +25,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
@@ -46,7 +45,7 @@ public class PlayerInit {
     private static volatile Inventory inventory;
 
     static {
-        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data");
+        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOption().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
@@ -160,7 +159,7 @@ public class PlayerInit {
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
                 zombie.setInstance(player.getInstance());*/
 
-                FakePlayer.initPlayer(UUID.randomUUID(), "test", fakePlayer -> {
+                /*FakePlayer.initPlayer(UUID.randomUUID(), "test", fakePlayer -> {
                     //fakePlayer.setInstance(player.getInstance());
                     fakePlayer.teleport(player.getPosition());
                     fakePlayer.setSkin(PlayerSkin.fromUsername("TheMode911"));
@@ -172,7 +171,7 @@ public class PlayerInit {
                     fakePlayer.setArrowCount(25);
                     FakePlayerController controller = fakePlayer.getController();
                     controller.sendChatMessage("I am a bot!");
-                });
+                });*/
                 //Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
 
             });
@@ -245,7 +244,7 @@ public class PlayerInit {
                     displayData.title = ColoredText.of("Hello");
                     displayData.description = ColoredText.of("Hello");
                     displayData.icon = new ItemStack(Material.DIRT, (byte) 1);
-                    displayData.frameType = AdvancementsPacket.FrameType.TASK;
+                    displayData.frameType = FrameType.TASK;
                     displayData.flags = 0x1;
                     displayData.backgroundTexture = "minecraft:textures/block/red_wool.png";
 
@@ -270,7 +269,7 @@ public class PlayerInit {
                     displayData.title = ColoredText.of("Hello World");
                     displayData.description = ColoredText.of("Hello World");
                     displayData.icon = new ItemStack(Material.DIAMOND, (byte) 1);
-                    displayData.frameType = AdvancementsPacket.FrameType.GOAL;
+                    displayData.frameType = FrameType.GOAL;
                     displayData.flags = 0x2;
 
                     secondAdvancement.displayData = displayData;
@@ -299,35 +298,13 @@ public class PlayerInit {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
                 }*/
 
-                /*ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
-                MapMeta mapMeta = (MapMeta) map.getItemMeta();
-                mapMeta.setMapId(1);
-                player.getInventory().setItemStack(0, map);
-
                 {
-                    // Map test
-                    MapDataPacket mapDataPacket = new MapDataPacket();
-                    mapDataPacket.mapId = 1;
-                    mapDataPacket.scale = 1;
-                    mapDataPacket.trackingPosition = false;
-                    mapDataPacket.locked = false;
-                    mapDataPacket.icons = null;
-                    mapDataPacket.columns = (byte) 127;
-                    mapDataPacket.rows = (byte) 127;
-                    mapDataPacket.x = 0;
-                    mapDataPacket.z = 0;
+                    ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
+                    MapMeta mapMeta = (MapMeta) map.getItemMeta();
+                    mapMeta.setMapId(1);
+                    //player.getInventory().setItemStack(0, map);
 
-                    final byte[] data = new byte[127 * 127];
-                    for (int i = 0; i < data.length; i++) {
-                        final byte color = (byte) (i % 2 == 0 ? 5 : 10);
-                        data[i] = color;
-                    }
-
-                    mapDataPacket.data = data;
-
-                    player.getPlayerConnection().sendPacket(mapDataPacket);
-
-                }*/
+                }
 
 
                 ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
@@ -347,12 +324,19 @@ public class PlayerInit {
 
                 //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
 
+                {
+                    /*EntityItemFrame entityItemFrame = new EntityItemFrame(new Position(-5, 36, 9, 0, 180), EntityItemFrame.ItemFrameOrientation.DOWN);
+                    entityItemFrame.setNoGravity(true);
+                    entityItemFrame.setInstance(player.getInstance());
+                    entityItemFrame.setItemStack(item);*/
+                }
+
                 Instance instance = player.getInstance();
                 WorldBorder worldBorder = instance.getWorldBorder();
                 worldBorder.setDiameter(30);
 
                 RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + "test item"));
-                richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.DIAMOND, (byte) 1)));
+                richMessage.setHoverEvent(ChatHoverEvent.showEntity(player));
                 richMessage.setInsertion("Test Insert");
                 System.out.println(richMessage.toString());
                 player.sendMessage(richMessage);
@@ -384,6 +368,10 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
                 event.setRespawnPosition(new Position(0f, 41f, 0f));
+            });
+
+            player.addEventCallback(PlayerCommandEvent.class, event -> {
+                System.out.println("COMMAND EVENT");
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

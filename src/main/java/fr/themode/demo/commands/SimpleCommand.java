@@ -1,18 +1,16 @@
 package fr.themode.demo.commands;
 
-import fr.themode.demo.entity.ChickenCreature;
-import net.minestom.server.advancements.notifications.AdvancementNotification;
-import net.minestom.server.advancements.notifications.AdvancementNotificationManager;
+import net.minestom.server.advancements.FrameType;
+import net.minestom.server.advancements.notifications.Notification;
+import net.minestom.server.advancements.notifications.NotificationCenter;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.utils.Position;
+
+import java.util.Arrays;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -58,19 +56,19 @@ public class SimpleCommand implements CommandProcessor {
         System.gc();
         player.sendMessage("Garbage collector called");*/
 
-        Instance instance = player.getInstance();
+        /*Instance instance = player.getInstance();
 
         ChickenCreature chickenCreature = new ChickenCreature(new Position(-10, 43, -10));
         chickenCreature.setInstance(instance);
 
-        chickenCreature.setPathTo(player.getPosition());
+        chickenCreature.setPathTo(player.getPosition());*/
 
-        new AdvancementNotificationManager().sendAdvancementNotification(
-                new AdvancementNotification(
-                        ColoredText.of(ChatColor.BRIGHT_GREEN + "Welcome to Minestom!"),
-                        new ItemStack(Material.ACACIA_BOAT, (byte) 1), AdvancementsPacket.FrameType.GOAL)
-                , player
-        );
+        final Notification notification = new Notification(ColoredText.of(ChatColor.BRIGHT_GREEN + "Welcome to Minestom!"),
+                FrameType.TASK, Material.APPLE);
+
+        NotificationCenter.send(notification, Arrays.asList(player));
+        NotificationCenter.send(notification, Arrays.asList(player));
+
         return true;
     }
 
