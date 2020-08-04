@@ -109,7 +109,6 @@ public class Player extends LivingEntity implements CommandSender {
     private int blockBreakTime;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
-    private Team team;
     private BelowNameScoreboard belowNameScoreboard;
 
     /**
@@ -527,8 +526,8 @@ public class Player extends LivingEntity implements CommandSender {
         viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
-        if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
-            viewerConnection.sendPacket(team.createTeamDestructionPacket());
+        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
+            viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         return result;
     }
 
@@ -1371,21 +1370,6 @@ public class Player extends LivingEntity implements CommandSender {
         return heldSlot;
     }
 
-    public void setTeam(Team team) {
-        if (this.team == team)
-            return;
-
-        if (this.team != null) {
-            this.team.removePlayer(this);
-        }
-
-        this.team = team;
-        if (team != null) {
-            team.addPlayer(this);
-            sendPacketToViewers(team.getTeamsCreationPacket()); // FIXME: only if viewer hasn't already register this team
-        }
-    }
-
     public void setBelowNameScoreboard(BelowNameScoreboard belowNameScoreboard) {
         if (this.belowNameScoreboard == belowNameScoreboard)
             return;
@@ -1400,6 +1384,13 @@ public class Player extends LivingEntity implements CommandSender {
             belowNameScoreboard.displayScoreboard(this);
             getViewers().forEach(player -> belowNameScoreboard.addViewer(player));
         }
+    }
+
+    @Override
+    public void setTeam(Team team) {
+        super.setTeam(team);
+        if(team != null)
+            getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
     }
 
     /**
@@ -2005,8 +1996,8 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Team
-        if (team != null)
-            connection.sendPacket(team.getTeamsCreationPacket());
+        if (this.getTeam() != null)
+            connection.sendPacket(this.getTeam().getTeamsCreationPacket());
 
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();

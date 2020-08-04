@@ -13,6 +13,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
@@ -53,6 +54,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * Period, in ms, between two fire damage applications
      */
     private long fireDamagePeriod = 1000L;
+
+    private Team team;
 
     public LivingEntity(EntityType entityType, Position spawnPosition) {
         super(entityType, spawnPosition);
@@ -504,5 +507,41 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public void setFireDamagePeriod(long fireDamagePeriod, TimeUnit timeUnit) {
         fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
         this.fireDamagePeriod = fireDamagePeriod;
+    }
+
+    /**
+     * Change the {@link Team} for the entity
+     *
+     * @param team The new team
+     */
+    public void setTeam(Team team) {
+        if (this.team == team) return;
+
+        String member;
+
+        if (this instanceof Player) {
+            Player player = (Player) this;
+            member = player.getUsername();
+        } else {
+            member = this.uuid.toString();
+        }
+
+        if (this.team != null) {
+            this.team.removeMember(member);
+        }
+
+        this.team = team;
+        if (team != null) {
+            team.addMember(member);
+        }
+    }
+
+    /**
+     * Gets the {@link Team} of the entity
+     *
+     * @return the {@link Team}
+     */
+    public Team getTeam() {
+        return team;
     }
 }
