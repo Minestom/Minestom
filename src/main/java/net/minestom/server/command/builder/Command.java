@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
+import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 
 import java.util.ArrayList;
@@ -123,4 +125,16 @@ public class Command {
     public Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
     }
+
+    /**
+     * Allow for tab auto completion, this is called everytime the player press a key in the chat
+     * when in a dynamic argument ({@link ArgumentDynamicWord} & {@link ArgumentDynamicStringArray})
+     *
+     * @param text the whole player text
+     * @return the array containing all the suggestion for the current arg (split " ")
+     */
+    public String[] onDynamicWrite(String text) {
+        return null;
+    }
+
 }

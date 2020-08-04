@@ -21,7 +21,7 @@ public class ArgumentWord extends Argument<String> {
         if (value.contains(" "))
             return SPACE_ERROR;
 
-        return Argument.SUCCESS;
+        return SUCCESS;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ArgumentWord extends Argument<String> {
         if (restrictions != null && restrictions.length > 0) {
             for (String r : restrictions) {
                 if (value.equalsIgnoreCase(r))
-                    return Argument.SUCCESS;
+                    return SUCCESS;
             }
             if (!findRestriction)
                 return RESTRICTION_ERROR;

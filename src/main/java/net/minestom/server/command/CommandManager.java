@@ -74,6 +74,16 @@ public class CommandManager {
     }
 
     /**
+     * Get the command register by {@link #register(Command)}
+     *
+     * @param commandName the command name
+     * @return the command associated with the name, null if not any
+     */
+    public Command getCommand(String commandName) {
+        return dispatcher.findCommand(commandName);
+    }
+
+    /**
      * Register a simple command without auto-completion
      *
      * @param commandProcessor the command to register
@@ -353,12 +363,12 @@ public class CommandManager {
         }*/
 
         if (argument instanceof ArgumentBoolean) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             argumentNode.parser = "brigadier:bool";
             argumentNode.properties = packetWriter -> packetWriter.writeByte((byte) 0);
         } else if (argument instanceof ArgumentDouble) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             ArgumentDouble argumentDouble = (ArgumentDouble) argument;
             argumentNode.parser = "brigadier:double";
@@ -370,7 +380,7 @@ public class CommandManager {
                     packetWriter.writeDouble(argumentDouble.getMax());
             };
         } else if (argument instanceof ArgumentFloat) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             ArgumentFloat argumentFloat = (ArgumentFloat) argument;
             argumentNode.parser = "brigadier:float";
@@ -382,7 +392,7 @@ public class CommandManager {
                     packetWriter.writeFloat(argumentFloat.getMax());
             };
         } else if (argument instanceof ArgumentInteger) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             ArgumentInteger argumentInteger = (ArgumentInteger) argument;
             argumentNode.parser = "brigadier:integer";
@@ -418,50 +428,67 @@ public class CommandManager {
                 }
             } else {
                 // Can be any word, add only one argument node
-                DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+                DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
                 wordConsumer.accept(argumentNode);
             }
+        } else if (argument instanceof ArgumentDynamicWord) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
+
+            argumentNode.parser = "brigadier:string";
+            argumentNode.properties = packetWriter -> {
+                packetWriter.writeVarInt(0); // Single word
+            };
+            argumentNode.suggestionsType = "minecraft:ask_server";
+
         } else if (argument instanceof ArgumentString) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             argumentNode.parser = "brigadier:string";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(1); // Quotable phrase
             };
         } else if (argument instanceof ArgumentStringArray) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             argumentNode.parser = "brigadier:string";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(2); // Greedy phrase
             };
+        } else if (argument instanceof ArgumentDynamicStringArray) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
+
+            argumentNode.parser = "brigadier:string";
+            argumentNode.properties = packetWriter -> {
+                packetWriter.writeVarInt(2); // Greedy phrase
+            };
+            argumentNode.suggestionsType = "minecraft:ask_server";
         } else if (argument instanceof ArgumentColor) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:color";
         } else if (argument instanceof ArgumentTime) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:time";
         } else if (argument instanceof ArgumentEnchantment) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:item_enchantment";
         } else if (argument instanceof ArgumentParticle) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:particle";
         } else if (argument instanceof ArgumentPotion) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:mob_effect";
         } else if (argument instanceof ArgumentEntityType) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:entity_summon";
         } else if (argument instanceof ArgumentIntRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:int_range";
         } else if (argument instanceof ArgumentFloatRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:float_range";
         } else if (argument instanceof ArgumentEntities) {
             ArgumentEntities argumentEntities = (ArgumentEntities) argument;
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:entity";
             argumentNode.properties = packetWriter -> {
                 byte mask = 0;
@@ -496,11 +523,11 @@ public class CommandManager {
      * @return the created {@link DeclareCommandsPacket.Node}
      */
     private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,
-                                                          Argument<?> argument, boolean executable) {
+                                                          Argument<?> argument, boolean executable, boolean suggestion) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         nodes.add(argumentNode);
 
-        argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, false);
+        argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, suggestion);
         argumentNode.name = argument.getId();
 
         return argumentNode;

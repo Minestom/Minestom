@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandProcessor;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
@@ -23,41 +24,54 @@ public class TabCompleteListener {
         // Tab complete for CommandProcessor
         final CommandProcessor commandProcessor = COMMAND_MANAGER.getCommandProcessor(commandName);
         if (commandProcessor != null) {
-            final boolean endSpace = text.endsWith(" ");
-
-            int start;
-
-            if (endSpace) {
-                start = text.length();
-            } else {
-                final String lastArg = split[split.length - 1];
-                start = text.indexOf(lastArg);
-            }
-
+            final int start = findStart(text, split);
             final String[] matches = commandProcessor.onWrite(text);
-
             if (matches != null && matches.length > 0) {
-                TabCompletePacket tabCompletePacket = new TabCompletePacket();
-                tabCompletePacket.transactionId = packet.transactionId;
-                tabCompletePacket.start = start;
-                tabCompletePacket.length = 20;
-
-                TabCompletePacket.Match[] matchesArray = new TabCompletePacket.Match[matches.length];
-                for (int i = 0; i < matchesArray.length; i++) {
-                    TabCompletePacket.Match match = new TabCompletePacket.Match();
-                    match.match = matches[i];
-                    matchesArray[i] = match;
+                sendTabCompletePacket(packet.transactionId, start, matches, player);
+            }
+        } else {
+            // Tab complete for Command
+            final Command command = COMMAND_MANAGER.getCommand(commandName);
+            if (command != null) {
+                final int start = findStart(text, split);
+                final String[] matches = command.onDynamicWrite(text);
+                if (matches != null && matches.length > 0) {
+                    sendTabCompletePacket(packet.transactionId, start, matches, player);
                 }
-
-                tabCompletePacket.matches = matchesArray;
-
-                player.getPlayerConnection().sendPacket(tabCompletePacket);
             }
         }
 
-        // TODO tab complete for Command (TabArgument)
 
+    }
 
+    private static int findStart(String text, String[] split) {
+        final boolean endSpace = text.endsWith(" ");
+        int start;
+        if (endSpace) {
+            start = text.length();
+        } else {
+            final String lastArg = split[split.length - 1];
+            start = text.lastIndexOf(lastArg);
+        }
+        return start;
+    }
+
+    private static void sendTabCompletePacket(int transactionId, int start, String[] matches, Player player) {
+        TabCompletePacket tabCompletePacket = new TabCompletePacket();
+        tabCompletePacket.transactionId = transactionId;
+        tabCompletePacket.start = start;
+        tabCompletePacket.length = 20;
+
+        TabCompletePacket.Match[] matchesArray = new TabCompletePacket.Match[matches.length];
+        for (int i = 0; i < matchesArray.length; i++) {
+            TabCompletePacket.Match match = new TabCompletePacket.Match();
+            match.match = matches[i];
+            matchesArray[i] = match;
+        }
+
+        tabCompletePacket.matches = matchesArray;
+
+        player.getPlayerConnection().sendPacket(tabCompletePacket);
     }
 
 

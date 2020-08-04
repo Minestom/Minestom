@@ -43,8 +43,16 @@ public class ArgumentType {
         return new ArgumentWord(id);
     }
 
+    public static ArgumentDynamicWord DynamicWord(String id) {
+        return new ArgumentDynamicWord(id);
+    }
+
     public static ArgumentStringArray StringArray(String id) {
         return new ArgumentStringArray(id);
+    }
+
+    public static ArgumentDynamicStringArray DynamicStringArray(String id) {
+        return new ArgumentDynamicStringArray(id);
     }
 
     // Minecraft specific

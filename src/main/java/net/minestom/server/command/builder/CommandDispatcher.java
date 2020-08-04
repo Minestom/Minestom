@@ -13,9 +13,9 @@ public class CommandDispatcher {
     private Set<Command> commands = new HashSet<>();
 
     public void register(Command command) {
-        this.commandMap.put(command.getName(), command);
+        this.commandMap.put(command.getName().toLowerCase(), command);
         for (String alias : command.getAliases()) {
-            this.commandMap.put(alias, command);
+            this.commandMap.put(alias.toLowerCase(), command);
         }
         this.commands.add(command);
     }
@@ -54,7 +54,14 @@ public class CommandDispatcher {
         return Collections.unmodifiableSet(commands);
     }
 
-    private Command findCommand(String commandName) {
+    /**
+     * Get the command class associated with its name
+     *
+     * @param commandName the command name
+     * @return the {@link Command} associated with the name, null if not any
+     */
+    public Command findCommand(String commandName) {
+        commandName = commandName.toLowerCase();
         return commandMap.containsKey(commandName) ? commandMap.get(commandName) : null;
     }
 
