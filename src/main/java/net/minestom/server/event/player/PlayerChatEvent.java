@@ -4,6 +4,8 @@ import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
@@ -22,7 +24,7 @@ public class PlayerChatEvent extends CancellableEvent {
     public PlayerChatEvent(Player sender, Collection<Player> recipients, String message) {
         this.sender = sender;
         this.recipients = new ArrayList<>(recipients);
-        this.message = message;
+        this.message = new String(message.getBytes(), StandardCharsets.UTF_8);
     }
 
     /**
