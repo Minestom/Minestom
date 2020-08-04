@@ -5,21 +5,23 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.MapMeta;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.framebuffers.GLFWFramebuffer;
 import net.minestom.server.map.framebuffers.Graphics2DFramebuffer;
 import net.minestom.server.network.packet.server.play.MapDataPacket;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.time.TimeUnit;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class MapAnimationDemo {
 
     public static final int MAP_ID = 1;
+    public static final int EGL_MAP_ID = 2;
+
+    private static final Graphics2DFramebuffer framebuffer = new Graphics2DFramebuffer();
+    private static final GLFWFramebuffer glfwFramebuffer = new GLFWFramebuffer();
 
     public static void init() {
         SchedulerManager scheduler = MinecraftServer.getSchedulerManager();
@@ -30,11 +32,31 @@ public class MapAnimationDemo {
                 ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
                 map.setItemMeta(new MapMeta(MAP_ID));
                 player.getInventory().addItemStack(map);
+
+                ItemStack map2 = new ItemStack(Material.FILLED_MAP, (byte) 1);
+                map2.setItemMeta(new MapMeta(EGL_MAP_ID));
+                player.getInventory().addItemStack(map2);
             });
         });
-    }
 
-    private static final Graphics2DFramebuffer framebuffer = new Graphics2DFramebuffer();
+        glfwFramebuffer.setupRenderLoop(16, TimeUnit.MILLISECOND, () -> {
+            glClearColor(0f, 0f, 0f, 1f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glBegin(GL_TRIANGLES);
+
+            glVertex2f(0, -0.75f);
+            glColor3f(1f, 0f, 0f);
+
+            glVertex2f(0.75f, 0.75f);
+            glColor3f(0f, 1f, 0f);
+
+            glVertex2f(-0.75f, 0.75f);
+            glColor3f(0f, 0f, 1f);
+
+            glEnd();
+        });
+    }
 
     private static float time = 0f;
     private static long lastTime = System.currentTimeMillis();
@@ -68,7 +90,13 @@ public class MapAnimationDemo {
 
         MapDataPacket mapDataPacket = new MapDataPacket();
         mapDataPacket.mapId = MAP_ID;
-        framebuffer.preparePacket(mapDataPacket, 32, 32, 64+32, 64+32);
+        framebuffer.preparePacket(mapDataPacket);
+        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> {
+            p.getPlayerConnection().sendPacket(mapDataPacket);
+        });
+
+        mapDataPacket.mapId = EGL_MAP_ID;
+        glfwFramebuffer.preparePacket(mapDataPacket);
         MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> {
             p.getPlayerConnection().sendPacket(mapDataPacket);
         });
