@@ -43,4 +43,14 @@ public interface CommandProcessor {
      * @return true if the player has access to the command, false otherwise
      */
     boolean hasAccess(Player player);
+
+    /**
+     * Allow for tab auto completion, this is called everytime the player press a key in the chat
+     *
+     * @param text the whole player text
+     * @return the array containing all the suggestion for the current arg (split " ")
+     */
+    default String[] onWrite(String text) {
+        return null;
+    }
 }

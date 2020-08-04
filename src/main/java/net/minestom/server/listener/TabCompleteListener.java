@@ -1,13 +1,63 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
+import net.minestom.server.network.packet.server.play.TabCompletePacket;
+
+import java.util.regex.Pattern;
 
 public class TabCompleteListener {
 
+    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
+
     public static void listener(ClientTabCompletePacket packet, Player player) {
-        // TODO when is it called?
-        System.out.println("text: " + packet.text);
+        final String text = packet.text;
+
+        final String[] split = packet.text.split(Pattern.quote(" "));
+
+        final String commandName = split[0].replaceFirst(CommandManager.COMMAND_PREFIX, "");
+
+        // Tab complete for CommandProcessor
+        final CommandProcessor commandProcessor = COMMAND_MANAGER.getCommandProcessor(commandName);
+        if (commandProcessor != null) {
+            final boolean endSpace = text.endsWith(" ");
+
+            int start;
+
+            if (endSpace) {
+                start = text.length();
+            } else {
+                final String lastArg = split[split.length - 1];
+                start = text.indexOf(lastArg);
+            }
+
+            final String[] matches = commandProcessor.onWrite(text);
+
+            if (matches != null && matches.length > 0) {
+                TabCompletePacket tabCompletePacket = new TabCompletePacket();
+                tabCompletePacket.transactionId = packet.transactionId;
+                tabCompletePacket.start = start;
+                tabCompletePacket.length = 20;
+
+                TabCompletePacket.Match[] matchesArray = new TabCompletePacket.Match[matches.length];
+                for (int i = 0; i < matchesArray.length; i++) {
+                    TabCompletePacket.Match match = new TabCompletePacket.Match();
+                    match.match = matches[i];
+                    matchesArray[i] = match;
+                }
+
+                tabCompletePacket.matches = matchesArray;
+
+                player.getPlayerConnection().sendPacket(tabCompletePacket);
+            }
+        }
+
+        // TODO tab complete for Command (TabArgument)
+
+
     }
 
 

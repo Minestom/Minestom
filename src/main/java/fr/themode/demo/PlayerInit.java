@@ -7,9 +7,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -334,12 +332,6 @@ public class PlayerInit {
                 Instance instance = player.getInstance();
                 WorldBorder worldBorder = instance.getWorldBorder();
                 worldBorder.setDiameter(30);
-
-                RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + "test item"));
-                richMessage.setHoverEvent(ChatHoverEvent.showEntity(player));
-                richMessage.setInsertion("Test Insert");
-                System.out.println(richMessage.toString());
-                player.sendMessage(richMessage);
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());
                 //entityBoat.setInstance(player.getInstance());

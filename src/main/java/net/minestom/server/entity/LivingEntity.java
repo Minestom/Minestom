@@ -233,7 +233,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(type, value, this);
+        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value);
         callCancellableEvent(EntityDamageEvent.class, entityDamageEvent, () -> {
             float damage = entityDamageEvent.getDamage();
 

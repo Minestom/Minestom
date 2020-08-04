@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -22,7 +23,7 @@ public class TabCompletePacket implements ServerPacket {
             writer.writeSizedString(match.match);
             writer.writeBoolean(match.hasTooltip);
             if (match.hasTooltip)
-                writer.writeSizedString(match.tooltip);
+                writer.writeSizedString(match.tooltip.toString());
         }
     }
 
@@ -34,7 +35,7 @@ public class TabCompletePacket implements ServerPacket {
     public static class Match {
         public String match;
         public boolean hasTooltip;
-        public String tooltip; // Chat
+        public ColoredText tooltip;
     }
 
 }

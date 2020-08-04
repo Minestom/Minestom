@@ -10,8 +10,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.Material;
 
-import java.util.Arrays;
-
 public class SimpleCommand implements CommandProcessor {
     @Override
     public String getCommandName() {
@@ -20,7 +18,7 @@ public class SimpleCommand implements CommandProcessor {
 
     @Override
     public String[] getAliases() {
-        return new String[0];
+        return new String[]{"alias"};
     }
 
     @Override
@@ -66,8 +64,8 @@ public class SimpleCommand implements CommandProcessor {
         final Notification notification = new Notification(ColoredText.of(ChatColor.BRIGHT_GREEN + "Welcome to Minestom!"),
                 FrameType.TASK, Material.APPLE);
 
-        NotificationCenter.send(notification, Arrays.asList(player));
-        NotificationCenter.send(notification, Arrays.asList(player));
+        NotificationCenter.send(notification, player);
+        NotificationCenter.send(notification, player);
 
         return true;
     }
@@ -75,5 +73,10 @@ public class SimpleCommand implements CommandProcessor {
     @Override
     public boolean hasAccess(Player player) {
         return true;
+    }
+
+    @Override
+    public String[] onWrite(String text) {
+        return new String[]{"Complete1", "Complete2"};
     }
 }

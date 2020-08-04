@@ -24,7 +24,7 @@ public class ChatMessageListener {
     public static void listener(ClientChatMessagePacket packet, Player player) {
         String message = packet.message;
 
-        String cmdPrefix = COMMAND_MANAGER.getCommandPrefix();
+        final String cmdPrefix = CommandManager.COMMAND_PREFIX;
         if (message.startsWith(cmdPrefix)) {
             // The message is a command
             message = message.replaceFirst(cmdPrefix, "");

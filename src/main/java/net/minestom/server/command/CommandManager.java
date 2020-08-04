@@ -27,8 +27,9 @@ import java.util.function.Consumer;
 
 public class CommandManager {
 
+    public static final String COMMAND_PREFIX = "/";
+
     private boolean running;
-    private String commandPrefix = "/";
 
     private ConsoleSender consoleSender = new ConsoleSender();
 
@@ -43,9 +44,9 @@ public class CommandManager {
             while (running) {
                 if (scanner.hasNext()) {
                     String command = scanner.nextLine();
-                    if (!command.startsWith(commandPrefix))
+                    if (!command.startsWith(COMMAND_PREFIX))
                         continue;
-                    command = command.replaceFirst(commandPrefix, "");
+                    command = command.replaceFirst(COMMAND_PREFIX, "");
                     execute(consoleSender, command);
                 }
             }
@@ -79,6 +80,23 @@ public class CommandManager {
      */
     public void register(CommandProcessor commandProcessor) {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
+        // Register aliases
+        final String[] aliases = commandProcessor.getAliases();
+        if (aliases != null && aliases.length > 0) {
+            for (String alias : aliases) {
+                this.commandProcessorMap.put(alias.toLowerCase(), commandProcessor);
+            }
+        }
+    }
+
+    /**
+     * Get the command register by {@link #register(CommandProcessor)}
+     *
+     * @param commandName the command name
+     * @return the command associated with the name, null if not any
+     */
+    public CommandProcessor getCommandProcessor(String commandName) {
+        return commandProcessorMap.get(commandName.toLowerCase());
     }
 
     /**
@@ -86,7 +104,7 @@ public class CommandManager {
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
-     * @return
+     * @return true if the command hadn't been cancelled and has been successful
      */
     public boolean execute(CommandSender sender, String command) {
         Check.notNull(sender, "Source cannot be null");
@@ -122,26 +140,6 @@ public class CommandManager {
             return commandProcessor.process(sender, commandName, args);
 
         }
-    }
-
-    /**
-     * Get the current command prefix (what should always be before the command name, ie: '/')
-     *
-     * @return the command prefix
-     */
-    public String getCommandPrefix() {
-        return commandPrefix;
-    }
-
-    /**
-     * Change the command prefix
-     * <p>
-     * This field can be changed half-way, but the client auto-completion still expect the '/' char
-     *
-     * @param commandPrefix the new command prefix
-     */
-    public void setCommandPrefix(String commandPrefix) {
-        this.commandPrefix = commandPrefix;
     }
 
     /**
@@ -219,12 +217,23 @@ public class CommandManager {
         }
 
         for (String simpleCommand : simpleCommands) {
-            // TODO server suggestion
+            // Server suggestion (ask_server)
+            {
+                DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
+                tabNode.flags = getFlag(NodeType.ARGUMENT, true, true, true);
+                tabNode.name = "tab_completion";
+                tabNode.parser = "brigadier:string";
+                tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
+                tabNode.children = new int[0];
+                tabNode.suggestionsType = "minecraft:ask_server";
+
+                nodes.add(tabNode);
+            }
+
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
             literalNode.flags = getFlag(NodeType.LITERAL, true, false, false);
             literalNode.name = simpleCommand;
-            literalNode.children = new int[0];
-            //literalNode.suggestionsType = "minecraft:ask_server";
+            literalNode.children = new int[]{nodes.size() - 1};
 
             rootChildren.add(nodes.size());
             nodes.add(literalNode);
@@ -272,7 +281,7 @@ public class CommandManager {
                 final boolean isLast = i == arguments.length - 1;
 
 
-                List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
+                final List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
 
@@ -501,11 +510,11 @@ public class CommandManager {
         byte result = (byte) type.mask;
 
         if (executable) {
-            result |= 0x4;
+            result |= 0x04;
         }
 
         if (redirect) {
-            result |= 0x8;
+            result |= 0x08;
         }
 
         if (suggestionType) {
