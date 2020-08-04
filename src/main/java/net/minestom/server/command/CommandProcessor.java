@@ -45,7 +45,19 @@ public interface CommandProcessor {
     boolean hasAccess(Player player);
 
     /**
+     * Disabling it will deactivate the {@link #onWrite(String)} callback
+     * Enabling it will result in a degression of performance
+     *
+     * @return true to enable writing tracking (and server auto completion)
+     */
+    default boolean enableWritingTracking() {
+        return false;
+    }
+
+    /**
      * Allow for tab auto completion, this is called everytime the player press a key in the chat
+     * <p>
+     * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default
      *
      * @param text the whole player text
      * @return the array containing all the suggestion for the current arg (split " ")

@@ -21,6 +21,7 @@ import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -211,38 +212,44 @@ public class CommandManager {
 
         }
 
-        final List<String> simpleCommands = new ArrayList<>();
+        // Pair<CommandName,EnabledTracking>
+        final List<Pair<String, Boolean>> commandsPair = new ArrayList<>();
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
+            final boolean enableTracking = commandProcessor.enableWritingTracking();
             // Do not show command if return false
             if (!commandProcessor.hasAccess(player))
                 continue;
 
-            simpleCommands.add(commandProcessor.getCommandName());
+            commandsPair.add(Pair.of(commandProcessor.getCommandName(), enableTracking));
             final String[] aliases = commandProcessor.getAliases();
             if (aliases == null || aliases.length == 0)
                 continue;
             for (String alias : aliases) {
-                simpleCommands.add(alias);
+                commandsPair.add(Pair.of(alias, enableTracking));
             }
         }
 
-        for (String simpleCommand : simpleCommands) {
+        for (Pair<String, Boolean> pair : commandsPair) {
+            final String name = pair.getLeft();
+            final boolean tracking = pair.getRight();
             // Server suggestion (ask_server)
             {
                 DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
-                tabNode.flags = getFlag(NodeType.ARGUMENT, true, true, true);
-                tabNode.name = "tab_completion";
+                tabNode.flags = getFlag(NodeType.ARGUMENT, true, false, tracking);
+                tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
                 tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
                 tabNode.children = new int[0];
-                tabNode.suggestionsType = "minecraft:ask_server";
+                if (tracking) {
+                    tabNode.suggestionsType = "minecraft:ask_server";
+                }
 
                 nodes.add(tabNode);
             }
 
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
             literalNode.flags = getFlag(NodeType.LITERAL, true, false, false);
-            literalNode.name = simpleCommand;
+            literalNode.name = name;
             literalNode.children = new int[]{nodes.size() - 1};
 
             rootChildren.add(nodes.size());

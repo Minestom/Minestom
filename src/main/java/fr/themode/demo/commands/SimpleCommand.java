@@ -76,6 +76,11 @@ public class SimpleCommand implements CommandProcessor {
     }
 
     @Override
+    public boolean enableWritingTracking() {
+        return true;
+    }
+
+    @Override
     public String[] onWrite(String text) {
         return new String[]{"Complete1", "Complete2"};
     }
