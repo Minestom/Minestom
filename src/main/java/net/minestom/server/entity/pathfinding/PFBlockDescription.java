@@ -128,6 +128,6 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isIncinerating() {
-        return block == Block.LAVA || block == Block.FIRE;
+        return block == Block.LAVA || block == Block.FIRE || block == Block.SOUL_FIRE;
     }
 }
