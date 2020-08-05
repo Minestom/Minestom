@@ -3,7 +3,7 @@ package fr.themode.demo;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.advancements.FrameType;
+import net.minestom.server.advancements.*;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
@@ -25,7 +25,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -226,62 +225,21 @@ public class PlayerInit {
 
                 scoreboard.setTitle("test");*/
 
-                // Testing advancements
-                AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-                advancementsPacket.resetAdvancements = true;
-
-                AdvancementsPacket.AdvancementMapping firstMapping = new AdvancementsPacket.AdvancementMapping();
                 {
-                    AdvancementsPacket.Advancement firstAdvancement = new AdvancementsPacket.Advancement();
-                    firstMapping.key = "minestom:advancement";
-                    firstMapping.value = firstAdvancement;
+                    AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
+                    AdvancementRoot root = new AdvancementRoot(ColoredText.of("title"), ColoredText.of(ChatColor.BLUE + "description"),
+                            Material.APPLE, FrameType.TASK, 0, 0, "minecraft:textures/block/red_wool.png");
+                    AdvancementTab tab = advancementManager.createTab("root", root);
+                    Advancement advancement = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
+                            Material.WOODEN_AXE, FrameType.CHALLENGE, 1, 0)
+                            .showToast(true).setHidden(false);
+                    tab.createAdvancement("second", advancement, root);
 
-                    AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
-                    displayData.x = 0.0F;
-                    displayData.y = 0.0F;
-                    displayData.title = ColoredText.of("Hello");
-                    displayData.description = ColoredText.of("Hello");
-                    displayData.icon = new ItemStack(Material.DIRT, (byte) 1);
-                    displayData.frameType = FrameType.TASK;
-                    displayData.flags = 0x1;
-                    displayData.backgroundTexture = "minecraft:textures/block/red_wool.png";
+                    tab.addViewer(player);
 
-                    firstAdvancement.displayData = displayData;
-                    firstAdvancement.criterions = new String[]{};
-                    firstAdvancement.requirements = new AdvancementsPacket.Requirement[]{};
-
+                    advancement.setTitle(ColoredText.of("test ttlechange"));
+                    //player.getPlayerConnection().sendPacket(tab.removePacket());
                 }
-                // This advancement will be to the bottom right of the firstAdvancement
-                // The background of this advancement is apparentely ignored!
-                AdvancementsPacket.AdvancementMapping secondMapping = new AdvancementsPacket.AdvancementMapping();
-                {
-                    AdvancementsPacket.Advancement secondAdvancement = new AdvancementsPacket.Advancement();
-                    secondMapping.key = "minestom:advance";
-                    secondMapping.value = secondAdvancement;
-
-                    secondAdvancement.parentIdentifier = "minestom:advancement";
-
-                    AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
-                    displayData.x = 2.0F;
-                    displayData.y = 2.0F;
-                    displayData.title = ColoredText.of("Hello World");
-                    displayData.description = ColoredText.of("Hello World");
-                    displayData.icon = new ItemStack(Material.DIAMOND, (byte) 1);
-                    displayData.frameType = FrameType.GOAL;
-                    displayData.flags = 0x2;
-
-                    secondAdvancement.displayData = displayData;
-                    secondAdvancement.criterions = new String[]{};
-                    secondAdvancement.requirements = new AdvancementsPacket.Requirement[]{};
-                }
-
-
-                advancementsPacket.identifiersToRemove = new String[]{};
-                advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{firstMapping, secondMapping};
-                advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
-
-
-                player.getPlayerConnection().sendPacket(advancementsPacket);
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {

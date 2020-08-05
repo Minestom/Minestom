@@ -5,6 +5,7 @@ import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import lombok.Getter;
 import lombok.Setter;
+import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
@@ -107,6 +108,7 @@ public class MinecraftServer {
     private static SchedulerManager schedulerManager;
     private static BenchmarkManager benchmarkManager;
     private static DimensionTypeManager dimensionTypeManager;
+    private static AdvancementManager advancementManager;
 
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
@@ -157,6 +159,7 @@ public class MinecraftServer {
         schedulerManager = new SchedulerManager();
         benchmarkManager = new BenchmarkManager();
         dimensionTypeManager = new DimensionTypeManager();
+        advancementManager = new AdvancementManager();
 
         updateManager = new UpdateManager();
 
@@ -275,6 +278,10 @@ public class MinecraftServer {
 
     public static DimensionTypeManager getDimensionTypeManager() {
         return dimensionTypeManager;
+    }
+
+    public static AdvancementManager getAdvancementManager() {
+        return advancementManager;
     }
 
     public static TagManager getTagManager() {

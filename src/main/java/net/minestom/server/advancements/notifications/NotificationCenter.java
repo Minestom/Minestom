@@ -40,7 +40,7 @@ public class NotificationCenter {
      * Create the packet responsive for showing the Toast to players
      *
      * @param notification the notification
-     * @return the packet to show the Toast
+     * @return the packet used to show the Toast
      */
     private static AdvancementsPacket getCreatePacket(Notification notification) {
         // For An advancement to be shown, it must have all of it's criteria achieved (progress 100%)
