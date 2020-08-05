@@ -153,7 +153,40 @@ public class Advancement {
     }
 
     /**
-     * Update this advancement value when a field is modified
+     * Get the packet used to add this advancement to the already existing tab
+     *
+     * @return the packet to add this advancement
+     */
+    protected AdvancementsPacket getUpdatePacket() {
+        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
+        advancementsPacket.resetAdvancements = false;
+
+        AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
+        {
+            AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement();
+            mapping.key = getIdentifier();
+            mapping.value = adv;
+
+            final Advancement parent = getParent();
+            if (parent != null) {
+                final String parentIdentifier = parent.getIdentifier();
+                adv.parentIdentifier = parentIdentifier;
+            }
+
+            adv.displayData = toDisplayData();
+            adv.criterions = new String[]{};
+            adv.requirements = new AdvancementsPacket.Requirement[]{};
+        }
+
+        advancementsPacket.identifiersToRemove = new String[]{};
+        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};
+        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
+
+        return advancementsPacket;
+    }
+
+    /**
+     * Send update to all tab viewers if one of the advancement value changes
      */
     protected void update() {
         if (tab != null) {

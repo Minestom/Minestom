@@ -238,6 +238,13 @@ public class PlayerInit {
                     tab.addViewer(player);
 
                     root.setTitle(ColoredText.of("test ttlechange"));
+
+                    Advancement advancement2 = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
+                            Material.GOLD_BLOCK, FrameType.CHALLENGE, 3, 0)
+                            .showToast(true).setHidden(false);
+                    tab.createAdvancement("second2", advancement2, root);
+
+
                     //player.getPlayerConnection().sendPacket(tab.removePacket());
                 }
             });

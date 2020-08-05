@@ -31,10 +31,27 @@ public class AdvancementTab implements Viewable {
         this.removeBuffer = PacketUtils.writePacket(removePacket);
     }
 
+    /**
+     * Create and add an advancement into this tab
+     *
+     * @param identifier  the unique identifier
+     * @param advancement the advancement to add
+     * @param parent      the parent of this advancement, it cannot be null
+     */
     public void createAdvancement(String identifier, Advancement advancement, Advancement parent) {
+        Check.argCondition(identifier == null, "the advancement identifier cannot be null");
         Check.stateCondition(!advancementMap.containsKey(parent),
                 "You tried to set a parent which doesn't exist or isn't registered");
         cacheAdvancement(identifier, advancement, parent);
+        sendPacketToViewers(advancement.getUpdatePacket());
+
+    }
+
+    /**
+     * Update the packet buffer
+     */
+    protected void updatePacket() {
+        this.createBuffer = PacketUtils.writePacket(createPacket());
     }
 
     /**
@@ -75,6 +92,13 @@ public class AdvancementTab implements Viewable {
         return advancementsPacket;
     }
 
+    /**
+     * Cache an advancement
+     *
+     * @param identifier  the identifier of the advancement
+     * @param advancement the advancement
+     * @param parent      the parent of this advancement
+     */
     private void cacheAdvancement(String identifier, Advancement advancement, Advancement parent) {
         Check.stateCondition(advancement.getTab() != null,
                 "You tried to add an advancement already linked to a tab");
@@ -82,6 +106,8 @@ public class AdvancementTab implements Viewable {
         advancement.setIdentifier(identifier);
         advancement.setParent(parent);
         this.advancementMap.put(advancement, parent);
+
+        updatePacket();
     }
 
     @Override
@@ -94,7 +120,7 @@ public class AdvancementTab implements Viewable {
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
         // Send the tab to the player
-        playerConnection.sendPacket(createPacket());
+        playerConnection.sendPacket(createBuffer, true);
 
         return true;
     }
