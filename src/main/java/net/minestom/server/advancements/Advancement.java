@@ -45,36 +45,91 @@ public class Advancement {
         this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
     }
 
+    /**
+     * Get the advancement tab linked to this advancement
+     *
+     * @return the {@link AdvancementTab} linked to this advancement
+     */
     public AdvancementTab getTab() {
         return tab;
     }
 
-    public void setTab(AdvancementTab tab) {
+    protected void setTab(AdvancementTab tab) {
         this.tab = tab;
     }
 
+    /**
+     * Get the title of the advancement
+     *
+     * @return the advancement title
+     */
     public ColoredText getTitle() {
         return title;
     }
 
+    /**
+     * Change the advancement title
+     *
+     * @param title the new title
+     */
     public void setTitle(ColoredText title) {
         this.title = title;
         update();
     }
 
+    /**
+     * Get the description of the advancement
+     *
+     * @return the description title
+     */
     public ColoredText getDescription() {
         return description;
     }
 
+    /**
+     * Change the description title
+     *
+     * @param description the new description
+     */
     public void setDescription(ColoredText description) {
         this.description = description;
         update();
     }
 
+    /**
+     * Get the advancement icon
+     *
+     * @return the advancement icon
+     */
+    public ItemStack getIcon() {
+        return icon;
+    }
+
+    /**
+     * Change the advancement icon
+     *
+     * @param icon the new advancement icon
+     */
+    public void setIcon(ItemStack icon) {
+        this.icon = icon;
+        update();
+    }
+
+    /**
+     * Get if this advancement has a toast
+     *
+     * @return true if the advancement has a toast
+     */
     public boolean hasToast() {
         return toast;
     }
 
+    /**
+     * Make this argument a toast
+     *
+     * @param toast true to make this advancement a toast
+     * @return this advancement
+     */
     public Advancement showToast(boolean toast) {
         this.toast = toast;
         return this;
@@ -90,28 +145,58 @@ public class Advancement {
         return this;
     }
 
+    /**
+     * Get the advancement frame type
+     *
+     * @return this advancement frame type
+     */
     public FrameType getFrameType() {
         return frameType;
     }
 
+    /**
+     * Change the advancement frame type
+     *
+     * @param frameType the new frame type
+     */
     public void setFrameType(FrameType frameType) {
         this.frameType = frameType;
         update();
     }
 
+    /**
+     * Get the X position of this advancement
+     *
+     * @return this advancement X
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * Change this advancement X coordinate
+     *
+     * @param x the new X coordinate
+     */
     public void setX(float x) {
         this.x = x;
         update();
     }
 
+    /**
+     * Get the Y position of this advancement
+     *
+     * @return this advancement Y
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * Change this advancement Y coordinate
+     *
+     * @param y the new Y coordinate
+     */
     public void setY(float y) {
         this.y = y;
         update();

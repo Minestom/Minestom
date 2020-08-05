@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -8,11 +9,11 @@ public class TitlePacket implements ServerPacket {
 
     public Action action;
 
-    public String titleText;
+    public ColoredText titleText;
 
-    public String subtitleText;
+    public ColoredText subtitleText;
 
-    public String actionBarText;
+    public ColoredText actionBarText;
 
     public int fadeIn;
     public int stay;
@@ -24,13 +25,13 @@ public class TitlePacket implements ServerPacket {
 
         switch (action) {
             case SET_TITLE:
-                writer.writeSizedString(titleText);
+                writer.writeSizedString(titleText.toString());
                 break;
             case SET_SUBTITLE:
-                writer.writeSizedString(subtitleText);
+                writer.writeSizedString(subtitleText.toString());
                 break;
             case SET_ACTION_BAR:
-                writer.writeSizedString(actionBarText);
+                writer.writeSizedString(actionBarText.toString());
                 break;
             case SET_TIMES_AND_DISPLAY:
                 writer.writeInt(fadeIn);

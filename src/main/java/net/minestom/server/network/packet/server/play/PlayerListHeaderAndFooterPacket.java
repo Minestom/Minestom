@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -11,8 +12,8 @@ public class PlayerListHeaderAndFooterPacket implements ServerPacket {
     public boolean emptyHeader;
     public boolean emptyFooter;
 
-    public String header;
-    public String footer;
+    public ColoredText header;
+    public ColoredText footer;
 
 
     @Override
@@ -20,13 +21,13 @@ public class PlayerListHeaderAndFooterPacket implements ServerPacket {
         if (emptyHeader) {
             writer.writeSizedString(EMPTY_COMPONENT);
         } else {
-            writer.writeSizedString(header);
+            writer.writeSizedString(header.toString());
         }
 
         if (emptyFooter) {
             writer.writeSizedString(EMPTY_COMPONENT);
         } else {
-            writer.writeSizedString(footer);
+            writer.writeSizedString(footer.toString());
         }
     }
 

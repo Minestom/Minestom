@@ -716,8 +716,8 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
-        playerListHeaderAndFooterPacket.header = header.toString();
-        playerListHeaderAndFooterPacket.footer = footer.toString();
+        playerListHeaderAndFooterPacket.header = header;
+        playerListHeaderAndFooterPacket.footer = footer;
 
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
@@ -728,13 +728,13 @@ public class Player extends LivingEntity implements CommandSender {
 
         switch (action) {
             case SET_TITLE:
-                titlePacket.titleText = text.toString();
+                titlePacket.titleText = text;
                 break;
             case SET_SUBTITLE:
-                titlePacket.subtitleText = text.toString();
+                titlePacket.subtitleText = text;
                 break;
             case SET_ACTION_BAR:
-                titlePacket.actionBarText = text.toString();
+                titlePacket.actionBarText = text;
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
@@ -1328,7 +1328,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void kick(ColoredText text) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = text.toString();
+        disconnectPacket.message = text;
         playerConnection.sendPacket(disconnectPacket);
         playerConnection.disconnect();
         playerConnection.refreshOnline(false);
