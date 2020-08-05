@@ -22,17 +22,24 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isFenceLike() {
-        return block.name().toLowerCase().contains("FENCE");
+        // Return fences, fencegates and walls.
+        return block.name().toUpperCase().contains("FENCE") || block.name().toUpperCase().endsWith("WALL");
     }
 
     @Override
     public boolean isClimbable() {
-        return block == Block.LADDER;
+        // Return ladders and vines (including weeping and twisting vines)
+        return block == Block.LADDER || block.name().toUpperCase().contains("VINE");
     }
 
     @Override
     public boolean isDoor() {
-        return block.name().toLowerCase().contains("DOOR");
+        // Return wooden doors, trapdoors and wooden fence gates.
+        if (block == Block.IRON_DOOR || block == Block.IRON_TRAPDOOR) {
+            return false;
+        } else {
+            return (block.name().toUpperCase().endsWith("DOOR") || block.name().toUpperCase().endsWith("FENCE_GATE"));
+        }
     }
 
     @Override
@@ -42,7 +49,85 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isFullyBounded() {
-        return block.isSolid();
+        // Return false for anything that does not have a full hitbox but impedes
+        // e.g. Anvils, Lilypads, Ladders, Walls, Fences, EnchantmentTables
+        // Fences & Walls
+        if (isFenceLike()) {
+            return false;
+        }
+        // Ladders and Vines
+        if (isClimbable()) {
+            return false;
+        }
+        // All doors/trapdoors.
+        if (block.name().toUpperCase().endsWith("DOOR")) {
+            return false;
+        }
+        if (block.name().toUpperCase().startsWith("POTTED")) {
+            return false;
+        }
+        // Skulls & Heads
+        if (block.name().toUpperCase().contains("SKULL") || block.name().toUpperCase().contains("HEAD")) {
+            return false;
+        }
+        // Carpets
+        if (block.name().toUpperCase().endsWith("CARPET")) {
+            return false;
+        }
+        // Slabs
+        if (block.name().toUpperCase().contains("SLAB")) {
+            return false;
+        }
+        // Beds
+        if (block.name().toUpperCase().endsWith("BED")) {
+            return false;
+        }
+        // Glass Panes
+        if (block.name().toUpperCase().endsWith("PANE")) {
+            return false;
+        }
+
+        switch (block) {
+            case CHORUS_FLOWER:
+            case CHORUS_PLANT:
+            case BAMBOO:
+            case BAMBOO_SAPLING:
+            case SEA_PICKLE:
+            case TURTLE_EGG:
+            case SNOW:
+            case FLOWER_POT:
+            case LILY_PAD:
+            case ANVIL:
+            case CHIPPED_ANVIL:
+            case DAMAGED_ANVIL:
+            case CAKE:
+            case CACTUS:
+            case BREWING_STAND:
+            case LECTERN:
+            case DAYLIGHT_DETECTOR:
+            case CAMPFIRE:
+            case SOUL_CAMPFIRE:
+            case ENCHANTING_TABLE:
+            case CHEST:
+            case ENDER_CHEST:
+            case GRINDSTONE:
+            case TRAPPED_CHEST:
+            case SOUL_SAND:
+            case SOUL_SOIL:
+            case LANTERN:
+            case COCOA:
+            case CONDUIT:
+            case GRASS_PATH:
+            case FARMLAND:
+            case END_ROD:
+            case STONECUTTER:
+            case BELL: {
+                return false;
+            }
+            default: {
+                return true;
+            }
+        }
     }
 
     @Override
@@ -52,6 +137,6 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isIncinerating() {
-        return block == Block.LAVA || block == Block.FIRE;
+        return block == Block.LAVA || block == Block.FIRE || block == Block.SOUL_FIRE;
     }
 }
