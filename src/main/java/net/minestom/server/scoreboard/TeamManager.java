@@ -1,12 +1,17 @@
 package net.minestom.server.scoreboard;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.UniqueIdUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -35,6 +40,30 @@ public final class TeamManager {
     protected void registerNewTeam(Team team) {
         this.teams.add(team);
         this.broadcastPacket(team.getTeamsCreationPacket());
+    }
+
+    /**
+     * Deletes a {@link Team}
+     *
+     * @param registryName The registry name of team
+     * @return {@code true} if the team was deleted, otherwise {@code false}
+     */
+    public boolean deleteTeam(String registryName) {
+        Team team = this.getTeam(registryName);
+        if (team == null) return false;
+        return this.deleteTeam(team);
+    }
+
+    /**
+     * Deletes a {@link Team}
+     *
+     * @param team The team to be deleted
+     * @return {@code true} if the team was deleted, otherwise {@code false}
+     */
+    public boolean deleteTeam(Team team) {
+        // Sends to all online players a team destroy packet
+        this.broadcastBuffer(team.getTeamsDestroyPacket());
+        return this.teams.remove(team);
     }
 
     /**
@@ -121,6 +150,42 @@ public final class TeamManager {
     }
 
     /**
+     * Gets a {@link List} with all registered {@link Player} in the team
+     * <br>
+     * <b>Note:</b> The list exclude all entities. To get all entities of the team, you can use {@link #getEntities(Team)}
+     *
+     * @param team The team
+     * @return a {@link List} with all registered {@link Player}
+     */
+    public List<String> getPlayers(Team team) {
+        List<String> players = new ArrayList<>();
+        for (String member : team.getMembers()) {
+            boolean match = UniqueIdUtils.isUniqueId(member);
+
+            if (!match) players.add(member);
+        }
+        return players;
+    }
+
+    /**
+     * Gets a {@link List} with all registered {@link LivingEntity} in the team
+     * <br>
+     * <b>Note:</b> The list exclude all players. To get all players of the team, you can use {@link #getPlayers(Team)}
+     *
+     * @param team The team
+     * @return a {@link List} with all registered {@link LivingEntity}
+     */
+    public List<String> getEntities(Team team) {
+        List<String> entities = new ArrayList<>();
+        for (String member : team.getMembers()) {
+            boolean match = UniqueIdUtils.isUniqueId(member);
+
+            if (match) entities.add(member);
+        }
+        return entities;
+    }
+
+    /**
      * Gets a {@link Set} with all registered {@link Team}'s
      *
      * @return a {@link Set} with all registered {@link Team}'s
@@ -136,5 +201,16 @@ public final class TeamManager {
      */
     private void broadcastPacket(ServerPacket packet) {
         PacketWriterUtils.writeAndSend(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    }
+
+    /**
+     * Broadcasts to all online {@link Player}'s a buffer
+     *
+     * @param buffer The buffer to broadcast
+     */
+    private void broadcastBuffer(ByteBuf buffer) {
+        for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            onlinePlayer.getPlayerConnection().sendPacket(buffer, true);
+        }
     }
 }
