@@ -1,9 +1,12 @@
 package net.minestom.server.advancements;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.advancement.AdvancementUtils;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
@@ -12,14 +15,20 @@ public class AdvancementTab implements Viewable {
 
     private Set<Player> viewers = new HashSet<>();
 
-    private Advancement root;
-
     // Advancement -> its parent
     private Map<Advancement, Advancement> advancementMap = new HashMap<>();
 
+    // Packet cache, updated every time the tab changes
+    protected ByteBuf createBuffer;
+    // the packet used to clear the tab (used to remove it and to update an advancement)
+    // will never change (since the root identifier is always the same)
+    protected ByteBuf removeBuffer;
+
     protected AdvancementTab(String rootIdentifier, Advancement root) {
-        this.root = root;
         cacheAdvancement(rootIdentifier, root, null);
+
+        final AdvancementsPacket removePacket = AdvancementUtils.getRemovePacket(new String[]{rootIdentifier});
+        this.removeBuffer = PacketUtils.writePacket(removePacket);
     }
 
     public void createAdvancement(String identifier, Advancement advancement, Advancement parent) {
@@ -33,7 +42,7 @@ public class AdvancementTab implements Viewable {
      *
      * @return the packet adding this advancement tab and all its advancements
      */
-    public AdvancementsPacket createPacket() {
+    protected AdvancementsPacket createPacket() {
         AdvancementsPacket advancementsPacket = new AdvancementsPacket();
         advancementsPacket.resetAdvancements = false;
 
@@ -61,23 +70,6 @@ public class AdvancementTab implements Viewable {
 
         advancementsPacket.identifiersToRemove = new String[]{};
         advancementsPacket.advancementMappings = mappings.toArray(new AdvancementsPacket.AdvancementMapping[0]);
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
-
-        return advancementsPacket;
-    }
-
-    /**
-     * Create a packet which remove the root advancement
-     * <p>
-     * This does in fact remove the whole advancement tab
-     *
-     * @return the packet which remove the root advancement
-     */
-    public AdvancementsPacket removePacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-        advancementsPacket.identifiersToRemove = new String[]{root.getIdentifier()};
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{};
         advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
 
         return advancementsPacket;
@@ -116,7 +108,7 @@ public class AdvancementTab implements Viewable {
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
         // Remove the tab
-        playerConnection.sendPacket(removePacket());
+        playerConnection.sendPacket(removeBuffer, true);
 
         return viewers.remove(player);
     }
@@ -125,4 +117,5 @@ public class AdvancementTab implements Viewable {
     public Set<Player> getViewers() {
         return viewers;
     }
+
 }

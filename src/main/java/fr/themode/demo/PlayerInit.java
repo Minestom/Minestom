@@ -237,7 +237,7 @@ public class PlayerInit {
 
                     tab.addViewer(player);
 
-                    advancement.setTitle(ColoredText.of("test ttlechange"));
+                    root.setTitle(ColoredText.of("test ttlechange"));
                     //player.getPlayerConnection().sendPacket(tab.removePacket());
                 }
             });

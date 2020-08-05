@@ -1,9 +1,12 @@
 package net.minestom.server.advancements;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
+import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.PacketUtils;
 
 public class Advancement {
 
@@ -149,42 +152,20 @@ public class Advancement {
         return displayData;
     }
 
-    protected AdvancementsPacket getUpdatePacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-
-        AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
-        {
-            AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement();
-            mapping.key = getIdentifier();
-            mapping.value = adv;
-
-            final Advancement parent = getParent();
-            if (parent != null) {
-                final String parentIdentifier = parent.getIdentifier();
-                adv.parentIdentifier = parentIdentifier;
-            }
-
-            adv.displayData = toDisplayData();
-            adv.criterions = new String[]{};
-            adv.requirements = new AdvancementsPacket.Requirement[]{};
-        }
-
-        advancementsPacket.identifiersToRemove = new String[]{};
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
-
-        return advancementsPacket;
-    }
-
     /**
      * Update this advancement value when a field is modified
      */
     protected void update() {
         if (tab != null) {
-            // TODO: how to update an advancement without clearing everything
-            //final AdvancementsPacket packet = getUpdatePacket();
-            //tab.sendPacketToViewers(packet);
+            tab.createBuffer = PacketUtils.writePacket(tab.createPacket());
+
+            final ByteBuf createBuffer = tab.createBuffer;
+            final ByteBuf removeBuffer = tab.removeBuffer;
+            tab.getViewers().forEach(player -> {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+                playerConnection.sendPacket(removeBuffer, true);
+                playerConnection.sendPacket(createBuffer, true);
+            });
         }
     }
 

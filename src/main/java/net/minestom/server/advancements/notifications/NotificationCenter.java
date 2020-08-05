@@ -4,6 +4,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.advancement.AdvancementUtils;
 
 import java.sql.Date;
 import java.util.Collection;
@@ -26,7 +27,7 @@ public class NotificationCenter {
 
         playerConnection.sendPacket(getCreatePacket(notification));
 
-        playerConnection.sendPacket(getRemovePacket());
+        playerConnection.sendPacket(AdvancementUtils.getRemovePacket(new String[]{IDENTIFIER}));
     }
 
     public static void send(Notification notification, Collection<Player> players) {
@@ -107,21 +108,6 @@ public class NotificationCenter {
             progressMapping.value = advancementProgress;
         }
         advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{progressMapping};
-
-        return advancementsPacket;
-    }
-
-    /**
-     * Create the packet responsive for removing the advancement identifier
-     *
-     * @return the packet to remove the identifier
-     */
-    private static AdvancementsPacket getRemovePacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-        advancementsPacket.identifiersToRemove = new String[]{IDENTIFIER};
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{};
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
 
         return advancementsPacket;
     }
