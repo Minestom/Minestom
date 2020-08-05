@@ -61,7 +61,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             writer.writeSizedString(recipeId);
 
             switch (recipeType) {
-                case "crafting_shapeless":
+                case "crafting_shapeless": {
                     writer.writeSizedString(group);
                     writer.writeVarInt(ingredients.length);
                     for (Ingredient ingredient : ingredients) {
@@ -69,7 +69,8 @@ public class DeclareRecipesPacket implements ServerPacket {
                     }
                     writer.writeItemStack(result);
                     break;
-                case "crafting_shaped":
+                }
+                case "crafting_shaped": {
                     writer.writeVarInt(width);
                     writer.writeVarInt(height);
                     writer.writeSizedString(group);
@@ -78,13 +79,21 @@ public class DeclareRecipesPacket implements ServerPacket {
                     }
                     writer.writeItemStack(result);
                     break;
-                case "smelting":
+                }
+                case "smelting": {
                     writer.writeSizedString(group);
                     ingredient.write(writer);
                     writer.writeItemStack(result);
                     writer.writeFloat(experience);
                     writer.writeVarInt(cookingTime);
                     break;
+                }
+                case "stonecutting": {
+                    writer.writeSizedString(group);
+                    ingredient.write(writer);
+                    writer.writeItemStack(result);
+                    break;
+                }
             }
         }
 
