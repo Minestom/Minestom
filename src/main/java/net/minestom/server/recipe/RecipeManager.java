@@ -43,7 +43,7 @@ public class RecipeManager {
             DeclareRecipesPacket.Recipe packetRecipe = new DeclareRecipesPacket.Recipe();
 
             switch (recipe.recipeType) {
-                case SHAPELESS:
+                case SHAPELESS: {
                     packetRecipe.recipeType = "crafting_shapeless";
                     packetRecipe.group = recipe.getGroup();
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
@@ -51,7 +51,8 @@ public class RecipeManager {
                     packetRecipe.ingredients = ingredients.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapelessRecipe.getResult();
                     break;
-                case SHAPED:
+                }
+                case SHAPED: {
                     packetRecipe.recipeType = "crafting_shaped";
                     packetRecipe.group = recipe.getGroup();
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
@@ -59,7 +60,8 @@ public class RecipeManager {
                     packetRecipe.ingredients = ingredients2.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapedRecipe.getResult();
                     break;
-                case SMELTING:
+                }
+                case SMELTING: {
                     packetRecipe.recipeType = "smelting";
                     packetRecipe.group = recipe.getGroup();
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
@@ -68,6 +70,15 @@ public class RecipeManager {
                     packetRecipe.experience = smeltingRecipe.getExperience();
                     packetRecipe.cookingTime = smeltingRecipe.getCookingTime();
                     break;
+                }
+                case STONECUTTER: {
+                    packetRecipe.recipeType = "stonecutting";
+                    packetRecipe.group = recipe.getGroup();
+                    StonecutterRecipe stonecuttingRecipe = (StonecutterRecipe) recipe;
+                    packetRecipe.ingredient = stonecuttingRecipe.getIngredient();
+                    packetRecipe.result = stonecuttingRecipe.getResult();
+                    break;
+                }
             }
 
             packetRecipe.recipeId = recipe.recipeId;
