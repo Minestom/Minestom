@@ -43,7 +43,45 @@ public class AdvancementTab implements Viewable {
         Check.stateCondition(!advancementMap.containsKey(parent),
                 "You tried to set a parent which doesn't exist or isn't registered");
         cacheAdvancement(identifier, advancement, parent);
-        sendPacketToViewers(advancement.getUpdatePacket());
+        if (!getViewers().isEmpty()) {
+            sendPacketToViewers(advancement.getUpdatePacket());
+        }
+
+    }
+
+    // FIXME
+    public void complete(String identifier) {
+        AdvancementsPacket.Criteria criteria = new AdvancementsPacket.Criteria();
+        {
+            AdvancementsPacket.CriterionProgress progress = new AdvancementsPacket.CriterionProgress();
+            progress.achieved = true;
+            progress.dateOfAchieving = new Date(System.currentTimeMillis()).getTime();
+            criteria.criterionProgress = progress;
+            criteria.criterionIdentifier = "minestom:some_criteria";
+        }
+
+        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
+        advancementsPacket.resetAdvancements = false;
+
+        // Add the mapping to the main packet
+        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[0];
+
+
+        // We have no identifiers to remove.
+        advancementsPacket.identifiersToRemove = new String[]{};
+
+        // Now we need to set the player's progress for the criteria.
+        AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
+        {
+            AdvancementsPacket.AdvancementProgress advancementProgress = new AdvancementsPacket.AdvancementProgress();
+            advancementProgress.criteria = new AdvancementsPacket.Criteria[]{criteria};
+
+            progressMapping.key = identifier;
+            progressMapping.value = advancementProgress;
+        }
+        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{progressMapping};
+
+        sendPacketToViewers(advancementsPacket);
 
     }
 
