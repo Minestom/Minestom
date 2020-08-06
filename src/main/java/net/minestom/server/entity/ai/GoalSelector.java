@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 
 public abstract class GoalSelector {
 
-    private EntityCreature entityCreature;
+    protected EntityCreature entityCreature;
 
     public GoalSelector(EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
@@ -39,15 +39,6 @@ public abstract class GoalSelector {
      * End this {@link GoalSelector}
      */
     public abstract void end();
-
-    /**
-     * Get the entity linked to this goal selector
-     *
-     * @return the entity
-     */
-    public EntityCreature getEntityCreature() {
-        return entityCreature;
-    }
 
     /**
      * Find a target based on the entity {@link TargetSelector}

@@ -151,6 +151,7 @@ public class PlayerInit {
 
                 ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
+                chickenCreature.setTarget(player);
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);

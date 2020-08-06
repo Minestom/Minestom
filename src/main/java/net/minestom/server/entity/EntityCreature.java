@@ -32,6 +32,7 @@ public abstract class EntityCreature extends LivingEntity {
     private PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
     private PathObject path;
+    private Position pathPosition;
 
     protected List<GoalSelector> goalSelectors = new ArrayList<>();
     protected List<TargetSelector> targetSelectors = new ArrayList<>();
@@ -122,6 +123,7 @@ public abstract class EntityCreature extends LivingEntity {
         } else {
             // TODO not call this every tick (code above with #done() is never called)
             pathFinder.reset();
+            pathPosition = null;
         }
 
         super.update(time);
@@ -400,7 +402,21 @@ public abstract class EntityCreature extends LivingEntity {
 
         position = position.clone();
         this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
-        return path != null;
+
+        final boolean success = path != null;
+
+        this.pathPosition = success ? position : null;
+
+        return success;
+    }
+
+    /**
+     * Get the target pathfinder position
+     *
+     * @return the target pathfinder position, null if there is no one
+     */
+    public Position getPathPosition() {
+        return pathPosition;
     }
 
     /**

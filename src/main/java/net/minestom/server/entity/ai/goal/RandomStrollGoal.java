@@ -38,8 +38,8 @@ public class RandomStrollGoal extends GoalSelector {
         Collections.shuffle(closePositions);
 
         for (Position position : closePositions) {
-            Position target = position.clone().add(getEntityCreature().getPosition());
-            final boolean result = getEntityCreature().setPathTo(target);
+            Position target = position.clone().add(entityCreature.getPosition());
+            final boolean result = entityCreature.setPathTo(target);
             if (result) {
                 break;
             }
