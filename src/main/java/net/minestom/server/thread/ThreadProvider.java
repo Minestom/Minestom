@@ -31,27 +31,29 @@ public abstract class ThreadProvider {
     }
 
     /**
-     * Called to prepare the thread provider, to provide threads for the next server tick
-     */
-    public abstract void start();
-
-    /**
-     * Assign a thread to a chunk, create one if none is defined
+     * Called when a chunk is loaded
      *
-     * @param instance the instance where the chunk is
-     * @param chunk    the chunk which should get an assigned thread
+     * @param instance the instance of the chunk
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
      */
-    public abstract void linkThread(Instance instance, Chunk chunk);
+    public abstract void onChunkLoad(Instance instance, int chunkX, int chunkZ);
 
     /**
-     * Inform the server that all chunks have been assigned to a thread
+     * Called when a chunk is unloaded
+     *
+     * @param instance the instance of the chunk
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
      */
-    public abstract void end();
+    public abstract void onChunkUnload(Instance instance, int chunkX, int chunkZ);
 
     /**
      * Perform a server tick for all chunks based on their linked thread
+     *
+     * @param time the update time in milliseconds
      */
-    public abstract void update();
+    public abstract void update(long time);
 
     /**
      * Get the current size of the thread pool
@@ -177,6 +179,15 @@ public abstract class ThreadProvider {
                     continue;
                 entity.tick(time);
             }
+        }
+    }
+
+    protected static class ChunkCoordinate {
+        public int chunkX, chunkZ;
+
+        public ChunkCoordinate(int chunkX, int chunkZ) {
+            this.chunkX = chunkX;
+            this.chunkZ = chunkZ;
         }
     }
 

@@ -149,9 +149,10 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
-                chickenCreature.setTarget(player);
+                for (int i = 0; i < 100; i++) {
+                    ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                    chickenCreature.setInstance(player.getInstance());
+                }
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);

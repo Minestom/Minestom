@@ -61,6 +61,22 @@ public final class ConnectionManager {
     }
 
     /**
+     * Get the first player which validate {@link UUID#equals(Object)}
+     * <p>
+     * This can cause issue if two or more players have the same UUID
+     *
+     * @param uuid the player UUID
+     * @return the first player who validate the UUID condition
+     */
+    public Player getPlayer(UUID uuid) {
+        for (Player player : getOnlinePlayers()) {
+            if (player.getUuid().equals(uuid))
+                return player;
+        }
+        return null;
+    }
+
+    /**
      * Send a rich message to all online players who validate the condition {@code condition}
      *
      * @param richMessage the rich message to send

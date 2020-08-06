@@ -4,12 +4,11 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.thread.SingleThreadProvider;
+import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
@@ -27,8 +26,7 @@ public final class UpdateManager {
     private ThreadProvider threadProvider;
 
     {
-        threadProvider = new SingleThreadProvider();
-        //threadProvider = new PerInstanceThreadProvider();
+        threadProvider = new PerInstanceThreadProvider();
         //threadProvider = new PerGroupChunkProvider();
     }
 
@@ -49,24 +47,15 @@ public final class UpdateManager {
             long currentTime;
             while (!stopRequested) {
                 currentTime = System.nanoTime();
+                final long time = System.currentTimeMillis();
 
                 // Server tick
-                //long testTime = System.nanoTime();
-                threadProvider.start();
-                for (Instance instance : instanceManager.getInstances()) {
-                    for (Chunk chunk : instance.getChunks()) {
-                        threadProvider.linkThread(instance, chunk);
-                    }
-                }
-                threadProvider.end();
-                threadProvider.update();
-                //System.out.println("time: " + (System.nanoTime() - testTime));
+                threadProvider.update(time);
 
                 // Waiting players update
                 entityManager.updateWaitingPlayers();
 
                 // Keep Alive Handling
-                final long time = System.currentTimeMillis();
                 final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
                 for (Player player : connectionManager.getOnlinePlayers()) {
                     final long lastKeepAlive = time - player.getLastKeepAlive();
@@ -111,6 +100,33 @@ public final class UpdateManager {
         Check.notNull(threadProvider, "The thread provider cannot be null");
         this.threadProvider = threadProvider;
     }
+
+    /**
+     * Signal the thread provider that a chunk has been loaded
+     *
+     * @param instance the instance of the chunk
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     */
+    public void signalChunkLoad(Instance instance, int chunkX, int chunkZ) {
+        if (this.threadProvider == null)
+            return;
+        this.threadProvider.onChunkLoad(instance, chunkX, chunkZ);
+    }
+
+    /**
+     * Signal the thread provider that a chunk has been unloaded
+     *
+     * @param instance the instance of the chunk
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     */
+    public void signalChunkUnload(Instance instance, int chunkX, int chunkZ) {
+        if (this.threadProvider == null)
+            return;
+        this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
+    }
+
 
     public void stop() {
         stopRequested = true;

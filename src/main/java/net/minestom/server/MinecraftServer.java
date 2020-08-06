@@ -288,6 +288,10 @@ public class MinecraftServer {
         return tagManager;
     }
 
+    public static UpdateManager getUpdateManager() {
+        return updateManager;
+    }
+
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
         LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;

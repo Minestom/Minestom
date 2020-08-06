@@ -342,6 +342,8 @@ public class InstanceContainer extends Instance {
         this.chunkEntities.remove(index);
 
         chunk.unload();
+
+        UPDATE_MANAGER.signalChunkUnload(this, chunkX, chunkZ);
     }
 
     @Override
@@ -428,6 +430,7 @@ public class InstanceContainer extends Instance {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
             callChunkLoadEvent(chunkX, chunkZ);
+            UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
             if (callback != null)
                 callback.accept(chunk);
         });
@@ -459,6 +462,7 @@ public class InstanceContainer extends Instance {
                 callback.accept(chunk);
         }
 
+        UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
         callChunkLoadEvent(chunkX, chunkZ);
     }
 

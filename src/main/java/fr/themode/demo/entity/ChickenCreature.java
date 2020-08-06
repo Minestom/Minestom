@@ -1,7 +1,7 @@
 package fr.themode.demo.entity;
 
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.entity.ai.goal.FollowTargetGoal;
+import net.minestom.server.entity.ai.goal.RandomStrollGoal;
 import net.minestom.server.entity.ai.target.PlayerTarget;
 import net.minestom.server.entity.type.EntityChicken;
 import net.minestom.server.utils.Position;
@@ -12,8 +12,8 @@ public class ChickenCreature extends EntityChicken {
         super(defaultPosition);
 
         //goalSelectors.add(new DoNothingGoal(this, 500, 0.1f));
-        //goalSelectors.add(new RandomStrollGoal(this, 2));
-        goalSelectors.add(new FollowTargetGoal(this));
+        goalSelectors.add(new RandomStrollGoal(this, 2));
+        //goalSelectors.add(new FollowTargetGoal(this));
 
 
         targetSelectors.add(new PlayerTarget(this, 15));

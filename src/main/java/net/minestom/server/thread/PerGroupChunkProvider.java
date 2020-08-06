@@ -2,6 +2,7 @@ package net.minestom.server.thread;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,65 +14,65 @@ import java.util.Set;
  * <p>
  * (1 chunks group = 1 thread execution)
  */
-// FIXME: unusable at the moment, too much overhead because groups need to be created every tick
-// Should have a callback for when a chunk is loaded and unloaded, so groups are updated only once
+// TODO
 public class PerGroupChunkProvider extends ThreadProvider {
 
     /**
      * Here are stored all cached chunks waiting for a ChunkGroup
      */
-    private Map<Chunk, Set<Chunk>> cachedChunks = new HashMap<>();
+    private Map<Chunk, Set<ChunkCoordinate>> cachedChunks = new HashMap<>();
 
     /**
      * Used to know to which instance is linked a Set of chunks
      */
-    private Map<Set<Chunk>, Instance> instanceMap = new HashMap<>();
+    private Map<Set<ChunkCoordinate>, Instance> instanceMap = new HashMap<>();
 
     @Override
-    public void start() {
-        this.cachedChunks.clear();
-        this.instanceMap.clear();
-    }
-
-    @Override
-    public void linkThread(Instance instance, Chunk chunk) {
-        startChunkQuery(instance, chunk.getChunkX(), chunk.getChunkZ());
-    }
-
-    @Override
-    public void end() {
+    public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
 
     }
 
     @Override
-    public void update() {
-        // The time of the tick
-        final long time = System.currentTimeMillis();
+    public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
+
+    }
+
+    @Override
+    public void update(long time) {
 
         // Set of already-updated instances
         final Set<Instance> updatedInstance = new HashSet<>();
 
         // Update all the chunks
-        for (Map.Entry<Set<Chunk>, Instance> entry : instanceMap.entrySet()) {
-            Set<Chunk> chunks = entry.getKey();
+        for (Map.Entry<Set<ChunkCoordinate>, Instance> entry : instanceMap.entrySet()) {
+            Set<ChunkCoordinate> chunks = entry.getKey();
             Instance instance = entry.getValue();
 
             final boolean updateInstance = updatedInstance.add(instance);
             pool.execute(() -> {
-                /*if (updateInstance) {
+                if (updateInstance) {
                     updateInstance(instance, time);
                 }
 
-                for (Chunk chunk : chunks) {
+                for (ChunkCoordinate chunkCoordinate : chunks) {
+                    final Chunk chunk = instance.getChunk(chunkCoordinate.chunkX, chunkCoordinate.chunkZ);
+                    if (ChunkUtils.isChunkUnloaded(chunk)) {
+                        continue;
+                    }
 
                     updateChunk(instance, chunk, time);
 
                     updateEntities(instance, chunk, time);
-                }*/
+                }
             });
 
         }
     }
+
+    /*@Override
+    public void linkThread(Instance instance, Chunk chunk) {
+        startChunkQuery(instance, chunk.getChunkX(), chunk.getChunkZ());
+    }*/
 
     /**
      * Check the four chunk neighbors (up/down/left/right)
@@ -81,7 +82,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      */
-    private void startChunkQuery(Instance instance, int chunkX, int chunkZ) {
+    /*private void startChunkQuery(Instance instance, int chunkX, int chunkZ) {
         // Constants used to loop through the neighbors
         final int[] posX = {1, 0, -1};
         final int[] posZ = {1, 0, -1};
@@ -124,6 +125,5 @@ public class PerGroupChunkProvider extends ThreadProvider {
             this.cachedChunks.put(cachedChunk, cache);
         }
         this.instanceMap.put(cache, instance);
-    }
-
+    }*/
 }

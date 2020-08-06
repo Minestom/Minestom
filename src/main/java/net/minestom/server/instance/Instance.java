@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.*;
@@ -48,6 +49,7 @@ import java.util.function.Consumer;
 public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
+    protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
 
     private DimensionType dimensionType;
 
