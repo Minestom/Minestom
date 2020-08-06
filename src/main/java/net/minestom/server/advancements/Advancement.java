@@ -238,14 +238,11 @@ public class Advancement {
     }
 
     /**
-     * Get the packet used to add this advancement to the already existing tab
+     * Convert this advancement to an {@link AdvancementsPacket.AdvancementMapping}
      *
-     * @return the packet to add this advancement
+     * @return the mapping of this advancement
      */
-    protected AdvancementsPacket getUpdatePacket() {
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-
+    protected AdvancementsPacket.AdvancementMapping toMapping() {
         AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
         {
             AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement();
@@ -262,6 +259,20 @@ public class Advancement {
             adv.criterions = new String[]{};
             adv.requirements = new AdvancementsPacket.Requirement[]{};
         }
+
+        return mapping;
+    }
+
+    /**
+     * Get the packet used to add this advancement to the already existing tab
+     *
+     * @return the packet to add this advancement
+     */
+    protected AdvancementsPacket getUpdatePacket() {
+        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
+        advancementsPacket.resetAdvancements = false;
+
+        final AdvancementsPacket.AdvancementMapping mapping = toMapping();
 
         advancementsPacket.identifiersToRemove = new String[]{};
         advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};

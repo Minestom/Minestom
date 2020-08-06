@@ -104,23 +104,7 @@ public class AdvancementTab implements Viewable {
         List<AdvancementsPacket.AdvancementMapping> mappings = new ArrayList<>();
 
         for (Advancement advancement : advancementMap.keySet()) {
-            AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
-            {
-                AdvancementsPacket.Advancement adv = new AdvancementsPacket.Advancement();
-                mapping.key = advancement.getIdentifier();
-                mapping.value = adv;
-
-                final Advancement parent = advancement.getParent();
-                if (parent != null) {
-                    final String parentIdentifier = parent.getIdentifier();
-                    adv.parentIdentifier = parentIdentifier;
-                }
-
-                adv.displayData = advancement.toDisplayData();
-                adv.criterions = new String[]{};
-                adv.requirements = new AdvancementsPacket.Requirement[]{};
-            }
-            mappings.add(mapping);
+            mappings.add(advancement.toMapping());
         }
 
         advancementsPacket.identifiersToRemove = new String[]{};
