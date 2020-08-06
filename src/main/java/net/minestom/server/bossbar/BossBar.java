@@ -134,6 +134,25 @@ public class BossBar implements Viewable {
     }
 
     /**
+     * Get the bossbar flags
+     *
+     * @return the flags
+     */
+    public byte getFlags() {
+        return flags;
+    }
+
+    /**
+     * Set the bossbar flags
+     *
+     * @param flags the bossbar flags
+     * @see <a href="https://wiki.vg/Protocol#Boss_Bar">Boss bar packet</a>
+     */
+    public void setFlags(byte flags) {
+        this.flags = flags;
+    }
+
+    /**
      * Delete the boss bar and remove all of its viewers
      */
     public void delete() {

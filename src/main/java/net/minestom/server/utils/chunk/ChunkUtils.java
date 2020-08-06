@@ -23,10 +23,10 @@ public class ChunkUtils {
      * @return true if the chunk is unloaded, false otherwise
      */
     public static boolean isChunkUnloaded(Instance instance, float x, float z) {
-        int chunkX = getChunkCoordinate((int) x);
-        int chunkZ = getChunkCoordinate((int) z);
+        final int chunkX = getChunkCoordinate((int) x);
+        final int chunkZ = getChunkCoordinate((int) z);
 
-        Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         return isChunkUnloaded(chunk);
     }
 
@@ -53,8 +53,8 @@ public class ChunkUtils {
      * @return an array containing both the chunk X and Z (index 0 = X; index 1 = Z)
      */
     public static int[] getChunkCoord(long index) {
-        int chunkX = (int) (index >> 32);
-        int chunkZ = (int) index;
+        final int chunkX = (int) (index >> 32);
+        final int chunkZ = (int) index;
         return new int[]{chunkX, chunkZ};
     }
 
@@ -74,8 +74,8 @@ public class ChunkUtils {
         int counter = 0;
         for (int x = startLoop; x < endLoop; x++) {
             for (int z = startLoop; z < endLoop; z++) {
-                int chunkX = getChunkCoordinate((int) (position.getX() + Chunk.CHUNK_SIZE_X * x));
-                int chunkZ = getChunkCoordinate((int) (position.getZ() + Chunk.CHUNK_SIZE_Z * z));
+                final int chunkX = getChunkCoordinate((int) (position.getX() + Chunk.CHUNK_SIZE_X * x));
+                final int chunkZ = getChunkCoordinate((int) (position.getZ() + Chunk.CHUNK_SIZE_Z * z));
                 visibleChunks[counter] = getChunkIndex(chunkX, chunkZ);
                 counter++;
             }
@@ -106,7 +106,7 @@ public class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
-        int[] pos = indexToPosition(index, chunkX, chunkZ);
+        final int[] pos = indexToPosition(index, chunkX, chunkZ);
         return new BlockPosition(pos[0], pos[1], pos[2]);
     }
 
@@ -119,7 +119,7 @@ public class ChunkUtils {
      */
     public static int[] indexToPosition(int index, int chunkX, int chunkZ) {
         int z = (byte) (index >> 12 & 0xF);
-        int y = (index >>> 4 & 0xFF);
+        final int y = (index >>> 4 & 0xFF);
         int x = (byte) (index >> 0 & 0xF);
 
         x += 16 * chunkX;

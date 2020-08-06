@@ -1,5 +1,6 @@
 package fr.themode.demo;
 
+import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
@@ -148,9 +149,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                /*ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                 chickenCreature.setInstance(player.getInstance());
-                chickenCreature.setAttribute(Attribute.MOVEMENT_SPEED, 0.4f);*/
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
@@ -230,6 +230,7 @@ public class PlayerInit {
                     AdvancementRoot root = new AdvancementRoot(ColoredText.of("title"), ColoredText.of(ChatColor.BLUE + "description"),
                             Material.APPLE, FrameType.TASK, 0, 0,
                             "minecraft:textures/block/red_wool.png");
+                    root.setAchieved(true);
                     AdvancementTab tab = advancementManager.createTab("root", root);
                     Advancement advancement = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
                             Material.WOODEN_AXE, FrameType.CHALLENGE, 1, 0)
@@ -240,7 +241,8 @@ public class PlayerInit {
 
                     root.setTitle(ColoredText.of("test ttlechange"));
 
-                    Advancement advancement2 = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
+                    Advancement advancement2 = new Advancement(ColoredText.of(ChatColor.BLUE + "Title"),
+                            ColoredText.of("description of the advancement"),
                             Material.GOLD_BLOCK, FrameType.CHALLENGE, 3, 0)
                             .showToast(true).setHidden(false);
                     tab.createAdvancement("second2", advancement2, root);

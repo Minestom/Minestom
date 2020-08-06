@@ -5,6 +5,8 @@ import com.extollit.gaming.ai.path.model.PathObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
@@ -19,11 +21,21 @@ import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
 public abstract class EntityCreature extends LivingEntity {
 
     private PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
     private PathObject path;
+
+    protected List<GoalSelector> goalSelectors = new ArrayList<>();
+    protected List<TargetSelector> targetSelectors = new ArrayList<>();
+    private GoalSelector currentGoalSelector;
+
+    private Entity target;
 
     // Equipments
     private ItemStack mainHandItem;
@@ -51,6 +63,49 @@ public abstract class EntityCreature extends LivingEntity {
 
     @Override
     public void update(long time) {
+
+        {
+            // Supplier used to get the next goal selector which should start
+            // (null if not found)
+            final Supplier<GoalSelector> goalSelectorSupplier = () -> {
+                for (GoalSelector goalSelector : goalSelectors) {
+                    final boolean start = goalSelector.shouldStart();
+                    if (start) {
+                        return goalSelector;
+                    }
+                }
+                return null;
+            };
+
+            // true if the goal selector changed this tick
+            boolean newGoalSelector = false;
+
+            if (currentGoalSelector == null) {
+                // No goal selector, get a new one
+                this.currentGoalSelector = goalSelectorSupplier.get();
+                newGoalSelector = currentGoalSelector != null;
+            } else {
+                final boolean stop = currentGoalSelector.shouldEnd();
+                if (stop) {
+                    // The current goal selector stopped, find a new one
+                    this.currentGoalSelector.end();
+                    this.currentGoalSelector = goalSelectorSupplier.get();
+                    newGoalSelector = currentGoalSelector != null;
+                }
+            }
+
+            // Start the new goal selector
+            if (newGoalSelector) {
+                this.currentGoalSelector.start();
+            }
+
+            // Execute tick for the goal selector
+            if (currentGoalSelector != null) {
+                currentGoalSelector.tick();
+            }
+        }
+
+
         // Path finding
         path = pathFinder.update();
         if (path != null) {
@@ -178,6 +233,42 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         return result;
+    }
+
+    /**
+     * Get the goal selectors of this entity
+     *
+     * @return a modifiable list containing the entity goal selectors
+     */
+    public List<GoalSelector> getGoalSelectors() {
+        return goalSelectors;
+    }
+
+    /**
+     * Get the target selectors of this entity
+     *
+     * @return a modifiable list containing the entity target selectors
+     */
+    public List<TargetSelector> getTargetSelectors() {
+        return targetSelectors;
+    }
+
+    /**
+     * Get the entity target
+     *
+     * @return the entity target
+     */
+    public Entity getTarget() {
+        return target;
+    }
+
+    /**
+     * Change the entity target
+     *
+     * @param target the new entity target
+     */
+    public void setTarget(Entity target) {
+        this.target = target;
     }
 
     @Override

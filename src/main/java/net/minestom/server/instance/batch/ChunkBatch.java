@@ -48,6 +48,7 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockId, short customBlockId, Data data) {
+        // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
         BlockData blockData = new BlockData();
         blockData.x = x;
         blockData.y = y;
