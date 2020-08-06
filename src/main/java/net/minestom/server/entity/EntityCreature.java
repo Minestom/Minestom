@@ -67,6 +67,10 @@ public abstract class EntityCreature extends LivingEntity {
     @Override
     public void update(long time) {
 
+        if (getInstance() == null) {
+            return;
+        }
+
         {
             // Supplier used to get the next goal selector which should start
             // (null if not found)
@@ -209,8 +213,6 @@ public abstract class EntityCreature extends LivingEntity {
     @Override
     public boolean addViewer(Player player) {
         final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
 
         PlayerConnection playerConnection = player.getPlayerConnection();
 

@@ -18,13 +18,13 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
-        Set<ChunkCoordinate> chunkCoordinates = instanceChunkMap.computeIfAbsent(instance, inst -> new HashSet<>());
+        Set<ChunkCoordinate> chunkCoordinates = getChunkCoordinates(instance);
         chunkCoordinates.add(new ChunkCoordinate(chunkX, chunkZ));
     }
 
     @Override
     public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
-        Set<ChunkCoordinate> chunkCoordinates = instanceChunkMap.computeIfAbsent(instance, inst -> new HashSet<>());
+        Set<ChunkCoordinate> chunkCoordinates = getChunkCoordinates(instance);
 
         chunkCoordinates.removeIf(chunkCoordinate -> chunkCoordinate.chunkX == chunkX &&
                 chunkCoordinate.chunkZ == chunkZ);
@@ -53,6 +53,10 @@ public class PerInstanceThreadProvider extends ThreadProvider {
             });
 
         }
+    }
+
+    private Set<ChunkCoordinate> getChunkCoordinates(Instance instance) {
+        return instanceChunkMap.computeIfAbsent(instance, inst -> new HashSet<>());
     }
 
 }

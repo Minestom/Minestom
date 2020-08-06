@@ -6,6 +6,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.thread.MinestomThread;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
@@ -182,12 +183,30 @@ public abstract class ThreadProvider {
         }
     }
 
+    protected ChunkCoordinate toChunkCoordinate(Chunk chunk) {
+        return new ChunkCoordinate(chunk.getChunkX(), chunk.getChunkZ());
+    }
+
     protected static class ChunkCoordinate {
         public int chunkX, chunkZ;
 
         public ChunkCoordinate(int chunkX, int chunkZ) {
             this.chunkX = chunkX;
             this.chunkZ = chunkZ;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChunkCoordinate that = (ChunkCoordinate) o;
+            return chunkX == that.chunkX &&
+                    chunkZ == that.chunkZ;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(chunkX, chunkZ);
         }
     }
 

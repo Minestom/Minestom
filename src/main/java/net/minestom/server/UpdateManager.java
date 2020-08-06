@@ -8,7 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.thread.PerInstanceThreadProvider;
+import net.minestom.server.thread.PerGroupChunkProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
@@ -26,8 +26,8 @@ public final class UpdateManager {
     private ThreadProvider threadProvider;
 
     {
-        threadProvider = new PerInstanceThreadProvider();
-        //threadProvider = new PerGroupChunkProvider();
+        //threadProvider = new PerInstanceThreadProvider();
+        threadProvider = new PerGroupChunkProvider();
     }
 
     /**
@@ -108,7 +108,7 @@ public final class UpdateManager {
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      */
-    public void signalChunkLoad(Instance instance, int chunkX, int chunkZ) {
+    public synchronized void signalChunkLoad(Instance instance, int chunkX, int chunkZ) {
         if (this.threadProvider == null)
             return;
         this.threadProvider.onChunkLoad(instance, chunkX, chunkZ);
@@ -121,7 +121,7 @@ public final class UpdateManager {
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      */
-    public void signalChunkUnload(Instance instance, int chunkX, int chunkZ) {
+    public synchronized void signalChunkUnload(Instance instance, int chunkX, int chunkZ) {
         if (this.threadProvider == null)
             return;
         this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
