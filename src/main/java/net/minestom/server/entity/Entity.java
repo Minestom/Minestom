@@ -413,7 +413,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
                 float drag;
                 if (onGround) {
-                    drag = 0.5f; // ground drag
+                    final BlockPosition blockPosition = position.toBlockPosition();
+                    final CustomBlock customBlock =
+                            instance.getCustomBlock(blockPosition);
+                    if (customBlock != null) {
+                        // Custom drag
+                        drag = customBlock.getDrag(instance, blockPosition);
+                    } else {
+                        // Default ground drag
+                        drag = 0.5f;
+                    }
 
                     // Stop player velocity
                     if (PlayerUtils.isNettyClient(this)) {

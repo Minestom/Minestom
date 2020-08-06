@@ -109,7 +109,7 @@ public abstract class CustomBlock {
      * Can be set to < 0 to be cancelled, in this case vanilla time will be used
      *
      * @param player   the player who is trying to break the block
-     * @param position
+     * @param position the block position
      * @return the time in ms to break it
      */
     public abstract int getBreakDelay(Player player, BlockPosition position);
@@ -193,6 +193,17 @@ public abstract class CustomBlock {
      */
     public void scheduledUpdate(Instance instance, BlockPosition position, Data blockData) {
         update(instance, position, blockData);
+    }
+
+    /**
+     * Get the drag of this block
+     * <p>
+     * It has to be between 0 and 1
+     *
+     * @return the drag of this block
+     */
+    public float getDrag(Instance instance, BlockPosition blockPosition) {
+        return 0.5f;
     }
 
     /**
