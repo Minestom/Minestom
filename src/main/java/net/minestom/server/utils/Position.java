@@ -43,6 +43,19 @@ public class Position {
     }
 
     /**
+     * Add a position to the current position
+     *
+     * @param position the position to add to this
+     * @return the same object position
+     */
+    public Position add(Position position) {
+        this.x += position.x;
+        this.y += position.y;
+        this.z += position.z;
+        return this;
+    }
+
+    /**
      * Remove offsets to the current position
      *
      * @param x the X offset

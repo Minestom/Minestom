@@ -10,7 +10,9 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -376,14 +378,29 @@ public abstract class EntityCreature extends LivingEntity {
      * you need to call this when you want the path to update
      *
      * @param position the position to find the path to, null to reset the pathfinder
+     * @return true if a path has been found
      */
-    public void setPathTo(Position position) {
+    public boolean setPathTo(Position position) {
         this.pathFinder.reset();
         if (position == null) {
-            return;
+            return false;
         }
+
+        // Can't path outside of the world border
+        final WorldBorder worldBorder = instance.getWorldBorder();
+        if (!worldBorder.isInside(position)) {
+            return false;
+        }
+
+        // Can't path in an unloaded chunk
+        final Chunk chunk = instance.getChunkAt(position);
+        if (ChunkUtils.isChunkUnloaded(chunk)) {
+            return false;
+        }
+
         position = position.clone();
         this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
+        return path != null;
     }
 
     /**

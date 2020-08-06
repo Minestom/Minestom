@@ -27,7 +27,7 @@ public class NoiseTestGenerator extends ChunkGenerator {
                     if (random.nextInt(100) > 10) {
                         batch.setCustomBlock(x, y, z, "custom_block");
                     } else {
-                        batch.setBlock(x, y, z, Block.LAVA);
+                        batch.setBlock(x, y, z, Block.GOLD_BLOCK);
                     }
                 }
             }
