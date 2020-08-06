@@ -228,7 +228,8 @@ public class PlayerInit {
                 {
                     AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
                     AdvancementRoot root = new AdvancementRoot(ColoredText.of("title"), ColoredText.of(ChatColor.BLUE + "description"),
-                            Material.APPLE, FrameType.TASK, 0, 0, "minecraft:textures/block/red_wool.png");
+                            Material.APPLE, FrameType.TASK, 0, 0,
+                            "minecraft:textures/block/red_wool.png");
                     AdvancementTab tab = advancementManager.createTab("root", root);
                     Advancement advancement = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
                             Material.WOODEN_AXE, FrameType.CHALLENGE, 1, 0)
@@ -243,7 +244,6 @@ public class PlayerInit {
                             Material.GOLD_BLOCK, FrameType.CHALLENGE, 3, 0)
                             .showToast(true).setHidden(false);
                     tab.createAdvancement("second2", advancement2, root);
-
 
                     //player.getPlayerConnection().sendPacket(tab.removePacket());
                 }

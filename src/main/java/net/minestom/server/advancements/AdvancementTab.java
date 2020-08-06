@@ -11,6 +11,9 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 
+/**
+ * Represents a tab which can be shared between multiple players
+ */
 public class AdvancementTab implements Viewable {
 
     private Set<Player> viewers = new HashSet<>();
@@ -49,42 +52,6 @@ public class AdvancementTab implements Viewable {
 
     }
 
-    // FIXME
-    public void complete(String identifier) {
-        AdvancementsPacket.Criteria criteria = new AdvancementsPacket.Criteria();
-        {
-            AdvancementsPacket.CriterionProgress progress = new AdvancementsPacket.CriterionProgress();
-            progress.achieved = true;
-            progress.dateOfAchieving = new Date(System.currentTimeMillis()).getTime();
-            criteria.criterionProgress = progress;
-            criteria.criterionIdentifier = "minestom:some_criteria";
-        }
-
-        AdvancementsPacket advancementsPacket = new AdvancementsPacket();
-        advancementsPacket.resetAdvancements = false;
-
-        // Add the mapping to the main packet
-        advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[0];
-
-
-        // We have no identifiers to remove.
-        advancementsPacket.identifiersToRemove = new String[]{};
-
-        // Now we need to set the player's progress for the criteria.
-        AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
-        {
-            AdvancementsPacket.AdvancementProgress advancementProgress = new AdvancementsPacket.AdvancementProgress();
-            advancementProgress.criteria = new AdvancementsPacket.Criteria[]{criteria};
-
-            progressMapping.key = identifier;
-            progressMapping.value = advancementProgress;
-        }
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{progressMapping};
-
-        sendPacketToViewers(advancementsPacket);
-
-    }
-
     /**
      * Update the packet buffer
      */
@@ -102,14 +69,16 @@ public class AdvancementTab implements Viewable {
         advancementsPacket.resetAdvancements = false;
 
         List<AdvancementsPacket.AdvancementMapping> mappings = new ArrayList<>();
+        List<AdvancementsPacket.ProgressMapping> progressMappings = new ArrayList<>();
 
         for (Advancement advancement : advancementMap.keySet()) {
             mappings.add(advancement.toMapping());
+            progressMappings.add(advancement.toProgressMapping());
         }
 
         advancementsPacket.identifiersToRemove = new String[]{};
         advancementsPacket.advancementMappings = mappings.toArray(new AdvancementsPacket.AdvancementMapping[0]);
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
+        advancementsPacket.progressMappings = progressMappings.toArray(new AdvancementsPacket.ProgressMapping[0]);
 
         return advancementsPacket;
     }
@@ -127,6 +96,7 @@ public class AdvancementTab implements Viewable {
         advancement.setTab(this);
         advancement.setIdentifier(identifier);
         advancement.setParent(parent);
+        advancement.updateCriteria();
         this.advancementMap.put(advancement, parent);
 
         updatePacket();

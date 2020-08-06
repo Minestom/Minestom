@@ -8,9 +8,16 @@ import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 
+import java.util.Date;
+
+/**
+ * Represent an advancement situated in an {@link AdvancementTab}
+ */
 public class Advancement {
 
     protected AdvancementTab tab;
+
+    private boolean achieved;
 
     private ColoredText title;
     private ColoredText description;
@@ -28,6 +35,9 @@ public class Advancement {
     private String identifier;
     private Advancement parent;
 
+    // Packet
+    private AdvancementsPacket.Criteria criteria;
+
     public Advancement(ColoredText title, ColoredText description,
                        ItemStack icon, FrameType frameType,
                        float x, float y) {
@@ -43,6 +53,27 @@ public class Advancement {
                        Material icon, FrameType frameType,
                        float x, float y) {
         this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
+    }
+
+    /**
+     * Get if the advancement is achieved
+     *
+     * @return true if the advancement is achieved
+     */
+    public boolean isAchieved() {
+        return achieved;
+    }
+
+    /**
+     * Make the advancement achieved
+     *
+     * @param achieved true to make it achieved
+     * @return this advancement
+     */
+    public Advancement setAchieved(boolean achieved) {
+        this.achieved = achieved;
+        update();
+        return this;
     }
 
     /**
@@ -222,6 +253,18 @@ public class Advancement {
         this.parent = parent;
     }
 
+    protected AdvancementsPacket.ProgressMapping toProgressMapping() {
+        AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
+        {
+            AdvancementsPacket.AdvancementProgress advancementProgress = new AdvancementsPacket.AdvancementProgress();
+            advancementProgress.criteria = new AdvancementsPacket.Criteria[]{criteria};
+
+            progressMapping.key = identifier;
+            progressMapping.value = advancementProgress;
+        }
+        return progressMapping;
+    }
+
     protected AdvancementsPacket.DisplayData toDisplayData() {
         AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
         displayData.x = x;
@@ -256,8 +299,14 @@ public class Advancement {
             }
 
             adv.displayData = toDisplayData();
-            adv.criterions = new String[]{};
-            adv.requirements = new AdvancementsPacket.Requirement[]{};
+            adv.criterions = new String[]{criteria.criterionIdentifier};
+
+            AdvancementsPacket.Requirement requirement = new AdvancementsPacket.Requirement();
+            {
+                requirement.requirements = new String[]{criteria.criterionIdentifier};
+            }
+            adv.requirements = new AdvancementsPacket.Requirement[]{requirement};
+
         }
 
         return mapping;
@@ -276,7 +325,7 @@ public class Advancement {
 
         advancementsPacket.identifiersToRemove = new String[]{};
         advancementsPacket.advancementMappings = new AdvancementsPacket.AdvancementMapping[]{mapping};
-        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{};
+        advancementsPacket.progressMappings = new AdvancementsPacket.ProgressMapping[]{toProgressMapping()};
 
         return advancementsPacket;
     }
@@ -285,6 +334,8 @@ public class Advancement {
      * Send update to all tab viewers if one of the advancement value changes
      */
     protected void update() {
+        updateCriteria();
+
         if (tab != null) {
             tab.createBuffer = PacketUtils.writePacket(tab.createPacket());
 
@@ -295,6 +346,19 @@ public class Advancement {
                 playerConnection.sendPacket(removeBuffer, true);
                 playerConnection.sendPacket(createBuffer, true);
             });
+        }
+    }
+
+    protected void updateCriteria() {
+        this.criteria = new AdvancementsPacket.Criteria();
+        {
+            AdvancementsPacket.CriterionProgress progress = new AdvancementsPacket.CriterionProgress();
+            progress.achieved = achieved;
+            if (achieved) {
+                progress.dateOfAchieving = new Date(System.currentTimeMillis()).getTime();
+            }
+            this.criteria.criterionProgress = progress;
+            this.criteria.criterionIdentifier = identifier;
         }
     }
 

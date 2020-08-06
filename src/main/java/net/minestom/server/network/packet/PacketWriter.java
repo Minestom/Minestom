@@ -110,7 +110,7 @@ public class PacketWriter extends OutputStream {
 
     public void writeBufferAndFree(BufferWrapper buffer) {
         ByteBuffer byteBuffer = buffer.getByteBuffer();
-        int size = buffer.getSize();
+        final int size = buffer.getSize();
         byte[] cache = new byte[size];
         byteBuffer.position(0).get(cache, 0, size);
         writeBytes(cache);
@@ -145,7 +145,7 @@ public class PacketWriter extends OutputStream {
 
     public byte[] toByteArray() {
         byte[] bytes = new byte[buffer.readableBytes()];
-        int readerIndex = buffer.readerIndex();
+        final int readerIndex = buffer.readerIndex();
         buffer.getBytes(readerIndex, bytes);
         return bytes;
     }

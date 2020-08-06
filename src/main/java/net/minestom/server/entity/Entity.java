@@ -166,8 +166,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Checks if now is a good time to send a velocity update packet
      *
-     * @param time
-     * @return
+     * @param time the current time in milliseconds
+     * @return true if the velocity update packet should be send
      */
     protected boolean shouldSendVelocityUpdate(long time) {
         return (time - lastVelocityUpdateTime) >= velocityUpdatePeriod;
@@ -191,6 +191,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.velocityUpdatePeriod = velocityUpdatePeriod;
     }
 
+    /**
+     * Teleport the entity only if the chunk at {@code position} is loaded or if
+     * {@link Instance#hasEnabledAutoChunkLoad()} returns true
+     *
+     * @param position the teleport position
+     * @param callback the callback executed, even if auto chunk is not enabled
+     */
     public void teleport(Position position, Runnable callback) {
         Check.notNull(position, "Teleport position cannot be null");
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
@@ -312,7 +319,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Update the entity, called every tick
      *
-     * @param time update time in milliseconds
+     * @param time the update time in milliseconds
      */
     public void tick(long time) {
         if (instance == null)
@@ -669,6 +676,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
+     * Get if the entity currently has a velocity applied
+     *
      * @return true if velocity is not set to 0
      */
     public boolean hasVelocity() {
@@ -680,7 +689,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Change the gravity of the entity
      *
-     * @param gravityDragPerTick
+     * @param gravityDragPerTick the gravity drag per tick
      */
     public void setGravity(float gravityDragPerTick) {
         this.gravityDragPerTick = gravityDragPerTick;
@@ -1181,7 +1190,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      * Send a {@link EntityMetaDataPacket} containing only the specified index
      * The index is wrote using {@link #fillMetadataIndex(PacketWriter, int)}
      *
-     * @param index
+     * @param index the metadata index
      */
     protected void sendMetadataIndex(int index) {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
