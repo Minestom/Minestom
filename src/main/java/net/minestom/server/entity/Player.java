@@ -564,6 +564,7 @@ public class Player extends LivingEntity implements CommandSender {
                 final boolean isLast = counter.get() == length - 1;
                 if (isLast) {
                     // This is the last chunk to be loaded , spawn player
+                    this.viewableEntities.forEach(entity -> entity.removeViewer(this));
                     super.setInstance(instance);
                     PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(instance, firstSpawn);
                     callEvent(PlayerSpawnEvent.class, spawnEvent);
