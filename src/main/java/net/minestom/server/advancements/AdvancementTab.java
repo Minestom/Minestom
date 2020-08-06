@@ -18,6 +18,8 @@ public class AdvancementTab implements Viewable {
 
     private Set<Player> viewers = new HashSet<>();
 
+    private AdvancementRoot root;
+
     // Advancement -> its parent
     private Map<Advancement, Advancement> advancementMap = new HashMap<>();
 
@@ -27,11 +29,22 @@ public class AdvancementTab implements Viewable {
     // will never change (since the root identifier is always the same)
     protected ByteBuf removeBuffer;
 
-    protected AdvancementTab(String rootIdentifier, Advancement root) {
+    protected AdvancementTab(String rootIdentifier, AdvancementRoot root) {
+        this.root = root;
+
         cacheAdvancement(rootIdentifier, root, null);
 
         final AdvancementsPacket removePacket = AdvancementUtils.getRemovePacket(new String[]{rootIdentifier});
         this.removeBuffer = PacketUtils.writePacket(removePacket);
+    }
+
+    /**
+     * Get the root advancement of this tab
+     *
+     * @return the root advancement
+     */
+    public AdvancementRoot getRoot() {
+        return root;
     }
 
     /**

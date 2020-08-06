@@ -34,17 +34,19 @@ public class BossBar implements Viewable {
 
     @Override
     public boolean addViewer(Player player) {
-        boolean result = this.viewers.add(player);
-        player.refreshAddBossbar(this);
-        addToPlayer(player);
+        final boolean result = this.viewers.add(player);
+        if (result) {
+            addToPlayer(player);
+        }
         return result;
     }
 
     @Override
     public boolean removeViewer(Player player) {
-        boolean result = this.viewers.remove(player);
-        player.refreshRemoveBossbar(this);
-        removeToPlayer(player);
+        final boolean result = this.viewers.remove(player);
+        if (result) {
+            removeToPlayer(player);
+        }
         return result;
     }
 
@@ -139,7 +141,6 @@ public class BossBar implements Viewable {
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.REMOVE;
         sendPacketToViewers(bossBarPacket);
-        getViewers().forEach(player -> player.refreshRemoveBossbar(this));
     }
 
     private void addToPlayer(Player player) {

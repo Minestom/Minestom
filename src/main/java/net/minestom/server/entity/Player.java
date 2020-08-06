@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.RichMessage;
@@ -108,7 +107,6 @@ public class Player extends LivingEntity implements CommandSender {
     private byte targetLastStage;
     private int blockBreakTime;
 
-    private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
     private Team team;
     private BelowNameScoreboard belowNameScoreboard;
 
@@ -490,7 +488,6 @@ public class Player extends LivingEntity implements CommandSender {
     public void remove() {
         super.remove();
         this.packets.clear();
-        clearBossBars();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
@@ -1412,13 +1409,6 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * @return an unmodifiable {@link Set} containing all the current player viewable boss bars
-     */
-    public Set<BossBar> getBossBars() {
-        return Collections.unmodifiableSet(bossBars);
-    }
-
-    /**
      * Get the player open inventory
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
@@ -1525,13 +1515,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public Set<Chunk> getViewableChunks() {
         return Collections.unmodifiableSet(viewableChunks);
-    }
-
-    /**
-     * Remove all the boss bars that the player has
-     */
-    public void clearBossBars() {
-        this.bossBars.forEach(bossBar -> bossBar.removeViewer(this));
     }
 
     /**
@@ -1889,26 +1872,6 @@ public class Player extends LivingEntity implements CommandSender {
             removeEntityEffectPacket.effectId = 4;
             getPlayerConnection().sendPacket(removeEntityEffectPacket);
         }
-    }
-
-    /**
-     * Used internally to add Bossbar in the {@link #getBossBars()} set
-     * You probably want to use {@link BossBar#addViewer(Player)}
-     *
-     * @param bossBar the bossbar to add internally
-     */
-    public void refreshAddBossbar(BossBar bossBar) {
-        this.bossBars.add(bossBar);
-    }
-
-    /**
-     * Used internally to remove Bossbar from the {@link #getBossBars()} set
-     * You probably want to use {@link BossBar#removeViewer(Player)}
-     *
-     * @param bossBar the bossbar to remove internally
-     */
-    public void refreshRemoveBossbar(BossBar bossBar) {
-        this.bossBars.remove(bossBar);
     }
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
