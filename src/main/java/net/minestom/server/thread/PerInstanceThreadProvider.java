@@ -18,6 +18,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
+        // Add the loaded chunk to the instance chunks list
         Set<ChunkCoordinate> chunkCoordinates = getChunkCoordinates(instance);
         chunkCoordinates.add(new ChunkCoordinate(chunkX, chunkZ));
     }
@@ -25,7 +26,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     @Override
     public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
         Set<ChunkCoordinate> chunkCoordinates = getChunkCoordinates(instance);
-
+        // Remove the unloaded chunk from the instance list
         chunkCoordinates.removeIf(chunkCoordinate -> chunkCoordinate.chunkX == chunkX &&
                 chunkCoordinate.chunkZ == chunkZ);
 

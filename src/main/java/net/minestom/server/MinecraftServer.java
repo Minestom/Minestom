@@ -192,7 +192,7 @@ public class MinecraftServer {
     /**
      * Change the server brand name, update the name to all connected players
      *
-     * @param brandName
+     * @param brandName the server brand name
      */
     public static void setBrandName(String brandName) {
         Check.notNull(brandName, "The brand name cannot be null");

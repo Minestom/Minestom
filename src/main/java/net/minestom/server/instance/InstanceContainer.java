@@ -142,8 +142,8 @@ public class InstanceContainer extends Instance {
     /**
      * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace
      *
-     * @param blockPosition
-     * @param blockId
+     * @param blockPosition the block position
+     * @param blockId       the block id
      * @return
      */
     private boolean isAlreadyChanged(BlockPosition blockPosition, short blockId) {

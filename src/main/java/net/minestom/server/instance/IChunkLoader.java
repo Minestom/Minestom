@@ -30,7 +30,7 @@ public interface IChunkLoader {
     /**
      * Does this ChunkLoader allow for multi-threaded saving of chunks?
      *
-     * @return
+     * @return true if the chunk loader supports parallel saving
      */
     default boolean supportsParallelSaving() {
         return false;
@@ -39,7 +39,7 @@ public interface IChunkLoader {
     /**
      * Does this ChunkLoader allow for multi-threaded loading of chunks?
      *
-     * @return
+     * @return true if the chunk loader supports parallel loading
      */
     default boolean supportsParallelLoading() {
         return false;

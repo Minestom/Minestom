@@ -26,8 +26,10 @@ public class ArrayUtils {
     }
 
     /**
-     * @param a
-     * @param b
+     * Get the differences between 2 arrays
+     *
+     * @param a the first array
+     * @param b the second array
      * @return an array containing a's indexes that aren't in b array
      */
     public static int[] getDifferencesBetweenArray(long[] a, long[] b) {

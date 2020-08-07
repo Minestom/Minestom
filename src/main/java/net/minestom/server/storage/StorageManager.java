@@ -66,8 +66,8 @@ public class StorageManager {
     /**
      * Used to know if the specified folder already exist or not
      *
-     * @param folderPath
-     * @param storageSystem
+     * @param folderPath    the folder path
+     * @param storageSystem the storage system to use
      * @return true if the folder exists, false otherwise
      */
     public boolean folderExists(String folderPath, StorageSystem storageSystem) {
@@ -77,8 +77,8 @@ public class StorageManager {
     /**
      * Call {@link #folderExists(String, StorageSystem)} with the default StorageSystem
      *
-     * @param folderPath
-     * @return
+     * @param folderPath the folder path
+     * @return true if the folder exists
      */
     public boolean folderExists(String folderPath) {
         return folderExists(folderPath, defaultStorageSystemSupplier.get());
@@ -93,6 +93,11 @@ public class StorageManager {
         return Collections.unmodifiableCollection(folderMap.values());
     }
 
+    /**
+     * Define the default storage system used for {@link StorageFolder}
+     *
+     * @param storageSystemSupplier the supplier called to get the default {@link StorageSystem}
+     */
     public void defineDefaultStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
         if (this.defaultStorageSystemSupplier != null) {
             LOGGER.warn("The default storage-system has been changed. This could lead to issues!");
@@ -100,6 +105,11 @@ public class StorageManager {
         this.defaultStorageSystemSupplier = storageSystemSupplier;
     }
 
+    /**
+     * Get if the default storage system is set
+     *
+     * @return true if a default storage system is set
+     */
     public boolean isDefaultStorageSystemDefined() {
         return defaultStorageSystemSupplier != null;
     }

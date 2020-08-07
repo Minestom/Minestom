@@ -121,13 +121,13 @@ public class CollisionUtils {
     }
 
     /**
-     * Steps once (by a length of 1 block) on the given axis. Returns false if this method encountered a collision
+     * Steps once (by a length of 1 block) on the given axis.
      *
      * @param instance        instance to get blocks from
      * @param axis            the axis to move along
      * @param cornersCopy     the corners of the bounding box to consider (mutable)
      * @param cornerPositions the corners, converted to BlockPosition (mutable)
-     * @return
+     * @return false if this method encountered a collision
      */
     private static boolean stepOnce(Instance instance, Vector axis, float amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
         final float sign = Math.signum(amount);

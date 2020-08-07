@@ -1669,7 +1669,7 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition)}
      *
-     * @param instantBreak
+     * @param instantBreak true to allow instant break
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;

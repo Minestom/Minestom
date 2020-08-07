@@ -33,8 +33,8 @@ public class NBTUtils {
     /**
      * Loads all the items from the 'items' list into the given inventory
      *
-     * @param items
-     * @param destination
+     * @param items       the items to save
+     * @param destination the inventory destination
      */
     public static void loadAllItems(NBTList<NBTCompound> items, Inventory destination) {
         destination.clear();

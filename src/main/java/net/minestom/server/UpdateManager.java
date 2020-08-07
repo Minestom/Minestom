@@ -5,7 +5,6 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.thread.PerGroupChunkProvider;
@@ -19,6 +18,7 @@ public final class UpdateManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
+    private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
 
     private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
@@ -36,12 +36,14 @@ public final class UpdateManager {
     protected UpdateManager() {
     }
 
-    public void start() {
+    /**
+     * Start the server loop in the update thread
+     */
+    protected void start() {
         mainUpdate.execute(() -> {
 
             final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
             final EntityManager entityManager = MinecraftServer.getEntityManager();
-            final InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
             final long tickDistance = MinecraftServer.TICK_MS * 1000000;
             long currentTime;
@@ -49,10 +51,10 @@ public final class UpdateManager {
                 currentTime = System.nanoTime();
                 final long time = System.currentTimeMillis();
 
-                // Server tick
+                // Server tick (instance/chunk/entity)
                 threadProvider.update(time);
 
-                // Waiting players update
+                // Waiting players update (newly connected waiting to get into the server)
                 entityManager.updateWaitingPlayers();
 
                 // Keep Alive Handling
@@ -63,7 +65,7 @@ public final class UpdateManager {
                         player.refreshKeepAlive(time);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
                     } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                        player.kick(ColoredText.of(ChatColor.RED + "Timeout"));
+                        player.kick(TIMEOUT_TEXT);
                     }
                 }
 
@@ -127,7 +129,9 @@ public final class UpdateManager {
         this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
     }
 
-
+    /**
+     * Stop the server loop
+     */
     public void stop() {
         stopRequested = true;
     }

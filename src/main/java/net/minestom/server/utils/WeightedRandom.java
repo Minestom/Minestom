@@ -36,7 +36,7 @@ public class WeightedRandom<E extends WeightedRandomItem> {
      * Gets a random element from this set
      *
      * @param rng Random Number Generator to generate random numbers with
-     * @return
+     * @return a random element from this set
      */
     public E get(Random rng) {
         final double p = rng.nextDouble() * totalWeight;

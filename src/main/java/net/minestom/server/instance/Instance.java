@@ -919,10 +919,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Creates an explosion at the given position with the given strength.
      * The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      *
-     * @param centerX
-     * @param centerY
-     * @param centerZ
-     * @param strength
+     * @param centerX  the center X
+     * @param centerY  the center Y
+     * @param centerZ  the center Z
+     * @param strength the strength of the explosion
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
     public void explode(float centerX, float centerY, float centerZ, float strength) {

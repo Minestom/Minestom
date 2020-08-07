@@ -68,8 +68,8 @@ public class Data {
     /**
      * Get if the data has a key
      *
-     * @param key
-     * @return true if the data contains the key, false otherwise
+     * @param key the key to check
+     * @return true if the data contains the key
      */
     public boolean hasKey(String key) {
         return data.containsKey(key);

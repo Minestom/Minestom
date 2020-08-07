@@ -76,7 +76,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      * WARNING: this does not change the visual block id, see {@link #setBlockId(short)}
      * or {@link #setCustomBlock(short)}
      *
-     * @param customBlockId
+     * @param customBlockId the custom block id
      */
     public void setCustomBlockId(short customBlockId) {
         this.customBlockId = customBlockId;

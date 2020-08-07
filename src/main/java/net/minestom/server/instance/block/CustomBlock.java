@@ -129,7 +129,7 @@ public abstract class CustomBlock {
     /**
      * Defines custom behaviour for entities touching this block.
      *
-     * @param instance
+     * @param instance the instance
      * @param position the position at which the block is
      * @param touching the entity currently touching the block
      */
@@ -220,7 +220,7 @@ public abstract class CustomBlock {
     /**
      * Called when an explosion wants to destroy this block.
      *
-     * @param instance
+     * @param instance           the instance
      * @param lootTableArguments arguments used in the loot table loot generation
      * @return 'true' if the explosion should happen on this block, 'false' to cancel the destruction.
      * Returning true does NOT block the explosion rays, ie it does not change the block explosion resistance
@@ -232,7 +232,7 @@ public abstract class CustomBlock {
     /**
      * Return the loot table associated to this block. Return null to use vanilla behavior
      *
-     * @param tableManager
+     * @param tableManager the loot table manager
      * @return the loot table associated to this block
      */
     public LootTable getLootTable(LootTableManager tableManager) {

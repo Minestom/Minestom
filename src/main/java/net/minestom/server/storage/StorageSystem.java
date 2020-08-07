@@ -1,10 +1,16 @@
 package net.minestom.server.storage;
 
+/**
+ * Represent a way of storing data
+ * It works by using keys and values assigned to each one
+ */
 public interface StorageSystem {
 
     /**
-     * @param folderPath
-     * @return true if the folder exists, false otherwise
+     * Get if the folder exists
+     *
+     * @param folderPath the folder path
+     * @return true if the folder exists
      */
     boolean exists(String folderPath);
 
@@ -17,7 +23,9 @@ public interface StorageSystem {
     void open(String folderPath, StorageOptions storageOptions);
 
     /**
-     * @param key
+     * Get the data associated to a key
+     *
+     * @param key the key to retrieve
      * @return the retrieved data
      */
     byte[] get(String key);
@@ -25,15 +33,15 @@ public interface StorageSystem {
     /**
      * Set the specified data to the defined key
      *
-     * @param key
-     * @param data
+     * @param key  the key of the data
+     * @param data the data
      */
     void set(String key, byte[] data);
 
     /**
      * Delete the specified key from the database
      *
-     * @param key
+     * @param key the key to delete
      */
     void delete(String key);
 

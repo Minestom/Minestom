@@ -234,8 +234,8 @@ public class ItemEntity extends ObjectEntity {
     /**
      * Set the pickup delay of the ItemEntity
      *
-     * @param delay
-     * @param timeUnit
+     * @param delay    the pickup delay
+     * @param timeUnit the unit of the delay
      */
     public void setPickupDelay(long delay, TimeUnit timeUnit) {
         this.pickupDelay = timeUnit.toMilliseconds(delay);

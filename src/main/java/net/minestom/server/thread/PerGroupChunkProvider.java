@@ -25,7 +25,6 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
-
         Map<ChunkCoordinate, Set<ChunkCoordinate>> chunksGroupMap = getChunksGroupMap(instance);
         Map<Set<ChunkCoordinate>, Instance> instanceMap = getInstanceMap(instance);
 
@@ -56,10 +55,13 @@ public class PerGroupChunkProvider extends ThreadProvider {
             return;
         }
 
+        // Represent the merged group of all the neighbours
         Set<ChunkCoordinate> finalGroup = new HashSet<>();
 
+        // Add the newly loaded chunk to the group
         finalGroup.add(new ChunkCoordinate(chunkX, chunkZ));
 
+        // Add all the neighbours groups to the final one
         for (Set<ChunkCoordinate> chunkCoordinates : neighboursGroups) {
             finalGroup.addAll(chunkCoordinates);
         }
@@ -80,11 +82,13 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
         final ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkZ);
         if (chunksGroupMap.containsKey(chunkCoordinate)) {
+            // The unloaded chunk is part of a group, remove it from the group
             Set<ChunkCoordinate> chunkCoordinates = chunksGroupMap.get(chunkCoordinate);
             chunkCoordinates.remove(chunkCoordinate);
             chunksGroupMap.remove(chunkCoordinate);
 
             if (chunkCoordinates.isEmpty()) {
+                // The chunk group is empty, remove it entirely
                 instanceMap.entrySet().removeIf(entry -> entry.getKey().isEmpty());
             }
         }
@@ -92,20 +96,20 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
     @Override
     public void update(long time) {
-        // Set of already-updated instances
+        // Set of already-updated instances this tick
         final Set<Instance> updatedInstance = new HashSet<>();
-
 
         instanceInstanceMap.entrySet().forEach(entry -> {
             final Instance instance = entry.getKey();
             final Map<Set<ChunkCoordinate>, Instance> instanceMap = entry.getValue();
 
-            // Update all the chunks
+            // Update all the chunks + instances
             for (Map.Entry<Set<ChunkCoordinate>, Instance> ent : instanceMap.entrySet()) {
                 final Set<ChunkCoordinate> chunks = ent.getKey();
 
                 final boolean updateInstance = updatedInstance.add(instance);
                 pool.execute(() -> {
+                    // Used to check if the instance has already been updated this tick
                     if (updateInstance) {
                         updateInstance(instance, time);
                     }
@@ -127,6 +131,14 @@ public class PerGroupChunkProvider extends ThreadProvider {
         });
     }
 
+    /**
+     * Get all the neighbours of a chunk and itself, no diagonals
+     *
+     * @param instance the instance of the chunks
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @return the loaded neighbours of the chunk
+     */
     private List<ChunkCoordinate> getNeighbours(Instance instance, int chunkX, int chunkZ) {
         List<ChunkCoordinate> chunks = new ArrayList<>();
         // Constants used to loop through the neighbors
@@ -144,9 +156,8 @@ public class PerGroupChunkProvider extends ThreadProvider {
                 final int targetZ = chunkZ + z;
                 final Chunk chunk = instance.getChunk(targetX, targetZ);
                 if (!ChunkUtils.isChunkUnloaded(chunk)) {
+                    // Chunk is loaded, add it
                     chunks.add(toChunkCoordinate(chunk));
-                } else {
-                    //System.out.println(targetX+" : "+targetZ);
                 }
 
             }

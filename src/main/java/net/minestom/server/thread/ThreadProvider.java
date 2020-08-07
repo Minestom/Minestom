@@ -183,10 +183,20 @@ public abstract class ThreadProvider {
         }
     }
 
+    /**
+     * Convert a {@link Chunk} to a {@link ChunkCoordinate}
+     *
+     * @param chunk the chunk to convert
+     * @return the converted {@link ChunkCoordinate}
+     */
     protected ChunkCoordinate toChunkCoordinate(Chunk chunk) {
         return new ChunkCoordinate(chunk.getChunkX(), chunk.getChunkZ());
     }
 
+    /**
+     * Represent the coordinates of a {@link Chunk}
+     * Used so the chunks objects can be cleared by the garbage collector properly¬
+     */
     protected static class ChunkCoordinate {
         public int chunkX, chunkZ;
 

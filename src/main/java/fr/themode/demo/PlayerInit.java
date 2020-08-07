@@ -4,7 +4,6 @@ import fr.themode.demo.entity.ChickenCreature;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.advancements.*;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
@@ -68,7 +67,6 @@ public class PlayerInit {
                 netherTest.loadChunk(x, z);
                 end.loadChunk(x, z);
             }
-
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
         inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -149,10 +147,8 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                for (int i = 0; i < 100; i++) {
-                    ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                    chickenCreature.setInstance(player.getInstance());
-                }
+                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                chickenCreature.setInstance(player.getInstance());
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
@@ -228,7 +224,7 @@ public class PlayerInit {
                 scoreboard.setTitle("test");*/
 
                 {
-                    AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
+                    /*AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
                     AdvancementRoot root = new AdvancementRoot(ColoredText.of("title"), ColoredText.of(ChatColor.BLUE + "description"),
                             Material.APPLE, FrameType.TASK, 0, 0,
                             "minecraft:textures/block/red_wool.png");
@@ -247,9 +243,7 @@ public class PlayerInit {
                             ColoredText.of("description of the advancement"),
                             Material.GOLD_BLOCK, FrameType.CHALLENGE, 3, 0)
                             .showToast(true).setHidden(false);
-                    tab.createAdvancement("second2", advancement2, root);
-
-                    //player.getPlayerConnection().sendPacket(tab.removePacket());
+                    tab.createAdvancement("second2", advancement2, root);*/
                 }
             });
 

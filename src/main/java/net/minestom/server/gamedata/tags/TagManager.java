@@ -4,13 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minestom.server.network.packet.server.play.TagsPacket;
 import net.minestom.server.registry.ResourceGatherer;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -177,17 +178,19 @@ public class TagManager {
 
     /**
      * Loads a tag with the given name. This method attempts to read from "data/&lt;name.domain&gt;/tags/&lt;tagType&gt;/&lt;name.path&gt;.json" if the given name is not already present in cache
+     *
      * @param name
      * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
      * @return
      * @throws FileNotFoundException if the file does not exist
      */
     public Tag load(NamespaceID name, String tagType) throws FileNotFoundException {
-        return load(name, tagType, () -> new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/"+name.getDomain()+"/tags/"+tagType+"/"+name.getPath()+".json")));
+        return load(name, tagType, () -> new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/tags/" + tagType + "/" + name.getPath() + ".json")));
     }
 
     /**
      * Loads a tag with the given name. This method attempts to read from 'reader' if the given name is not already present in cache
+     *
      * @param name
      * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
      * @param reader
@@ -199,8 +202,9 @@ public class TagManager {
 
     /**
      * Loads a tag with the given name. This method reads from 'reader'. This will override the previous tag
+     *
      * @param name
-     * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
+     * @param tagType        the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
      * @param readerSupplier
      * @return
      */
@@ -213,8 +217,9 @@ public class TagManager {
 
     /**
      * Loads a tag with the given name. This method attempts to read from 'reader' if the given name is not already present in cache
+     *
      * @param name
-     * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
+     * @param tagType        the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
      * @param readerSupplier
      * @return
      */
@@ -240,10 +245,11 @@ public class TagManager {
 
     /**
      * Adds the required tags for the game to function correctly
+     *
      * @param tags the packet to add the tags to
      */
     public void addRequiredTagsToPacket(TagsPacket tags) {
-        for(RequiredTag requiredTag : requiredTags) {
+        for (RequiredTag requiredTag : requiredTags) {
             Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType().name().toLowerCase());
             switch (requiredTag.getType()) {
                 case BLOCKS:
@@ -267,6 +273,7 @@ public class TagManager {
 
     /**
      * Adds a required tag to send to players when they connect
+     *
      * @param type type of tag to send. Required so the client knows its use
      * @param name the name of the tag to load
      */
