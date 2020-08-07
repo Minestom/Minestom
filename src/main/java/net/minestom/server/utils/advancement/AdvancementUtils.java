@@ -2,7 +2,11 @@ package net.minestom.server.utils.advancement;
 
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 
-public class AdvancementUtils {
+public final class AdvancementUtils {
+
+    private AdvancementUtils() {
+
+    }
 
     /**
      * Get an {@link AdvancementsPacket} which remove the specified identifiers
@@ -19,5 +23,4 @@ public class AdvancementUtils {
 
         return advancementsPacket;
     }
-
 }

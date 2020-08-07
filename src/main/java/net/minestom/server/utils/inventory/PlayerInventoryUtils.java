@@ -1,6 +1,6 @@
 package net.minestom.server.utils.inventory;
 
-public class PlayerInventoryUtils {
+public final class PlayerInventoryUtils {
 
     public static final int OFFSET = 9;
 
@@ -15,6 +15,10 @@ public class PlayerInventoryUtils {
     public static final int LEGGINGS_SLOT = 43;
     public static final int BOOTS_SLOT = 44;
     public static final int OFFHAND_SLOT = 45;
+
+    private PlayerInventoryUtils() {
+
+    }
 
     /**
      * Convert a packet slot to an internal one

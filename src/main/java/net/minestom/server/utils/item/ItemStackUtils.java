@@ -2,7 +2,11 @@ package net.minestom.server.utils.item;
 
 import net.minestom.server.item.ItemStack;
 
-public class ItemStackUtils {
+public final class ItemStackUtils {
+
+    private ItemStackUtils() {
+
+    }
 
     /**
      * Ensure that the returned ItemStack won't be null
@@ -24,5 +28,4 @@ public class ItemStackUtils {
     public static boolean isVisible(ItemStack itemStack) {
         return itemStack != null && !itemStack.isAir();
     }
-
 }

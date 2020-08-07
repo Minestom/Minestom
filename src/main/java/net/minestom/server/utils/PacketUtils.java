@@ -5,7 +5,11 @@ import io.netty.buffer.Unpooled;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 
-public class PacketUtils {
+public final class PacketUtils {
+
+    private PacketUtils() {
+
+    }
 
     public static void writePacket(ByteBuf buf, ServerPacket packet) {
         PacketWriter writer = new PacketWriter();

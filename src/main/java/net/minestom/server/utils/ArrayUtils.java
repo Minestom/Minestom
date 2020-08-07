@@ -4,7 +4,11 @@ import it.unimi.dsi.fastutil.ints.IntList;
 
 import java.util.function.Supplier;
 
-public class ArrayUtils {
+public final class ArrayUtils {
+
+    private ArrayUtils() {
+
+    }
 
     public static byte[] concenateByteArrays(byte[]... arrays) {
         int totalLength = 0;

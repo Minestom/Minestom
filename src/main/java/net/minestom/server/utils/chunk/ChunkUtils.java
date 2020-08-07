@@ -6,7 +6,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 
-public class ChunkUtils {
+public final class ChunkUtils {
+
+    private ChunkUtils() {
+
+    }
 
     /**
      * @param chunk the chunk to check
@@ -136,5 +140,4 @@ public class ChunkUtils {
     public static int[] indexToChunkPosition(int index) {
         return indexToPosition(index, 0, 0);
     }
-
 }

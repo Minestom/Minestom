@@ -9,7 +9,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
-public class EntityUtils {
+public final class EntityUtils {
+
+    private EntityUtils() {
+
+    }
 
     public static boolean areVisible(Entity ent1, Entity ent2) {
         if (ent1.getInstance() == null || ent2.getInstance() == null)
