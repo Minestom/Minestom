@@ -323,7 +323,7 @@ public abstract class EntityCreature extends LivingEntity {
      * @param position the position to find the path to, null to reset the pathfinder
      * @return true if a path has been found
      */
-    public boolean setPathTo(Position position) {
+    public synchronized boolean setPathTo(Position position) {
         this.pathFinder.reset();
         if (position == null) {
             return false;
