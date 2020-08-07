@@ -4,7 +4,6 @@ import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.PathObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
@@ -14,7 +13,9 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
+import net.minestom.server.network.packet.server.play.EntityPacket;
+import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -114,20 +115,16 @@ public abstract class EntityCreature extends LivingEntity {
 
 
         // Path finding
-        path = pathFinder.update();
+        path = pathFinder.updatePathFor(pathingEntity);
         if (path != null) {
-            path.update(pathingEntity);
-            if (path.done()) {
-                pathFinder.reset();
-            } else {
-                final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
-                final Position targetPosition = pathingEntity.getTargetPosition();
-                moveTowards(targetPosition, speed);
-            }
+            final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+            final Position targetPosition = pathingEntity.getTargetPosition();
+            moveTowards(targetPosition, speed);
         } else {
-            // TODO not call this every tick (code above with #done() is never called)
-            pathFinder.reset();
-            pathPosition = null;
+            if (pathPosition != null) {
+                this.pathPosition = null;
+                this.pathFinder.reset();
+            }
         }
 
         super.update(time);
@@ -137,64 +134,6 @@ public abstract class EntityCreature extends LivingEntity {
     public void setInstance(Instance instance) {
         super.setInstance(instance);
         this.pathFinder = new HydrazinePathFinder(pathingEntity, instance.getInstanceSpace());
-    }
-
-    /**
-     * @param x          X movement offset
-     * @param y          Y movement offset
-     * @param z          Z movement offset
-     * @param updateView should the entity move its head toward the position?
-     */
-    public void move(float x, float y, float z, boolean updateView) {
-        // TODO: remove ? Entity#tick already performs this behaviour, and syncs it properly
-        final Position position = getPosition();
-        Position newPosition = new Position();
-        // Calculate collisions boxes
-        onGround = CollisionUtils.handlePhysics(this, new Vector(x, y, z), newPosition, new Vector());
-        // Refresh target position
-        final float newX = newPosition.getX();
-        final float newY = newPosition.getY();
-        final float newZ = newPosition.getZ();
-
-        // Creatures cannot move in unloaded chunk
-        if (ChunkUtils.isChunkUnloaded(getInstance(), newX, newZ))
-            return;
-
-        final float lastYaw = position.getYaw();
-        final float radians = (float) Math.atan2(newZ - position.getZ(), newX - position.getX());
-
-        final float yaw = (float) (radians * (180.0 / Math.PI)) - 90;
-        final float pitch = position.getPitch(); // TODO
-
-        final short deltaX = (short) ((newX * 32 - position.getX() * 32) * 128);
-        final short deltaY = (short) ((newY * 32 - position.getY() * 32) * 128);
-        final short deltaZ = (short) ((newZ * 32 - position.getZ() * 32) * 128);
-
-        if (updateView) {
-            EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
-            entityPositionAndRotationPacket.entityId = getEntityId();
-            entityPositionAndRotationPacket.deltaX = deltaX;
-            entityPositionAndRotationPacket.deltaY = deltaY;
-            entityPositionAndRotationPacket.deltaZ = deltaZ;
-            entityPositionAndRotationPacket.yaw = yaw;
-            entityPositionAndRotationPacket.pitch = pitch;
-            entityPositionAndRotationPacket.onGround = isOnGround();
-            sendPacketToViewers(entityPositionAndRotationPacket);
-        } else {
-            EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
-            entityPositionPacket.entityId = getEntityId();
-            entityPositionPacket.deltaX = deltaX;
-            entityPositionPacket.deltaY = deltaY;
-            entityPositionPacket.deltaZ = deltaZ;
-            entityPositionPacket.onGround = isOnGround();
-            sendPacketToViewers(entityPositionPacket);
-        }
-
-        if (lastYaw != yaw) {
-            setView(yaw, pitch);
-        }
-
-        refreshPosition(newX, newY, newZ);
     }
 
     @Override
@@ -403,7 +342,12 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         position = position.clone();
-        this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
+
+        try {
+            this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            this.path = null;
+        }
 
         final boolean success = path != null;
 

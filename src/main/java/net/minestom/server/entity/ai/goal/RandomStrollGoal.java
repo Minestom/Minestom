@@ -7,12 +7,8 @@ import net.minestom.server.utils.Position;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class RandomStrollGoal extends GoalSelector {
-
-    // Random used to get a position from the close blocks list
-    private static final Random RANDOM = new Random();
 
     private static final long DELAY = 2500;
 
@@ -38,7 +34,7 @@ public class RandomStrollGoal extends GoalSelector {
         Collections.shuffle(closePositions);
 
         for (Position position : closePositions) {
-            Position target = position.clone().add(entityCreature.getPosition());
+            final Position target = position.clone().add(entityCreature.getPosition());
             final boolean result = entityCreature.setPathTo(target);
             if (result) {
                 break;

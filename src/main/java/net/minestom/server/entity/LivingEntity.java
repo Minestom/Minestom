@@ -386,7 +386,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Get if the entity is dead or not
      *
-     * @return true if the entity is dead, false otherwise
+     * @return true if the entity is dead
      */
     public boolean isDead() {
         return isDead;
@@ -472,6 +472,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return propertiesPacket;
     }
 
+    /**
+     * Set all the attributes to {@link Attribute#getDefaultValue()}
+     */
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
             setAttribute(attribute, attribute.getDefaultValue());
