@@ -109,7 +109,7 @@ public class Player extends LivingEntity implements CommandSender {
     private int blockBreakTime;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
-    private BelowNameScoreboard belowNameScoreboard;
+    private BelowNameScoreboard belowNameScoreboard = null;
 
     /**
      * Last damage source to hit this player, used to display the death message.
@@ -1370,26 +1370,25 @@ public class Player extends LivingEntity implements CommandSender {
         return heldSlot;
     }
 
+    /**
+     * Change the tag below the name
+     *
+     * @param belowNameScoreboard The new below name tag
+     */
     public void setBelowNameScoreboard(BelowNameScoreboard belowNameScoreboard) {
-        if (this.belowNameScoreboard == belowNameScoreboard)
-            return;
+        if (this.belowNameScoreboard == belowNameScoreboard) return;
 
         if (this.belowNameScoreboard != null) {
             this.belowNameScoreboard.removeViewer(this);
         }
 
         this.belowNameScoreboard = belowNameScoreboard;
-        if (belowNameScoreboard != null) {
-            belowNameScoreboard.addViewer(this);
-            belowNameScoreboard.displayScoreboard(this);
-            getViewers().forEach(player -> belowNameScoreboard.addViewer(player));
-        }
     }
 
     @Override
     public void setTeam(Team team) {
         super.setTeam(team);
-        if(team != null)
+        if (team != null)
             getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
     }
 

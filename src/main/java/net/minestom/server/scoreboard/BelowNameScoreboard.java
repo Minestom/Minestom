@@ -11,68 +11,115 @@ import net.minestom.server.network.player.PlayerConnection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
 
-// TODO fix score and objective refresh
+/**
+ * Represents a scoreboard which rendered a tag below the name
+ */
 public class BelowNameScoreboard implements Viewable {
 
-    private static final AtomicInteger counter = new AtomicInteger();
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final String objectiveName;
 
-    // WARNING: you shouldn't create scoreboards/teams with the same prefixes as those
-    private static final String SCOREBOARD_PREFIX = "bn-";
-    private static final String TEAM_PREFIX = "bnt-";
+    private final ScoreboardObjectivePacket scoreboardObjectivePacket;
+    private final ScoreboardObjectivePacket destructionObjectivePacket;
+    private final DisplayScoreboardPacket displayScoreboardPacket;
 
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    /**
+     * Creates a new below name scoreboard
+     *
+     * @param name  The objective name of the scoreboard
+     * @param value The value of the scoreboard
+     */
+    public BelowNameScoreboard(String name, String value) {
+        this.objectiveName = name;
 
-    private String objectiveName;
+        this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value);
 
-    private ScoreboardObjectivePacket scoreboardObjectivePacket;
-    private DisplayScoreboardPacket displayScoreboardPacket;
+        this.displayScoreboardPacket = new DisplayScoreboardPacket();
+        this.displayScoreboardPacket.position = 2; // Below name
+        this.displayScoreboardPacket.scoreName = this.objectiveName;
 
-    public BelowNameScoreboard() {
-        this.objectiveName = SCOREBOARD_PREFIX + counter.incrementAndGet();
-
-        scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 0;
-        scoreboardObjectivePacket.objectiveValue = ColoredText.of(objectiveName);
-        scoreboardObjectivePacket.type = 0;
-
-        displayScoreboardPacket = new DisplayScoreboardPacket();
-        displayScoreboardPacket.position = 2; // Below name
-        displayScoreboardPacket.scoreName = objectiveName;
+        this.destructionObjectivePacket = this.getDestructionObjectivePacket();
     }
 
-    public void updateScore(Player player, int score) {
-        UpdateScorePacket updateScorePacket = new UpdateScorePacket();
-        updateScorePacket.entityName = player.getUsername();
-        updateScorePacket.action = 0; // Create/update
-        updateScorePacket.objectiveName = objectiveName;
-        updateScorePacket.value = score;
+    /**
+     * Creates a creation objective packet for the tag below name
+     *
+     * @param value The value of the tag
+     * @return the creation objective packet
+     */
+    private ScoreboardObjectivePacket getCreationObjectivePacket(String value) {
+        ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
+        packet.objectiveName = this.objectiveName;
+        packet.mode = 0; // Create/Update
+        packet.objectiveValue = ColoredText.of(value);
+        packet.type = ScoreboardObjectivePacket.Type.INTEGER;
 
-        sendPacketToViewers(updateScorePacket);
+        return packet;
+    }
+
+    /**
+     * Creates the destruction objective packet for the tag below name
+     *
+     * @return the destruction objective packet
+     */
+    private ScoreboardObjectivePacket getDestructionObjectivePacket() {
+        ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
+        packet.objectiveName = this.objectiveName;
+        packet.mode = 1;
+        packet.objectiveValue = ColoredText.of("");
+        packet.type = ScoreboardObjectivePacket.Type.INTEGER;
+
+        return packet;
+    }
+
+    /**
+     * Updates the score of a {@link Player}
+     *
+     * @param player The player
+     * @param score  The new score
+     */
+    public void updateScore(Player player, int score) {
+        UpdateScorePacket packet = new UpdateScorePacket();
+        packet.entityName = player.getUsername();
+        packet.action = 0; //Create/Update
+        packet.objectiveName = this.objectiveName;
+        packet.value = score;
+
+        // Sends to all viewers an update packet
+        sendPacketToViewers(packet);
     }
 
     @Override
     public boolean addViewer(Player player) {
         boolean result = this.viewers.add(player);
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(scoreboardObjectivePacket);
+        PlayerConnection connection = player.getPlayerConnection();
+
+        if (result) {
+            connection.sendPacket(this.scoreboardObjectivePacket);
+            connection.sendPacket(this.displayScoreboardPacket);
+
+            player.setBelowNameScoreboard(this);
+        }
+
         return result;
     }
 
     @Override
     public boolean removeViewer(Player player) {
-        return this.viewers.remove(player);
+        boolean result = this.viewers.remove(player);
+        PlayerConnection connection = player.getPlayerConnection();
+
+        if (result) {
+            connection.sendPacket(this.destructionObjectivePacket);
+            player.setBelowNameScoreboard(null);
+        }
+
+        return result;
     }
 
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
-    }
-
-    public void displayScoreboard(Player player) {
-        PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(displayScoreboardPacket);
     }
 }
