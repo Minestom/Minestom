@@ -1,6 +1,10 @@
 package net.minestom.server.utils.time;
 
-public class CooldownUtils {
+public final class CooldownUtils {
+
+    private CooldownUtils() {
+
+    }
 
     /**
      * Get if something is in cooldown based on the current time
@@ -39,5 +43,4 @@ public class CooldownUtils {
     public static boolean hasCooldown(long lastUpdate, TimeUnit timeUnit, int cooldown) {
         return hasCooldown(System.currentTimeMillis(), lastUpdate, timeUnit, cooldown);
     }
-
 }

@@ -7,7 +7,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class URLUtils {
+public final class URLUtils {
+
+    private URLUtils() {
+
+    }
 
     public static String getText(String url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -36,5 +40,4 @@ public class URLUtils {
 
         return response.toString();
     }
-
 }

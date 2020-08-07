@@ -1,6 +1,10 @@
 package net.minestom.server.utils;
 
-public class MathUtils {
+public final class MathUtils {
+
+    private MathUtils() {
+
+    }
 
     public static int square(int num) {
         return num * num;
@@ -66,5 +70,4 @@ public class MathUtils {
     public static float setBetween(float number, float min, float max) {
         return number > max ? max : number < min ? min : number;
     }
-
 }

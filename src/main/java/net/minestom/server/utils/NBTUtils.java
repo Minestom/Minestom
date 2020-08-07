@@ -26,9 +26,13 @@ import java.util.Map;
 import java.util.UUID;
 
 // for lack of a better name
-public class NBTUtils {
+public final class NBTUtils {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(NBTUtils.class);
+
+    private NBTUtils() {
+
+    }
 
     /**
      * Loads all the items from the 'items' list into the given inventory

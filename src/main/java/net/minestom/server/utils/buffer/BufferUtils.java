@@ -4,9 +4,13 @@ import com.github.pbbl.heap.ByteBufferPool;
 
 import java.nio.ByteBuffer;
 
-public class BufferUtils {
+public final class BufferUtils {
 
-    private static ByteBufferPool pool = new ByteBufferPool();
+    private static final ByteBufferPool pool = new ByteBufferPool();
+
+    private BufferUtils() {
+
+    }
 
     public static BufferWrapper getBuffer(int size) {
         return new BufferWrapper(pool.take(size));
@@ -15,5 +19,4 @@ public class BufferUtils {
     protected static void giveBuffer(ByteBuffer byteBuffer) {
         pool.give(byteBuffer);
     }
-
 }

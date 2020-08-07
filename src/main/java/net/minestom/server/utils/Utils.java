@@ -5,7 +5,11 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.buffer.BufferWrapper;
 
-public class Utils {
+public final class Utils {
+
+    private Utils() {
+
+    }
 
     public static int getVarIntSize(int input) {
         return (input & 0xFFFFFF80) == 0

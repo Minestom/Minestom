@@ -1,6 +1,10 @@
 package net.minestom.server.utils;
 
-public class SerializerUtils {
+public final class SerializerUtils {
+
+    private SerializerUtils() {
+
+    }
 
     public static long positionToLong(int x, int y, int z) {
         return (((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF);

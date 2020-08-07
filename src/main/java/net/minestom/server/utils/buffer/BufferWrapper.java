@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 public class BufferWrapper {
 
-    private ByteBuffer byteBuffer;
+    private final ByteBuffer byteBuffer;
     private int size;
 
     protected BufferWrapper(ByteBuffer byteBuffer) {

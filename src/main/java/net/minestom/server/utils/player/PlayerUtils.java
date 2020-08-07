@@ -5,7 +5,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 
-public class PlayerUtils {
+public final class PlayerUtils {
+
+    private PlayerUtils() {
+
+    }
 
     public static boolean isNettyClient(PlayerConnection playerConnection) {
         return playerConnection instanceof NettyPlayerConnection;
