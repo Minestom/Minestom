@@ -247,6 +247,6 @@ public final class ConnectionManager {
             return;
 
         this.players.remove(player);
-        this.connectionPlayerMap.remove(player);
+        this.connectionPlayerMap.remove(connection);
     }
 }
