@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Represents a scoreboard which rendered a tag below the name
  */
-public class BelowNameScoreboard implements Viewable {
+public class BelowNameTag implements Viewable {
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final String objectiveName;
@@ -30,7 +30,7 @@ public class BelowNameScoreboard implements Viewable {
      * @param name  The objective name of the scoreboard
      * @param value The value of the scoreboard
      */
-    public BelowNameScoreboard(String name, String value) {
+    public BelowNameTag(String name, String value) {
         this.objectiveName = name;
 
         this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value);
@@ -99,7 +99,7 @@ public class BelowNameScoreboard implements Viewable {
             connection.sendPacket(this.scoreboardObjectivePacket);
             connection.sendPacket(this.displayScoreboardPacket);
 
-            player.setBelowNameScoreboard(this);
+            player.setBelowNameTag(this);
         }
 
         return result;
@@ -112,7 +112,7 @@ public class BelowNameScoreboard implements Viewable {
 
         if (result) {
             connection.sendPacket(this.destructionObjectivePacket);
-            player.setBelowNameScoreboard(null);
+            player.setBelowNameTag(null);
         }
 
         return result;

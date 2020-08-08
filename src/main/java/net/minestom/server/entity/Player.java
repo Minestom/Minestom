@@ -34,7 +34,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
-import net.minestom.server.scoreboard.BelowNameScoreboard;
+import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -109,7 +109,7 @@ public class Player extends LivingEntity implements CommandSender {
     private int blockBreakTime;
 
     private Set<BossBar> bossBars = new CopyOnWriteArraySet<>();
-    private BelowNameScoreboard belowNameScoreboard = null;
+    private BelowNameTag belowNameTag = null;
 
     /**
      * Last damage source to hit this player, used to display the death message.
@@ -1373,16 +1373,16 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Change the tag below the name
      *
-     * @param belowNameScoreboard The new below name tag
+     * @param belowNameTag The new below name tag
      */
-    public void setBelowNameScoreboard(BelowNameScoreboard belowNameScoreboard) {
-        if (this.belowNameScoreboard == belowNameScoreboard) return;
+    public void setBelowNameTag(BelowNameTag belowNameTag) {
+        if (this.belowNameTag == belowNameTag) return;
 
-        if (this.belowNameScoreboard != null) {
-            this.belowNameScoreboard.removeViewer(this);
+        if (this.belowNameTag != null) {
+            this.belowNameTag.removeViewer(this);
         }
 
-        this.belowNameScoreboard = belowNameScoreboard;
+        this.belowNameTag = belowNameTag;
     }
 
     @Override
