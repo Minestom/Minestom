@@ -58,7 +58,7 @@ public class ChatParser {
             String colorString = textObject.get("color").getAsString();
             if (colorString.startsWith("#")) {
                 // RGB format
-                builder.append("{" + colorString + "}");
+                builder.append("{").append(colorString).append("}");
             } else {
                 // Color simple name
                 ChatColor color = ChatColor.fromName(colorString);

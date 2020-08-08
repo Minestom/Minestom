@@ -27,7 +27,7 @@ public class AnvilInventory extends Inventory {
      * @param cost the new anvil repair cost
      */
     public void setRepairCost(short cost) {
-        this.repairCost = repairCost;
+        this.repairCost = cost;
         sendProperty(InventoryProperty.ANVIL_REPAIR_COST, cost);
     }
 }

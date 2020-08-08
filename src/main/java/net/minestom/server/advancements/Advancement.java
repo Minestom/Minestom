@@ -294,8 +294,7 @@ public class Advancement {
 
             final Advancement parent = getParent();
             if (parent != null) {
-                final String parentIdentifier = parent.getIdentifier();
-                adv.parentIdentifier = parentIdentifier;
+                adv.parentIdentifier = parent.getIdentifier();
             }
 
             adv.displayData = toDisplayData();
