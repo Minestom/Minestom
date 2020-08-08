@@ -9,7 +9,7 @@ import net.minestom.server.entity.EntityCreature;
  */
 public abstract class TargetSelector {
 
-    private final EntityCreature entityCreature;
+    protected final EntityCreature entityCreature;
 
     public TargetSelector(EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
