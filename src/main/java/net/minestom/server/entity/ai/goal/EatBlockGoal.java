@@ -13,14 +13,14 @@ public class EatBlockGoal extends GoalSelector {
     private static final Random RANDOM = new Random();
     private final Map<Short, Short> eatBelowMap;
     private final Map<Short, Short> eatInMap;
-    private int chancePerTick;
+    private final int chancePerTick;
     private int eatAnimationTick;
 
     /**
      * @param entityCreature Creature that should eat a block.
-     * @param eatInMap Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
+     * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
      * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
-     * @param chancePerTick The chance that the entity eats. Settings this to N would mean there is a 1 in N chance.
+     * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
      */
     public EatBlockGoal(
             @NotNull EntityCreature entityCreature,
@@ -40,8 +40,8 @@ public class EatBlockGoal extends GoalSelector {
             return false;
         }
         Instance instance = entityCreature.getInstance();
-        final short blockIdIn = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1,0));
-        final short blockIdBelow = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0,2,0));
+        final short blockIdIn = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0));
+        final short blockIdBelow = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0, 2, 0));
 
         return eatInMap.containsKey(blockIdIn) || eatBelowMap.containsKey(blockIdBelow);
     }

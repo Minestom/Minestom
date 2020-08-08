@@ -1077,7 +1077,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Change the entity eye height
      *
-     * @param eyeHeight the entity eye eight
+     * @param eyeHeight the entity eye height
      */
     public void setEyeHeight(float eyeHeight) {
         this.eyeHeight = eyeHeight;
