@@ -203,9 +203,7 @@ public class CommandManager {
 
             List<String> names = new ArrayList<>();
             names.add(command.getName());
-            for (String alias : command.getAliases()) {
-                names.add(alias);
-            }
+            names.addAll(Arrays.asList(command.getAliases()));
             for (String name : names) {
                 createCommand(nodes, cmdChildren, name, syntaxes, rootChildren);
             }

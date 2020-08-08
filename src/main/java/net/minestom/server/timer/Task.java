@@ -54,13 +54,11 @@ public class Task implements Runnable {
             try {
                 this.runnable.run();
             } catch (Exception e) {
-                System.err.println(
-                        String.format(
-                                "An exception in %s task %s is occurred! (%s)",
-                                this.shutdown ? "shutdown" : "",
-                                this.id,
-                                e.getMessage()
-                        )
+                System.err.printf(
+                        "An exception in %s task %s is occurred! (%s)%n",
+                        this.shutdown ? "shutdown" : "",
+                        this.id,
+                        e.getMessage()
                 );
                 e.printStackTrace();
             } finally {

@@ -124,7 +124,8 @@ public final class ChunkUtils {
     public static int[] indexToPosition(int index, int chunkX, int chunkZ) {
         int z = (byte) (index >> 12 & 0xF);
         final int y = (index >>> 4 & 0xFF);
-        int x = (byte) (index >> 0 & 0xF);
+        // index >> 0 = index
+        int x = (byte) (index & 0xF);
 
         x += 16 * chunkX;
         z += 16 * chunkZ;
