@@ -1,7 +1,6 @@
 package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
-import net.minestom.server.Viewable;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
@@ -21,11 +20,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}'s
  */
-public class Sidebar implements Viewable {
+public class Sidebar implements Scoreboard {
 
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    // WARNING: you shouldn't create scoreboards/teams with the same prefixes as those
+    /**
+     * <b>WARNING:</b> You shouldn't create scoreboards/teams with the same prefixes as those
+     */
     private static final String SCOREBOARD_PREFIX = "sb-";
     private static final String TEAM_PREFIX = "sbt-";
 
@@ -173,15 +174,8 @@ public class Sidebar implements Viewable {
         final boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 0; // Create scoreboard
-        scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
-        scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER; // Type integer
-
-        DisplayScoreboardPacket displayScoreboardPacket = new DisplayScoreboardPacket();
-        displayScoreboardPacket.position = 1; // Sidebar
-        displayScoreboardPacket.scoreName = objectiveName;
+        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+        DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
 
         playerConnection.sendPacket(scoreboardObjectivePacket); // Creative objective
         playerConnection.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
@@ -197,9 +191,7 @@ public class Sidebar implements Viewable {
     public boolean removeViewer(Player player) {
         boolean result = this.viewers.remove(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 1; // Remove
+        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         playerConnection.sendPacket(scoreboardObjectivePacket);
 
         for (ScoreboardLine line : lines) {
@@ -212,6 +204,11 @@ public class Sidebar implements Viewable {
     @Override
     public Set<Player> getViewers() {
         return viewers;
+    }
+
+    @Override
+    public String getObjectiveName() {
+        return this.objectiveName;
     }
 
     /**
