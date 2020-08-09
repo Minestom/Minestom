@@ -572,7 +572,10 @@ public class ItemStack implements DataContainer {
      * @return the item meta
      */
     private ItemMeta findMeta() {
-        if (material == Material.POTION)
+        if (material == Material.POTION ||
+                material == Material.LINGERING_POTION ||
+                material == Material.SPLASH_POTION ||
+                material == Material.TIPPED_ARROW)
             return new PotionMeta();
 
         if (material == Material.FILLED_MAP)
