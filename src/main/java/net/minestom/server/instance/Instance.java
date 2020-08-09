@@ -539,7 +539,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunkZ the chunk Z
      */
     public void unloadChunk(int chunkX, int chunkZ) {
-        unloadChunk(getChunk(chunkX, chunkZ));
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        Check.notNull(chunk, "The chunk at " + chunkX + ":" + chunkZ + " is already unloaded");
+        unloadChunk(chunk);
     }
 
     /**

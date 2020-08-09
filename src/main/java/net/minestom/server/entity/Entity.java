@@ -531,7 +531,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         Check.notNull(eventCallback, "Event callback cannot be null");
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.add(eventCallback);
-        this.eventCallbacks.put(eventClass, callbacks);
     }
 
     @Override
@@ -540,13 +539,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         Check.notNull(eventCallback, "Event callback cannot be null");
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.remove(eventCallback);
-        this.eventCallbacks.put(eventClass, callbacks);
     }
 
     @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         Check.notNull(eventClass, "Event class cannot be null");
-        return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
+        return eventCallbacks.computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
     }
 
     /**
