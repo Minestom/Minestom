@@ -18,6 +18,8 @@ public class MeleeAttackGoal extends GoalSelector {
     private int delay;
     private TimeUnit timeUnit;
 
+    private boolean stop;
+
     /**
      * @param entityCreature the entity to add the goal to
      * @param delay          the delay between each attacks
@@ -43,7 +45,10 @@ public class MeleeAttackGoal extends GoalSelector {
     @Override
     public void tick(long time) {
         final Entity target = getTarget();
-        if (target != null) {
+
+        this.stop = target == null;
+
+        if (!stop) {
 
             // Attack the target entity
             if (entityCreature.getBoundingBox().intersect(target)) {
@@ -65,7 +70,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
     @Override
     public boolean shouldEnd() {
-        return entityCreature.getTarget() == null;
+        return stop;
     }
 
     @Override
