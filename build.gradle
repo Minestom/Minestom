@@ -73,5 +73,5 @@ dependencies {
     api 'com.github.MadMartian:hydrazine-path-finding:1.2.3'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    api 'com.github.jglrxavpok:Hephaistos:v1.0.4'
+    api 'com.github.jglrxavpok:Hephaistos:v1.0.5'
 }
