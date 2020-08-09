@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SchedulerManager {
 
+    private boolean instanced;
     // A counter for all normal tasks
     private final AtomicInteger counter;
     // A counter for all shutdown tasks
@@ -29,6 +30,11 @@ public class SchedulerManager {
      * Default constructor
      */
     public SchedulerManager() {
+        if (instanced) {
+            throw new IllegalStateException("You cannot instantiate a SchedulerManager," +
+                    " use MinecraftServer.getSchedulerManager()");
+        }
+        this.instanced = true;
         this.counter = new AtomicInteger();
         this.shutdownCounter = new AtomicInteger();
 
