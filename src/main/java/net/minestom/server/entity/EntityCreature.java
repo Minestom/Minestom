@@ -109,7 +109,7 @@ public abstract class EntityCreature extends LivingEntity {
 
             // Execute tick for the goal selector
             if (currentGoalSelector != null) {
-                currentGoalSelector.tick();
+                currentGoalSelector.tick(time);
             }
         }
 

@@ -189,6 +189,16 @@ public class Position {
                 Float.compare(position.pitch, pitch) == 0;
     }
 
+    /**
+     * Check it two positions are similar (x/y/z)
+     *
+     * @param position the position to compare
+     * @return true if the two positions are similar
+     */
+    public boolean isSimilar(Position position) {
+        return position.x == x && position.y == y && position.z == z;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(x, y, z, yaw, pitch);

@@ -67,7 +67,7 @@ public class RandomLookAroundGoal extends GoalSelector {
     }
 
     @Override
-    public void tick() {
+    public void tick(long time) {
         --lookTime;
         entityCreature.setView(entityCreature.getPosition().clone().setDirection(lookDirection));
     }

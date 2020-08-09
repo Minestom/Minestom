@@ -55,7 +55,7 @@ public class EatBlockGoal extends GoalSelector {
     }
 
     @Override
-    public void tick() {
+    public void tick(long time) {
         this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
         if (this.eatAnimationTick != 4) {
             return;

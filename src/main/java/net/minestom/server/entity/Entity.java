@@ -671,7 +671,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         callCancellableEvent(EntityVelocityEvent.class, entityVelocityEvent, () -> {
             this.velocity.copy(entityVelocityEvent.getVelocity());
-            sendPacketToViewers(getVelocityPacket());
+            sendPacketToViewersAndSelf(getVelocityPacket());
         });
     }
 

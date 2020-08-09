@@ -44,7 +44,7 @@ public class RandomStrollGoal extends GoalSelector {
     }
 
     @Override
-    public void tick() {
+    public void tick(long time) {
 
     }
 

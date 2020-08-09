@@ -7,8 +7,6 @@ import net.minestom.server.utils.Position;
 
 public class FollowTargetGoal extends GoalSelector {
 
-    private Position lastPath;
-
     public FollowTargetGoal(EntityCreature entityCreature) {
         super(entityCreature);
     }
@@ -29,15 +27,15 @@ public class FollowTargetGoal extends GoalSelector {
                 return;
             }
 
-            if (lastPath == null || lastPath.equals(targetPosition)) {
+            if (entityCreature.getPathPosition() == null ||
+                    (!entityCreature.getPathPosition().isSimilar(targetPosition))) {
                 entityCreature.setPathTo(targetPosition);
-                lastPath = targetPosition;
             }
         }
     }
 
     @Override
-    public void tick() {
+    public void tick(long time) {
 
     }
 

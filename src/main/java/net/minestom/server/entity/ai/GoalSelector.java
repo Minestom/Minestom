@@ -25,8 +25,10 @@ public abstract class GoalSelector {
 
     /**
      * Called every tick when this {@link GoalSelector} is running
+     *
+     * @param time the time of the update in milliseconds
      */
-    public abstract void tick();
+    public abstract void tick(long time);
 
     /**
      * Whether or not this {@link GoalSelector} should end.

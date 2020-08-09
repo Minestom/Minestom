@@ -48,7 +48,7 @@ public class DoNothingGoal extends GoalSelector {
     }
 
     @Override
-    public void tick() {
+    public void tick(long time) {
 
     }
 }
