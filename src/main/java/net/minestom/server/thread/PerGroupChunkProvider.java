@@ -99,6 +99,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         // Set of already-updated instances this tick
         final Set<Instance> updatedInstance = new HashSet<>();
 
+        getLock().lock();
         instanceInstanceMap.entrySet().forEach(entry -> {
             final Instance instance = entry.getKey();
             final Map<Set<ChunkCoordinate>, Instance> instanceMap = entry.getValue();
@@ -129,6 +130,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
             }
 
         });
+        getLock().unlock();
     }
 
     /**

@@ -34,6 +34,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
     @Override
     public void update(long time) {
+        getLock().lock();
         for (Map.Entry<Instance, Set<ChunkCoordinate>> entry : instanceChunkMap.entrySet()) {
             final Instance instance = entry.getKey();
             final Set<ChunkCoordinate> chunkCoordinates = entry.getValue();
@@ -52,7 +53,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
                 }
             });
-
+            getLock().unlock();
         }
     }
 

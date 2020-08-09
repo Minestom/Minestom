@@ -26,8 +26,12 @@ public class ArgumentLong extends ArgumentNumber<Long> {
     @Override
     public int getConditionResult(Long value) {
         // Check range
-        if (value < this.min || value > this.max)
+        if (hasMin && value < min) {
             return RANGE_ERROR;
+        }
+        if (hasMax && value > max) {
+            return RANGE_ERROR;
+        }
 
         return SUCCESS;
     }

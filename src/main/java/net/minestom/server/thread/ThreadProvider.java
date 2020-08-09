@@ -9,6 +9,7 @@ import net.minestom.server.utils.thread.MinestomThread;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
@@ -25,6 +26,8 @@ public abstract class ThreadProvider {
      * The amount of threads in the thread pool
      */
     private int threadCount;
+
+    private ReentrantLock lock = new ReentrantLock();
 
     {
         // Default thread count in the pool
@@ -73,6 +76,15 @@ public abstract class ThreadProvider {
     public synchronized void setThreadCount(int threadCount) {
         this.threadCount = threadCount;
         refreshPool();
+    }
+
+    /**
+     * Get the lock of this thread provider
+     *
+     * @return the thread provider lock
+     */
+    public ReentrantLock getLock() {
+        return lock;
     }
 
     private void refreshPool() {

@@ -203,7 +203,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         Check.notNull(position, "Teleport position cannot be null");
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
-        Runnable runnable = () -> {
+        final Runnable runnable = () -> {
             refreshPosition(position.getX(), position.getY(), position.getZ());
             refreshView(position.getYaw(), position.getPitch());
             sendSynchronization();

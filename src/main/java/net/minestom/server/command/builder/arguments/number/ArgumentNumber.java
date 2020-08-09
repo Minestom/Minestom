@@ -26,6 +26,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     public ArgumentNumber<T> max(T value) {
         this.max = value;
         this.hasMax = true;
+
         return this;
     }
 
@@ -37,18 +38,38 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
         return this;
     }
 
+    /**
+     * Get if the argument has a minimum
+     *
+     * @return true if the argument has a minimum
+     */
     public boolean hasMin() {
         return hasMin;
     }
 
+    /**
+     * Get the minimum value for this argument
+     *
+     * @return the minimum of this argument
+     */
     public T getMin() {
         return min;
     }
 
+    /**
+     * Get if the argument has a maximum
+     *
+     * @return true if the argument has a maximum
+     */
     public boolean hasMax() {
         return hasMax;
     }
 
+    /**
+     * Get the maximum value for this argument
+     *
+     * @return the maximum of this argument
+     */
     public T getMax() {
         return max;
     }
