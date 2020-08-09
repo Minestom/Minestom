@@ -7,15 +7,16 @@ import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Represent a bossbar which can be showed to any player {@link #addViewer(Player)}
  */
 public class BossBar implements Viewable {
+
+    private static final int MAX_BOSSBAR = 7;
+    private static Map<Player, Set<BossBar>> playerBossBarMap = new HashMap<>();
 
     private UUID uuid = UUID.randomUUID();
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -32,12 +33,27 @@ public class BossBar implements Viewable {
         this.division = division;
     }
 
+    /**
+     * Get all the visible boss bars of a player
+     *
+     * @param player the player to check the boss bars
+     * @return all the visible boss bars of the player, null if not any
+     */
+    public static Set<BossBar> getBossBars(Player player) {
+        return playerBossBarMap.getOrDefault(player, null);
+    }
+
     @Override
     public boolean addViewer(Player player) {
+        if (isViewer(player)) {
+            return false;
+        }
         final boolean result = this.viewers.add(player);
         if (result) {
             addToPlayer(player);
         }
+        // Add to the map
+        addPlayer(player);
         return result;
     }
 
@@ -47,6 +63,8 @@ public class BossBar implements Viewable {
         if (result) {
             removeToPlayer(player);
         }
+        // Remove from the map
+        removePlayer(player);
         return result;
     }
 
@@ -160,6 +178,22 @@ public class BossBar implements Viewable {
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.REMOVE;
         sendPacketToViewers(bossBarPacket);
+    }
+
+    private void addPlayer(Player player) {
+        Set<BossBar> bossBars = playerBossBarMap.computeIfAbsent(player, p -> new HashSet<>());
+        bossBars.add(this);
+    }
+
+    private void removePlayer(Player player) {
+        if (!playerBossBarMap.containsKey(player)) {
+            return;
+        }
+        Set<BossBar> bossBars = playerBossBarMap.get(player);
+        bossBars.remove(this);
+        if (bossBars.isEmpty()) {
+            playerBossBarMap.remove(player);
+        }
     }
 
     private void addToPlayer(Player player) {
