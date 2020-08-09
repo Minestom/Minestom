@@ -16,6 +16,8 @@ import java.util.*;
  */
 public class AdvancementTab implements Viewable {
 
+    private static Map<Player, Set<AdvancementTab>> playerTabMap = new HashMap<>();
+
     private Set<Player> viewers = new HashSet<>();
 
     private AdvancementRoot root;
@@ -36,6 +38,16 @@ public class AdvancementTab implements Viewable {
 
         final AdvancementsPacket removePacket = AdvancementUtils.getRemovePacket(new String[]{rootIdentifier});
         this.removeBuffer = PacketUtils.writePacket(removePacket);
+    }
+
+    /**
+     * Get all the tabs of a viewer
+     *
+     * @param player the player to get the tabs from
+     * @return all the advancement tabs that the player sees
+     */
+    public static Set<AdvancementTab> getTabs(Player player) {
+        return playerTabMap.getOrDefault(player, null);
     }
 
     /**
@@ -116,7 +128,7 @@ public class AdvancementTab implements Viewable {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public synchronized boolean addViewer(Player player) {
         final boolean result = viewers.add(player);
         if (!result) {
             return false;
@@ -127,11 +139,13 @@ public class AdvancementTab implements Viewable {
         // Send the tab to the player
         playerConnection.sendPacket(createBuffer, true);
 
+        addPlayer(player);
+
         return true;
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public synchronized boolean removeViewer(Player player) {
         if (!isViewer(player)) {
             return false;
         }
@@ -141,12 +155,40 @@ public class AdvancementTab implements Viewable {
         // Remove the tab
         playerConnection.sendPacket(removeBuffer, true);
 
+        removePlayer(player);
+
         return viewers.remove(player);
     }
 
     @Override
     public Set<Player> getViewers() {
         return viewers;
+    }
+
+    /**
+     * Add the tab to the player set
+     *
+     * @param player the player
+     */
+    private void addPlayer(Player player) {
+        Set<AdvancementTab> tabs = playerTabMap.computeIfAbsent(player, p -> new HashSet<>());
+        tabs.add(this);
+    }
+
+    /**
+     * Remove the tab from the player set
+     *
+     * @param player the player
+     */
+    private void removePlayer(Player player) {
+        if (!playerTabMap.containsKey(player)) {
+            return;
+        }
+        Set<AdvancementTab> tabs = playerTabMap.get(player);
+        tabs.remove(this);
+        if (tabs.isEmpty()) {
+            playerTabMap.remove(player);
+        }
     }
 
 }

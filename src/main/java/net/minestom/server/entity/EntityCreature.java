@@ -76,6 +76,7 @@ public abstract class EntityCreature extends LivingEntity {
             return;
         }
 
+        // Goal selectors
         {
             // Supplier used to get the next goal selector which should start
             // (null if not found)
@@ -111,7 +112,7 @@ public abstract class EntityCreature extends LivingEntity {
                 this.currentGoalSelector.start();
             }
 
-            // Execute tick for the goal selector
+            // Execute tick for the current goal selector
             if (currentGoalSelector != null) {
                 currentGoalSelector.tick(time);
             }
@@ -120,7 +121,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         {
-            pathLock.lock();
+            this.pathLock.lock();
             path = pathFinder.updatePathFor(pathingEntity);
             if (path != null) {
                 final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
@@ -132,7 +133,7 @@ public abstract class EntityCreature extends LivingEntity {
                     this.pathFinder.reset();
                 }
             }
-            pathLock.unlock();
+            this.pathLock.unlock();
         }
 
         super.update(time);
@@ -337,7 +338,7 @@ public abstract class EntityCreature extends LivingEntity {
             return false;
         }
 
-        pathLock.lock();
+        this.pathLock.lock();
         this.pathFinder.reset();
         if (position == null) {
             return false;
@@ -362,7 +363,7 @@ public abstract class EntityCreature extends LivingEntity {
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             this.path = null;
         }
-        pathLock.unlock();
+        this.pathLock.unlock();
 
         final boolean success = path != null;
 

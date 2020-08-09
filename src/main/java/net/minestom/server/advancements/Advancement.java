@@ -6,7 +6,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.PacketUtils;
 
 import java.util.Date;
 
@@ -336,7 +335,8 @@ public class Advancement {
         updateCriteria();
 
         if (tab != null) {
-            tab.createBuffer = PacketUtils.writePacket(tab.createPacket());
+            // Update the tab cached packet
+            tab.updatePacket();
 
             final ByteBuf createBuffer = tab.createBuffer;
             final ByteBuf removeBuffer = tab.removeBuffer;
