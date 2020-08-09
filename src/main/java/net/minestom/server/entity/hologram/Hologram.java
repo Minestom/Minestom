@@ -3,7 +3,7 @@ package net.minestom.server.entity.hologram;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.type.EntityArmorStand;
+import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;

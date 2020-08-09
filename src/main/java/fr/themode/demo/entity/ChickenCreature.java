@@ -5,7 +5,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.goal.MeleeAttackGoal;
 import net.minestom.server.entity.ai.target.ClosestEntityTarget;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.EntityChicken;
+import net.minestom.server.entity.type.animal.EntityChicken;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
