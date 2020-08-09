@@ -78,23 +78,23 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, Data data) {
-        setBlock(x, y, z, blockId, null, data);
+    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+        setBlock(x, y, z, blockStateId, null, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        setBlock(x, y, z, customBlock.getBlockId(), customBlock, data);
+        setBlock(x, y, z, customBlock.getBlockStateId(), customBlock, data);
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
+    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        setBlock(x, y, z, blockId, customBlock, data);
+        setBlock(x, y, z, blockStateId, customBlock, data);
     }
 
-    private synchronized void setBlock(int x, int y, int z, short blockId, CustomBlock customBlock, Data data) {
+    private synchronized void setBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
         final Chunk chunk = getChunkAt(x, z);
         synchronized (chunk) {
 
@@ -102,32 +102,32 @@ public class InstanceContainer extends Instance {
 
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
-            if (isAlreadyChanged(blockPosition, blockId)) { // do NOT change the block again.
+            if (isAlreadyChanged(blockPosition, blockStateId)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
                 return;
             }
-            setAlreadyChanged(blockPosition, blockId);
+            setAlreadyChanged(blockPosition, blockStateId);
             final int index = ChunkUtils.getBlockIndex(x, y, z);
 
             // Call the destroy listener if previous block was a custom block
             callBlockDestroy(chunk, index, blockPosition);
             // Change id based on neighbors
-            blockId = executeBlockPlacementRule(blockId, blockPosition);
+            blockStateId = executeBlockPlacementRule(blockStateId, blockPosition);
 
             // Set the block
             if (isCustomBlock) {
                 data = customBlock.createData(this, blockPosition, data);
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlock, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlock, data);
             } else {
-                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
+                chunk.UNSAFE_setBlock(x, y, z, blockStateId, data);
             }
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
 
             // Refresh player chunk block
-            sendBlockChange(chunk, blockPosition, blockId);
+            sendBlockChange(chunk, blockPosition, blockStateId);
 
             // Call the place listener for custom block
             if (isCustomBlock)
@@ -135,32 +135,32 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void setAlreadyChanged(BlockPosition blockPosition, short blockId) {
-        currentlyChangingBlocks.put(blockPosition, Block.fromId(blockId));
+    private void setAlreadyChanged(BlockPosition blockPosition, short blockStateId) {
+        currentlyChangingBlocks.put(blockPosition, Block.fromStateId(blockStateId));
     }
 
     /**
      * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace
      *
      * @param blockPosition the block position
-     * @param blockId       the block id
+     * @param blockStateId  the block state id
      * @return
      */
-    private boolean isAlreadyChanged(BlockPosition blockPosition, short blockId) {
+    private boolean isAlreadyChanged(BlockPosition blockPosition, short blockStateId) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
-        return changedBlock.getBlockId() == blockId;
+        return changedBlock.getBlockId() == blockStateId;
     }
 
     @Override
-    public void refreshBlockId(BlockPosition blockPosition, short blockId) {
+    public void refreshBlockStateId(BlockPosition blockPosition, short blockStateId) {
         final Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
         synchronized (chunk) {
-            chunk.refreshBlockId(blockPosition.getX(), blockPosition.getY(),
-                    blockPosition.getZ(), blockId);
+            chunk.refreshBlockStateId(blockPosition.getX(), blockPosition.getY(),
+                    blockPosition.getZ(), blockStateId);
 
-            sendBlockChange(chunk, blockPosition, blockId);
+            sendBlockChange(chunk, blockPosition, blockStateId);
         }
     }
 
@@ -179,12 +179,12 @@ public class InstanceContainer extends Instance {
         actualBlock.onPlace(this, blockPosition, previousData);
     }
 
-    private short executeBlockPlacementRule(short blockId, BlockPosition blockPosition) {
-        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockId);
+    private short executeBlockPlacementRule(short blockStateId, BlockPosition blockPosition) {
+        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
         if (blockPlacementRule != null) {
-            return blockPlacementRule.blockRefresh(this, blockPosition, blockId);
+            return blockPlacementRule.blockRefresh(this, blockPosition, blockStateId);
         }
-        return blockId;
+        return blockStateId;
     }
 
     private void executeNeighboursBlockPlacementRule(BlockPosition blockPosition) {
@@ -202,13 +202,13 @@ public class InstanceContainer extends Instance {
                     if (chunk == null)
                         continue;
 
-                    final short neighborId = chunk.getBlockId(neighborX, neighborY, neighborZ);
-                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborId);
+                    final short neighborStateId = chunk.getBlockStateId(neighborX, neighborY, neighborZ);
+                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborStateId);
                     if (neighborBlockPlacementRule != null) {
                         final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
-                                new BlockPosition(neighborX, neighborY, neighborZ), neighborId);
-                        if (neighborId != newNeighborId) {
-                            refreshBlockId(neighborX, neighborY, neighborZ, newNeighborId);
+                                new BlockPosition(neighborX, neighborY, neighborZ), neighborStateId);
+                        if (neighborStateId != newNeighborId) {
+                            refreshBlockStateId(neighborX, neighborY, neighborZ, neighborStateId);
                         }
                     }
 
@@ -242,28 +242,28 @@ public class InstanceContainer extends Instance {
         final int y = blockPosition.getY();
         final int z = blockPosition.getZ();
 
-        final short blockId = getBlockId(x, y, z);
+        final short blockStateId = getBlockStateId(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
-        if (blockId == 0) {
+        if (blockStateId == 0) {
             sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(y), player);
             return false;
         }
 
         final CustomBlock customBlock = getCustomBlock(x, y, z);
 
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockId, customBlock, (short) 0, (short) 0);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockStateId, customBlock, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         final boolean result = !blockBreakEvent.isCancelled();
         if (result) {
             // Break or change the broken block based on event result
-            setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockId(), blockBreakEvent.getResultCustomBlockId());
+            setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockStateId(), blockBreakEvent.getResultCustomBlockId());
 
             ParticlePacket particlePacket = ParticleCreator.createParticlePacket(Particle.BLOCK, false,
                     x + 0.5f, y, z + 0.5f,
                     0.4f, 0.5f, 0.4f,
                     0.3f, 125, writer -> {
-                        writer.writeVarInt(blockId);
+                        writer.writeVarInt(blockStateId);
                     });
 
             chunk.getViewers().forEach(p -> {
@@ -579,10 +579,10 @@ public class InstanceContainer extends Instance {
         this.chunkLoader = chunkLoader;
     }
 
-    private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockId) {
+    private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockStateId) {
         BlockChangePacket blockChangePacket = new BlockChangePacket();
         blockChangePacket.blockPosition = blockPosition;
-        blockChangePacket.blockId = blockId;
+        blockChangePacket.blockStateId = blockStateId;
         chunk.sendPacketToViewers(blockChangePacket);
     }
 

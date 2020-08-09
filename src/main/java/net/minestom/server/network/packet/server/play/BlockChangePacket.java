@@ -8,12 +8,12 @@ import net.minestom.server.utils.BlockPosition;
 public class BlockChangePacket implements ServerPacket {
 
     public BlockPosition blockPosition;
-    public int blockId;
+    public int blockStateId;
 
     @Override
     public void write(PacketWriter writer) {
         writer.writeBlockPosition(blockPosition);
-        writer.writeVarInt(blockId);
+        writer.writeVarInt(blockStateId);
     }
 
     @Override

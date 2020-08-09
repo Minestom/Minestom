@@ -81,13 +81,13 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     private boolean isRedstone(Instance instance, int x, int y, int z) {
-        short blockId = instance.getBlockId(x, y, z);
-        return Block.fromId(blockId) == Block.REDSTONE_WIRE;
+        final short blockStateId = instance.getBlockStateId(x, y, z);
+        return Block.fromStateId(blockStateId) == Block.REDSTONE_WIRE;
     }
 
     private boolean isAir(Instance instance, int x, int y, int z) {
-        short blockId = instance.getBlockId(x, y, z);
-        return Block.fromId(blockId) == Block.AIR;
+        final short blockStateId = instance.getBlockStateId(x, y, z);
+        return Block.fromStateId(blockStateId) == Block.AIR;
     }
 
 }

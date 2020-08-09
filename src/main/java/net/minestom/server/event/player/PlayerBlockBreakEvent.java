@@ -11,23 +11,23 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
 
     private BlockPosition blockPosition;
 
-    private short blockId;
+    private short blockStateId;
     private CustomBlock customBlock;
 
-    private short resultBlockId;
+    private short resultBlockStateId;
     private short resultCustomBlockId;
 
     public PlayerBlockBreakEvent(Player player, BlockPosition blockPosition,
-                                 short blockId, CustomBlock customBlock,
-                                 short resultBlockId, short resultCustomBlockId) {
+                                 short blockStateId, CustomBlock customBlock,
+                                 short resultBlockStateId, short resultCustomBlockId) {
         this.player = player;
 
         this.blockPosition = blockPosition;
 
-        this.blockId = blockId;
+        this.blockStateId = blockStateId;
         this.customBlock = customBlock;
 
-        this.resultBlockId = resultBlockId;
+        this.resultBlockStateId = resultBlockStateId;
         this.resultCustomBlockId = resultCustomBlockId;
     }
 
@@ -50,12 +50,12 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     }
 
     /**
-     * Get the broken block visual id
+     * Get the broken block state id
      *
      * @return the block id
      */
-    public short getBlockId() {
-        return blockId;
+    public short getBlockStateId() {
+        return blockStateId;
     }
 
     /**
@@ -74,24 +74,24 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      * @return the block id that will be set at {@link #getBlockPosition()}
      * set to 0 to remove
      */
-    public short getResultBlockId() {
-        return resultBlockId;
+    public short getResultBlockStateId() {
+        return resultBlockStateId;
     }
 
     /**
      * Change the visual block id result
      *
-     * @param resultBlockId the result block id
+     * @param resultBlockStateId the result block id
      */
-    public void setResultBlockId(short resultBlockId) {
-        this.resultBlockId = resultBlockId;
+    public void setResultBlockId(short resultBlockStateId) {
+        this.resultBlockStateId = resultBlockStateId;
     }
 
     /**
      * Get the custom block id result, which will be placed after the event
      * <p>
      * Warning: the visual block will not be changed, be sure to call {@link #setResultBlockId(short)}
-     * if you want the visual to be the same as {@link CustomBlock#getBlockId()}
+     * if you want the visual to be the same as {@link CustomBlock#getBlockStateId()}
      *
      * @return the custom block id that will be set at {@link #getBlockPosition()}
      * set to 0 to remove

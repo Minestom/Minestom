@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableManager;
+import net.minestom.server.instance.BlockModifier;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.UpdateOption;
@@ -24,15 +25,15 @@ public abstract class CustomBlock {
      * - option to set the global as "global breaking" meaning that multiple players mining the same block will break it faster (accumulation)
      */
 
-    private final short blockId;
+    private final short blockStateId;
     private final String identifier;
 
     /**
-     * @param blockId    the visual block id
-     * @param identifier the custom block identifier
+     * @param blockStateId the block state id
+     * @param identifier   the custom block identifier
      */
-    public CustomBlock(short blockId, String identifier) {
-        this.blockId = blockId;
+    public CustomBlock(short blockStateId, String identifier) {
+        this.blockStateId = blockStateId;
         this.identifier = identifier;
     }
 
@@ -137,16 +138,16 @@ public abstract class CustomBlock {
     }
 
     /**
-     * This is the default visual for the block when the custom block is set,
+     * This is the default block state id when the custom block is set,
      * it is possible to change this value per block using
-     * {@link net.minestom.server.instance.BlockModifier#setSeparateBlocks(int, int, int, short, short)}
+     * {@link BlockModifier#setSeparateBlocks(int, int, int, short, short)}
      * <p>
      * Meaning that you should not believe that your custom blocks id will always be this one.
      *
      * @return the default visual block id
      */
-    public short getBlockId() {
-        return blockId;
+    public short getBlockStateId() {
+        return blockStateId;
     }
 
     /**

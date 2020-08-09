@@ -27,8 +27,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void refreshBlockId(BlockPosition blockPosition, short blockId) {
-        instanceContainer.refreshBlockId(blockPosition, blockId);
+    public void refreshBlockStateId(BlockPosition blockPosition, short blockStateId) {
+        instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
     }
 
     @Override
@@ -142,18 +142,18 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, Data data) {
-        instanceContainer.setBlock(x, y, z, blockId, data);
+    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+        instanceContainer.setBlockStateId(x, y, z, blockStateId, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        instanceContainer.setBlock(x, y, z, customBlockId, data);
+        instanceContainer.setCustomBlock(x, y, z, customBlockId, data);
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
-        instanceContainer.setSeparateBlocks(x, y, z, blockId, customBlockId, data);
+    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+        instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
     }
 
     @Override

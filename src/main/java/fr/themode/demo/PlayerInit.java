@@ -113,7 +113,7 @@ public class PlayerInit {
 
         connectionManager.addPlayerInitialization(player -> {
             player.addEventCallback(EntityAttackEvent.class, event -> {
-                Entity entity = event.getTarget();
+                final Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
                     creature.damage(DamageType.fromPlayer(player), -1);
@@ -135,10 +135,13 @@ public class PlayerInit {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
 
-                if (event.getBlockId() == Block.STONE.getBlockId()) {
+                final Block block = Block.fromStateId(event.getBlockStateId());
+
+                if (block == Block.STONE) {
                     event.setCustomBlock((short) 2); // custom stone block
+                    System.out.println("custom stone");
                 }
-                if (event.getBlockId() == Block.TORCH.getBlockId()) {
+                if (block == Block.TORCH) {
                     event.setCustomBlock((short) 3); // custom torch block
                 }
 
@@ -147,8 +150,11 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                chickenCreature.setInstance(player.getInstance());
+                for (int i = 0; i < 1; i++) {
+                    ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
+                    chickenCreature.setInstance(player.getInstance());
+                    //chickenCreature.setTarget(player);
+                }
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
@@ -175,13 +181,14 @@ public class PlayerInit {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
 
-                short blockId = player.getInstance().getBlockId(event.getBlockPosition());
-                Block block = Block.fromId(blockId);
+                final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
+                final Block block = Block.fromStateId(blockStateId);
                 player.sendMessage("You clicked at the block " + block);
             });
 
             player.addEventCallback(PickupItemEvent.class, event -> {
-                event.setCancelled(!player.getInventory().addItemStack(event.getItemStack())); // Cancel event if player does not have enough inventory space
+                // Cancel event if player does not have enough inventory space
+                event.setCancelled(!player.getInventory().addItemStack(event.getItemStack()));
             });
 
             player.addEventCallback(ItemDropEvent.class, event -> {
@@ -248,7 +255,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 41f, 0));
 
                 //player.setHeldItemSlot((byte) 5);
@@ -294,7 +301,7 @@ public class PlayerInit {
 
                 Instance instance = player.getInstance();
                 WorldBorder worldBorder = instance.getWorldBorder();
-                worldBorder.setDiameter(30);
+                //worldBorder.setDiameter(30);
 
                 //EntityBoat entityBoat = new EntityBoat(player.getPosition());
                 //entityBoat.setInstance(player.getInstance());

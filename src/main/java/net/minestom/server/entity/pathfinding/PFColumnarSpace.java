@@ -21,8 +21,8 @@ public class PFColumnarSpace implements IColumnarSpace {
 
     @Override
     public IBlockDescription blockAt(int x, int y, int z) {
-        final short blockId = chunk.getBlockId(x, y, z);
-        final Block block = Block.fromId(blockId);
+        final short blockStateId = chunk.getBlockStateId(x, y, z);
+        final Block block = Block.fromStateId(blockStateId);
         return new PFBlockDescription(block);
     }
 

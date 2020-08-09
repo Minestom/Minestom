@@ -41,12 +41,12 @@ public class BlockManager {
     /**
      * Get the block placement rule of the specific block
      *
-     * @param blockId the block id to check
+     * @param blockStateId the block id to check
      * @return the block placement rule associated with the id, null if not any
      */
-    public BlockPlacementRule getBlockPlacementRule(short blockId) {
-        final Block block = Block.fromId(blockId); // Convert block alternative
-        blockId = block.getBlockId();
+    public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
+        final Block block = Block.fromStateId(blockStateId); // Convert block alternative
+        final short blockId = block.getBlockId();
         return this.placementRules.get(blockId);
     }
 

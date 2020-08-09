@@ -35,7 +35,7 @@ public class ChunkReader {
                 final int y = stream.readInt();
                 final int z = stream.readInt();
 
-                final short blockId = stream.readShort();
+                final short blockStateId = stream.readShort();
                 final short customBlockId = stream.readShort();
 
                 final boolean hasData = stream.readBoolean();
@@ -49,9 +49,9 @@ public class ChunkReader {
                 }
 
                 if (customBlockId != 0) {
-                    chunkBatch.setSeparateBlocks(x, y, z, blockId, customBlockId, data);
+                    chunkBatch.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
                 } else {
-                    chunkBatch.setBlock(x, y, z, blockId, data);
+                    chunkBatch.setBlockStateId(x, y, z, blockStateId, data);
                 }
             }
         } catch (EOFException e) {

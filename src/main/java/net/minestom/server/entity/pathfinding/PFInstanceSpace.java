@@ -22,8 +22,8 @@ public class PFInstanceSpace implements IInstanceSpace {
 
     @Override
     public IBlockObject blockObjectAt(int x, int y, int z) {
-        final short blockId = instance.getBlockId(x, y, z);
-        final Block block = Block.fromId(blockId);
+        final short blockStateId = instance.getBlockStateId(x, y, z);
+        final Block block = Block.fromStateId(blockStateId);
         return new PFBlockObject(block);
     }
 

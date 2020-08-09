@@ -138,8 +138,8 @@ public class CollisionUtils {
             blockPos.setX((int) Math.floor(corner.getX()));
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
-            final short blockId = instance.getBlockId(blockPos);
-            final Block block = Block.fromId(blockId);
+            final short blockStateId = instance.getBlockStateId(blockPos);
+            final Block block = Block.fromStateId(blockStateId);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block

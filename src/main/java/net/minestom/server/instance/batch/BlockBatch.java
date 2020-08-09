@@ -21,25 +21,25 @@ public class BlockBatch implements InstanceBatch {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, short blockId, Data data) {
-        Chunk chunk = this.instance.getChunkAt(x, z);
-        addBlockData(chunk, x, y, z, false, blockId, (short) 0, data);
+    public synchronized void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+        final Chunk chunk = this.instance.getChunkAt(x, z);
+        addBlockData(chunk, x, y, z, false, blockStateId, (short) 0, data);
     }
 
     @Override
-    public synchronized void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        Chunk chunk = this.instance.getChunkAt(x, z);
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
-        addBlockData(chunk, x, y, z, true, customBlock.getBlockId(), blockId, data);
+    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+        final Chunk chunk = this.instance.getChunkAt(x, z);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        addBlockData(chunk, x, y, z, true, customBlock.getBlockStateId(), customBlockId, data);
     }
 
     @Override
-    public synchronized void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
-        Chunk chunk = this.instance.getChunkAt(x, z);
-        addBlockData(chunk, x, y, z, true, blockId, customBlockId, data);
+    public synchronized void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+        final Chunk chunk = this.instance.getChunkAt(x, z);
+        addBlockData(chunk, x, y, z, true, blockStateId, customBlockId, data);
     }
 
-    private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockId, short customBlockId, Data data) {
+    private void addBlockData(Chunk chunk, int x, int y, int z, boolean customBlock, short blockStateId, short customBlockId, Data data) {
         List<BlockData> blocksData = this.data.get(chunk);
         if (blocksData == null)
             blocksData = new ArrayList<>();
@@ -49,7 +49,7 @@ public class BlockBatch implements InstanceBatch {
         blockData.y = y;
         blockData.z = z;
         blockData.hasCustomBlock = customBlock;
-        blockData.blockId = blockId;
+        blockData.blockStateId = blockStateId;
         blockData.customBlockId = customBlockId;
         blockData.data = data;
 
@@ -92,15 +92,15 @@ public class BlockBatch implements InstanceBatch {
 
         private int x, y, z;
         private boolean hasCustomBlock;
-        private short blockId;
+        private short blockStateId;
         private short customBlockId;
         private Data data;
 
         public void apply(Chunk chunk) {
             if (!hasCustomBlock) {
-                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
+                chunk.UNSAFE_setBlock(x, y, z, blockStateId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlockId, data);
             }
         }
 

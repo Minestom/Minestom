@@ -39,11 +39,12 @@ public class EatBlockGoal extends GoalSelector {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
-        Instance instance = entityCreature.getInstance();
-        final short blockIdIn = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0));
-        final short blockIdBelow = instance.getBlockId(entityCreature.getPosition().toBlockPosition().clone().subtract(0, 2, 0));
+        final Instance instance = entityCreature.getInstance();
+        final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
+        final short blockStateIdIn = instance.getBlockStateId(blockPosition.clone().subtract(0, 1, 0));
+        final short blockStateIdBelow = instance.getBlockStateId(blockPosition.clone().subtract(0, 2, 0));
 
-        return eatInMap.containsKey(blockIdIn) || eatBelowMap.containsKey(blockIdBelow);
+        return eatInMap.containsKey(blockStateIdIn) || eatBelowMap.containsKey(blockStateIdBelow);
     }
 
     @Override
@@ -64,12 +65,12 @@ public class EatBlockGoal extends GoalSelector {
         final BlockPosition currentPosition = entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0);
         final BlockPosition belowPosition = currentPosition.clone().subtract(0, 1, 0);
 
-        final short blockIdIn = instance.getBlockId(currentPosition);
-        final short blockIdBelow = instance.getBlockId(belowPosition);
-        if (eatInMap.containsKey(blockIdIn)) {
-            instance.setBlock(currentPosition, eatInMap.get(blockIdIn));
-        } else if (eatBelowMap.containsKey(blockIdBelow)) {
-            instance.setBlock(belowPosition, eatBelowMap.get(blockIdBelow));
+        final short blockStateIdIn = instance.getBlockStateId(currentPosition);
+        final short blockStateIdBelow = instance.getBlockStateId(belowPosition);
+        if (eatInMap.containsKey(blockStateIdIn)) {
+            instance.setBlockStateId(currentPosition, eatInMap.get(blockStateIdIn));
+        } else if (eatBelowMap.containsKey(blockStateIdBelow)) {
+            instance.setBlockStateId(belowPosition, eatBelowMap.get(blockStateIdBelow));
         }
         // TODO: Call Entity Eat Animation
     }

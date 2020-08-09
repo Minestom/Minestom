@@ -32,29 +32,29 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, Data data) {
-        addBlockData((byte) x, y, (byte) z, false, blockId, (short) 0, data);
+    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+        addBlockData((byte) x, y, (byte) z, false, blockStateId, (short) 0, data);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short blockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(blockId);
-        addBlockData((byte) x, y, (byte) z, true, customBlock.getBlockId(), blockId, data);
+    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        addBlockData((byte) x, y, (byte) z, true, customBlock.getBlockStateId(), customBlockId, data);
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockId, short customBlockId, Data data) {
-        addBlockData((byte) x, y, (byte) z, true, blockId, customBlockId, data);
+    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+        addBlockData((byte) x, y, (byte) z, true, blockStateId, customBlockId, data);
     }
 
-    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockId, short customBlockId, Data data) {
+    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockStateId, short customBlockId, Data data) {
         // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
         BlockData blockData = new BlockData();
         blockData.x = x;
         blockData.y = y;
         blockData.z = z;
         blockData.hasCustomBlock = customBlock;
-        blockData.blockId = blockId;
+        blockData.blockStateId = blockStateId;
         blockData.customBlockId = customBlockId;
         blockData.data = data;
 
@@ -115,15 +115,15 @@ public class ChunkBatch implements InstanceBatch {
 
         private int x, y, z;
         private boolean hasCustomBlock;
-        private short blockId;
+        private short blockStateId;
         private short customBlockId;
         private Data data;
 
         public void apply(Chunk chunk) {
             if (!hasCustomBlock) {
-                chunk.UNSAFE_setBlock(x, y, z, blockId, data);
+                chunk.UNSAFE_setBlock(x, y, z, blockStateId, data);
             } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockId, customBlockId, data);
+                chunk.UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlockId, data);
             }
         }
 

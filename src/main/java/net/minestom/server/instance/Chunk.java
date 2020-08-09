@@ -49,7 +49,7 @@ public final class Chunk implements Viewable {
     private int chunkX, chunkZ;
 
     // blocks id based on coord, see Chunk#getBlockIndex
-    public short[] blocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    public short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
     private short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     // Used to get all blocks with data (no null)
@@ -80,20 +80,20 @@ public final class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    public void UNSAFE_setBlock(int x, int y, int z, short blockId, Data data) {
-        setBlock(x, y, z, blockId, (short) 0, data, null);
+    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, Data data) {
+        setBlock(x, y, z, blockStateId, (short) 0, data, null);
     }
 
-    public void UNSAFE_setCustomBlock(int x, int y, int z, short visualBlockId, short customBlockId, Data data) {
+    public void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         Check.notNull(customBlock, "The custom block " + customBlockId + " does not exist or isn't registered");
 
-        UNSAFE_setCustomBlock(x, y, z, visualBlockId, customBlock, data);
+        UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlock, data);
     }
 
-    protected void UNSAFE_setCustomBlock(int x, int y, int z, short visualBlockId, CustomBlock customBlock, Data data) {
+    protected void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
         UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(x, y, z, visualBlockId, customBlock.getCustomBlockId(), data, updateConsumer);
+        setBlock(x, y, z, blockStateId, customBlock.getCustomBlockId(), data, updateConsumer);
     }
 
     public void UNSAFE_removeCustomBlock(int x, int y, int z) {
@@ -107,16 +107,16 @@ public final class Chunk implements Viewable {
         this.blockEntities.remove(index);
     }
 
-    private void setBlock(int x, int y, int z, short blockId, short customId, Data data, UpdateConsumer updateConsumer) {
+    private void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
         final int index = getBlockIndex(x, y, z);
-        if (blockId != 0
-                || (blockId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
-            this.blocksId[index] = blockId;
+        if (blockStateId != 0
+                || (blockStateId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
+            this.blocksStateId[index] = blockStateId;
             this.customBlocksId[index] = customId;
         } else {
             // Block has been deleted, clear cache and return
 
-            this.blocksId[index] = 0; // Set to air
+            this.blocksStateId[index] = 0; // Set to air
 
             this.blocksData.remove(index);
 
@@ -145,7 +145,7 @@ public final class Chunk implements Viewable {
             this.updatableBlocksLastUpdate.remove(index);
         }
 
-        if (isBlockEntity(blockId)) {
+        if (isBlockEntity(blockStateId)) {
             this.blockEntities.add(index);
         } else {
             this.blockEntities.remove(index);
@@ -155,7 +155,7 @@ public final class Chunk implements Viewable {
 
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-            final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromId(blockId));
+            final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromStateId(blockStateId));
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
     }
@@ -169,18 +169,18 @@ public final class Chunk implements Viewable {
         }
     }
 
-    public short getBlockId(int x, int y, int z) {
+    public short getBlockStateId(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksId.length)) {
+        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
-        final short id = blocksId[index];
+        final short id = blocksStateId[index];
         return id;
     }
 
     public short getCustomBlockId(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksId.length)) {
+        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
         final short id = customBlocksId[index];
@@ -189,7 +189,7 @@ public final class Chunk implements Viewable {
 
     public CustomBlock getCustomBlock(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksId.length)) {
+        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return null; // TODO: custom invalid block
         }
         final short id = customBlocksId[index];
@@ -201,29 +201,29 @@ public final class Chunk implements Viewable {
         return getCustomBlock(pos[0], pos[1], pos[2]);
     }
 
-    protected void refreshBlockValue(int x, int y, int z, short blockId, short customId) {
+    protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customId) {
         final int blockIndex = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
+        if (!MathUtils.isBetween(blockIndex, 0, blocksStateId.length)) {
             return;
         }
 
-        this.blocksId[blockIndex] = blockId;
+        this.blocksStateId[blockIndex] = blockStateId;
         this.customBlocksId[blockIndex] = customId;
     }
 
-    protected void refreshBlockId(int x, int y, int z, short blockId) {
+    protected void refreshBlockStateId(int x, int y, int z, short blockStateId) {
         final int blockIndex = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(blockIndex, 0, blocksId.length)) {
+        if (!MathUtils.isBetween(blockIndex, 0, blocksStateId.length)) {
             return;
         }
 
-        this.blocksId[blockIndex] = blockId;
+        this.blocksStateId[blockIndex] = blockStateId;
     }
 
-    protected void refreshBlockValue(int x, int y, int z, short blockId) {
+    protected void refreshBlockValue(int x, int y, int z, short blockStateId) {
         final CustomBlock customBlock = getCustomBlock(x, y, z);
         final short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
-        refreshBlockValue(x, y, z, blockId, customBlockId);
+        refreshBlockValue(x, y, z, blockStateId, customBlockId);
     }
 
     public Data getData(int x, int y, int z) {
@@ -281,8 +281,8 @@ public final class Chunk implements Viewable {
         return fullDataPacket;
     }
 
-    private boolean isBlockEntity(short blockId) {
-        final Block block = Block.fromId(blockId);
+    private boolean isBlockEntity(short blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
         return block.hasBlockEntity();
     }
 
@@ -328,10 +328,10 @@ public final class Chunk implements Viewable {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                     final int index = getBlockIndex(x, y, z);
 
-                    final short blockId = blocksId[index];
+                    final short blockStateId = blocksStateId[index];
                     final short customBlockId = customBlocksId[index];
 
-                    if (blockId == 0 && customBlockId == 0)
+                    if (blockStateId == 0 && customBlockId == 0)
                         continue;
 
                     final Data data = blocksData.get(index);
@@ -342,7 +342,7 @@ public final class Chunk implements Viewable {
                     dos.writeInt(z);
 
                     // Id
-                    dos.writeShort(blockId);
+                    dos.writeShort(blockStateId);
                     dos.writeShort(customBlockId);
 
                     // Data
@@ -381,7 +381,7 @@ public final class Chunk implements Viewable {
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.blocksId = blocksId.clone();
+        fullDataPacket.blocksStateId = blocksStateId.clone();
         fullDataPacket.customBlocksId = customBlocksId.clone();
         fullDataPacket.blockEntities = new CopyOnWriteArraySet<>(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);

@@ -61,8 +61,8 @@ public class WallPlacementRule extends BlockPlacementRule {
     }
 
     private boolean isBlock(Instance instance, int x, int y, int z) {
-        short blockId = instance.getBlockId(x, y, z);
-        return Block.fromId(blockId).isSolid();
+        final short blockStateId = instance.getBlockStateId(x, y, z);
+        return Block.fromStateId(blockStateId).isSolid();
     }
 
 }

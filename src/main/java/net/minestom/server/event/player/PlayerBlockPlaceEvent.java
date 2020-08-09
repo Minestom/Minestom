@@ -15,16 +15,16 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private final Player player;
-    private short blockId;
+    private short blockStateId;
     private short customBlockId;
     private BlockPosition blockPosition;
     private Player.Hand hand;
 
     private boolean consumeBlock;
 
-    public PlayerBlockPlaceEvent(Player player, short blockId, short customBlockId, BlockPosition blockPosition, Player.Hand hand) {
+    public PlayerBlockPlaceEvent(Player player, short blockStateId, short customBlockId, BlockPosition blockPosition, Player.Hand hand) {
         this.player = player;
-        this.blockId = blockId;
+        this.blockStateId = blockStateId;
         this.customBlockId = customBlockId;
         this.blockPosition = blockPosition;
         this.hand = hand;
@@ -37,12 +37,12 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      * @param customBlock the custom block to place
      */
     public void setCustomBlock(CustomBlock customBlock) {
-        setBlockId(customBlock.getBlockId());
+        setBlockStateId(customBlock.getBlockStateId());
         setCustomBlockId(customBlock.getCustomBlockId());
     }
 
     /**
-     * Set both the blockId and customBlockId
+     * Set both the blockStateId and customBlockId
      *
      * @param customBlockId the custom block id to place
      */
@@ -73,7 +73,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     /**
      * Set the custom block id to place
      * <p>
-     * WARNING: this does not change the visual block id, see {@link #setBlockId(short)}
+     * WARNING: this does not change the visual block id, see {@link #setBlockStateId(short)}
      * or {@link #setCustomBlock(short)}
      *
      * @param customBlockId the custom block id
@@ -83,21 +83,21 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the visual block id
+     * Get the block state id
      *
-     * @return the visual block id
+     * @return the block state id
      */
-    public short getBlockId() {
-        return blockId;
+    public short getBlockStateId() {
+        return blockStateId;
     }
 
     /**
      * Change the visual block id
      *
-     * @param blockId the new visual block id
+     * @param blockStateId the new block state id
      */
-    public void setBlockId(short blockId) {
-        this.blockId = blockId;
+    public void setBlockStateId(short blockStateId) {
+        this.blockStateId = blockStateId;
     }
 
     /**

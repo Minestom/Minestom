@@ -90,10 +90,10 @@ public class BlockPlacementListener {
                 // BlockPlacementRule check
                 final BlockManager blockManager = MinecraftServer.getBlockManager();
                 final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
-                final short blockId = blockPlacementRule == null ? block.getBlockId() :
+                final short blockStateId = blockPlacementRule == null ? block.getBlockId() :
                         blockPlacementRule.blockPlace(instance, block, blockFace, player);
 
-                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockId, (short) 0, blockPosition, packet.hand);
+                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockStateId, (short) 0, blockPosition, packet.hand);
                 playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                 // BlockPlacementRule check
@@ -103,9 +103,9 @@ public class BlockPlacementListener {
                 if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
                     final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                     if (customBlockId != 0) {
-                        instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId(), playerBlockPlaceEvent.getCustomBlockId());
+                        instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId(), playerBlockPlaceEvent.getCustomBlockId());
                     } else {
-                        instance.setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockId());
+                        instance.setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId());
                     }
                     if (playerBlockPlaceEvent.doesConsumeBlock()) {
                         // Consume the block in the player's hand

@@ -21,13 +21,13 @@ public final class EntityUtils {
         if (!ent1.getInstance().equals(ent2.getInstance()))
             return false;
 
-        Chunk chunk = ent1.getInstance().getChunkAt(ent1.getPosition());
+        final Chunk chunk = ent1.getInstance().getChunkAt(ent1.getPosition());
 
         long[] visibleChunksEntity = ChunkUtils.getChunksInRange(ent2.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
         for (long visibleChunk : visibleChunksEntity) {
-            int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
-            int chunkX = chunkPos[0];
-            int chunkZ = chunkPos[1];
+            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
+            final int chunkX = chunkPos[0];
+            final int chunkZ = chunkPos[1];
             if (chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ)
                 return true;
         }
@@ -36,18 +36,17 @@ public final class EntityUtils {
     }
 
     public static boolean isOnGround(Entity entity) {
-        Instance instance = entity.getInstance();
+        final Instance instance = entity.getInstance();
         if (instance == null)
             return false;
 
-        Position entityPosition = entity.getPosition();
+        final Position entityPosition = entity.getPosition();
 
         // TODO: check entire bounding box
-        BlockPosition blockPosition = entityPosition.toBlockPosition();
-        blockPosition = blockPosition.subtract(0, 1, 0);
+        final BlockPosition blockPosition = entityPosition.toBlockPosition().subtract(0, 1, 0);
         try {
-            short blockId = instance.getBlockId(blockPosition);
-            Block block = Block.fromId(blockId);
+            final short blockStateId = instance.getBlockStateId(blockPosition);
+            final Block block = Block.fromStateId(blockStateId);
             return block.isSolid();
         } catch (NullPointerException e) {
             // Probably an entity at the border of an unloaded chunk

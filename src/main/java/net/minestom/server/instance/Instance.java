@@ -100,9 +100,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * In case of a CustomBlock it does not remove it but only refresh its visual
      *
      * @param blockPosition the block position
-     * @param blockId       the new block id
+     * @param blockStateId  the new block state
      */
-    public abstract void refreshBlockId(BlockPosition blockPosition, short blockId);
+    public abstract void refreshBlockStateId(BlockPosition blockPosition, short blockStateId);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -467,13 +467,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * <p>
      * WARNING: the custom block id at the position will not change
      *
-     * @param x       the X position
-     * @param y       the Y position
-     * @param z       the Z position
-     * @param blockId the new visual block id
+     * @param x            the X position
+     * @param y            the Y position
+     * @param z            the Z position
+     * @param blockStateId the new block state id
      */
-    public void refreshBlockId(int x, int y, int z, short blockId) {
-        refreshBlockId(new BlockPosition(x, y, z), blockId);
+    public void refreshBlockStateId(int x, int y, int z, short blockStateId) {
+        refreshBlockStateId(new BlockPosition(x, y, z), blockStateId);
     }
 
     /**
@@ -487,7 +487,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param block the new visual block
      */
     public void refreshBlockId(int x, int y, int z, Block block) {
-        refreshBlockId(x, y, z, block.getBlockId());
+        refreshBlockStateId(x, y, z, block.getBlockId());
     }
 
     /**
@@ -499,7 +499,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param block         the new visual block
      */
     public void refreshBlockId(BlockPosition blockPosition, Block block) {
-        refreshBlockId(blockPosition, block.getBlockId());
+        refreshBlockStateId(blockPosition, block.getBlockId());
     }
 
     /**
@@ -543,39 +543,39 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Give the visual block id at the given position
+     * Give the block state id at the given position
      *
      * @param x the X position
      * @param y the Y position
      * @param z the Z position
      * @return the visual block id at the position
      */
-    public short getBlockId(int x, int y, int z) {
+    public short getBlockStateId(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        return chunk.getBlockId(x, y, z);
+        return chunk.getBlockStateId(x, y, z);
     }
 
     /**
-     * Give the visual block id at the given position
+     * Give the block state id at the given position
      *
      * @param x the X position
      * @param y the Y position
      * @param z the Z position
      * @return the visual block id at the position
      */
-    public short getBlockId(float x, float y, float z) {
-        return getBlockId(Math.round(x), Math.round(y), Math.round(z));
+    public short getBlockStateId(float x, float y, float z) {
+        return getBlockStateId(Math.round(x), Math.round(y), Math.round(z));
     }
 
     /**
-     * Give the visual block id at the given position
+     * Give the block state id at the given position
      *
      * @param blockPosition the block position
      * @return the visual block id at the position
      */
-    public short getBlockId(BlockPosition blockPosition) {
-        return getBlockId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    public short getBlockStateId(BlockPosition blockPosition) {
+        return getBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     /**
@@ -603,8 +603,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
-        final short blockId = getBlockId(blockPosition);
-        final Block block = Block.fromId(blockId);
+        final short blockStateId = getBlockStateId(blockPosition);
+        final Block block = Block.fromStateId(blockStateId);
 
         BlockActionPacket blockActionPacket = new BlockActionPacket();
         blockActionPacket.blockPosition = blockPosition;

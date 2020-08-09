@@ -30,13 +30,13 @@ public class PlayerDiggingListener {
         if (instance == null)
             return;
 
-        final short blockId = instance.getBlockId(blockPosition);
+        final short blockStateId = instance.getBlockStateId(blockPosition);
 
         switch (status) {
             case STARTED_DIGGING:
                 final boolean instantBreak = player.isCreative() ||
                         player.isInstantBreak() ||
-                        Block.fromId(blockId).breaksInstantaneously();
+                        Block.fromStateId(blockStateId).breaksInstantaneously();
 
                 if (instantBreak) {
                     breakBlock(instance, player, blockPosition);
@@ -54,11 +54,11 @@ public class PlayerDiggingListener {
                                 player.setTargetBlock(customBlock, blockPosition, breakTime);
                                 addEffect(player);
                             }
-                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockStateId(),
                                     ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                         } else {
                             // Unsuccessful digging
-                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockId(),
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockStateId(),
                                     ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                         }
                     } else {
@@ -71,7 +71,7 @@ public class PlayerDiggingListener {
                 // Remove custom block target
                 removeEffect(player);
 
-                sendAcknowledgePacket(player, blockPosition, blockId,
+                sendAcknowledgePacket(player, blockPosition, blockStateId,
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
@@ -151,11 +151,11 @@ public class PlayerDiggingListener {
         player.resetTargetBlock();
     }
 
-    private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockId,
+    private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockStateId,
                                               ClientPlayerDiggingPacket.Status status, boolean success) {
         AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();
         acknowledgePlayerDiggingPacket.blockPosition = blockPosition;
-        acknowledgePlayerDiggingPacket.blockStateId = blockId;
+        acknowledgePlayerDiggingPacket.blockStateId = blockStateId;
         acknowledgePlayerDiggingPacket.status = status;
         acknowledgePlayerDiggingPacket.successful = success;
 
