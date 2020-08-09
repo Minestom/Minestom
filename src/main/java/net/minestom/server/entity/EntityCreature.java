@@ -7,6 +7,7 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
+import net.minestom.server.entity.pathfinding.PathfinderManager;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Chunk;
@@ -31,6 +32,8 @@ import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity {
 
+    private static final PathfinderManager PATHFINDER_MANAGER = new PathfinderManager();
+
     private PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
     private PathObject path;
@@ -51,7 +54,6 @@ public abstract class EntityCreature extends LivingEntity {
     private ItemStack leggings;
     private ItemStack boots;
 
-    // Lock used for the pathfinder
     private ReentrantLock pathLock = new ReentrantLock();
 
 
@@ -121,19 +123,25 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         {
-            this.pathLock.lock();
-            path = pathFinder.updatePathFor(pathingEntity);
-            if (path != null) {
-                final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
-                final Position targetPosition = pathingEntity.getTargetPosition();
-                moveTowards(targetPosition, speed);
-            } else {
-                if (pathPosition != null) {
-                    this.pathPosition = null;
-                    this.pathFinder.reset();
-                }
+            if (pathPosition != null) {
+                PATHFINDER_MANAGER.getPool().execute(() -> {
+                    this.pathLock.lock();
+                    this.path = pathFinder.updatePathFor(pathingEntity);
+
+                    if (path != null) {
+                        final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+                        final Position targetPosition = pathingEntity.getTargetPosition();
+                        moveTowards(targetPosition, speed);
+                    } else {
+                        if (pathPosition != null) {
+                            this.pathPosition = null;
+                            this.pathFinder.reset();
+                        }
+                    }
+
+                    this.pathLock.unlock();
+                });
             }
-            this.pathLock.unlock();
         }
 
         super.update(time);
@@ -339,35 +347,33 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         this.pathLock.lock();
+
         this.pathFinder.reset();
         if (position == null) {
+            this.pathLock.unlock();
             return false;
         }
 
         // Can't path outside of the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
         if (!worldBorder.isInside(position)) {
+            this.pathLock.unlock();
             return false;
         }
 
         // Can't path in an unloaded chunk
         final Chunk chunk = instance.getChunkAt(position);
         if (ChunkUtils.isChunkUnloaded(chunk)) {
+            this.pathLock.unlock();
             return false;
         }
 
-        position = position.clone();
+        final Position targetPosition = position.clone();
 
-        try {
-            this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            this.path = null;
-        }
+        this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
         this.pathLock.unlock();
-
         final boolean success = path != null;
-
-        this.pathPosition = success ? position : null;
+        this.pathPosition = success ? targetPosition : null;
 
         return success;
     }

@@ -6,7 +6,6 @@ import com.extollit.gaming.ai.path.model.IInstanceSpace;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.validate.Check;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +29,10 @@ public class PFInstanceSpace implements IInstanceSpace {
     @Override
     public IColumnarSpace columnarSpaceAt(int cx, int cz) {
         final Chunk chunk = instance.getChunk(cx, cz);
-        Check.notNull(chunk,
-                "The pathfinder tried to get the unloaded chunk [" + cx + ":" + cz + "]," +
-                        " try to lower the search range or to load the chunk manually");
+        if (chunk == null) {
+            return null;
+        }
+
         final PFColumnarSpace columnarSpace =
                 chunkSpaceMap.computeIfAbsent(chunk, c -> {
                     final PFColumnarSpace cs = new PFColumnarSpace(this, c);

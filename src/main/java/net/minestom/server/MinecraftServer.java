@@ -64,6 +64,9 @@ public class MinecraftServer {
 
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
+    public static final String THREAD_NAME_PATHFINDER = "Ms-PathFinding";
+    public static final int THREAD_COUNT_PATHFINDER = 2;
+
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
 
