@@ -26,6 +26,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity {
@@ -49,6 +50,9 @@ public abstract class EntityCreature extends LivingEntity {
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
+
+    // Lock used for the pathfinder
+    private ReentrantLock pathLock = new ReentrantLock();
 
 
     public EntityCreature(EntityType entityType, Position spawnPosition) {
@@ -115,16 +119,20 @@ public abstract class EntityCreature extends LivingEntity {
 
 
         // Path finding
-        path = pathFinder.updatePathFor(pathingEntity);
-        if (path != null) {
-            final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
-            final Position targetPosition = pathingEntity.getTargetPosition();
-            moveTowards(targetPosition, speed);
-        } else {
-            if (pathPosition != null) {
-                this.pathPosition = null;
-                this.pathFinder.reset();
+        {
+            pathLock.lock();
+            path = pathFinder.updatePathFor(pathingEntity);
+            if (path != null) {
+                final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+                final Position targetPosition = pathingEntity.getTargetPosition();
+                moveTowards(targetPosition, speed);
+            } else {
+                if (pathPosition != null) {
+                    this.pathPosition = null;
+                    this.pathFinder.reset();
+                }
             }
+            pathLock.unlock();
         }
 
         super.update(time);
@@ -323,7 +331,13 @@ public abstract class EntityCreature extends LivingEntity {
      * @param position the position to find the path to, null to reset the pathfinder
      * @return true if a path has been found
      */
-    public synchronized boolean setPathTo(Position position) {
+    public boolean setPathTo(Position position) {
+        if (position != null && getPathPosition() != null && position.isSimilar(getPathPosition())) {
+            // Tried to set path to the same target position
+            return false;
+        }
+
+        pathLock.lock();
         this.pathFinder.reset();
         if (position == null) {
             return false;
@@ -348,6 +362,7 @@ public abstract class EntityCreature extends LivingEntity {
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             this.path = null;
         }
+        pathLock.unlock();
 
         final boolean success = path != null;
 
