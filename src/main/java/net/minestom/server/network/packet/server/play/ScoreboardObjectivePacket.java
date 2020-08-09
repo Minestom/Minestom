@@ -7,10 +7,24 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 
 public class ScoreboardObjectivePacket implements ServerPacket {
 
+    /**
+     * An unique name for the objective
+     */
     public String objectiveName;
+    /**
+     * 0 = create the scoreboard <br>
+     * 1 = to remove the scoreboard<br>
+     * 2 = to update the display text
+     */
     public byte mode;
+    /**
+     * The text to be displayed for the score
+     */
     public ColoredText objectiveValue;
-    public int type;
+    /**
+     * The type how the score is displayed
+     */
+    public Type type;
 
     @Override
     public void write(PacketWriter writer) {
@@ -19,12 +33,20 @@ public class ScoreboardObjectivePacket implements ServerPacket {
 
         if (mode == 0 || mode == 2) {
             writer.writeSizedString(objectiveValue.toString());
-            writer.writeVarInt(type);
+            writer.writeVarInt(type.ordinal());
         }
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.SCOREBOARD_OBJECTIVE;
+    }
+
+    /**
+     * This enumeration represents all available types for the scoreboard objective
+     */
+    public enum Type {
+        INTEGER,
+        HEARTS
     }
 }
