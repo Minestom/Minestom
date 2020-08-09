@@ -44,21 +44,23 @@ public class BossBar implements Viewable {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public synchronized boolean addViewer(Player player) {
+        // Check already viewer
         if (isViewer(player)) {
             return false;
         }
-        final boolean result = this.viewers.add(player);
-        if (result) {
-            addToPlayer(player);
+        // Check max boss bar count
+        if (getBossBars(player).size() >= MAX_BOSSBAR) {
+            return false;
         }
         // Add to the map
         addPlayer(player);
-        return result;
+        return viewers.add(player);
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public synchronized boolean removeViewer(Player player) {
+        // Check not viewer
         final boolean result = this.viewers.remove(player);
         if (result) {
             removeToPlayer(player);
