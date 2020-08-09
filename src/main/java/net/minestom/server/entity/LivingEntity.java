@@ -27,6 +27,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     protected boolean isDead;
 
     private float health;
+    private DamageType lastDamageType;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
@@ -244,7 +245,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
             // Additional hearts support
             if (this instanceof Player) {
-                Player player = (Player) this;
+                final Player player = (Player) this;
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
                     if (damage > additionalHearts) {
@@ -257,6 +258,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
 
+            // Set the final entity health
             setHealth(getHealth() - damage);
 
             // play damage sound
@@ -273,6 +275,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 SoundEffectPacket damageSoundPacket = SoundEffectPacket.create(soundCategory, sound, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 1.0f, 1.0f);
                 sendPacketToViewersAndSelf(damageSoundPacket);
             }
+
+            // Set the last damage type since the event is not cancelled
+            this.lastDamageType = entityDamageEvent.getDamageType();
         });
 
         return !entityDamageEvent.isCancelled();
@@ -310,6 +315,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             kill();
         }
         sendMetadataIndex(8); // Health metadata index
+    }
+
+    /**
+     * Get the last damage type of this entity
+     *
+     * @return the last damage type, null if not any
+     */
+    public DamageType getLastDamageType() {
+        return lastDamageType;
     }
 
     /**

@@ -77,6 +77,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
+    private boolean removed;
     private boolean shouldRemove;
     private long scheduledRemoveTime;
     private EntityType entityType;
@@ -1116,10 +1117,20 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      * WARNING: this do not trigger the {@link EntityDeathEvent} event
      */
     public void remove() {
+        this.removed = true;
         this.shouldRemove = true;
         entityById.remove(id);
         if (instance != null)
             instance.removeEntity(this);
+    }
+
+    /**
+     * Get if this entity has been removed
+     *
+     * @return true if this entity is removed
+     */
+    public boolean isRemoved() {
+        return removed;
     }
 
     /**

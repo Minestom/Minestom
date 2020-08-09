@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Target the closest entity
+ */
 public class ClosestEntityTarget extends TargetSelector {
 
     private float range;
@@ -37,10 +40,12 @@ public class ClosestEntityTarget extends TargetSelector {
         for (Chunk chunk : chunks) {
             final Set<Entity> entities = instance.getChunkEntities(chunk);
 
-            if (!(entities instanceof LivingEntity))
-                continue;
-
             for (Entity ent : entities) {
+
+                // Only target living entities
+                if (!(ent instanceof LivingEntity)) {
+                    continue;
+                }
 
                 // Don't target itself
                 if (ent.equals(entityCreature)) {
@@ -56,12 +61,13 @@ public class ClosestEntityTarget extends TargetSelector {
                         break;
                     }
                 }
+
                 if (!correct) {
                     continue;
                 }
 
                 // Check distance
-                final float d = getEntityCreature().getDistance(ent);
+                final float d = entityCreature.getDistance(ent);
                 if ((entity == null || d < distance) && d < range) {
                     entity = ent;
                     distance = d;
