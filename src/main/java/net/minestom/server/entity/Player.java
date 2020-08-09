@@ -33,7 +33,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
-import net.minestom.server.scoreboard.BelowNameScoreboard;
+import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -107,8 +107,7 @@ public class Player extends LivingEntity implements CommandSender {
     private byte targetLastStage;
     private int blockBreakTime;
 
-    private Team team;
-    private BelowNameScoreboard belowNameScoreboard;
+    private BelowNameTag belowNameTag;
 
     /**
      * Last damage source to hit this player, used to display the death message.
@@ -524,8 +523,8 @@ public class Player extends LivingEntity implements CommandSender {
         viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
-        if (team != null && team.getPlayers().size() == 1) // If team only contains "this" player
-            viewerConnection.sendPacket(team.createTeamDestructionPacket());
+        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
+            viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         return result;
     }
 
@@ -1370,34 +1369,24 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     public void setTeam(Team team) {
-        if (this.team == team)
-            return;
-
-        if (this.team != null) {
-            this.team.removePlayer(this);
-        }
-
-        this.team = team;
-        if (team != null) {
-            team.addPlayer(this);
-            sendPacketToViewers(team.getTeamsCreationPacket()); // FIXME: only if viewer hasn't already register this team
-        }
+        super.setTeam(team);
+        if(team != null)
+            getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
     }
 
-    public void setBelowNameScoreboard(BelowNameScoreboard belowNameScoreboard) {
-        if (this.belowNameScoreboard == belowNameScoreboard)
-            return;
+    /**
+     * Change the tag below the name
+     *
+     * @param belowNameTag The new below name tag
+     */
+    public void setBelowNameTag(BelowNameTag belowNameTag) {
+        if (this.belowNameTag == belowNameTag) return;
 
-        if (this.belowNameScoreboard != null) {
-            this.belowNameScoreboard.removeViewer(this);
+        if (this.belowNameTag != null) {
+            this.belowNameTag.removeViewer(this);
         }
 
-        this.belowNameScoreboard = belowNameScoreboard;
-        if (belowNameScoreboard != null) {
-            belowNameScoreboard.addViewer(this);
-            belowNameScoreboard.displayScoreboard(this);
-            getViewers().forEach(player -> belowNameScoreboard.addViewer(player));
-        }
+        this.belowNameTag = belowNameTag;
     }
 
     /**
@@ -1969,8 +1958,8 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Team
-        if (team != null)
-            connection.sendPacket(team.getTeamsCreationPacket());
+        if (this.getTeam() != null)
+            connection.sendPacket(this.getTeam().getTeamsCreationPacket());
 
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();

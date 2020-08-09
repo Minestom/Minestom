@@ -1,7 +1,6 @@
 package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
-import net.minestom.server.Viewable;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
@@ -18,30 +17,42 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Sidebar implements Viewable {
+/**
+ * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}'s
+ */
+public class Sidebar implements Scoreboard {
 
-    private static final AtomicInteger counter = new AtomicInteger();
+    private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    // WARNING: you shouldn't create scoreboards/teams with the same prefixes as those
+    /**
+     * <b>WARNING:</b> You shouldn't create scoreboards/teams with the same prefixes as those
+     */
     private static final String SCOREBOARD_PREFIX = "sb-";
     private static final String TEAM_PREFIX = "sbt-";
 
-    // Limited by notchian client, do not change
+    /**
+     * Limited by the notch client, do not change
+     */
     private static final int MAX_LINES_COUNT = 15;
 
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
-    private ConcurrentLinkedQueue<ScoreboardLine> lines = new ConcurrentLinkedQueue<>();
-    private IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
+    private final ConcurrentLinkedQueue<ScoreboardLine> lines = new ConcurrentLinkedQueue<>();
+    private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
 
-    private String objectiveName;
+    private final String objectiveName;
 
     private String title;
 
+    /**
+     * Creates a new sidebar
+     *
+     * @param title The title of the sidebar
+     */
     public Sidebar(String title) {
         this.title = title;
 
-        this.objectiveName = SCOREBOARD_PREFIX + counter.incrementAndGet();
+        this.objectiveName = SCOREBOARD_PREFIX + COUNTER.incrementAndGet();
 
         // Fill available colors for entities name showed in scoreboard
         for (int i = 0; i < 16; i++) {
@@ -49,6 +60,11 @@ public class Sidebar implements Viewable {
         }
     }
 
+    /**
+     * Changes the {@link Sidebar} title
+     *
+     * @param title The new sidebar title
+     */
     public void setTitle(String title) {
         this.title = title;
 
@@ -56,11 +72,16 @@ public class Sidebar implements Viewable {
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 2; // Update display text
         scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
-        scoreboardObjectivePacket.type = 0;
+        scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER;
 
         sendPacketToViewers(scoreboardObjectivePacket);
     }
 
+    /**
+     * Creates a new {@link ScoreboardLine}
+     *
+     * @param scoreboardLine The new scoreboard line
+     */
     public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
             Check.stateCondition(lines.size() >= MAX_LINES_COUNT, "You cannot have more than " + MAX_LINES_COUNT + "  lines");
@@ -84,6 +105,12 @@ public class Sidebar implements Viewable {
         }
     }
 
+    /**
+     * Updates a line content through the given identifier
+     *
+     * @param id      The identifier of the line
+     * @param content The new content for the line
+     */
     public void updateLineContent(String id, ColoredText content) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
@@ -92,6 +119,12 @@ public class Sidebar implements Viewable {
         }
     }
 
+    /**
+     * Updates the score of a line through the given identifier
+     *
+     * @param id    The identifier of the team
+     * @param score The new score for the line
+     */
     public void updateLineScore(String id, int score) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
@@ -100,6 +133,12 @@ public class Sidebar implements Viewable {
         }
     }
 
+    /**
+     * Gets a {@link ScoreboardLine} through the given identifier
+     *
+     * @param id The identifier of the line
+     * @return a {@link ScoreboardLine} or {@code null}
+     */
     public ScoreboardLine getLine(String id) {
         for (ScoreboardLine line : lines) {
             if (line.id.equals(id))
@@ -108,6 +147,11 @@ public class Sidebar implements Viewable {
         return null;
     }
 
+    /**
+     * Removes a {@link ScoreboardLine} through the given identifier
+     *
+     * @param id The identifier of the line
+     */
     public void removeLine(String id) {
         synchronized (lines) {
             Iterator<ScoreboardLine> iterator = lines.iterator();
@@ -130,15 +174,8 @@ public class Sidebar implements Viewable {
         final boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 0; // Create scoreboard
-        scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
-        scoreboardObjectivePacket.type = 0; // Type integer
-
-        DisplayScoreboardPacket displayScoreboardPacket = new DisplayScoreboardPacket();
-        displayScoreboardPacket.position = 1; // Sidebar
-        displayScoreboardPacket.scoreName = objectiveName;
+        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
+        DisplayScoreboardPacket displayScoreboardPacket = this.getDisplayScoreboardPacket((byte) 1);
 
         playerConnection.sendPacket(scoreboardObjectivePacket); // Creative objective
         playerConnection.sendPacket(displayScoreboardPacket); // Show sidebar scoreboard (wait for scores packet)
@@ -154,9 +191,7 @@ public class Sidebar implements Viewable {
     public boolean removeViewer(Player player) {
         boolean result = this.viewers.remove(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
-        ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
-        scoreboardObjectivePacket.objectiveName = objectiveName;
-        scoreboardObjectivePacket.mode = 1; // Remove
+        ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         playerConnection.sendPacket(scoreboardObjectivePacket);
 
         for (ScoreboardLine line : lines) {
@@ -171,15 +206,38 @@ public class Sidebar implements Viewable {
         return viewers;
     }
 
+    @Override
+    public String getObjectiveName() {
+        return this.objectiveName;
+    }
+
+    /**
+     * This class is used to create a line for the sidebar.
+     */
     public static class ScoreboardLine {
 
-        private String id; // ID used to modify the line later
+        /**
+         * The identifier is used to modify the line later
+         */
+        private String id;
+        /**
+         * The content for the line
+         */
         private ColoredText content;
+        /**
+         * The score of the line
+         */
         private int line;
 
         private String teamName;
-        private int colorName; // Name of the score (entityName) which is essentially an ID
+        /**
+         * The name of the score ({@code entityName}) which is essentially an identifier
+         */
+        private int colorName;
         private String entityName;
+        /**
+         * The sidebar team of the line
+         */
         private SidebarTeam sidebarTeam;
 
         public ScoreboardLine(String id, ColoredText content, int line) {
@@ -187,17 +245,32 @@ public class Sidebar implements Viewable {
             this.content = content;
             this.line = line;
 
-            this.teamName = TEAM_PREFIX + counter.incrementAndGet();
+            this.teamName = TEAM_PREFIX + COUNTER.incrementAndGet();
         }
 
+        /**
+         * Gets the identifier of the line
+         *
+         * @return the line identifier
+         */
         public String getId() {
             return id;
         }
 
+        /**
+         * Gets the content of the line
+         *
+         * @return The line content
+         */
         public ColoredText getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
+        /**
+         * Gets the position of the line
+         *
+         * @return the line position
+         */
         public int getLine() {
             return line;
         }
@@ -208,6 +281,9 @@ public class Sidebar implements Viewable {
             }
         }
 
+        /**
+         * Creates a new {@link SidebarTeam}
+         */
         private void createTeam() {
             this.entityName = ChatParser.COLOR_CHAR + Integer.toHexString(colorName);
 
@@ -220,6 +296,12 @@ public class Sidebar implements Viewable {
             }
         }
 
+        /**
+         * Gets a score creation packet
+         *
+         * @param objectiveName The objective name to be updated
+         * @return a {@link UpdateScorePacket}
+         */
         private UpdateScorePacket getScoreCreationPacket(String objectiveName) {
             UpdateScorePacket updateScorePacket = new UpdateScorePacket();
             updateScorePacket.entityName = entityName;
@@ -229,6 +311,12 @@ public class Sidebar implements Viewable {
             return updateScorePacket;
         }
 
+        /**
+         * Gets a score destruction packet
+         *
+         * @param objectiveName The objective name to be destroyed
+         * @return a {@link UpdateScorePacket}
+         */
         private UpdateScorePacket getScoreDestructionPacket(String objectiveName) {
             UpdateScorePacket updateScorePacket = new UpdateScorePacket();
             updateScorePacket.entityName = entityName;
@@ -237,18 +325,33 @@ public class Sidebar implements Viewable {
             return updateScorePacket;
         }
 
+        /**
+         * Gets a line score update packet
+         *
+         * @param objectiveName The objective name to be updated
+         * @param score         The new score
+         * @return a {@link UpdateScorePacket}
+         */
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
             UpdateScorePacket updateScorePacket = getScoreCreationPacket(objectiveName);
             updateScorePacket.value = score;
             return updateScorePacket;
         }
 
+        /**
+         * Refresh the prefix of the {@link SidebarTeam}
+         *
+         * @param content The new content
+         */
         private void refreshContent(ColoredText content) {
             this.sidebarTeam.refreshPrefix(content);
         }
 
     }
 
+    /**
+     * This class is used to create a team for the sidebar
+     */
     private static class SidebarTeam {
 
         private String teamName;
@@ -262,6 +365,14 @@ public class Sidebar implements Viewable {
         private int teamColor = 2;
 
 
+        /**
+         * The constructor to creates a team
+         *
+         * @param teamName   The registry name of the team
+         * @param prefix     The team prefix
+         * @param suffix     The team suffix
+         * @param entityName The team entity name
+         */
         private SidebarTeam(String teamName, ColoredText prefix, ColoredText suffix, String entityName) {
             this.teamName = teamName;
             this.prefix = prefix;
@@ -269,6 +380,11 @@ public class Sidebar implements Viewable {
             this.entityName = entityName;
         }
 
+        /**
+         * Gets a team creation packet
+         *
+         * @return a {@link TeamsPacket} which creates a new team
+         */
         private TeamsPacket getCreationPacket() {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
@@ -284,6 +400,11 @@ public class Sidebar implements Viewable {
             return teamsPacket;
         }
 
+        /**
+         * Gets a team destruction packet
+         *
+         * @return a {@link TeamsPacket} which destroyed a team
+         */
         private TeamsPacket getDestructionPacket() {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
@@ -291,6 +412,12 @@ public class Sidebar implements Viewable {
             return teamsPacket;
         }
 
+        /**
+         * Updates the prefix of the {@link SidebarTeam}
+         *
+         * @param prefix The new prefix
+         * @return a {@link TeamsPacket} with the updated prefix
+         */
         private TeamsPacket updatePrefix(ColoredText prefix) {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
@@ -305,14 +432,29 @@ public class Sidebar implements Viewable {
             return teamsPacket;
         }
 
+        /**
+         * Gets the entity name of the team
+         *
+         * @return the entity name
+         */
         private String getEntityName() {
             return entityName;
         }
 
+        /**
+         * Gets the prefix of the team
+         *
+         * @return the prefix
+         */
         private ColoredText getPrefix() {
             return prefix;
         }
 
+        /**
+         * Refresh the prefix of the {@link SidebarTeam}
+         *
+         * @param prefix The refreshed prefix
+         */
         private void refreshPrefix(ColoredText prefix) {
             this.prefix = prefix;
         }
