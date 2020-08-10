@@ -123,7 +123,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         {
-            if (pathPosition != null) {
+            if (pathPosition != null && !pathLock.isLocked()) {
                 PATHFINDER_MANAGER.getPool().execute(() -> {
                     this.pathLock.lock();
                     this.path = pathFinder.updatePathFor(pathingEntity);
@@ -347,7 +347,6 @@ public abstract class EntityCreature extends LivingEntity {
         }
 
         this.pathLock.lock();
-
         this.pathFinder.reset();
         if (position == null) {
             this.pathLock.unlock();

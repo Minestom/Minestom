@@ -1,8 +1,6 @@
 package net.minestom.server.instance;
 
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
@@ -72,7 +70,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
-    protected Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     protected UUID uniqueId;
 
     protected List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());
@@ -452,14 +450,15 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunk the chunk to get the entities from
      * @return an unmodifiable set containing all the entities in a chunk,
-     * if {@code chunk} is null, return an empty {@link HashSet}
+     * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public Set<Entity> getChunkEntities(Chunk chunk) {
-        if (chunk == null)
+        if (ChunkUtils.isChunkUnloaded(chunk))
             return new HashSet<>();
 
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        return Collections.unmodifiableSet(getEntitiesInChunk(index));
+        final Set<Entity> entities = getEntitiesInChunk(index);
+        return Collections.unmodifiableSet(entities);
     }
 
     /**
@@ -550,7 +549,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param x the X position
      * @param y the Y position
      * @param z the Z position
-     * @return the visual block id at the position
+     * @return the block state id at the position
      */
     public short getBlockStateId(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
@@ -564,7 +563,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param x the X position
      * @param y the Y position
      * @param z the Z position
-     * @return the visual block id at the position
+     * @return the block state id at the position
      */
     public short getBlockStateId(float x, float y, float z) {
         return getBlockStateId(Math.round(x), Math.round(y), Math.round(z));
@@ -574,7 +573,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Give the block state id at the given position
      *
      * @param blockPosition the block position
-     * @return the visual block id at the position
+     * @return the block state id at the position
      */
     public short getBlockStateId(BlockPosition blockPosition) {
         return getBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
@@ -725,19 +724,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.add(eventCallback);
-        this.eventCallbacks.put(eventClass, callbacks);
     }
 
     @Override
     public <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
         List<EventCallback> callbacks = getEventCallbacks(eventClass);
         callbacks.remove(eventCallback);
-        this.eventCallbacks.put(eventClass, callbacks);
     }
 
     @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
-        return eventCallbacks.getOrDefault(eventClass, new CopyOnWriteArrayList<>());
+        return eventCallbacks.computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)

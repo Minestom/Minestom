@@ -2,14 +2,12 @@ package fr.themode.demo.entity;
 
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.ai.goal.MeleeAttackGoal;
-import net.minestom.server.entity.ai.target.ClosestEntityTarget;
+import net.minestom.server.entity.ai.goal.RandomStrollGoal;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.animal.EntityChicken;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.time.TimeUnit;
 
 public class ChickenCreature extends EntityChicken {
 
@@ -17,8 +15,8 @@ public class ChickenCreature extends EntityChicken {
         super(defaultPosition);
 
         //goalSelectors.add(new DoNothingGoal(this, 500, 0.1f));
-        goalSelectors.add(new MeleeAttackGoal(this, 500, TimeUnit.MILLISECOND));
-        //goalSelectors.add(new RandomStrollGoal(this, 2));
+        //goalSelectors.add(new MeleeAttackGoal(this, 500, TimeUnit.MILLISECOND));
+        goalSelectors.add(new RandomStrollGoal(this, 2));
         /*goalSelectors.add(new EatBlockGoal(this,
                 new HashMap<>() {
                     {
@@ -36,7 +34,7 @@ public class ChickenCreature extends EntityChicken {
 
 
         //targetSelectors.add(new LastEntityDamagerTarget(this, 15));
-        targetSelectors.add(new ClosestEntityTarget(this, 15, LivingEntity.class));
+        //targetSelectors.add(new ClosestEntityTarget(this, 15, LivingEntity.class));
 
 
         setAttribute(Attribute.MOVEMENT_SPEED, 0.1f);

@@ -5,6 +5,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Separate chunks into group of linked chunks
@@ -16,12 +18,12 @@ public class PerGroupChunkProvider extends ThreadProvider {
     /**
      * Chunk -> its chunk group
      */
-    private Map<Instance, Map<ChunkCoordinate, Set<ChunkCoordinate>>> instanceChunksGroupMap = new HashMap<>();
+    private Map<Instance, Map<ChunkCoordinate, Set<ChunkCoordinate>>> instanceChunksGroupMap = new ConcurrentHashMap<>();
 
     /**
      * Used to know to which instance is linked a Set of chunks
      */
-    private Map<Instance, Map<Set<ChunkCoordinate>, Instance>> instanceInstanceMap = new HashMap<>();
+    private Map<Instance, Map<Set<ChunkCoordinate>, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
@@ -46,7 +48,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         if (!findGroup) {
             // Create group of one chunk
             final ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkZ);
-            Set<ChunkCoordinate> chunkCoordinates = new HashSet<>();
+            Set<ChunkCoordinate> chunkCoordinates = new CopyOnWriteArraySet<>();
             chunkCoordinates.add(chunkCoordinate);
 
             chunksGroupMap.put(chunkCoordinate, chunkCoordinates);
@@ -56,7 +58,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         }
 
         // Represent the merged group of all the neighbours
-        Set<ChunkCoordinate> finalGroup = new HashSet<>();
+        Set<ChunkCoordinate> finalGroup = new CopyOnWriteArraySet<>();
 
         // Add the newly loaded chunk to the group
         finalGroup.add(new ChunkCoordinate(chunkX, chunkZ));
@@ -168,11 +170,11 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     private Map<ChunkCoordinate, Set<ChunkCoordinate>> getChunksGroupMap(Instance instance) {
-        return instanceChunksGroupMap.computeIfAbsent(instance, inst -> new HashMap<>());
+        return instanceChunksGroupMap.computeIfAbsent(instance, inst -> new ConcurrentHashMap<>());
     }
 
     private Map<Set<ChunkCoordinate>, Instance> getInstanceMap(Instance instance) {
-        return instanceInstanceMap.computeIfAbsent(instance, inst -> new HashMap<>());
+        return instanceInstanceMap.computeIfAbsent(instance, inst -> new ConcurrentHashMap<>());
     }
 
 }
