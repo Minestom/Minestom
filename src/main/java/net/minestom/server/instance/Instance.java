@@ -134,9 +134,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     /**
-     * Unload a chunk
+     * Schedule the removal of a chunk, this method does not promise when it will be done
      * <p>
-     * WARNING: all entities other than {@link Player} will be removed
+     * WARNING: during unloading, all entities other than {@link Player} will be removed
+     * <p>
+     * For {@link InstanceContainer} it is done during {@link InstanceContainer#tick(long)}
      *
      * @param chunk the chunk to unload
      */

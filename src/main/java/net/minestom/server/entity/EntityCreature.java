@@ -346,7 +346,13 @@ public abstract class EntityCreature extends LivingEntity {
             return false;
         }
 
+        if (pathFinder == null) {
+            // Unexpected error
+            return false;
+        }
+
         this.pathLock.lock();
+
         this.pathFinder.reset();
         if (position == null) {
             this.pathLock.unlock();

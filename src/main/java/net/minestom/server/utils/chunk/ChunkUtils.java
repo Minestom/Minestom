@@ -13,6 +13,8 @@ public final class ChunkUtils {
     }
 
     /**
+     * Get if a chunk is unloaded
+     *
      * @param chunk the chunk to check
      * @return true if the chunk is unloaded, false otherwise
      */
@@ -21,6 +23,8 @@ public final class ChunkUtils {
     }
 
     /**
+     * Get if a chunk is unloaded
+     *
      * @param instance the instance to check
      * @param x        instance X coordinate
      * @param z        instance Z coordinate

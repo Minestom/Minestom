@@ -98,7 +98,7 @@ public final class UpdateManager {
      * @param threadProvider the new thread provider
      * @throws NullPointerException if {@param threadProvider} is null
      */
-    public void setThreadProvider(ThreadProvider threadProvider) {
+    public synchronized void setThreadProvider(ThreadProvider threadProvider) {
         Check.notNull(threadProvider, "The thread provider cannot be null");
         this.threadProvider = threadProvider;
     }

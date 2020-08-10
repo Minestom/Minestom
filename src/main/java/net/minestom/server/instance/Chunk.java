@@ -70,7 +70,7 @@ public final class Chunk implements Viewable {
     private PFColumnarSpace columnarSpace;
 
     // Cache
-    private boolean loaded = true;
+    private volatile boolean loaded = true;
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private ByteBuf fullDataPacket;
 

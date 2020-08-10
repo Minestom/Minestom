@@ -7,6 +7,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Separate chunks into group of linked chunks
@@ -106,15 +107,24 @@ public class PerGroupChunkProvider extends ThreadProvider {
             final Instance instance = entry.getKey();
             final Map<Set<ChunkCoordinate>, Instance> instanceMap = entry.getValue();
 
+            // True if the instance ended its tick call
+            AtomicBoolean instanceUpdated = new AtomicBoolean(false);
+
             // Update all the chunks + instances
             for (Map.Entry<Set<ChunkCoordinate>, Instance> ent : instanceMap.entrySet()) {
                 final Set<ChunkCoordinate> chunks = ent.getKey();
 
-                final boolean updateInstance = updatedInstance.add(instance);
+                final boolean shouldUpdateInstance = updatedInstance.add(instance);
                 pool.execute(() -> {
                     // Used to check if the instance has already been updated this tick
-                    if (updateInstance) {
+                    if (shouldUpdateInstance) {
                         updateInstance(instance, time);
+                        instanceUpdated.set(true);
+                    }
+
+                    // Wait for the instance to be updated
+                    // Needed because the instance tick is used to unload waiting chunks
+                    while (!instanceUpdated.get()) {
                     }
 
                     for (ChunkCoordinate chunkCoordinate : chunks) {

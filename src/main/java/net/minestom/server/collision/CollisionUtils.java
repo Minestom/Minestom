@@ -1,11 +1,13 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 public class CollisionUtils {
 
@@ -138,7 +140,14 @@ public class CollisionUtils {
             blockPos.setX((int) Math.floor(corner.getX()));
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
-            final short blockStateId = instance.getBlockStateId(blockPos);
+
+            final Chunk chunk = instance.getChunkAt(blockPos);
+            if (ChunkUtils.isChunkUnloaded(chunk)) {
+                // Collision at chunk border
+                return false;
+            }
+
+            final short blockStateId = chunk.getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             final Block block = Block.fromStateId(blockStateId);
 
             // TODO: block collision boxes
