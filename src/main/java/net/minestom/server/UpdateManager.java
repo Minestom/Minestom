@@ -12,6 +12,7 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 public final class UpdateManager {
@@ -24,6 +25,8 @@ public final class UpdateManager {
     private boolean stopRequested;
 
     private ThreadProvider threadProvider;
+
+    private ArrayList<Runnable> tickCallbacks = new ArrayList<>();
 
     {
         //threadProvider = new PerInstanceThreadProvider();
@@ -50,6 +53,9 @@ public final class UpdateManager {
             while (!stopRequested) {
                 currentTime = System.nanoTime();
                 final long time = System.currentTimeMillis();
+
+                //Tick Callbacks
+                tickCallbacks.forEach(Runnable::run);
 
                 // Server tick (instance/chunk/entity)
                 threadProvider.update(time);
@@ -127,6 +133,14 @@ public final class UpdateManager {
         if (this.threadProvider == null)
             return;
         this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
+    }
+
+    public void addTickCallback(Runnable callback) {
+        tickCallbacks.add(callback);
+    }
+
+    public void removeTickCallback(Runnable callback) {
+        tickCallbacks.remove(callback);
     }
 
     /**
