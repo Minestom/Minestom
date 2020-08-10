@@ -28,13 +28,13 @@ public interface LargeFramebuffer {
      * @param top
      */
     default void preparePacket(MapDataPacket packet, int left, int top) {
-        byte[] colors = new byte[width()*height()];
+        byte[] colors = new byte[Framebuffer.WIDTH*Framebuffer.WIDTH];
         int width = Math.min(width(), left+Framebuffer.WIDTH) - left;
         int height = Math.min(height(), top+Framebuffer.HEIGHT) - top;
         for (int y = top; y < height; y++) {
             for (int x = left; x < width; x++) {
                 byte color = getMapColor(left, top);
-                colors[Framebuffer.index(x-left, y-top, width)] = color;
+                colors[Framebuffer.index(x-left, y-top)] = color;
             }
         }
 
