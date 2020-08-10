@@ -31,6 +31,7 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.plugins.PluginManager;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
@@ -113,6 +114,8 @@ public class MinecraftServer {
     private static DimensionTypeManager dimensionTypeManager;
     private static AdvancementManager advancementManager;
 
+    private static PluginManager pluginManager;
+
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
 
@@ -165,6 +168,8 @@ public class MinecraftServer {
         advancementManager = new AdvancementManager();
 
         updateManager = new UpdateManager();
+
+        pluginManager = PluginManager.getInstance();
 
         lootTableManager = new LootTableManager();
         tagManager = new TagManager();
@@ -300,6 +305,9 @@ public class MinecraftServer {
         MinecraftServer.responseDataConsumer = responseDataConsumer;
         updateManager.start();
         nettyServer.start(address, port);
+        long t1 = -System.nanoTime();
+        pluginManager.loadPlugins();
+        LOGGER.info("Plugins loaded in " + (t1+System.nanoTime())/1_000_000D + "ms");
         LOGGER.info("Minestom server started successfully.");
     }
 
