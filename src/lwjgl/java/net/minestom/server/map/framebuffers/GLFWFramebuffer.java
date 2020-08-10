@@ -10,12 +10,11 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
 
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * GLFW-based framebuffer.
@@ -31,6 +30,8 @@ import static org.lwjgl.glfw.GLFW.*;
  *
  * GLFWFramebuffer does not provide guarantee that the result of {@link #toMapColors()} is synchronized with rendering, but
  * it will be updated after each frame rendered through {@link #render(Runnable)} or {@link #setupRenderLoop(long, TimeUnit, Runnable)}.
+ *
+ * This framebuffer is meant to render to a single map (ie it is only compatible with 128x128 rendering)
  */
 public class GLFWFramebuffer implements Framebuffer {
 

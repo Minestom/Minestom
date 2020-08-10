@@ -1,6 +1,5 @@
-package fr.themode.demo.commands;
+package fr.themode.demo.map;
 
-import fr.themode.demo.map.MapAnimationDemo;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;

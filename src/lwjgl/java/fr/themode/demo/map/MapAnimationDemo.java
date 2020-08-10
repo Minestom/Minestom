@@ -1,5 +1,6 @@
 package fr.themode.demo.map;
 
+import fr.themode.demo.Main;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.item.ItemStack;
@@ -130,5 +131,13 @@ public class MapAnimationDemo {
         MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> {
             p.getPlayerConnection().sendPacket(mapDataPacket);
         });
+    }
+
+    public static void main(String[] args) {
+        MinecraftServer.init();
+
+        MinecraftServer.getCommandManager().register(new TestItemFrame());
+        init();
+        Main.main(args);
     }
 }

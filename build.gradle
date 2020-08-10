@@ -51,6 +51,21 @@ sourceSets {
         compileClasspath += sourceSets.main.runtimeClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
+    lwjgl {
+        java {
+            srcDir 'src/lwjgl/java'
+        }
+
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+// Minestom uses LWJGL libs as optional dependency if interfacing with a GPU is asked
+java {
+    registerFeature("lwjgl") {
+        usingSourceSet(sourceSets.lwjgl)
+    }
 }
 
 dependencies {
@@ -95,15 +110,15 @@ dependencies {
     api 'com.github.jglrxavpok:Hephaistos:v1.0.4'
 
     // LWJGL, for map rendering
-    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
-    api "org.lwjgl:lwjgl"
-    api "org.lwjgl:lwjgl-egl"
-    api "org.lwjgl:lwjgl-opengl"
-    api "org.lwjgl:lwjgl-opengles"
-    api "org.lwjgl:lwjgl-glfw"
-    runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    lwjglApi "org.lwjgl:lwjgl"
+    lwjglApi "org.lwjgl:lwjgl-egl"
+    lwjglApi "org.lwjgl:lwjgl-opengl"
+    lwjglApi "org.lwjgl:lwjgl-opengles"
+    lwjglApi "org.lwjgl:lwjgl-glfw"
+    lwjglRuntimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    lwjglRuntimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+    lwjglRuntimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"
+    lwjglRuntimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
 }

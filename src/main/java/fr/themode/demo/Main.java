@@ -4,7 +4,6 @@ import fr.themode.demo.blocks.BurningTorchBlock;
 import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.blocks.UpdatableBlockDemo;
 import fr.themode.demo.commands.*;
-import fr.themode.demo.map.MapAnimationDemo;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -35,9 +34,6 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
-        commandManager.register(new TestItemFrame());
-
-        MapAnimationDemo.init();
 
         /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
         ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
