@@ -1370,7 +1370,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     public void setTeam(Team team) {
         super.setTeam(team);
-        if(team != null)
+        if (team != null)
             getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
     }
 

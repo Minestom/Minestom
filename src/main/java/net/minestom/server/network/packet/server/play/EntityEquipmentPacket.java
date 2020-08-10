@@ -9,15 +9,34 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 public class EntityEquipmentPacket implements ServerPacket {
 
     public int entityId;
-    public Slot slot;
-    public ItemStack itemStack;
+    public Slot[] slots;
+    public ItemStack[] itemStacks;
 
     @Override
     public void write(PacketWriter writer) {
         writer.writeVarInt(entityId);
-        // TODO multiple equipments
-        writer.writeByte((byte) slot.ordinal());
-        writer.writeItemStack(itemStack);
+
+        if (slots == null || itemStacks == null) {
+            throw new IllegalArgumentException("You need to specify at least one slot and one item");
+        }
+
+        if (slots.length != itemStacks.length) {
+            throw new IllegalArgumentException("You need the same amount of slots and items");
+        }
+
+        for (int i = 0; i < slots.length; i++) {
+            final Slot slot = slots[i];
+            final ItemStack itemStack = itemStacks[i];
+            final boolean last = i == slots.length - 1;
+
+            byte slotEnum = (byte) slot.ordinal();
+            if (!last) {
+                slotEnum |= 0x80;
+            }
+
+            writer.writeByte(slotEnum);
+            writer.writeItemStack(itemStack);
+        }
     }
 
     @Override

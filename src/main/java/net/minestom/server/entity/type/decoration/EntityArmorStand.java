@@ -8,7 +8,6 @@ import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.item.ItemStackUtils;
@@ -317,28 +316,6 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     // Equipments
-    public void syncEquipments(PlayerConnection connection) {
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
-            if (entityEquipmentPacket == null)
-                return;
-            connection.sendPacket(entityEquipmentPacket);
-        }
-    }
-
-    public void syncEquipments() {
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            syncEquipment(slot);
-        }
-    }
-
-    protected void syncEquipment(EntityEquipmentPacket.Slot slot) {
-        EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
-        if (entityEquipmentPacket == null)
-            return;
-
-        sendPacketToViewers(entityEquipmentPacket);
-    }
 
     private ItemStack getEquipmentItem(ItemStack itemStack, ArmorEquipEvent.ArmorSlot armorSlot) {
         itemStack = ItemStackUtils.notNull(itemStack);
@@ -346,15 +323,5 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
         ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
         callEvent(ArmorEquipEvent.class, armorEquipEvent);
         return armorEquipEvent.getArmorItem();
-    }
-
-    protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
-        ItemStack itemStack = getEquipment(slot);
-
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = getEntityId();
-        equipmentPacket.slot = slot;
-        equipmentPacket.itemStack = itemStack;
-        return equipmentPacket;
     }
 }

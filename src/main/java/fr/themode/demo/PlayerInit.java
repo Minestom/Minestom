@@ -292,8 +292,6 @@ public class PlayerInit {
 
                 player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
 
-                player.getInventory().setItemStack(41, ItemStack.getAirItem());
-
                 inventory.addItemStack(item.clone());
                 //player.openInventory(inventory);
 
