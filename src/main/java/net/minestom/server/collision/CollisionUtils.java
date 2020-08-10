@@ -142,7 +142,7 @@ public class CollisionUtils {
             blockPos.setZ((int) Math.floor(corner.getZ()));
 
             final Chunk chunk = instance.getChunkAt(blockPos);
-            if (ChunkUtils.isChunkUnloaded(chunk)) {
+            if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
                 return false;
             }

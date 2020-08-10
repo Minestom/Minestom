@@ -368,7 +368,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Can't path in an unloaded chunk
         final Chunk chunk = instance.getChunkAt(position);
-        if (ChunkUtils.isChunkUnloaded(chunk)) {
+        if (!ChunkUtils.isLoaded(chunk)) {
             this.pathLock.unlock();
             return false;
         }

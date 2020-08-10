@@ -1,5 +1,7 @@
 package net.minestom.server.utils.chunk;
 
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
@@ -13,29 +15,29 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get if a chunk is unloaded
+     * Get if a chunk is loaded
      *
      * @param chunk the chunk to check
-     * @return true if the chunk is unloaded, false otherwise
+     * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isChunkUnloaded(Chunk chunk) {
-        return chunk == null || !chunk.isLoaded();
+    public static boolean isLoaded(Chunk chunk) {
+        return chunk != null && chunk.isLoaded();
     }
 
     /**
-     * Get if a chunk is unloaded
+     * Get if a chunk is loaded
      *
      * @param instance the instance to check
      * @param x        instance X coordinate
      * @param z        instance Z coordinate
-     * @return true if the chunk is unloaded, false otherwise
+     * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isChunkUnloaded(Instance instance, float x, float z) {
+    public static boolean isLoaded(Instance instance, float x, float z) {
         final int chunkX = getChunkCoordinate((int) x);
         final int chunkZ = getChunkCoordinate((int) z);
 
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        return isChunkUnloaded(chunk);
+        return isLoaded(chunk);
     }
 
     /**
@@ -48,6 +50,8 @@ public final class ChunkUtils {
     }
 
     /**
+     * Get the chunk index of chunk coordinates
+     *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      * @return a number storing the chunk X and Z
@@ -71,6 +75,8 @@ public final class ChunkUtils {
     }
 
     /**
+     * Get the chunks in range of a position
+     *
      * @param position the initial position
      * @param range    how far should it retrieves chunk
      * @return an array containing chunks index which can be converted using {@link #getChunkCoord(long)}
@@ -92,6 +98,44 @@ public final class ChunkUtils {
     }
 
     /**
+     * Get all the loaded neighbours of a chunk and itself, no diagonals
+     *
+     * @param instance the instance of the chunks
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @return an array containing all the loaded neighbours
+     * can be deserialized using {@link #indexToChunkPosition(int)}
+     */
+    public static long[] getNeighbours(Instance instance, int chunkX, int chunkZ) {
+        LongList chunks = new LongArrayList();
+        // Constants used to loop through the neighbors
+        final int[] posX = {1, 0, -1};
+        final int[] posZ = {1, 0, -1};
+
+        for (int x : posX) {
+            for (int z : posZ) {
+
+                // No diagonal check
+                if ((Math.abs(x) + Math.abs(z)) == 2)
+                    continue;
+
+                final int targetX = chunkX + x;
+                final int targetZ = chunkZ + z;
+                final Chunk chunk = instance.getChunk(targetX, targetZ);
+                if (ChunkUtils.isLoaded(chunk)) {
+                    // Chunk is loaded, add it
+                    final long index = getChunkIndex(targetX, targetZ);
+                    chunks.add(index);
+                }
+
+            }
+        }
+        return chunks.toArray(new long[0]);
+    }
+
+    /**
+     * Get the block index of a position
+     *
      * @param x the block X
      * @param y the block Y
      * @param z the block Z

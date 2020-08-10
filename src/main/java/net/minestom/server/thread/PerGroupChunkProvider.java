@@ -1,12 +1,15 @@
 package net.minestom.server.thread;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -19,28 +22,28 @@ public class PerGroupChunkProvider extends ThreadProvider {
     /**
      * Chunk -> its chunk group
      */
-    private Map<Instance, Map<ChunkCoordinate, Set<ChunkCoordinate>>> instanceChunksGroupMap = new ConcurrentHashMap<>();
+    private Map<Instance, Long2ObjectMap<LongSet>> instanceChunksGroupMap = new ConcurrentHashMap<>();
 
     /**
      * Used to know to which instance is linked a Set of chunks
      */
-    private Map<Instance, Map<Set<ChunkCoordinate>, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
+    private Map<Instance, Map<LongSet, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
-        Map<ChunkCoordinate, Set<ChunkCoordinate>> chunksGroupMap = getChunksGroupMap(instance);
-        Map<Set<ChunkCoordinate>, Instance> instanceMap = getInstanceMap(instance);
+        Long2ObjectMap<LongSet> chunksGroupMap = getChunksGroupMap(instance);
+        Map<LongSet, Instance> instanceMap = getInstanceMap(instance);
 
         // List of groups which are neighbours
-        List<Set<ChunkCoordinate>> neighboursGroups = new ArrayList<>();
+        List<LongSet> neighboursGroups = new ArrayList<>();
 
-        final List<ChunkCoordinate> chunks = getNeighbours(instance, chunkX, chunkZ);
+        final long[] chunks = ChunkUtils.getNeighbours(instance, chunkX, chunkZ);
         boolean findGroup = false;
-        for (ChunkCoordinate chunkCoordinate : chunks) {
-            if (chunksGroupMap.containsKey(chunkCoordinate)) {
-                final Set<ChunkCoordinate> group = chunksGroupMap.get(chunkCoordinate);
+        for (long chunkIndex : chunks) {
+            if (chunksGroupMap.containsKey(chunkIndex)) {
+                final LongSet group = chunksGroupMap.get(chunkIndex);
                 neighboursGroups.add(group);
-                chunksGroupMap.remove(chunkCoordinate);
+                chunksGroupMap.remove(chunkIndex);
                 instanceMap.remove(group);
                 findGroup = true;
             }
@@ -48,30 +51,31 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
         if (!findGroup) {
             // Create group of one chunk
-            final ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkZ);
-            Set<ChunkCoordinate> chunkCoordinates = new CopyOnWriteArraySet<>();
-            chunkCoordinates.add(chunkCoordinate);
+            final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+            LongSet chunkIndexes = new LongArraySet();
+            chunkIndexes.add(chunkIndex);
 
-            chunksGroupMap.put(chunkCoordinate, chunkCoordinates);
-            instanceMap.put(chunkCoordinates, instance);
+            chunksGroupMap.put(chunkIndex, chunkIndexes);
+            instanceMap.put(chunkIndexes, instance);
 
             return;
         }
 
         // Represent the merged group of all the neighbours
-        Set<ChunkCoordinate> finalGroup = new CopyOnWriteArraySet<>();
+        LongSet finalGroup = new LongArraySet();
 
         // Add the newly loaded chunk to the group
-        finalGroup.add(new ChunkCoordinate(chunkX, chunkZ));
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        finalGroup.add(chunkIndex);
 
         // Add all the neighbours groups to the final one
-        for (Set<ChunkCoordinate> chunkCoordinates : neighboursGroups) {
+        for (LongSet chunkCoordinates : neighboursGroups) {
             finalGroup.addAll(chunkCoordinates);
         }
 
         // Complete maps
-        for (ChunkCoordinate chunkCoordinate : finalGroup) {
-            chunksGroupMap.put(chunkCoordinate, finalGroup);
+        for (long index : finalGroup) {
+            chunksGroupMap.put(index, finalGroup);
         }
 
         instanceMap.put(finalGroup, instance);
@@ -80,15 +84,15 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
     @Override
     public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
-        Map<ChunkCoordinate, Set<ChunkCoordinate>> chunksGroupMap = getChunksGroupMap(instance);
-        Map<Set<ChunkCoordinate>, Instance> instanceMap = getInstanceMap(instance);
+        Long2ObjectMap<LongSet> chunksGroupMap = getChunksGroupMap(instance);
+        Map<LongSet, Instance> instanceMap = getInstanceMap(instance);
 
-        final ChunkCoordinate chunkCoordinate = new ChunkCoordinate(chunkX, chunkZ);
-        if (chunksGroupMap.containsKey(chunkCoordinate)) {
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        if (chunksGroupMap.containsKey(chunkIndex)) {
             // The unloaded chunk is part of a group, remove it from the group
-            Set<ChunkCoordinate> chunkCoordinates = chunksGroupMap.get(chunkCoordinate);
-            chunkCoordinates.remove(chunkCoordinate);
-            chunksGroupMap.remove(chunkCoordinate);
+            LongSet chunkCoordinates = chunksGroupMap.get(chunkIndex);
+            chunkCoordinates.remove(chunkIndex);
+            chunksGroupMap.remove(chunkIndex);
 
             if (chunkCoordinates.isEmpty()) {
                 // The chunk group is empty, remove it entirely
@@ -102,17 +106,16 @@ public class PerGroupChunkProvider extends ThreadProvider {
         // Set of already-updated instances this tick
         final Set<Instance> updatedInstance = new HashSet<>();
 
-        getLock().lock();
         instanceInstanceMap.entrySet().forEach(entry -> {
             final Instance instance = entry.getKey();
-            final Map<Set<ChunkCoordinate>, Instance> instanceMap = entry.getValue();
+            final Map<LongSet, Instance> instanceMap = entry.getValue();
 
             // True if the instance ended its tick call
             AtomicBoolean instanceUpdated = new AtomicBoolean(false);
 
             // Update all the chunks + instances
-            for (Map.Entry<Set<ChunkCoordinate>, Instance> ent : instanceMap.entrySet()) {
-                final Set<ChunkCoordinate> chunks = ent.getKey();
+            for (Map.Entry<LongSet, Instance> ent : instanceMap.entrySet()) {
+                final LongSet chunksIndexes = ent.getKey();
 
                 final boolean shouldUpdateInstance = updatedInstance.add(instance);
                 pool.execute(() -> {
@@ -127,9 +130,10 @@ public class PerGroupChunkProvider extends ThreadProvider {
                     while (!instanceUpdated.get()) {
                     }
 
-                    for (ChunkCoordinate chunkCoordinate : chunks) {
-                        final Chunk chunk = instance.getChunk(chunkCoordinate.chunkX, chunkCoordinate.chunkZ);
-                        if (ChunkUtils.isChunkUnloaded(chunk)) {
+                    for (long chunkIndex : chunksIndexes) {
+                        final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
+                        final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
+                        if (!ChunkUtils.isLoaded(chunk)) {
                             continue;
                         }
 
@@ -142,49 +146,14 @@ public class PerGroupChunkProvider extends ThreadProvider {
             }
 
         });
-        getLock().unlock();
     }
 
-    /**
-     * Get all the neighbours of a chunk and itself, no diagonals
-     *
-     * @param instance the instance of the chunks
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @return the loaded neighbours of the chunk
-     */
-    private List<ChunkCoordinate> getNeighbours(Instance instance, int chunkX, int chunkZ) {
-        List<ChunkCoordinate> chunks = new ArrayList<>();
-        // Constants used to loop through the neighbors
-        final int[] posX = {1, 0, -1};
-        final int[] posZ = {1, 0, -1};
-
-        for (int x : posX) {
-            for (int z : posZ) {
-
-                // No diagonal check
-                if ((Math.abs(x) + Math.abs(z)) == 2)
-                    continue;
-
-                final int targetX = chunkX + x;
-                final int targetZ = chunkZ + z;
-                final Chunk chunk = instance.getChunk(targetX, targetZ);
-                if (!ChunkUtils.isChunkUnloaded(chunk)) {
-                    // Chunk is loaded, add it
-                    chunks.add(toChunkCoordinate(chunk));
-                }
-
-            }
-        }
-        return chunks;
+    private Long2ObjectMap<LongSet> getChunksGroupMap(Instance instance) {
+        return instanceChunksGroupMap.computeIfAbsent(instance, inst -> new Long2ObjectOpenHashMap<>());
     }
 
-    private Map<ChunkCoordinate, Set<ChunkCoordinate>> getChunksGroupMap(Instance instance) {
-        return instanceChunksGroupMap.computeIfAbsent(instance, inst -> new ConcurrentHashMap<>());
-    }
-
-    private Map<Set<ChunkCoordinate>, Instance> getInstanceMap(Instance instance) {
-        return instanceInstanceMap.computeIfAbsent(instance, inst -> new ConcurrentHashMap<>());
+    private Map<LongSet, Instance> getInstanceMap(Instance instance) {
+        return instanceInstanceMap.computeIfAbsent(instance, inst -> new HashMap<>());
     }
 
 }

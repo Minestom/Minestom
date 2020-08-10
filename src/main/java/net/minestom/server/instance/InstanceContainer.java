@@ -236,7 +236,7 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = getChunkAt(blockPosition);
 
         // Chunk unloaded, stop here
-        if (ChunkUtils.isChunkUnloaded(chunk))
+        if (!ChunkUtils.isLoaded(chunk))
             return false;
 
         final int x = blockPosition.getX();
@@ -316,7 +316,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void unloadChunk(Chunk chunk) {
-        if (ChunkUtils.isChunkUnloaded(chunk)) {
+        // Already unloaded chunk
+        if (!ChunkUtils.isLoaded(chunk)) {
             return;
         }
         // Schedule the chunk removal
@@ -328,7 +329,7 @@ public class InstanceContainer extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-        return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
+        return ChunkUtils.isLoaded(chunk) ? chunk : null;
     }
 
     /**

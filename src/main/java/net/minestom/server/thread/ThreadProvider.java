@@ -6,10 +6,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.thread.MinestomThread;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
@@ -26,8 +24,6 @@ public abstract class ThreadProvider {
      * The amount of threads in the thread pool
      */
     private int threadCount;
-
-    private ReentrantLock lock = new ReentrantLock();
 
     {
         // Default thread count in the pool
@@ -76,15 +72,6 @@ public abstract class ThreadProvider {
     public synchronized void setThreadCount(int threadCount) {
         this.threadCount = threadCount;
         refreshPool();
-    }
-
-    /**
-     * Get the lock of this thread provider
-     *
-     * @return the thread provider lock
-     */
-    public ReentrantLock getLock() {
-        return lock;
     }
 
     private void refreshPool() {
@@ -192,43 +179,6 @@ public abstract class ThreadProvider {
                     continue;
                 entity.tick(time);
             }
-        }
-    }
-
-    /**
-     * Convert a {@link Chunk} to a {@link ChunkCoordinate}
-     *
-     * @param chunk the chunk to convert
-     * @return the converted {@link ChunkCoordinate}
-     */
-    protected ChunkCoordinate toChunkCoordinate(Chunk chunk) {
-        return new ChunkCoordinate(chunk.getChunkX(), chunk.getChunkZ());
-    }
-
-    /**
-     * Represent the coordinates of a {@link Chunk}
-     * Used so the chunks objects can be cleared by the garbage collector properly¬
-     */
-    protected static class ChunkCoordinate {
-        public int chunkX, chunkZ;
-
-        public ChunkCoordinate(int chunkX, int chunkZ) {
-            this.chunkX = chunkX;
-            this.chunkZ = chunkZ;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ChunkCoordinate that = (ChunkCoordinate) o;
-            return chunkX == that.chunkX &&
-                    chunkZ == that.chunkZ;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(chunkX, chunkZ);
         }
     }
 

@@ -455,7 +455,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public Set<Entity> getChunkEntities(Chunk chunk) {
-        if (ChunkUtils.isChunkUnloaded(chunk))
+        if (!ChunkUtils.isLoaded(chunk))
             return new HashSet<>();
 
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());

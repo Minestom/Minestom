@@ -91,7 +91,7 @@ public class ClosestEntityTarget extends TargetSelector {
                 final int targetX = chunkX + x;
                 final int targetZ = chunkZ + z;
                 final Chunk chunk = instance.getChunk(targetX, targetZ);
-                if (!ChunkUtils.isChunkUnloaded(chunk)) {
+                if (ChunkUtils.isLoaded(chunk)) {
                     // Chunk is loaded, add it
                     chunks.add(chunk);
                 }
