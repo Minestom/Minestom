@@ -22,6 +22,8 @@ public class EntityItemFrame extends ObjectEntity {
         super(EntityType.ITEM_FRAME, spawnPosition);
         this.orientation = orientation;
         this.rotation = Rotation.NONE;
+        setNoGravity(true);
+        setGravity(0f);
     }
 
     @Override
