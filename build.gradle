@@ -72,6 +72,10 @@ java {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     // Junit Testing Framework
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
