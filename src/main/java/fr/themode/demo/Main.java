@@ -47,7 +47,7 @@ public class Main {
 
         //MojangAuth.init();
 
-        minecraftServer.start("localhost", 25565, PlayerInit.getResponseDataConsumer());
+        minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
     }
 
 }

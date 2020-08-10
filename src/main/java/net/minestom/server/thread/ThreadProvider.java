@@ -6,8 +6,10 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.thread.MinestomThread;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
 /**
@@ -52,8 +54,9 @@ public abstract class ThreadProvider {
      * Perform a server tick for all chunks based on their linked thread
      *
      * @param time the update time in milliseconds
+     * @return
      */
-    public abstract void update(long time);
+    public abstract ArrayList<Future<?>> update(long time);
 
     /**
      * Get the current size of the thread pool

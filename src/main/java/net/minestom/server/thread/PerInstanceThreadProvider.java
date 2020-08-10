@@ -6,8 +6,10 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * Separate work between instance (1 instance = 1 thread execution)
@@ -34,12 +36,14 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     }
 
     @Override
-    public void update(long time) {
+    public ArrayList<Future<?>> update(long time) {
+        ArrayList<Future<?>> futures = new ArrayList<>();
+
         for (Map.Entry<Instance, LongSet> entry : instanceChunkMap.entrySet()) {
             final Instance instance = entry.getKey();
             final LongSet chunkIndexes = entry.getValue();
 
-            pool.execute(() -> {
+            futures.add(pool.submit(() -> {
                 updateInstance(instance, time);
 
                 for (long chunkIndex : chunkIndexes) {
@@ -53,8 +57,9 @@ public class PerInstanceThreadProvider extends ThreadProvider {
                     updateEntities(instance, chunk, time);
 
                 }
-            });
+            }));
         }
+        return futures;
     }
 
     private LongSet getChunkCoordinates(Instance instance) {

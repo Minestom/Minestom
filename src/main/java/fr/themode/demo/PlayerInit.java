@@ -61,8 +61,8 @@ public class PlayerInit {
         end.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        final int loopStart = -10;
-        final int loopEnd = 10;
+        final int loopStart = -4;
+        final int loopEnd = 4;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);

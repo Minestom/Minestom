@@ -14,6 +14,8 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 public final class UpdateManager {
 
@@ -26,7 +28,9 @@ public final class UpdateManager {
 
     private ThreadProvider threadProvider;
 
-    private ArrayList<Runnable> tickCallbacks = new ArrayList<>();
+    private ArrayList<Runnable> tickStartCallbacks = new ArrayList<>();
+
+    private ArrayList<Consumer<Double>> tickEndCallbacks = new ArrayList<>();
 
     {
         //threadProvider = new PerInstanceThreadProvider();
@@ -55,10 +59,10 @@ public final class UpdateManager {
                 final long time = System.currentTimeMillis();
 
                 //Tick Callbacks
-                tickCallbacks.forEach(Runnable::run);
+                tickStartCallbacks.forEach(Runnable::run);
 
                 // Server tick (instance/chunk/entity)
-                threadProvider.update(time);
+                ArrayList<Future<?>> futures = threadProvider.update(time);
 
                 // Waiting players update (newly connected waiting to get into the server)
                 entityManager.updateWaitingPlayers();
@@ -74,6 +78,19 @@ public final class UpdateManager {
                         player.kick(TIMEOUT_TEXT);
                     }
                 }
+
+                for (final Future<?> future : futures) {
+                    try {
+                        future.get();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                //Tick Callbacks
+                double tickTime = (System.nanoTime() - currentTime) / 1000000D;
+                tickEndCallbacks.forEach(doubleConsumer -> doubleConsumer.accept(tickTime));
 
                 // Sleep until next tick
                 long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
@@ -135,12 +152,20 @@ public final class UpdateManager {
         this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
     }
 
-    public void addTickCallback(Runnable callback) {
-        tickCallbacks.add(callback);
+    public void addTickStartCallback(Runnable callback) {
+        tickStartCallbacks.add(callback);
     }
 
-    public void removeTickCallback(Runnable callback) {
-        tickCallbacks.remove(callback);
+    public void removeTickStartCallback(Runnable callback) {
+        tickStartCallbacks.remove(callback);
+    }
+
+    public void addTickEndCallback(Consumer<Double> callback) {
+        tickEndCallbacks.add(callback);
+    }
+
+    public void removeTickEndCallback(Consumer<Double> callback) {
+        tickEndCallbacks.remove(callback);
     }
 
     /**

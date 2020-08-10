@@ -10,6 +10,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -102,9 +103,11 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     @Override
-    public void update(long time) {
+    public ArrayList<Future<?>> update(long time) {
         // Set of already-updated instances this tick
         final Set<Instance> updatedInstance = new HashSet<>();
+
+        ArrayList<Future<?>> futures = new ArrayList<>();
 
         instanceInstanceMap.entrySet().forEach(entry -> {
             final Instance instance = entry.getKey();
@@ -118,7 +121,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
                 final LongSet chunksIndexes = ent.getKey();
 
                 final boolean shouldUpdateInstance = updatedInstance.add(instance);
-                pool.execute(() -> {
+                futures.add(pool.submit(() -> {
                     // Used to check if the instance has already been updated this tick
                     if (shouldUpdateInstance) {
                         updateInstance(instance, time);
@@ -141,11 +144,12 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
                         updateEntities(instance, chunk, time);
                     }
-                });
+                }));
 
             }
 
         });
+        return futures;
     }
 
     private Long2ObjectMap<LongSet> getChunksGroupMap(Instance instance) {
