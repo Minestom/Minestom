@@ -15,6 +15,12 @@ public class MapMeta implements ItemMeta {
     private List<MapDecoration> decorations = new ArrayList<>();
     private ChatColor mapColor = ChatColor.NO_COLOR;
 
+    public MapMeta() {}
+
+    public MapMeta(int id) {
+        this.mapId = id;
+    }
+
     /**
      * Get the map id
      *

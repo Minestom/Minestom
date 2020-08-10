@@ -132,6 +132,8 @@ public class MinecraftServer {
     private static MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
+        if(minecraftServer != null) // don't init twice
+            return minecraftServer;
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
