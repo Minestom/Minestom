@@ -30,6 +30,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.permission.Permission;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -134,6 +135,8 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
+
+    private final List<Permission> permissions = new LinkedList<>();
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
@@ -622,6 +625,11 @@ public class Player extends LivingEntity implements CommandSender {
     @Override
     public void sendMessage(String message) {
         sendMessage(ColoredText.of(message));
+    }
+
+    @Override
+    public Collection<Permission> getAllPermissions() {
+        return permissions;
     }
 
     /**
@@ -1370,7 +1378,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     public void setTeam(Team team) {
         super.setTeam(team);
-        if(team != null)
+        if (team != null)
             getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
     }
 

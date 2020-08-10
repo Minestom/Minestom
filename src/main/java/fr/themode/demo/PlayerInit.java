@@ -15,6 +15,7 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.WorldBorder;
@@ -26,6 +27,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -112,6 +114,7 @@ public class PlayerInit {
         });
 
         connectionManager.addPlayerInitialization(player -> {
+
             player.addEventCallback(EntityAttackEvent.class, event -> {
                 final Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
@@ -144,16 +147,14 @@ public class PlayerInit {
                 if (block == Block.TORCH) {
                     event.setCustomBlock((short) 3); // custom torch block
                 }
-
                 /*for (Player p : player.getInstance().getPlayers()) {
                     if (p != player)
                         p.teleport(player.getPosition());
                 }*/
 
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < 100; i++) {
                     ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                     chickenCreature.setInstance(player.getInstance());
-                    //chickenCreature.setTarget(player);
                 }
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
@@ -267,6 +268,12 @@ public class PlayerInit {
                 }*/
 
                 {
+                    Sidebar sidebar = new Sidebar("title");
+                    sidebar.createLine(new Sidebar.ScoreboardLine("id1", ColoredText.of("text"), 1));
+                    sidebar.addViewer(player);
+                }
+
+                {
                     ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
                     MapMeta mapMeta = (MapMeta) map.getItemMeta();
                     mapMeta.setMapId(1);
@@ -284,8 +291,6 @@ public class PlayerInit {
                 player.getInventory().addItemStack(item);
 
                 player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
-
-                player.getInventory().setItemStack(41, ItemStack.getAirItem());
 
                 inventory.addItemStack(item.clone());
                 //player.openInventory(inventory);
@@ -359,7 +364,7 @@ public class PlayerInit {
                 System.out.println("PLAYER EAT EVENT");
             });
 
-            /*player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
+            player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
                 Instance instance = player.getInstance();
 
                 Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
@@ -371,7 +376,7 @@ public class PlayerInit {
                 if (chunk.getViewers().isEmpty()) {
                     player.getInstance().unloadChunk(chunk);
                 }
-            });*/
+            });
 
         });
     }

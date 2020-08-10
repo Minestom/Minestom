@@ -53,6 +53,7 @@ public class InstanceContainer extends Instance {
 
     private ChunkGenerator chunkGenerator;
     private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
+    private Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
@@ -235,7 +236,7 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = getChunkAt(blockPosition);
 
         // Chunk unloaded, stop here
-        if (ChunkUtils.isChunkUnloaded(chunk))
+        if (!ChunkUtils.isLoaded(chunk))
             return false;
 
         final int x = blockPosition.getX();
@@ -315,41 +316,20 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void unloadChunk(Chunk chunk) {
-        final int chunkX = chunk.getChunkX();
-        final int chunkZ = chunk.getChunkZ();
-
-        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-
-        UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-        unloadChunkPacket.chunkX = chunkX;
-        unloadChunkPacket.chunkZ = chunkZ;
-        chunk.sendPacketToViewers(unloadChunkPacket);
-
-        for (Player viewer : chunk.getViewers()) {
-            chunk.removeViewer(viewer);
+        // Already unloaded chunk
+        if (!ChunkUtils.isLoaded(chunk)) {
+            return;
         }
-
-        callChunkUnloadEvent(chunkX, chunkZ);
-
-        // Remove all entities in chunk
-        getChunkEntities(chunk).forEach(entity -> {
-            if (!(entity instanceof Player))
-                entity.remove();
-        });
-
-        // Clear cache
-        this.chunks.remove(index);
-        this.chunkEntities.remove(index);
-
-        chunk.unload();
-
-        UPDATE_MANAGER.signalChunkUnload(this, chunkX, chunkZ);
+        // Schedule the chunk removal
+        synchronized (this.scheduledChunksToRemove) {
+            this.scheduledChunksToRemove.add(chunk);
+        }
     }
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
-        return ChunkUtils.isChunkUnloaded(chunk) ? null : chunk;
+        return ChunkUtils.isLoaded(chunk) ? chunk : null;
     }
 
     /**
@@ -607,11 +587,56 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void tick(long time) {
+        // Unload all waiting chunks
+        UNSAFE_unloadChunks();
+
         super.tick(time);
         Lock wrlock = changingBlockLock.writeLock();
         wrlock.lock();
         currentlyChangingBlocks.clear();
         wrlock.unlock();
+    }
+
+    /**
+     * Unload all waiting chunks
+     * <p>
+     * Unsafe because it has to be done on the same thread as the instance/chunks tick update
+     */
+    private void UNSAFE_unloadChunks() {
+        synchronized (this.scheduledChunksToRemove) {
+            for (Chunk chunk : scheduledChunksToRemove) {
+                final int chunkX = chunk.getChunkX();
+                final int chunkZ = chunk.getChunkZ();
+
+                final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+
+                UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+                unloadChunkPacket.chunkX = chunkX;
+                unloadChunkPacket.chunkZ = chunkZ;
+                chunk.sendPacketToViewers(unloadChunkPacket);
+
+                for (Player viewer : chunk.getViewers()) {
+                    chunk.removeViewer(viewer);
+                }
+
+                callChunkUnloadEvent(chunkX, chunkZ);
+
+                // Remove all entities in chunk
+                getChunkEntities(chunk).forEach(entity -> {
+                    if (!(entity instanceof Player))
+                        entity.remove();
+                });
+
+                // Clear cache
+                this.chunks.remove(index);
+                this.chunkEntities.remove(index);
+
+                chunk.unload();
+
+                UPDATE_MANAGER.signalChunkUnload(this, chunkX, chunkZ);
+            }
+            this.scheduledChunksToRemove.clear();
+        }
     }
 
     private void callChunkLoadEvent(int chunkX, int chunkZ) {

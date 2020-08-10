@@ -25,7 +25,7 @@ public class NoiseTestGenerator extends ChunkGenerator {
                 double height = jNoise.getNoise((x + chunkX * 16) / 16.0, (z + chunkZ * 16) / 16.0) * 15 + 40;
                 for (int y = 0; y < height; y++) {
                     if (random.nextInt(100) > 10) {
-                        batch.setCustomBlock(x, y, z, "custom_block");
+                        batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
                     } else {
                         batch.setBlock(x, y, z, Block.GOLD_BLOCK);
                     }

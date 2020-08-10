@@ -11,8 +11,10 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.PacketWriter;
-import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.packet.server.play.CollectItemPacket;
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
+import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -290,7 +292,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * Is this entity immune to the given type of damage?
      *
      * @param type the type of damage
-     * @return true iff this entity is immune to the given type of damage
+     * @return true if this entity is immune to the given type of damage
      */
     public boolean isImmune(DamageType type) {
         return false;
@@ -364,40 +366,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     public float getAttributeValue(Attribute attribute) {
         return this.attributeValues[attribute.ordinal()];
-    }
-
-    // Equipments
-    protected void syncEquipments(PlayerConnection connection) {
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            final EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
-            if (entityEquipmentPacket == null)
-                return;
-            connection.sendPacket(entityEquipmentPacket);
-        }
-    }
-
-    protected void syncEquipments() {
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            syncEquipment(slot);
-        }
-    }
-
-    public void syncEquipment(EntityEquipmentPacket.Slot slot) {
-        final EntityEquipmentPacket entityEquipmentPacket = getEquipmentPacket(slot);
-        if (entityEquipmentPacket == null)
-            return;
-
-        sendPacketToViewers(entityEquipmentPacket);
-    }
-
-    protected EntityEquipmentPacket getEquipmentPacket(EntityEquipmentPacket.Slot slot) {
-        final ItemStack itemStack = getEquipment(slot);
-
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = getEntityId();
-        equipmentPacket.slot = slot;
-        equipmentPacket.itemStack = itemStack;
-        return equipmentPacket;
     }
 
     /**

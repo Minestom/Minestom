@@ -339,7 +339,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
-        boolean chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, position.getX(), position.getZ());
+        boolean chunkUnloaded = !ChunkUtils.isLoaded(instance, position.getX(), position.getZ());
         if (chunkUnloaded) {
             // No update for entities in unloaded chunk
             return;
@@ -461,7 +461,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        chunkUnloaded = ChunkUtils.isChunkUnloaded(instance, x, z);
+                        chunkUnloaded = !ChunkUtils.isLoaded(instance, x, z);
                         if (chunkUnloaded)
                             continue;
                         final CustomBlock customBlock = instance.getCustomBlock(x, y, z);

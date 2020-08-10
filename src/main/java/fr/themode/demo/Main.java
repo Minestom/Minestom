@@ -36,24 +36,10 @@ public class Main {
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
 
-        /*RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-        ShapelessRecipe shapelessRecipe = new ShapelessRecipe("test", "groupname") {
-            @Override
-            public boolean shouldShow(Player player) {
-                return true;
-            }
-        };
-        shapelessRecipe.setResult(new ItemStack(Material.STONE, (byte) 1));
-        DeclareRecipesPacket.Ingredient ingredient = new DeclareRecipesPacket.Ingredient();
-        ingredient.items = new ItemStack[]{new ItemStack(Material.STONE, (byte) 3)};
-        shapelessRecipe.addIngredient(ingredient);
-        recipeManager.addRecipe(shapelessRecipe);*/
-
         StorageManager storageManager = MinecraftServer.getStorageManager();
         storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
-
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 

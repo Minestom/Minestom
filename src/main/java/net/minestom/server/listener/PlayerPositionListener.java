@@ -51,7 +51,7 @@ public class PlayerPositionListener {
                                         float yaw, float pitch, boolean onGround) {
 
         // Try to move in an unloaded chunk, prevent it
-        if (ChunkUtils.isChunkUnloaded(player.getInstance(), x, z)) {
+        if (!ChunkUtils.isLoaded(player.getInstance(), x, z)) {
             player.teleport(player.getPosition());
             return;
         }

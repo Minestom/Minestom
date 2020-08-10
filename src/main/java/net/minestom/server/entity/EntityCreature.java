@@ -123,7 +123,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         {
-            if (pathPosition != null) {
+            if (pathPosition != null && !pathLock.isLocked()) {
                 PATHFINDER_MANAGER.getPool().execute(() -> {
                     this.pathLock.lock();
                     this.path = pathFinder.updatePathFor(pathingEntity);
@@ -346,6 +346,11 @@ public abstract class EntityCreature extends LivingEntity {
             return false;
         }
 
+        if (pathFinder == null) {
+            // Unexpected error
+            return false;
+        }
+
         this.pathLock.lock();
 
         this.pathFinder.reset();
@@ -363,7 +368,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Can't path in an unloaded chunk
         final Chunk chunk = instance.getChunkAt(position);
-        if (ChunkUtils.isChunkUnloaded(chunk)) {
+        if (!ChunkUtils.isLoaded(chunk)) {
             this.pathLock.unlock();
             return false;
         }

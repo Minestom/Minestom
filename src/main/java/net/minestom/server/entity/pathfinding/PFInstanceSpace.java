@@ -7,13 +7,13 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PFInstanceSpace implements IInstanceSpace {
 
     private Instance instance;
-    private Map<Chunk, PFColumnarSpace> chunkSpaceMap = new HashMap<>();
+    private Map<Chunk, PFColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
 
     public PFInstanceSpace(Instance instance) {
         this.instance = instance;

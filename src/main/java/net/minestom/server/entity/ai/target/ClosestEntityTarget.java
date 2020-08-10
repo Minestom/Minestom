@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Target the closest entity
+ * Target the closest targetable entity (based on the class array)
  */
 public class ClosestEntityTarget extends TargetSelector {
 
@@ -32,7 +32,6 @@ public class ClosestEntityTarget extends TargetSelector {
         final Instance instance = getEntityCreature().getInstance();
         final Chunk currentChunk = instance.getChunkAt(entityCreature.getPosition());
         final List<Chunk> chunks = getNeighbours(instance, currentChunk.getChunkX(), currentChunk.getChunkZ());
-
 
         Entity entity = null;
         float distance = Float.MAX_VALUE;
@@ -91,7 +90,7 @@ public class ClosestEntityTarget extends TargetSelector {
                 final int targetX = chunkX + x;
                 final int targetZ = chunkZ + z;
                 final Chunk chunk = instance.getChunk(targetX, targetZ);
-                if (!ChunkUtils.isChunkUnloaded(chunk)) {
+                if (ChunkUtils.isLoaded(chunk)) {
                     // Chunk is loaded, add it
                     chunks.add(chunk);
                 }
