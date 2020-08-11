@@ -15,8 +15,8 @@ void main() {
     // render in map colors
     int closest = 0;
     uint closestDistance = uint(2147483647);
-    for(int i = 1; i < paletteSize; i++) {
-        vec3 mapColor = texture(palette, vec2(i/paletteSize, 0.0)).rgb;
+    for(int i = 4; i < paletteSize; i++) {
+        vec3 mapColor = texture(palette, vec2((i+0.5f)/paletteSize, 0.0)).rgb;
         int dr = int((mapColor.r - vertexColor.r)*255);
         int dg = int((mapColor.g - vertexColor.g)*255);
         int db = int((mapColor.b - vertexColor.b)*255);

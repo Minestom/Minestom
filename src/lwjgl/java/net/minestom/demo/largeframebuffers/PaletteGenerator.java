@@ -15,6 +15,8 @@ public class PaletteGenerator {
         Map<Integer, Integer> colors = new HashMap<>();
         int highestIndex = 0;
         for(MapColors c : MapColors.values()) {
+            if (c == MapColors.NONE)
+                continue;
             for(MapColors.Multiplier m : MapColors.Multiplier.values()) {
                 int index = ((int)m.apply(c)) & 0xFF;
                 if(index > highestIndex) {
