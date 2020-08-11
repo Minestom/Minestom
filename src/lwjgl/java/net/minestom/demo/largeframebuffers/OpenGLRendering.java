@@ -68,7 +68,7 @@ public final  class OpenGLRendering {
     private static int boxTexture;
 
     static void init() {
-    //    GLUtil.setupDebugMessageCallback();
+        GLUtil.setupDebugMessageCallback();
 
         paletteTexture = loadTexture("palette");
         boxTexture = loadTexture("box");

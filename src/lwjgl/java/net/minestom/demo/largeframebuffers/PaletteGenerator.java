@@ -12,13 +12,13 @@ import java.util.Map;
 public class PaletteGenerator {
 
     public static void main(String[] args) {
-        Map<Byte, Integer> colors = new HashMap<>();
+        Map<Integer, Integer> colors = new HashMap<>();
         int highestIndex = 0;
         for(MapColors c : MapColors.values()) {
             for(MapColors.Multiplier m : MapColors.Multiplier.values()) {
-                byte index = m.apply(c);
-                if(((int)index & 0xFF) > highestIndex) {
-                    highestIndex = ((int)index) & 0xFF;
+                int index = ((int)m.apply(c)) & 0xFF;
+                if(index > highestIndex) {
+                    highestIndex = index;
                 }
                 int rgb = MapColors.PreciseMapColor.toRGB(c, m);
                 colors.put(index, rgb);
@@ -27,8 +27,8 @@ public class PaletteGenerator {
 
         BufferedImage paletteTexture = new BufferedImage(highestIndex+1, 1, BufferedImage.TYPE_INT_ARGB);
         for (int i = 0; i <= highestIndex; i++) {
-            int rgb = colors.getOrDefault((byte)i, 0);
-            int argb = (0xFF << 24) | rgb;
+            int rgb = colors.getOrDefault(i, 0);
+            int argb = (0xFF << 24) | (rgb & 0xFFFFFF);
             paletteTexture.setRGB(i, 0, argb);
         }
 

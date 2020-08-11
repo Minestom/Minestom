@@ -14,16 +14,16 @@ void main() {
 
     // render in map colors
     int closest = 0;
-    float distance = 1.0f/0.0f;
+    uint closestDistance = uint(2147483647);
     for(int i = 1; i < paletteSize; i++) {
         vec3 mapColor = texture(palette, vec2(i/paletteSize, 0.0)).rgb;
-        float dr = mapColor.r - vertexColor.r;
-        float dg = mapColor.g - vertexColor.g;
-        float db = mapColor.b - vertexColor.b;
+        int dr = int((mapColor.r - vertexColor.r)*255);
+        int dg = int((mapColor.g - vertexColor.g)*255);
+        int db = int((mapColor.b - vertexColor.b)*255);
 
-        float d = dr*dr+dg*dg+db*db;
-        if(d < distance) {
-            distance = d;
+        uint d = uint(dr*dr)+uint(dg*dg)+uint(db*db);
+        if(d < closestDistance) {
+            closestDistance = d;
             closest = i;
         }
     }
