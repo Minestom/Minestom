@@ -7,7 +7,6 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
-import net.minestom.server.entity.pathfinding.PathfinderManager;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Chunk;
@@ -31,8 +30,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity {
-
-    private static final PathfinderManager PATHFINDER_MANAGER = new PathfinderManager();
 
     private PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
@@ -123,24 +120,22 @@ public abstract class EntityCreature extends LivingEntity {
 
         // Path finding
         {
-            if (pathPosition != null && !pathLock.isLocked()) {
-                PATHFINDER_MANAGER.getPool().execute(() -> {
-                    this.pathLock.lock();
-                    this.path = pathFinder.updatePathFor(pathingEntity);
+            if (pathPosition != null) {
+                this.pathLock.lock();
+                this.path = pathFinder.updatePathFor(pathingEntity);
 
-                    if (path != null) {
-                        final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
-                        final Position targetPosition = pathingEntity.getTargetPosition();
-                        moveTowards(targetPosition, speed);
-                    } else {
-                        if (pathPosition != null) {
-                            this.pathPosition = null;
-                            this.pathFinder.reset();
-                        }
+                if (path != null) {
+                    final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+                    final Position targetPosition = pathingEntity.getTargetPosition();
+                    moveTowards(targetPosition, speed);
+                } else {
+                    if (pathPosition != null) {
+                        this.pathPosition = null;
+                        this.pathFinder.reset();
                     }
+                }
 
-                    this.pathLock.unlock();
-                });
+                this.pathLock.unlock();
             }
         }
 
@@ -170,7 +165,7 @@ public abstract class EntityCreature extends LivingEntity {
     public boolean addViewer(Player player) {
         final boolean result = super.addViewer(player);
 
-        PlayerConnection playerConnection = player.getPlayerConnection();
+        final PlayerConnection playerConnection = player.getPlayerConnection();
 
         EntityPacket entityPacket = new EntityPacket();
         entityPacket.entityId = getEntityId();

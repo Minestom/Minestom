@@ -27,7 +27,6 @@ public class BenchmarkManager {
         threadMXBean.setThreadCpuTimeEnabled(true);
 
         threads.add(THREAD_NAME_MAIN_UPDATE);
-        threads.add(THREAD_NAME_PATHFINDER);
         threads.add(THREAD_NAME_PACKET_WRITER);
         threads.add(THREAD_NAME_BLOCK_BATCH);
         threads.add(THREAD_NAME_SCHEDULER);

@@ -64,9 +64,6 @@ public class MinecraftServer {
 
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
-    public static final String THREAD_NAME_PATHFINDER = "Ms-PathFinding";
-    public static final int THREAD_COUNT_PATHFINDER = 2;
-
     public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
     public static final int THREAD_COUNT_PACKET_WRITER = 2;
 
@@ -132,7 +129,7 @@ public class MinecraftServer {
     private static MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
-        if(minecraftServer != null) // don't init twice
+        if (minecraftServer != null) // don't init twice
             return minecraftServer;
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
