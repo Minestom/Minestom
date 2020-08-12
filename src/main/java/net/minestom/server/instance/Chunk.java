@@ -25,6 +25,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.biomes.Biome;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

@@ -3,7 +3,9 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
+//todo
 public class MultiBlockChangePacket implements ServerPacket {
 
     public int chunkX;
@@ -12,8 +14,7 @@ public class MultiBlockChangePacket implements ServerPacket {
 
     @Override
     public void write(PacketWriter writer) {
-        writer.writeInt(chunkX);
-        writer.writeInt(chunkZ);
+        writer.writeLong(ChunkUtils.getChunkIndex(chunkX, chunkZ));
 
         if (blockChanges != null) {
             int length = blockChanges.length;

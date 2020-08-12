@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.world.biomes.Biome;
 
 import java.util.List;
 

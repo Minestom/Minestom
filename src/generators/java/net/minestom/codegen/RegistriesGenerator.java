@@ -2,7 +2,6 @@ package net.minestom.codegen;
 
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluids.Fluid;
-import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
@@ -31,7 +30,6 @@ public class RegistriesGenerator implements CodeGenerator {
     private static final String[] types = {
             Block.class.getCanonicalName(),
             Material.class.getCanonicalName(),
-            Biome.class.getCanonicalName(),
             Enchantment.class.getCanonicalName(),
             EntityType.class.getCanonicalName(),
             Particle.class.getCanonicalName(),

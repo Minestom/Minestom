@@ -1,6 +1,7 @@
 package fr.themode.demo.generator;
 
-import net.minestom.server.instance.Biome;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
@@ -24,7 +25,7 @@ public class ChunkGeneratorDemo extends ChunkGenerator {
 
     @Override
     public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
-        Arrays.fill(biomes, Biome.PLAINS);
+        Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
     }
 
     @Override

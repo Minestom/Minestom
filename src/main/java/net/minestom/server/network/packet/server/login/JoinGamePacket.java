@@ -8,13 +8,12 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 public class JoinGamePacket implements ServerPacket {
 
 	public int entityId;
 	public GameMode gameMode = GameMode.SURVIVAL;
+	//Todo implement
 	public DimensionType dimensionType = DimensionType.OVERWORLD;
 	public long hashedSeed;
 	public byte maxPlayers = 0; // Unused
@@ -33,24 +32,28 @@ public class JoinGamePacket implements ServerPacket {
 			gameModeId |= 8;
 
 		writer.writeInt(entityId);
+		//hardcore
+		writer.writeBoolean(false);
 		writer.writeByte((byte) gameModeId);
 		//Previous Gamemode
 		writer.writeByte((byte) gameModeId);
 
 		//array of worlds
 		writer.writeVarInt(1);
-		writer.writeSizedString("test:spawn_name");
+		writer.writeSizedString("minestom:world");
+		NBTCompound nbt = new NBTCompound();
+		NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
+		NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
 
-		NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
-		for(DimensionType type : MinecraftServer.getDimensionTypeManager().unmodifiableList()) {
-			dimensionList.add(type.toNBT());
-		}
-		writer.writeNBT("", new NBTCompound().set("dimension", dimensionList));
+		nbt.set("minecraft:dimension_type", dimensions);
+		nbt.set("minecraft:worldgen/biome", biomes);
+
+		writer.writeNBT("", nbt);
+		writer.writeNBT("", dimensionType.toNBT2());
 
 		writer.writeSizedString(dimensionType.getName().toString());
-		writer.writeSizedString(identifier+"_"+ dimensionType.getName().getPath());
 		writer.writeLong(hashedSeed);
-		writer.writeByte(maxPlayers);
+		writer.writeVarInt(maxPlayers);
 		writer.writeVarInt(viewDistance);
 		writer.writeBoolean(reducedDebugInfo);
 		writer.writeBoolean(enableRespawnScreen);

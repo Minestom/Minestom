@@ -29,6 +29,7 @@ import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biomes.Biome;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -425,7 +426,7 @@ public class InstanceContainer extends Instance {
     protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
-            Arrays.fill(biomes, Biome.THE_VOID);
+            Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         } else {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }

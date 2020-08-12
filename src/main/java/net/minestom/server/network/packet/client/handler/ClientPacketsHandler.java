@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 public class ClientPacketsHandler {
 
     // Max packet id
-    private static final int SIZE = 0x2F;
+    private static final int SIZE = 0x30;
 
     private final Supplier<? extends ClientPacket>[] supplierAccesses = new Supplier[SIZE];
 

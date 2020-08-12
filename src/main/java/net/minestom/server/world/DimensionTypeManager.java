@@ -1,5 +1,9 @@
 package net.minestom.server.world;
 
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +11,7 @@ import java.util.List;
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
  *
- * Contains {@link DimensionType#OVERWORLD}, {@link DimensionType#NETHER}, {@link DimensionType#END} by default but can be removed.
+ * Contains {@link DimensionType#OVERWORLD} by default but can be removed.
  */
 public class DimensionTypeManager {
 
@@ -15,8 +19,6 @@ public class DimensionTypeManager {
 
     public DimensionTypeManager() {
         addDimension(DimensionType.OVERWORLD);
-        addDimension(DimensionType.NETHER);
-        addDimension(DimensionType.END);
     }
 
     /**
@@ -44,4 +46,16 @@ public class DimensionTypeManager {
         return Collections.unmodifiableList(dimensionTypes);
     }
 
+
+
+    public NBTCompound toNBT() {
+        NBTCompound dimensions = new NBTCompound();
+        dimensions.setString("type", "minecraft:dimension_type");
+        NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
+        for (DimensionType dimensionType : dimensionTypes) {
+            dimensionList.add(dimensionType.toNBT());
+        }
+        dimensions.set("value", dimensionList);
+        return dimensions;
+    }
 }

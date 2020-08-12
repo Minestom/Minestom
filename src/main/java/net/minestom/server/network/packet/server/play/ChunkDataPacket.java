@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
-import net.minestom.server.instance.Biome;
+import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -89,7 +89,7 @@ public class ChunkDataPacket implements ServerPacket {
         // Biome data
         if (fullChunk) {
             for (int i = 0; i < biomes.length; i++) {
-                writer.writeInt(biomes[i].getId());
+                writer.writeVarInt(biomes[i].getId());
             }
         }
 

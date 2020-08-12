@@ -29,10 +29,10 @@ public class DimensionCommand implements CommandProcessor {
 
         Instance instance = player.getInstance();
 
-        DimensionType targetDimensionType = DimensionType.NETHER;
-        if (instance.getDimensionType() == targetDimensionType) {
-            targetDimensionType = DimensionType.OVERWORLD;
-        }
+        DimensionType targetDimensionType = DimensionType.OVERWORLD;
+        //if (instance.getDimensionType() == targetDimensionType) {
+        //    targetDimensionType = DimensionType.OVERWORLD;
+        //}
 
         DimensionType finalTargetDimensionType = targetDimensionType;
         Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType() == finalTargetDimensionType).findFirst();

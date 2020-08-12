@@ -1,8 +1,9 @@
 package net.minestom.server.reader;
 
 import io.netty.buffer.Unpooled;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
-import net.minestom.server.instance.Biome;
+import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.ChunkBatch;
@@ -23,7 +24,7 @@ public class ChunkReader {
 
             Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
             for (int i = 0; i < biomes.length; i++) {
-                biomes[i] = Biome.fromId(stream.readByte());
+                biomes[i] = MinecraftServer.getBiomeManager().getById(stream.readByte());
             }
 
             final Chunk chunk = new Chunk(biomes, chunkX, chunkZ);

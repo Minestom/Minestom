@@ -33,23 +33,31 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x1B, ClientPlayerDiggingPacket::new);
         register(0x1C, ClientEntityActionPacket::new);
         register(0x1D, ClientSteerVehiclePacket::new);
-        register(0x1E, ClientRecipeBookData::new);
-        register(0x1F, ClientNameItemPacket::new);
-        register(0x20, ClientResourcePackStatusPacket::new);
 
-        register(0x21, ClientAdvancementTabPacket::new);
-        register(0x22, ClientSelectTradePacket::new);
+
+
+        register(0x1E, ClientRecipeBookData::new);
+        register(0x1F, ClientRecipeBookData::new);
+
+
+
+
+        register(0x20, ClientNameItemPacket::new);
+        register(0x21, ClientResourcePackStatusPacket::new);
+
+        register(0x22, ClientAdvancementTabPacket::new);
+        register(0x23, ClientSelectTradePacket::new);
         // Set Beacon Effect??
-        register(0x24, ClientHeldItemChangePacket::new);
-        register(0x25, ClientUpdateCommandBlockPacket::new);
-        register(0x26, ClientUpdateCommandBlockMinecartPacket::new);
-        register(0x27, ClientCreativeInventoryActionPacket::new);
+        register(0x25, ClientHeldItemChangePacket::new);
+        register(0x26, ClientUpdateCommandBlockPacket::new);
+        register(0x27, ClientUpdateCommandBlockMinecartPacket::new);
+        register(0x28, ClientCreativeInventoryActionPacket::new);
         //Update Jigsaw Block??
         //Update Structure Block??
-        register(0x2A, ClientUpdateSignPacket::new);
-        register(0x2B, ClientAnimationPacket::new);
+        register(0x2B, ClientUpdateSignPacket::new);
+        register(0x2C, ClientAnimationPacket::new);
         //Spectate??
-        register(0x2D, ClientPlayerBlockPlacementPacket::new);
-        register(0x2E, ClientUseItemPacket::new);
+        register(0x2E, ClientPlayerBlockPlacementPacket::new);
+        register(0x2F, ClientUseItemPacket::new);
     }
 }

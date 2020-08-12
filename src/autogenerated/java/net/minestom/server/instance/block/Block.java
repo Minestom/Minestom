@@ -1259,7 +1259,7 @@ public enum Block {
     private NamespaceID blockEntity;
     private boolean singleState;
 
-    private List<BlockAlternative> alternatives = new ArrayList<BlockAlternative>();
+    private List<BlockAlternative> alternatives = new ArrayList<>();
 
     Block(String namespaceID, short defaultID, double hardness, double resistance, boolean isAir, boolean isSolid, NamespaceID blockEntity, boolean singleState) {
         this.namespaceID = namespaceID;

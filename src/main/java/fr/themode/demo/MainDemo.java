@@ -8,6 +8,7 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.Position;
+import net.minestom.server.world.biomes.Biome;
 
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +60,7 @@ public class MainDemo {
 
         @Override
         public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
-            Arrays.fill(biomes, Biome.PLAINS);
+            Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         }
 
         @Override

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.instance.Biome;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.particle.Particle;
@@ -22,10 +21,6 @@ public class Registries {
 	/** Should only be used for internal code, please use the get* methods. */
 	@Deprecated
 	public static final HashMap<NamespaceID, Material> materials = new HashMap<>();
-
-	/** Should only be used for internal code, please use the get* methods. */
-	@Deprecated
-	public static final HashMap<NamespaceID, Biome> biomes = new HashMap<>();
 
 	/** Should only be used for internal code, please use the get* methods. */
 	@Deprecated
@@ -74,16 +69,6 @@ public class Registries {
 	/** Returns the corresponding Material matching the given id. Returns 'AIR' if none match. */
 	public static Material getMaterial(NamespaceID id) {
 		return materials.getOrDefault(id, Material.AIR);
-	}
-
-	/** Returns the corresponding Biome matching the given id. Returns null if none match. */
-	public static Biome getBiome(String id) {
-		return getBiome(NamespaceID.from(id));
-	}
-
-	/** Returns the corresponding Biome matching the given id. Returns null if none match. */
-	public static Biome getBiome(NamespaceID id) {
-		return biomes.get(id);
 	}
 
 	/** Returns the corresponding Enchantment matching the given id. Returns null if none match. */

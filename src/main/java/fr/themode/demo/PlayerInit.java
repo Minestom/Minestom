@@ -39,7 +39,7 @@ import java.util.UUID;
 
 public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
-    private static volatile InstanceContainer netherTest;
+    //private static volatile InstanceContainer netherTest;
 
     private static volatile Inventory inventory;
 
@@ -52,22 +52,22 @@ public class PlayerInit {
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
-        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
+        /*netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
         netherTest.enableAutoChunkLoad(true);
         netherTest.setChunkGenerator(noiseTestGenerator);
 
         InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.END);
         end.enableAutoChunkLoad(true);
-        end.setChunkGenerator(noiseTestGenerator);
+        end.setChunkGenerator(noiseTestGenerator);*/
 
         // Load some chunks beforehand
-        final int loopStart = -4;
-        final int loopEnd = 4;
+        final int loopStart = -10;
+        final int loopEnd = 10;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                netherTest.loadChunk(x, z);
-                end.loadChunk(x, z);
+                //netherTest.loadChunk(x, z);
+                //end.loadChunk(x, z);
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");

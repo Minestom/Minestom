@@ -16,7 +16,6 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Biome;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
@@ -45,6 +44,7 @@ import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
+import net.minestom.server.world.biomes.BiomeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class MinecraftServer {
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final int PROTOCOL_VERSION = 736;
+    public static final int PROTOCOL_VERSION = 751;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -81,7 +81,7 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 10;
+    public static final int CHUNK_VIEW_DISTANCE = 5;
     public static final int ENTITY_VIEW_DISTANCE = 5;
     public static final int COMPRESSION_THRESHOLD = 256;
     // Can be modified at performance cost when decreased
@@ -112,6 +112,7 @@ public class MinecraftServer {
     private static SchedulerManager schedulerManager;
     private static BenchmarkManager benchmarkManager;
     private static DimensionTypeManager dimensionTypeManager;
+    private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
 
     private static PluginManager pluginManager;
@@ -149,7 +150,6 @@ public class MinecraftServer {
         Sound.values();
         Particle.values();
         StatisticType.values();
-        Biome.values();
         Fluid.values();
 
         connectionManager = new ConnectionManager();
@@ -167,6 +167,7 @@ public class MinecraftServer {
         schedulerManager = new SchedulerManager();
         benchmarkManager = new BenchmarkManager();
         dimensionTypeManager = new DimensionTypeManager();
+        biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
 
         updateManager = new UpdateManager();
@@ -288,6 +289,10 @@ public class MinecraftServer {
 
     public static DimensionTypeManager getDimensionTypeManager() {
         return dimensionTypeManager;
+    }
+
+    public static BiomeManager getBiomeManager() {
+        return biomeManager;
     }
 
     public static AdvancementManager getAdvancementManager() {
