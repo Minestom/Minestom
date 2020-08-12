@@ -13,6 +13,15 @@ public class PFPathingEntity implements IPathingEntity {
     private float searchRange;
     private Position targetPosition;
 
+    // Capacities
+    private boolean fireResistant;
+    private boolean cautious;
+    private boolean climber;
+    private boolean swimmer;
+    private boolean aquaphobic;
+    private boolean avoidsDoorways;
+    private boolean opensDoors;
+
     public PFPathingEntity(EntityCreature entity) {
         this.entity = entity;
         this.searchRange = entity.getAttributeValue(Attribute.FOLLOW_RANGE);
@@ -41,6 +50,62 @@ public class PFPathingEntity implements IPathingEntity {
         this.searchRange = searchRange;
     }
 
+    public boolean isFireResistant() {
+        return fireResistant;
+    }
+
+    public void setFireResistant(boolean fireResistant) {
+        this.fireResistant = fireResistant;
+    }
+
+    public boolean isCautious() {
+        return cautious;
+    }
+
+    public void setCautious(boolean cautious) {
+        this.cautious = cautious;
+    }
+
+    public boolean isClimber() {
+        return climber;
+    }
+
+    public void setClimber(boolean climber) {
+        this.climber = climber;
+    }
+
+    public boolean isSwimmer() {
+        return swimmer;
+    }
+
+    public void setSwimmer(boolean swimmer) {
+        this.swimmer = swimmer;
+    }
+
+    public boolean isAquaphobic() {
+        return aquaphobic;
+    }
+
+    public void setAquaphobic(boolean aquaphobic) {
+        this.aquaphobic = aquaphobic;
+    }
+
+    public boolean isAvoidsDoorways() {
+        return avoidsDoorways;
+    }
+
+    public void setAvoidsDoorways(boolean avoidsDoorways) {
+        this.avoidsDoorways = avoidsDoorways;
+    }
+
+    public boolean isOpensDoors() {
+        return opensDoors;
+    }
+
+    public void setOpensDoors(boolean opensDoors) {
+        this.opensDoors = opensDoors;
+    }
+
     @Override
     public Capabilities capabilities() {
         return new Capabilities() {
@@ -51,37 +116,37 @@ public class PFPathingEntity implements IPathingEntity {
 
             @Override
             public boolean fireResistant() {
-                return false;
+                return fireResistant;
             }
 
             @Override
             public boolean cautious() {
-                return false;
+                return cautious;
             }
 
             @Override
             public boolean climber() {
-                return true;
+                return climber;
             }
 
             @Override
             public boolean swimmer() {
-                return true;
+                return swimmer;
             }
 
             @Override
             public boolean aquaphobic() {
-                return false;
+                return aquaphobic;
             }
 
             @Override
             public boolean avoidsDoorways() {
-                return false;
+                return avoidsDoorways;
             }
 
             @Override
             public boolean opensDoors() {
-                return false;
+                return opensDoors;
             }
         };
     }
