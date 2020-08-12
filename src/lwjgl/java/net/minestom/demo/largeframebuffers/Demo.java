@@ -24,8 +24,6 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class Demo {
 
     public static void main(String[] args) {
@@ -45,11 +43,17 @@ public class Demo {
         LargeGraphics2DFramebuffer graphics2DFramebuffer = new LargeGraphics2DFramebuffer(512, 512);
         LargeGLFWFramebuffer glfwFramebuffer = new LargeGLFWFramebuffer(512, 512);
 
-        renderingLoop(0, directFramebuffer, Demo::directRendering);
-        renderingLoop(101, graphics2DFramebuffer, Demo::graphics2DRendering);
+        glfwFramebuffer.useMapColors();
+
+        glfwFramebuffer.changeRenderingThreadToCurrent();
+        OpenGLRendering.init();
+        glfwFramebuffer.unbindContextFromThread();
+
+     //   renderingLoop(0, directFramebuffer, Demo::directRendering);
+     //   renderingLoop(101, graphics2DFramebuffer, Demo::graphics2DRendering);
         renderingLoop(201, glfwFramebuffer, f -> {});
 
-        glfwFramebuffer.setupRenderLoop(30, TimeUnit.MILLISECOND, Demo::openGLRendering);
+        glfwFramebuffer.setupRenderLoop(15, TimeUnit.MILLISECOND, () -> OpenGLRendering.render(glfwFramebuffer));
 
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
@@ -97,7 +101,7 @@ public class Demo {
                 f.preparePacket(packet);
                 sendPacket(packet);
             }
-        }).repeat(30, TimeUnit.MILLISECOND).schedule();
+        }).repeat(15, TimeUnit.MILLISECOND).schedule();
     }
 
     private static void sendPacket(MapDataPacket packet) {
@@ -117,21 +121,4 @@ public class Demo {
         renderer.drawString("Here's a very very long string that needs multiple maps to fit", 0, 100);
     }
 
-    private static void openGLRendering() {
-        glClearColor(0f, 0f, 0f, 1f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glBegin(GL_TRIANGLES);
-
-        glVertex2f(0, -0.75f);
-        glColor3f(1f, 0f, 0f);
-
-        glVertex2f(0.75f, 0.75f);
-        glColor3f(0f, 1f, 0f);
-
-        glVertex2f(-0.75f, 0.75f);
-        glColor3f(0f, 0f, 1f);
-
-        glEnd();
-    }
 }

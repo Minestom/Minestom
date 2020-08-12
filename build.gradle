@@ -125,6 +125,8 @@ dependencies {
     lwjglApi "org.lwjgl:lwjgl-opengl"
     lwjglApi "org.lwjgl:lwjgl-opengles"
     lwjglApi "org.lwjgl:lwjgl-glfw"
+    lwjglApi "org.lwjgl:lwjgl-glfw"
+    lwjglApi 'org.joml:joml:1.9.25'
     lwjglRuntimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"

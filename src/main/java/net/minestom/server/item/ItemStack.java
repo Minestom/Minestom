@@ -1,6 +1,5 @@
 package net.minestom.server.item;
 
-import com.google.gson.JsonObject;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -65,6 +64,11 @@ public class ItemStack implements DataContainer {
         this(material, amount, (short) 0);
     }
 
+    /**
+     * Get a new air item
+     *
+     * @return an air item
+     */
     public static ItemStack getAirItem() {
         return new ItemStack(Material.AIR, (byte) 0);
     }
@@ -145,8 +149,22 @@ public class ItemStack implements DataContainer {
         }
     }
 
+    /**
+     * Get the item damage (durability)
+     *
+     * @return the item damagel
+     */
     public int getDamage() {
         return damage;
+    }
+
+    /**
+     * Set the item damage (durability)
+     *
+     * @param damage the item damage
+     */
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
     /**
@@ -171,10 +189,6 @@ public class ItemStack implements DataContainer {
      */
     public void setAmount(byte amount) {
         this.amount = amount;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
     }
 
     /**
@@ -406,7 +420,7 @@ public class ItemStack implements DataContainer {
      * @return true if the item has the flag {@code flag}, false otherwise
      */
     public boolean hasItemFlag(ItemFlag flag) {
-        int bitModifier = getBitModifier(flag);
+        final int bitModifier = getBitModifier(flag);
         return (this.hideFlag & bitModifier) == bitModifier;
     }
 
@@ -520,7 +534,7 @@ public class ItemStack implements DataContainer {
      * @throws NullPointerException if {@code stackingRule} is null
      */
     public void setStackingRule(StackingRule stackingRule) {
-        Check.notNull(stackingRule, "StackingRule cannot be null!");
+        Check.notNull(stackingRule, "The stacking rule cannot be null!");
         this.stackingRule = stackingRule;
     }
 
@@ -541,29 +555,6 @@ public class ItemStack implements DataContainer {
 
     private byte getBitModifier(ItemFlag hideFlag) {
         return (byte) (1 << hideFlag.ordinal());
-    }
-
-    /**
-     * Convert the item into a readable Json object
-     * <p>
-     * Mainly used to show an item in a message hover
-     *
-     * @return a {@link JsonObject} containing the item data
-     */
-    public synchronized JsonObject toJsonObject() {
-        JsonObject object = new JsonObject();
-        object.addProperty("id", material.getId());
-        object.addProperty("Damage", getDamage());
-        object.addProperty("Count", getAmount());
-
-        if (hasDisplayName() || hasLore()) {
-            JsonObject tagObject = new JsonObject();
-            if (hasDisplayName()) {
-                tagObject.addProperty("display", getDisplayName().toString());
-            }
-        }
-
-        return object;
     }
 
     /**

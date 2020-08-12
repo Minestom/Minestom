@@ -307,7 +307,7 @@ public enum MapColors {
         }
     }
 
-    enum Multiplier {
+    public enum Multiplier {
         x1_00(MapColors::baseColor, 1.00),
         x0_53(MapColors::multiply53, 0.53),
         x0_71(MapColors::multiply71, 0.71),

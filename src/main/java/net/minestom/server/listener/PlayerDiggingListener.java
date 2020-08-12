@@ -41,7 +41,7 @@ public class PlayerDiggingListener {
                 if (instantBreak) {
                     breakBlock(instance, player, blockPosition);
                 } else {
-                    CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+                    final CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                     if (customBlock != null) {
                         int breakTime = customBlock.getBreakDelay(player, blockPosition);
 
@@ -78,13 +78,13 @@ public class PlayerDiggingListener {
                 breakBlock(instance, player, blockPosition);
                 break;
             case DROP_ITEM_STACK:
-                ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
+                final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
                 dropItem(player, droppedItemStack, ItemStack.getAirItem());
                 break;
             case DROP_ITEM:
                 ItemStack handItem = player.getInventory().getItemInMainHand().clone();
                 ItemStack droppedItemStack2 = handItem.clone();
-                StackingRule handStackingRule = handItem.getStackingRule();
+                final StackingRule handStackingRule = handItem.getStackingRule();
 
                 droppedItemStack2 = handStackingRule.apply(droppedItemStack2, 1);
 
@@ -129,7 +129,7 @@ public class PlayerDiggingListener {
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {
-        PlayerInventory playerInventory = player.getInventory();
+        final PlayerInventory playerInventory = player.getInventory();
         if (player.dropItem(droppedItem)) {
             playerInventory.setItemInMainHand(handItem);
         } else {

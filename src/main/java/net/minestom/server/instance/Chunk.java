@@ -86,19 +86,19 @@ public final class Chunk implements Viewable {
     }
 
     public void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         Check.notNull(customBlock, "The custom block " + customBlockId + " does not exist or isn't registered");
 
         UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlock, data);
     }
 
     protected void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
-        UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
+        final UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
         setBlock(x, y, z, blockStateId, customBlock.getCustomBlockId(), data, updateConsumer);
     }
 
     public void UNSAFE_removeCustomBlock(int x, int y, int z) {
-        int index = getBlockIndex(x, y, z);
+        final int index = getBlockIndex(x, y, z);
         this.customBlocksId[index] = 0; // Set to none
         this.blocksData.remove(index);
 
@@ -405,7 +405,6 @@ public final class Chunk implements Viewable {
 
     /**
      * Used to verify if the chunk should still be kept in memory
-     * having the chunk unloaded means no data is contained in it (blocks, data, etc...)
      *
      * @return true if the chunk is loaded
      */
