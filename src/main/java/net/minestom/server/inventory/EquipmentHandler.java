@@ -208,7 +208,7 @@ public interface EquipmentHandler {
         entityEquipmentPacket.slots = new EntityEquipmentPacket.Slot[]{slot};
         entityEquipmentPacket.itemStacks = new ItemStack[]{itemStack};
 
-        viewable.sendPacketToViewersAndSelf(entityEquipmentPacket);
+        viewable.sendPacketToViewers(entityEquipmentPacket);
     }
 
     /**
