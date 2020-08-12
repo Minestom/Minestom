@@ -16,6 +16,7 @@ import net.minestom.server.map.MapColors;
 import net.minestom.server.map.framebuffers.LargeDirectFramebuffer;
 import net.minestom.server.map.framebuffers.LargeGLFWFramebuffer;
 import net.minestom.server.map.framebuffers.LargeGraphics2DFramebuffer;
+import net.minestom.server.map.framebuffers.MapColorRenderer;
 import net.minestom.server.network.packet.server.play.MapDataPacket;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
@@ -43,17 +44,16 @@ public class Demo {
         LargeGraphics2DFramebuffer graphics2DFramebuffer = new LargeGraphics2DFramebuffer(512, 512);
         LargeGLFWFramebuffer glfwFramebuffer = new LargeGLFWFramebuffer(512, 512);
 
-        glfwFramebuffer.useMapColors();
-
         glfwFramebuffer.changeRenderingThreadToCurrent();
         OpenGLRendering.init();
+        MapColorRenderer renderer = new MapColorRenderer(glfwFramebuffer, OpenGLRendering::render);
         glfwFramebuffer.unbindContextFromThread();
 
      //   renderingLoop(0, directFramebuffer, Demo::directRendering);
      //   renderingLoop(101, graphics2DFramebuffer, Demo::graphics2DRendering);
         renderingLoop(201, glfwFramebuffer, f -> {});
 
-        glfwFramebuffer.setupRenderLoop(15, TimeUnit.MILLISECOND, () -> OpenGLRendering.render(glfwFramebuffer));
+        glfwFramebuffer.setupRenderLoop(15, TimeUnit.MILLISECOND, renderer);
 
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
