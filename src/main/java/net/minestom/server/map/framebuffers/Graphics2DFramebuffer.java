@@ -1,6 +1,7 @@
 package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
+import net.minestom.server.map.LargeFramebuffer;
 import net.minestom.server.map.MapColors;
 
 import java.awt.*;
