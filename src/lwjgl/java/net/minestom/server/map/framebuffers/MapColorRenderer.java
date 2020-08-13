@@ -25,15 +25,15 @@ import static org.lwjgl.opengl.GL30.*;
  *
  * <hr/>
  * Resources created in constructor are:
- * <li>
- *     <ul>Framebuffer</ul>
- *     <ul>Color texture (if default fbo initialization chosen)</ul>
- *     <ul>Depth24 Stencil8 render buffer (if default fbo initialization chosen)</ul>
- *     <ul>Post processing shader program</ul>
- *     <ul>Palette texture</ul>
- *     <ul>Screen quad VAO</ul>
- *     <ul>Screen quad index buffer</ul>
- * </li>
+ * <ul>
+ *     <li>Framebuffer</li>
+ *     <li>Color texture (if default fbo initialization chosen)</li>
+ *     <li>Depth24 Stencil8 render buffer (if default fbo initialization chosen)</li>
+ *     <li>Post processing shader program</li>
+ *     <li>Palette texture</li>
+ *     <li>Screen quad VAO</li>
+ *     <li>Screen quad index buffer</li>
+ * </ul>
  *
  * The constructor also puts the given buffer in map color mode.
  */
