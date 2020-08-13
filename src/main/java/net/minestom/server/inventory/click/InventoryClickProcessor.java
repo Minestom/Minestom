@@ -518,10 +518,8 @@ public class InventoryClickProcessor {
         // Wait for inventory conditions + events to possibly close the inventory
         player.UNSAFE_changeDidCloseInventory(false);
 
-        final List<InventoryCondition> inventoryConditions = isPlayerInventory ?
-                player.getInventory().getInventoryConditions() : inventory.getInventoryConditions();
-        if (!inventoryConditions.isEmpty()) {
-
+        // PreClickEvent
+        {
             InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(player, inventory, slot, clickType, clicked, cursor);
             player.callEvent(InventoryPreClickEvent.class, inventoryPreClickEvent);
             cursor = inventoryPreClickEvent.getCursorItem();
@@ -531,6 +529,12 @@ public class InventoryClickProcessor {
             if (inventoryPreClickEvent.isCancelled()) {
                 clickResult.setRefresh(true);
             }
+        }
+
+        // Inventory conditions
+        final List<InventoryCondition> inventoryConditions = isPlayerInventory ?
+                player.getInventory().getInventoryConditions() : inventory.getInventoryConditions();
+        if (!inventoryConditions.isEmpty()) {
 
             for (InventoryCondition inventoryCondition : inventoryConditions) {
                 InventoryConditionResult result = new InventoryConditionResult(clicked, cursor);

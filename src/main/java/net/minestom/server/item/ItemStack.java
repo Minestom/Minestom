@@ -623,8 +623,8 @@ public class ItemStack implements DataContainer {
     /**
      * Called when the player right clicks with this item
      *
-     * @param player
-     * @param hand
+     * @param player the player who used the item
+     * @param hand   the hand used
      */
     public void onRightClick(Player player, Player.Hand hand) {
     }
@@ -632,8 +632,8 @@ public class ItemStack implements DataContainer {
     /**
      * Called when the player left clicks with this item
      *
-     * @param player
-     * @param hand
+     * @param player the player who used the item
+     * @param hand   the hand used
      */
     public void onLeftClick(Player player, Player.Hand hand) {
     }
@@ -641,10 +641,10 @@ public class ItemStack implements DataContainer {
     /**
      * Called when the player right clicks with this item on a block
      *
-     * @param player
-     * @param hand
-     * @param position
-     * @param blockFace
+     * @param player    the player who used the item
+     * @param hand      the hand used
+     * @param position  the position of the interacted block
+     * @param blockFace the block face
      * @return true if it prevents normal item use (placing blocks for instance)
      */
     public boolean onUseOnBlock(Player player, Player.Hand hand, BlockPosition position, Direction blockFace) {
@@ -656,10 +656,10 @@ public class ItemStack implements DataContainer {
      * <p>
      * Executed before any events
      *
-     * @param player
-     * @param clickType
-     * @param slot
-     * @param playerInventory
+     * @param player          the player who clicked on the item
+     * @param clickType       the click type
+     * @param slot            the slot clicked
+     * @param playerInventory true if the click is in the player inventory
      */
     public void onInventoryClick(Player player, ClickType clickType, int slot, boolean playerInventory) {
 
