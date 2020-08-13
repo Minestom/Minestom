@@ -4,6 +4,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.*;
 import net.minestom.server.item.rule.VanillaStackingRule;
@@ -648,5 +649,19 @@ public class ItemStack implements DataContainer {
      */
     public boolean onUseOnBlock(Player player, Player.Hand hand, BlockPosition position, Direction blockFace) {
         return false;
+    }
+
+    /**
+     * Called when the player click on this item on an inventory
+     * <p>
+     * Executed before any events
+     *
+     * @param player
+     * @param clickType
+     * @param slot
+     * @param playerInventory
+     */
+    public void onInventoryClick(Player player, ClickType clickType, int slot, boolean playerInventory) {
+
     }
 }
