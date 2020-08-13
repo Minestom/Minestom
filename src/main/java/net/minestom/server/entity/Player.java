@@ -290,6 +290,8 @@ public class Player extends LivingEntity implements CommandSender {
         // Flush all pending packets
         playerConnection.flush();
 
+        playerConnection.updateStats();
+
         // Process received packets
         ClientPlayPacket packet;
         while ((packet = packets.poll()) != null) {

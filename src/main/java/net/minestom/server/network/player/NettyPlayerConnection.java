@@ -59,6 +59,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
 	@Override
 	public void writePacket(ByteBuf buffer, boolean copy) {
+		//System.out.println(getConnectionState() + " out");
 		if ((encrypted || compressed) && copy) {
 			buffer = buffer.copy();
 			buffer.retain();

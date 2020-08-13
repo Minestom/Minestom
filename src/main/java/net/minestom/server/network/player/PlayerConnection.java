@@ -45,21 +45,23 @@ public abstract class PlayerConnection {
     }
 
     public void updateStats() {
-        tickCounter++;
-        if (tickCounter % 20 == 0 && tickCounter > 0) {
-            tickCounter = 0;
-            int i = packetCounter.get();
-            packetCounter.set(0);
-            if (i > MinecraftServer.getRateLimit()) {
-                if (connectionState == ConnectionState.LOGIN) {
-                    sendPacket(new LoginDisconnect("Too Many Packets"));
-                } else {
-                    DisconnectPacket disconnectPacket = new DisconnectPacket();
-                    disconnectPacket.message = rateLimitKickMessage;
-                    sendPacket(disconnectPacket);
+        if (MinecraftServer.getRateLimit() > 0) {
+            tickCounter++;
+            if (tickCounter % 20 == 0 && tickCounter > 0) {
+                tickCounter = 0;
+                int i = packetCounter.get();
+                packetCounter.set(0);
+                if (i > MinecraftServer.getRateLimit()) {
+                    if (connectionState == ConnectionState.LOGIN) {
+                        sendPacket(new LoginDisconnect("Too Many Packets"));
+                    } else {
+                        DisconnectPacket disconnectPacket = new DisconnectPacket();
+                        disconnectPacket.message = rateLimitKickMessage;
+                        sendPacket(disconnectPacket);
+                    }
+                    disconnect();
+                    refreshOnline(false);
                 }
-                disconnect();
-                refreshOnline(false);
             }
         }
     }
