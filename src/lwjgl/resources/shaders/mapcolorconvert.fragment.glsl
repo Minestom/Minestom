@@ -8,6 +8,8 @@ uniform sampler2D palette;
 uniform float paletteSize;
 
 void main() {
+    vec2 uv = fragCoords;
+    uv.y = -uv.y;
     vec3 fragmentColor = texture(frame, fragCoords).rgb;
 
     // render in map colors
