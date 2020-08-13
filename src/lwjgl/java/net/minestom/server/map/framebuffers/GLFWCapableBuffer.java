@@ -17,7 +17,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL11.*;
 
-abstract class GLFWCapableBuffer {
+public abstract class GLFWCapableBuffer {
 
     protected final byte[] colors;
     private final ByteBuffer pixels;
