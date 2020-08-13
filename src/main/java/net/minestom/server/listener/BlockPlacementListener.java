@@ -20,6 +20,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.Set;
@@ -31,13 +32,19 @@ public class BlockPlacementListener {
         final Player.Hand hand = packet.hand;
         final BlockFace blockFace = packet.blockFace;
         final BlockPosition blockPosition = packet.blockPosition;
+        final Direction direction = blockFace.toDirection();
 
         final Instance instance = player.getInstance();
         if (instance == null)
             return;
 
+        final ItemStack usedItem = player.getItemInHand(hand);
+
         // Interact at block
+        final boolean cancel = usedItem.onUseOnBlock(player, hand, blockPosition, direction);
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
+        playerBlockInteractEvent.setCancelled(cancel);
+        playerBlockInteractEvent.setBlockingItemUse(cancel);
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
             final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {
@@ -54,7 +61,6 @@ public class BlockPlacementListener {
         }
 
         // Check if item at hand is a block
-        final ItemStack usedItem = hand == Player.Hand.MAIN ? playerInventory.getItemInMainHand() : playerInventory.getItemInOffHand();
         final Material material = usedItem.getMaterial();
         if (material == Material.AIR) {
             return;
@@ -123,7 +129,7 @@ public class BlockPlacementListener {
             }
         } else {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, blockFace.toDirection());
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;
         }
