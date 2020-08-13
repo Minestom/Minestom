@@ -339,8 +339,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
-        boolean chunkUnloaded = !ChunkUtils.isLoaded(instance, position.getX(), position.getZ());
-        if (chunkUnloaded) {
+        if (!ChunkUtils.isLoaded(instance, position.getX(), position.getZ())) {
             // No update for entities in unloaded chunk
             return;
         }
@@ -391,6 +390,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                         getVelocity().getZ() / tps
                 );
                 onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+
+                // Check chunk
+                if (!ChunkUtils.isLoaded(instance, newPosition.getX(), newPosition.getZ())) {
+                    return;
+                }
 
                 // World border collision
                 {
@@ -461,10 +465,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        chunkUnloaded = !ChunkUtils.isLoaded(instance, x, z);
-                        if (chunkUnloaded)
+                        final Chunk chunk = instance.getChunkAt(x, z);
+                        if (!ChunkUtils.isLoaded(chunk))
                             continue;
-                        final CustomBlock customBlock = instance.getCustomBlock(x, y, z);
+
+                        final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
                             tmpPosition.setX(x);
                             tmpPosition.setY(y);

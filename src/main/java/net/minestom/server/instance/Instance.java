@@ -650,7 +650,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z the Z position
      * @return the chunk at the given position, null if not loaded
      */
-    public Chunk getChunkAt(double x, double z) {
+    public Chunk getChunkAt(float x, float z) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
         return getChunk(chunkX, chunkZ);
