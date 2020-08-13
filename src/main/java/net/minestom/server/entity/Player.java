@@ -1169,11 +1169,15 @@ public class Player extends LivingEntity implements CommandSender {
      * It does remove and add the player from the chunks viewers list when removed or added
      * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}
      *
-     * @param lastChunk the last player chunk
      * @param newChunk  the current/new player chunk
      */
-    protected void onChunkChange(Chunk lastChunk, Chunk newChunk) {
-        final long[] lastVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), getChunkRange());
+    protected void onChunkChange(Chunk newChunk) {
+        final long[] lastVisibleChunks = new long[viewableChunks.size()];
+        Chunk[] lastViewableChunks = viewableChunks.toArray(new Chunk[0]);
+        for (int i = 0; i < lastViewableChunks.length; i++) {
+            Chunk lastViewableChunk = lastViewableChunks[i];
+            lastVisibleChunks[i] = ChunkUtils.getChunkIndex(lastViewableChunk.getChunkX(), lastViewableChunk.getChunkZ());
+        }
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), getChunkRange());
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
@@ -1187,6 +1191,7 @@ public class Player extends LivingEntity implements CommandSender {
             playerConnection.sendPacket(unloadChunkPacket);
 
             Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            viewableChunks.remove(chunk);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
