@@ -23,7 +23,7 @@ import static org.lwjgl.opengl.GL30.*;
  * Therefore, the constructor call should be done inside the thread linked to the OpenGL context. The context can
  * be moved through {@link GLFWCapableBuffer#changeRenderingThreadToCurrent()} and {@link GLFWCapableBuffer#unbindContextFromThread()}
  *
- * <hr/>
+ * <hr>
  * Resources created in constructor are:
  * <ul>
  *     <li>Framebuffer</li>
