@@ -39,7 +39,7 @@ public class ServerPacketIdentifier {
     public static final int PARTICLE = 0x22;
     public static final int UPDATE_LIGHT = 0x23;
     public static final int JOIN_GAME = 0x24;
-    public static final int MAP_DATA = 0x26;
+    public static final int MAP_DATA = 0x25;
     public static final int TRADE_LIST = 0x26;
     public static final int ENTITY_POSITION = 0x27;
     public static final int ENTITY_POSITION_AND_ROTATION = 0x28;

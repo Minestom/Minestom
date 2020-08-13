@@ -13,14 +13,10 @@ public class JoinGamePacket implements ServerPacket {
 
 	public int entityId;
 	public GameMode gameMode = GameMode.SURVIVAL;
-	//Todo implement
 	public DimensionType dimensionType = DimensionType.OVERWORLD;
 	public long hashedSeed;
 	public byte maxPlayers = 0; // Unused
-	//TODO remove
 	public LevelType levelType;
-	//TODO add api
-	String identifier = "test:spawn";
 	public int viewDistance;
 	public boolean reducedDebugInfo = false;
 	public boolean enableRespawnScreen = true;
@@ -32,8 +28,7 @@ public class JoinGamePacket implements ServerPacket {
 			gameModeId |= 8;
 
 		writer.writeInt(entityId);
-		//hardcore
-		writer.writeBoolean(false);
+		writer.writeBoolean(MinecraftServer.isHardcoreLook());
 		writer.writeByte((byte) gameModeId);
 		//Previous Gamemode
 		writer.writeByte((byte) gameModeId);

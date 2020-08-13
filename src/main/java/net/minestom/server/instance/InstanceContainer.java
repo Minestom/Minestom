@@ -478,7 +478,7 @@ public class InstanceContainer extends Instance {
             sendChunkUpdate(player, chunk);
         }
 
-        // TODO do not hardcore
+        // TODO do not hardcode
         if (MinecraftServer.isFixLighting()) {
             UpdateLightPacket updateLightPacket = new UpdateLightPacket();
             updateLightPacket.chunkX = chunk.getChunkX();

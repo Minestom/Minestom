@@ -21,7 +21,6 @@ public class DimensionType {
 	public static final DimensionType OVERWORLD = DimensionType.builder(NamespaceID.from("minecraft:overworld"))
 			.ultrawarm(false)
 			.natural(true)
-			.shrunk(false)
 			.piglinSafe(false)
 			.respawnAnchorSafe(false)
 			.bedSafe(true)
@@ -42,7 +41,6 @@ public class DimensionType {
 	private final boolean skylightEnabled;
 	@Builder.Default
 	private final Optional<Long> fixedTime = Optional.empty();
-	private final boolean shrunk;
 	private final boolean raidCapable;
 	private final boolean respawnAnchorSafe;
 	private final boolean ultrawarm;
@@ -68,7 +66,6 @@ public class DimensionType {
 				.setByte("natural", (byte) (natural ? 0x01 : 0x00))
 				.setByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00))
 				.setByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00))
-				.setByte("shrunk", (byte) (shrunk ? 0x01 : 0x00))
 				.setByte("ultrawarm", (byte) (ultrawarm ? 0x01 : 0x00))
 				.setByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00))
 				.setByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00))
@@ -90,7 +87,6 @@ public class DimensionType {
 				.setByte("natural", (byte) (natural ? 0x01 : 0x00))
 				.setByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00))
 				.setByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00))
-				.setByte("shrunk", (byte) (shrunk ? 0x01 : 0x00))
 				.setByte("ultrawarm", (byte) (ultrawarm ? 0x01 : 0x00))
 				.setByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00))
 				.setByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00))

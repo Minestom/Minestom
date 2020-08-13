@@ -15,29 +15,36 @@ import java.util.concurrent.atomic.AtomicInteger;
 @EqualsAndHashCode
 public class Biome {
 
-	private static final AtomicInteger idCounter = new AtomicInteger(0);
+	public static final AtomicInteger idCounter = new AtomicInteger(0);
 
-	public static final Biome EXAMPLE = Biome.builder()
+	//A plains biome has to be registered or else minecraft will crash
+	public static final Biome PLAINS = Biome.builder()
 			.category(Biome.Category.NONE)
 			.name(NamespaceID.from("minecraft:plains"))
 			.effects(BiomeEffects.builder()
-					.fog_color(0x34e38c)
-					.sky_color(0xdae334)
-					.water_color(0x349ae3)
-					.water_fog_color(0x3460e3)
+					.fog_color(0xC0D8FF)
+					.sky_color(0x78A7FF)
+					.water_color(0x3F76E4)
+					.water_fog_color(0x50533)
 					.build())
 			.build();
 
 	private final int id = idCounter.getAndIncrement();
 
 	private final NamespaceID name;
-	@Builder.Default private final float depth = 0.2F;
-	@Builder.Default private final float temperature = 0.25F;
-	@Builder.Default private final float scale = 0.2F;
-	@Builder.Default private final float downfall = 0.8F;
-	@Builder.Default private final Category category = Category.NONE;
+	@Builder.Default
+	private final float depth = 0.2F;
+	@Builder.Default
+	private final float temperature = 0.25F;
+	@Builder.Default
+	private final float scale = 0.2F;
+	@Builder.Default
+	private final float downfall = 0.8F;
+	@Builder.Default
+	private final Category category = Category.NONE;
 	private final BiomeEffects effects;
-	@Builder.Default private final Precipitation precipitation = Precipitation.RAIN;
+	@Builder.Default
+	private final Precipitation precipitation = Precipitation.RAIN;
 	@Builder.Default
 	private TemperatureModifier temperature_modifier = TemperatureModifier.NONE;
 

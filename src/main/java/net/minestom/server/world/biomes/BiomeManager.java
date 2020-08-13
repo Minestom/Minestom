@@ -12,14 +12,14 @@ import java.util.List;
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
  *
- * Contains {@link Biome#EXAMPLE} by default but can be removed.
+ * Contains {@link Biome#PLAINS} by default but can be removed.
  */
 public class BiomeManager {
 
-	private List<Biome> biomes = new LinkedList<>();
+	private final List<Biome> biomes = new LinkedList<>();
 
 	public BiomeManager() {
-		addBiome(Biome.EXAMPLE);
+		addBiome(Biome.PLAINS);
 	}
 
 	/**

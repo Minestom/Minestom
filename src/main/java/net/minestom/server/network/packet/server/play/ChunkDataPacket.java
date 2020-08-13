@@ -24,8 +24,6 @@ public class ChunkDataPacket implements ServerPacket {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public boolean fullChunk;
-    //todo make a changeable
-    public boolean ignoreOldLighting = true;
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
@@ -47,8 +45,6 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
         writer.writeBoolean(fullChunk);
-
-        writer.writeBoolean(ignoreOldLighting);
 
         int mask = 0;
         BufferWrapper blocks = BufferUtils.getBuffer(MAX_BUFFER_SIZE);
@@ -88,8 +84,9 @@ public class ChunkDataPacket implements ServerPacket {
 
         // Biome data
         if (fullChunk) {
-            for (int i = 0; i < biomes.length; i++) {
-                writer.writeVarInt(biomes[i].getId());
+            writer.writeVarInt(biomes.length);
+            for (Biome biome : biomes) {
+                writer.writeVarInt(biome.getId());
             }
         }
 

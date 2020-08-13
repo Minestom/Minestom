@@ -78,13 +78,16 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 5;
+    public static final int CHUNK_VIEW_DISTANCE = 10;
     public static final int ENTITY_VIEW_DISTANCE = 5;
     public static final int COMPRESSION_THRESHOLD = 256;
     // Can be modified at performance cost when decreased
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / 20;
     public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
+
+    @Getter @Setter
+    private static boolean hardcoreLook = false;
 
     //Extras
     @Getter
@@ -178,7 +181,7 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent("1.16.1", null); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent("1.16.2", null); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
