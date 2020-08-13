@@ -10,7 +10,7 @@ uniform float paletteSize;
 void main() {
     vec2 uv = fragCoords;
     uv.y = -uv.y;
-    vec3 fragmentColor = texture(frame, fragCoords).rgb;
+    vec3 fragmentColor = texture(frame, uv).rgb;
 
     // render in map colors
     int closest = 0;
