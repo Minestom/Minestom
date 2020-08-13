@@ -1,6 +1,4 @@
-package net.minestom.demo.largeframebuffers;
-
-import net.minestom.server.map.MapColors;
+package net.minestom.server.map;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

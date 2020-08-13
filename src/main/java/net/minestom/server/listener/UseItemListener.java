@@ -16,6 +16,7 @@ public class UseItemListener {
         final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand;
         final ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 

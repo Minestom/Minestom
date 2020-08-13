@@ -3,11 +3,16 @@ package net.minestom.server.network.player;
 import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.Setter;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.login.LoginDisconnect;
+import net.minestom.server.network.packet.server.play.DisconnectPacket;
 
 import java.net.SocketAddress;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A PlayerConnection is an object needed for all created player
@@ -27,9 +32,38 @@ public abstract class PlayerConnection {
     private ConnectionState connectionState;
     private boolean online;
 
+    private static final ColoredText rateLimitKickMessage = ColoredText.of("Too Many Packets");
+
+    //Connection Stats
+    @Getter
+    private final AtomicInteger packetCounter = new AtomicInteger(0);
+    private short tickCounter = 0;
+
     public PlayerConnection() {
         this.online = true;
         this.connectionState = ConnectionState.UNKNOWN;
+    }
+
+    public void updateStats() {
+        if (MinecraftServer.getRateLimit() > 0) {
+            tickCounter++;
+            if (tickCounter % 20 == 0 && tickCounter > 0) {
+                tickCounter = 0;
+                int i = packetCounter.get();
+                packetCounter.set(0);
+                if (i > MinecraftServer.getRateLimit()) {
+                    if (connectionState == ConnectionState.LOGIN) {
+                        sendPacket(new LoginDisconnect("Too Many Packets"));
+                    } else {
+                        DisconnectPacket disconnectPacket = new DisconnectPacket();
+                        disconnectPacket.message = rateLimitKickMessage;
+                        sendPacket(disconnectPacket);
+                    }
+                    disconnect();
+                    refreshOnline(false);
+                }
+            }
+        }
     }
 
     public abstract void enableCompression(int threshold);
