@@ -90,6 +90,10 @@ public class MinecraftServer {
     @Setter
     private static boolean fixLighting = true;
 
+    //Rate Limiting
+    @Getter @Setter
+    private static int rateLimit = 0;
+
     // Networking
     private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
