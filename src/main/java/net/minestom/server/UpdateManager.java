@@ -52,7 +52,10 @@ public final class UpdateManager {
                 final long time = System.currentTimeMillis();
 
                 // Server tick (instance/chunk/entity)
-                threadProvider.update(time);
+                // Synchronize with the update manager instance, like the signal for chunk load/unload
+                synchronized (this) {
+                    threadProvider.update(time);
+                }
 
                 // Waiting players update (newly connected waiting to get into the server)
                 entityManager.updateWaitingPlayers();

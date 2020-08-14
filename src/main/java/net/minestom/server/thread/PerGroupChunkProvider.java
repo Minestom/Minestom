@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
@@ -22,12 +21,12 @@ public class PerGroupChunkProvider extends ThreadProvider {
     /**
      * Chunk -> its chunk group
      */
-    private Map<Instance, Long2ObjectMap<LongSet>> instanceChunksGroupMap = new ConcurrentHashMap<>();
+    private final Map<Instance, Long2ObjectMap<LongSet>> instanceChunksGroupMap = new ConcurrentHashMap<>();
 
     /**
      * Used to know to which instance is linked a Set of chunks
      */
-    private Map<Instance, Map<LongSet, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
+    private final Map<Instance, Map<LongSet, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
@@ -107,18 +106,14 @@ public class PerGroupChunkProvider extends ThreadProvider {
     @Override
     public void update(long time) {
         // Set of already-updated instances this tick
-        final Set<Instance> updatedInstance = new HashSet<>();
+        Set<Instance> updatedInstance = new HashSet<>();
 
-        instanceInstanceMap.entrySet().forEach(entry -> {
-            final Instance instance = entry.getKey();
-            final Map<LongSet, Instance> instanceMap = entry.getValue();
-
+        instanceInstanceMap.forEach((instance, instanceMap) -> {
             // True if the instance ended its tick call
             AtomicBoolean instanceUpdated = new AtomicBoolean(false);
 
             // Update all the chunks + instances
-            for (Map.Entry<LongSet, Instance> ent : instanceMap.entrySet()) {
-                final LongSet chunksIndexes = ent.getKey();
+            instanceMap.keySet().forEach(chunksIndexes -> {
 
                 final boolean shouldUpdateInstance = updatedInstance.add(instance);
                 pool.execute(() -> {
@@ -133,21 +128,11 @@ public class PerGroupChunkProvider extends ThreadProvider {
                     while (!instanceUpdated.get()) {
                     }
 
-                    for (long chunkIndex : chunksIndexes) {
-                        final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
-                        final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
-                        if (!ChunkUtils.isLoaded(chunk)) {
-                            continue;
-                        }
-
-                        updateChunk(instance, chunk, time);
-
-                        updateEntities(instance, chunk, time);
-                    }
+                    // Tick all this chunk group
+                    chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
                 });
 
-            }
-
+            });
         });
     }
 

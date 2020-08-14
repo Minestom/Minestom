@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.Set;
@@ -81,6 +82,24 @@ public abstract class ThreadProvider {
     /**
      * INSTANCE UPDATE
      */
+
+    /**
+     * Process a whole tick for a chunk
+     *
+     * @param instance   the instance of the chunk
+     * @param chunkIndex the index of the chunk {@link ChunkUtils#getChunkIndex(int, int)}
+     * @param time       the time of the update in milliseconds
+     */
+    protected void processChunkTick(Instance instance, long chunkIndex, long time) {
+        final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
+        final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
+        if (!ChunkUtils.isLoaded(chunk))
+            return;
+
+        updateChunk(instance, chunk, time);
+
+        updateEntities(instance, chunk, time);
+    }
 
     /**
      * Execute an instance tick

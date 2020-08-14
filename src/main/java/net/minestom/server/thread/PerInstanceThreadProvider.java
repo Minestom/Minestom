@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
@@ -35,26 +34,14 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
     @Override
     public void update(long time) {
-        for (Map.Entry<Instance, LongSet> entry : instanceChunkMap.entrySet()) {
-            final Instance instance = entry.getKey();
-            final LongSet chunkIndexes = entry.getValue();
-
+        instanceChunkMap.forEach((instance, chunkIndexes) -> {
             pool.execute(() -> {
+                // Tick instance
                 updateInstance(instance, time);
-
-                for (long chunkIndex : chunkIndexes) {
-                    final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
-                    final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
-                    if (!ChunkUtils.isLoaded(chunk))
-                        continue;
-
-                    updateChunk(instance, chunk, time);
-
-                    updateEntities(instance, chunk, time);
-
-                }
+                // Tick chunks
+                chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
             });
-        }
+        });
     }
 
     private LongSet getChunkCoordinates(Instance instance) {
