@@ -99,7 +99,7 @@ public class PlayerDiggingListener {
                 if (itemUpdateStateEvent == null) {
                     player.refreshActiveHand(true, false, false);
                 } else {
-                    boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                    final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
                     player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
                 }
 

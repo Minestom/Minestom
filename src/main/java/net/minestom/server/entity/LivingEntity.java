@@ -100,20 +100,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
                     final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        synchronized (itemEntity) {
-                            if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
-                                continue;
-                            final ItemStack item = itemEntity.getItemStack();
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
-                            callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
-                                CollectItemPacket collectItemPacket = new CollectItemPacket();
-                                collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                                collectItemPacket.collectorEntityId = getEntityId();
-                                collectItemPacket.pickupItemCount = item.getAmount();
-                                sendPacketToViewersAndSelf(collectItemPacket);
-                                entity.remove();
-                            });
-                        }
+                        if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
+                            continue;
+                        final ItemStack item = itemEntity.getItemStack();
+                        PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
+                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                            CollectItemPacket collectItemPacket = new CollectItemPacket();
+                            collectItemPacket.collectedEntityId = itemEntity.getEntityId();
+                            collectItemPacket.collectorEntityId = getEntityId();
+                            collectItemPacket.pickupItemCount = item.getAmount();
+                            sendPacketToViewersAndSelf(collectItemPacket);
+                            entity.remove();
+                        });
                     }
                 }
             }

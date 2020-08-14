@@ -128,8 +128,8 @@ public class ItemStack implements DataContainer {
      * @param itemStack The ItemStack to compare to
      * @return true if both items are similar
      */
-    public synchronized boolean isSimilar(ItemStack itemStack) {
-        synchronized (itemStack) {
+    public boolean isSimilar(ItemStack itemStack) {
+        synchronized (ItemStack.class) {
             final ColoredText itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
                     (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));

@@ -49,9 +49,9 @@ public abstract class PlayerConnection {
             tickCounter++;
             if (tickCounter % 20 == 0 && tickCounter > 0) {
                 tickCounter = 0;
-                int i = packetCounter.get();
+                final int count = packetCounter.get();
                 packetCounter.set(0);
-                if (i > MinecraftServer.getRateLimit()) {
+                if (count > MinecraftServer.getRateLimit()) {
                     if (connectionState == ConnectionState.LOGIN) {
                         sendPacket(new LoginDisconnect("Too Many Packets"));
                     } else {
