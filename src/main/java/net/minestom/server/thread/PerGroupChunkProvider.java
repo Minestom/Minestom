@@ -61,8 +61,11 @@ public class PerGroupChunkProvider extends ThreadProvider {
             return;
         }
 
+        // The size of the final list, used as the initial capacity
+        final int size = neighboursGroups.stream().mapToInt(value -> value.size()).sum() + 1;
+
         // Represent the merged group of all the neighbours
-        LongSet finalGroup = new LongArraySet();
+        LongSet finalGroup = new LongArraySet(size);
 
         // Add the newly loaded chunk to the group
         final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
