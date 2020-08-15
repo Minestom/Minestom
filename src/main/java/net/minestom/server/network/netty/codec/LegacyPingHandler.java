@@ -132,7 +132,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
     private String formatResponse(int playerProtocol) {
         // todo server motd, online and slots
         final String motd = "Minestom";
-        final String version = "1.16.1";
+        final String version = "1.16.2";
         final int online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
         final int max = 0;
         final int protocol = MinecraftServer.PROTOCOL_VERSION; // 1.15.2
