@@ -437,7 +437,7 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        Function<BlockPosition, Short> chunkSuppler = chunkDecider.apply(chunkX, chunkZ);
+        Function<BlockPosition, Short> chunkSuppler = chunkDecider != null ? chunkDecider.apply(chunkX, chunkZ) : null;
         final Chunk chunk = chunkSuppler == null ? new DynamicChunk(biomes, chunkX, chunkZ) : new StaticChunk(biomes, chunkX, chunkZ, chunkSuppler) ;
         cacheChunk(chunk);
 
