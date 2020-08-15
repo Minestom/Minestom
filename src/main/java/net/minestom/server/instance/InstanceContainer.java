@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import io.netty.buffer.ByteBuf;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
@@ -12,20 +11,18 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -41,7 +38,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -66,7 +62,7 @@ public class InstanceContainer extends Instance {
     private boolean autoChunkLoad;
 
     @Setter
-    private BiFunction<Integer, Integer, Function<BlockPosition, Short>> chunkDecider;
+    private BiFunction<Integer, Integer, BlockProvider> chunkDecider;
 
     public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
         super(uniqueId, dimensionType);
@@ -256,7 +252,7 @@ public class InstanceContainer extends Instance {
 
         // The player probably have a wrong version of this chunk section, send it
         if (blockStateId == 0) {
-            sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(y), player);
+            chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(y), player);
             return false;
         }
 
@@ -286,7 +282,7 @@ public class InstanceContainer extends Instance {
         } else {
             // Cancelled so we need to refresh player chunk section
             final int section = ChunkUtils.getSectionAt(blockPosition.getY());
-            sendChunkSectionUpdate(chunk, section, player);
+            chunk.sendChunkSectionUpdate(section, player);
         }
         return result;
     }
@@ -439,11 +435,19 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        Function<BlockPosition, Short> chunkSuppler = chunkDecider != null ? chunkDecider.apply(chunkX, chunkZ) : null;
-        final Chunk chunk = chunkSuppler == null ? new DynamicChunk(biomes, chunkX, chunkZ) : new StaticChunk(biomes, chunkX, chunkZ, chunkSuppler) ;
+        final Chunk chunk;
+        final BlockProvider blockProvider = chunkDecider != null ? chunkDecider.apply(chunkX, chunkZ) : null;
+        if (blockProvider != null) {
+            // Use static chunk
+            chunk = new StaticChunk(biomes, chunkX, chunkZ, blockProvider);
+        } else {
+            // Use dynamic chunk
+            chunk = new DynamicChunk(biomes, chunkX, chunkZ);
+        }
+
         cacheChunk(chunk);
 
-        if (chunkGenerator != null && chunkSuppler == null) {
+        if (chunkGenerator != null && blockProvider == null) {
             final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
@@ -455,62 +459,6 @@ public class InstanceContainer extends Instance {
 
         UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
         callChunkLoadEvent(chunkX, chunkZ);
-    }
-
-    public void sendChunkUpdate(Chunk chunk) {
-        final Set<Player> chunkViewers = chunk.getViewers();
-        if (!chunkViewers.isEmpty()) {
-            sendChunkUpdate(chunkViewers, chunk);
-        }
-    }
-
-    @Override
-    public void sendChunks(Player player) {
-        for (Chunk chunk : getChunks()) {
-            sendChunk(player, chunk);
-        }
-    }
-
-    @Override
-    public void sendChunk(Player player, Chunk chunk) {
-        if (!chunk.isLoaded())
-            return;
-        if (!PlayerUtils.isNettyClient(player))
-            return;
-
-        final ByteBuf data = chunk.getFullDataPacket();
-        if (data == null || !chunk.packetUpdated) {
-            PacketWriterUtils.writeCallbackPacket(chunk.getFreshFullDataPacket(), packet -> {
-                chunk.setFullDataPacket(packet);
-                sendChunkUpdate(player, chunk);
-            });
-        } else {
-            sendChunkUpdate(player, chunk);
-        }
-
-        // TODO do not hardcode
-        if (MinecraftServer.isFixLighting()) {
-            UpdateLightPacket updateLightPacket = new UpdateLightPacket();
-            updateLightPacket.chunkX = chunk.getChunkX();
-            updateLightPacket.chunkZ = chunk.getChunkZ();
-            updateLightPacket.skyLightMask = 0x3FFF0;
-            updateLightPacket.blockLightMask = 0x3F;
-            updateLightPacket.emptySkyLightMask = 0x0F;
-            updateLightPacket.emptyBlockLightMask = 0x3FFC0;
-            byte[] bytes = new byte[2048];
-            Arrays.fill(bytes, (byte) 0xFF);
-            List<byte[]> temp = new ArrayList<>();
-            List<byte[]> temp2 = new ArrayList<>();
-            for (int i = 0; i < 14; ++i) {
-                temp.add(bytes);
-            }
-            for (int i = 0; i < 6; ++i) {
-                temp2.add(bytes);
-            }
-            updateLightPacket.skyLight = temp;
-            updateLightPacket.blockLight = temp2;
-            PacketWriterUtils.writeAndSend(player, updateLightPacket);
-        }
     }
 
     @Override

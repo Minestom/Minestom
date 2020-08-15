@@ -74,9 +74,8 @@ public class BlockBatch implements InstanceBatch {
                         data.apply(chunk);
                     }
 
-                    chunk.refreshDataPacket(() -> {
-                        instance.sendChunkUpdate(chunk);
-                    });
+                    // Refresh chunk for viewers
+                    chunk.sendChunkUpdate();
 
                     if (isLast) {
                         if (callback != null)

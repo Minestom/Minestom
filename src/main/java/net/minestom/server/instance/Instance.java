@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
@@ -19,13 +18,11 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageFolder;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -228,21 +225,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
     /**
-     * Send all chunks data to {@code player}
-     *
-     * @param player the player
-     */
-    public abstract void sendChunks(Player player);
-
-    /**
-     * Send a specific chunk data to {@code player}
-     *
-     * @param player the player
-     * @param chunk  the chunk
-     */
-    public abstract void sendChunk(Player player, Chunk chunk);
-
-    /**
      * When set to true, chunks will load with players moving closer
      * Otherwise using {@link #loadChunk(int, int)} will be required to even spawn a player
      *
@@ -263,50 +245,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return true iif position is inside the void
      */
     public abstract boolean isInVoid(Position position);
-
-    //
-
-    /**
-     * Send a full {@link ChunkDataPacket} to {@code player}
-     *
-     * @param player the player to update the chunk to
-     * @param chunk  the chunk to send
-     */
-    public void sendChunkUpdate(Player player, Chunk chunk) {
-        player.getPlayerConnection().sendPacket(chunk.getFullDataPacket(), true);
-    }
-
-    protected void sendChunkUpdate(Collection<Player> players, Chunk chunk) {
-        final ByteBuf chunkData = chunk.getFullDataPacket();
-        players.forEach(player -> {
-            if (!PlayerUtils.isNettyClient(player))
-                return;
-
-            player.getPlayerConnection().sendPacket(chunkData, true);
-        });
-    }
-
-    protected void sendChunkSectionUpdate(Chunk chunk, int section, Collection<Player> players) {
-        PacketWriterUtils.writeAndSend(players, getChunkSectionUpdatePacket(chunk, section));
-    }
-
-    public void sendChunkSectionUpdate(Chunk chunk, int section, Player player) {
-        if (!PlayerUtils.isNettyClient(player))
-            return;
-
-        PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(chunk, section));
-    }
-
-    protected ChunkDataPacket getChunkSectionUpdatePacket(Chunk chunk, int section) {
-        ChunkDataPacket chunkDataPacket = chunk.getFreshPartialDataPacket();
-        chunkDataPacket.fullChunk = false;
-        int[] sections = new int[16];
-        sections[section] = 1;
-        chunkDataPacket.sections = sections;
-        return chunkDataPacket;
-    }
-    //
-
 
     /**
      * Get if the instance has been registered in {@link InstanceManager}
@@ -783,7 +721,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
             if (isPlayer) {
                 final Player player = (Player) entity;
-                sendChunks(player);
                 getWorldBorder().init(player);
             }
 

@@ -39,7 +39,10 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -540,7 +543,7 @@ public class Player extends LivingEntity implements CommandSender {
         viewableChunks.clear();
 
         if (this.instance != null) {
-            DimensionType instanceDimensionType = instance.getDimensionType();
+            final DimensionType instanceDimensionType = instance.getDimensionType();
             if (dimensionType != instanceDimensionType)
                 sendDimension(instanceDimensionType);
         }
@@ -557,7 +560,6 @@ public class Player extends LivingEntity implements CommandSender {
                 if (chunk != null) {
                     viewableChunks.add(chunk);
                     chunk.addViewer(this);
-                    instance.sendChunk(this, chunk);
                     if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))
                         updateViewPosition(chunk);
                 }
@@ -1196,7 +1198,7 @@ public class Player extends LivingEntity implements CommandSender {
      * It does remove and add the player from the chunks viewers list when removed or added
      * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}
      *
-     * @param newChunk  the current/new player chunk
+     * @param newChunk the current/new player chunk
      */
     protected void onChunkChange(Chunk newChunk) {
         final long[] lastVisibleChunks = new long[viewableChunks.size()];
@@ -1236,7 +1238,6 @@ public class Player extends LivingEntity implements CommandSender {
                 }
                 this.viewableChunks.add(chunk);
                 chunk.addViewer(this);
-                instance.sendChunk(this, chunk);
             });
         }
     }

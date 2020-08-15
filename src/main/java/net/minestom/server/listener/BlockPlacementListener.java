@@ -136,7 +136,7 @@ public class BlockPlacementListener {
 
         // Refresh chunk section if needed
         if (refreshChunk) {
-            instance.sendChunkSectionUpdate(chunk, ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
 
         player.getInventory().refreshSlot(player.getHeldSlot());
