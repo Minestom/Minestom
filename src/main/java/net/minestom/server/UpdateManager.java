@@ -61,8 +61,13 @@ public final class UpdateManager {
                 //Tick Callbacks
                 tickStartCallbacks.forEach(Runnable::run);
 
+                ArrayList<Future<?>> futures;
+
                 // Server tick (instance/chunk/entity)
-                ArrayList<Future<?>> futures = threadProvider.update(time);
+                // Synchronize with the update manager instance, like the signal for chunk load/unload
+                synchronized (this) {
+                    futures = threadProvider.update(time);
+                }
 
                 // Waiting players update (newly connected waiting to get into the server)
                 entityManager.updateWaitingPlayers();

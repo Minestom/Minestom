@@ -5,18 +5,19 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.PacketWriter;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 public class InventoryData extends DataType<Inventory> {
 
     @Override
     public void encode(PacketWriter packetWriter, Inventory value) {
-        InventoryType inventoryType = value.getInventoryType();
-        int size = inventoryType.getAdditionalSlot();
+        final InventoryType inventoryType = value.getInventoryType();
+        final int size = inventoryType.getAdditionalSlot();
 
+        // Inventory title & type
         packetWriter.writeSizedString(value.getTitle());
         packetWriter.writeSizedString(inventoryType.name());
 
+        // Write all item stacks
         for (int i = 0; i < size; i++) {
             packetWriter.writeItemStack(value.getItemStack(i));
         }
@@ -24,12 +25,13 @@ public class InventoryData extends DataType<Inventory> {
 
     @Override
     public Inventory decode(PacketReader packetReader) {
-        String title = packetReader.readSizedString();
-        InventoryType inventoryType = InventoryType.valueOf(packetReader.readSizedString());
-        int size = inventoryType.getAdditionalSlot();
+        final String title = packetReader.readSizedString();
+        final InventoryType inventoryType = InventoryType.valueOf(packetReader.readSizedString());
+        final int size = inventoryType.getAdditionalSlot();
 
         Inventory inventory = new Inventory(inventoryType, title);
 
+        // Read all item stacks
         for (int i = 0; i < size; i++) {
             inventory.setItemStack(i, packetReader.readSlot());
         }

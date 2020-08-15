@@ -85,31 +85,27 @@ public class ItemEntity extends ObjectEntity {
                     if (getDistance(itemEntity) > mergeRange)
                         continue;
 
-                    // Use the class as a monitor to prevent deadlock
-                    // Shouldn't happen too often to be an issue
-                    synchronized (ItemEntity.class) {
-                        final ItemStack itemStackEntity = itemEntity.getItemStack();
+                    final ItemStack itemStackEntity = itemEntity.getItemStack();
 
-                        final StackingRule stackingRule = itemStack.getStackingRule();
-                        final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+                    final StackingRule stackingRule = itemStack.getStackingRule();
+                    final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
 
-                        if (!canStack)
-                            continue;
+                    if (!canStack)
+                        continue;
 
-                        final int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
-                        final boolean canApply = stackingRule.canApply(itemStack, totalAmount);
+                    final int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
+                    final boolean canApply = stackingRule.canApply(itemStack, totalAmount);
 
-                        if (!canApply)
-                            continue;
+                    if (!canApply)
+                        continue;
 
-                        final ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
+                    final ItemStack result = stackingRule.apply(itemStack.clone(), totalAmount);
 
-                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
-                        callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
-                            setItemStack(entityItemMergeEvent.getResult());
-                            itemEntity.remove();
-                        });
-                    }
+                    EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
+                    callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
+                        setItemStack(entityItemMergeEvent.getResult());
+                        itemEntity.remove();
+                    });
 
                 }
             }

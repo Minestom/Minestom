@@ -33,7 +33,7 @@ public class TagsPacket implements ServerPacket {
             // name
             writer.writeSizedString(tag.getName().toString());
 
-            Set<NamespaceID> values = tag.getValues();
+            final Set<NamespaceID> values = tag.getValues();
             // count
             writer.writeVarInt(values.size());
             // entries

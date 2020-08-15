@@ -16,7 +16,7 @@ public abstract class DataType<T> {
     /**
      * Decode the data type
      *
-     * @param packetReader the data readerr
+     * @param packetReader the data reader
      * @return the decoded value
      */
     public abstract T decode(PacketReader packetReader);

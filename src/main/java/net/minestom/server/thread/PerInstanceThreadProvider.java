@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
@@ -16,54 +15,43 @@ import java.util.concurrent.Future;
  */
 public class PerInstanceThreadProvider extends ThreadProvider {
 
-    private Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
+	private Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
 
-    @Override
-    public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
-        // Add the loaded chunk to the instance chunks list
-        LongSet chunkCoordinates = getChunkCoordinates(instance);
-        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        chunkCoordinates.add(index);
-    }
+	@Override
+	public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
+		// Add the loaded chunk to the instance chunks list
+		LongSet chunkCoordinates = getChunkCoordinates(instance);
+		final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+		chunkCoordinates.add(index);
+	}
 
-    @Override
-    public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
-        LongSet chunkCoordinates = getChunkCoordinates(instance);
-        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        // Remove the unloaded chunk from the instance list
-        chunkCoordinates.remove(index);
+	@Override
+	public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
+		LongSet chunkCoordinates = getChunkCoordinates(instance);
+		final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+		// Remove the unloaded chunk from the instance list
+		chunkCoordinates.remove(index);
 
-    }
+	}
 
-    @Override
-    public ArrayList<Future<?>> update(long time) {
-        ArrayList<Future<?>> futures = new ArrayList<>();
+	@Override
+	public ArrayList<Future<?>> update(long time) {
+		ArrayList<Future<?>> futures = new ArrayList<>();
 
-        for (Map.Entry<Instance, LongSet> entry : instanceChunkMap.entrySet()) {
-            final Instance instance = entry.getKey();
-            final LongSet chunkIndexes = entry.getValue();
+		instanceChunkMap.forEach((instance, chunkIndexes) -> {
 
-            futures.add(pool.submit(() -> {
-                updateInstance(instance, time);
+			futures.add(pool.submit(() -> {
+				// Tick instance
+				updateInstance(instance, time);
+				// Tick chunks
+				chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
+			});
+		});
+		return futures;
+	}
 
-                for (long chunkIndex : chunkIndexes) {
-                    final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
-                    final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
-                    if (!ChunkUtils.isLoaded(chunk))
-                        continue;
-
-                    updateChunk(instance, chunk, time);
-
-                    updateEntities(instance, chunk, time);
-
-                }
-            }));
-        }
-        return futures;
-    }
-
-    private LongSet getChunkCoordinates(Instance instance) {
-        return instanceChunkMap.computeIfAbsent(instance, inst -> new LongArraySet());
-    }
+	private LongSet getChunkCoordinates(Instance instance) {
+		return instanceChunkMap.computeIfAbsent(instance, inst -> new LongArraySet());
+	}
 
 }

@@ -227,7 +227,7 @@ public class Player extends LivingEntity implements CommandSender {
                 recipesIdentifier.add(recipe.getRecipeId());
             }
             if (!recipesIdentifier.isEmpty()) {
-                String[] identifiers = recipesIdentifier.toArray(new String[0]);
+                final String[] identifiers = recipesIdentifier.toArray(new String[0]);
                 UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket();
                 unlockRecipesPacket.mode = 0;
                 unlockRecipesPacket.recipesId = identifiers;
@@ -321,15 +321,13 @@ public class Player extends LivingEntity implements CommandSender {
                 final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                 final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                 if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                    synchronized (experienceOrb) {
-                        if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                            continue;
-                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
-                        callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
-                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                            entity.remove();
-                        });
-                    }
+                    if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
+                        continue;
+                    PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
+                    callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
+                        short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                        entity.remove();
+                    });
                 }
             }
         }
