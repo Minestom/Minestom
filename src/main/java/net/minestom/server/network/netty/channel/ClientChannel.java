@@ -20,7 +20,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("CONNECTION");
+        //System.out.println("CONNECTION");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
         try {
             packetProcessor.process(ctx, packet);
         } finally {
-            int availableBytes = packet.body.readableBytes();
+            final int availableBytes = packet.body.readableBytes();
 
             if (availableBytes > 0) {
                 // TODO log4j2
@@ -44,6 +44,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     public void channelInactive(ChannelHandlerContext ctx) {
         PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
         if (playerConnection != null) {
+            // Remove the connection
             playerConnection.refreshOnline(false);
             Player player = playerConnection.getPlayer();
             if (player != null) {

@@ -13,19 +13,34 @@ import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
-public class PacketWriterUtils {
+/**
+ * Utils class used to write packets in the appropriate thread pool
+ */
+public final class PacketWriterUtils {
 
-    private static ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, MinecraftServer.THREAD_NAME_PACKET_WRITER);
+    private static final ExecutorService PACKET_WRITER_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, MinecraftServer.THREAD_NAME_PACKET_WRITER);
 
+    /**
+     * Write the packet in the writer thread pool
+     *
+     * @param serverPacket the packet to write
+     * @param consumer     the consumer called once the packet has been written
+     */
     public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<ByteBuf> consumer) {
-        batchesPool.execute(() -> {
+        PACKET_WRITER_POOL.execute(() -> {
             final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             consumer.accept(buffer);
         });
     }
 
+    /**
+     * Write a packet in the writer thread pool and send it to every players in {@code players}
+     *
+     * @param players      the players list to send the packet to
+     * @param serverPacket the packet to write and send
+     */
     public static void writeAndSend(Collection<Player> players, ServerPacket serverPacket) {
-        batchesPool.execute(() -> {
+        PACKET_WRITER_POOL.execute(() -> {
             if (players.isEmpty())
                 return;
 
@@ -42,14 +57,27 @@ public class PacketWriterUtils {
         });
     }
 
+    /**
+     * Write a packet and send it to a player connection
+     *
+     * @param playerConnection the connection to send the packet to
+     * @param serverPacket     the packet to write and send
+     */
     public static void writeAndSend(PlayerConnection playerConnection, ServerPacket serverPacket) {
-        batchesPool.execute(() -> {
+        PACKET_WRITER_POOL.execute(() -> {
             playerConnection.sendPacket(serverPacket);
         });
     }
 
+    /**
+     * Write a packet and send it to a player
+     *
+     * @param player       the player to send the packet to
+     * @param serverPacket the packet to write and send
+     */
     public static void writeAndSend(Player player, ServerPacket serverPacket) {
-        writeAndSend(player.getPlayerConnection(), serverPacket);
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+        writeAndSend(playerConnection, serverPacket);
     }
 
 }

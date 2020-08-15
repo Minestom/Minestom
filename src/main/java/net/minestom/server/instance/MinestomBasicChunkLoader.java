@@ -28,10 +28,11 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         final int chunkZ = chunk.getChunkZ();
 
         try {
+            final String key = getChunkKey(chunkX, chunkZ);
             final byte[] data = chunk.getSerializedData();
             if (data == null)
                 return;
-            storageFolder.set(getChunkKey(chunkX, chunkZ), data);
+            storageFolder.set(key, data);
 
             if (callback != null)
                 callback.run();
@@ -53,6 +54,13 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         }
     }
 
+    /**
+     * Get the chunk key used by the {@link StorageFolder}
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the chunk key
+     */
     private static String getChunkKey(int chunkX, int chunkZ) {
         return chunkX + "." + chunkZ;
     }

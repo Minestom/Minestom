@@ -527,6 +527,13 @@ public class InstanceContainer extends Instance {
         return position.getY() < -64;
     }
 
+    /**
+     * Assign a {@link SharedInstance} to this container
+     * <p>
+     * Only used by {@link InstanceManager}
+     *
+     * @param sharedInstance the shared instance to assign to this container
+     */
     protected void addSharedInstance(SharedInstance sharedInstance) {
         this.sharedInstances.add(sharedInstance);
     }

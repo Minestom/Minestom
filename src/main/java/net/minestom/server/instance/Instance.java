@@ -49,6 +49,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
 
+    private boolean registered;
+
     private DimensionType dimensionType;
 
     private WorldBorder worldBorder;
@@ -305,6 +307,26 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
     //
 
+
+    /**
+     * Get if the instance has been registered in {@link InstanceManager}
+     *
+     * @return true if the instance has been registered
+     */
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    /**
+     * Change the registered field
+     * <p>
+     * WARNING: should only be used by {@link InstanceManager}
+     *
+     * @param registered true to mark the instance as registered
+     */
+    protected void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
 
     /**
      * Get the instance dimension

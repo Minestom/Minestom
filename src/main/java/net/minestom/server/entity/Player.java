@@ -603,6 +603,35 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Send a plugin message to the player
+     *
+     * @param channel the message channel
+     * @param data    the message data
+     */
+    public void sendPluginMessage(String channel, byte[] data) {
+        PluginMessagePacket pluginMessagePacket = new PluginMessagePacket();
+        pluginMessagePacket.channel = channel;
+        pluginMessagePacket.data = data;
+        playerConnection.sendPacket(pluginMessagePacket);
+    }
+
+    /**
+     * Send a plugin message to the player
+     *
+     * @param channel the message channel
+     * @param message the message
+     */
+    public void sendPluginMessage(String channel, String message) {
+        // Write the data
+        PacketWriter writer = new PacketWriter();
+        writer.writeSizedString(message);
+        // Retrieve the data
+        final byte[] data = writer.toByteArray();
+
+        sendPluginMessage(channel, data);
+    }
+
+    /**
      * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
      * Setting {@code destroyStage} to -1 resets the break animation
      *

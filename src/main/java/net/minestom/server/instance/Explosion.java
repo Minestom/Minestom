@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.utils.BlockPosition;
 
@@ -78,9 +79,8 @@ public abstract class Explosion {
 
         postExplosion(instance, blocks, packet);
 
-        instance.getPlayers().forEach(player -> {
-            player.sendPacketToViewersAndSelf(packet);
-        });
+        // TODO send only to close players
+        PacketWriterUtils.writeAndSend(instance.getPlayers(), packet);
 
         postSend(instance, blocks);
     }

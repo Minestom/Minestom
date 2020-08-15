@@ -8,9 +8,9 @@ public interface ExplosionSupplier {
     /**
      * Creates a new explosion
      *
-     * @param centerX        center of the explosion
-     * @param centerY        center of the explosion
-     * @param centerZ        center of the explosion
+     * @param centerX        center X of the explosion
+     * @param centerY        center Y of the explosion
+     * @param centerZ        center Z of the explosion
      * @param strength       strength of the explosion
      * @param additionalData data passed via {@link Instance#explode)}. Can be null
      * @return Explosion object representing the algorithm to use

@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.WorldBorderPacket;
 import net.minestom.server.utils.Position;
 
@@ -59,6 +60,11 @@ public class WorldBorder {
         return centerX;
     }
 
+    /**
+     * Change the center X of the world border
+     *
+     * @param centerX the new center X
+     */
     public void setCenterX(float centerX) {
         this.centerX = centerX;
         refreshCenter();
@@ -73,6 +79,11 @@ public class WorldBorder {
         return centerZ;
     }
 
+    /**
+     * Change the center Z of the world border
+     *
+     * @param centerZ the new center Z
+     */
     public void setCenterZ(float centerZ) {
         this.centerZ = centerZ;
         refreshCenter();
@@ -220,6 +231,11 @@ public class WorldBorder {
         }
     }
 
+    /**
+     * Send the world border init packet to a player
+     *
+     * @param player the player to send the packet to
+     */
     protected void init(Player player) {
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.INITIALIZE;
@@ -237,6 +253,9 @@ public class WorldBorder {
         return instance;
     }
 
+    /**
+     * Send the new world border centers to all instance players
+     */
     private void refreshCenter() {
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.SET_CENTER;
@@ -244,8 +263,13 @@ public class WorldBorder {
         sendPacket(worldBorderPacket);
     }
 
+    /**
+     * Send a {@link WorldBorderPacket} to all the instance players
+     *
+     * @param worldBorderPacket the packet to send
+     */
     private void sendPacket(WorldBorderPacket worldBorderPacket) {
-        instance.getPlayers().forEach(player -> player.getPlayerConnection().sendPacket(worldBorderPacket));
+        PacketWriterUtils.writeAndSend(instance.getPlayers(), worldBorderPacket);
     }
 
     public enum CollisionAxis {

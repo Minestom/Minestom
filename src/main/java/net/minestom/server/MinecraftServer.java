@@ -9,9 +9,10 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
+import net.minestom.server.data.DataType;
+import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Player;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
@@ -19,6 +20,8 @@ import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -81,10 +84,10 @@ public class MinecraftServer {
     public static final int CHUNK_VIEW_DISTANCE = 10;
     public static final int ENTITY_VIEW_DISTANCE = 5;
     public static final int COMPRESSION_THRESHOLD = 256;
-    // Can be modified at performance cost when decreased
+    // Can be modified at performance cost when increased
+    public static final int TICK_PER_SECOND = 20;
     private static final int MS_TO_SEC = 1000;
-    public static final int TICK_MS = MS_TO_SEC / 20;
-    public static final int TICK_PER_SECOND = MS_TO_SEC / TICK_MS;
+    public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
 
     @Getter @Setter
     private static boolean hardcoreLook = false;
@@ -95,7 +98,6 @@ public class MinecraftServer {
     private static boolean fixLighting = true;
 
     //Rate Limiting
-    @Getter @Setter
     private static int rateLimit = 0;
 
     // Networking
@@ -217,80 +219,189 @@ public class MinecraftServer {
         PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), brandMessage);
     }
 
+    /**
+     * Get the max number of packets a client can send over 1 second
+     *
+     * @return the packet count limit over 1 second
+     */
+    public static int getRateLimit() {
+        return rateLimit;
+    }
+
+    /**
+     * Change the number of packet a client can send over 1 second without being disconnected
+     *
+     * @param rateLimit the number of packet, 0 to disable
+     */
+    public static void setRateLimit(int rateLimit) {
+        MinecraftServer.rateLimit = rateLimit;
+    }
+
+    /**
+     * Get the server difficulty showed in game option
+     *
+     * @return the server difficulty
+     */
     public static Difficulty getDifficulty() {
         return difficulty;
     }
 
+    /**
+     * Change the server difficulty and send the appropriate packet to all connected clients
+     *
+     * @param difficulty the new server difficulty
+     */
     public static void setDifficulty(Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        for (Player player : connectionManager.getOnlinePlayers()) {
-            ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
-            serverDifficultyPacket.difficulty = difficulty;
-            serverDifficultyPacket.locked = true;
-            player.getPlayerConnection().sendPacket(serverDifficultyPacket);
-        }
+
+        // The difficulty packet
+        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
+        serverDifficultyPacket.difficulty = difficulty;
+        serverDifficultyPacket.locked = true; // Can only be modified on singleplayer
+        // Send the packet to all online players
+        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
     }
 
+    /**
+     * Get the manager handling all incoming packets
+     *
+     * @return the packet listener manager
+     */
     public static PacketListenerManager getPacketListenerManager() {
         return packetListenerManager;
     }
 
+    /**
+     * Get the netty server
+     *
+     * @return the netty server
+     */
     public static NettyServer getNettyServer() {
         return nettyServer;
     }
 
+    /**
+     * Get the manager handling all registered instances
+     *
+     * @return the instance manager
+     */
     public static InstanceManager getInstanceManager() {
         return instanceManager;
     }
 
+    /**
+     * Get the manager handling {@link CustomBlock} and {@link BlockPlacementRule}
+     *
+     * @return the block manager
+     */
     public static BlockManager getBlockManager() {
         return blockManager;
     }
 
+    /**
+     * Get the manager handling waiting players
+     *
+     * @return the entity manager
+     */
     public static EntityManager getEntityManager() {
         return entityManager;
     }
 
+    /**
+     * Get the manager handling commands
+     *
+     * @return the command manager
+     */
     public static CommandManager getCommandManager() {
         return commandManager;
     }
 
+    /**
+     * Get the manager handling recipes show to the clients
+     *
+     * @return the recipe manager
+     */
     public static RecipeManager getRecipeManager() {
         return recipeManager;
     }
 
+    /**
+     * Get the manager handling storage
+     *
+     * @return the storage manager
+     */
     public static StorageManager getStorageManager() {
         return storageManager;
     }
 
+    /**
+     * Get the manager handling {@link DataType} used by {@link SerializableData}
+     *
+     * @return the data manager
+     */
     public static DataManager getDataManager() {
         return dataManager;
     }
 
+    /**
+     * Get the manager handling teams
+     *
+     * @return the team manager
+     */
     public static TeamManager getTeamManager() {
         return teamManager;
     }
 
+    /**
+     * Get the manager handling scheduled tasks
+     *
+     * @return the scheduler manager
+     */
     public static SchedulerManager getSchedulerManager() {
         return schedulerManager;
     }
 
+    /**
+     * Get the manager handling server monitoring
+     *
+     * @return the benchmark manager
+     */
     public static BenchmarkManager getBenchmarkManager() {
         return benchmarkManager;
     }
 
+    /**
+     * Get the manager handling server connections
+     *
+     * @return the connection manager
+     */
     public static ConnectionManager getConnectionManager() {
         return connectionManager;
     }
 
+    /**
+     * Get the consumer executed to show server-list data
+     *
+     * @return the response data consumer
+     */
     public static ResponseDataConsumer getResponseDataConsumer() {
         return responseDataConsumer;
     }
 
+    /**
+     * Get the manager handling loot tables
+     *
+     * @return the loot table manager
+     */
     public static LootTableManager getLootTableManager() {
         return lootTableManager;
     }
 
+    /**
+     * Get the manager handling dimensions
+     *
+     * @return the dimension manager
+     */
     public static DimensionTypeManager getDimensionTypeManager() {
         return dimensionTypeManager;
     }
@@ -299,18 +410,40 @@ public class MinecraftServer {
         return biomeManager;
     }
 
+    /**
+     * Get the manager handling advancements
+     *
+     * @return the advancement manager
+     */
     public static AdvancementManager getAdvancementManager() {
         return advancementManager;
     }
 
+    /**
+     * Get the manager handling tags
+     *
+     * @return the tag manager
+     */
     public static TagManager getTagManager() {
         return tagManager;
     }
 
+    /**
+     * Get the manager handling the server ticks
+     *
+     * @return the update manager
+     */
     public static UpdateManager getUpdateManager() {
         return updateManager;
     }
 
+    /**
+     * Start the server
+     *
+     * @param address              the server address
+     * @param port                 the server port
+     * @param responseDataConsumer the response data consumer, can be null
+     */
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
         LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
@@ -322,6 +455,12 @@ public class MinecraftServer {
         LOGGER.info("Minestom server started successfully.");
     }
 
+    /**
+     * Start the server
+     *
+     * @param address the server address
+     * @param port    the server port
+     */
     public void start(String address, int port) {
         start(address, port, null);
     }
