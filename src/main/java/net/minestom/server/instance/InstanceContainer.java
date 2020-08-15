@@ -183,6 +183,8 @@ public class InstanceContainer extends Instance {
 
     private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
         final CustomBlock actualBlock = chunk.getCustomBlock(index);
+        if (actualBlock == null)
+            return;
         final Data previousData = chunk.getData(index);
         actualBlock.onPlace(this, blockPosition, previousData);
     }
