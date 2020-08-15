@@ -14,7 +14,10 @@ import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.handler.EventHandler;
-import net.minestom.server.instance.*;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
@@ -634,13 +637,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      *
      * @param instance the new instance of the entity
      * @throws NullPointerException  if {@code instance} is null
-     * @throws IllegalStateException if {@code instance} has not been registered in
-     *                               {@link InstanceManager#createInstanceContainer()} or
-     *                               {@link InstanceManager#createSharedInstance(InstanceContainer)}
+     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public void setInstance(Instance instance) {
         Check.notNull(instance, "instance cannot be null!");
-        Check.stateCondition(!MinecraftServer.getInstanceManager().getInstances().contains(instance),
+        Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#createSharedInstance");
 
         if (this.instance != null) {

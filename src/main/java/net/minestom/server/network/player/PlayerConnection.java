@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
@@ -32,11 +33,13 @@ public abstract class PlayerConnection {
     private ConnectionState connectionState;
     private boolean online;
 
-    private static final ColoredText rateLimitKickMessage = ColoredText.of("Too Many Packets");
+    // Text used to kick client sending too many packets
+    private static final ColoredText rateLimitKickMessage = ColoredText.of(ChatColor.RED + "Too Many Packets");
 
     //Connection Stats
     @Getter
     private final AtomicInteger packetCounter = new AtomicInteger(0);
+    private final AtomicInteger lastPacketCounter = new AtomicInteger(0);
     private short tickCounter = 0;
 
     public PlayerConnection() {
@@ -44,14 +47,21 @@ public abstract class PlayerConnection {
         this.connectionState = ConnectionState.UNKNOWN;
     }
 
+    /**
+     * Update values related to the network connection
+     */
     public void updateStats() {
+        // Check rate limit
         if (MinecraftServer.getRateLimit() > 0) {
             tickCounter++;
-            if (tickCounter % 20 == 0 && tickCounter > 0) {
+            if (tickCounter % MinecraftServer.TICK_PER_SECOND == 0 && tickCounter > 0) {
                 tickCounter = 0;
+                // Retrieve the packet count
                 final int count = packetCounter.get();
-                packetCounter.set(0);
+                this.lastPacketCounter.set(count);
+                this.packetCounter.set(0);
                 if (count > MinecraftServer.getRateLimit()) {
+                    // Sent too many packets
                     if (connectionState == ConnectionState.LOGIN) {
                         sendPacket(new LoginDisconnect("Too Many Packets"));
                     } else {
@@ -96,6 +106,11 @@ public abstract class PlayerConnection {
      */
     public abstract void flush();
 
+    /**
+     * Get the remote address of the client
+     *
+     * @return the remote address
+     */
     public abstract SocketAddress getRemoteAddress();
 
     /**
@@ -140,7 +155,21 @@ public abstract class PlayerConnection {
         this.connectionState = connectionState;
     }
 
+    /**
+     * Get the client connection state
+     *
+     * @return the client connection state
+     */
     public ConnectionState getConnectionState() {
         return connectionState;
+    }
+
+    /**
+     * Get the number of packet the client sent over the last second
+     *
+     * @return the number of packet sent over the last second
+     */
+    public int getLastPacketCounter() {
+        return lastPacketCounter.get();
     }
 }

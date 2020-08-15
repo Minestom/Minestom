@@ -52,6 +52,13 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         }
     }
 
+    /**
+     * Get the chunk key used by the {@link StorageFolder}
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return the chunk key
+     */
     private static String getChunkKey(int chunkX, int chunkZ) {
         return chunkX + "." + chunkZ;
     }
