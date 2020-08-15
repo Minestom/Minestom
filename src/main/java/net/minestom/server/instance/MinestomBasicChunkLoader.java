@@ -29,6 +29,8 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
         try {
             final byte[] data = chunk.getSerializedData();
+            if (data == null)
+                return;
             storageFolder.set(getChunkKey(chunkX, chunkZ), data);
 
             if (callback != null)

@@ -3,6 +3,7 @@ package net.minestom.server.reader;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
+import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -27,7 +28,7 @@ public class ChunkReader {
                 biomes[i] = MinecraftServer.getBiomeManager().getById(stream.readByte());
             }
 
-            final Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
+            final Chunk chunk = new DynamicChunk(biomes, chunkX, chunkZ);
 
             chunkBatch = instance.createChunkBatch(chunk);
 

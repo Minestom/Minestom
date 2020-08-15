@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import io.netty.buffer.ByteBuf;
+import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
@@ -38,7 +39,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -61,6 +64,9 @@ public class InstanceContainer extends Instance {
     private IChunkLoader chunkLoader;
 
     private boolean autoChunkLoad;
+
+    @Setter
+    private BiFunction<Integer, Integer, Function<BlockPosition, Short>> chunkDecider;
 
     public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
         super(uniqueId, dimensionType);
@@ -431,9 +437,11 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        final Chunk chunk = new Chunk(biomes, chunkX, chunkZ);
+        Function<BlockPosition, Short> chunkSuppler = chunkDecider.apply(chunkX, chunkZ);
+        final Chunk chunk = chunkSuppler == null ? new DynamicChunk(biomes, chunkX, chunkZ) : new StaticChunk(biomes, chunkX, chunkZ, chunkSuppler) ;
         cacheChunk(chunk);
-        if (chunkGenerator != null) {
+
+        if (chunkGenerator != null && chunkSuppler == null) {
             final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
