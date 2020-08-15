@@ -70,4 +70,12 @@ public final class MathUtils {
     public static float setBetween(float number, float min, float max) {
         return number > max ? max : number < min ? min : number;
     }
+
+    public static int clamp(int value, int min, int max) {
+        if (value < min) {
+            return min;
+        } else {
+            return Math.min(value, max);
+        }
+    }
 }

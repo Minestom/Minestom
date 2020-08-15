@@ -109,9 +109,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
         ArrayList<Future<?>> futures = new ArrayList<>();
 
-        instanceInstanceMap.entrySet().forEach(entry -> {
-            final Instance instance = entry.getKey();
-            final Map<LongSet, Instance> instanceMap = entry.getValue();
+        instanceInstanceMap.forEach((instance, instanceMap) -> {
 
             // True if the instance ended its tick call
             AtomicBoolean instanceUpdated = new AtomicBoolean(false);
@@ -157,7 +155,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     private Map<LongSet, Instance> getInstanceMap(Instance instance) {
-        return instanceInstanceMap.computeIfAbsent(instance, inst -> new HashMap<>());
+        return instanceInstanceMap.computeIfAbsent(instance, inst -> new ConcurrentHashMap<>());
     }
 
 }

@@ -1,14 +1,14 @@
 package net.minestom.demo.largeframebuffers;
 
-import net.minestom.server.map.MapColors;
-import net.minestom.server.map.framebuffers.LargeGLFWFramebuffer;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GLUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.stream.Collectors;
 
@@ -64,13 +64,11 @@ public final  class OpenGLRendering {
     private static int projectionUniform;
     private static int viewUniform;
     private static int modelUniform;
-    private static int paletteTexture;
     private static int boxTexture;
 
     static void init() {
         GLUtil.setupDebugMessageCallback();
 
-        paletteTexture = loadTexture("palette");
         boxTexture = loadTexture("box");
 
         vbo = glGenBuffers();
@@ -80,15 +78,6 @@ public final  class OpenGLRendering {
         indexBuffer = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, VERTEX_SIZE, 0); // position
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, false, VERTEX_SIZE, 3*4); // color
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // prepare matrices and shader
         renderShader = glCreateProgram();
@@ -107,8 +96,6 @@ public final  class OpenGLRendering {
         projectionUniform = glGetUniformLocation(renderShader, "projection");
         viewUniform = glGetUniformLocation(renderShader, "view");
         modelUniform = glGetUniformLocation(renderShader, "model");
-        int paletteSizeUniform = glGetUniformLocation(renderShader, "paletteSize");
-        int paletteUniform = glGetUniformLocation(renderShader, "palette");
         int boxUniform = glGetUniformLocation(renderShader, "box");
 
         glUseProgram(renderShader); {
@@ -116,9 +103,8 @@ public final  class OpenGLRendering {
             uploadMatrix(viewUniform, viewMatrix);
 
             glUniform1i(boxUniform, 0); // texture unit 0
-            glUniform1i(paletteUniform, 1); // texture unit 1
-            glUniform1f(paletteSizeUniform, 236);
         }
+        glUseProgram(0);
     }
 
     private static int loadTexture(String filename) {
@@ -166,7 +152,6 @@ public final  class OpenGLRendering {
     private static int createShader(String filename, int type) {
         int shader = glCreateShader(type);
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(OpenGLRendering.class.getResourceAsStream(filename)))) {
-            StringBuffer buffer = new StringBuffer();
             String source = reader.lines().collect(Collectors.joining("\n"));
             glShaderSource(shader, source);
             glCompileShader(shader);
@@ -180,7 +165,7 @@ public final  class OpenGLRendering {
 
     private static int frame = 0;
 
-    static void render(LargeGLFWFramebuffer framebuffer) {
+    static void render() {
         if(frame % 100 == 0) {
             long time = System.currentTimeMillis();
             long dt = time-lastTime;
@@ -192,23 +177,24 @@ public final  class OpenGLRendering {
         frame++;
 
 
-        glClearColor(MapColors.COLOR_BLACK.multiply53()/255.0f, 0f, 0f, 1f);
+        glClearColor(0f, 0f, 0f, 1f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glEnable(GL_DEPTH_TEST);
 
         modelMatrix.rotateY((float) (Math.PI/60f));
 
-        // TODO: render texture
         glUseProgram(renderShader); {
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, paletteTexture);
-
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, boxTexture);
 
             uploadMatrix(modelUniform, modelMatrix);
             glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glEnableVertexAttribArray(0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, false, VERTEX_SIZE, 0); // position
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 2, GL_FLOAT, false, VERTEX_SIZE, 3*4); // color
+
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
             glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
         }

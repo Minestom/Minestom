@@ -3,10 +3,14 @@ package net.minestom.server.item;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.*;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -612,5 +616,52 @@ public class ItemStack implements DataContainer {
             compound.set("tag", additionalTag);
         }
         return compound;
+    }
+
+    // Callback events
+
+    /**
+     * Called when the player right clicks with this item
+     *
+     * @param player the player who used the item
+     * @param hand   the hand used
+     */
+    public void onRightClick(Player player, Player.Hand hand) {
+    }
+
+    /**
+     * Called when the player left clicks with this item
+     *
+     * @param player the player who used the item
+     * @param hand   the hand used
+     */
+    public void onLeftClick(Player player, Player.Hand hand) {
+    }
+
+    /**
+     * Called when the player right clicks with this item on a block
+     *
+     * @param player    the player who used the item
+     * @param hand      the hand used
+     * @param position  the position of the interacted block
+     * @param blockFace the block face
+     * @return true if it prevents normal item use (placing blocks for instance)
+     */
+    public boolean onUseOnBlock(Player player, Player.Hand hand, BlockPosition position, Direction blockFace) {
+        return false;
+    }
+
+    /**
+     * Called when the player click on this item on an inventory
+     * <p>
+     * Executed before any events
+     *
+     * @param player          the player who clicked on the item
+     * @param clickType       the click type
+     * @param slot            the slot clicked
+     * @param playerInventory true if the click is in the player inventory
+     */
+    public void onInventoryClick(Player player, ClickType clickType, int slot, boolean playerInventory) {
+
     }
 }

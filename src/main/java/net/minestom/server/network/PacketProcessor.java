@@ -46,6 +46,9 @@ public class PacketProcessor {
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
         );
 
+        if (MinecraftServer.getRateLimit() > 0)
+            playerConnection.getPacketCounter().incrementAndGet();
+
         final ConnectionState connectionState = playerConnection.getConnectionState();
 
         //if (!printBlackList.contains(id)) {
