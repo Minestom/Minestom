@@ -624,7 +624,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param message the message
      */
     public void sendPluginMessage(String channel, String message) {
-        sendPluginMessage(channel, message.getBytes());
+        // Write the data
+        PacketWriter writer = new PacketWriter();
+        writer.writeSizedString(message);
+        // Retrieve the data
+        final byte[] data = writer.toByteArray();
+
+        sendPluginMessage(channel, data);
     }
 
     /**
