@@ -134,8 +134,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
                     // Tick all this chunk group
                     chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-                });
-
+                }));
             });
         });
         return futures;

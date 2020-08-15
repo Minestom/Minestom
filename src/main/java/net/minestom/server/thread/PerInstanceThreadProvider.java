@@ -45,7 +45,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 				updateInstance(instance, time);
 				// Tick chunks
 				chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-			});
+			}));
 		});
 		return futures;
 	}
