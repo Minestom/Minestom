@@ -286,6 +286,8 @@ public abstract class Chunk implements Viewable {
 
         // Send the chunk data & light packets to the player
         sendChunk(player);
+        // Add to the viewable chunks set
+        player.getViewableChunks().add(this);
 
         PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
@@ -296,6 +298,9 @@ public abstract class Chunk implements Viewable {
     @Override
     public boolean removeViewer(Player player) {
         final boolean result = this.viewers.remove(player);
+
+        // Remove from the viewable chunks set
+        player.getViewableChunks().remove(this);
 
         PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
         player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);

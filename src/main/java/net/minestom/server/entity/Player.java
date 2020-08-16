@@ -61,7 +61,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     private String username;
     protected PlayerConnection playerConnection;
-    private ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
+    protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
     private int latency;
     private ColoredText displayName;
@@ -69,19 +69,17 @@ public class Player extends LivingEntity implements CommandSender {
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    private LevelType levelType;
+    protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
     private int teleportId = 0;
 
     protected boolean onGround;
-
-    protected Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
-    protected Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
-
-    private PlayerSettings settings;
+    private final ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
+    private final LevelType levelType;
+    private final PlayerSettings settings;
     private float exp;
     private int level;
 
-    private PlayerInventory inventory;
+    private final PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
@@ -128,10 +126,10 @@ public class Player extends LivingEntity implements CommandSender {
     private float walkingSpeed = 0.1f;
 
     // Statistics
-    private Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
+    private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
 
     // Vehicle
-    private PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
+    private final PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
 
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
@@ -364,7 +362,7 @@ public class Player extends LivingEntity implements CommandSender {
         final boolean positionChanged = position.getX() != lastX || position.getY() != lastY || position.getZ() != lastZ;
         final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
         if (!getViewers().isEmpty() && (positionChanged || viewChanged)) {
-            ServerPacket updatePacket = null;
+            ServerPacket updatePacket;
             ServerPacket optionalUpdatePacket = null;
             if (positionChanged && viewChanged) {
                 EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
@@ -393,7 +391,8 @@ public class Player extends LivingEntity implements CommandSender {
                 lastY = position.getY();
                 lastZ = position.getZ();
                 updatePacket = entityPositionPacket;
-            } else if (viewChanged) {
+            } else {
+                // View changed
                 EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
                 entityRotationPacket.entityId = getEntityId();
                 entityRotationPacket.yaw = position.getYaw();
@@ -412,13 +411,13 @@ public class Player extends LivingEntity implements CommandSender {
                 optionalUpdatePacket = entityHeadLookPacket;
             }
 
-            if (updatePacket != null) {
-                if (optionalUpdatePacket != null) {
-                    sendPacketsToViewers(updatePacket, optionalUpdatePacket);
-                } else {
-                    sendPacketToViewers(updatePacket);
-                }
+            // Send the update packet
+            if (optionalUpdatePacket != null) {
+                sendPacketsToViewers(updatePacket, optionalUpdatePacket);
+            } else {
+                sendPacketToViewers(updatePacket);
             }
+
         }
 
     }
@@ -513,7 +512,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
         showPlayer(viewerConnection);
-        return result;
+        return true;
     }
 
     @Override
@@ -540,7 +539,6 @@ public class Player extends LivingEntity implements CommandSender {
         for (Chunk viewableChunk : viewableChunks) {
             viewableChunk.removeViewer(this);
         }
-        viewableChunks.clear();
 
         if (this.instance != null) {
             final DimensionType instanceDimensionType = instance.getDimensionType();
@@ -552,13 +550,12 @@ public class Player extends LivingEntity implements CommandSender {
         final int length = visibleChunks.length;
 
         AtomicInteger counter = new AtomicInteger(0);
-        for (int i = 0; i < length; i++) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunks[i]);
+        for (long visibleChunk : visibleChunks) {
+            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
             final int chunkX = chunkPos[0];
             final int chunkZ = chunkPos[1];
             Consumer<Chunk> callback = (chunk) -> {
                 if (chunk != null) {
-                    viewableChunks.add(chunk);
                     chunk.addViewer(this);
                     if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))
                         updateViewPosition(chunk);
@@ -827,7 +824,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Update the internal field and send the appropriate {@link EntityMetaDataPacket}
      *
-     * @param additionalHearts the count of additional heartss
+     * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
         this.additionalHearts = additionalHearts;
@@ -958,7 +955,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(addPlayerPacket);
 
         for (Player viewer : getViewers()) {
-            PlayerConnection connection = viewer.getPlayerConnection();
+            final PlayerConnection connection = viewer.getPlayerConnection();
 
             connection.sendPacket(removePlayerPacket);
             connection.sendPacket(destroyEntitiesPacket);
@@ -968,16 +965,6 @@ public class Player extends LivingEntity implements CommandSender {
 
         getInventory().update();
         teleport(getPosition());
-    }
-
-    /**
-     * Used to update the internal skin field
-     *
-     * @param skin the player skin
-     * @see #setSkin(PlayerSkin) instead
-     */
-    protected void refreshSkin(PlayerSkin skin) {
-        this.skin = skin;
     }
 
     /**
@@ -1202,9 +1189,9 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void onChunkChange(Chunk newChunk) {
         final long[] lastVisibleChunks = new long[viewableChunks.size()];
-        Chunk[] lastViewableChunks = viewableChunks.toArray(new Chunk[0]);
+        final Chunk[] lastViewableChunks = viewableChunks.toArray(new Chunk[0]);
         for (int i = 0; i < lastViewableChunks.length; i++) {
-            Chunk lastViewableChunk = lastViewableChunks[i];
+            final Chunk lastViewableChunk = lastViewableChunks[i];
             lastVisibleChunks[i] = ChunkUtils.getChunkIndex(lastViewableChunk.getChunkX(), lastViewableChunk.getChunkZ());
         }
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), getChunkRange());
@@ -1219,8 +1206,7 @@ public class Player extends LivingEntity implements CommandSender {
             unloadChunkPacket.chunkZ = chunkPos[1];
             playerConnection.sendPacket(unloadChunkPacket);
 
-            Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
-            viewableChunks.remove(chunk);
+            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
@@ -1228,15 +1214,13 @@ public class Player extends LivingEntity implements CommandSender {
         updateViewPosition(newChunk);
 
         // Load new chunks
-        for (int i = 0; i < newChunks.length; i++) {
-            final int index = newChunks[i];
+        for (int index : newChunks) {
             final int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
             instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;
                 }
-                this.viewableChunks.add(chunk);
                 chunk.addViewer(this);
             });
         }
@@ -1541,11 +1525,14 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Get the player viewable chunks
+     * <p>
+     * WARNING: adding or removing a chunk there will not load/unload it,
+     * use {@link Chunk#addViewer(Player)} or {@link Chunk#removeViewer(Player)}
      *
-     * @return an unmodifiable {@link Set} containing all the chunks that the player sees
+     * @return a {@link Set} containing all the chunks that the player sees
      */
     public Set<Chunk> getViewableChunks() {
-        return Collections.unmodifiableSet(viewableChunks);
+        return viewableChunks;
     }
 
     /**

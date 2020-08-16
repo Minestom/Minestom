@@ -40,8 +40,8 @@ import java.util.function.Consumer;
 
 public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
-    private static Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
-    private static AtomicInteger lastEntityId = new AtomicInteger();
+    private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
+    private static final AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
     protected static final byte METADATA_BYTE = 0;
@@ -63,7 +63,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     protected float cacheYaw, cachePitch;
-    private int id;
+    // Synchronization
+    private static final long SYNCHRONIZATION_DELAY = 1500; // In ms
 
     private BoundingBox boundingBox;
 
@@ -74,22 +75,20 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float eyeHeight;
 
     private boolean autoViewable;
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final int id;
     private Data data;
-    private Set<Entity> passengers = new CopyOnWriteArraySet<>();
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
     private boolean shouldRemove;
     private long scheduledRemoveTime;
-    private EntityType entityType;
+    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     private long lastUpdate;
-    private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final EntityType entityType;
     protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
-
-    // Synchronization
-    private long synchronizationDelay = 1500; // In ms
+    private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
     private long lastSynchronizationTime;
 
     // Metadata
@@ -215,9 +214,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         };
 
         if (instance.hasEnabledAutoChunkLoad()) {
-            instance.loadChunk(position, chunk -> {
-                runnable.run();
-            });
+            instance.loadChunk(position, chunk -> runnable.run());
         } else {
             runnable.run();
         }
@@ -289,7 +286,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         if (!result)
             return false;
         player.viewableEntities.add(this);
-        return result;
+        return true;
     }
 
     @Override
@@ -497,7 +494,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
 
         // Scheduled synchronization
-        if (time - lastSynchronizationTime >= synchronizationDelay) {
+        if (time - lastSynchronizationTime >= SYNCHRONIZATION_DELAY) {
             lastSynchronizationTime = time;
             sendSynchronization();
         }
@@ -1210,9 +1207,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected void sendMetadataIndex(int index) {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
-        metaDataPacket.consumer = packet -> {
-            fillMetadataIndex(packet, index);
-        };
+        metaDataPacket.consumer = packet -> fillMetadataIndex(packet, index);
 
         sendPacketToViewersAndSelf(metaDataPacket);
     }
