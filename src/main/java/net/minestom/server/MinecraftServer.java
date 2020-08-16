@@ -59,6 +59,7 @@ public class MinecraftServer {
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
+    public static final String VERSION_NAME = "1.16.2";
     public static final int PROTOCOL_VERSION = 751;
 
     // Threads
@@ -89,7 +90,8 @@ public class MinecraftServer {
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private static boolean hardcoreLook = false;
 
     //Extras
@@ -187,7 +189,7 @@ public class MinecraftServer {
 
         // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent("1.16.2", null); // TODO: provide a way to give a path override, probably via launch arguments?
+            ResourceGatherer.ensureResourcesArePresent(VERSION_NAME, null); // TODO: provide a way to give a path override, probably via launch arguments?
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
@@ -451,7 +453,7 @@ public class MinecraftServer {
         nettyServer.start(address, port);
         long t1 = -System.nanoTime();
         pluginManager.loadPlugins();
-        LOGGER.info("Plugins loaded in " + (t1+System.nanoTime())/1_000_000D + "ms");
+        LOGGER.info("Plugins loaded in " + (t1 + System.nanoTime()) / 1_000_000D + "ms");
         LOGGER.info("Minestom server started successfully.");
     }
 
