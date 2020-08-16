@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PolishedBlackstoneBrickSlab {
 	public static void initStates() {
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16254, "type=top", "waterlogged=true"));
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16255, "type=top", "waterlogged=false"));
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16256, "type=bottom", "waterlogged=true"));
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16257, "type=bottom", "waterlogged=false"));
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16258, "type=double", "waterlogged=true"));
-		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16259, "type=double", "waterlogged=false"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16262, "type=top", "waterlogged=true"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16263, "type=top", "waterlogged=false"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16264, "type=bottom", "waterlogged=true"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16265, "type=bottom", "waterlogged=false"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16266, "type=double", "waterlogged=true"));
+		POLISHED_BLACKSTONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 16267, "type=double", "waterlogged=false"));
 	}
 }

@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class WarpedHyphae {
 	public static void initStates() {
-		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14964, "axis=x"));
-		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14965, "axis=y"));
-		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14966, "axis=z"));
+		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14972, "axis=x"));
+		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14973, "axis=y"));
+		WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14974, "axis=z"));
 	}
 }

@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DragonWallHead {
 	public static void initStates() {
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6606, "facing=north"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6607, "facing=south"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6608, "facing=west"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6609, "facing=east"));
+		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6610, "facing=north"));
+		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6611, "facing=south"));
+		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6612, "facing=west"));
+		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6613, "facing=east"));
 	}
 }

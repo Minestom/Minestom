@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class WarpedSlab {
 	public static void initStates() {
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15053, "type=top", "waterlogged=true"));
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15054, "type=top", "waterlogged=false"));
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15055, "type=bottom", "waterlogged=true"));
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15056, "type=bottom", "waterlogged=false"));
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15057, "type=double", "waterlogged=true"));
-		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15058, "type=double", "waterlogged=false"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15061, "type=top", "waterlogged=true"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15062, "type=top", "waterlogged=false"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15063, "type=bottom", "waterlogged=true"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15064, "type=bottom", "waterlogged=false"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15065, "type=double", "waterlogged=true"));
+		WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15066, "type=double", "waterlogged=false"));
 	}
 }

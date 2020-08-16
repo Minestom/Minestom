@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class TubeCoralFan {
 	public static void initStates() {
-		TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9550, "waterlogged=true"));
-		TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9551, "waterlogged=false"));
+		TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9554, "waterlogged=true"));
+		TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9555, "waterlogged=false"));
 	}
 }

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class EndPortalFrame {
 	public static void initStates() {
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5146, "eye=true", "facing=north"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5147, "eye=true", "facing=south"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5148, "eye=true", "facing=west"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5149, "eye=true", "facing=east"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5150, "eye=false", "facing=north"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5151, "eye=false", "facing=south"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5152, "eye=false", "facing=west"));
-		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5153, "eye=false", "facing=east"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5150, "eye=true", "facing=north"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5151, "eye=true", "facing=south"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5152, "eye=true", "facing=west"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5153, "eye=true", "facing=east"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5154, "eye=false", "facing=north"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5155, "eye=false", "facing=south"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5156, "eye=false", "facing=west"));
+		END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5157, "eye=false", "facing=east"));
 	}
 }

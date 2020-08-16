@@ -7,10 +7,10 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RespawnAnchor {
 	public static void initStates() {
-		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15829, "charges=0"));
-		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15830, "charges=1"));
-		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15831, "charges=2"));
-		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15832, "charges=3"));
-		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15833, "charges=4"));
+		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15837, "charges=0"));
+		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15838, "charges=1"));
+		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15839, "charges=2"));
+		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15840, "charges=3"));
+		RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15841, "charges=4"));
 	}
 }

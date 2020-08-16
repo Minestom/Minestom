@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class WarpedStem {
 	public static void initStates() {
-		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14958, "axis=x"));
-		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14959, "axis=y"));
-		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14960, "axis=z"));
+		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14966, "axis=x"));
+		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14967, "axis=y"));
+		WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14968, "axis=z"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Peony {
 	public static void initStates() {
-		PEONY.addBlockAlternative(new BlockAlternative((short) 7891, "half=upper"));
-		PEONY.addBlockAlternative(new BlockAlternative((short) 7892, "half=lower"));
+		PEONY.addBlockAlternative(new BlockAlternative((short) 7895, "half=upper"));
+		PEONY.addBlockAlternative(new BlockAlternative((short) 7896, "half=lower"));
 	}
 }

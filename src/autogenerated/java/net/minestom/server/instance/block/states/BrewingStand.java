@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BrewingStand {
 	public static void initStates() {
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5133, "has_bottle_0=true", "has_bottle_1=true", "has_bottle_2=true"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5134, "has_bottle_0=true", "has_bottle_1=true", "has_bottle_2=false"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5135, "has_bottle_0=true", "has_bottle_1=false", "has_bottle_2=true"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5136, "has_bottle_0=true", "has_bottle_1=false", "has_bottle_2=false"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5137, "has_bottle_0=false", "has_bottle_1=true", "has_bottle_2=true"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5138, "has_bottle_0=false", "has_bottle_1=true", "has_bottle_2=false"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5139, "has_bottle_0=false", "has_bottle_1=false", "has_bottle_2=true"));
-		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5140, "has_bottle_0=false", "has_bottle_1=false", "has_bottle_2=false"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5137, "has_bottle_0=true", "has_bottle_1=true", "has_bottle_2=true"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5138, "has_bottle_0=true", "has_bottle_1=true", "has_bottle_2=false"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5139, "has_bottle_0=true", "has_bottle_1=false", "has_bottle_2=true"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5140, "has_bottle_0=true", "has_bottle_1=false", "has_bottle_2=false"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5141, "has_bottle_0=false", "has_bottle_1=true", "has_bottle_2=true"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5142, "has_bottle_0=false", "has_bottle_1=true", "has_bottle_2=false"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5143, "has_bottle_0=false", "has_bottle_1=false", "has_bottle_2=true"));
+		BREWING_STAND.addBlockAlternative(new BlockAlternative((short) 5144, "has_bottle_0=false", "has_bottle_1=false", "has_bottle_2=false"));
 	}
 }

@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class QuartzPillar {
 	public static void initStates() {
-		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6740, "axis=x"));
-		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6741, "axis=y"));
-		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6742, "axis=z"));
+		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6744, "axis=x"));
+		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6745, "axis=y"));
+		QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6746, "axis=z"));
 	}
 }

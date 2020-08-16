@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BubbleColumn {
 	public static void initStates() {
-		BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9667, "drag=true"));
-		BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9668, "drag=false"));
+		BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9671, "drag=true"));
+		BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9672, "drag=false"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Mycelium {
 	public static void initStates() {
-		MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5012, "snowy=true"));
-		MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5013, "snowy=false"));
+		MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5016, "snowy=true"));
+		MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5017, "snowy=false"));
 	}
 }

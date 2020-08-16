@@ -7,7 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Lantern {
 	public static void initStates() {
-		LANTERN.addBlockAlternative(new BlockAlternative((short) 14886, "hanging=true"));
-		LANTERN.addBlockAlternative(new BlockAlternative((short) 14887, "hanging=false"));
+		LANTERN.addBlockAlternative(new BlockAlternative((short) 14890, "hanging=true", "waterlogged=true"));
+		LANTERN.addBlockAlternative(new BlockAlternative((short) 14891, "hanging=true", "waterlogged=false"));
+		LANTERN.addBlockAlternative(new BlockAlternative((short) 14892, "hanging=false", "waterlogged=true"));
+		LANTERN.addBlockAlternative(new BlockAlternative((short) 14893, "hanging=false", "waterlogged=false"));
 	}
 }

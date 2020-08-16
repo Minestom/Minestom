@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class AcaciaSlab {
 	public static void initStates() {
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8324, "type=top", "waterlogged=true"));
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8325, "type=top", "waterlogged=false"));
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8326, "type=bottom", "waterlogged=true"));
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8327, "type=bottom", "waterlogged=false"));
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8328, "type=double", "waterlogged=true"));
-		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8329, "type=double", "waterlogged=false"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8328, "type=top", "waterlogged=true"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8329, "type=top", "waterlogged=false"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8330, "type=bottom", "waterlogged=true"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8331, "type=bottom", "waterlogged=false"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8332, "type=double", "waterlogged=true"));
+		ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8333, "type=double", "waterlogged=false"));
 	}
 }

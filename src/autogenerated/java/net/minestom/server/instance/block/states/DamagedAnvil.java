@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class DamagedAnvil {
 	public static void initStates() {
-		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6618, "facing=north"));
-		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6619, "facing=south"));
-		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6620, "facing=west"));
-		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6621, "facing=east"));
+		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6622, "facing=north"));
+		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6623, "facing=south"));
+		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6624, "facing=west"));
+		DAMAGED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6625, "facing=east"));
 	}
 }

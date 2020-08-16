@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class WitherSkeletonWallSkull {
 	public static void initStates() {
-		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6526, "facing=north"));
-		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6527, "facing=south"));
-		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6528, "facing=west"));
-		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6529, "facing=east"));
+		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6530, "facing=north"));
+		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6531, "facing=south"));
+		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6532, "facing=west"));
+		WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6533, "facing=east"));
 	}
 }

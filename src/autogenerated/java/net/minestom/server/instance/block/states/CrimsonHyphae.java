@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CrimsonHyphae {
 	public static void initStates() {
-		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14981, "axis=x"));
-		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14982, "axis=y"));
-		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14983, "axis=z"));
+		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14989, "axis=x"));
+		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14990, "axis=y"));
+		CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14991, "axis=z"));
 	}
 }

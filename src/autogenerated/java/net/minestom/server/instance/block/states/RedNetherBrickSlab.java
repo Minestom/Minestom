@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class RedNetherBrickSlab {
 	public static void initStates() {
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10849, "type=top", "waterlogged=true"));
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10850, "type=top", "waterlogged=false"));
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10851, "type=bottom", "waterlogged=true"));
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10852, "type=bottom", "waterlogged=false"));
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10853, "type=double", "waterlogged=true"));
-		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10854, "type=double", "waterlogged=false"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10853, "type=top", "waterlogged=true"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10854, "type=top", "waterlogged=false"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10855, "type=bottom", "waterlogged=true"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10856, "type=bottom", "waterlogged=false"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10857, "type=double", "waterlogged=true"));
+		RED_NETHER_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10858, "type=double", "waterlogged=false"));
 	}
 }

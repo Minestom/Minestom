@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PurpurSlab {
 	public static void initStates() {
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8408, "type=top", "waterlogged=true"));
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8409, "type=top", "waterlogged=false"));
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8410, "type=bottom", "waterlogged=true"));
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8411, "type=bottom", "waterlogged=false"));
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8412, "type=double", "waterlogged=true"));
-		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8413, "type=double", "waterlogged=false"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8412, "type=top", "waterlogged=true"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8413, "type=top", "waterlogged=false"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8414, "type=bottom", "waterlogged=true"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8415, "type=bottom", "waterlogged=false"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8416, "type=double", "waterlogged=true"));
+		PURPUR_SLAB.addBlockAlternative(new BlockAlternative((short) 8417, "type=double", "waterlogged=false"));
 	}
 }

@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class MagentaShulkerBox {
 	public static void initStates() {
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9290, "facing=north"));
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9291, "facing=east"));
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9292, "facing=south"));
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9293, "facing=west"));
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9294, "facing=up"));
-		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9295, "facing=down"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9294, "facing=north"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9295, "facing=east"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9296, "facing=south"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9297, "facing=west"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9298, "facing=up"));
+		MAGENTA_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9299, "facing=down"));
 	}
 }

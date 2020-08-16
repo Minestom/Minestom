@@ -7,8 +7,8 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CrimsonStem {
 	public static void initStates() {
-		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14975, "axis=x"));
-		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14976, "axis=y"));
-		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14977, "axis=z"));
+		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14983, "axis=x"));
+		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14984, "axis=y"));
+		CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14985, "axis=z"));
 	}
 }

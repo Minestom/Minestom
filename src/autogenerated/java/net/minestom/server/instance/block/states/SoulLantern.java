@@ -7,7 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class SoulLantern {
 	public static void initStates() {
-		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14888, "hanging=true"));
-		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14889, "hanging=false"));
+		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14894, "hanging=true", "waterlogged=true"));
+		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14895, "hanging=true", "waterlogged=false"));
+		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14896, "hanging=false", "waterlogged=true"));
+		SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14897, "hanging=false", "waterlogged=false"));
 	}
 }

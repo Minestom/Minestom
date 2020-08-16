@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Cauldron {
 	public static void initStates() {
-		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5141, "level=0"));
-		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5142, "level=1"));
-		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5143, "level=2"));
-		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5144, "level=3"));
+		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5145, "level=0"));
+		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5146, "level=1"));
+		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5147, "level=2"));
+		CAULDRON.addBlockAlternative(new BlockAlternative((short) 5148, "level=3"));
 	}
 }

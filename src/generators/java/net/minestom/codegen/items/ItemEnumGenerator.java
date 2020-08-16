@@ -1,15 +1,12 @@
 package net.minestom.codegen.items;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.codegen.PrismarinePaths;
-import net.minestom.codegen.blocks.*;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -17,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -66,16 +64,23 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     }
 
     /**
-     * Extract block information from PrismarineJS (submodule of Minestom)
+     * Extract item information from Burger (submodule of Minestom)
      * @param gson
-     * @param blockFile
+     * @param url
      * @return
      * @throws IOException
      */
-    private List<PrismarineJSItem> parseItemsFromPrismarineJS(Gson gson, File blockFile) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(blockFile))) {
-            PrismarineJSItem[] items = gson.fromJson(bufferedReader, PrismarineJSItem[].class);
-            return Arrays.asList(items);
+    private List<BurgerItem> parseItemsFromBurger(Gson gson, String url) throws IOException {
+        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+            LOGGER.debug("\tConnection established, reading file");
+            JsonObject dictionary = gson.fromJson(bufferedReader, JsonArray.class).get(0).getAsJsonObject();
+            JsonObject itemMap = dictionary.getAsJsonObject("items").getAsJsonObject("item");
+            List<BurgerItem> items = new LinkedList<>();
+            for(var entry : itemMap.entrySet()) {
+                BurgerItem item = gson.fromJson(entry.getValue(), BurgerItem.class);
+                items.add(item);
+            }
+            return items;
         } catch (IOException e) {
             throw e;
         }
@@ -100,11 +105,11 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
 
         PrismarinePaths paths = gson.fromJson(pathsJson, PrismarinePaths.class);
         LOGGER.debug("Loading PrismarineJS blocks data");
-        List<PrismarineJSItem> prismarineJSItems = parseItemsFromPrismarineJS(gson, paths.getItemsFile());
+        List<BurgerItem> burgerItems = parseItemsFromBurger(gson, BURGER_URL_BASE_URL+targetVersion+".json");
 
         TreeSet<ItemContainer> items = new TreeSet<>(ItemContainer::compareTo);
-        for(var prismarineJSItem : prismarineJSItems) {
-            items.add(new ItemContainer(prismarineJSItem.id, NamespaceID.from(prismarineJSItem.name), prismarineJSItem.stackSize, getBlock(prismarineJSItem.name.toUpperCase())));
+        for(var burgerItem : burgerItems) {
+            items.add(new ItemContainer(burgerItem.numeric_id, NamespaceID.from("minecraft:"+burgerItem.text_id), burgerItem.max_stack_size, getBlock(burgerItem.text_id.toUpperCase())));
         }
         return items;
     }

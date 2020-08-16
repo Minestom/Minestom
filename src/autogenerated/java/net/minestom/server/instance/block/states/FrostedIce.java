@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class FrostedIce {
 	public static void initStates() {
-		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9249, "age=0"));
-		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9250, "age=1"));
-		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9251, "age=2"));
-		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9252, "age=3"));
+		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9253, "age=0"));
+		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9254, "age=1"));
+		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9255, "age=2"));
+		FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9256, "age=3"));
 	}
 }

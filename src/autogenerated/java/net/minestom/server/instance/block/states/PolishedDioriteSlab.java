@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PolishedDioriteSlab {
 	public static void initStates() {
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10807, "type=top", "waterlogged=true"));
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10808, "type=top", "waterlogged=false"));
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10809, "type=bottom", "waterlogged=true"));
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10810, "type=bottom", "waterlogged=false"));
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10811, "type=double", "waterlogged=true"));
-		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10812, "type=double", "waterlogged=false"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10811, "type=top", "waterlogged=true"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10812, "type=top", "waterlogged=false"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10813, "type=bottom", "waterlogged=true"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10814, "type=bottom", "waterlogged=false"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10815, "type=double", "waterlogged=true"));
+		POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10816, "type=double", "waterlogged=false"));
 	}
 }

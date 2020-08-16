@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class BrainCoralFan {
 	public static void initStates() {
-		BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9552, "waterlogged=true"));
-		BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9553, "waterlogged=false"));
+		BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9556, "waterlogged=true"));
+		BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9557, "waterlogged=false"));
 	}
 }

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CrimsonWallSign {
 	public static void initStates() {
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15719, "facing=north", "waterlogged=true"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15720, "facing=north", "waterlogged=false"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15721, "facing=south", "waterlogged=true"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15722, "facing=south", "waterlogged=false"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15723, "facing=west", "waterlogged=true"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15724, "facing=west", "waterlogged=false"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15725, "facing=east", "waterlogged=true"));
-		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15726, "facing=east", "waterlogged=false"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15727, "facing=north", "waterlogged=true"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15728, "facing=north", "waterlogged=false"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15729, "facing=south", "waterlogged=true"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15730, "facing=south", "waterlogged=false"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15731, "facing=west", "waterlogged=true"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15732, "facing=west", "waterlogged=false"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15733, "facing=east", "waterlogged=true"));
+		CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15734, "facing=east", "waterlogged=false"));
 	}
 }

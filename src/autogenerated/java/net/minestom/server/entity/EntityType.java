@@ -68,6 +68,7 @@ public enum EntityType {
 	PHANTOM("minecraft:phantom"),
 	PIG("minecraft:pig"),
 	PIGLIN("minecraft:piglin"),
+	PIGLIN_BRUTE("minecraft:piglin_brute"),
 	PILLAGER("minecraft:pillager"),
 	POLAR_BEAR("minecraft:polar_bear"),
 	TNT("minecraft:tnt"),

@@ -7,13 +7,13 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Potatoes {
 	public static void initStates() {
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6338, "age=0"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6339, "age=1"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6340, "age=2"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6341, "age=3"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6342, "age=4"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6343, "age=5"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6344, "age=6"));
-		POTATOES.addBlockAlternative(new BlockAlternative((short) 6345, "age=7"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6342, "age=0"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6343, "age=1"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6344, "age=2"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6345, "age=3"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6346, "age=4"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6347, "age=5"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6348, "age=6"));
+		POTATOES.addBlockAlternative(new BlockAlternative((short) 6349, "age=7"));
 	}
 }

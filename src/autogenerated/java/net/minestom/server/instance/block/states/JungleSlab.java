@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class JungleSlab {
 	public static void initStates() {
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8318, "type=top", "waterlogged=true"));
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8319, "type=top", "waterlogged=false"));
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8320, "type=bottom", "waterlogged=true"));
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8321, "type=bottom", "waterlogged=false"));
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8322, "type=double", "waterlogged=true"));
-		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8323, "type=double", "waterlogged=false"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8322, "type=top", "waterlogged=true"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8323, "type=top", "waterlogged=false"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8324, "type=bottom", "waterlogged=true"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8325, "type=bottom", "waterlogged=false"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8326, "type=double", "waterlogged=true"));
+		JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8327, "type=double", "waterlogged=false"));
 	}
 }

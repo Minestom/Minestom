@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CrimsonPressurePlate {
 	public static void initStates() {
-		CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15059, "powered=true"));
-		CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15060, "powered=false"));
+		CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15067, "powered=true"));
+		CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15068, "powered=false"));
 	}
 }

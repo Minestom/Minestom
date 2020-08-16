@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class SkeletonWallSkull {
 	public static void initStates() {
-		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6506, "facing=north"));
-		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6507, "facing=south"));
-		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6508, "facing=west"));
-		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6509, "facing=east"));
+		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6510, "facing=north"));
+		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6511, "facing=south"));
+		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6512, "facing=west"));
+		SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6513, "facing=east"));
 	}
 }

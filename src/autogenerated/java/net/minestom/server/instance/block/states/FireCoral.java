@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class FireCoral {
 	public static void initStates() {
-		FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9536, "waterlogged=true"));
-		FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9537, "waterlogged=false"));
+		FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9540, "waterlogged=true"));
+		FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9541, "waterlogged=false"));
 	}
 }

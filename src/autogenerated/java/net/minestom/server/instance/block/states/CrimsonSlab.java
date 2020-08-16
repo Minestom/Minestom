@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CrimsonSlab {
 	public static void initStates() {
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15047, "type=top", "waterlogged=true"));
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15048, "type=top", "waterlogged=false"));
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15049, "type=bottom", "waterlogged=true"));
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15050, "type=bottom", "waterlogged=false"));
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15051, "type=double", "waterlogged=true"));
-		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15052, "type=double", "waterlogged=false"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15055, "type=top", "waterlogged=true"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15056, "type=top", "waterlogged=false"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15057, "type=bottom", "waterlogged=true"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15058, "type=bottom", "waterlogged=false"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15059, "type=double", "waterlogged=true"));
+		CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15060, "type=double", "waterlogged=false"));
 	}
 }

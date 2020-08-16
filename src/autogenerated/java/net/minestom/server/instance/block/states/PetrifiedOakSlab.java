@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class PetrifiedOakSlab {
 	public static void initStates() {
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8360, "type=top", "waterlogged=true"));
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8361, "type=top", "waterlogged=false"));
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8362, "type=bottom", "waterlogged=true"));
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8363, "type=bottom", "waterlogged=false"));
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8364, "type=double", "waterlogged=true"));
-		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8365, "type=double", "waterlogged=false"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8364, "type=top", "waterlogged=true"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8365, "type=top", "waterlogged=false"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8366, "type=bottom", "waterlogged=true"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8367, "type=bottom", "waterlogged=false"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8368, "type=double", "waterlogged=true"));
+		PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8369, "type=double", "waterlogged=false"));
 	}
 }

@@ -7,21 +7,21 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Lectern {
 	public static void initStates() {
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14833, "facing=north", "has_book=true", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14834, "facing=north", "has_book=true", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14835, "facing=north", "has_book=false", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14836, "facing=north", "has_book=false", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14837, "facing=south", "has_book=true", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14838, "facing=south", "has_book=true", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14839, "facing=south", "has_book=false", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14840, "facing=south", "has_book=false", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14841, "facing=west", "has_book=true", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14842, "facing=west", "has_book=true", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14843, "facing=west", "has_book=false", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14844, "facing=west", "has_book=false", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14845, "facing=east", "has_book=true", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14846, "facing=east", "has_book=true", "powered=false"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14847, "facing=east", "has_book=false", "powered=true"));
-		LECTERN.addBlockAlternative(new BlockAlternative((short) 14848, "facing=east", "has_book=false", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14837, "facing=north", "has_book=true", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14838, "facing=north", "has_book=true", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14839, "facing=north", "has_book=false", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14840, "facing=north", "has_book=false", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14841, "facing=south", "has_book=true", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14842, "facing=south", "has_book=true", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14843, "facing=south", "has_book=false", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14844, "facing=south", "has_book=false", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14845, "facing=west", "has_book=true", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14846, "facing=west", "has_book=true", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14847, "facing=west", "has_book=false", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14848, "facing=west", "has_book=false", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14849, "facing=east", "has_book=true", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14850, "facing=east", "has_book=true", "powered=false"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14851, "facing=east", "has_book=false", "powered=true"));
+		LECTERN.addBlockAlternative(new BlockAlternative((short) 14852, "facing=east", "has_book=false", "powered=false"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Lilac {
 	public static void initStates() {
-		LILAC.addBlockAlternative(new BlockAlternative((short) 7887, "half=upper"));
-		LILAC.addBlockAlternative(new BlockAlternative((short) 7888, "half=lower"));
+		LILAC.addBlockAlternative(new BlockAlternative((short) 7891, "half=upper"));
+		LILAC.addBlockAlternative(new BlockAlternative((short) 7892, "half=lower"));
 	}
 }

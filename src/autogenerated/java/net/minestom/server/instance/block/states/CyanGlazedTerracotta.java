@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class CyanGlazedTerracotta {
 	public static void initStates() {
-		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9410, "facing=north"));
-		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9411, "facing=south"));
-		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9412, "facing=west"));
-		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9413, "facing=east"));
+		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9414, "facing=north"));
+		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9415, "facing=south"));
+		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9416, "facing=west"));
+		CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9417, "facing=east"));
 	}
 }

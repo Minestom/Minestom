@@ -7,11 +7,11 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class GrayShulkerBox {
 	public static void initStates() {
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9320, "facing=north"));
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9321, "facing=east"));
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9322, "facing=south"));
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9323, "facing=west"));
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9324, "facing=up"));
-		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9325, "facing=down"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9324, "facing=north"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9325, "facing=east"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9326, "facing=south"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9327, "facing=west"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9328, "facing=up"));
+		GRAY_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9329, "facing=down"));
 	}
 }

@@ -7,17 +7,17 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Jigsaw {
 	public static void initStates() {
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15739, "orientation=down_east"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15740, "orientation=down_north"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15741, "orientation=down_south"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15742, "orientation=down_west"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15743, "orientation=up_east"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15744, "orientation=up_north"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15745, "orientation=up_south"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15746, "orientation=up_west"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15747, "orientation=west_up"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15748, "orientation=east_up"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15749, "orientation=north_up"));
-		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15750, "orientation=south_up"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15747, "orientation=down_east"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15748, "orientation=down_north"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15749, "orientation=down_south"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15750, "orientation=down_west"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15751, "orientation=up_east"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15752, "orientation=up_north"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15753, "orientation=up_south"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15754, "orientation=up_west"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15755, "orientation=west_up"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15756, "orientation=east_up"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15757, "orientation=north_up"));
+		JIGSAW.addBlockAlternative(new BlockAlternative((short) 15758, "orientation=south_up"));
 	}
 }

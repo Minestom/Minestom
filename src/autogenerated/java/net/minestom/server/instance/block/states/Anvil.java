@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Anvil {
 	public static void initStates() {
-		ANVIL.addBlockAlternative(new BlockAlternative((short) 6610, "facing=north"));
-		ANVIL.addBlockAlternative(new BlockAlternative((short) 6611, "facing=south"));
-		ANVIL.addBlockAlternative(new BlockAlternative((short) 6612, "facing=west"));
-		ANVIL.addBlockAlternative(new BlockAlternative((short) 6613, "facing=east"));
+		ANVIL.addBlockAlternative(new BlockAlternative((short) 6614, "facing=north"));
+		ANVIL.addBlockAlternative(new BlockAlternative((short) 6615, "facing=south"));
+		ANVIL.addBlockAlternative(new BlockAlternative((short) 6616, "facing=west"));
+		ANVIL.addBlockAlternative(new BlockAlternative((short) 6617, "facing=east"));
 	}
 }

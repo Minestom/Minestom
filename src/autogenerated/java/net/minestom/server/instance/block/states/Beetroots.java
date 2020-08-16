@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class Beetroots {
 	public static void initStates() {
-		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9219, "age=0"));
-		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9220, "age=1"));
-		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9221, "age=2"));
-		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9222, "age=3"));
+		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9223, "age=0"));
+		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9224, "age=1"));
+		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9225, "age=2"));
+		BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9226, "age=3"));
 	}
 }

@@ -7,9 +7,9 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class NetherWart {
 	public static void initStates() {
-		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5128, "age=0"));
-		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5129, "age=1"));
-		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5130, "age=2"));
-		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5131, "age=3"));
+		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5132, "age=0"));
+		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5133, "age=1"));
+		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5134, "age=2"));
+		NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5135, "age=3"));
 	}
 }

@@ -7,7 +7,7 @@ import static net.minestom.server.instance.block.Block.*;
 @Deprecated(forRemoval = false, since = "forever")
 public class WarpedPressurePlate {
 	public static void initStates() {
-		WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15061, "powered=true"));
-		WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15062, "powered=false"));
+		WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15069, "powered=true"));
+		WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15070, "powered=false"));
 	}
 }
