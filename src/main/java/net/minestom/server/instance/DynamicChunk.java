@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -45,7 +44,7 @@ public class DynamicChunk extends Chunk {
             // Update pathfinder
             if (columnarSpace != null) {
                 final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-                final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromStateId(blockStateId));
+                final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(blockStateId);
                 columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
             }
         }
