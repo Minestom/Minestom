@@ -40,6 +40,16 @@ public class DynamicChunk extends Chunk {
 
     @Override
     protected void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
+
+        {
+            // Update pathfinder
+            if (columnarSpace != null) {
+                final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
+                final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromStateId(blockStateId));
+                columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
+            }
+        }
+
         final int index = getBlockIndex(x, y, z);
         if (blockStateId != 0
                 || (blockStateId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
@@ -85,12 +95,6 @@ public class DynamicChunk extends Chunk {
         }
 
         this.packetUpdated.set(false);
-
-        if (columnarSpace != null) {
-            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-            final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromStateId(blockStateId));
-            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
-        }
     }
 
     @Override
