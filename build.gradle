@@ -82,14 +82,14 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
     // Netty
-    api 'io.netty:netty-handler:4.1.45.Final'
-    api 'io.netty:netty-codec:4.1.45.Final'
-    implementation 'io.netty:netty-transport-native-epoll:4.1.45.Final:linux-x86_64'
+    api 'io.netty:netty-handler:4.1.51.Final'
+    api 'io.netty:netty-codec:4.1.51.Final'
+    implementation 'io.netty:netty-transport-native-epoll:4.1.51.Final:linux-x86_64'
 
     api 'com.github.jhg023:Pbbl:1.0.2'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
-    api 'it.unimi.dsi:fastutil:8.3.0'
+    api 'it.unimi.dsi:fastutil:8.4.1'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.6'
@@ -99,7 +99,7 @@ dependencies {
     api 'com.github.Articdive:Jnoise:1.0.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api 'org.rocksdb:rocksdbjni:6.8.1'
+    api 'org.rocksdb:rocksdbjni:6.11.4'
 
     // Logging
     api 'org.apache.logging.log4j:log4j-core:2.13.3'
