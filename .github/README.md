@@ -17,6 +17,7 @@ However, we have a complete API which allows you to make anything possible with 
 - [Why Minestom?](#why-minestom)
 - [Advantages & Disadvantages](#advantages-and-disadvantages)
 - [API](#api)
+- [Credits](#credits)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -78,6 +79,12 @@ It is a field where Minecraft evolved a lot, inventories are now used a lot as c
 
 ## Commands
 Commands are the simplest way of communication between clients and server. Since 1.13 Minecraft has incorporated a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
+
+# Credits
+* [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) -
+   protocol and file formats research.
+* [The Minecraft Wiki](https://minecraft.gamepedia.com/Minecraft_Wiki) for all their useful info
+* [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) for their amazing Java profiler
 
 # Contributing
 See [the contributing file](CONTRIBUTING.md)!  
