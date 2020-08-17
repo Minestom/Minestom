@@ -551,9 +551,9 @@ public class Player extends LivingEntity implements CommandSender {
 
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : visibleChunks) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
-            final int chunkX = chunkPos[0];
-            final int chunkZ = chunkPos[1];
+            final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
+
             Consumer<Chunk> callback = (chunk) -> {
                 if (chunk != null) {
                     chunk.addViewer(this);
@@ -1200,13 +1200,16 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Unload old chunks
         for (int index : oldChunks) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunks[index]);
+            final long chunkIndex = lastVisibleChunks[index];
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+
             UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-            unloadChunkPacket.chunkX = chunkPos[0];
-            unloadChunkPacket.chunkZ = chunkPos[1];
+            unloadChunkPacket.chunkX = chunkX;
+            unloadChunkPacket.chunkZ = chunkZ;
             playerConnection.sendPacket(unloadChunkPacket);
 
-            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
@@ -1215,8 +1218,11 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Load new chunks
         for (int index : newChunks) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunks[index]);
-            instance.loadOptionalChunk(chunkPos[0], chunkPos[1], chunk -> {
+            final long chunkIndex = updatedVisibleChunks[index];
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+
+            instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;

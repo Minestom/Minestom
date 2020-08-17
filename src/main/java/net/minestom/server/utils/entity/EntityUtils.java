@@ -25,9 +25,9 @@ public final class EntityUtils {
 
         long[] visibleChunksEntity = ChunkUtils.getChunksInRange(ent2.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
         for (long visibleChunk : visibleChunksEntity) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(visibleChunk);
-            final int chunkX = chunkPos[0];
-            final int chunkZ = chunkPos[1];
+            final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
+
             if (chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ)
                 return true;
         }

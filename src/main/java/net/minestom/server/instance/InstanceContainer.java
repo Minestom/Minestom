@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
@@ -30,7 +32,6 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
@@ -52,7 +53,8 @@ public class InstanceContainer extends Instance {
     private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     private ChunkGenerator chunkGenerator;
-    private Map<Long, Chunk> chunks = new ConcurrentHashMap<>();
+    // WARNING: need to be synchronized properly
+    private Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap();
     private Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
@@ -333,7 +335,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = chunks.get(ChunkUtils.getChunkIndex(chunkX, chunkZ));
+        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        final Chunk chunk = chunks.get(index);
         return ChunkUtils.isLoaded(chunk) ? chunk : null;
     }
 
@@ -390,11 +393,13 @@ public class InstanceContainer extends Instance {
                 e.printStackTrace();
             }
         } else {
-            final Iterator<Chunk> chunks = getChunks().iterator();
-            while (chunks.hasNext()) {
-                final Chunk chunk = chunks.next();
-                final boolean isLast = !chunks.hasNext();
-                saveChunkToStorageFolder(chunk, isLast ? callback : null);
+            synchronized (chunks) {
+                final Iterator<Chunk> chunkIterator = chunks.values().iterator();
+                while (chunkIterator.hasNext()) {
+                    final Chunk chunk = chunkIterator.next();
+                    final boolean isLast = !chunkIterator.hasNext();
+                    saveChunkToStorageFolder(chunk, isLast ? callback : null);
+                }
             }
         }
     }
@@ -503,6 +508,11 @@ public class InstanceContainer extends Instance {
         this.chunkGenerator = chunkGenerator;
     }
 
+    /**
+     * Get all the instance chunks
+     *
+     * @return the chunks of this instance
+     */
     public Collection<Chunk> getChunks() {
         return Collections.unmodifiableCollection(chunks.values());
     }

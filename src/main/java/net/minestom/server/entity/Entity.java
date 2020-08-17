@@ -63,14 +63,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     protected float cacheYaw, cachePitch;
-    // Synchronization
-    private static final long SYNCHRONIZATION_DELAY = 1500; // In ms
 
     private BoundingBox boundingBox;
 
     protected Entity vehicle;
+
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
+    protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
+
     protected float gravityDragPerTick;
     protected float eyeHeight;
 
@@ -84,12 +85,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     private boolean removed;
     private boolean shouldRemove;
     private long scheduledRemoveTime;
+
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     private long lastUpdate;
     private final EntityType entityType;
-    protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
-    private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+
+    // Synchronization
+    private static final long SYNCHRONIZATION_DELAY = 1500; // In ms
     private long lastSynchronizationTime;
+
+    private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Metadata
     protected boolean onFire;
@@ -990,8 +995,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
         final int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
         for (int index : oldChunksEntity) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(lastVisibleChunksEntity[index]);
-            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            final long chunkIndex = lastVisibleChunksEntity[index];
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk == null)
                 continue;
             instance.getChunkEntities(chunk).forEach(ent -> {
@@ -1010,8 +1017,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
         final int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
         for (int index : newChunksEntity) {
-            final int[] chunkPos = ChunkUtils.getChunkCoord(updatedVisibleChunksEntity[index]);
-            final Chunk chunk = instance.getChunk(chunkPos[0], chunkPos[1]);
+            final long chunkIndex = updatedVisibleChunksEntity[index];
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk == null)
                 continue;
             instance.getChunkEntities(chunk).forEach(ent -> {

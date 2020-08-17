@@ -94,8 +94,10 @@ public abstract class ThreadProvider {
      * @param time       the time of the update in milliseconds
      */
     protected void processChunkTick(Instance instance, long chunkIndex, long time) {
-        final int[] chunkCoordinates = ChunkUtils.getChunkCoord(chunkIndex);
-        final Chunk chunk = instance.getChunk(chunkCoordinates[0], chunkCoordinates[1]);
+        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+
+        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (!ChunkUtils.isLoaded(chunk))
             return;
 

@@ -832,7 +832,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     private Set<Entity> getEntitiesInChunk(long index) {
-        final Set<Entity> entities = chunkEntities.getOrDefault(index, new CopyOnWriteArraySet<>());
+        final Set<Entity> entities = chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
         return entities;
     }
 
