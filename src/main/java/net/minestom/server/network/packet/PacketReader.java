@@ -17,8 +17,8 @@ import java.util.UUID;
 
 public class PacketReader extends InputStream {
 
-    private ByteBuf buffer;
-    private NBTReader nbtReader = new NBTReader(this, false);
+    private final ByteBuf buffer;
+    private final NBTReader nbtReader = new NBTReader(this, false);
 
     public PacketReader(ByteBuf buffer) {
         this.buffer = buffer;

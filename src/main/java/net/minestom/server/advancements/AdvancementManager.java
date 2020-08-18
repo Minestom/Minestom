@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class AdvancementManager {
 
-    private Map<String, AdvancementTab> advancementTabMap = new HashMap<>();
+    private final Map<String, AdvancementTab> advancementTabMap = new HashMap<>();
 
     /**
      * Create a new tab with a single advancement

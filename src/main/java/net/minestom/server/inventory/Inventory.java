@@ -27,25 +27,26 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
 
-    private static volatile byte lastInventoryId;
+    private static AtomicInteger lastInventoryId = new AtomicInteger();
 
-    private byte id;
+    private final byte id;
     private final InventoryType inventoryType;
     private String title;
 
-    private int size;
+    private final int size;
 
-    private int offset;
+    private final int offset;
 
-    private ItemStack[] itemStacks;
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
+    private final ItemStack[] itemStacks;
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
-    private List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
+    private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
+    private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     // Cached windows packet
 
@@ -64,8 +65,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     private static byte generateId() {
-        byte newInventoryId = ++lastInventoryId;
-        if (newInventoryId < 0)
+        byte newInventoryId = (byte) lastInventoryId.incrementAndGet();
+        if (newInventoryId == Byte.MAX_VALUE)
             newInventoryId = 1;
         return newInventoryId;
     }

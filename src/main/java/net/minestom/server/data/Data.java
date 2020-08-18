@@ -27,7 +27,7 @@ public class Data {
         }
     };
 
-    protected ConcurrentHashMap<String, Object> data = new ConcurrentHashMap();
+    protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
     /**
      * Set a value to a specific key

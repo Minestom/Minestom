@@ -8,12 +8,12 @@ import java.util.function.BiConsumer;
 
 public class InventoryClickLoopHandler {
 
-    private int start;
-    private int end;
-    private int step;
-    private Int2IntFunction indexModifier;
-    private Int2ObjectFunction<ItemStack> itemGetter;
-    private BiConsumer<Integer, ItemStack> itemSetter;
+    private final int start;
+    private final int end;
+    private final int step;
+    private final Int2IntFunction indexModifier;
+    private final Int2ObjectFunction<ItemStack> itemGetter;
+    private final BiConsumer<Integer, ItemStack> itemSetter;
 
     public InventoryClickLoopHandler(int start, int end, int step,
                                      Int2IntFunction indexModifier,

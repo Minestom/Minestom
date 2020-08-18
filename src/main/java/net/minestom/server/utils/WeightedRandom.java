@@ -41,7 +41,7 @@ public class WeightedRandom<E extends WeightedRandomItem> {
     public E get(Random rng) {
         final double p = rng.nextDouble() * totalWeight;
         for (int i = 0; i < entries.size(); i++) {
-            final double weightSum = weightSums.get(i);
+            final double weightSum = weightSums.getDouble(i);
             if (weightSum >= p) {
                 return entries.get(i);
             }

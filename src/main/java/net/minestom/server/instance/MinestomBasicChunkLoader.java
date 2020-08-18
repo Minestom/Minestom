@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class MinestomBasicChunkLoader implements IChunkLoader {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
-    private StorageFolder storageFolder;
+    private final StorageFolder storageFolder;
 
     public MinestomBasicChunkLoader(StorageFolder storageFolder) {
         this.storageFolder = storageFolder;

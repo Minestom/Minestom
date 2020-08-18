@@ -85,8 +85,6 @@ public final class ChunkUtils {
      * @return the chunk Z based on the index
      */
     public static int getChunkCoordZ(long index) {
-        final int chunkX = (int) (index >> 32);
-        final int chunkZ = (int) index;
         return (int) index;
     }
 
@@ -117,8 +115,7 @@ public final class ChunkUtils {
             for (int z = startLoop; z < endLoop; z++) {
                 final int chunkX = getChunkCoordinate((int) (position.getX() + Chunk.CHUNK_SIZE_X * x));
                 final int chunkZ = getChunkCoordinate((int) (position.getZ() + Chunk.CHUNK_SIZE_Z * z));
-                visibleChunks[counter] = getChunkIndex(chunkX, chunkZ);
-                counter++;
+                visibleChunks[counter++] = getChunkIndex(chunkX, chunkZ);
             }
         }
         return visibleChunks;
@@ -130,8 +127,7 @@ public final class ChunkUtils {
      * @param instance the instance of the chunks
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @return an array containing all the loaded neighbours
-     * can be deserialized using {@link #indexToChunkPosition(int)}
+     * @return an array containing all the loaded neighbours chunk index
      */
     public static long[] getNeighbours(Instance instance, int chunkX, int chunkZ) {
         LongList chunks = new LongArrayList();
@@ -185,36 +181,76 @@ public final class ChunkUtils {
      * @return the instance position of the block located in {@code index}
      */
     public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
-        final int[] pos = indexToPosition(index, chunkX, chunkZ);
-        return new BlockPosition(pos[0], pos[1], pos[2]);
+        final int x = blockIndexToPositionX(index, chunkX);
+        final int y = blockIndexToPositionY(index);
+        final int z = blockIndexToPositionZ(index, chunkZ);
+        return new BlockPosition(x, y, z);
     }
 
     /**
-     * @param index  an index computed from {@link #getBlockIndex(int, int, int)}
+     * Convert a block chunk index to its instance position X
+     *
+     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
      * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return the world position of the specified index with its chunks being {@code chunkX} and {@code chunk Z}
-     * positions in the array are in the order X/Y/Z
+     * @return the X coordinate of the block index
      */
-    public static int[] indexToPosition(int index, int chunkX, int chunkZ) {
-        int z = (byte) (index >> 12 & 0xF);
-        final int y = (index >>> 4 & 0xFF);
-        // index >> 0 = index
+    public static int blockIndexToPositionX(int index, int chunkX) {
         int x = (byte) (index & 0xF);
-
         x += 16 * chunkX;
-        z += 16 * chunkZ;
-
-        return new int[]{x, y, z};
+        return x;
     }
 
     /**
-     * @param index an index computed from {@link #getBlockIndex(int, int, int)}
-     * @return the chunk position (O-15) of the specified index,
-     * positions in the array are in the order X/Y/Z
+     * Convert a block chunk index to its instance position Y
+     *
+     * @param index the block chunk index from {@link #getBlockIndex(int, int, int)}
+     * @return the Y coordinate of the block index
      */
-    public static int[] indexToChunkPosition(int index) {
-        return indexToPosition(index, 0, 0);
+    public static int blockIndexToPositionY(int index) {
+        return (index >>> 4 & 0xFF);
+    }
+
+    /**
+     * Convert a block chunk index to its instance position Z
+     *
+     * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
+     * @param chunkZ the chunk Z
+     * @return the Z coordinate of the block index
+     */
+    public static int blockIndexToPositionZ(int index, int chunkZ) {
+        int z = (byte) (index >> 12 & 0xF);
+        z += 16 * chunkZ;
+        return z;
+    }
+
+    /**
+     * Convert a block index to a chunk position X
+     *
+     * @param index an index computed from {@link #getBlockIndex(int, int, int)}
+     * @return the chunk position X (O-15) of the specified index
+     */
+    public static int blockIndexToChunkPositionX(int index) {
+        return blockIndexToPositionX(index, 0);
+    }
+
+    /**
+     * Convert a block index to a chunk position Y
+     *
+     * @param index an index computed from {@link #getBlockIndex(int, int, int)}
+     * @return the chunk position Y (O-255) of the specified index
+     */
+    public static int blockIndexToChunkPositionY(int index) {
+        return blockIndexToPositionY(index);
+    }
+
+    /**
+     * Convert a block index to a chunk position Z
+     *
+     * @param index an index computed from {@link #getBlockIndex(int, int, int)}
+     * @return the chunk position Z (O-15) of the specified index
+     */
+    public static int blockIndexToChunkPositionZ(int index) {
+        return blockIndexToPositionZ(index, 0);
     }
 
 }

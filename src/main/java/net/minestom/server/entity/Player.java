@@ -1858,8 +1858,8 @@ public class Player extends LivingEntity implements CommandSender {
         if (isFood && !allowFood)
             return null;
 
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(updatedItem,
-                isOffhand ? Hand.OFF : Hand.MAIN);
+        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
         return itemUpdateStateEvent;

@@ -28,7 +28,6 @@ import net.minestom.server.world.biomes.Biome;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 // TODO light data & API
@@ -46,10 +45,6 @@ public abstract class Chunk implements Viewable {
     protected Biome[] biomes;
     protected int chunkX, chunkZ;
 
-    // blocks id based on coord, see Chunk#getBlockIndex
-    //public short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-    //protected short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-
     // Used to get all blocks with data (no null)
     // Key is still chunk coord
     protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
@@ -59,7 +54,7 @@ public abstract class Chunk implements Viewable {
     // (block index)/(last update in ms)
     protected Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
-    protected AtomicBoolean packetUpdated = new AtomicBoolean(false);
+    protected volatile boolean packetUpdated;
 
     // Block entities
     protected Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
@@ -114,8 +109,10 @@ public abstract class Chunk implements Viewable {
     public abstract CustomBlock getCustomBlock(int x, int y, int z);
 
     protected CustomBlock getCustomBlock(int index) {
-        final int[] pos = ChunkUtils.indexToChunkPosition(index);
-        return getCustomBlock(pos[0], pos[1], pos[2]);
+        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+        final int y = ChunkUtils.blockIndexToChunkPositionY(index);
+        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+        return getCustomBlock(x, y, z);
     }
 
     protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customId);
@@ -142,7 +139,7 @@ public abstract class Chunk implements Viewable {
             return;
 
         // Block all chunk operation during the update
-        IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
+        final IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
         while (iterator.hasNext()) {
             final int index = iterator.nextInt();
             final CustomBlock customBlock = getCustomBlock(index);
@@ -156,12 +153,7 @@ public abstract class Chunk implements Viewable {
 
             this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
-            final int[] blockPos = ChunkUtils.indexToPosition(index, chunkX, chunkZ);
-            final int x = blockPos[0];
-            final int y = blockPos[1];
-            final int z = blockPos[2];
-
-            final BlockPosition blockPosition = new BlockPosition(x, y, z);
+            final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
             final Data data = getData(index);
             customBlock.update(instance, blockPosition, data);
         }
@@ -192,7 +184,7 @@ public abstract class Chunk implements Viewable {
 
     public void setFullDataPacket(ByteBuf fullDataPacket) {
         this.fullDataPacket = fullDataPacket;
-        this.packetUpdated.set(true);
+        this.packetUpdated = true;
     }
 
     protected boolean isBlockEntity(short blockStateId) {
@@ -214,13 +206,13 @@ public abstract class Chunk implements Viewable {
     }
 
     /**
-     * Retrieve the updated data packet
+     * Retrieve (and save if needed) the updated data packet
      *
      * @param consumer the consumer called once the packet is sure to be up-to-date
      */
     public void retrieveDataBuffer(Consumer<ByteBuf> consumer) {
         final ByteBuf data = getFullDataPacket();
-        if (data == null || !packetUpdated.get()) {
+        if (data == null || !packetUpdated) {
             PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), packet -> {
                 setFullDataPacket(packet);
                 consumer.accept(packet);
@@ -325,9 +317,7 @@ public abstract class Chunk implements Viewable {
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
-        retrieveDataBuffer(buf -> {
-            playerConnection.sendPacket(buf, true);
-        });
+        retrieveDataBuffer(buf -> playerConnection.sendPacket(buf, true));
 
         // TODO do not hardcode
         if (MinecraftServer.isFixLighting()) {
@@ -372,15 +362,13 @@ public abstract class Chunk implements Viewable {
     public void sendChunkUpdate() {
         final Set<Player> chunkViewers = getViewers();
         if (!chunkViewers.isEmpty()) {
-            retrieveDataBuffer(buf -> {
-                chunkViewers.forEach(player -> {
-                    final PlayerConnection playerConnection = player.getPlayerConnection();
-                    if (!PlayerUtils.isNettyClient(playerConnection))
-                        return;
+            retrieveDataBuffer(buf -> chunkViewers.forEach(player -> {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+                if (!PlayerUtils.isNettyClient(playerConnection))
+                    return;
 
-                    playerConnection.sendPacket(buf, true);
-                });
-            });
+                playerConnection.sendPacket(buf, true);
+            }));
 
         }
     }

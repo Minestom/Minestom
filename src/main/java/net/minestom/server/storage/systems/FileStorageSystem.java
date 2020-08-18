@@ -42,8 +42,7 @@ public class FileStorageSystem implements StorageSystem {
     @Override
     public byte[] get(String key) {
         try {
-            byte[] result = this.rocksDB.get(getKey(key));
-            return result;
+            return rocksDB.get(getKey(key));
         } catch (RocksDBException e) {
             e.printStackTrace();
             return null;

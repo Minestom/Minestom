@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block;
 
 public class PFBlockObject implements IBlockObject {
 
-    private static Short2ObjectMap<PFBlockObject> blockObjectsMap = new Short2ObjectOpenHashMap<>();
+    private static final Short2ObjectMap<PFBlockObject> BLOCK_OBJECT_MAP = new Short2ObjectOpenHashMap<>();
 
     /**
      * Get the {@link PFBlockObject} linked to the block state id
@@ -19,19 +19,19 @@ public class PFBlockObject implements IBlockObject {
      * @return the {@link PFBlockObject} linked to {@code blockStateId}
      */
     public static PFBlockObject getBlockObject(short blockStateId) {
-        if (!blockObjectsMap.containsKey(blockStateId)) {
-            synchronized (blockObjectsMap) {
+        if (!BLOCK_OBJECT_MAP.containsKey(blockStateId)) {
+            synchronized (BLOCK_OBJECT_MAP) {
                 final Block block = Block.fromStateId(blockStateId);
                 final PFBlockObject blockObject = new PFBlockObject(block);
-                blockObjectsMap.put(blockStateId, blockObject);
+                BLOCK_OBJECT_MAP.put(blockStateId, blockObject);
                 return blockObject;
             }
         }
 
-        return blockObjectsMap.get(blockStateId);
+        return BLOCK_OBJECT_MAP.get(blockStateId);
     }
 
-    private Block block;
+    private final Block block;
 
     public PFBlockObject(Block block) {
         this.block = block;

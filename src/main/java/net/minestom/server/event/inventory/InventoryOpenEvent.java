@@ -6,7 +6,7 @@ import net.minestom.server.inventory.Inventory;
 
 public class InventoryOpenEvent extends CancellableEvent {
 
-    private Player player;
+    private final Player player;
     private Inventory inventory;
 
     public InventoryOpenEvent(Player player, Inventory inventory) {

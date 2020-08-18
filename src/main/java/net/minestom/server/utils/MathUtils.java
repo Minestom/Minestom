@@ -64,11 +64,11 @@ public final class MathUtils {
     }
 
     public static int setBetween(int number, int min, int max) {
-        return number > max ? max : number < min ? min : number;
+        return number > max ? max : Math.max(number, min);
     }
 
     public static float setBetween(float number, float min, float max) {
-        return number > max ? max : number < min ? min : number;
+        return number > max ? max : Math.max(number, min);
     }
 
     public static int clamp(int value, int min, int max) {

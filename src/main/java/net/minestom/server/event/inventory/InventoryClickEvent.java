@@ -8,14 +8,15 @@ import net.minestom.server.item.ItemStack;
 
 public class InventoryClickEvent extends Event {
 
-    private Player player;
-    private Inventory inventory;
-    private int slot;
-    private ClickType clickType;
-    private ItemStack clickedItem;
-    private ItemStack cursorItem;
+    private final Player player;
+    private final Inventory inventory;
+    private final int slot;
+    private final ClickType clickType;
+    private final ItemStack clickedItem;
+    private final ItemStack cursorItem;
 
     public InventoryClickEvent(Player player, Inventory inventory, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
+        this.player = player;
         this.inventory = inventory;
         this.slot = slot;
         this.clickType = clickType;

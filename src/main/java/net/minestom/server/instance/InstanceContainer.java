@@ -54,8 +54,8 @@ public class InstanceContainer extends Instance {
 
     private ChunkGenerator chunkGenerator;
     // WARNING: need to be synchronized properly
-    private Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap();
-    private Set<Chunk> scheduledChunksToRemove = new HashSet<>();
+    private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
@@ -351,8 +351,9 @@ public class InstanceContainer extends Instance {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
 
         this.storageFolder.set(UUID_KEY, getUniqueId(), UUID.class);
-        Data data = getData();
+        final Data data = getData();
         if (data != null) {
+            // Save the instance data
             Check.stateCondition(!(data instanceof SerializableData),
                     "Instance#getData needs to be a SerializableData in order to be saved");
             this.storageFolder.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);

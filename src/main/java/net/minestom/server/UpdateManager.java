@@ -13,6 +13,7 @@ import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
@@ -61,7 +62,7 @@ public final class UpdateManager {
                 //Tick Callbacks
                 tickStartCallbacks.forEach(Runnable::run);
 
-                ArrayList<Future<?>> futures;
+                List<Future<?>> futures;
 
                 // Server tick (instance/chunk/entity)
                 // Synchronize with the update manager instance, like the signal for chunk load/unload

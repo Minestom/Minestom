@@ -42,7 +42,6 @@ public class BenchmarkManager {
 
     private boolean enabled = false;
     private volatile boolean stop = false;
-    private Thread thread;
 
     private long time;
 
@@ -51,7 +50,7 @@ public class BenchmarkManager {
 
         time = updateOption.getTimeUnit().toMilliseconds(updateOption.getValue());
 
-        this.thread = new Thread(null, () -> {
+        final Thread thread = new Thread(null, () -> {
 
             while (!stop) {
                 refreshData();
@@ -67,7 +66,7 @@ public class BenchmarkManager {
 
         }, MinecraftServer.THREAD_NAME_BENCHMARK, 0L);
 
-        this.thread.start();
+        thread.start();
 
         this.enabled = true;
     }

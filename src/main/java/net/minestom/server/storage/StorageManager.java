@@ -30,9 +30,8 @@ public class StorageManager {
      */
     public StorageFolder getFolder(String folderPath, StorageOptions storageOptions, StorageSystem storageSystem) {
         Check.notNull(storageOptions, "The storage option cannot be null");
-        StorageFolder storageFolder =
-                folderMap.computeIfAbsent(folderPath, s -> new StorageFolder(storageSystem, folderPath, storageOptions));
-        return storageFolder;
+        return folderMap.computeIfAbsent(folderPath,
+                s -> new StorageFolder(storageSystem, folderPath, storageOptions));
     }
 
     /**
@@ -47,7 +46,7 @@ public class StorageManager {
     public StorageFolder getFolder(String folderPath, StorageOptions storageOptions) {
         Check.notNull(defaultStorageSystemSupplier,
                 "You need to either define a default storage system or specify your storage system for this specific folder");
-        StorageSystem storageSystem = defaultStorageSystemSupplier.get();
+        final StorageSystem storageSystem = defaultStorageSystemSupplier.get();
         return getFolder(folderPath, storageOptions, storageSystem);
     }
 

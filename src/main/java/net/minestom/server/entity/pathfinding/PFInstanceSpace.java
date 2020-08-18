@@ -31,14 +31,11 @@ public class PFInstanceSpace implements IInstanceSpace {
             return null;
         }
 
-        final PFColumnarSpace columnarSpace =
-                chunkSpaceMap.computeIfAbsent(chunk, c -> {
-                    final PFColumnarSpace cs = new PFColumnarSpace(this, c);
-                    c.setColumnarSpace(cs);
-                    return cs;
-                });
-
-        return columnarSpace;
+        return chunkSpaceMap.computeIfAbsent(chunk, c -> {
+            final PFColumnarSpace cs = new PFColumnarSpace(this, c);
+            c.setColumnarSpace(cs);
+            return cs;
+        });
     }
 
     public Instance getInstance() {

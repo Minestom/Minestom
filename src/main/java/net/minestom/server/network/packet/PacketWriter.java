@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 
 public class PacketWriter extends OutputStream {
 
-    private ByteBuf buffer = Unpooled.buffer();
-    private NBTWriter nbtWriter = new NBTWriter(this, false);
+    private final ByteBuf buffer = Unpooled.buffer();
+    private final NBTWriter nbtWriter = new NBTWriter(this, false);
 
     public void writeBoolean(boolean b) {
         buffer.writeBoolean(b);

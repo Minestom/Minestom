@@ -8,8 +8,8 @@ import net.minestom.server.instance.Instance;
  */
 public class InstanceChunkUnloadEvent extends Event {
 
-    private Instance instance;
-    private int chunkX, chunkZ;
+    private final Instance instance;
+    private final int chunkX, chunkZ;
 
     public InstanceChunkUnloadEvent(Instance instance, int chunkX, int chunkZ) {
         this.instance = instance;

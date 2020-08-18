@@ -61,7 +61,7 @@ public class ColoredText {
     }
 
     private static String toLegacy(String message, char colorChar) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < message.length(); i++) {
             final char c = message.charAt(i);
@@ -71,19 +71,19 @@ public class ColoredText {
                     final char nextChar = message.charAt(i + 1);
                     final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
                     if (color != ChatColor.NO_COLOR) {
-                        String replacement = color.toString();
-                        result += replacement;
+                        final String replacement = color.toString();
+                        result.append(replacement);
                         i++; // Increment to ignore the color code
                     } else {
-                        result += c;
+                        result.append(c);
                     }
                 }
             } else {
-                result += c;
+                result.append(c);
             }
         }
 
-        return result;
+        return result.toString();
     }
 
     public ColoredText appendLegacy(String message, char colorChar) {

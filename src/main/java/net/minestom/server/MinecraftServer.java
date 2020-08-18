@@ -102,8 +102,6 @@ public class MinecraftServer {
     //Rate Limiting
     private static int rateLimit = 0;
 
-    // Networking
-    private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
     private static NettyServer nettyServer;
 
@@ -161,7 +159,8 @@ public class MinecraftServer {
         Fluid.values();
 
         connectionManager = new ConnectionManager();
-        packetProcessor = new PacketProcessor();
+        // Networking
+        final PacketProcessor packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
 
         instanceManager = new InstanceManager();

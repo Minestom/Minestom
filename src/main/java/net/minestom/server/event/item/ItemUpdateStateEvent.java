@@ -6,21 +6,27 @@ import net.minestom.server.item.ItemStack;
 
 public class ItemUpdateStateEvent extends Event {
 
-    private ItemStack itemStack;
-    private Player.Hand hand;
+    private Player player;
+    private final Player.Hand hand;
+    private final ItemStack itemStack;
     private boolean handAnimation;
 
-    public ItemUpdateStateEvent(ItemStack itemStack, Player.Hand hand) {
-        this.itemStack = itemStack;
+    public ItemUpdateStateEvent(Player player, Player.Hand hand, ItemStack itemStack) {
+        this.player = player;
         this.hand = hand;
+        this.itemStack = itemStack;
     }
 
-    public ItemStack getItemStack() {
-        return itemStack;
+    public Player getPlayer() {
+        return player;
     }
 
     public Player.Hand getHand() {
         return hand;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     public void setHandAnimation(boolean handAnimation) {

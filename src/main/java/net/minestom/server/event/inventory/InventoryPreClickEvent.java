@@ -9,10 +9,10 @@ import net.minestom.server.utils.item.ItemStackUtils;
 
 public class InventoryPreClickEvent extends CancellableEvent {
 
-    private Player player;
-    private Inventory inventory;
-    private int slot;
-    private ClickType clickType;
+    private final Player player;
+    private final Inventory inventory;
+    private final int slot;
+    private final ClickType clickType;
     private ItemStack clickedItem;
     private ItemStack cursorItem;
 

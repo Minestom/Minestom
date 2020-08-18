@@ -64,7 +64,7 @@ public final class ArrayUtils {
     public static int[] toArray(IntList list) {
         int[] array = new int[list.size()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
+            array[i] = list.getInt(i);
         }
         return array;
     }

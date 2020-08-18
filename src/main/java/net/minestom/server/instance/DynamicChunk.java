@@ -18,8 +18,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DynamicChunk extends Chunk {
 
-    public short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-    private short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    // blocks id based on coordinate, see Chunk#getBlockIndex
+    private final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    private final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     public DynamicChunk(Biome[] biomes, int chunkX, int chunkZ) {
         super(biomes, chunkX, chunkZ);
@@ -50,8 +51,7 @@ public class DynamicChunk extends Chunk {
         }
 
         final int index = getBlockIndex(x, y, z);
-        if (blockStateId != 0
-                || (blockStateId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
+        if (blockStateId != 0 || customId != 0 && updateConsumer != null) { // Allow custom air block for update purpose, refused if no update consumer has been found
             this.blocksStateId[index] = blockStateId;
             this.customBlocksId[index] = customId;
         } else {
@@ -66,7 +66,7 @@ public class DynamicChunk extends Chunk {
 
             this.blockEntities.remove(index);
 
-            this.packetUpdated.set(false);
+            this.packetUpdated = false;
             return;
         }
 
@@ -93,7 +93,7 @@ public class DynamicChunk extends Chunk {
             this.blockEntities.remove(index);
         }
 
-        this.packetUpdated.set(false);
+        this.packetUpdated = false;
     }
 
     @Override
@@ -102,8 +102,7 @@ public class DynamicChunk extends Chunk {
         if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
-        final short id = blocksStateId[index];
-        return id;
+        return blocksStateId[index];
     }
 
     @Override
@@ -112,8 +111,7 @@ public class DynamicChunk extends Chunk {
         if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
-        final short id = customBlocksId[index];
-        return id;
+        return customBlocksId[index];
     }
 
     @Override
@@ -179,7 +177,7 @@ public class DynamicChunk extends Chunk {
                     dos.writeShort(customBlockId);
 
                     // Data
-                    final boolean hasData = (data != null && (data instanceof SerializableData));
+                    final boolean hasData = data instanceof SerializableData;
                     dos.writeBoolean(hasData);
                     if (hasData) {
                         final byte[] d = ((SerializableData) data).getSerializedData();
@@ -190,8 +188,7 @@ public class DynamicChunk extends Chunk {
             }
         }
 
-        final byte[] result = output.toByteArray();
-        return result;
+        return output.toByteArray();
     }
 
     @Override

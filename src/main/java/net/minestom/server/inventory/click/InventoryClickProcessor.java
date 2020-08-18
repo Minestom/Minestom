@@ -23,8 +23,8 @@ import java.util.function.BiConsumer;
 public class InventoryClickProcessor {
 
     // Dragging maps
-    private Map<Player, IntSet> leftDraggingMap = new HashMap<>();
-    private Map<Player, IntSet> rightDraggingMap = new HashMap<>();
+    private final Map<Player, IntSet> leftDraggingMap = new HashMap<>();
+    private final Map<Player, IntSet> rightDraggingMap = new HashMap<>();
 
     public InventoryClickResult leftClick(Inventory inventory, Player player, int slot, ItemStack clicked, ItemStack cursor) {
         final InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.LEFT_CLICK, clicked, cursor);

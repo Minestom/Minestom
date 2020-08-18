@@ -7,12 +7,12 @@ import java.util.UUID;
 
 public class ItemAttribute {
 
-    private UUID uuid;
-    private String internalName;
-    private Attribute attribute;
-    private AttributeOperation operation;
-    private double value;
-    private AttributeSlot slot;
+    private final UUID uuid;
+    private final String internalName;
+    private final Attribute attribute;
+    private final AttributeOperation operation;
+    private final double value;
+    private final AttributeSlot slot;
 
     public ItemAttribute(UUID uuid, String internalName, Attribute attribute, AttributeOperation operation, double value, AttributeSlot slot) {
         this.uuid = uuid;
