@@ -78,4 +78,8 @@ public final class MathUtils {
             return Math.min(value, max);
         }
     }
+
+    public static double mod(final double a, final double b) {
+        return (a % b + b) % b;
+    }
 }

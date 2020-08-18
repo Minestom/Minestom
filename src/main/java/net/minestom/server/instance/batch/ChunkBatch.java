@@ -72,14 +72,13 @@ public class ChunkBatch implements InstanceBatch {
             clearData(); // So the populators won't place those blocks again
 
             if (hasPopulator) {
-                Iterator<ChunkPopulator> populatorIterator = populators.iterator();
-                while (populatorIterator.hasNext()) {
-                    final ChunkPopulator chunkPopulator = populatorIterator.next();
+                for (ChunkPopulator chunkPopulator : populators) {
                     chunkPopulator.populateChunk(this, chunk);
                 }
                 singleThreadFlush(callback);
+
+                clearData(); // Clear populators blocks
             }
-            clearData(); // Clear populators blocks
         });
     }
 

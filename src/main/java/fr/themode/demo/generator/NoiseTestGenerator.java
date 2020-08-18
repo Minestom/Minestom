@@ -2,46 +2,188 @@ package fr.themode.demo.generator;
 
 import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;
+import lombok.Data;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.world.biomes.Biome;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class NoiseTestGenerator extends ChunkGenerator {
 
-    private Random random = new Random();
-    private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(141414).setFrequency(0.5).build();
+	private Random random = new Random();
+	private JNoise jNoise = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.4).build();
+	private JNoise jNoise2 = JNoise.newBuilder().perlin().setInterpolation(InterpolationType.LINEAR).setSeed(random.nextInt()).setFrequency(0.6).build();
+	private TreePopulator treeGen = new TreePopulator();
 
-    @Override
-    public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
-        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                double height = jNoise.getNoise((x + chunkX * 16) / 16.0, (z + chunkZ * 16) / 16.0) * 15 + 40;
-                for (int y = 0; y < height; y++) {
-                    if (random.nextInt(100) > 10) {
-                        batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
-                    } else {
-                        batch.setBlock(x, y, z, Block.GOLD_BLOCK);
-                    }
-                }
-            }
-        }
-    }
+	public int getHeight(int x, int z) {
+		double preHeight = jNoise.getNoise(x / 16.0, z / 16.0);
+		return (int) ((preHeight > 0 ? preHeight * 6 : preHeight * 4) + 64);
+	}
 
-    @Override
-    public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
-        Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
-    }
+	@Override
+	public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
+		for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+			for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+				int height = getHeight(x + chunkX * 16, z + chunkZ * 16);
+				for (int y = 0; y < height; y++) {
+					//if (random.nextInt(100) > 10) {
+					//    batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
+					//} else {
+					//    batch.setBlock(x, y, z, Block.GOLD_BLOCK);
+					//}
+					batch.setBlock(x, y, z, Block.GRASS_BLOCK);
+				}
+				if (height < 61) {
+					for (int y = 0; y < 61 - height; y++) {
+						batch.setBlock(x, y + height, z, Block.WATER);
+					}
+				}
+			}
+		}
+	}
 
-    @Override
-    public List<ChunkPopulator> getPopulators() {
-        return null;
-    }
+	@Override
+	public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+		Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
+	}
+
+	@Override
+	public List<ChunkPopulator> getPopulators() {
+		List<ChunkPopulator> list = new ArrayList<>();
+		list.add(treeGen);
+		return list;
+	}
+
+	@Data
+	public static class Structure {
+
+		private final Map<BlockPosition, Block> blocks = new HashMap<>();
+
+		public void build(ChunkBatch batch, BlockPosition pos) {
+			blocks.forEach((bPos, block) -> {
+				if (bPos.getX() + pos.getX() >= Chunk.CHUNK_SIZE_X || bPos.getX() + pos.getX() < 0)
+					return;
+				if (bPos.getZ() + pos.getZ() >= Chunk.CHUNK_SIZE_Z || bPos.getZ() + pos.getZ() < 0)
+					return;
+				batch.setBlock(bPos.clone().add(pos), block);
+			});
+		}
+
+		public void addBlock(Block block, int localX, int localY, int localZ) {
+			blocks.put(new BlockPosition(localX, localY, localZ), block);
+		}
+
+	}
+
+	private class TreePopulator implements ChunkPopulator {
+
+		final Structure tree;
+
+		public TreePopulator() {
+			tree = new Structure();
+			tree.addBlock(Block.OAK_LOG, 0, 0, 0);
+			tree.addBlock(Block.OAK_LOG, 0, 1, 0);
+			tree.addBlock(Block.OAK_LOG, 0, 2, 0);
+			tree.addBlock(Block.OAK_LOG, 0, 3, 0);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 1, 0);
+			tree.addBlock(Block.OAK_LEAVES, 2, 1, 0);
+			tree.addBlock(Block.OAK_LEAVES, -1, 1, 0);
+			tree.addBlock(Block.OAK_LEAVES, -2, 1, 0);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 1, 1);
+			tree.addBlock(Block.OAK_LEAVES, 2, 1, 1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 1, 1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 1, 1);
+			tree.addBlock(Block.OAK_LEAVES, -2, 1, 1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 1, 2);
+			tree.addBlock(Block.OAK_LEAVES, 2, 1, 2);
+			tree.addBlock(Block.OAK_LEAVES, 0, 1, 2);
+			tree.addBlock(Block.OAK_LEAVES, -1, 1, 2);
+			tree.addBlock(Block.OAK_LEAVES, -2, 1, 2);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 1, -1);
+			tree.addBlock(Block.OAK_LEAVES, 2, 1, -1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 1, -1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 1, -1);
+			tree.addBlock(Block.OAK_LEAVES, -2, 1, -1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 1, -2);
+			tree.addBlock(Block.OAK_LEAVES, 2, 1, -2);
+			tree.addBlock(Block.OAK_LEAVES, 0, 1, -2);
+			tree.addBlock(Block.OAK_LEAVES, -1, 1, -2);
+			tree.addBlock(Block.OAK_LEAVES, -2, 1, -2);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 2, 0);
+			tree.addBlock(Block.OAK_LEAVES, 2, 2, 0);
+			tree.addBlock(Block.OAK_LEAVES, -1, 2, 0);
+			tree.addBlock(Block.OAK_LEAVES, -2, 2, 0);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 2, 1);
+			tree.addBlock(Block.OAK_LEAVES, 2, 2, 1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 2, 1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 2, 1);
+			tree.addBlock(Block.OAK_LEAVES, -2, 2, 1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 2, 2);
+			tree.addBlock(Block.OAK_LEAVES, 2, 2, 2);
+			tree.addBlock(Block.OAK_LEAVES, 0, 2, 2);
+			tree.addBlock(Block.OAK_LEAVES, -1, 2, 2);
+			tree.addBlock(Block.OAK_LEAVES, -2, 2, 2);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 2, -1);
+			tree.addBlock(Block.OAK_LEAVES, 2, 2, -1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 2, -1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 2, -1);
+			tree.addBlock(Block.OAK_LEAVES, -2, 2, -1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 2, -2);
+			tree.addBlock(Block.OAK_LEAVES, 2, 2, -2);
+			tree.addBlock(Block.OAK_LEAVES, 0, 2, -2);
+			tree.addBlock(Block.OAK_LEAVES, -1, 2, -2);
+			tree.addBlock(Block.OAK_LEAVES, -2, 2, -2);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 3, 0);
+			tree.addBlock(Block.OAK_LEAVES, -1, 3, 0);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 3, 1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 3, 1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 3, 1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 3, -1);
+			tree.addBlock(Block.OAK_LEAVES, 0, 3, -1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 3, -1);
+
+			tree.addBlock(Block.OAK_LEAVES, 1, 4, 0);
+			tree.addBlock(Block.OAK_LEAVES, 0, 4, 0);
+			tree.addBlock(Block.OAK_LEAVES, -1, 4, 0);
+
+			tree.addBlock(Block.OAK_LEAVES, 0, 4, 1);
+
+			tree.addBlock(Block.OAK_LEAVES, 0, 4, -1);
+			tree.addBlock(Block.OAK_LEAVES, -1, 4, -1);
+		}
+
+		@Override
+		public void populateChunk(ChunkBatch batch, Chunk chunk) {
+			for (int i = -2; i < 18; i++) {
+				for (int j = -2; j < 18; j++) {
+					if (jNoise2.getNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
+                        int y = getHeight(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16);
+                        tree.build(batch, new BlockPosition(i, y, j));
+					}
+				}
+			}
+		}
+
+
+	}
+
 }

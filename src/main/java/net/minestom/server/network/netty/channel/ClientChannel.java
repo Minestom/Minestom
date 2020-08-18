@@ -2,6 +2,7 @@ package net.minestom.server.network.netty.channel;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
@@ -9,6 +10,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.PlayerConnection;
 
+@Slf4j
 public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     private final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
@@ -57,7 +59,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        log.info(cause.getMessage());
         ctx.close();
     }
 }

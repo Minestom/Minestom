@@ -19,8 +19,12 @@ public class Biome {
 
 	//A plains biome has to be registered or else minecraft will crash
 	public static final Biome PLAINS = Biome.builder()
-			.category(Biome.Category.NONE)
+			.category(Category.NONE)
 			.name(NamespaceID.from("minecraft:plains"))
+			.temperature(0.8F)
+			.downfall(0.4F)
+			.depth(0.125F)
+			.scale(0.05F)
 			.effects(BiomeEffects.builder()
 					.fog_color(0xC0D8FF)
 					.sky_color(0x78A7FF)

@@ -85,8 +85,8 @@ public final class ChunkUtils {
      * @return the chunk Z based on the index
      */
     public static int getChunkCoordZ(long index) {
-        final int chunkX = (int) (index >> 32);
-        final int chunkZ = (int) index;
+        //final int chunkX = (int) (index >> 32);
+        //final int chunkZ = (int) index;
         return (int) index;
     }
 

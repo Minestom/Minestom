@@ -56,6 +56,32 @@ public class BlockPosition {
     }
 
     /**
+     * Add offsets to this block position
+     *
+     * @param pos the pos to add
+     * @return the instance of this block position
+     */
+    public BlockPosition add(BlockPosition pos) {
+        this.x += pos.getX();
+        this.y += pos.getY();
+        this.z += pos.getZ();
+        return this;
+    }
+
+    /**
+     * Subtract offsets to this block position
+     *
+     * @param pos the pos to subtract
+     * @return the instance of this block position
+     */
+    public BlockPosition subtract(BlockPosition pos) {
+        this.x -= pos.getX();
+        this.y -= pos.getY();
+        this.z -= pos.getZ();
+        return this;
+    }
+
+    /**
      * Get the block X
      *
      * @return the block X

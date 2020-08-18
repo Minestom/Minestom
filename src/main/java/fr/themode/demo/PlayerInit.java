@@ -35,11 +35,14 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
     //private static volatile InstanceContainer netherTest;
+
+    private static Random r = new Random();
 
     private static volatile Inventory inventory;
 
@@ -258,7 +261,7 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
-                player.teleport(new Position(0, 41f, 0));
+                player.teleport(new Position(r.nextInt(200)-100, 73, r.nextInt(200)-100));
 
                 //player.setHeldItemSlot((byte) 5);
 
