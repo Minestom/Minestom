@@ -89,8 +89,8 @@ public final class ChunkUtils {
     }
 
     public static short getLocalBlockPosAsShort(int x, int y, int z) {
-        x = x % 16;
-        z = z % 16;
+        x = x % Chunk.CHUNK_SIZE_X;
+        z = z % Chunk.CHUNK_SIZE_Z;
         return (short) (x << 8 | y << 4 | z);
     }
 
@@ -196,7 +196,7 @@ public final class ChunkUtils {
      */
     public static int blockIndexToPositionX(int index, int chunkX) {
         int x = (byte) (index & 0xF);
-        x += 16 * chunkX;
+        x += Chunk.CHUNK_SIZE_X * chunkX;
         return x;
     }
 
@@ -219,7 +219,7 @@ public final class ChunkUtils {
      */
     public static int blockIndexToPositionZ(int index, int chunkZ) {
         int z = (byte) (index >> 12 & 0xF);
-        z += 16 * chunkZ;
+        z += Chunk.CHUNK_SIZE_Z * chunkZ;
         return z;
     }
 
