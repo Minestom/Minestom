@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
@@ -39,6 +40,8 @@ public abstract class Chunk implements Viewable {
     public static final int CHUNK_SIZE_Y = 256;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
+
+    public static final int CHUNK_SECTION_COUNT = CHUNK_SIZE_Y / CHUNK_SECTION_SIZE;
 
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks
 
@@ -176,7 +179,7 @@ public abstract class Chunk implements Viewable {
      * <p>
      * Use {@link #retrieveDataBuffer(Consumer)} to be sure to get the updated version
      *
-     * @return the current cached data packet, can be null or outdated
+     * @return the last cached data packet, can be null or outdated
      */
     public ByteBuf getFullDataPacket() {
         return fullDataPacket;
@@ -271,7 +274,13 @@ public abstract class Chunk implements Viewable {
         return "Chunk[" + chunkX + ":" + chunkZ + "]";
     }
 
-    // UNSAFE
+    /**
+     * Send the chunk to {@code player} and add it to the player viewing chunks collection
+     * and send a {@link PlayerChunkLoadEvent}
+     *
+     * @param player the viewer to add
+     * @return true if the player has just been added to the viewer collection
+     */
     @Override
     public boolean addViewer(Player player) {
         final boolean result = this.viewers.add(player);
@@ -286,7 +295,13 @@ public abstract class Chunk implements Viewable {
         return result;
     }
 
-    // UNSAFE
+    /**
+     * Remove the chunk to the player viewing chunks collection
+     * and send a {@link PlayerChunkUnloadEvent}
+     *
+     * @param player the viewer to remove
+     * @return true if the player has just been removed to the viewer collection
+     */
     @Override
     public boolean removeViewer(Player player) {
         final boolean result = this.viewers.remove(player);
@@ -382,14 +397,22 @@ public abstract class Chunk implements Viewable {
     public void sendChunkSectionUpdate(int section, Player player) {
         if (!PlayerUtils.isNettyClient(player))
             return;
+        Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),
+                "The chunk section " + section + " does not exist");
 
         PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(section));
     }
 
+    /**
+     * Get the {@link ChunkDataPacket} to update a single chunk section
+     *
+     * @param section the chunk section to update
+     * @return the {@link ChunkDataPacket} to update a single chunk sectionl
+     */
     protected ChunkDataPacket getChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
         chunkDataPacket.fullChunk = false;
-        int[] sections = new int[16];
+        int[] sections = new int[CHUNK_SECTION_COUNT];
         sections[section] = 1;
         chunkDataPacket.sections = sections;
         return chunkDataPacket;

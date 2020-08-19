@@ -1,4 +1,5 @@
 package net.minestom.server.network.packet.server.play;
+
 import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -18,10 +19,10 @@ public class MultiBlockChangePacket implements ServerPacket {
         writer.writeLong(ChunkUtils.getChunkIndexWithSection(chunkX, chunkZ, section));
         writer.writeBoolean(suppressLightUpdates);
         if (blockChanges != null) {
-            int length = blockChanges.length;
+            final int length = blockChanges.length;
             writer.writeVarInt(length);
             for (int i = 0; i < length; i++) {
-                BlockChange blockChange = blockChanges[i];
+                final BlockChange blockChange = blockChanges[i];
                 writer.writeVarInt(blockChange.newBlockId << 12 | ChunkUtils.getLocalBlockPosAsShort(blockChange.positionX, blockChange.positionY, blockChange.positionZ));
             }
         } else {
