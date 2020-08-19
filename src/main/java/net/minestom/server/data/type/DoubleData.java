@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class DoubleData extends DataType<Double> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, Double value) {
-        binaryWriter.writeDouble(value);
+    public void encode(BinaryWriter writer, Double value) {
+        writer.writeDouble(value);
     }
 
     @Override
-    public Double decode(BinaryReader binaryReader) {
-        return binaryReader.readDouble();
+    public Double decode(BinaryReader reader) {
+        return reader.readDouble();
     }
 }

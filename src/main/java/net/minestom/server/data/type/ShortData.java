@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class ShortData extends DataType<Short> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, Short value) {
-        binaryWriter.writeShort(value);
+    public void encode(BinaryWriter writer, Short value) {
+        writer.writeShort(value);
     }
 
     @Override
-    public Short decode(BinaryReader binaryReader) {
-        return binaryReader.readShort();
+    public Short decode(BinaryReader reader) {
+        return reader.readShort();
     }
 }

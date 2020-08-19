@@ -6,12 +6,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 public class BooleanData extends DataType<Boolean> {
     @Override
-    public void encode(BinaryWriter binaryWriter, Boolean value) {
-        binaryWriter.writeBoolean(value);
+    public void encode(BinaryWriter writer, Boolean value) {
+        writer.writeBoolean(value);
     }
 
     @Override
-    public Boolean decode(BinaryReader binaryReader) {
-        return binaryReader.readBoolean();
+    public Boolean decode(BinaryReader reader) {
+        return reader.readBoolean();
     }
 }

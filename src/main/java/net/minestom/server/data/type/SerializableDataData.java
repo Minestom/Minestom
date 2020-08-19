@@ -10,12 +10,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class SerializableDataData extends DataType<SerializableData> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, SerializableData value) {
-        binaryWriter.writeBytes(value.getSerializedData());
+    public void encode(BinaryWriter writer, SerializableData value) {
+        writer.writeBytes(value.getSerializedData());
     }
 
     @Override
-    public SerializableData decode(BinaryReader binaryReader) {
-        return DataReader.readData(binaryReader);
+    public SerializableData decode(BinaryReader reader) {
+        return DataReader.readData(reader);
     }
 }

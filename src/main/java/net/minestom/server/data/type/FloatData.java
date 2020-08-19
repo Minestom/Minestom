@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class FloatData extends DataType<Float> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, Float value) {
-        binaryWriter.writeFloat(value);
+    public void encode(BinaryWriter writer, Float value) {
+        writer.writeFloat(value);
     }
 
     @Override
-    public Float decode(BinaryReader binaryReader) {
-        return binaryReader.readFloat();
+    public Float decode(BinaryReader reader) {
+        return reader.readFloat();
     }
 }

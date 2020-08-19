@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class ShortArrayData extends DataType<short[]> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, short[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, short[] value) {
+        writer.writeVarInt(value.length);
         for (short val : value) {
-            binaryWriter.writeShort(val);
+            writer.writeShort(val);
         }
     }
 
     @Override
-    public short[] decode(BinaryReader binaryReader) {
-        short[] array = new short[binaryReader.readVarInt()];
+    public short[] decode(BinaryReader reader) {
+        short[] array = new short[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = binaryReader.readShort();
+            array[i] = reader.readShort();
         }
         return array;
     }

@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class LongArrayData extends DataType<long[]> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, long[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, long[] value) {
+        writer.writeVarInt(value.length);
         for (long val : value) {
-            binaryWriter.writeLong(val);
+            writer.writeLong(val);
         }
     }
 
     @Override
-    public long[] decode(BinaryReader binaryReader) {
-        long[] array = new long[binaryReader.readVarInt()];
+    public long[] decode(BinaryReader reader) {
+        long[] array = new long[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = binaryReader.readLong();
+            array[i] = reader.readLong();
         }
         return array;
     }

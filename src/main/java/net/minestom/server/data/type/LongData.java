@@ -6,12 +6,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 public class LongData extends DataType<Long> {
     @Override
-    public void encode(BinaryWriter binaryWriter, Long value) {
-        binaryWriter.writeLong(value);
+    public void encode(BinaryWriter writer, Long value) {
+        writer.writeLong(value);
     }
 
     @Override
-    public Long decode(BinaryReader binaryReader) {
-        return binaryReader.readLong();
+    public Long decode(BinaryReader reader) {
+        return reader.readLong();
     }
 }

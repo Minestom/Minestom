@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class FloatArrayData extends DataType<float[]> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, float[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, float[] value) {
+        writer.writeVarInt(value.length);
         for (float val : value) {
-            binaryWriter.writeFloat(val);
+            writer.writeFloat(val);
         }
     }
 
     @Override
-    public float[] decode(BinaryReader binaryReader) {
-        float[] array = new float[binaryReader.readVarInt()];
+    public float[] decode(BinaryReader reader) {
+        float[] array = new float[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = binaryReader.readFloat();
+            array[i] = reader.readFloat();
         }
         return array;
     }

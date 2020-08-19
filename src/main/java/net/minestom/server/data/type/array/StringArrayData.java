@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class StringArrayData extends DataType<String[]> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, String[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, String[] value) {
+        writer.writeVarInt(value.length);
         for (String val : value) {
-            binaryWriter.writeSizedString(val);
+            writer.writeSizedString(val);
         }
     }
 
     @Override
-    public String[] decode(BinaryReader binaryReader) {
-        String[] array = new String[binaryReader.readVarInt()];
+    public String[] decode(BinaryReader reader) {
+        String[] array = new String[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = binaryReader.readSizedString();
+            array[i] = reader.readSizedString();
         }
         return array;
     }

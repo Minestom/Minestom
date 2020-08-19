@@ -8,12 +8,12 @@ import java.util.UUID;
 
 public class UuidType extends DataType<UUID> {
     @Override
-    public void encode(BinaryWriter binaryWriter, UUID value) {
-        binaryWriter.writeUuid(value);
+    public void encode(BinaryWriter writer, UUID value) {
+        writer.writeUuid(value);
     }
 
     @Override
-    public UUID decode(BinaryReader binaryReader) {
-        return binaryReader.readUuid();
+    public UUID decode(BinaryReader reader) {
+        return reader.readUuid();
     }
 }

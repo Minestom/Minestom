@@ -22,17 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketProcessor {
 
-    private Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
-
-    private ConnectionManager connectionManager;
+    private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
     // Protocols
-    private ClientStatusPacketsHandler statusPacketsHandler;
-    private ClientLoginPacketsHandler loginPacketsHandler;
-    private ClientPlayPacketsHandler playPacketsHandler;
+    private final ClientStatusPacketsHandler statusPacketsHandler;
+    private final ClientLoginPacketsHandler loginPacketsHandler;
+    private final ClientPlayPacketsHandler playPacketsHandler;
 
     public PacketProcessor() {
-        this.connectionManager = MinecraftServer.getConnectionManager();
 
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();
@@ -62,7 +59,7 @@ public class PacketProcessor {
             if (packet.packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
                 handshakePacket.read(binaryReader);
-                handshakePacket.process(playerConnection, connectionManager);
+                handshakePacket.process(playerConnection);
             }
             return;
         }
@@ -77,13 +74,12 @@ public class PacketProcessor {
             case LOGIN:
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
                 loginPacket.read(binaryReader);
-                loginPacket.process(playerConnection, connectionManager);
+                loginPacket.process(playerConnection);
                 break;
             case STATUS:
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
                 statusPacket.read(binaryReader);
-
-                statusPacket.process(playerConnection, connectionManager);
+                statusPacket.process(playerConnection);
                 break;
         }
     }

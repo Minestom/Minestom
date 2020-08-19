@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ItemStackArrayData extends DataType<ItemStack[]> {
     @Override
-    public void encode(BinaryWriter binaryWriter, ItemStack[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, ItemStack[] value) {
+        writer.writeVarInt(value.length);
         for (ItemStack itemStack : value) {
-            binaryWriter.writeItemStack(itemStack);
+            writer.writeItemStack(itemStack);
         }
     }
 
     @Override
-    public ItemStack[] decode(BinaryReader binaryReader) {
-        ItemStack[] items = new ItemStack[binaryReader.readVarInt()];
+    public ItemStack[] decode(BinaryReader reader) {
+        ItemStack[] items = new ItemStack[reader.readVarInt()];
         for (int i = 0; i < items.length; i++) {
-            items[i] = binaryReader.readSlot();
+            items[i] = reader.readSlot();
         }
         return items;
     }

@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ItemStackData extends DataType<ItemStack> {
     @Override
-    public void encode(BinaryWriter binaryWriter, ItemStack value) {
-        binaryWriter.writeItemStack(value);
+    public void encode(BinaryWriter writer, ItemStack value) {
+        writer.writeItemStack(value);
     }
 
     @Override
-    public ItemStack decode(BinaryReader binaryReader) {
-        return binaryReader.readSlot();
+    public ItemStack decode(BinaryReader reader) {
+        return reader.readSlot();
     }
 }

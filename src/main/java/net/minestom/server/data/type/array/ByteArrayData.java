@@ -6,13 +6,13 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ByteArrayData extends DataType<byte[]> {
     @Override
-    public void encode(BinaryWriter binaryWriter, byte[] value) {
-        encodeByteArray(binaryWriter, value);
+    public void encode(BinaryWriter writer, byte[] value) {
+        encodeByteArray(writer, value);
     }
 
     @Override
-    public byte[] decode(BinaryReader binaryReader) {
-        return decodeByteArray(binaryReader);
+    public byte[] decode(BinaryReader reader) {
+        return decodeByteArray(reader);
     }
 
     public static void encodeByteArray(BinaryWriter binaryWriter, byte[] value) {

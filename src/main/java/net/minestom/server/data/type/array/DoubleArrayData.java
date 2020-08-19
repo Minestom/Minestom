@@ -7,18 +7,18 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class DoubleArrayData extends DataType<double[]> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, double[] value) {
-        binaryWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, double[] value) {
+        writer.writeVarInt(value.length);
         for (double val : value) {
-            binaryWriter.writeDouble(val);
+            writer.writeDouble(val);
         }
     }
 
     @Override
-    public double[] decode(BinaryReader binaryReader) {
-        double[] array = new double[binaryReader.readVarInt()];
+    public double[] decode(BinaryReader reader) {
+        double[] array = new double[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = binaryReader.readDouble();
+            array[i] = reader.readDouble();
         }
         return array;
     }

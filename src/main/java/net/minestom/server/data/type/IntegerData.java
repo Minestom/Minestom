@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class IntegerData extends DataType<Integer> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, Integer value) {
-        binaryWriter.writeVarInt(value);
+    public void encode(BinaryWriter writer, Integer value) {
+        writer.writeVarInt(value);
     }
 
     @Override
-    public Integer decode(BinaryReader binaryReader) {
-        return binaryReader.readVarInt();
+    public Integer decode(BinaryReader reader) {
+        return reader.readVarInt();
     }
 }

@@ -7,12 +7,12 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public class CharacterData extends DataType<Character> {
 
     @Override
-    public void encode(BinaryWriter binaryWriter, Character value) {
-        binaryWriter.writeChar(value);
+    public void encode(BinaryWriter writer, Character value) {
+        writer.writeChar(value);
     }
 
     @Override
-    public Character decode(BinaryReader binaryReader) {
-        return binaryReader.readChar();
+    public Character decode(BinaryReader reader) {
+        return reader.readChar();
     }
 }
