@@ -244,7 +244,7 @@ public class BinaryWriter extends OutputStream {
 
     public void writeNBT(String name, NBT tag) {
         try {
-            nbtWriter.writeNamed("", tag);
+            nbtWriter.writeNamed(name, tag);
         } catch (IOException e) {
             // should not throw, as nbtWriter points to this PacketWriter
             e.printStackTrace();
