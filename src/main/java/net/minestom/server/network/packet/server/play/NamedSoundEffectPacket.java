@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class NamedSoundEffectPacket implements ServerPacket {
 
@@ -14,7 +14,7 @@ public class NamedSoundEffectPacket implements ServerPacket {
     public float pitch;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(soundName);
         writer.writeVarInt(soundCategory.ordinal());
         writer.writeInt(x);

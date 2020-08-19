@@ -3,9 +3,9 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.bossbar.BarColor;
 import net.minestom.server.bossbar.BarDivision;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class BossBarPacket implements ServerPacket {
 
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeUuid(uuid);
         writer.writeVarInt(action.ordinal());
 

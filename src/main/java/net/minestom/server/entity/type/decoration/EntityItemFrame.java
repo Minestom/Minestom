@@ -3,9 +3,9 @@ package net.minestom.server.entity.type.decoration;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Rotation;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.item.ItemStackUtils;
 
 import java.util.function.Consumer;
@@ -27,7 +27,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 7);
@@ -36,7 +36,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);

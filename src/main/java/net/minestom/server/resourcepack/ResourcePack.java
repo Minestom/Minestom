@@ -7,8 +7,8 @@ import net.minestom.server.utils.validate.Check;
  */
 public class ResourcePack {
 
-    private String url;
-    private String hash;
+    private final String url;
+    private final String hash;
 
     public ResourcePack(String url, String hash) {
         Check.notNull(url, "The resource pack url cannot be null");

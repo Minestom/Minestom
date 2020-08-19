@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.server;
 
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public interface ServerPacket {
 
-    void write(PacketWriter writer);
+    void write(BinaryWriter writer);
 
     int getId();
 

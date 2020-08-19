@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class EntityPropertiesPacket implements ServerPacket {
 
@@ -12,7 +12,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeInt(properties.length);
         for (Property property : properties) {
@@ -30,7 +30,7 @@ public class EntityPropertiesPacket implements ServerPacket {
         public Attribute attribute;
         public double value;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             float maxValue = attribute.getMaxVanillaValue();
 
             // Bypass vanilla limit client-side if needed (by sending the max value allowed)

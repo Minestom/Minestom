@@ -2,8 +2,8 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 /**
  * Class used to write packets
@@ -21,7 +21,7 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(ByteBuf buf, ServerPacket packet) {
-        PacketWriter writer = new PacketWriter();
+        BinaryWriter writer = new BinaryWriter();
 
         Utils.writeVarIntBuf(buf, packet.getId());
         packet.write(writer);

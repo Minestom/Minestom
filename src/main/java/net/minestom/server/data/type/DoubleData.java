@@ -1,18 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class DoubleData extends DataType<Double> {
 
     @Override
-    public void encode(PacketWriter packetWriter, Double value) {
-        packetWriter.writeDouble(value);
+    public void encode(BinaryWriter binaryWriter, Double value) {
+        binaryWriter.writeDouble(value);
     }
 
     @Override
-    public Double decode(PacketReader packetReader) {
-        return packetReader.readDouble();
+    public Double decode(BinaryReader binaryReader) {
+        return binaryReader.readDouble();
     }
 }

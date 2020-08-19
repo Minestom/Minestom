@@ -2,9 +2,9 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public class PlayerInfoPacket implements ServerPacket {
     }
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
         writer.writeVarInt(playerInfos.size());
 
@@ -63,7 +63,7 @@ public class PlayerInfoPacket implements ServerPacket {
             this.uuid = uuid;
         }
 
-        public abstract void write(PacketWriter writer);
+        public abstract void write(BinaryWriter writer);
     }
 
     public static class AddPlayer extends PlayerInfo {
@@ -83,7 +83,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeSizedString(name);
             writer.writeVarInt(properties.size());
             for (Property property : properties) {
@@ -114,7 +114,7 @@ public class PlayerInfoPacket implements ServerPacket {
                 this(name, value, null);
             }
 
-            public void write(PacketWriter writer) {
+            public void write(BinaryWriter writer) {
                 writer.writeSizedString(name);
                 writer.writeSizedString(value);
 
@@ -136,7 +136,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeVarInt(gameMode.getId());
         }
     }
@@ -151,7 +151,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeVarInt(ping);
         }
     }
@@ -166,7 +166,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
@@ -181,7 +181,7 @@ public class PlayerInfoPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
         }
     }
 }

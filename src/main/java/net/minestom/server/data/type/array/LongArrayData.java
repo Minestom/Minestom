@@ -1,24 +1,24 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class LongArrayData extends DataType<long[]> {
 
     @Override
-    public void encode(PacketWriter packetWriter, long[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter binaryWriter, long[] value) {
+        binaryWriter.writeVarInt(value.length);
         for (long val : value) {
-            packetWriter.writeLong(val);
+            binaryWriter.writeLong(val);
         }
     }
 
     @Override
-    public long[] decode(PacketReader packetReader) {
-        long[] array = new long[packetReader.readVarInt()];
+    public long[] decode(BinaryReader binaryReader) {
+        long[] array = new long[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readLong();
+            array[i] = binaryReader.readLong();
         }
         return array;
     }

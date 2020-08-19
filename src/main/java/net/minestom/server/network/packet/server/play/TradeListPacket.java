@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class TradeListPacket implements ServerPacket {
 
@@ -15,7 +15,7 @@ public class TradeListPacket implements ServerPacket {
     public boolean canRestock;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(windowId);
         writer.writeByte((byte) trades.length);
         for (Trade trade : trades) {
@@ -46,7 +46,7 @@ public class TradeListPacket implements ServerPacket {
         public int demand;
 
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             boolean hasSecondItem = inputItem2 != null;
 
             writer.writeItemStack(inputItem1);

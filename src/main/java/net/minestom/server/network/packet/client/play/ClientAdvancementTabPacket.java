@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.advancements.AdvancementAction;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientAdvancementTabPacket extends ClientPlayPacket {
 
@@ -10,7 +10,7 @@ public class ClientAdvancementTabPacket extends ClientPlayPacket {
     public String tabIdentifier;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.action = AdvancementAction.values()[reader.readVarInt()];
 
         if (action == AdvancementAction.OPENED_TAB) {

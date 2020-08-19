@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ScoreboardObjectivePacket implements ServerPacket {
 
@@ -27,7 +27,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
     public Type type;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(objectiveName);
         writer.writeByte(mode);
 

@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class WorldBorderPacket implements ServerPacket {
 
@@ -10,7 +10,7 @@ public class WorldBorderPacket implements ServerPacket {
     public WBAction wbAction;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
         wbAction.write(writer);
     }
@@ -30,7 +30,7 @@ public class WorldBorderPacket implements ServerPacket {
     }
 
     public static abstract class WBAction {
-        public abstract void write(PacketWriter writer);
+        public abstract void write(BinaryWriter writer);
     }
 
     public static class WBSetSize extends WBAction {
@@ -42,7 +42,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeDouble(diameter);
         }
     }
@@ -60,7 +60,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeDouble(oldDiameter);
             writer.writeDouble(newDiameter);
             writer.writeVarLong(speed);
@@ -77,7 +77,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeDouble(x);
             writer.writeDouble(z);
         }
@@ -106,7 +106,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeDouble(x);
             writer.writeDouble(z);
             writer.writeDouble(oldDiameter);
@@ -127,7 +127,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeVarInt(warningTime);
         }
     }
@@ -141,7 +141,7 @@ public class WorldBorderPacket implements ServerPacket {
         }
 
         @Override
-        public void write(PacketWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeVarInt(warningBlocks);
         }
     }

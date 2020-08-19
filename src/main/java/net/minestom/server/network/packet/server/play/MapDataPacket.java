@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class MapDataPacket implements ServerPacket {
 
@@ -21,7 +21,7 @@ public class MapDataPacket implements ServerPacket {
     public byte[] data;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(mapId);
         writer.writeByte(scale);
         writer.writeBoolean(trackingPosition);
@@ -64,7 +64,7 @@ public class MapDataPacket implements ServerPacket {
         public byte direction;
         public ColoredText displayName;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeVarInt(type);
             writer.writeByte(x);
             writer.writeByte(z);

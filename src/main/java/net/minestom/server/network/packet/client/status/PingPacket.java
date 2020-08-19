@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.client.status;
 
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.status.PongPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class PingPacket implements ClientPreplayPacket {
 
@@ -18,7 +18,7 @@ public class PingPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.number = reader.readLong();
     }
 }

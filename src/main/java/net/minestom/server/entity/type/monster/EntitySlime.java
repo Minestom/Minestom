@@ -3,8 +3,8 @@ package net.minestom.server.entity.type.monster;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.type.Monster;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
@@ -18,7 +18,7 @@ public class EntitySlime extends EntityCreature implements Monster {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 15);
@@ -26,7 +26,7 @@ public class EntitySlime extends EntityCreature implements Monster {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 15) {
             packet.writeByte((byte) 15);

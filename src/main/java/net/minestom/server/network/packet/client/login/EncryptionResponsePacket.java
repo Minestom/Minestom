@@ -7,11 +7,11 @@ import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.binary.BinaryReader;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -58,7 +58,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
 	}
 
 	@Override
-	public void read(PacketReader reader) {
+	public void read(BinaryReader reader) {
 		sharedSecret = ByteArrayData.decodeByteArray(reader);
 		verifyToken = ByteArrayData.decodeByteArray(reader);
 	}

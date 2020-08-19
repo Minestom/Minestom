@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class BlockActionPacket implements ServerPacket {
 
@@ -13,7 +13,7 @@ public class BlockActionPacket implements ServerPacket {
     public int blockId;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeBlockPosition(blockPosition);
         writer.writeByte(actionId);
         writer.writeByte(actionParam);

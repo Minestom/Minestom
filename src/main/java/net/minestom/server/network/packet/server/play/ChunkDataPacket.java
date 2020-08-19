@@ -3,18 +3,18 @@ package net.minestom.server.network.packet.server.play;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
-import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.buffer.BufferUtils;
 import net.minestom.server.utils.buffer.BufferWrapper;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.world.biomes.Biome;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Set;
@@ -41,7 +41,7 @@ public class ChunkDataPacket implements ServerPacket {
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
         writer.writeBoolean(fullChunk);

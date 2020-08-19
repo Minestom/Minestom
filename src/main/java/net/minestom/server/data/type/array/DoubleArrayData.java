@@ -1,24 +1,24 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class DoubleArrayData extends DataType<double[]> {
 
     @Override
-    public void encode(PacketWriter packetWriter, double[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter binaryWriter, double[] value) {
+        binaryWriter.writeVarInt(value.length);
         for (double val : value) {
-            packetWriter.writeDouble(val);
+            binaryWriter.writeDouble(val);
         }
     }
 
     @Override
-    public double[] decode(PacketReader packetReader) {
-        double[] array = new double[packetReader.readVarInt()];
+    public double[] decode(BinaryReader binaryReader) {
+        double[] array = new double[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readDouble();
+            array[i] = binaryReader.readDouble();
         }
         return array;
     }

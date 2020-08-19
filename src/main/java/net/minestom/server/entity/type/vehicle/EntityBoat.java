@@ -3,8 +3,8 @@ package net.minestom.server.entity.type.vehicle;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.entity.type.Vehicle;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.function.Consumer;
@@ -27,7 +27,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 10);
@@ -39,7 +39,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 10) {
             packet.writeByte((byte) 10);

@@ -2,23 +2,23 @@ package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ItemStackArrayData extends DataType<ItemStack[]> {
     @Override
-    public void encode(PacketWriter packetWriter, ItemStack[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter binaryWriter, ItemStack[] value) {
+        binaryWriter.writeVarInt(value.length);
         for (ItemStack itemStack : value) {
-            packetWriter.writeItemStack(itemStack);
+            binaryWriter.writeItemStack(itemStack);
         }
     }
 
     @Override
-    public ItemStack[] decode(PacketReader packetReader) {
-        ItemStack[] items = new ItemStack[packetReader.readVarInt()];
+    public ItemStack[] decode(BinaryReader binaryReader) {
+        ItemStack[] items = new ItemStack[binaryReader.readVarInt()];
         for (int i = 0; i < items.length; i++) {
-            items[i] = packetReader.readSlot();
+            items[i] = binaryReader.readSlot();
         }
         return items;
     }

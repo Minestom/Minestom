@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 
@@ -15,7 +15,7 @@ public class RespawnPacket implements ServerPacket {
     public LevelType levelType;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         //TODO add api
         writer.writeSizedString(dimensionType.getName().toString());
 

@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.login;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class LoginDisconnect implements ServerPacket {
 	private String kickMessage;
@@ -11,7 +11,7 @@ public class LoginDisconnect implements ServerPacket {
 	}
 
 	@Override
-	public void write(PacketWriter writer) {
+	public void write(BinaryWriter writer) {
 		writer.writeSizedString(kickMessage);
 	}
 

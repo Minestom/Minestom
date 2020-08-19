@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.login;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ public class LoginSuccessPacket implements ServerPacket {
     }
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeUuid(uuid);
         writer.writeSizedString(username);
     }

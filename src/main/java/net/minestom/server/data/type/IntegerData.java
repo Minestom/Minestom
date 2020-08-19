@@ -1,18 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class IntegerData extends DataType<Integer> {
 
     @Override
-    public void encode(PacketWriter packetWriter, Integer value) {
-        packetWriter.writeVarInt(value);
+    public void encode(BinaryWriter binaryWriter, Integer value) {
+        binaryWriter.writeVarInt(value);
     }
 
     @Override
-    public Integer decode(PacketReader packetReader) {
-        return packetReader.readVarInt();
+    public Integer decode(BinaryReader binaryReader) {
+        return binaryReader.readVarInt();
     }
 }

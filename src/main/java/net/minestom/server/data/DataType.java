@@ -1,24 +1,24 @@
 package net.minestom.server.data;
 
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public abstract class DataType<T> {
 
     /**
      * Encode the data type
      *
-     * @param packetWriter the data writer
-     * @param value        the value to encode
+     * @param writer the data writer
+     * @param value  the value to encode
      */
-    public abstract void encode(PacketWriter packetWriter, T value);
+    public abstract void encode(BinaryWriter writer, T value);
 
     /**
      * Decode the data type
      *
-     * @param packetReader the data reader
+     * @param reader the data reader
      * @return the decoded value
      */
-    public abstract T decode(PacketReader packetReader);
+    public abstract T decode(BinaryReader reader);
 
 }

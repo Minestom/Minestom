@@ -26,7 +26,6 @@ import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -229,9 +228,8 @@ public abstract class Chunk implements Viewable {
      * Serialize the chunk
      *
      * @return the serialized chunk
-     * @throws IOException
      */
-    protected abstract byte[] getSerializedData() throws IOException;
+    protected abstract byte[] getSerializedData();
 
     /**
      * Get a {@link ChunkDataPacket} which should contain the full chunk

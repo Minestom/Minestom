@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class UnlockRecipesPacket implements ServerPacket {
 
@@ -19,7 +19,7 @@ public class UnlockRecipesPacket implements ServerPacket {
     public String[] initRecipesId;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(mode);
 
         writer.writeBoolean(craftingRecipeBookOpen);

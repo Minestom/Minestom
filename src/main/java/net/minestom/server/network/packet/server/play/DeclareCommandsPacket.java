@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
@@ -13,7 +13,7 @@ public class DeclareCommandsPacket implements ServerPacket {
     public int rootIndex;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(nodes.length);
         for (Node node : nodes) {
             node.write(writer);
@@ -33,10 +33,10 @@ public class DeclareCommandsPacket implements ServerPacket {
         public int redirectedNode; // Only if flags & 0x08
         public String name; // Only for literal and argument
         public String parser; // Only for argument
-        public Consumer<PacketWriter> properties; // Only for argument
+        public Consumer<BinaryWriter> properties; // Only for argument
         public String suggestionsType; // Only if flags 0x10
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeByte(flags);
 
             writer.writeVarIntArray(children);

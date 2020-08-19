@@ -1,11 +1,9 @@
 package net.minestom.server.reader;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.utils.binary.BinaryReader;
 
 /**
  * Class used to convert an array of bytes to a {@link SerializableData}
@@ -21,39 +19,32 @@ public class DataReader {
      * <p>
      * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
      *
-     * @param buffer the data
+     * @param reader the reader
      * @return a {@link SerializableData} based on the data input
      */
-    public static SerializableData readData(ByteBuf buffer) {
+    public static SerializableData readData(BinaryReader reader) {
         SerializableData data = new SerializableData();
         try {
             while (true) {
-                final short typeLength = buffer.readShort();
+                final int typeLength = reader.readVarInt();
 
-                if (typeLength == 0xff) {
+                if (typeLength == 0) {
                     // End of data
                     break;
                 }
 
-                byte[] typeCache = new byte[typeLength];
-                for (int i = 0; i < typeLength; i++) {
-                    typeCache[i] = buffer.readByte();
+                final String className;
+                {
+                    final byte[] typeCache = reader.readBytes(typeLength);
+
+                    className = new String(typeCache);
                 }
 
-                final String className = new String(typeCache);
                 final Class type = Class.forName(className);
 
-                short nameLength = buffer.readShort();
-                byte[] nameCache = new byte[nameLength];
-                for (int i = 0; i < nameLength; i++) {
-                    nameCache[i] = buffer.readByte();
-                }
+                final String name = reader.readSizedString();
 
-                final ByteBuf valueCache = buffer.readBytes(buffer.readInt());
-
-                final String name = new String(nameCache);
-                PacketReader packetReader = new PacketReader(valueCache);
-                final Object value = DATA_MANAGER.getDataType(type).decode(packetReader);
+                final Object value = DATA_MANAGER.getDataType(type).decode(reader);
 
                 data.set(name, value, type);
             }
@@ -69,10 +60,10 @@ public class DataReader {
      *
      * @param data the data
      * @return a {@link SerializableData} based on the data input
-     * @see #readData(ByteBuf)
+     * @see #readData(BinaryReader)
      */
     public static SerializableData readData(byte[] data) {
-        return readData(Unpooled.wrappedBuffer(data));
+        return readData(new BinaryReader(data));
     }
 
 }

@@ -6,10 +6,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.item.ItemStackUtils;
 
 import java.util.function.Consumer;
@@ -73,7 +73,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 14);
@@ -87,7 +87,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 14) {
             packet.writeByte((byte) 14);

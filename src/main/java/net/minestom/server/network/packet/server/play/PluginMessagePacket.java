@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class PluginMessagePacket implements ServerPacket {
 
@@ -11,7 +11,7 @@ public class PluginMessagePacket implements ServerPacket {
     public byte[] data;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(channel);
         writer.writeBytes(data);
     }
@@ -32,7 +32,7 @@ public class PluginMessagePacket implements ServerPacket {
         PluginMessagePacket brandMessage = new PluginMessagePacket();
         brandMessage.channel = "minecraft:brand";
 
-        PacketWriter writer = new PacketWriter();
+        BinaryWriter writer = new BinaryWriter();
         writer.writeSizedString(MinecraftServer.getBrandName());
 
         brandMessage.data = writer.toByteArray();

@@ -9,11 +9,9 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.biomes.Biome;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DynamicChunk extends Chunk {
@@ -146,12 +144,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    protected byte[] getSerializedData() throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(output);
+    protected byte[] getSerializedData() {
+        BinaryWriter binaryWriter = new BinaryWriter();
 
+        // Write the biomes id
         for (int i = 0; i < BIOME_COUNT; i++) {
-            dos.writeByte(biomes[i].getId());
+            final byte id = (byte) biomes[i].getId();
+            binaryWriter.writeByte(id);
         }
 
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
@@ -162,33 +161,32 @@ public class DynamicChunk extends Chunk {
                     final short blockStateId = blocksStateId[index];
                     final short customBlockId = customBlocksId[index];
 
+                    // No block at the position
                     if (blockStateId == 0 && customBlockId == 0)
                         continue;
 
-                    final Data data = blocksData.get(index);
-
                     // Chunk coordinates
-                    dos.writeInt(x);
-                    dos.writeInt(y);
-                    dos.writeInt(z);
+                    binaryWriter.writeByte(x);
+                    binaryWriter.writeShort(y);
+                    binaryWriter.writeByte(z);
 
-                    // Id
-                    dos.writeShort(blockStateId);
-                    dos.writeShort(customBlockId);
+                    // Block ids
+                    binaryWriter.writeShort(blockStateId);
+                    binaryWriter.writeShort(customBlockId);
 
                     // Data
+                    final Data data = blocksData.get(index);
                     final boolean hasData = data instanceof SerializableData;
-                    dos.writeBoolean(hasData);
+                    binaryWriter.writeBoolean(hasData);
                     if (hasData) {
-                        final byte[] d = ((SerializableData) data).getSerializedData();
-                        dos.writeInt(d.length);
-                        dos.write(d);
+                        final byte[] serializedData = ((SerializableData) data).getSerializedData();
+                        binaryWriter.writeBytes(serializedData);
                     }
                 }
             }
         }
 
-        return output.toByteArray();
+        return binaryWriter.toByteArray();
     }
 
     @Override

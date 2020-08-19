@@ -12,9 +12,9 @@ import net.minestom.server.item.NBTConsumer;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.ItemMeta;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +86,7 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    public static ItemStack readItemStack(PacketReader reader) {
+    public static ItemStack readItemStack(BinaryReader reader) {
         final boolean present = reader.readBoolean();
 
         if (!present) {
@@ -189,7 +189,7 @@ public final class NBTUtils {
         }
     }
 
-    public static void writeItemStack(PacketWriter packet, ItemStack itemStack) {
+    public static void writeItemStack(BinaryWriter packet, ItemStack itemStack) {
         if (itemStack == null || itemStack.isAir()) {
             packet.writeBoolean(false);
         } else {

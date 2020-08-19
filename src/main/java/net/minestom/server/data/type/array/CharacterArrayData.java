@@ -1,23 +1,23 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class CharacterArrayData extends DataType<char[]> {
     @Override
-    public void encode(PacketWriter packetWriter, char[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter binaryWriter, char[] value) {
+        binaryWriter.writeVarInt(value.length);
         for (char val : value) {
-            packetWriter.writeChar(val);
+            binaryWriter.writeChar(val);
         }
     }
 
     @Override
-    public char[] decode(PacketReader packetReader) {
-        char[] array = new char[packetReader.readVarInt()];
+    public char[] decode(BinaryReader binaryReader) {
+        char[] array = new char[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readChar();
+            array[i] = binaryReader.readChar();
         }
         return array;
     }

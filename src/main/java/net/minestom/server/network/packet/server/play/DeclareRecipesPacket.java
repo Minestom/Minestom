@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 
 public class DeclareRecipesPacket implements ServerPacket {
@@ -11,7 +11,7 @@ public class DeclareRecipesPacket implements ServerPacket {
     public Recipe[] recipes;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         Check.notNull(recipes, "Recipes cannot be null!");
 
         writer.writeVarInt(recipes.length);
@@ -56,7 +56,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         public ItemStack result;
 
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeSizedString(recipeType);
             writer.writeSizedString(recipeId);
 
@@ -104,7 +104,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         // The count of each item should be 1
         public ItemStack[] items;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeVarInt(items.length);
             for (ItemStack itemStack : items) {
                 writer.writeItemStack(itemStack);

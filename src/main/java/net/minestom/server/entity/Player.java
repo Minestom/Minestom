@@ -24,7 +24,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
@@ -43,6 +42,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -579,7 +579,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 14);
@@ -588,7 +588,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 14) {
             packet.writeByte((byte) 14);
@@ -622,7 +622,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void sendPluginMessage(String channel, String message) {
         // Write the data
-        PacketWriter writer = new PacketWriter();
+        BinaryWriter writer = new BinaryWriter();
         writer.writeSizedString(message);
         // Retrieve the data
         final byte[] data = writer.toByteArray();
