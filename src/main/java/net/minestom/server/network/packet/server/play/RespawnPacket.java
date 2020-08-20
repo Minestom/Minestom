@@ -17,10 +17,10 @@ public class RespawnPacket implements ServerPacket {
     @Override
     public void write(PacketWriter writer) {
         //TODO add api
-        writer.writeSizedString(dimensionType.getName().toString());
+        writer.writeNBT("", dimensionType.toNBT2());
 
         // Warning: must be different for each dimension type! Otherwise the client seems to cache the world name
-        writer.writeSizedString("test:spawn_"+ dimensionType.getName().getPath()); // TODO: replace by instance name?
+        writer.writeSizedString(dimensionType.getName().toString());
 
         writer.writeLong(hashedSeed);
         writer.writeByte(gameMode.getId());
