@@ -1,13 +1,16 @@
 package net.minestom.server.extensions;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
+import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
@@ -16,10 +19,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.zip.ZipFile;
 
 @Slf4j
 public class ExtensionManager {
@@ -30,7 +31,7 @@ public class ExtensionManager {
     public ExtensionManager() {
     }
 
-    public void loadExtensionJARs() {
+    public void loadExtensions() {
         if (!extensionFolder.exists()) {
             if (!extensionFolder.mkdirs()) {
                 log.error("Could not find or create the extension folder, extensions will not be loaded!");
@@ -38,14 +39,12 @@ public class ExtensionManager {
             }
         }
 
-        for (File file : extensionFolder.listFiles()) {
-            if (file.isDirectory()) {
-                continue;
-            }
-            if (!file.getName().endsWith(".jar")) {
-                continue;
-            }
+        List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+        setupCodeModifiers(discoveredExtensions);
+
+        for (DiscoveredExtension extension : discoveredExtensions) {
             URLClassLoader loader;
+            File file = extension.jarFile;
             try {
                 URL url = file.toURI().toURL();
                 loader = loadJar(url);
@@ -137,6 +136,30 @@ public class ExtensionManager {
         }
     }
 
+    private List<DiscoveredExtension> discoverExtensions() {
+        Gson gson = new Gson();
+        List<DiscoveredExtension> extensions = new LinkedList<>();
+        for (File file : extensionFolder.listFiles()) {
+            if (file.isDirectory()) {
+                continue;
+            }
+            if (!file.getName().endsWith(".jar")) {
+                continue;
+            }
+            try(ZipFile f = new ZipFile(file);
+                    InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
+
+                DiscoveredExtension extension = new DiscoveredExtension();
+                extension.jarFile = file;
+                extension.description = gson.fromJson(reader, JsonObject.class);
+                extensions.add(extension);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return extensions;
+    }
+
     /**
      * Loads a URL into the classpath.
      *
@@ -165,5 +188,36 @@ public class ExtensionManager {
     @NotNull
     public Map<URL, URLClassLoader> getExtensionLoaders() {
         return new HashMap<>(extensionLoaders);
+    }
+
+    /**
+     * Extensions are allowed to apply Mixin transformers, the magic happens here
+     */
+    private void setupCodeModifiers(List<DiscoveredExtension> extensions) {
+        ClassLoader cl = getClass().getClassLoader();
+        if(!(cl instanceof MinestomOverwriteClassLoader)) {
+            log.warning("Current class loader is not a MinestomOverwriteClassLoader, but "+cl+". This disables code modifiers (Mixin support is therefore disabled)");
+            return;
+        }
+        MinestomOverwriteClassLoader modifiableClassLoader = (MinestomOverwriteClassLoader)cl;
+        log.info("Start loading code modifiers...");
+        for(DiscoveredExtension extension : extensions) {
+            try {
+                if(extension.description.has("codeModifier")) {
+                    String codeModifierClass = extension.description.get("codeModifier").getAsString();
+                    modifiableClassLoader.loadModifier(extension.jarFile, codeModifierClass);
+                }
+                // TODO: special support for mixins
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("Failed to load code modifier for extension "+extension.jarFile, e);
+            }
+        }
+        log.info("Done loading code modifiers.");
+    }
+
+    private class DiscoveredExtension {
+        private File jarFile;
+        private JsonObject description;
     }
 }

@@ -145,6 +145,9 @@ public class MinecraftServer {
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
             return minecraftServer;
+        extensionManager = new ExtensionManager();
+        extensionManager.loadExtensions();
+
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
@@ -179,8 +182,6 @@ public class MinecraftServer {
         advancementManager = new AdvancementManager();
 
         updateManager = new UpdateManager();
-
-        extensionManager = new ExtensionManager();
 
         lootTableManager = new LootTableManager();
         tagManager = new TagManager();
@@ -452,7 +453,6 @@ public class MinecraftServer {
         updateManager.start();
         nettyServer.start(address, port);
         long t1 = -System.nanoTime();
-        extensionManager.loadExtensionJARs();
         // Init extensions
         // TODO: Extensions should handle depending on each other and have a load-order.
         extensionManager.getExtensions().forEach(Extension::preInitialize);
