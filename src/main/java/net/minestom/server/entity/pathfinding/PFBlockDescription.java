@@ -1,11 +1,36 @@
 package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.model.IBlockDescription;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
 
 public class PFBlockDescription implements IBlockDescription {
 
-    private Block block;
+    private static final Short2ObjectMap<PFBlockDescription> BLOCK_DESCRITION_MAP = new Short2ObjectOpenHashMap<>();
+
+    /**
+     * Get the {@link PFBlockDescription} linked to the block state id
+     * <p>
+     * Cache the result if it is not already
+     *
+     * @param blockStateId the block state id
+     * @return the {@link PFBlockDescription} linked to {@code blockStateId}
+     */
+    public static PFBlockDescription getBlockDescription(short blockStateId) {
+        if (!BLOCK_DESCRITION_MAP.containsKey(blockStateId)) {
+            synchronized (BLOCK_DESCRITION_MAP) {
+                final Block block = Block.fromStateId(blockStateId);
+                final PFBlockDescription blockDescription = new PFBlockDescription(block);
+                BLOCK_DESCRITION_MAP.put(blockStateId, blockDescription);
+                return blockDescription;
+            }
+        }
+
+        return BLOCK_DESCRITION_MAP.get(blockStateId);
+    }
+
+    private final Block block;
 
     public PFBlockDescription(Block block) {
         this.block = block;

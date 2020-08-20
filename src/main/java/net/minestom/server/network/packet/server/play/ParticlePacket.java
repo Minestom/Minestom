@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
@@ -15,10 +15,10 @@ public class ParticlePacket implements ServerPacket {
     public float particleData;
     public int particleCount;
 
-    public Consumer<PacketWriter> dataConsumer;
+    public Consumer<BinaryWriter> dataConsumer;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeInt(particleId);
         writer.writeBoolean(longDistance);
         writer.writeDouble(x);

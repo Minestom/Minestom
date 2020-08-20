@@ -5,22 +5,20 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.biomes.Biome;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DynamicChunk extends Chunk {
 
-    public short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-    private short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    // blocks id based on coordinate, see Chunk#getBlockIndex
+    private final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    private final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     public DynamicChunk(Biome[] biomes, int chunkX, int chunkZ) {
         super(biomes, chunkX, chunkZ);
@@ -40,9 +38,18 @@ public class DynamicChunk extends Chunk {
 
     @Override
     protected void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
+
+        {
+            // Update pathfinder
+            if (columnarSpace != null) {
+                final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
+                final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(blockStateId);
+                columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
+            }
+        }
+
         final int index = getBlockIndex(x, y, z);
-        if (blockStateId != 0
-                || (blockStateId == 0 && customId != 0 && updateConsumer != null)) { // Allow custom air block for update purpose, refused if no update consumer has been found
+        if (blockStateId != 0 || customId != 0 && updateConsumer != null) { // Allow custom air block for update purpose, refused if no update consumer has been found
             this.blocksStateId[index] = blockStateId;
             this.customBlocksId[index] = customId;
         } else {
@@ -57,7 +64,7 @@ public class DynamicChunk extends Chunk {
 
             this.blockEntities.remove(index);
 
-            this.packetUpdated.set(false);
+            this.packetUpdated = false;
             return;
         }
 
@@ -84,13 +91,7 @@ public class DynamicChunk extends Chunk {
             this.blockEntities.remove(index);
         }
 
-        this.packetUpdated.set(false);
-
-        if (columnarSpace != null) {
-            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-            final PFBlockDescription blockDescription = new PFBlockDescription(Block.fromStateId(blockStateId));
-            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
-        }
+        this.packetUpdated = false;
     }
 
     @Override
@@ -99,8 +100,7 @@ public class DynamicChunk extends Chunk {
         if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
-        final short id = blocksStateId[index];
-        return id;
+        return blocksStateId[index];
     }
 
     @Override
@@ -109,8 +109,7 @@ public class DynamicChunk extends Chunk {
         if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
             return 0; // TODO: custom invalid block
         }
-        final short id = customBlocksId[index];
-        return id;
+        return customBlocksId[index];
     }
 
     @Override
@@ -145,12 +144,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    protected byte[] getSerializedData() throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(output);
+    protected byte[] getSerializedData() {
+        BinaryWriter binaryWriter = new BinaryWriter();
 
+        // Write the biomes id
         for (int i = 0; i < BIOME_COUNT; i++) {
-            dos.writeByte(biomes[i].getId());
+            final byte id = (byte) biomes[i].getId();
+            binaryWriter.writeByte(id);
         }
 
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
@@ -161,34 +161,32 @@ public class DynamicChunk extends Chunk {
                     final short blockStateId = blocksStateId[index];
                     final short customBlockId = customBlocksId[index];
 
+                    // No block at the position
                     if (blockStateId == 0 && customBlockId == 0)
                         continue;
 
-                    final Data data = blocksData.get(index);
-
                     // Chunk coordinates
-                    dos.writeInt(x);
-                    dos.writeInt(y);
-                    dos.writeInt(z);
+                    binaryWriter.writeByte(x);
+                    binaryWriter.writeShort(y);
+                    binaryWriter.writeByte(z);
 
-                    // Id
-                    dos.writeShort(blockStateId);
-                    dos.writeShort(customBlockId);
+                    // Block ids
+                    binaryWriter.writeShort(blockStateId);
+                    binaryWriter.writeShort(customBlockId);
 
                     // Data
-                    final boolean hasData = (data != null && (data instanceof SerializableData));
-                    dos.writeBoolean(hasData);
+                    final Data data = blocksData.get(index);
+                    final boolean hasData = data instanceof SerializableData;
+                    binaryWriter.writeBoolean(hasData);
                     if (hasData) {
-                        final byte[] d = ((SerializableData) data).getSerializedData();
-                        dos.writeInt(d.length);
-                        dos.write(d);
+                        final byte[] serializedData = ((SerializableData) data).getSerializedData();
+                        binaryWriter.writeBytes(serializedData);
                     }
                 }
             }
         }
 
-        final byte[] result = output.toByteArray();
-        return result;
+        return binaryWriter.toByteArray();
     }
 
     @Override

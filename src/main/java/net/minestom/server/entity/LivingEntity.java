@@ -10,7 +10,6 @@ import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
@@ -19,6 +18,7 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.Set;
@@ -35,7 +35,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private float[] attributeValues = new float[Attribute.values().length];
+    private final float[] attributeValues = new float[Attribute.values().length];
 
     private boolean isHandActive;
     private boolean offHand;
@@ -119,7 +119,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 7);
@@ -129,7 +129,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);

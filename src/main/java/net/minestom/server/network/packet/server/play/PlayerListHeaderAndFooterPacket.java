@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class PlayerListHeaderAndFooterPacket implements ServerPacket {
 
@@ -17,7 +17,7 @@ public class PlayerListHeaderAndFooterPacket implements ServerPacket {
 
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         if (emptyHeader) {
             writer.writeSizedString(EMPTY_COMPONENT);
         } else {

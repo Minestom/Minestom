@@ -17,7 +17,7 @@ public final class MathUtils {
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
-        long factor = (long) Math.pow(10, places);
+        final long factor = (long) Math.pow(10, places);
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
@@ -26,7 +26,7 @@ public final class MathUtils {
     public static float round(float value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
-        long factor = (long) Math.pow(10, places);
+        final long factor = (long) Math.pow(10, places);
         value = value * factor;
         long tmp = Math.round(value);
         return (float) tmp / factor;
@@ -64,11 +64,11 @@ public final class MathUtils {
     }
 
     public static int setBetween(int number, int min, int max) {
-        return number > max ? max : number < min ? min : number;
+        return number > max ? max : Math.max(number, min);
     }
 
     public static float setBetween(float number, float min, float max) {
-        return number > max ? max : number < min ? min : number;
+        return number > max ? max : Math.max(number, min);
     }
 
     public static int clamp(int value, int min, int max) {

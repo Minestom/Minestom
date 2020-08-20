@@ -1,17 +1,15 @@
 package net.minestom.server.storage;
 
-import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.reader.DataReader;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +17,10 @@ public class StorageFolder {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
-    private StorageSystem storageSystem;
-    private String folderPath;
+    private final StorageSystem storageSystem;
+    private final String folderPath;
 
-    private Map<String, SerializableData> cachedData;
+    private final Map<String, SerializableData> cachedData;
 
     protected StorageFolder(StorageSystem storageSystem, String folderPath, StorageOptions storageOptions) {
         this.storageSystem = storageSystem;
@@ -50,27 +48,26 @@ public class StorageFolder {
     }
 
     public <T> void set(String key, T object, Class<T> type) {
-        DataType<T> dataType = DATA_MANAGER.getDataType(type);
+        final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only save registered DataType type!");
 
-        PacketWriter packetWriter = new PacketWriter();
-        dataType.encode(packetWriter, object); // Encode
-        byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
+        BinaryWriter binaryWriter = new BinaryWriter();
+        dataType.encode(binaryWriter, object); // Encode
+        final byte[] encodedValue = binaryWriter.toByteArray(); // Retrieve bytes
 
         set(key, encodedValue);
     }
 
     public <T> T get(String key, Class<T> type) {
-        DataType<T> dataType = DATA_MANAGER.getDataType(type);
+        final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only save registered DataType type!");
 
-        byte[] data = get(key);
+        final byte[] data = get(key);
         if (data == null)
             return null;
 
-        PacketReader packetReader = new PacketReader(data);
-        T value = dataType.decode(packetReader);
-        return value;
+        BinaryReader binaryReader = new BinaryReader(data);
+        return dataType.decode(binaryReader);
     }
 
     public <T> T getOrDefault(String key, Class<T> type, T defaultValue) {
@@ -95,11 +92,11 @@ public class StorageFolder {
             }
 
             // Load it from the storage system
-            byte[] bytes = get(key);
+            final byte[] bytes = get(key);
             SerializableData data;
 
             if (bytes != null) {
-                data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+                data = DataReader.readData(new BinaryReader(bytes));
             } else {
                 data = new SerializableData();
             }
@@ -128,11 +125,11 @@ public class StorageFolder {
             }
 
             // Load it from the storage system and cache it
-            byte[] bytes = get(key);
+            final byte[] bytes = get(key);
             SerializableData data;
 
             if (bytes != null) {
-                data = DataReader.readData(Unpooled.wrappedBuffer(bytes));
+                data = DataReader.readData(new BinaryReader(bytes));
             } else {
                 data = new SerializableData();
             }
@@ -151,15 +148,12 @@ public class StorageFolder {
      */
     public void saveAndRemoveCachedData(String key) {
         synchronized (cachedData) {
-            SerializableData serializableData = cachedData.get(key);
+            final SerializableData serializableData = cachedData.get(key);
             if (serializableData == null)
                 return;
 
-            try {
-                set(key, serializableData.getSerializedData());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            // Save the data
+            set(key, serializableData.getSerializedData());
 
             // Remove from map
             this.cachedData.remove(key);
@@ -170,17 +164,10 @@ public class StorageFolder {
      * Save the whole cached data
      */
     public void saveCachedData() {
-        try {
-            synchronized (cachedData) {
-                for (Map.Entry<String, SerializableData> entry : cachedData.entrySet()) {
-                    String key = entry.getKey();
-                    SerializableData data = entry.getValue();
-
-                    set(key, data.getSerializedData());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (cachedData) {
+            cachedData.forEach((key, data) -> {
+                set(key, data.getSerializedData());
+            });
         }
     }
 
@@ -190,13 +177,9 @@ public class StorageFolder {
      * @param key the data key
      */
     public void saveCachedData(String key) {
-        try {
-            synchronized (cachedData) {
-                SerializableData data = cachedData.get(key);
-                set(key, data.getSerializedData());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        synchronized (cachedData) {
+            final SerializableData data = cachedData.get(key);
+            set(key, data.getSerializedData());
         }
     }
 

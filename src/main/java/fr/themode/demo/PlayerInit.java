@@ -1,6 +1,6 @@
 package fr.themode.demo;
 
-import fr.themode.demo.entity.ChickenCreature;
+import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
@@ -8,6 +8,7 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.data.Data;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -20,6 +21,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -28,6 +30,7 @@ import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -35,19 +38,16 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
     //private static volatile InstanceContainer netherTest;
 
-    private static Random r = new Random();
-
     private static volatile Inventory inventory;
 
     static {
-        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOption().setCompression(true));
+        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
@@ -156,10 +156,10 @@ public class PlayerInit {
                         p.teleport(player.getPosition());
                 }*/
 
-                for (int i = 0; i < 100; i++) {
+                /*for (int i = 0; i < 100; i++) {
                     ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
                     chickenCreature.setInstance(player.getInstance());
-                }
+                }*/
 
                 /*EntityZombie zombie = new EntityZombie(player.getPosition());
                 zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
@@ -185,6 +185,17 @@ public class PlayerInit {
             player.addEventCallback(PlayerBlockInteractEvent.class, event -> {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
+
+                final Instance instance = player.getInstance();
+                final BlockPosition blockPosition = event.getBlockPosition();
+
+                final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+                if (customBlock instanceof StoneBlock) {
+                    final Data data = instance.getBlockData(blockPosition);
+                    if (data != null) {
+                        player.sendMessage("test: " + data.get("test"));
+                    }
+                }
 
                 final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
                 final Block block = Block.fromStateId(blockStateId);
@@ -260,8 +271,8 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
-                player.teleport(new Position(r.nextInt(200)-100, 73, r.nextInt(200)-100));
+                player.setGameMode(GameMode.SURVIVAL);
+                player.teleport(new Position(0, 41f, 0));
 
                 //player.setHeldItemSlot((byte) 5);
 
@@ -378,7 +389,7 @@ public class PlayerInit {
 
                 // Unload the chunk (save memory) if it has no remaining viewer
                 if (chunk.getViewers().isEmpty()) {
-                    player.getInstance().unloadChunk(chunk);
+                    //player.getInstance().unloadChunk(chunk);
                 }
             });
 

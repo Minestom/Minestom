@@ -104,37 +104,41 @@ public class CommandDispatcher {
                 // true if the arg is valid, false otherwise
                 boolean correct = false;
                 // the raw string representing the correct argument syntax
-                String argValue = "";
+                StringBuilder argValue = new StringBuilder();
 
                 if (useRemaining) {
                     for (int i = argIndex; i < args.length; i++) {
                         final String arg = args[i];
                         if (argValue.length() > 0)
-                            argValue += " ";
-                        argValue += arg;
+                            argValue.append(" ");
+                        argValue.append(arg);
                     }
 
-                    correctionResult = argument.getCorrectionResult(argValue);
+                    final String argValueString = argValue.toString();
+
+                    correctionResult = argument.getCorrectionResult(argValueString);
                     if (correctionResult == Argument.SUCCESS) {
                         correct = true;
-                        argsValues[argIndex] = argValue;
+                        argsValues[argIndex] = argValueString;
                     }
                 } else {
                     for (int i = argIndex; i < args.length; i++) {
                         final String arg = args[i];
 
-                        argValue += arg;
+                        argValue.append(arg);
 
-                        correctionResult = argument.getCorrectionResult(argValue);
+                        final String argValueString = argValue.toString();
+
+                        correctionResult = argument.getCorrectionResult(argValueString);
                         if (correctionResult == Argument.SUCCESS) {
                             correct = true;
-                            argsValues[argIndex] = argValue;
+                            argsValues[argIndex] = argValueString;
                             argIndex = i + 1;
                             break;
                         } else {
                             if (!argument.allowSpace())
                                 break;
-                            argValue += " ";
+                            argValue.append(" ");
                         }
                     }
                 }
@@ -145,7 +149,7 @@ public class CommandDispatcher {
                     syntaxCorrect = false;
                     CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
                     suggestionHolder.syntax = syntax;
-                    suggestionHolder.argValue = argValue;
+                    suggestionHolder.argValue = argValue.toString();
                     suggestionHolder.correctionResult = correctionResult;
                     suggestionHolder.argIndex = argCount;
                     syntaxesSuggestions.put(argCount, suggestionHolder);
@@ -222,7 +226,7 @@ public class CommandDispatcher {
         return result;
     }
 
-    private class CommandSuggestionHolder {
+    private static class CommandSuggestionHolder {
         private CommandSyntax syntax;
         private String argValue;
         private int correctionResult;
@@ -230,7 +234,7 @@ public class CommandDispatcher {
 
     }
 
-    private class CommandResult {
+    private static class CommandResult {
 
         // Command
         private Command command;

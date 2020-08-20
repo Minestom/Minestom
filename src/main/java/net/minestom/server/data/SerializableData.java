@@ -1,13 +1,9 @@
 package net.minestom.server.data;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.utils.PrimitiveConversion;
+import net.minestom.server.utils.binary.BinaryWriter;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SerializableData extends Data {
@@ -52,36 +48,28 @@ public class SerializableData extends Data {
      * to convert it back
      *
      * @return the array representation of this data object
-     * @throws IOException if an error occur when serializing the data
      */
-    public byte[] getSerializedData() throws IOException {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(output);
+    public byte[] getSerializedData() {
+        BinaryWriter binaryWriter = new BinaryWriter();
 
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            final String key = entry.getKey();
+        data.forEach((key, value) -> {
             final Class type = dataType.get(key);
-            final Object value = entry.getValue();
             final DataType dataType = DATA_MANAGER.getDataType(type);
 
-            final byte[] encodedType = PrimitiveConversion.getObjectClassString(type.getName()).getBytes(); // Data type (fix for primitives)
-            dos.writeShort(encodedType.length);
-            dos.write(encodedType);
+            // Write the data type
+            final String encodedType = PrimitiveConversion.getObjectClassString(type.getName()); // Data type (fix for primitives)
+            binaryWriter.writeSizedString(encodedType);
 
-            final byte[] encodedName = key.getBytes(); // Data name
-            dos.writeShort(encodedName.length);
-            dos.write(encodedName);
+            // Write the data key
+            binaryWriter.writeSizedString(key);
 
-            PacketWriter packetWriter = new PacketWriter();
-            dataType.encode(packetWriter, value); // Encode
-            final byte[] encodedValue = packetWriter.toByteArray(); // Retrieve bytes
-            dos.writeInt(encodedValue.length);
-            dos.write(encodedValue);
-        }
+            // Write the data (no length)
+            dataType.encode(binaryWriter, value);
+        });
 
-        dos.writeShort(0xff); // End of data object
+        binaryWriter.writeVarInt(0); // End of data object
 
-        return output.toByteArray();
+        return binaryWriter.toByteArray();
     }
 
 }

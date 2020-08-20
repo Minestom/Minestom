@@ -18,8 +18,8 @@ import java.util.function.Consumer;
  */
 public class ChunkBatch implements InstanceBatch {
 
-    private InstanceContainer instance;
-    private Chunk chunk;
+    private final InstanceContainer instance;
+    private final Chunk chunk;
 
     // Give it the max capacity by default (avoid resizing)
     private List<BlockData> dataList =
@@ -109,7 +109,7 @@ public class ChunkBatch implements InstanceBatch {
         }
     }
 
-    private class BlockData {
+    private static class BlockData {
 
         private int x, y, z;
         private boolean hasCustomBlock;

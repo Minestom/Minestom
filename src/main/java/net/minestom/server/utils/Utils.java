@@ -2,7 +2,7 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.buffer.BufferWrapper;
 
 public final class Utils {
@@ -41,7 +41,7 @@ public final class Utils {
         } while (value != 0);
     }
 
-    public static void writeVarInt(PacketWriter writer, int value) {
+    public static void writeVarInt(BinaryWriter writer, int value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
@@ -70,7 +70,7 @@ public final class Utils {
         return result;
     }
 
-    public static void writeVarLong(PacketWriter writer, long value) {
+    public static void writeVarLong(BinaryWriter writer, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;

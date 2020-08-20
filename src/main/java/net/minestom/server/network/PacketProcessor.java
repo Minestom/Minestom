@@ -5,7 +5,6 @@ import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.netty.packet.InboundPacket;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandler;
@@ -14,6 +13,7 @@ import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHand
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.binary.BinaryReader;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,17 +22,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PacketProcessor {
 
-    private Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
-
-    private ConnectionManager connectionManager;
+    private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
     // Protocols
-    private ClientStatusPacketsHandler statusPacketsHandler;
-    private ClientLoginPacketsHandler loginPacketsHandler;
-    private ClientPlayPacketsHandler playPacketsHandler;
+    private final ClientStatusPacketsHandler statusPacketsHandler;
+    private final ClientLoginPacketsHandler loginPacketsHandler;
+    private final ClientPlayPacketsHandler playPacketsHandler;
 
     public PacketProcessor() {
-        this.connectionManager = MinecraftServer.getConnectionManager();
 
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();
@@ -55,14 +52,14 @@ public class PacketProcessor {
         //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
         //}
 
-        PacketReader packetReader = new PacketReader(packet.body);
+        BinaryReader binaryReader = new BinaryReader(packet.body);
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packet.packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(packetReader);
-                handshakePacket.process(playerConnection, connectionManager);
+                handshakePacket.read(binaryReader);
+                handshakePacket.process(playerConnection);
             }
             return;
         }
@@ -71,19 +68,18 @@ public class PacketProcessor {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packet.packetId);
-                playPacket.read(packetReader);
+                playPacket.read(binaryReader);
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
-                loginPacket.read(packetReader);
-                loginPacket.process(playerConnection, connectionManager);
+                loginPacket.read(binaryReader);
+                loginPacket.process(playerConnection);
                 break;
             case STATUS:
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
-                statusPacket.read(packetReader);
-
-                statusPacket.process(playerConnection, connectionManager);
+                statusPacket.read(binaryReader);
+                statusPacket.process(playerConnection);
                 break;
         }
     }

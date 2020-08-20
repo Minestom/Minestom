@@ -1,31 +1,31 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ByteArrayData extends DataType<byte[]> {
     @Override
-    public void encode(PacketWriter packetWriter, byte[] value) {
-        encodeByteArray(packetWriter, value);
+    public void encode(BinaryWriter writer, byte[] value) {
+        encodeByteArray(writer, value);
     }
 
     @Override
-    public byte[] decode(PacketReader packetReader) {
-        return decodeByteArray(packetReader);
+    public byte[] decode(BinaryReader reader) {
+        return decodeByteArray(reader);
     }
 
-    public static void encodeByteArray(PacketWriter packetWriter, byte[] value) {
-        packetWriter.writeVarInt(value.length);
+    public static void encodeByteArray(BinaryWriter binaryWriter, byte[] value) {
+        binaryWriter.writeVarInt(value.length);
         for (byte val : value) {
-            packetWriter.writeByte(val);
+            binaryWriter.writeByte(val);
         }
     }
 
-    public static byte[] decodeByteArray(PacketReader packetReader) {
-        byte[] array = new byte[packetReader.readVarInt()];
+    public static byte[] decodeByteArray(BinaryReader binaryReader) {
+        byte[] array = new byte[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readByte();
+            array[i] = binaryReader.readByte();
         }
         return array;
     }

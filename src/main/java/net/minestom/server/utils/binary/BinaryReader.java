@@ -1,4 +1,4 @@
-package net.minestom.server.network.packet;
+package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,16 +15,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-public class PacketReader extends InputStream {
+public class BinaryReader extends InputStream {
 
-    private ByteBuf buffer;
-    private NBTReader nbtReader = new NBTReader(this, false);
+    private final ByteBuf buffer;
+    private final NBTReader nbtReader = new NBTReader(this, false);
 
-    public PacketReader(ByteBuf buffer) {
+    public BinaryReader(ByteBuf buffer) {
         this.buffer = buffer;
     }
 
-    public PacketReader(byte[] bytes) {
+    public BinaryReader(byte[] bytes) {
         this(Unpooled.wrappedBuffer(bytes));
     }
 
@@ -69,39 +69,37 @@ public class PacketReader extends InputStream {
     }
 
     public String readSizedString() {
-        int length = readVarInt();
-        ByteBuf buf = buffer.readBytes(length);
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.readBytes(bytes);
-        buf.release();
+        final int length = readVarInt();
+        final byte[] bytes = readBytes(length);
         return new String(bytes);
     }
 
     public String readShortSizedString() {
-        short length = readShort();
-        ByteBuf buf = buffer.readBytes(length);
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.readBytes(bytes);
-        buf.release();
+        final short length = readShort();
+        final byte[] bytes = readBytes(length);
         return new String(bytes);
     }
 
-    public byte[] getRemainingBytes() {
-        ByteBuf buf = buffer.readBytes(buffer.readableBytes());
+    public byte[] readBytes(int length) {
+        ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
         buf.release();
         return bytes;
     }
 
+    public byte[] getRemainingBytes() {
+        return readBytes(buffer.readableBytes());
+    }
+
     public BlockPosition readBlockPosition() {
-        long value = buffer.readLong();
+        final long value = buffer.readLong();
         return SerializerUtils.longToBlockPosition(value);
     }
 
     public UUID readUuid() {
-        long most = readLong();
-        long least = readLong();
+        final long most = readLong();
+        final long least = readLong();
         return new UUID(most, least);
     }
 

@@ -42,7 +42,7 @@ public class PlayerVehicleListener {
     public static void boatSteerListener(ClientSteerBoatPacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
 
-        if (vehicle == null || !(vehicle instanceof EntityBoat))
+        if (!(vehicle instanceof EntityBoat))
             return;
 
         EntityBoat boat = (EntityBoat) vehicle;

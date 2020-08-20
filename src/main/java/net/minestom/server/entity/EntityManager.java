@@ -28,16 +28,15 @@ public final class EntityManager {
     private void waitingPlayersTick() {
         Player waitingPlayer;
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
-            final Player playerCache = waitingPlayer;
-            playerCache.init();
+            waitingPlayer.init();
 
-            PlayerLoginEvent loginEvent = new PlayerLoginEvent(playerCache);
-            playerCache.callEvent(PlayerLoginEvent.class, loginEvent);
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
-            playerCache.setInstance(spawningInstance);
+            waitingPlayer.setInstance(spawningInstance);
         }
     }
 

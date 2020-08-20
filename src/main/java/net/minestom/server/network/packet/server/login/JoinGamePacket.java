@@ -2,9 +2,9 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.LevelType;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -22,7 +22,7 @@ public class JoinGamePacket implements ServerPacket {
 	public boolean enableRespawnScreen = true;
 
 	@Override
-	public void write(PacketWriter writer) {
+	public void write(BinaryWriter writer) {
 		int gameModeId = gameMode.getId();
 		if (gameMode.isHardcore())
 			gameModeId |= 8;

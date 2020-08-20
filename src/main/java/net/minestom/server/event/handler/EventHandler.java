@@ -43,7 +43,7 @@ public interface EventHandler {
      * @param <E>        the event type
      */
     default <E extends Event> void callEvent(Class<E> eventClass, E event) {
-        List<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
+        final List<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
         for (EventCallback<E> eventCallback : eventCallbacks) {
             eventCallback.run(event);
         }

@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
 
@@ -12,7 +12,7 @@ public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
     public byte flags;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
         this.command = reader.readSizedString();
         this.mode = Mode.values()[reader.readVarInt()];

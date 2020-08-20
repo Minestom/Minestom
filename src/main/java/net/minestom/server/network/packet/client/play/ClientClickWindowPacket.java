@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientClickWindowPacket extends ClientPlayPacket {
 
@@ -14,7 +14,7 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     public ItemStack item;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.windowId = reader.readByte();
         this.slot = reader.readShort();
         this.button = reader.readByte();

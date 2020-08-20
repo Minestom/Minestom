@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientPlayerPositionPacket extends ClientPlayPacket {
 
@@ -9,7 +9,7 @@ public class ClientPlayerPositionPacket extends ClientPlayPacket {
     public boolean onGround;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.x = reader.readDouble();
         this.y = reader.readDouble();
         this.z = reader.readDouble();

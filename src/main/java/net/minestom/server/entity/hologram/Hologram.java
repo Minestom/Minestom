@@ -17,7 +17,7 @@ public class Hologram implements Viewable {
 
     private static final float OFFSET_Y = -0.9875f;
 
-    private HologramEntity entity;
+    private final HologramEntity entity;
 
     private Position position;
     private ColoredText text;
@@ -124,7 +124,7 @@ public class Hologram implements Viewable {
     }
 
 
-    private class HologramEntity extends EntityArmorStand {
+    private static class HologramEntity extends EntityArmorStand {
 
         public HologramEntity(Position spawnPosition) {
             super(spawnPosition);

@@ -618,6 +618,20 @@ public class ItemStack implements DataContainer {
         return compound;
     }
 
+    /**
+     * WARNING: not implemented yet
+     * <p>
+     * This is be called each time an item is serialized to be send to a player,
+     * can be used to customize the display of the item based on player data
+     *
+     * @param player the player
+     * @return the custom {@link ItemDisplay} for {@code player},
+     * null to use the normal item display name & lore
+     */
+    public ItemDisplay getCustomDisplay(Player player) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
     // Callback events
 
     /**

@@ -3,9 +3,9 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.Optional;
 
@@ -48,7 +48,7 @@ public class CombatEventPacket implements ServerPacket {
     }
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(type.ordinal());
         switch (type) {
             case ENTER_COMBAT:

@@ -1,18 +1,18 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ShortData extends DataType<Short> {
 
     @Override
-    public void encode(PacketWriter packetWriter, Short value) {
-        packetWriter.writeShort(value);
+    public void encode(BinaryWriter writer, Short value) {
+        writer.writeShort(value);
     }
 
     @Override
-    public Short decode(PacketReader packetReader) {
-        return packetReader.readShort();
+    public Short decode(BinaryReader reader) {
+        return reader.readShort();
     }
 }

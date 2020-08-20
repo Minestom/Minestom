@@ -26,8 +26,8 @@ public enum InventoryType {
     CARTOGRAPHY(21, 3),
     STONE_CUTTER(22, 2);
 
-    private int windowType;
-    private int slot;
+    private final int windowType;
+    private final int slot;
 
     InventoryType(int windowType, int slot) {
         this.windowType = windowType;

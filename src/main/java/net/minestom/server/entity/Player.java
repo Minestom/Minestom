@@ -24,13 +24,13 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -43,6 +43,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -102,9 +103,10 @@ public class Player extends LivingEntity implements CommandSender {
     // CustomBlock break delay
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
-    private long targetBlockTime;
-    private byte targetLastStage;
-    private int blockBreakTime;
+    private long targetBreakDelay; // The last break delay requested
+    private long targetBlockBreakCount; // Number of tick since the last stage change
+    private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
+    private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
 
     private BelowNameTag belowNameTag;
 
@@ -158,6 +160,9 @@ public class Player extends LivingEntity implements CommandSender {
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelType = LevelType.FLAT;
         refreshPosition(0, 0, 0);
+
+        // Used to cache the breaker for single custom block breaking
+        this.targetBreakers.add(this);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -300,17 +305,38 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Target block stage
         if (targetCustomBlock != null) {
-            final byte animationCount = 10;
-            final long since = time - targetBlockTime;
-            byte stage = (byte) (since / (blockBreakTime / animationCount));
-            stage = MathUtils.setBetween(stage, (byte) -1, animationCount);
-            if (stage != targetLastStage) {
-                sendBlockBreakAnimation(targetBlockPosition, stage);
-            }
-            this.targetLastStage = stage;
-            if (stage > 9) {
-                instance.breakBlock(this, targetBlockPosition);
-                resetTargetBlock();
+            this.targetBlockBreakCount++;
+            final boolean processStage = targetBlockBreakCount >= targetBreakDelay;
+            if (processStage) {
+                // Should increment the target block stage
+                if (targetCustomBlock.enableMultiPlayerBreaking()) {
+                    // Let the custom block object manages the breaking
+                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this);
+                    if (canContinue) {
+                        final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
+                        refreshBreakDelay(breakers);
+                    } else {
+                        resetTargetBlock();
+                    }
+                } else {
+                    // Let the player object manages the breaking
+                    // The custom block doesn't support multi player breaking
+                    if (targetStage + 1 >= CustomBlock.MAX_STAGE) {
+                        // Break the block
+                        instance.breakBlock(this, targetBlockPosition);
+                        resetTargetBlock();
+                    } else {
+                        // Send the new block break animation packet and refresh data
+
+                        final Chunk chunk = instance.getChunkAt(targetBlockPosition);
+                        final int entityId = targetCustomBlock.getBreakEntityId(this);
+                        final BlockBreakAnimationPacket blockBreakAnimationPacket = new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
+                        chunk.sendPacketToViewers(blockBreakAnimationPacket);
+
+                        refreshBreakDelay(targetBreakers);
+                        this.targetStage++;
+                    }
+                }
             }
         }
 
@@ -579,7 +605,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 14);
@@ -588,7 +614,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 14) {
             packet.writeByte((byte) 14);
@@ -622,30 +648,12 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void sendPluginMessage(String channel, String message) {
         // Write the data
-        PacketWriter writer = new PacketWriter();
+        BinaryWriter writer = new BinaryWriter();
         writer.writeSizedString(message);
         // Retrieve the data
         final byte[] data = writer.toByteArray();
 
         sendPluginMessage(channel, data);
-    }
-
-    /**
-     * Send a {@link BlockBreakAnimationPacket} packet to the player and his viewers
-     * Setting {@code destroyStage} to -1 resets the break animation
-     *
-     * @param blockPosition the position of the block
-     * @param destroyStage  the destroy stage
-     * @throws IllegalArgumentException if {@code destroyStage} is not between -1 and 10
-     */
-    public void sendBlockBreakAnimation(BlockPosition blockPosition, byte destroyStage) {
-        Check.argCondition(!MathUtils.isBetween(destroyStage, -1, 10),
-                "The destroy stage has to be between -1 and 10");
-        BlockBreakAnimationPacket breakAnimationPacket = new BlockBreakAnimationPacket();
-        breakAnimationPacket.entityId = getEntityId() + 1;
-        breakAnimationPacket.blockPosition = blockPosition;
-        breakAnimationPacket.destroyStage = destroyStage;
-        sendPacketToViewersAndSelf(breakAnimationPacket);
     }
 
     @Override
@@ -1690,7 +1698,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Change the player ability "Creative Mode"
      * <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">see</a>
      * <p>
-     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition)}
+     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition, byte, Set)}
      *
      * @param instantBreak true to allow instant break
      */
@@ -1858,8 +1866,8 @@ public class Player extends LivingEntity implements CommandSender {
         if (isFood && !allowFood)
             return null;
 
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(updatedItem,
-                isOffhand ? Hand.OFF : Hand.MAIN);
+        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
+        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
@@ -1870,13 +1878,33 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param targetCustomBlock   the custom block to dig
      * @param targetBlockPosition the custom block position
-     * @param breakTime           the time it will take to break the block in milliseconds
+     * @param breakers            the breakers of the block, can be null if {@code this} is the only breaker
      */
-    public void setTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, int breakTime) {
+    public void setTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, Set<Player> breakers) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
-        this.targetBlockTime = targetBlockPosition == null ? 0 : System.currentTimeMillis();
-        this.blockBreakTime = breakTime;
+
+        refreshBreakDelay(breakers);
+    }
+
+    /**
+     * Refresh the break delay for the next block break stage
+     *
+     * @param breakers the list of breakers, can be null if {@code this} is the only breaker
+     */
+    private void refreshBreakDelay(Set<Player> breakers) {
+        breakers = breakers == null ? targetBreakers : breakers;
+
+        // Refresh the last tick update
+        this.targetBlockBreakCount = 0;
+
+        // Get if multi player breaking is enabled
+        final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
+        // Get the stage from the custom block object if it is, otherwise use the local fieldl
+        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
+        // Retrieve the break delay for the current stage
+        final int breakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
+        this.targetBreakDelay = breakDelay;
     }
 
     /**
@@ -1884,17 +1912,19 @@ public class Player extends LivingEntity implements CommandSender {
      * If the currently mined block (or if there isn't any) is not a CustomBlock, nothing append
      */
     public void resetTargetBlock() {
-        if (targetBlockPosition != null) {
-            sendBlockBreakAnimation(targetBlockPosition, (byte) -1); // Clear the break animation
+        if (targetCustomBlock != null) {
+            targetCustomBlock.stopDigging(instance, targetBlockPosition, this);
             this.targetCustomBlock = null;
             this.targetBlockPosition = null;
-            this.targetBlockTime = 0;
+            this.targetBreakDelay = 0;
+            this.targetBlockBreakCount = 0;
+            this.targetStage = 0;
 
             // Remove effect
             RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
             removeEntityEffectPacket.entityId = getEntityId();
-            removeEntityEffectPacket.effectId = 4;
-            getPlayerConnection().sendPacket(removeEntityEffectPacket);
+            removeEntityEffectPacket.effect = PotionType.AWKWARD;
+            playerConnection.sendPacket(removeEntityEffectPacket);
         }
     }
 
@@ -1927,7 +1957,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the packet to add the player from tab-list
+     * Get the packet to add the player from the tab-list
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
@@ -1950,9 +1980,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the packet to remove the player from tab-list
+     * Get the packet to remove the player from the tab-list
      *
-     * @return a {@link PlayerInfoPacket} to add the player
+     * @return a {@link PlayerInfoPacket} to remove the player
      */
     protected PlayerInfoPacket getRemovePlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
@@ -1968,7 +1998,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Send all the related packet to have the player sent to another with related data
      * (create player, spawn position, velocity, metadata, equipments, passengers, team)
      * <p>
-     * WARNING: this does not sync the player, please use {@link #addViewer(Player)}
+     * WARNING: this alone does not sync the player, please use {@link #addViewer(Player)}
      *
      * @param connection the connection to show the player to
      */

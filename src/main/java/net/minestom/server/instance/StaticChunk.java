@@ -70,8 +70,10 @@ public class StaticChunk extends Chunk {
         fullDataPacket.chunkZ = chunkZ;
         short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
         for (int i = 0; i < blocksStateId.length; i++) {
-            final int[] pos = ChunkUtils.indexToPosition(i, 0, 0);
-            blocksStateId[i] = blockProvider.getBlockStateId(pos[0], pos[1], pos[2]);
+            final int x = ChunkUtils.blockIndexToChunkPositionX(i);
+            final int y = ChunkUtils.blockIndexToChunkPositionY(i);
+            final int z = ChunkUtils.blockIndexToChunkPositionZ(i);
+            blocksStateId[i] = blockProvider.getBlockStateId(x, y, z);
         }
         fullDataPacket.blocksStateId = blocksStateId;
         fullDataPacket.customBlocksId = new short[0];

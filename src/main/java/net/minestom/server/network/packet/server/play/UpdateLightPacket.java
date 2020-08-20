@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class UpdateLightPacket implements ServerPacket {
     public List<byte[]> blockLight;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(chunkX);
         writer.writeVarInt(chunkZ);
 

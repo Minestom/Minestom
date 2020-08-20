@@ -2,15 +2,15 @@ package net.minestom.server.entity.type.other;
 
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
 public class EntityAreaEffectCloud extends ObjectEntity {
 
-    public Consumer<PacketWriter> particleDataConsumer;
+    public Consumer<BinaryWriter> particleDataConsumer;
     private float radius;
     private int color;
     private boolean ignoreRadius;
@@ -27,7 +27,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     }
 
     @Override
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 7);
@@ -38,7 +38,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     }
 
     @Override
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);
@@ -102,7 +102,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         sendMetadataIndex(10);
     }
 
-    public Consumer<PacketWriter> getParticleDataConsumer() {
+    public Consumer<BinaryWriter> getParticleDataConsumer() {
         return particleDataConsumer;
     }
 
@@ -112,7 +112,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
      * @param particleDataConsumer the particle data consumer
      * @see @see <a href="https://wiki.vg/Data_types#Particle">Particle data</a>
      */
-    public void setParticleDataConsumer(Consumer<PacketWriter> particleDataConsumer) {
+    public void setParticleDataConsumer(Consumer<BinaryWriter> particleDataConsumer) {
         this.particleDataConsumer = particleDataConsumer;
     }
 }

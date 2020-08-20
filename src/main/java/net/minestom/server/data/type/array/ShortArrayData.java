@@ -1,24 +1,24 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ShortArrayData extends DataType<short[]> {
 
     @Override
-    public void encode(PacketWriter packetWriter, short[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, short[] value) {
+        writer.writeVarInt(value.length);
         for (short val : value) {
-            packetWriter.writeShort(val);
+            writer.writeShort(val);
         }
     }
 
     @Override
-    public short[] decode(PacketReader packetReader) {
-        short[] array = new short[packetReader.readVarInt()];
+    public short[] decode(BinaryReader reader) {
+        short[] array = new short[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readShort();
+            array[i] = reader.readShort();
         }
         return array;
     }

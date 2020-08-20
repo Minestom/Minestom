@@ -48,9 +48,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     private boolean registered;
 
-    private DimensionType dimensionType;
+    private final DimensionType dimensionType;
 
-    private WorldBorder worldBorder;
+    private final WorldBorder worldBorder;
 
     // Tick since the creation of the instance
     private long worldAge;
@@ -61,24 +61,24 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.TICK);
     private long lastTimeUpdate;
 
-    private Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
-    protected Set<Player> players = new CopyOnWriteArraySet<>();
-    protected Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
-    protected Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
-    protected Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
+    protected final Set<Player> players = new CopyOnWriteArraySet<>();
+    protected final Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
+    protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
+    protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
-    protected Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     protected UUID uniqueId;
 
-    protected List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());
+    protected final List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());
 
     private Data data;
     private ExplosionSupplier explosionSupplier;
 
     // Pathfinder
-    private PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
+    private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     public Instance(UUID uniqueId, DimensionType dimensionType) {
         this.uniqueId = uniqueId;
@@ -754,13 +754,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void removeEntity(Entity entity) {
         final Instance entityInstance = entity.getInstance();
-        if (entityInstance == null || entityInstance != this)
+        if (entityInstance != this)
             return;
 
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
-            entity.getViewers().forEach(p -> entity.removeViewer(p));
+            entity.getViewers().forEach(entity::removeViewer);
 
             // Remove the entity from cache
             final Chunk chunk = getChunkAt(entity.getPosition());
@@ -832,8 +832,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     private Set<Entity> getEntitiesInChunk(long index) {
-        final Set<Entity> entities = chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
-        return entities;
+        return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
     }
 
     /**
@@ -864,7 +863,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             // time
             this.worldAge++;
 
-            this.time += 1 * timeRate;
+            this.time += timeRate;
 
             if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());

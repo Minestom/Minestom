@@ -19,12 +19,12 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -1195,7 +1195,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      *
      * @return The consumer used to write {@link EntityMetaDataPacket} in {@link #getMetadataPacket()}
      */
-    public Consumer<PacketWriter> getMetadataConsumer() {
+    public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
             fillMetadataIndex(packet, 0);
             fillMetadataIndex(packet, 1);
@@ -1209,7 +1209,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     /**
      * Send a {@link EntityMetaDataPacket} containing only the specified index
-     * The index is wrote using {@link #fillMetadataIndex(PacketWriter, int)}
+     * The index is wrote using {@link #fillMetadataIndex(BinaryWriter, int)}
      *
      * @param index the metadata index
      */
@@ -1229,7 +1229,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      * @param packet the packet writer
      * @param index  the index to fill/write
      */
-    protected void fillMetadataIndex(PacketWriter packet, int index) {
+    protected void fillMetadataIndex(BinaryWriter packet, int index) {
         switch (index) {
             case 0:
                 fillStateMetadata(packet);
@@ -1255,7 +1255,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
     }
 
-    private void fillStateMetadata(PacketWriter packet) {
+    private void fillStateMetadata(BinaryWriter packet) {
         packet.writeByte((byte) 0);
         packet.writeByte(METADATA_BYTE);
         byte index0 = 0;
@@ -1278,13 +1278,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         packet.writeByte(index0);
     }
 
-    private void fillAirTickMetaData(PacketWriter packet) {
+    private void fillAirTickMetaData(BinaryWriter packet) {
         packet.writeByte((byte) 1);
         packet.writeByte(METADATA_VARINT);
         packet.writeVarInt(air);
     }
 
-    private void fillCustomNameMetaData(PacketWriter packet) {
+    private void fillCustomNameMetaData(BinaryWriter packet) {
         boolean hasCustomName = customName != null;
 
         packet.writeByte((byte) 2);
@@ -1295,25 +1295,25 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
     }
 
-    private void fillCustomNameVisibleMetaData(PacketWriter packet) {
+    private void fillCustomNameVisibleMetaData(BinaryWriter packet) {
         packet.writeByte((byte) 3);
         packet.writeByte(METADATA_BOOLEAN);
         packet.writeBoolean(customNameVisible);
     }
 
-    private void fillSilentMetaData(PacketWriter packet) {
+    private void fillSilentMetaData(BinaryWriter packet) {
         packet.writeByte((byte) 4);
         packet.writeByte(METADATA_BOOLEAN);
         packet.writeBoolean(silent);
     }
 
-    private void fillNoGravityMetaData(PacketWriter packet) {
+    private void fillNoGravityMetaData(BinaryWriter packet) {
         packet.writeByte((byte) 5);
         packet.writeByte(METADATA_BOOLEAN);
         packet.writeBoolean(noGravity);
     }
 
-    private void fillPoseMetaData(PacketWriter packet) {
+    private void fillPoseMetaData(BinaryWriter packet) {
         packet.writeByte((byte) 6);
         packet.writeByte(METADATA_POSE);
         packet.writeVarInt(pose.ordinal());

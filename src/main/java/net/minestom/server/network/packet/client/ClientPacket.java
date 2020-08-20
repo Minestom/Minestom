@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.client;
 
-import net.minestom.server.network.packet.PacketReader;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public interface ClientPacket {
 
-    void read(PacketReader reader);
+    void read(BinaryReader reader);
 
 }

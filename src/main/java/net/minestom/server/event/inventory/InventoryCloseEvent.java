@@ -6,8 +6,8 @@ import net.minestom.server.inventory.Inventory;
 
 public class InventoryCloseEvent extends Event {
 
-    private Player player;
-    private Inventory inventory;
+    private final Player player;
+    private final Inventory inventory;
     private Inventory newInventory;
 
     public InventoryCloseEvent(Player player, Inventory inventory) {

@@ -39,11 +39,11 @@ public class TranslatableText {
         final String prefix = "{@";
         final String suffix = "}";
 
-        String content = code;
+        StringBuilder content = new StringBuilder(code);
 
         if (arguments != null && arguments.length > 0) {
             for (String arg : arguments) {
-                content += "," + arg;
+                content.append("," + arg);
             }
         }
 

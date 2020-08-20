@@ -11,7 +11,7 @@ import net.minestom.server.utils.Position;
  */
 public class WorldBorder {
 
-    private Instance instance;
+    private final Instance instance;
 
     private float centerX, centerZ;
 

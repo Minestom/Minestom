@@ -1,14 +1,14 @@
 package net.minestom.server.network.packet.server.handshake;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class ResponsePacket implements ServerPacket {
 
     public String jsonResponse;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(jsonResponse);
     }
 

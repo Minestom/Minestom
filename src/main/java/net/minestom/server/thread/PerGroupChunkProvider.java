@@ -9,8 +9,8 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Separate chunks into group of linked chunks
@@ -105,16 +105,16 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     @Override
-    public ArrayList<Future<?>> update(long time) {
+    public List<Future<?>> update(long time) {
         // Set of already-updated instances this tick
         final Set<Instance> updatedInstance = new HashSet<>();
 
-        ArrayList<Future<?>> futures = new ArrayList<>();
+        List<Future<?>> futures = new ArrayList<>();
 
         instanceInstanceMap.forEach((instance, instanceMap) -> {
 
-            // True if the instance ended its tick call
-            AtomicBoolean instanceUpdated = new AtomicBoolean(false);
+            // True if the instance ended its tick call¬
+            final CountDownLatch countDownLatch = new CountDownLatch(1);
 
             // Update all the chunks + instances
             instanceMap.keySet().forEach(chunksIndexes -> {
@@ -124,12 +124,15 @@ public class PerGroupChunkProvider extends ThreadProvider {
                     // Used to check if the instance has already been updated this tick
                     if (shouldUpdateInstance) {
                         updateInstance(instance, time);
-                        instanceUpdated.set(true);
+                        countDownLatch.countDown();
                     }
 
                     // Wait for the instance to be updated
                     // Needed because the instance tick is used to unload waiting chunks
-                    while (!instanceUpdated.get()) {
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
 
                     // Tick all this chunk group

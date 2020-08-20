@@ -1,24 +1,24 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class BooleanArrayData extends DataType<boolean[]> {
 
     @Override
-    public void encode(PacketWriter packetWriter, boolean[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, boolean[] value) {
+        writer.writeVarInt(value.length);
         for (boolean val : value) {
-            packetWriter.writeBoolean(val);
+            writer.writeBoolean(val);
         }
     }
 
     @Override
-    public boolean[] decode(PacketReader packetReader) {
-        boolean[] array = new boolean[packetReader.readVarInt()];
+    public boolean[] decode(BinaryReader reader) {
+        boolean[] array = new boolean[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readBoolean();
+            array[i] = reader.readBoolean();
         }
         return array;
     }

@@ -1,16 +1,16 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.stat.StatisticCategory;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class StatisticsPacket implements ServerPacket {
 
     public Statistic[] statistics;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(statistics.length);
         for (Statistic statistic : statistics) {
             statistic.write(writer);
@@ -28,7 +28,7 @@ public class StatisticsPacket implements ServerPacket {
         public int statisticId;
         public int value;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeVarInt(category.ordinal());
             writer.writeVarInt(statisticId);
             writer.writeVarInt(value);

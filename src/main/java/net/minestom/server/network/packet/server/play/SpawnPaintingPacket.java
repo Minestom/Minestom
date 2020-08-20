@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ public class SpawnPaintingPacket implements ServerPacket {
     public byte direction;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeUuid(entityUuid);
         writer.writeVarInt(motive);

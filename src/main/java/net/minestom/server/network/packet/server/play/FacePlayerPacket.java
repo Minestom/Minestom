@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class FacePlayerPacket implements ServerPacket {
 
@@ -13,7 +13,7 @@ public class FacePlayerPacket implements ServerPacket {
 
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(facePosition.ordinal());
         writer.writeDouble(targetX);
         writer.writeDouble(targetY);

@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 /**
  * The packet creates or updates teams
@@ -52,12 +52,12 @@ public class TeamsPacket implements ServerPacket {
     public String[] entities;
 
     /**
-     * Writes data into the {@link PacketWriter}
+     * Writes data into the {@link BinaryWriter}
      *
      * @param writer The writer to writes
      */
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(this.teamName);
         writer.writeByte((byte) this.action.ordinal());
 

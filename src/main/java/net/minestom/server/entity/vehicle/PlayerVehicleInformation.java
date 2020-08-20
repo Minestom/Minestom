@@ -23,6 +23,14 @@ public class PlayerVehicleInformation {
         return unmount;
     }
 
+    /**
+     * Refresh internal data
+     *
+     * @param sideways the new sideways value
+     * @param forward  the new forward value
+     * @param jump     the new jump value
+     * @param unmount  the new unmount value
+     */
     public void refresh(float sideways, float forward, boolean jump, boolean unmount) {
         this.sideways = sideways;
         this.forward = forward;

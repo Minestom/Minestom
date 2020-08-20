@@ -16,14 +16,14 @@ import java.util.*;
  */
 public class AdvancementTab implements Viewable {
 
-    private static Map<Player, Set<AdvancementTab>> playerTabMap = new HashMap<>();
+    private static final Map<Player, Set<AdvancementTab>> PLAYER_TAB_MAP = new HashMap<>();
 
-    private Set<Player> viewers = new HashSet<>();
+    private final Set<Player> viewers = new HashSet<>();
 
-    private AdvancementRoot root;
+    private final AdvancementRoot root;
 
     // Advancement -> its parent
-    private Map<Advancement, Advancement> advancementMap = new HashMap<>();
+    private final Map<Advancement, Advancement> advancementMap = new HashMap<>();
 
     // Packet cache, updated every time the tab changes
     protected ByteBuf createBuffer;
@@ -47,7 +47,7 @@ public class AdvancementTab implements Viewable {
      * @return all the advancement tabs that the player sees
      */
     public static Set<AdvancementTab> getTabs(Player player) {
-        return playerTabMap.getOrDefault(player, null);
+        return PLAYER_TAB_MAP.getOrDefault(player, null);
     }
 
     /**
@@ -171,7 +171,7 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void addPlayer(Player player) {
-        Set<AdvancementTab> tabs = playerTabMap.computeIfAbsent(player, p -> new HashSet<>());
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player, p -> new HashSet<>());
         tabs.add(this);
     }
 
@@ -181,13 +181,13 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void removePlayer(Player player) {
-        if (!playerTabMap.containsKey(player)) {
+        if (!PLAYER_TAB_MAP.containsKey(player)) {
             return;
         }
-        Set<AdvancementTab> tabs = playerTabMap.get(player);
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.get(player);
         tabs.remove(this);
         if (tabs.isEmpty()) {
-            playerTabMap.remove(player);
+            PLAYER_TAB_MAP.remove(player);
         }
     }
 

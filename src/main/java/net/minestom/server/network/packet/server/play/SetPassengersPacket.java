@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class SetPassengersPacket implements ServerPacket {
 
@@ -10,7 +10,7 @@ public class SetPassengersPacket implements ServerPacket {
     public int[] passengersId;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(vehicleEntityId);
         writer.writeVarIntArray(passengersId);
     }

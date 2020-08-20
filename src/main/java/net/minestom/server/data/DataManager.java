@@ -79,7 +79,8 @@ public final class DataManager {
      * @throws NullPointerException if none is found
      */
     public <T> DataType<T> getDataType(Class<T> clazz) {
-        return dataTypeMap.get(PrimitiveConversion.getObjectClass(clazz));
+        clazz = PrimitiveConversion.getObjectClass(clazz);
+        return dataTypeMap.get(clazz);
     }
 
 }

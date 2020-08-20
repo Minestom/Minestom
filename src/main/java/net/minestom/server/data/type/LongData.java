@@ -1,17 +1,17 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class LongData extends DataType<Long> {
     @Override
-    public void encode(PacketWriter packetWriter, Long value) {
-        packetWriter.writeLong(value);
+    public void encode(BinaryWriter writer, Long value) {
+        writer.writeLong(value);
     }
 
     @Override
-    public Long decode(PacketReader packetReader) {
-        return packetReader.readLong();
+    public Long decode(BinaryReader reader) {
+        return reader.readLong();
     }
 }

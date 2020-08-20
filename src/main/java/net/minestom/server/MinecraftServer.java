@@ -13,6 +13,8 @@ import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.extensions.Extension;
+import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
@@ -33,7 +35,6 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.plugins.PluginManager;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
@@ -102,8 +103,6 @@ public class MinecraftServer {
     //Rate Limiting
     private static int rateLimit = 0;
 
-    // Networking
-    private static PacketProcessor packetProcessor;
     private static PacketListenerManager packetListenerManager;
     private static NettyServer nettyServer;
 
@@ -123,7 +122,7 @@ public class MinecraftServer {
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
 
-    private static PluginManager pluginManager;
+    private static ExtensionManager extensionManager;
 
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
@@ -161,7 +160,8 @@ public class MinecraftServer {
         Fluid.values();
 
         connectionManager = new ConnectionManager();
-        packetProcessor = new PacketProcessor();
+        // Networking
+        final PacketProcessor packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
 
         instanceManager = new InstanceManager();
@@ -180,7 +180,7 @@ public class MinecraftServer {
 
         updateManager = new UpdateManager();
 
-        pluginManager = PluginManager.getInstance();
+        extensionManager = new ExtensionManager();
 
         lootTableManager = new LootTableManager();
         tagManager = new TagManager();
@@ -452,8 +452,14 @@ public class MinecraftServer {
         updateManager.start();
         nettyServer.start(address, port);
         long t1 = -System.nanoTime();
-        pluginManager.loadPlugins();
-        LOGGER.info("Plugins loaded in " + (t1 + System.nanoTime()) / 1_000_000D + "ms");
+        extensionManager.loadExtensionJARs();
+        // Init extensions
+        // TODO: Extensions should handle depending on each other and have a load-order.
+        extensionManager.getExtensions().forEach(Extension::preInitialize);
+        extensionManager.getExtensions().forEach(Extension::initialize);
+        extensionManager.getExtensions().forEach(Extension::postInitialize);
+
+        LOGGER.info("Extensions loaded in " + (t1 + System.nanoTime()) / 1_000_000D + "ms");
         LOGGER.info("Minestom server started successfully.");
     }
 

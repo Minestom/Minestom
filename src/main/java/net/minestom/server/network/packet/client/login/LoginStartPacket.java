@@ -4,14 +4,13 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.extras.MojangAuth;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnect;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.binary.BinaryReader;
 
 import java.util.UUID;
 
@@ -23,9 +22,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
     public String username;
 
     @Override
-    public void process(PlayerConnection connection, ConnectionManager connectionManager) {
+    public void process(PlayerConnection connection) {
         if (MojangAuth.isUsingMojangAuth()) {
-            if (connectionManager.getPlayer(username) != null) {
+            if (CONNECTION_MANAGER.getPlayer(username) != null) {
                 connection.sendPacket(new LoginDisconnect(ALREADY_CONNECTED_JSON));
                 connection.disconnect();
                 return;
@@ -36,9 +35,9 @@ public class LoginStartPacket implements ClientPreplayPacket {
             EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(connection);
             connection.sendPacket(encryptionRequestPacket);
         } else {
-            UUID playerUuid = connectionManager.getPlayerConnectionUuid(connection, username);
+            final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-            int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
+            final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
 
             if (threshold > 0) {
                 connection.enableCompression(threshold);
@@ -48,12 +47,12 @@ public class LoginStartPacket implements ClientPreplayPacket {
             connection.sendPacket(successPacket);
 
             connection.setConnectionState(ConnectionState.PLAY);
-            connectionManager.createPlayer(playerUuid, username, connection);
+            CONNECTION_MANAGER.createPlayer(playerUuid, username, connection);
         }
     }
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.username = reader.readSizedString();
     }
 

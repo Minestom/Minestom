@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
 
@@ -23,7 +23,7 @@ public class ChatMessagePacket implements ServerPacket {
     }
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeSizedString(jsonMessage);
         writer.writeByte((byte) position.ordinal());
         writer.writeUuid(uuid);

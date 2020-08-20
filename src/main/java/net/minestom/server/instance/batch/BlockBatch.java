@@ -87,7 +87,7 @@ public class BlockBatch implements InstanceBatch {
         }
     }
 
-    private class BlockData {
+    private static class BlockData {
 
         private int x, y, z;
         private boolean hasCustomBlock;

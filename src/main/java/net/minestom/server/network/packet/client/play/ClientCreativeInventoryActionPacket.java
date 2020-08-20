@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
 
@@ -10,7 +10,7 @@ public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
     public ItemStack item;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.slot = reader.readShort();
         this.item = reader.readSlot();
     }

@@ -9,6 +9,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 
+import java.util.Set;
+
 public class UpdatableBlockDemo extends CustomBlock {
 
     private static final UpdateOption UPDATE_OPTION = new UpdateOption(20, TimeUnit.TICK);
@@ -43,8 +45,13 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
-    public int getBreakDelay(Player player, BlockPosition position) {
-        return 500;
+    public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
+        return 1;
+    }
+
+    @Override
+    public boolean enableCustomBreakDelay() {
+        return true;
     }
 
     @Override

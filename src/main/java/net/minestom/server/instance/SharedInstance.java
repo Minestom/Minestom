@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  */
 public class SharedInstance extends Instance {
 
-    private InstanceContainer instanceContainer;
+    private final InstanceContainer instanceContainer;
 
     public SharedInstance(UUID uniqueId, InstanceContainer instanceContainer) {
         super(uniqueId, instanceContainer.getDimensionType());

@@ -3,9 +3,9 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class AdvancementsPacket implements ServerPacket {
 
@@ -15,7 +15,7 @@ public class AdvancementsPacket implements ServerPacket {
     public ProgressMapping[] progressMappings;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeBoolean(resetAdvancements);
 
         writer.writeVarInt(advancementMappings.length);
@@ -43,7 +43,7 @@ public class AdvancementsPacket implements ServerPacket {
         public String key;
         public Advancement value;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeSizedString(key);
             value.write(writer);
         }
@@ -56,7 +56,7 @@ public class AdvancementsPacket implements ServerPacket {
         public String[] criterions;
         public Requirement[] requirements;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             // hasParent
             writer.writeBoolean(parentIdentifier != null);
             if (parentIdentifier != null) {
@@ -89,7 +89,7 @@ public class AdvancementsPacket implements ServerPacket {
         public float x;
         public float y;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeSizedString(title.toString());
             writer.writeSizedString(description.toString());
             writer.writeItemStack(icon);
@@ -108,7 +108,7 @@ public class AdvancementsPacket implements ServerPacket {
 
         public String[] requirements;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeVarInt(requirements.length);
             for (String requirement : requirements) {
                 writer.writeSizedString(requirement);
@@ -120,7 +120,7 @@ public class AdvancementsPacket implements ServerPacket {
         public String key;
         public AdvancementProgress value;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeSizedString(key);
             value.write(writer);
         }
@@ -129,7 +129,7 @@ public class AdvancementsPacket implements ServerPacket {
     public static class AdvancementProgress {
         public Criteria[] criteria;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeVarInt(criteria.length);
             for (Criteria criterion : criteria) {
                 criterion.write(writer);
@@ -141,7 +141,7 @@ public class AdvancementsPacket implements ServerPacket {
         public String criterionIdentifier;
         public CriterionProgress criterionProgress;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeSizedString(criterionIdentifier);
             criterionProgress.write(writer);
         }
@@ -151,7 +151,7 @@ public class AdvancementsPacket implements ServerPacket {
         public boolean achieved;
         public long dateOfAchieving;
 
-        private void write(PacketWriter writer) {
+        private void write(BinaryWriter writer) {
             writer.writeBoolean(achieved);
             if (dateOfAchieving != 0)
                 writer.writeLong(dateOfAchieving);

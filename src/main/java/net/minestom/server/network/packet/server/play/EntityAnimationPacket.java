@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.network.packet.PacketWriter;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class EntityAnimationPacket implements ServerPacket {
 
@@ -10,7 +10,7 @@ public class EntityAnimationPacket implements ServerPacket {
     public Animation animation;
 
     @Override
-    public void write(PacketWriter writer) {
+    public void write(BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeByte((byte) animation.ordinal());
     }

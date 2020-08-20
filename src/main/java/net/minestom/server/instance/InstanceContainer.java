@@ -54,8 +54,8 @@ public class InstanceContainer extends Instance {
 
     private ChunkGenerator chunkGenerator;
     // WARNING: need to be synchronized properly
-    private Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap();
-    private Set<Chunk> scheduledChunksToRemove = new HashSet<>();
+    private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
@@ -116,8 +116,17 @@ public class InstanceContainer extends Instance {
             setAlreadyChanged(blockPosition, blockStateId);
             final int index = ChunkUtils.getBlockIndex(x, y, z);
 
-            // Call the destroy listener if previous block was a custom block
-            callBlockDestroy(chunk, index, blockPosition);
+            final CustomBlock previousBlock = chunk.getCustomBlock(index);
+            if (previousBlock != null) {
+                // Previous block was a custom block
+
+                // Call the destroy listener
+                callBlockDestroy(chunk, index, previousBlock, blockPosition);
+
+                // Remove digging information for the previous custom block
+                previousBlock.removeDiggingInformation(this, blockPosition);
+            }
+
             // Change id based on neighbors
             blockStateId = executeBlockPlacementRule(blockStateId, blockPosition);
 
@@ -170,13 +179,10 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void callBlockDestroy(Chunk chunk, int index, BlockPosition blockPosition) {
-        final CustomBlock previousBlock = chunk.getCustomBlock(index);
-        if (previousBlock != null) {
-            final Data previousData = chunk.getData(index);
-            previousBlock.onDestroy(this, blockPosition, previousData);
-            chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-        }
+    private void callBlockDestroy(Chunk chunk, int index, CustomBlock previousBlock, BlockPosition blockPosition) {
+        final Data previousData = chunk.getData(index);
+        previousBlock.onDestroy(this, blockPosition, previousData);
+        chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
@@ -351,8 +357,9 @@ public class InstanceContainer extends Instance {
         Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
 
         this.storageFolder.set(UUID_KEY, getUniqueId(), UUID.class);
-        Data data = getData();
+        final Data data = getData();
         if (data != null) {
+            // Save the instance data
             Check.stateCondition(!(data instanceof SerializableData),
                     "Instance#getData needs to be a SerializableData in order to be saved");
             this.storageFolder.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);

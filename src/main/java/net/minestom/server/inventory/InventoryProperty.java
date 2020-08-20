@@ -33,7 +33,7 @@ public enum InventoryProperty {
     BREWING_STAND_FUEL_TIME((short) 1);
 
 
-    private short property;
+    private final short property;
 
     InventoryProperty(short property) {
         this.property = property;

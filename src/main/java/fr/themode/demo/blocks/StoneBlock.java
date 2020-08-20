@@ -7,6 +7,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 
+import java.util.Set;
+
 public class StoneBlock extends CustomBlock {
 
     public StoneBlock() {
@@ -39,8 +41,18 @@ public class StoneBlock extends CustomBlock {
     }
 
     @Override
-    public int getBreakDelay(Player player, BlockPosition position) {
-        return 750;
+    public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
+        return 5;
+    }
+
+    @Override
+    public boolean enableCustomBreakDelay() {
+        return true;
+    }
+
+    @Override
+    public boolean enableMultiPlayerBreaking() {
+        return true;
     }
 
     @Override

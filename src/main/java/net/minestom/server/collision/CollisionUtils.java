@@ -111,7 +111,7 @@ public class CollisionUtils {
         // find the corner which moved the least
         float smallestDisplacement = Float.POSITIVE_INFINITY;
         for (int i = 0; i < corners.length; i++) {
-            float displacement = (float) corners[i].distance(cornersCopy[i]);
+            final float displacement = (float) corners[i].distance(cornersCopy[i]);
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }

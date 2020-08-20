@@ -2,11 +2,36 @@ package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.model.IBlockObject;
 import com.extollit.linalg.immutable.AxisAlignedBBox;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
 
 public class PFBlockObject implements IBlockObject {
 
-    private Block block;
+    private static final Short2ObjectMap<PFBlockObject> BLOCK_OBJECT_MAP = new Short2ObjectOpenHashMap<>();
+
+    /**
+     * Get the {@link PFBlockObject} linked to the block state id
+     * <p>
+     * Cache the result if it is not already
+     *
+     * @param blockStateId the block state id
+     * @return the {@link PFBlockObject} linked to {@code blockStateId}
+     */
+    public static PFBlockObject getBlockObject(short blockStateId) {
+        if (!BLOCK_OBJECT_MAP.containsKey(blockStateId)) {
+            synchronized (BLOCK_OBJECT_MAP) {
+                final Block block = Block.fromStateId(blockStateId);
+                final PFBlockObject blockObject = new PFBlockObject(block);
+                BLOCK_OBJECT_MAP.put(blockStateId, blockObject);
+                return blockObject;
+            }
+        }
+
+        return BLOCK_OBJECT_MAP.get(blockStateId);
+    }
+
+    private final Block block;
 
     public PFBlockObject(Block block) {
         this.block = block;

@@ -1,24 +1,24 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.network.packet.PacketReader;
-import net.minestom.server.network.packet.PacketWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 
 public class FloatArrayData extends DataType<float[]> {
 
     @Override
-    public void encode(PacketWriter packetWriter, float[] value) {
-        packetWriter.writeVarInt(value.length);
+    public void encode(BinaryWriter writer, float[] value) {
+        writer.writeVarInt(value.length);
         for (float val : value) {
-            packetWriter.writeFloat(val);
+            writer.writeFloat(val);
         }
     }
 
     @Override
-    public float[] decode(PacketReader packetReader) {
-        float[] array = new float[packetReader.readVarInt()];
+    public float[] decode(BinaryReader reader) {
+        float[] array = new float[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
-            array[i] = packetReader.readFloat();
+            array[i] = reader.readFloat();
         }
         return array;
     }

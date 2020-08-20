@@ -1,82 +1,84 @@
 package net.minestom.server.world.biomes;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.NamespaceID;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Allows servers to register custom dimensions. Also used during player joining to send the list of all existing dimensions.
- *
+ * <p>
  * Contains {@link Biome#PLAINS} by default but can be removed.
  */
 public class BiomeManager {
 
-	private final List<Biome> biomes = new LinkedList<>();
+    private final Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
 
-	public BiomeManager() {
-		addBiome(Biome.PLAINS);
-	}
+    public BiomeManager() {
+        addBiome(Biome.PLAINS);
+    }
 
-	/**
-	 * Add a new biome. This does NOT send the new list to players.
-	 * @param biome
-	 */
-	public void addBiome(Biome biome) {
-		biomes.add(biome);
-	}
+    /**
+     * Add a new biome. This does NOT send the new list to players.
+     *
+     * @param biome the biome to add
+     */
+    public void addBiome(Biome biome) {
+        this.biomes.put(biome.getId(), biome);
+    }
 
-	/**
-	 * Removes a biome. This does NOT send the new list to players.
-	 * @param biome
-	 * @return if the biome type was removed, false if it was not present before
-	 */
-	public boolean removeBiome(Biome biome) {
-		return biomes.remove(biome);
-	}
+    /**
+     * Removes a biome. This does NOT send the new list to players.
+     *
+     * @param biome the biome to remove
+     */
+    public void removeBiome(Biome biome) {
+        this.biomes.remove(biome.getId());
+    }
 
-	/**
-	 * Returns an immutable copy of the biomes already registered
-	 * @return
-	 */
-	public List<Biome> unmodifiableList() {
-		return Collections.unmodifiableList(biomes);
-	}
+    /**
+     * Returns an immutable copy of the biomes already registered
+     *
+     * @return an immutable copy of the biomes already registered
+     */
+    public Collection<Biome> unmodifiableCollection() {
+        return Collections.unmodifiableCollection(biomes.values());
+    }
 
-	public Biome getById(int id) {
-		Biome biome = null;
-		for (final Biome biomeT : biomes) {
-			if (biomeT.getId() == id) {
-				biome = biomeT;
-				break;
-			}
-		}
-		return biome;
-	}
+    /**
+     * Get a biome by its id
+     *
+     * @param id the id of the biome
+     * @return the {@link Biome} linked to this id
+     */
+    public Biome getById(int id) {
+        return biomes.get(id);
+    }
 
-	public Biome getByName(NamespaceID namespaceID) {
-		Biome biome = null;
-		for (final Biome biomeT : biomes) {
-			if (biomeT.getName().equals(namespaceID)) {
-				biome = biomeT;
-				break;
-			}
-		}
-		return biome;
-	}
+    public Biome getByName(NamespaceID namespaceID) {
+        Biome biome = null;
+        for (final Biome biomeT : biomes.values()) {
+            if (biomeT.getName().equals(namespaceID)) {
+                biome = biomeT;
+                break;
+            }
+        }
+        return biome;
+    }
 
-	public NBTCompound toNBT() {
-		NBTCompound biomes = new NBTCompound();
-		biomes.setString("type", "minecraft:worldgen/biome");
-		NBTList<NBTCompound> biomesList = new NBTList<>(NBTTypes.TAG_Compound);
-		for (Biome biome : this.biomes) {
-			biomesList.add(biome.toNbt());
-		}
-		biomes.set("value", biomesList);
-		return biomes;
-	}
+    public NBTCompound toNBT() {
+        NBTCompound biomes = new NBTCompound();
+        biomes.setString("type", "minecraft:worldgen/biome");
+        NBTList<NBTCompound> biomesList = new NBTList<>(NBTTypes.TAG_Compound);
+        for (Biome biome : this.biomes.values()) {
+            biomesList.add(biome.toNbt());
+        }
+        biomes.set("value", biomesList);
+        return biomes;
+    }
 }

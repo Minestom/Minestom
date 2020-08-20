@@ -5,13 +5,12 @@ import net.minestom.server.storage.StorageFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class MinestomBasicChunkLoader implements IChunkLoader {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
-    private StorageFolder storageFolder;
+    private final StorageFolder storageFolder;
 
     public MinestomBasicChunkLoader(StorageFolder storageFolder) {
         this.storageFolder = storageFolder;
@@ -24,21 +23,22 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             LOGGER.warn("No folder to save chunk!");
             return;
         }
+
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
 
-        try {
-            final String key = getChunkKey(chunkX, chunkZ);
-            final byte[] data = chunk.getSerializedData();
-            if (data == null)
-                return;
-            storageFolder.set(key, data);
-
+        final String key = getChunkKey(chunkX, chunkZ);
+        final byte[] data = chunk.getSerializedData();
+        if (data == null) {
             if (callback != null)
                 callback.run();
-        } catch (IOException e) {
-            e.printStackTrace();
+            return;
         }
+
+        storageFolder.set(key, data);
+
+        if (callback != null)
+            callback.run();
     }
 
     @Override

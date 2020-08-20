@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.network.packet.PacketReader;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.utils.binary.BinaryReader;
 
 public class ClientEntityActionPacket extends ClientPlayPacket {
 
@@ -10,7 +10,7 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
     public int horseJumpBoost;
 
     @Override
-    public void read(PacketReader reader) {
+    public void read(BinaryReader reader) {
         this.playerId = reader.readVarInt();
         this.action = Action.values()[reader.readVarInt()];
         this.horseJumpBoost = reader.readVarInt();
