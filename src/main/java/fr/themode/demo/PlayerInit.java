@@ -271,8 +271,8 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 41f, 0));
+                player.setGameMode(GameMode.CREATIVE);
+                player.teleport(new Position(0, 73f, 0));
 
                 //player.setHeldItemSlot((byte) 5);
 

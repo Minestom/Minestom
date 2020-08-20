@@ -2,7 +2,6 @@ package fr.themode.demo.generator;
 
 import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;
-import lombok.Data;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
@@ -37,9 +36,18 @@ public class NoiseTestGenerator extends ChunkGenerator {
 					//} else {
 					//    batch.setBlock(x, y, z, Block.GOLD_BLOCK);
 					//}
-					batch.setBlock(x, y, z, Block.GRASS_BLOCK);
+					if (y == 0) {
+						batch.setBlock(x, y, z, Block.BEDROCK);
+					} else if (y == height-1) {
+						batch.setBlock(x, y, z, Block.GRASS_BLOCK);
+					} else if (y > height-7) {
+						batch.setBlock(x, y, z, Block.DIRT);
+					} else {
+						batch.setBlock(x, y, z, Block.STONE);
+					}
 				}
 				if (height < 61) {
+					batch.setBlock(x, height-1, z, Block.DIRT);
 					for (int y = 0; y < 61 - height; y++) {
 						batch.setBlock(x, y + height, z, Block.WATER);
 					}
@@ -60,33 +68,13 @@ public class NoiseTestGenerator extends ChunkGenerator {
 		return list;
 	}
 
-	@Data
-	public static class Structure {
-
-		private final Map<BlockPosition, Block> blocks = new HashMap<>();
-
-		public void build(ChunkBatch batch, BlockPosition pos) {
-			blocks.forEach((bPos, block) -> {
-				if (bPos.getX() + pos.getX() >= Chunk.CHUNK_SIZE_X || bPos.getX() + pos.getX() < 0)
-					return;
-				if (bPos.getZ() + pos.getZ() >= Chunk.CHUNK_SIZE_Z || bPos.getZ() + pos.getZ() < 0)
-					return;
-				batch.setBlock(bPos.clone().add(pos), block);
-			});
-		}
-
-		public void addBlock(Block block, int localX, int localY, int localZ) {
-			blocks.put(new BlockPosition(localX, localY, localZ), block);
-		}
-
-	}
-
 	private class TreePopulator implements ChunkPopulator {
 
 		final Structure tree;
 
 		public TreePopulator() {
 			tree = new Structure();
+			tree.addBlock(Block.DIRT, 0, -1, 0);
 			tree.addBlock(Block.OAK_LOG, 0, 0, 0);
 			tree.addBlock(Block.OAK_LOG, 0, 1, 0);
 			tree.addBlock(Block.OAK_LOG, 0, 2, 0);
@@ -171,6 +159,7 @@ public class NoiseTestGenerator extends ChunkGenerator {
 			tree.addBlock(Block.OAK_LEAVES, -1, 4, -1);
 		}
 
+		//todo improve
 		@Override
 		public void populateChunk(ChunkBatch batch, Chunk chunk) {
 			for (int i = -2; i < 18; i++) {
