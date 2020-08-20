@@ -54,9 +54,9 @@ public class PlayerSkin {
             final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
             final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
 
-            Iterator<JsonElement> iterator = propertiesArray.iterator();
+            final Iterator<JsonElement> iterator = propertiesArray.iterator();
             while (iterator.hasNext()) {
-                JsonObject propertyObject = iterator.next().getAsJsonObject();
+                final JsonObject propertyObject = iterator.next().getAsJsonObject();
                 final String name = propertyObject.get("name").getAsString();
                 if (!name.equals("textures"))
                     continue;
@@ -82,7 +82,7 @@ public class PlayerSkin {
 
         try {
             final String response = URLUtils.getText(url);
-            JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
+            final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
             final String uuid = jsonObject.get("id").getAsString();
             return fromUuid(uuid);
         } catch (IOException e) {

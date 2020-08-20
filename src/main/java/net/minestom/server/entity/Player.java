@@ -1909,7 +1909,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Reset data from the current block the player is mining.
-     * If the currently mined block (or if there isn't any) is not a CustomBlock, nothing append
+     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen
      */
     public void resetTargetBlock() {
         if (targetCustomBlock != null) {
@@ -1962,18 +1962,21 @@ public class Player extends LivingEntity implements CommandSender {
      * @return a {@link PlayerInfoPacket} to add the player
      */
     protected PlayerInfoPacket getAddPlayerToList() {
-        final String textures = skin == null ? "" : skin.getTextures();
-        final String signature = skin == null ? null : skin.getSignature();
-
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
                 new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
         addPlayer.displayName = displayName;
 
-        PlayerInfoPacket.AddPlayer.Property prop =
-                new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-        addPlayer.properties.add(prop);
+        // Skin support
+        if (skin != null) {
+            final String textures = skin.getTextures();
+            final String signature = skin.getSignature();
+
+            PlayerInfoPacket.AddPlayer.Property prop =
+                    new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+            addPlayer.properties.add(prop);
+        }
 
         playerInfoPacket.playerInfos.add(addPlayer);
         return playerInfoPacket;
