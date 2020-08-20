@@ -33,19 +33,23 @@ public class DataReader {
                     break;
                 }
 
-                final String className;
+                // Get the class type
+                final Class type;
                 {
                     final byte[] typeCache = reader.readBytes(typeLength);
 
-                    className = new String(typeCache);
+                    final String className = new String(typeCache);
+
+                    type = Class.forName(className);
                 }
 
-                final Class type = Class.forName(className);
-
+                // Get the key
                 final String name = reader.readSizedString();
 
+                // Get the data
                 final Object value = DATA_MANAGER.getDataType(type).decode(reader);
 
+                // Set the data
                 data.set(name, value, type);
             }
         } catch (ClassNotFoundException e) {

@@ -11,6 +11,16 @@ public class BlockBreakAnimationPacket implements ServerPacket {
     public BlockPosition blockPosition;
     public byte destroyStage;
 
+    public BlockBreakAnimationPacket() {
+
+    }
+
+    public BlockBreakAnimationPacket(int entityId, BlockPosition blockPosition, byte destroyStage) {
+        this.entityId = entityId;
+        this.blockPosition = blockPosition;
+        this.destroyStage = destroyStage;
+    }
+
     @Override
     public void write(BinaryWriter writer) {
         writer.writeVarInt(entityId);

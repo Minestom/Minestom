@@ -13,6 +13,7 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.BlockPosition;
 
 public class PlayerDiggingListener {
@@ -43,17 +44,17 @@ public class PlayerDiggingListener {
                 } else {
                     final CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                     if (customBlock != null) {
-                        int breakTime = customBlock.getBreakDelay(player, blockPosition);
-
                         // Custom block has a custom break time, allow for digging event
                         PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, customBlock);
                         player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
                         if (!playerStartDiggingEvent.isCancelled()) {
+
                             // Start digging the block
-                            if (breakTime >= 0) {
-                                player.setTargetBlock(customBlock, blockPosition, breakTime);
+                            if (customBlock.enableCustomBreakDelay()) {
+                                customBlock.startDigging(instance, blockPosition, player);
                                 addEffect(player);
                             }
+
                             sendAcknowledgePacket(player, blockPosition, customBlock.getBlockStateId(),
                                     ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                         } else {
@@ -140,7 +141,7 @@ public class PlayerDiggingListener {
     private static void addEffect(Player player) {
         EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
         entityEffectPacket.entityId = player.getEntityId();
-        entityEffectPacket.effectId = 4;
+        entityEffectPacket.effect = PotionType.AWKWARD;
         entityEffectPacket.amplifier = -1;
         entityEffectPacket.duration = 0;
         entityEffectPacket.flags = 0;

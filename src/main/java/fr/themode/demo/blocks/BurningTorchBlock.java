@@ -20,8 +20,8 @@ public class BurningTorchBlock extends CustomBlock {
 
     @Override
     public void handleContact(Instance instance, BlockPosition position, Entity touching) {
-        System.out.println("touching "+touching);
-        if(touching instanceof LivingEntity) {
+        System.out.println("touching " + touching);
+        if (touching instanceof LivingEntity) {
             ((LivingEntity) touching).damage(DamageType.GRAVITY, 0.1f);
         }
     }
@@ -44,10 +44,5 @@ public class BurningTorchBlock extends CustomBlock {
     @Override
     public short getCustomBlockId() {
         return 3;
-    }
-
-    @Override
-    public int getBreakDelay(Player player, BlockPosition position) {
-        return -1;
     }
 }

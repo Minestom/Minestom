@@ -46,7 +46,6 @@ public class ChunkReader {
                 Data data = null;
                 {
                     final boolean hasData = binaryReader.readBoolean();
-
                     // Data deserializer
                     if (hasData) {
                         data = DataReader.readData(binaryReader);

@@ -67,7 +67,9 @@ public class SimpleCommand implements CommandProcessor {
         NotificationCenter.send(notification, player);
         NotificationCenter.send(notification, player);
 
-        player.getInstance().saveChunksToStorageFolder(() -> System.out.println("end save"));
+        System.gc();
+
+        //player.getInstance().saveChunksToStorageFolder(() -> System.out.println("end save"));
 
         return true;
     }

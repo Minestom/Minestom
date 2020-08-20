@@ -23,13 +23,18 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             LOGGER.warn("No folder to save chunk!");
             return;
         }
+
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
 
         final String key = getChunkKey(chunkX, chunkZ);
         final byte[] data = chunk.getSerializedData();
-        if (data == null)
+        if (data == null) {
+            if (callback != null)
+                callback.run();
             return;
+        }
+
         storageFolder.set(key, data);
 
         if (callback != null)
