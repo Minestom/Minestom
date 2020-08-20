@@ -104,7 +104,7 @@ public class Player extends LivingEntity implements CommandSender {
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
     private long targetBreakDelay; // The last break delay requested
-    private long targetBlockLastStageChangeTime; // Time at which the block stage last changed
+    private long targetBlockBreakCount; // Number of tick since the last stage change
     private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
     private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
 
@@ -305,7 +305,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Target block stage
         if (targetCustomBlock != null) {
-            final boolean processStage = (time - targetBlockLastStageChangeTime) >= targetBreakDelay;
+            this.targetBlockBreakCount++;
+            final boolean processStage = targetBlockBreakCount >= targetBreakDelay;
             if (processStage) {
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
@@ -314,7 +315,6 @@ public class Player extends LivingEntity implements CommandSender {
                     if (canContinue) {
                         final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
                         refreshBreakDelay(breakers);
-                        this.targetBlockLastStageChangeTime = time;
                     } else {
                         resetTargetBlock();
                     }
@@ -334,7 +334,6 @@ public class Player extends LivingEntity implements CommandSender {
                         chunk.sendPacketToViewers(blockBreakAnimationPacket);
 
                         refreshBreakDelay(targetBreakers);
-                        this.targetBlockLastStageChangeTime = time;
                         this.targetStage++;
                     }
                 }
@@ -1895,9 +1894,17 @@ public class Player extends LivingEntity implements CommandSender {
      */
     private void refreshBreakDelay(Set<Player> breakers) {
         breakers = breakers == null ? targetBreakers : breakers;
-        final byte stage = targetCustomBlock.getBreakStage(instance, targetBlockPosition);
+
+        // Refresh the last tick update
+        this.targetBlockBreakCount = 0;
+
+        // Get if multi player breaking is enabled
+        final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
+        // Get the stage from the custom block object if it is, otherwise use the local fieldl
+        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
+        // Retrieve the break delay for the current stage
         final int breakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
-        this.targetBreakDelay = breakDelay * MinecraftServer.TICK_MS;
+        this.targetBreakDelay = breakDelay;
     }
 
     /**
@@ -1910,7 +1917,7 @@ public class Player extends LivingEntity implements CommandSender {
             this.targetCustomBlock = null;
             this.targetBlockPosition = null;
             this.targetBreakDelay = 0;
-            this.targetBlockLastStageChangeTime = 0;
+            this.targetBlockBreakCount = 0;
             this.targetStage = 0;
 
             // Remove effect
