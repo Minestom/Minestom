@@ -1,0 +1,7 @@
+{
+  "entrypoint": "testextension.TestExtension",
+  "name": "Test extension",
+  "codeModifiers": [
+    "testextension.TestModifier"
+  ]
+}

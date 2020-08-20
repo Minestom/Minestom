@@ -111,6 +111,10 @@ dependencies {
     api 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
+    // Code modification
+    api "org.ow2.asm:asm:6.2.1"
+    api "org.ow2.asm:asm-tree:6.2.1"
+
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.3.1'
 

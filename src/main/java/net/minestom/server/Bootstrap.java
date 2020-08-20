@@ -13,6 +13,12 @@ public class Bootstrap {
     public static void bootstrap(String mainClassFullName, String[] args) {
         try {
             ClassLoader classLoader = new MinestomOverwriteClassLoader(Bootstrap.class.getClassLoader());
+
+            // ensure extensions are loaded when starting the server
+            Class<?> serverClass = classLoader.loadClass("net.minestom.server.MinecraftServer");
+            Method init = serverClass.getMethod("init");
+            init.invoke(null);
+
             Class<?> mainClass = classLoader.loadClass(mainClassFullName);
             Method main = mainClass.getDeclaredMethod("main", String[].class);
             main.invoke(null, new Object[] { args });
