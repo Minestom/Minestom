@@ -21,11 +21,10 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(ByteBuf buf, ServerPacket packet) {
-        BinaryWriter writer = new BinaryWriter();
 
-        Utils.writeVarIntBuf(buf, packet.getId());
-        packet.write(writer);
-        buf.writeBytes(writer.toByteArray());
+        final ByteBuf packetBuffer = getPacketBuffer(packet);
+
+        writePacket(buf, packetBuffer, packet.getId());
     }
 
     /**
@@ -35,11 +34,40 @@ public final class PacketUtils {
      * @return a {@link ByteBuf} containing {@code packet}
      */
     public static ByteBuf writePacket(ServerPacket packet) {
-        ByteBuf buffer = Unpooled.buffer();
+        final ByteBuf packetBuffer = getPacketBuffer(packet);
 
-        writePacket(buffer, packet);
+        // Add 5 for the packet id and for the packet size
+        final int size = packetBuffer.writerIndex() + 5 + 5;
+        ByteBuf buffer = Unpooled.buffer(size);
+
+        writePacket(buffer, packetBuffer, packet.getId());
 
         return buffer;
+    }
+
+    /**
+     * Write a packet buffer into {@code buf}
+     *
+     * @param buf          the buffer which will receive the packet id/data
+     * @param packetBuffer the buffer containing the raw packet data
+     * @param packetId     the packet id
+     */
+    private static void writePacket(ByteBuf buf, ByteBuf packetBuffer, int packetId) {
+        Utils.writeVarIntBuf(buf, packetId);
+        buf.writeBytes(packetBuffer);
+    }
+
+    /**
+     * Get the buffer representing the raw packet data
+     *
+     * @param packet the packet to write
+     * @return the {@link ByteBuf} containing the raw packet data
+     */
+    private static ByteBuf getPacketBuffer(ServerPacket packet) {
+        BinaryWriter writer = new BinaryWriter();
+        packet.write(writer);
+
+        return writer.getBuffer();
     }
 
 }

@@ -3,7 +3,6 @@ package net.minestom.server.utils;
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.buffer.BufferWrapper;
 
 public final class Utils {
 
@@ -27,17 +26,6 @@ public final class Utils {
                 temp |= 0b10000000;
             }
             buffer.writeByte(temp);
-        } while (value != 0);
-    }
-
-    public static void writeVarIntBuffer(BufferWrapper buffer, int value) {
-        do {
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
-            }
-            buffer.putByte(temp);
         } while (value != 0);
     }
 
@@ -103,14 +91,14 @@ public final class Utils {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    public static void writeBlocks(BufferWrapper buffer, short[] blocksId, int bitsPerEntry) {
+    public static void writeBlocks(ByteBuf buffer, short[] blocksId, int bitsPerEntry) {
         short count = 0;
         for (short id : blocksId)
             if (id != 0)
                 count++;
 
-        buffer.putShort(count);
-        buffer.putByte((byte) bitsPerEntry);
+        buffer.writeShort(count);
+        buffer.writeByte((byte) bitsPerEntry);
         int[] blocksData = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
@@ -121,28 +109,28 @@ public final class Utils {
                 }
             }
         }
-        long[] data = encodeBlocks(blocksData, bitsPerEntry);
-        buffer.putVarInt(data.length);
+        final long[] data = encodeBlocks(blocksData, bitsPerEntry);
+        writeVarIntBuf(buffer, data.length);
         for (int i = 0; i < data.length; i++) {
-            buffer.putLong(data[i]);
+            buffer.writeLong(data[i]);
         }
     }
 
     public static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
-        long maxEntryValue = (1L << bitsPerEntry) - 1;
-        char valuesPerLong = (char) (64 / bitsPerEntry);
-        int magicIndex = 3 * (valuesPerLong - 1);
-        long divideMul = Integer.toUnsignedLong(MAGIC[magicIndex]);
-        long divideAdd = Integer.toUnsignedLong(MAGIC[magicIndex + 1]);
-        int divideShift = MAGIC[magicIndex + 2];
-        int size = (blocks.length + valuesPerLong - 1) / valuesPerLong;
+        final long maxEntryValue = (1L << bitsPerEntry) - 1;
+        final char valuesPerLong = (char) (64 / bitsPerEntry);
+        final int magicIndex = 3 * (valuesPerLong - 1);
+        final long divideMul = Integer.toUnsignedLong(MAGIC[magicIndex]);
+        final long divideAdd = Integer.toUnsignedLong(MAGIC[magicIndex + 1]);
+        final int divideShift = MAGIC[magicIndex + 2];
+        final int size = (blocks.length + valuesPerLong - 1) / valuesPerLong;
 
         long[] data = new long[size];
 
         for (int i = 0; i < blocks.length; i++) {
-            long value = blocks[i];
-            int cellIndex = (int) (i * divideMul + divideAdd >> 32L >> divideShift);
-            int bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
+            final long value = blocks[i];
+            final int cellIndex = (int) (i * divideMul + divideAdd >> 32L >> divideShift);
+            final int bitIndex = (i - cellIndex * valuesPerLong) * bitsPerEntry;
             data[cellIndex] = data[cellIndex] & ~(maxEntryValue << bitIndex) | (value & maxEntryValue) << bitIndex;
         }
 

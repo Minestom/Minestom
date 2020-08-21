@@ -64,13 +64,13 @@ public class PlayerDiggingListener {
                         }
                     } else {
                         // Player is not mining a custom block, be sure that he doesn't have the effect
-                        removeEffect(player);
+                        player.resetTargetBlock();
                     }
                 }
                 break;
             case CANCELLED_DIGGING:
                 // Remove custom block target
-                removeEffect(player);
+                player.resetTargetBlock();
 
                 sendAcknowledgePacket(player, blockPosition, blockStateId,
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
@@ -119,7 +119,7 @@ public class PlayerDiggingListener {
 
     private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition) {
         // Finished digging, remove effect if any
-        removeEffect(player);
+        player.resetTargetBlock();
 
         // Unverified block break, client is fully responsive
         instance.breakBlock(player, blockPosition);
@@ -146,10 +146,6 @@ public class PlayerDiggingListener {
         entityEffectPacket.duration = 0;
         entityEffectPacket.flags = 0;
         player.getPlayerConnection().sendPacket(entityEffectPacket);
-    }
-
-    private static void removeEffect(Player player) {
-        player.resetTargetBlock();
     }
 
     private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockStateId,

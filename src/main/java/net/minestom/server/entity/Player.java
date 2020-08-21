@@ -306,12 +306,19 @@ public class Player extends LivingEntity implements CommandSender {
         // Target block stage
         if (targetCustomBlock != null) {
             this.targetBlockBreakCount++;
-            final boolean processStage = targetBlockBreakCount >= targetBreakDelay;
+
+            final boolean processStage = targetBreakDelay < 0 || targetBlockBreakCount >= targetBreakDelay;
+
+            // Check if the player did finish his current break delay
             if (processStage) {
+
+                // Negative value should skip abs(value) stage
+                final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
+
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
                     // Let the custom block object manages the breaking
-                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this);
+                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
                     if (canContinue) {
                         final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
                         refreshBreakDelay(breakers);
@@ -321,7 +328,7 @@ public class Player extends LivingEntity implements CommandSender {
                 } else {
                     // Let the player object manages the breaking
                     // The custom block doesn't support multi player breaking
-                    if (targetStage + 1 >= CustomBlock.MAX_STAGE) {
+                    if (targetStage + stageIncrease >= CustomBlock.MAX_STAGE) {
                         // Break the block
                         instance.breakBlock(this, targetBlockPosition);
                         resetTargetBlock();
@@ -334,7 +341,7 @@ public class Player extends LivingEntity implements CommandSender {
                         chunk.sendPacketToViewers(blockBreakAnimationPacket);
 
                         refreshBreakDelay(targetBreakers);
-                        this.targetStage++;
+                        this.targetStage += stageIncrease;
                     }
                 }
             }
@@ -1909,7 +1916,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Reset data from the current block the player is mining.
-     * If the currently mined block (or if there isn't any) is not a CustomBlock, nothing append
+     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen
      */
     public void resetTargetBlock() {
         if (targetCustomBlock != null) {
@@ -1962,18 +1969,21 @@ public class Player extends LivingEntity implements CommandSender {
      * @return a {@link PlayerInfoPacket} to add the player
      */
     protected PlayerInfoPacket getAddPlayerToList() {
-        final String textures = skin == null ? "" : skin.getTextures();
-        final String signature = skin == null ? null : skin.getSignature();
-
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
                 new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
         addPlayer.displayName = displayName;
 
-        PlayerInfoPacket.AddPlayer.Property prop =
-                new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-        addPlayer.properties.add(prop);
+        // Skin support
+        if (skin != null) {
+            final String textures = skin.getTextures();
+            final String signature = skin.getSignature();
+
+            PlayerInfoPacket.AddPlayer.Property prop =
+                    new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+            addPlayer.properties.add(prop);
+        }
 
         playerInfoPacket.playerInfos.add(addPlayer);
         return playerInfoPacket;

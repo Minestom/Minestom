@@ -86,6 +86,8 @@ public class MinecraftServer {
     public static final int CHUNK_VIEW_DISTANCE = 10;
     public static final int ENTITY_VIEW_DISTANCE = 5;
     public static final int COMPRESSION_THRESHOLD = 256;
+    // TODO
+    public static final int MAX_PACKET_SIZE = 300_000;
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = 20;
     private static final int MS_TO_SEC = 1000;

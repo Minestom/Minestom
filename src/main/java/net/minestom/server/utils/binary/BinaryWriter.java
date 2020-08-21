@@ -7,13 +7,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
-import net.minestom.server.utils.buffer.BufferWrapper;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -210,15 +208,6 @@ public class BinaryWriter extends OutputStream {
             consumer.accept(this);
     }
 
-    public void writeBufferAndFree(BufferWrapper buffer) {
-        ByteBuffer byteBuffer = buffer.getByteBuffer();
-        final int size = buffer.getSize();
-        byte[] cache = new byte[size];
-        byteBuffer.position(0).get(cache, 0, size);
-        writeBytes(cache);
-        buffer.free();
-    }
-
     /**
      * Write an {@link UUID}
      * It is done by writing both long, the most & least significant bits
@@ -261,6 +250,15 @@ public class BinaryWriter extends OutputStream {
         final int readerIndex = buffer.readerIndex();
         buffer.getBytes(readerIndex, bytes);
         return bytes;
+    }
+
+    /**
+     * Get the raw buffer used by this binary writer
+     *
+     * @return the raw buffer
+     */
+    public ByteBuf getBuffer() {
+        return buffer;
     }
 
     @Override

@@ -132,6 +132,7 @@ public abstract class CustomBlock {
      * @param stage    the current break stage of the block (0-10)
      * @param breakers the list containing all the players currently digging this block
      * @return the time in tick to pass to the next state, 0 to instant break it.
+     * negative value allow to skip stages (-2 will skip 2 stages per tick)
      * @see #enableCustomBreakDelay() to enable/disable it
      */
     public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
@@ -373,10 +374,11 @@ public abstract class CustomBlock {
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
      * @param player        the player who processed one stage on the block
+     * @param stageIncrease the number of stage increase
      * @return true if the block can continue being digged
      * @throws IllegalStateException if {@link #enableMultiPlayerBreaking()} is disabled
      */
-    public synchronized boolean processStage(Instance instance, BlockPosition blockPosition, Player player) {
+    public synchronized boolean processStage(Instance instance, BlockPosition blockPosition, Player player, byte stageIncrease) {
         Check.stateCondition(!enableMultiPlayerBreaking(),
                 "CustomBlock#processState requires having the multi player breaking feature enabled");
 
@@ -384,7 +386,7 @@ public abstract class CustomBlock {
             InstanceBreakData instanceBreakData = instanceBreakDataMap.get(instance);
             Object2ByteMap<BlockPosition> breakStageMap = instanceBreakData.breakStageMap;
             byte stage = breakStageMap.getByte(blockPosition);
-            if (stage + 1 >= MAX_STAGE) {
+            if (stage + stageIncrease >= MAX_STAGE) {
                 instance.breakBlock(player, blockPosition);
                 return false;
             } else {
@@ -397,7 +399,8 @@ public abstract class CustomBlock {
                 chunk.sendPacketToViewers(new BlockBreakAnimationPacket(entityId, blockPosition, stage));
 
                 // Refresh the stage
-                breakStageMap.put(blockPosition, ++stage);
+                stage += stageIncrease;
+                breakStageMap.put(blockPosition, stage);
                 return true;
             }
         }
