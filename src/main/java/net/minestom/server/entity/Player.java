@@ -309,9 +309,12 @@ public class Player extends LivingEntity implements CommandSender {
 
             final boolean processStage = targetBreakDelay < 0 || targetBlockBreakCount >= targetBreakDelay;
 
-            // Negative value should skip abs(value) stage
-            final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
+            // Check if the player did finish his current break delay
             if (processStage) {
+
+                // Negative value should skip abs(value) stage
+                final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
+
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
                     // Let the custom block object manages the breaking
