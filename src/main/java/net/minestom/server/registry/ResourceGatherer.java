@@ -155,8 +155,8 @@ public class ResourceGatherer {
         // https://help.minecraft.net/hc/en-us/articles/360035131551-Where-are-Minecraft-files-stored-
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("win")) {
-            String user = System.getProperty("user.name");
-            return new File("C:/Users/" + user + "/AppData/Roaming/.minecraft/");
+            String user = System.getProperty("user.home");
+            return new File(user + "/AppData/Roaming/.minecraft/");
         }
         if (os.contains("mac")) {
             String user = System.getProperty("user.home");
