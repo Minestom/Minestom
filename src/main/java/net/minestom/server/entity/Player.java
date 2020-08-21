@@ -306,12 +306,16 @@ public class Player extends LivingEntity implements CommandSender {
         // Target block stage
         if (targetCustomBlock != null) {
             this.targetBlockBreakCount++;
-            final boolean processStage = targetBlockBreakCount >= targetBreakDelay;
+
+            final boolean processStage = targetBreakDelay < 0 || targetBlockBreakCount >= targetBreakDelay;
+
+            // Negative value should skip abs(value) stage
+            final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
             if (processStage) {
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
                     // Let the custom block object manages the breaking
-                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this);
+                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
                     if (canContinue) {
                         final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
                         refreshBreakDelay(breakers);
@@ -321,7 +325,7 @@ public class Player extends LivingEntity implements CommandSender {
                 } else {
                     // Let the player object manages the breaking
                     // The custom block doesn't support multi player breaking
-                    if (targetStage + 1 >= CustomBlock.MAX_STAGE) {
+                    if (targetStage + stageIncrease >= CustomBlock.MAX_STAGE) {
                         // Break the block
                         instance.breakBlock(this, targetBlockPosition);
                         resetTargetBlock();
@@ -334,7 +338,7 @@ public class Player extends LivingEntity implements CommandSender {
                         chunk.sendPacketToViewers(blockBreakAnimationPacket);
 
                         refreshBreakDelay(targetBreakers);
-                        this.targetStage++;
+                        this.targetStage += stageIncrease;
                     }
                 }
             }

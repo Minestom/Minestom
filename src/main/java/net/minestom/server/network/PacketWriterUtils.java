@@ -22,6 +22,8 @@ public final class PacketWriterUtils {
 
     /**
      * Write the packet in the writer thread pool
+     * <p>
+     * WARNING: should not be used if the packet receive order is important
      *
      * @param serverPacket the packet to write
      * @param consumer     the consumer called once the packet has been written
@@ -35,6 +37,8 @@ public final class PacketWriterUtils {
 
     /**
      * Write a packet in the writer thread pool and send it to every players in {@code players}
+     * <p>
+     * WARNING: should not be used if the packet receive order is important
      *
      * @param players      the players list to send the packet to
      * @param serverPacket the packet to write and send
@@ -59,6 +63,8 @@ public final class PacketWriterUtils {
 
     /**
      * Write a packet and send it to a player connection
+     * <p>
+     * WARNING: should not be used if the packet receive order is important
      *
      * @param playerConnection the connection to send the packet to
      * @param serverPacket     the packet to write and send
@@ -71,6 +77,8 @@ public final class PacketWriterUtils {
 
     /**
      * Write a packet and send it to a player
+     * <p>
+     * WARNING: should not be used if the packet receive order is important
      *
      * @param player       the player to send the packet to
      * @param serverPacket the packet to write and send
