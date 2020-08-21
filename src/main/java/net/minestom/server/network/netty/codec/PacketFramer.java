@@ -12,8 +12,8 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        int packetSize = from.readableBytes();
-        int headerSize = Utils.getVarIntSize(packetSize);
+        final int packetSize = from.readableBytes();
+        final int headerSize = Utils.getVarIntSize(packetSize);
 
         if (headerSize > 3) {
             throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
@@ -35,12 +35,12 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
                 return;
             }
 
-            byte b = buf.readByte();
+            final byte b = buf.readByte();
 
             if (b >= 0) {
                 buf.resetReaderIndex();
 
-                int j = Utils.readVarInt(buf);
+                final int j = Utils.readVarInt(buf);
 
                 if (buf.readableBytes() < j) {
                     buf.resetReaderIndex();
