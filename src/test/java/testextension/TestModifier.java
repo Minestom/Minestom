@@ -10,7 +10,7 @@ public class TestModifier extends CodeModifier implements Opcodes {
     @Override
     public boolean transform(ClassNode source) {
         if(source.name.equals("net/minestom/server/instance/InstanceContainer")) {
-            System.out.println("Modifying code source of "+source.name);
+            System.out.println("Modifying code of "+source.name);
             MethodNode constructor = findConstructor(source.methods);
             constructor.instructions.insert(constructor.instructions.getFirst(), buildInjectionCode());
             return true;

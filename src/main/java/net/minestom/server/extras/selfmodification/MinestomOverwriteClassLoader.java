@@ -7,11 +7,13 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -19,14 +21,25 @@ import java.util.Set;
 @Slf4j
 public class MinestomOverwriteClassLoader extends URLClassLoader {
 
+    private static MinestomOverwriteClassLoader INSTANCE;
+
     /**
      * Classes that cannot be loaded/modified by this classloader.
      * Will go through parent class loader
      */
-    private static final Set<String> protectedClasses = Set.of(
-            "net.minestom.server.extras.selfmodification.CodeModifier",
-            "net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader"
-    );
+    public final Set<String> protectedClasses = new HashSet<>() {
+        {
+            add("net.minestom.server.extras.selfmodification.CodeModifier");
+            add("net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader");
+        }
+    };
+    public final Set<String> protectedPackages = new HashSet<>() {
+        {
+            add("com.google");
+            add("com.mojang");
+            add("org.objectweb.asm");
+        }
+    };
     private final URLClassLoader asmClassLoader;
 
     // TODO: replace by tree to optimize lookup times. We can use the fact that package names are split with '.' to allow for fast lookup
@@ -38,7 +51,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
     private final Method findParentLoadedClass;
     private final Class<?> loadedCodeModifier;
 
-    public MinestomOverwriteClassLoader(ClassLoader parent) {
+    private MinestomOverwriteClassLoader(ClassLoader parent) {
         super("Minestom ClassLoader", loadURLs(), parent);
         try {
             findParentLoadedClass = ClassLoader.class.getDeclaredMethod("findLoadedClass", String.class);
@@ -56,6 +69,17 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         }
 
         asmClassLoader = newChild(new URL[0]);
+    }
+
+    public static MinestomOverwriteClassLoader getInstance() {
+        if(INSTANCE == null) {
+            synchronized (MinestomOverwriteClassLoader.class) {
+                if(INSTANCE == null) {
+                    INSTANCE = new MinestomOverwriteClassLoader(MinestomOverwriteClassLoader.class.getClassLoader());
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     private static URL[] loadURLs() {
@@ -110,9 +134,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
                     return super.loadClass(name, resolve);
                 }
 
-                String path = name.replace(".", "/") + ".class";
-                byte[] bytes = getResourceAsStream(path).readAllBytes();
-                return transformAndLoad(name, bytes, resolve);
+                return define(name, loadBytes(name, true), resolve);
             } catch (Exception ex) {
                 log.trace("Fail to load class, resorting to parent loader: "+name, ex);
                 // fail to load class, let parent load
@@ -123,38 +145,63 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
     }
 
     private boolean isProtected(String name) {
-        return protectedClasses.contains(name);
+        if(!protectedClasses.contains(name)) {
+            for(String start : protectedPackages) {
+                if(name.startsWith(start))
+                    return true;
+            }
+            return false;
+        }
+        return true;
     }
 
-    private Class<?> transformAndLoad(String name, byte[] bytes, boolean resolve) throws ClassNotFoundException {
-        ClassReader reader = new ClassReader(bytes);
-        ClassNode node = new ClassNode();
-        reader.accept(node, 0);
-        boolean modified = false;
-        synchronized (modifiers) {
-            for(CodeModifier modifier : modifiers) {
-                boolean shouldModify = modifier.getNamespace() == null || name.startsWith(modifier.getNamespace());
-                if(shouldModify) {
-                    modified |= modifier.transform(node);
-                }
-            }
-        }
-        if(modified) {
-            ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES) {
-                @Override
-                protected ClassLoader getClassLoader() {
-                    return asmClassLoader;
-                }
-            };
-            node.accept(writer);
-            bytes = writer.toByteArray();
-        }
+    private Class<?> define(String name, byte[] bytes, boolean resolve) throws ClassNotFoundException {
         Class<?> defined = defineClass(name, bytes, 0, bytes.length);
         log.trace("Loaded with code modifiers: "+name);
         if(resolve) {
             resolveClass(defined);
         }
         return defined;
+    }
+
+    public byte[] loadBytes(String name, boolean transform) throws IOException {
+        String path = name.replace(".", "/") + ".class";
+        byte[] bytes = getResourceAsStream(path).readAllBytes();
+        if(transform && !isProtected(name)) {
+            ClassReader reader = new ClassReader(bytes);
+            ClassNode node = new ClassNode();
+            reader.accept(node, 0);
+            boolean modified = false;
+            synchronized (modifiers) {
+                for(CodeModifier modifier : modifiers) {
+                    boolean shouldModify = modifier.getNamespace() == null || name.startsWith(modifier.getNamespace());
+                    if(shouldModify) {
+                        modified |= modifier.transform(node);
+                    }
+                }
+            }
+            if(modified) {
+                ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES) {
+                    @Override
+                    protected ClassLoader getClassLoader() {
+                        return asmClassLoader;
+                    }
+                };
+                node.accept(writer);
+                bytes = writer.toByteArray();
+                log.trace("Modified "+name);
+            }
+        }
+        return bytes;
+    }
+
+    @Override
+    public Class<?> findClass(String name) throws ClassNotFoundException {
+        return super.findClass(name);
+    }
+
+    public void resolve(Class<?> clazz) {
+        resolveClass(clazz);
     }
 
     @NotNull
@@ -174,11 +221,21 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
                 CodeModifier modifier = (CodeModifier) modifierClass.getDeclaredConstructor().newInstance();
                 synchronized (modifiers) {
                     log.warn("Added Code modifier: "+modifier);
-                    modifiers.add(modifier);
+                    addCodeModifier(modifier);
                 }
             }
         } catch (MalformedURLException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addCodeModifier(CodeModifier modifier) {
+        synchronized (modifiers) {
+            modifiers.add(modifier);
+        }
+    }
+
+    public List<CodeModifier> getModifiers() {
+        return modifiers;
     }
 }
