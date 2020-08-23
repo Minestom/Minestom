@@ -7,6 +7,9 @@ import org.spongepowered.asm.service.IClassBytecodeProvider;
 
 import java.io.IOException;
 
+/**
+ * Provides class bytecode for Mixin
+ */
 public class MinestomBytecodeProvider implements IClassBytecodeProvider {
     private final MinestomOverwriteClassLoader classLoader;
 

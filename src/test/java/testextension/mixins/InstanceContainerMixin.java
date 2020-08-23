@@ -14,5 +14,4 @@ public class InstanceContainerMixin {
         System.out.println("Hello from Mixin!!!");
     }
 
-
 }

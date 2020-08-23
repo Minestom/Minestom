@@ -21,14 +21,13 @@ public class Bootstrap {
         try {
             ClassLoader classLoader = MinestomOverwriteClassLoader.getInstance();
             startMixin(args);
-            MixinEnvironment.init(MixinEnvironment.Phase.INIT);
             MinestomOverwriteClassLoader.getInstance().addCodeModifier(new MixinCodeModifier());
+            MixinEnvironment.init(MixinEnvironment.Phase.DEFAULT);
 
             // ensure extensions are loaded when starting the server
             Class<?> serverClass = classLoader.loadClass("net.minestom.server.MinecraftServer");
             Method init = serverClass.getMethod("init");
             init.invoke(null);
-
 
             Class<?> mainClass = classLoader.loadClass(mainClassFullName);
             Method main = mainClass.getDeclaredMethod("main", String[].class);

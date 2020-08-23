@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Global properties service for Mixin
+ */
 public class GlobalPropertyServiceMinestom implements IGlobalPropertyService {
 
     private class BasicProperty implements IPropertyKey {

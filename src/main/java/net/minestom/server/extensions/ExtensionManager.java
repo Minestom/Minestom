@@ -6,6 +6,7 @@ import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -232,7 +233,11 @@ public class ExtensionManager {
                         modifiableClassLoader.loadModifier(extension.files, elem.getAsString());
                     }
                 }
-                // TODO: special support for mixins
+                if(extension.description.has("mixinConfig")) {
+                    String mixinConfigFile = extension.description.get("mixinConfig").getAsString();
+                    Mixins.addConfiguration(mixinConfigFile);
+                    log.info("Found mixin in extension "+extension.description.get("name").getAsString()+": "+mixinConfigFile);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("Failed to load code modifier for extension in files: "+Arrays.toString(extension.files), e);

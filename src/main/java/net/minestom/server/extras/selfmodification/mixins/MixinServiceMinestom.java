@@ -16,13 +16,13 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
     private final MinestomOverwriteClassLoader classLoader;
     private final MinestomClassProvider classProvider;
     private final MinestomBytecodeProvider bytecodeProvider;
-    private final MinestomTransformerProvider transformerProvider;
+    private final MixinAuditTrailMinestom auditTrail;
 
     public MixinServiceMinestom() {
         this.classLoader = MinestomOverwriteClassLoader.getInstance();
         classProvider = new MinestomClassProvider(classLoader);
         bytecodeProvider = new MinestomBytecodeProvider(classLoader);
-        transformerProvider = new MinestomTransformerProvider(classLoader);
+        auditTrail = new MixinAuditTrailMinestom();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
 
     @Override
     public ITransformerProvider getTransformerProvider() {
-        return transformerProvider;
+        return null;
     }
 
     @Override
@@ -65,8 +65,6 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
         return classLoader.getResourceAsStream(name);
     }
 
-    // TODO: everything below
-
     @Override
     public IClassTracker getClassTracker() {
         return null;
@@ -74,12 +72,13 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
 
     @Override
     public IMixinAuditTrail getAuditTrail() {
-        return null;
+        return auditTrail;
     }
 
     @Override
     public void wire(MixinEnvironment.Phase phase, IConsumer<MixinEnvironment.Phase> phaseConsumer) {
         super.wire(phase, phaseConsumer);
+        // TODO: hook into Minestom initialization process
         phaseConsumer.accept(MixinEnvironment.Phase.PREINIT);
         phaseConsumer.accept(MixinEnvironment.Phase.INIT);
     }

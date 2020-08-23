@@ -5,6 +5,9 @@ import org.spongepowered.asm.service.IClassProvider;
 
 import java.net.URL;
 
+/**
+ * Provides classes for Mixin
+ */
 public class MinestomClassProvider implements IClassProvider {
     private final MinestomOverwriteClassLoader classLoader;
 
