@@ -44,7 +44,7 @@ public class JoinGamePacket implements ServerPacket {
 		nbt.set("minecraft:worldgen/biome", biomes);
 
 		writer.writeNBT("", nbt);
-		writer.writeNBT("", dimensionType.toNBT2());
+		writer.writeNBT("", dimensionType.toNBT());
 
 		writer.writeSizedString(dimensionType.getName().toString());
 		writer.writeLong(hashedSeed);

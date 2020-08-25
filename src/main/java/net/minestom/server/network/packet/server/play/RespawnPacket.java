@@ -17,7 +17,7 @@ public class RespawnPacket implements ServerPacket {
     @Override
     public void write(BinaryWriter writer) {
         //TODO add api
-        writer.writeNBT("", dimensionType.toNBT2());
+        writer.writeNBT("", dimensionType.toNBT());
 
         // Warning: must be different for each dimension type! Otherwise the client seems to cache the world name
         writer.writeSizedString(dimensionType.getName().toString());

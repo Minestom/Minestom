@@ -58,29 +58,16 @@ public class DimensionType {
 		return hiddenBuilder().name(name);
 	}
 
-	public NBTCompound toNBT() {
+	public NBTCompound toIndexedNBT() {
 		NBTCompound nbt = new NBTCompound();
-		NBTCompound element = new NBTCompound()
-				.setFloat("ambient_light", ambientLight)
-				.setString("infiniburn", infiniburn.toString())
-				.setByte("natural", (byte) (natural ? 0x01 : 0x00))
-				.setByte("has_ceiling", (byte) (ceilingEnabled ? 0x01 : 0x00))
-				.setByte("has_skylight", (byte) (skylightEnabled ? 0x01 : 0x00))
-				.setByte("ultrawarm", (byte) (ultrawarm ? 0x01 : 0x00))
-				.setByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00))
-				.setByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00))
-				.setByte("bed_works", (byte) (bedSafe ? 0x01 : 0x00))
-				.setByte("piglin_safe", (byte) (piglinSafe ? 0x01 : 0x00))
-				.setInt("logical_height", logicalHeight)
-				.setInt("coordinate_scale", coordinateScale);
-		fixedTime.ifPresent(time -> element.setLong("fixed_time", time));
+		NBTCompound element = toNBT();
 		nbt.setString("name", name.toString());
 		nbt.setInt("id", id);
 		nbt.set("element", element);
 		return nbt;
 	}
 
-	public NBTCompound toNBT2() {
+	public NBTCompound toNBT() {
 		NBTCompound nbt = new NBTCompound()
 				.setFloat("ambient_light", ambientLight)
 				.setString("infiniburn", infiniburn.toString())

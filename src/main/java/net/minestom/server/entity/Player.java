@@ -506,6 +506,17 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+
+        resendVisibleChunks();
+    }
+
+    private void resendVisibleChunks() {
+        for (Chunk chunk : viewableChunks) {
+            chunk.removeViewer(this);
+        }
+        viewableChunks.clear();
+        BlockPosition pos = position.toBlockPosition();
+        onChunkChange(instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4));
     }
 
     @Override

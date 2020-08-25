@@ -53,7 +53,7 @@ public class DimensionTypeManager {
         dimensions.setString("type", "minecraft:dimension_type");
         NBTList<NBTCompound> dimensionList = new NBTList<>(NBTTypes.TAG_Compound);
         for (DimensionType dimensionType : dimensionTypes) {
-            dimensionList.add(dimensionType.toNBT());
+            dimensionList.add(dimensionType.toIndexedNBT());
         }
         dimensions.set("value", dimensionList);
         return dimensions;
