@@ -506,17 +506,6 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
-
-        resendVisibleChunks();
-    }
-
-    private void resendVisibleChunks() {
-        for (Chunk chunk : viewableChunks) {
-            chunk.removeViewer(this);
-        }
-        viewableChunks.clear();
-        BlockPosition pos = position.toBlockPosition();
-        onChunkChange(instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4));
     }
 
     @Override
@@ -535,7 +524,9 @@ public class Player extends LivingEntity implements CommandSender {
         this.packets.clear();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
+        // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        // Clear all viewable chunks
         this.viewableChunks.forEach(chunk -> {
             if (chunk.isLoaded())
                 chunk.removeViewer(this);
@@ -580,6 +571,7 @@ public class Player extends LivingEntity implements CommandSender {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
         final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
+        // Remove all previous viewable chunks (from the previous instance)
         for (Chunk viewableChunk : viewableChunks) {
             viewableChunk.removeViewer(this);
         }
@@ -1156,7 +1148,11 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(getPropertiesPacket());
         syncEquipments();
 
-        sendSynchronization();
+        {
+            // Send new chunks
+            final BlockPosition pos = position.toBlockPosition();
+            onChunkChange(instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4));
+        }
     }
 
     protected void refreshHealth() {
@@ -1214,13 +1210,15 @@ public class Player extends LivingEntity implements CommandSender {
      * @param newChunk the current/new player chunk
      */
     protected void onChunkChange(Chunk newChunk) {
-        final long[] lastVisibleChunks = new long[viewableChunks.size()];
-        final Chunk[] lastViewableChunks = viewableChunks.toArray(new Chunk[0]);
-        for (int i = 0; i < lastViewableChunks.length; i++) {
-            final Chunk lastViewableChunk = lastViewableChunks[i];
-            lastVisibleChunks[i] = ChunkUtils.getChunkIndex(lastViewableChunk.getChunkX(), lastViewableChunk.getChunkZ());
-        }
+        // Previous chunks indexes
+        final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(viewableChunks ->
+                ChunkUtils.getChunkIndex(viewableChunks.getChunkX(), viewableChunks.getChunkZ())
+        ).toArray();
+
+        // New chunks indexes
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), getChunkRange());
+
+        // Find the difference between the two arrays¬
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 

@@ -349,7 +349,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
-                event.setRespawnPosition(new Position(0f, 41f, 0f));
+                event.setRespawnPosition(new Position(0f, 75f, 0f));
             });
 
             player.addEventCallback(PlayerCommandEvent.class, event -> {
