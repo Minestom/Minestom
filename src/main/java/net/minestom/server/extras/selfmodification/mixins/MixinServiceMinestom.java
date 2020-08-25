@@ -17,8 +17,11 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
     private final MinestomClassProvider classProvider;
     private final MinestomBytecodeProvider bytecodeProvider;
     private final MixinAuditTrailMinestom auditTrail;
+    private static MixinServiceMinestom INSTANCE = null;
+    private IConsumer<MixinEnvironment.Phase> phaseConsumer;
 
     public MixinServiceMinestom() {
+        INSTANCE = this;
         this.classLoader = MinestomOverwriteClassLoader.getInstance();
         classProvider = new MinestomClassProvider(classLoader);
         bytecodeProvider = new MinestomBytecodeProvider(classLoader);
@@ -78,8 +81,28 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
     @Override
     public void wire(MixinEnvironment.Phase phase, IConsumer<MixinEnvironment.Phase> phaseConsumer) {
         super.wire(phase, phaseConsumer);
-        // TODO: hook into Minestom initialization process
-        phaseConsumer.accept(MixinEnvironment.Phase.PREINIT);
-        phaseConsumer.accept(MixinEnvironment.Phase.INIT);
+        this.phaseConsumer = phaseConsumer;
+    }
+
+    private void gotoPhase(MixinEnvironment.Phase phase) {
+        phaseConsumer.accept(phase);
+    }
+
+    public static void gotoPreinitPhase() {
+        if(INSTANCE != null) {
+            INSTANCE.gotoPhase(MixinEnvironment.Phase.PREINIT);
+        }
+    }
+
+    public static void gotoInitPhase() {
+        if(INSTANCE != null) {
+            INSTANCE.gotoPhase(MixinEnvironment.Phase.INIT);
+        }
+    }
+
+    public static void gotoDefaultPhase() {
+        if(INSTANCE != null) {
+            INSTANCE.gotoPhase(MixinEnvironment.Phase.DEFAULT);
+        }
     }
 }
