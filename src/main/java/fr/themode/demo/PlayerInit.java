@@ -30,12 +30,13 @@ import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -47,11 +48,11 @@ public class PlayerInit {
     private static volatile Inventory inventory;
 
     static {
-        //StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOptions().setCompression(true));
+        StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
+        //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);
         instanceContainer.setChunkGenerator(noiseTestGenerator);

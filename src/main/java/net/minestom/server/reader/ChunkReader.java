@@ -1,5 +1,6 @@
 package net.minestom.server.reader;
 
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
@@ -19,8 +20,16 @@ public class ChunkReader {
     public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
         BinaryReader binaryReader = new BinaryReader(b);
 
+        // Used for blocks data
+        Object2ShortMap<String> typeToIndexMap = null;
+
         ChunkBatch chunkBatch = null;
         try {
+
+            final boolean hasIndex = binaryReader.readBoolean();
+            if (hasIndex) {
+                typeToIndexMap = DataReader.readDataIndexes(binaryReader);
+            }
 
             Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
             for (int i = 0; i < biomes.length; i++) {
@@ -48,7 +57,8 @@ public class ChunkReader {
                     final boolean hasData = binaryReader.readBoolean();
                     // Data deserializer
                     if (hasData) {
-                        data = DataReader.readData(binaryReader);
+                        // Read the data with the deserialized index map
+                        data = DataReader.readData(typeToIndexMap, binaryReader);
                     }
                 }
 

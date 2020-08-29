@@ -96,7 +96,7 @@ public class StorageFolder {
             SerializableData data;
 
             if (bytes != null) {
-                data = DataReader.readData(new BinaryReader(bytes));
+                data = DataReader.readIndexedData(new BinaryReader(bytes));
             } else {
                 data = new SerializableData();
             }
@@ -129,7 +129,7 @@ public class StorageFolder {
             SerializableData data;
 
             if (bytes != null) {
-                data = DataReader.readData(new BinaryReader(bytes));
+                data = DataReader.readIndexedData(new BinaryReader(bytes));
             } else {
                 data = new SerializableData();
             }
@@ -153,7 +153,7 @@ public class StorageFolder {
                 return;
 
             // Save the data
-            set(key, serializableData.getSerializedData());
+            set(key, serializableData.getIndexedSerializedData());
 
             // Remove from map
             this.cachedData.remove(key);
@@ -166,7 +166,7 @@ public class StorageFolder {
     public void saveCachedData() {
         synchronized (cachedData) {
             cachedData.forEach((key, data) -> {
-                set(key, data.getSerializedData());
+                set(key, data.getIndexedSerializedData());
             });
         }
     }
@@ -179,7 +179,7 @@ public class StorageFolder {
     public void saveCachedData(String key) {
         synchronized (cachedData) {
             final SerializableData data = cachedData.get(key);
-            set(key, data.getSerializedData());
+            set(key, data.getIndexedSerializedData());
         }
     }
 

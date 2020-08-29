@@ -1,7 +1,11 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
@@ -145,6 +149,10 @@ public class DynamicChunk extends Chunk {
 
     @Override
     protected byte[] getSerializedData() {
+
+        // Used for blocks data
+        Object2ShortMap<String> typeToIndexMap = new Object2ShortOpenHashMap<>();
+
         BinaryWriter binaryWriter = new BinaryWriter();
 
         // Write the biomes id
@@ -179,12 +187,27 @@ public class DynamicChunk extends Chunk {
                     final boolean hasData = data instanceof SerializableData;
                     binaryWriter.writeBoolean(hasData);
                     if (hasData) {
-                        final byte[] serializedData = ((SerializableData) data).getSerializedData();
+                        // Get the un-indexed data
+                        final byte[] serializedData = ((SerializableData) data).getSerializedData(typeToIndexMap, false);
                         binaryWriter.writeBytes(serializedData);
                     }
                 }
             }
         }
+
+        // If the chunk data contains SerializableData type, it needs to be added in the header
+        BinaryWriter indexWriter = new BinaryWriter();
+        final boolean hasIndex = !typeToIndexMap.isEmpty();
+        indexWriter.writeBoolean(hasIndex);
+        if (hasIndex) {
+            // Get the index buffer (prefixed by true to say that the chunk contains data indexes)
+            SerializableData.writeDataIndexHeader(indexWriter, typeToIndexMap);
+        }
+
+        // Create the final buffer (data index buffer followed by the chunk buffer)
+        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(indexWriter.getBuffer(), binaryWriter.getBuffer());
+        // Change the main writer buffer
+        binaryWriter.setBuffer(finalBuffer);
 
         return binaryWriter.toByteArray();
     }

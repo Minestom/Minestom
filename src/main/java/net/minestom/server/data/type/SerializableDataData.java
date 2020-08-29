@@ -11,11 +11,11 @@ public class SerializableDataData extends DataType<SerializableData> {
 
     @Override
     public void encode(BinaryWriter writer, SerializableData value) {
-        writer.writeBytes(value.getSerializedData());
+        writer.writeBytes(value.getIndexedSerializedData());
     }
 
     @Override
     public SerializableData decode(BinaryReader reader) {
-        return DataReader.readData(reader);
+        return DataReader.readIndexedData(reader);
     }
 }

@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 public class BinaryWriter extends OutputStream {
 
-    private final ByteBuf buffer;
+    private ByteBuf buffer;
     private final NBTWriter nbtWriter = new NBTWriter(this, false);
 
     /**
@@ -259,6 +259,15 @@ public class BinaryWriter extends OutputStream {
      */
     public ByteBuf getBuffer() {
         return buffer;
+    }
+
+    /**
+     * Change the buffer used by this binary writer
+     *
+     * @param buffer the new buffer used by this binary writer
+     */
+    public void setBuffer(ByteBuf buffer) {
+        this.buffer = buffer;
     }
 
     @Override
