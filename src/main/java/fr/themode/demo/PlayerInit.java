@@ -30,7 +30,7 @@ import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.scoreboard.Sidebar;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
@@ -48,10 +48,10 @@ public class PlayerInit {
     private static volatile Inventory inventory;
 
     static {
-        StorageFolder storageFolder = MinecraftServer.getStorageManager().getFolder("instance_data", new StorageOptions().setCompression(true));
+        StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageFolder);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageLocation);
         //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);

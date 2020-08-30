@@ -20,8 +20,8 @@ public class FileStorageSystem implements StorageSystem {
     private RocksDB rocksDB;
 
     @Override
-    public boolean exists(String folderPath) {
-        return Files.isDirectory(Paths.get(folderPath));
+    public boolean exists(String location) {
+        return Files.isDirectory(Paths.get(location));
     }
 
     @Override

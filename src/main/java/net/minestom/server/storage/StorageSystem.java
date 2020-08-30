@@ -7,20 +7,20 @@ package net.minestom.server.storage;
 public interface StorageSystem {
 
     /**
-     * Get if the folder exists
+     * Get if the location exists
      *
-     * @param folderPath the folder path
-     * @return true if the folder exists
+     * @param location the location
+     * @return true if the location exists
      */
-    boolean exists(String folderPath);
+    boolean exists(String location);
 
     /**
-     * Called when a folder is opened with this StorageSystem
+     * Called when a location is opened with this {@link StorageSystem}
      *
-     * @param folderPath     the name of the folder
-     * @param storageOptions the storage option
+     * @param location     the location name
+     * @param storageOptions the {@link StorageOptions}
      */
-    void open(String folderPath, StorageOptions storageOptions);
+    void open(String location, StorageOptions storageOptions);
 
     /**
      * Get the data associated to a key
@@ -46,7 +46,7 @@ public interface StorageSystem {
     void delete(String key);
 
     /**
-     * Called when the folder is closed, generally during server shutdown
+     * Called when the location is closed, generally during server shutdown
      */
     void close();
 

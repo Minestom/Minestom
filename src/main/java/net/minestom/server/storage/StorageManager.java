@@ -15,85 +15,86 @@ public class StorageManager {
 
     private Supplier<StorageSystem> defaultStorageSystemSupplier = null;
 
-    // Folder path -> storage folder object
-    private Map<String, StorageFolder> folderMap = new HashMap<>();
+    // Location -> storage location object
+    private Map<String, StorageLocation> locationMap = new HashMap<>();
 
     /**
-     * Used to get an access to the specified folder
-     * WARNING: a storage folder needs to be created with an unique storage system linked
-     * you cannot open the save folder with two or more different StorageSystem implementation
+     * Used to get an access to the specified location
+     * WARNING: a {@link StorageLocation} needs to be created with an unique {@link StorageSystem} linked
+     * you cannot open the save location with two or more different {@link StorageSystem} implementation
      *
-     * @param folderPath     the path to the folder
-     * @param storageOptions the storage option
-     * @param storageSystem  the storage system used in the specified folder
-     * @return the specified storage folder
+     * @param location       the location
+     * @param storageOptions the {@link StorageOptions}
+     * @param storageSystem  the {@link StorageSystem} used in the specified location
+     * @return the specified {@link StorageLocation}
      */
-    public StorageFolder getFolder(String folderPath, StorageOptions storageOptions, StorageSystem storageSystem) {
+    public StorageLocation getLocation(String location, StorageOptions storageOptions, StorageSystem storageSystem) {
         Check.notNull(storageOptions, "The storage option cannot be null");
-        return folderMap.computeIfAbsent(folderPath,
-                s -> new StorageFolder(storageSystem, folderPath, storageOptions));
+        return locationMap.computeIfAbsent(location,
+                s -> new StorageLocation(storageSystem, location, storageOptions));
     }
 
     /**
-     * Used to get an access to the specified folder
-     * The default StorageSystem provider will be used
+     * Used to get an access to the specified location
+     * The default {@link StorageSystem} provider will be used
      *
-     * @param folderPath     the path to the folder
-     * @param storageOptions the storage option
-     * @return the specified storage default with the default
-     * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
+     * @param location       the location
+     * @param storageOptions the {@link StorageOptions}
+     * @return the {@link StorageLocation} at {@code location} with the default {@link StorageSystem}
+     * @throws NullPointerException if no default {@link StorageSystem} is defined with {@link #defineDefaultStorageSystem(Supplier)}
      */
-    public StorageFolder getFolder(String folderPath, StorageOptions storageOptions) {
+    public StorageLocation getLocation(String location, StorageOptions storageOptions) {
         Check.notNull(defaultStorageSystemSupplier,
-                "You need to either define a default storage system or specify your storage system for this specific folder");
+                "You need to either define a default storage system or specify your storage system for this specific location");
         final StorageSystem storageSystem = defaultStorageSystemSupplier.get();
-        return getFolder(folderPath, storageOptions, storageSystem);
+        return getLocation(location, storageOptions, storageSystem);
     }
 
     /**
-     * Used to get an access to the specified folder
-     * The default StorageSystem provider will be used
+     * Used to get an access to the specified location
+     * The default {@link StorageSystem} provider will be used
      *
-     * @param folderPath the path to the folder
-     * @return the specified storage default with the default
+     * @param location the location
+     * @return the {@link StorageLocation} at {@code location} with the default {@link StorageSystem}
      * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
      */
-    public StorageFolder getFolder(String folderPath) {
-        return getFolder(folderPath, new StorageOptions());
+    public StorageLocation getLocation(String location) {
+        return getLocation(location, new StorageOptions());
     }
 
     /**
-     * Used to know if the specified folder already exist or not
+     * Used to know if the specified location already exist or not
      *
-     * @param folderPath    the folder path
-     * @param storageSystem the storage system to use
-     * @return true if the folder exists, false otherwise
+     * @param location      the location
+     * @param storageSystem the {@link StorageSystem} to use
+     * @return true if the location exists, false otherwise
      */
-    public boolean folderExists(String folderPath, StorageSystem storageSystem) {
-        return storageSystem.exists(folderPath);
+    public boolean locationExists(String location, StorageSystem storageSystem) {
+        return storageSystem.exists(location);
     }
 
     /**
-     * Call {@link #folderExists(String, StorageSystem)} with the default StorageSystem
+     * Call {@link #locationExists(String, StorageSystem)} with the default {@link StorageSystem}
      *
-     * @param folderPath the folder path
-     * @return true if the folder exists
+     * @param location the location
+     * @return true if the location exists
      */
-    public boolean folderExists(String folderPath) {
-        return folderExists(folderPath, defaultStorageSystemSupplier.get());
+    public boolean locationExists(String location) {
+        return locationExists(location, defaultStorageSystemSupplier.get());
     }
 
     /**
-     * Get all folders which have been loaded by {@link #getFolder(String)} or {@link #getFolder(String, StorageOptions, StorageSystem)}
+     * Get all locations which have been loaded by {@link #getLocation(String)}
+     * or {@link #getLocation(String, StorageOptions, StorageSystem)}
      *
-     * @return an unmodifiable list of all the loaded StorageFolder
+     * @return an unmodifiable list of all the loaded {@link StorageLocation}
      */
-    public Collection<StorageFolder> getLoadedFolders() {
-        return Collections.unmodifiableCollection(folderMap.values());
+    public Collection<StorageLocation> getLoadedLocations() {
+        return Collections.unmodifiableCollection(locationMap.values());
     }
 
     /**
-     * Define the default storage system used for {@link StorageFolder}
+     * Define the default {@link StorageSystem} used for {@link StorageLocation}
      *
      * @param storageSystemSupplier the supplier called to get the default {@link StorageSystem}
      */
@@ -105,9 +106,9 @@ public class StorageManager {
     }
 
     /**
-     * Get if the default storage system is set
+     * Get if the default {@link StorageSystem} is set
      *
-     * @return true if a default storage system is set
+     * @return true if a default {@link StorageSystem} is set
      */
     public boolean isDefaultStorageSystemDefined() {
         return defaultStorageSystemSupplier != null;

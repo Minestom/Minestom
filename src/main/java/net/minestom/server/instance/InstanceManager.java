@@ -1,6 +1,6 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
@@ -28,31 +28,31 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified dimension and storage folder
+     * Create and register an {@link InstanceContainer} with the specified {@link DimensionType} and {@link StorageLocation}
      *
-     * @param dimensionType the dimension of the instance
-     * @param storageFolder the storage folder of the instance, can be null
+     * @param dimensionType   the {@link DimensionType} of the instance
+     * @param storageLocation the {@link StorageLocation} of the instance, can be null
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(DimensionType dimensionType, StorageFolder storageFolder) {
-        final InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimensionType, storageFolder);
+    public InstanceContainer createInstanceContainer(DimensionType dimensionType, StorageLocation storageLocation) {
+        final InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimensionType, storageLocation);
         return registerInstanceContainer(instance);
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified storage folder
+     * Create and register an {@link InstanceContainer} with the specified {@link StorageLocation}
      *
-     * @param storageFolder the storage folder of the instance, can be null
+     * @param storageLocation the {@link StorageLocation} of the instance, can be null
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(StorageFolder storageFolder) {
-        return createInstanceContainer(DimensionType.OVERWORLD, storageFolder);
+    public InstanceContainer createInstanceContainer(StorageLocation storageLocation) {
+        return createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified dimension
+     * Create and register an {@link InstanceContainer} with the specified {@link DimensionType}
      *
-     * @param dimensionType the dimension of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
      * @return the created {@link InstanceContainer}
      */
     public InstanceContainer createInstanceContainer(DimensionType dimensionType) {
@@ -73,9 +73,9 @@ public final class InstanceManager {
      * <p>
      * WARNING: the shared instance needs to have an {@link InstanceContainer} assigned to it
      *
-     * @param sharedInstance the instance to register
+     * @param sharedInstance the {@link SharedInstance} to register
      * @return the registered {@link SharedInstance}
-     * @throws NullPointerException if the shared instance doesn't have an {@link InstanceContainer} assigned to it
+     * @throws NullPointerException if {@code sharedInstance} doesn't have an {@link InstanceContainer} assigned to it
      */
     public SharedInstance registerSharedInstance(SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();

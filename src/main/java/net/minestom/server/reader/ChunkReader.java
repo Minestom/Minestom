@@ -83,6 +83,7 @@ public class ChunkReader {
             // Finished reading
         }
 
+        // Place all the blocks from the batch
         chunkBatch.flush(c -> callback.accept(c)); // Success, null if file isn't properly encoded
     }
 

@@ -13,7 +13,10 @@ import net.minestom.server.utils.validate.Check;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StorageFolder {
+/**
+ * Represent an area which contain data
+ */
+public class StorageLocation {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
@@ -22,7 +25,7 @@ public class StorageFolder {
 
     private final Map<String, SerializableData> cachedData;
 
-    protected StorageFolder(StorageSystem storageSystem, String folderPath, StorageOptions storageOptions) {
+    protected StorageLocation(StorageSystem storageSystem, String folderPath, StorageOptions storageOptions) {
         this.storageSystem = storageSystem;
         this.folderPath = folderPath;
 
@@ -60,7 +63,7 @@ public class StorageFolder {
 
     public <T> T get(String key, Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
-        Check.notNull(dataType, "You can only save registered DataType type!");
+        Check.notNull(dataType, "You can only get registered DataType type!");
 
         final byte[] data = get(key);
         if (data == null)
@@ -83,27 +86,26 @@ public class StorageFolder {
      */
     public void getAndCloneData(String key, DataContainer dataContainer) {
         synchronized (cachedData) {
-
             // Copy data from the cachedMap
             if (cachedData.containsKey(key)) {
                 SerializableData data = cachedData.get(key);
                 dataContainer.setData(data.clone());
                 return;
             }
-
-            // Load it from the storage system
-            final byte[] bytes = get(key);
-            SerializableData data;
-
-            if (bytes != null) {
-                data = DataReader.readIndexedData(new BinaryReader(bytes));
-            } else {
-                data = new SerializableData();
-            }
-
-            dataContainer.setData(data);
-
         }
+
+        // Load it from the storage system
+        final byte[] bytes = get(key);
+        SerializableData data;
+
+        if (bytes != null) {
+            data = DataReader.readIndexedData(new BinaryReader(bytes));
+        } else {
+            data = new SerializableData();
+        }
+
+        dataContainer.setData(data);
+
     }
 
     /**
@@ -117,7 +119,6 @@ public class StorageFolder {
      */
     public void getAndCacheData(String key, DataContainer dataContainer) {
         synchronized (cachedData) {
-
             // Give the cached SerializableData if already loaded
             if (cachedData.containsKey(key)) {
                 dataContainer.setData(cachedData.get(key));

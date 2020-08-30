@@ -4,7 +4,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
@@ -57,13 +57,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
-        instanceContainer.saveChunkToStorageFolder(chunk, callback);
+    public void saveChunkToStorage(Chunk chunk, Runnable callback) {
+        instanceContainer.saveChunkToStorage(chunk, callback);
     }
 
     @Override
-    public void saveChunksToStorageFolder(Runnable callback) {
-        instanceContainer.saveChunksToStorageFolder(callback);
+    public void saveChunksToStorage(Runnable callback) {
+        instanceContainer.saveChunksToStorage(callback);
     }
 
     @Override
@@ -92,13 +92,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public StorageFolder getStorageFolder() {
-        return instanceContainer.getStorageFolder();
+    public StorageLocation getStorageLocation() {
+        return instanceContainer.getStorageLocation();
     }
 
     @Override
-    public void setStorageFolder(StorageFolder storageFolder) {
-        instanceContainer.setStorageFolder(storageFolder);
+    public void setStorageLocation(StorageLocation storageLocation) {
+        instanceContainer.setStorageLocation(storageLocation);
     }
 
     @Override

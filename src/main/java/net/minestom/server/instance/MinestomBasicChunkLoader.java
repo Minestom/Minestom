@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.reader.ChunkReader;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,17 +10,17 @@ import java.util.function.Consumer;
 public class MinestomBasicChunkLoader implements IChunkLoader {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
-    private final StorageFolder storageFolder;
+    private final StorageLocation storageLocation;
 
-    public MinestomBasicChunkLoader(StorageFolder storageFolder) {
-        this.storageFolder = storageFolder;
+    public MinestomBasicChunkLoader(StorageLocation storageLocation) {
+        this.storageLocation = storageLocation;
     }
 
     @Override
     public void saveChunk(Chunk chunk, Runnable callback) {
-        if (storageFolder == null) {
+        if (storageLocation == null) {
             callback.run();
-            LOGGER.warn("No folder to save chunk!");
+            LOGGER.warn("No storage location to save chunk!");
             return;
         }
 
@@ -35,7 +35,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             return;
         }
 
-        storageFolder.set(key, data);
+        storageLocation.set(key, data);
 
         if (callback != null)
             callback.run();
@@ -43,7 +43,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
     @Override
     public boolean loadChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
-        final byte[] bytes = storageFolder == null ? null : storageFolder.get(getChunkKey(chunkX, chunkZ));
+        final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 
         if (bytes == null) {
             return false;
@@ -55,7 +55,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     /**
-     * Get the chunk key used by the {@link StorageFolder}
+     * Get the chunk key used by the {@link StorageLocation}
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z

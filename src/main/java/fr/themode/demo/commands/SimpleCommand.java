@@ -69,7 +69,7 @@ public class SimpleCommand implements CommandProcessor {
 
         System.gc();
 
-        player.getInstance().saveChunksToStorageFolder(() -> System.out.println("end save"));
+        player.getInstance().saveChunksToStorage(() -> System.out.println("end save"));
 
         return true;
     }

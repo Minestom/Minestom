@@ -19,7 +19,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -159,31 +159,31 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
-     * Save a chunk into the defined storage folder
+     * Save a {@link Chunk} into the defined {@link StorageLocation}
      *
-     * @param chunk    the chunk to save
-     * @param callback called when the chunk is done saving
-     * @throws NullPointerException if {@link #getStorageFolder()} returns null
+     * @param chunk    the {@link Chunk} to save
+     * @param callback called when the {@link Chunk} is done saving
+     * @throws NullPointerException if {@link #getStorageLocation()} returns null
      */
-    public abstract void saveChunkToStorageFolder(Chunk chunk, Runnable callback);
+    public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
 
     /**
-     * Save multiple chunks into the defined storage folder
+     * Save multiple chunks into the defined {@link StorageLocation}
      *
      * @param callback called when the chunks are done saving
-     * @throws NullPointerException if {@link #getStorageFolder()} returns null
+     * @throws NullPointerException if {@link #getStorageLocation()} returns null
      */
-    public abstract void saveChunksToStorageFolder(Runnable callback);
+    public abstract void saveChunksToStorage(Runnable callback);
 
     /**
-     * Create a new block batch linked to this instance
+     * Create a new {@link BlockBatch} linked to this instance
      *
-     * @return a BlockBatch linked to the instance
+     * @return a {@link BlockBatch} linked to the instance
      */
     public abstract BlockBatch createBlockBatch();
 
     /**
-     * Create a new chunk batch linked to this instance and the specified chunk
+     * Create a new {@link Chunk} batch linked to this instance and the specified chunk
      *
      * @param chunk the chunk to modify
      * @return a ChunkBatch linked to {@code chunk}
@@ -192,16 +192,16 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract ChunkBatch createChunkBatch(Chunk chunk);
 
     /**
-     * Get the instance chunk generator
+     * Get the instance {@link ChunkGenerator}
      *
-     * @return the chunk generator of the instance
+     * @return the {@link ChunkGenerator} of the instance
      */
     public abstract ChunkGenerator getChunkGenerator();
 
     /**
-     * Change the instance chunk generator
+     * Change the instance {@link ChunkGenerator}
      *
-     * @param chunkGenerator the new chunk generator of the instance
+     * @param chunkGenerator the new {@link ChunkGenerator} of the instance
      */
     public abstract void setChunkGenerator(ChunkGenerator chunkGenerator);
 
@@ -213,18 +213,18 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Collection<Chunk> getChunks();
 
     /**
-     * Get the instance storage folder
+     * Get the instance {@link StorageLocation}
      *
-     * @return the storage folder of the instance
+     * @return the {@link StorageLocation} of the instance
      */
-    public abstract StorageFolder getStorageFolder();
+    public abstract StorageLocation getStorageLocation();
 
     /**
-     * Change the instance storage folder
+     * Change the instance {@link StorageLocation}
      *
-     * @param storageFolder the new storage folder of the instance
+     * @param storageLocation the new {@link StorageLocation} of the instance
      */
-    public abstract void setStorageFolder(StorageFolder storageFolder);
+    public abstract void setStorageLocation(StorageLocation storageLocation);
 
     protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
 
@@ -239,6 +239,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void enableAutoChunkLoad(boolean enable);
 
     /**
+     * Get if the instance should auto load chunks
+     *
      * @return true if auto chunk load is enabled, false otherwise
      */
     public abstract boolean hasEnabledAutoChunkLoad();
@@ -273,7 +275,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the instance dimension
+     * Get the instance {@link DimensionType}
      *
      * @return the dimension of the instance
      */
@@ -654,19 +656,19 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Save a chunk to the instance storage folder without any callback
+     * Save a chunk to the instance {@link StorageLocation} without any callback
      *
      * @param chunk the chunk to save
      */
-    public void saveChunkToStorageFolder(Chunk chunk) {
-        saveChunkToStorageFolder(chunk, null);
+    public void saveChunkToStorage(Chunk chunk) {
+        saveChunkToStorage(chunk, null);
     }
 
     /**
-     * Save all chunks to the instance storage folder without any callback
+     * Save all chunks to the instance {@link StorageLocation} without any callback
      */
-    public void saveChunksToStorageFolder() {
-        saveChunksToStorageFolder(null);
+    public void saveChunksToStorage() {
+        saveChunksToStorage(null);
     }
 
     /**

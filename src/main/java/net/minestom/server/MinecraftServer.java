@@ -41,7 +41,7 @@ import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.stat.StatisticType;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.thread.MinestomThread;
@@ -483,7 +483,7 @@ public class MinecraftServer {
         updateManager.stop();
         nettyServer.stop();
         schedulerManager.shutdown();
-        storageManager.getLoadedFolders().forEach(StorageFolder::close);
+        storageManager.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         commandManager.stopConsoleThread();

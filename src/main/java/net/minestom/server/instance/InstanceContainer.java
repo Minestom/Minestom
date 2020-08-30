@@ -21,7 +21,7 @@ import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
-import net.minestom.server.storage.StorageFolder;
+import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -48,7 +48,7 @@ public class InstanceContainer extends Instance {
     private static final String UUID_KEY = "uuid";
     private static final String DATA_KEY = "data";
 
-    private StorageFolder storageFolder;
+    private StorageLocation storageLocation;
 
     private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
@@ -69,23 +69,23 @@ public class InstanceContainer extends Instance {
     /**
      * Create an {@link InstanceContainer}
      *
-     * @param uniqueId      the unique id of the instance
-     * @param dimensionType the dimension type of the instance
-     * @param storageFolder the {@link StorageFolder} of the instance,
-     *                      can be null if you do not wish to save the instance later on
+     * @param uniqueId        the unique id of the instance
+     * @param dimensionType   the dimension type of the instance
+     * @param storageLocation the {@link StorageLocation} of the instance,
+     *                        can be null if you do not wish to save the instance later on
      */
-    public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
+    public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageLocation storageLocation) {
         super(uniqueId, dimensionType);
 
-        this.storageFolder = storageFolder;
-        this.chunkLoader = new MinestomBasicChunkLoader(storageFolder);
+        this.storageLocation = storageLocation;
+        this.chunkLoader = new MinestomBasicChunkLoader(storageLocation);
 
         // Get instance data from the saved data if a StorageFolder is defined
-        if (storageFolder != null) {
+        if (storageLocation != null) {
             // Retrieve instance data
-            this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
+            this.uniqueId = storageLocation.getOrDefault(UUID_KEY, UUID.class, uniqueId);
 
-            final Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
+            final Data data = storageLocation.getOrDefault(DATA_KEY, SerializableData.class, null);
             setData(data);
         }
     }
@@ -354,25 +354,25 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Save the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorageFolder(Runnable)}
+     * Save the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage(Runnable)}
      * <p>
      * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
      *
      * @param callback the callback
      */
     public void saveInstance(Runnable callback) {
-        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
+        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageFolder has been defined");
 
-        this.storageFolder.set(UUID_KEY, getUniqueId(), UUID.class);
+        this.storageLocation.set(UUID_KEY, getUniqueId(), UUID.class);
         final Data data = getData();
         if (data != null) {
             // Save the instance data
             Check.stateCondition(!(data instanceof SerializableData),
                     "Instance#getData needs to be a SerializableData in order to be saved");
-            this.storageFolder.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
+            this.storageLocation.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
         }
 
-        saveChunksToStorageFolder(callback);
+        saveChunksToStorage(callback);
     }
 
     /**
@@ -385,18 +385,18 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void saveChunkToStorageFolder(Chunk chunk, Runnable callback) {
-        Check.notNull(getStorageFolder(), "You cannot save the chunk if no StorageFolder has been defined");
+    public void saveChunkToStorage(Chunk chunk, Runnable callback) {
+        Check.notNull(getStorageLocation(), "You cannot save the chunk if no StorageFolder has been defined");
         chunkLoader.saveChunk(chunk, callback);
     }
 
     @Override
-    public void saveChunksToStorageFolder(Runnable callback) {
-        Check.notNull(getStorageFolder(), "You cannot save the instance if no StorageFolder has been defined");
+    public void saveChunksToStorage(Runnable callback) {
+        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageFolder has been defined");
         if (chunkLoader.supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
-                saveChunkToStorageFolder(c, null);
+                saveChunkToStorage(c, null);
             }));
             try {
                 parallelSavingThreadPool.shutdown();
@@ -412,7 +412,7 @@ public class InstanceContainer extends Instance {
                 while (chunkIterator.hasNext()) {
                     final Chunk chunk = chunkIterator.next();
                     final boolean isLast = !chunkIterator.hasNext();
-                    saveChunkToStorageFolder(chunk, isLast ? callback : null);
+                    saveChunkToStorage(chunk, isLast ? callback : null);
                 }
             }
         }
@@ -532,13 +532,13 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public StorageFolder getStorageFolder() {
-        return storageFolder;
+    public StorageLocation getStorageLocation() {
+        return storageLocation;
     }
 
     @Override
-    public void setStorageFolder(StorageFolder storageFolder) {
-        this.storageFolder = storageFolder;
+    public void setStorageLocation(StorageLocation storageLocation) {
+        this.storageLocation = storageLocation;
     }
 
     public IChunkLoader getChunkLoader() {
