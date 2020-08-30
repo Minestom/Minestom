@@ -72,7 +72,7 @@ public class InstanceContainer extends Instance {
      * @param uniqueId      the unique id of the instance
      * @param dimensionType the dimension type of the instance
      * @param storageFolder the {@link StorageFolder} of the instance,
-     *                      can be null if you do not wish to save the instance latter on
+     *                      can be null if you do not wish to save the instance later on
      */
     public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
         super(uniqueId, dimensionType);
