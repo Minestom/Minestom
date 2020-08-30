@@ -11,7 +11,7 @@ import net.minestom.server.instance.block.Block;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChunkGeneratorDemo extends ChunkGenerator {
+public class ChunkGeneratorDemo implements ChunkGenerator {
 
     @Override
     public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {

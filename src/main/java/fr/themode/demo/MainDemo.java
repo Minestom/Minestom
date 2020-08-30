@@ -48,7 +48,7 @@ public class MainDemo {
         minecraftServer.start("localhost", 25565);
     }
 
-    private static class GeneratorDemo extends ChunkGenerator {
+    private static class GeneratorDemo implements ChunkGenerator {
 
         @Override
         public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
