@@ -4,7 +4,8 @@ import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.storage.StorageSystem;
 import org.rocksdb.*;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * A storage system which is local using OS files system
@@ -20,7 +21,7 @@ public class FileStorageSystem implements StorageSystem {
 
     @Override
     public boolean exists(String folderPath) {
-        return new File(folderPath).exists();
+        return Files.isDirectory(Paths.get(folderPath));
     }
 
     @Override

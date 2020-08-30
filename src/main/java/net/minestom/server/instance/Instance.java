@@ -80,6 +80,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     // Pathfinder
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
+    /**
+     * Create a new instance
+     *
+     * @param uniqueId      the unique id of the instance
+     * @param dimensionType the dimension type of the instance
+     */
     public Instance(UUID uniqueId, DimensionType dimensionType) {
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;

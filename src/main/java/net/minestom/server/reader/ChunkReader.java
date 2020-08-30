@@ -17,6 +17,15 @@ public class ChunkReader {
 
     private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
+    /**
+     * Read a chunk from a byte array, the array should contain the whole chunk and only it
+     *
+     * @param b        the byte array containing the chunk
+     * @param instance the instance of the chunk
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @param callback the consumer called once the chunk has been read
+     */
     public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
         BinaryReader binaryReader = new BinaryReader(b);
 
@@ -26,8 +35,10 @@ public class ChunkReader {
         ChunkBatch chunkBatch = null;
         try {
 
+            // Get if the chunk has data indexes (used for blocks data)
             final boolean hasIndex = binaryReader.readBoolean();
             if (hasIndex) {
+                // Get the data indexes which will be used to read all the individual data
                 typeToIndexMap = DataReader.readDataIndexes(binaryReader);
             }
 

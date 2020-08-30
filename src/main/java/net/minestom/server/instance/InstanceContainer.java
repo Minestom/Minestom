@@ -66,21 +66,28 @@ public class InstanceContainer extends Instance {
     @Setter
     private BiFunction<Integer, Integer, BlockProvider> chunkDecider;
 
+    /**
+     * Create an {@link InstanceContainer}
+     *
+     * @param uniqueId      the unique id of the instance
+     * @param dimensionType the dimension type of the instance
+     * @param storageFolder the {@link StorageFolder} of the instance,
+     *                      can be null if you do not wish to save the instance latter on
+     */
     public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageFolder storageFolder) {
         super(uniqueId, dimensionType);
 
         this.storageFolder = storageFolder;
-        chunkLoader = new MinestomBasicChunkLoader(storageFolder);
+        this.chunkLoader = new MinestomBasicChunkLoader(storageFolder);
 
-        if (storageFolder == null) {
-            return;
+        // Get instance data from the saved data if a StorageFolder is defined
+        if (storageFolder != null) {
+            // Retrieve instance data
+            this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
+
+            final Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
+            setData(data);
         }
-
-        // Retrieve instance data
-        this.uniqueId = storageFolder.getOrDefault(UUID_KEY, UUID.class, uniqueId);
-
-        final Data data = storageFolder.getOrDefault(DATA_KEY, SerializableData.class, null);
-        setData(data);
     }
 
     @Override
