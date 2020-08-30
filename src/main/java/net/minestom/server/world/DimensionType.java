@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * https://minecraft.gamepedia.com/Custom_dimension
  */
 @Data
-@Builder(builderMethodName = "hiddenBuilder", access = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "hiddenBuilder", access = AccessLevel.PUBLIC)
 public class DimensionType {
 
 	private static final AtomicInteger idCounter = new AtomicInteger(0);
@@ -34,6 +35,7 @@ public class DimensionType {
 			.build();
 
 	private final int id = idCounter.getAndIncrement();
+	@NotNull
 	private final NamespaceID name;
 	private final boolean natural;
 	private final float ambientLight;
