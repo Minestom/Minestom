@@ -5,12 +5,12 @@ import net.minestom.server.world.biomes.Biome;
 
 import java.util.List;
 
-public abstract class ChunkGenerator {
+public interface ChunkGenerator {
 
-    public abstract void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ);
+    void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ);
 
-    public abstract void fillBiomes(Biome[] biomes, int chunkX, int chunkZ);
+    void fillBiomes(Biome[] biomes, int chunkX, int chunkZ);
 
-    public abstract List<ChunkPopulator> getPopulators();
+    List<ChunkPopulator> getPopulators();
 
 }
