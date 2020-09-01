@@ -255,7 +255,7 @@ public final class ConnectionManager {
      * @param connection the new player connection
      */
     public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
-        final Player player = getPlayerProvider().getPlayer(uuid, username, connection);
+        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         createPlayer(player);
     }
 
