@@ -3,7 +3,9 @@ package net.minestom.server.network;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.listener.manager.PacketConsumer;
+import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
 
@@ -22,6 +24,8 @@ public final class ConnectionManager {
     private List<PacketConsumer> receivePacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
     private UuidProvider uuidProvider;
+    // The player provider to have your own Player implementation
+    private PlayerProvider playerProvider;
     // The consumers to call once a player connect, mostly used to init events
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
@@ -192,6 +196,26 @@ public final class ConnectionManager {
     }
 
     /**
+     * Change the {@link Player} provider, to change which object to link to him
+     *
+     * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
+     */
+    public void setPlayerProvider(PlayerProvider playerProvider) {
+        this.playerProvider = playerProvider;
+    }
+
+    /**
+     * Retrieve the current {@link PlayerProvider}, can be the default one if none is defined
+     *
+     * @return the current {@link PlayerProvider}
+     */
+    public PlayerProvider getPlayerProvider() {
+        return playerProvider == null ?
+                (uuid, username, connection) -> new Player(uuid, username, connection) :
+                playerProvider;
+    }
+
+    /**
      * Those are all the consumers called when a new player join
      *
      * @return an unmodifiable list containing all the player initialization consumer
@@ -213,8 +237,8 @@ public final class ConnectionManager {
     /**
      * Add a new player in the players list
      * Is currently used at
-     * {@link net.minestom.server.network.packet.client.login.LoginStartPacket#process(PlayerConnection, ConnectionManager)}
-     * and in {@link net.minestom.server.entity.fakeplayer.FakePlayer#initPlayer(UUID, String, Consumer)}
+     * {@link LoginStartPacket#process(PlayerConnection)}
+     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}
      *
      * @param player the player to add
      */
@@ -231,7 +255,7 @@ public final class ConnectionManager {
      * @param connection the new player connection
      */
     public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
-        final Player player = new Player(uuid, username, connection);
+        final Player player = getPlayerProvider().getPlayer(uuid, username, connection);
         createPlayer(player);
     }
 
