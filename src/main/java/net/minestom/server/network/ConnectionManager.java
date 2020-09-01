@@ -210,9 +210,7 @@ public final class ConnectionManager {
      * @return the current {@link PlayerProvider}
      */
     public PlayerProvider getPlayerProvider() {
-        return playerProvider == null ?
-                (uuid, username, connection) -> new Player(uuid, username, connection) :
-                playerProvider;
+        return playerProvider == null ? playerProvider = Player::new : playerProvider;
     }
 
     /**
