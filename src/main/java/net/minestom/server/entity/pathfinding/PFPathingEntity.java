@@ -1,6 +1,8 @@
 package net.minestom.server.entity.pathfinding;
 
+import com.extollit.gaming.ai.path.model.Gravitation;
 import com.extollit.gaming.ai.path.model.IPathingEntity;
+import com.extollit.gaming.ai.path.model.Passibility;
 import com.extollit.linalg.immutable.Vec3d;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.EntityCreature;
@@ -135,6 +137,16 @@ public class PFPathingEntity implements IPathingEntity {
             }
 
             @Override
+            public boolean aquatic() {
+                return false;
+            }
+
+            @Override
+            public boolean avian() {
+                return false;
+            }
+
+            @Override
             public boolean aquaphobic() {
                 return aquaphobic;
             }
@@ -152,7 +164,7 @@ public class PFPathingEntity implements IPathingEntity {
     }
 
     @Override
-    public void moveTo(Vec3d position) {
+    public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
         final float x = (float) position.x;
         final float y = (float) position.y;
         final float z = (float) position.z;

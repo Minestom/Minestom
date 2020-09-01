@@ -4,7 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.*;
+import net.minestom.server.instance.ChunkGenerator;
+import net.minestom.server.instance.ChunkPopulator;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
@@ -55,8 +58,7 @@ public class SimpleCommand implements CommandProcessor {
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
-        SharedInstance instance = instanceManager.createSharedInstance(instanceContainer);
-        sender.asPlayer().setInstance(instance);
+        sender.asPlayer().setInstance(instanceContainer);
         System.out.println(MinecraftServer.getInstanceManager().getInstances().size());
 
         System.gc();

@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.model.PathObject;
+import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.ai.GoalSelector;
@@ -33,7 +33,7 @@ public abstract class EntityCreature extends LivingEntity {
 
     private PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
-    private PathObject path;
+    private IPath path;
     private Position pathPosition;
 
     protected List<GoalSelector> goalSelectors = new ArrayList<>();
