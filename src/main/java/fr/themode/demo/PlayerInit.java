@@ -37,13 +37,14 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.world.DimensionType;
 
 import java.util.Map;
 import java.util.UUID;
 
 public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
-    //private static volatile InstanceContainer netherTest;
+    private static volatile InstanceContainer netherTest;
 
     private static volatile Inventory inventory;
 
@@ -57,13 +58,13 @@ public class PlayerInit {
         //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
-        /*netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.NETHER);
+        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         netherTest.enableAutoChunkLoad(true);
         netherTest.setChunkGenerator(noiseTestGenerator);
 
-        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.END);
+        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         end.enableAutoChunkLoad(true);
-        end.setChunkGenerator(noiseTestGenerator);*/
+        end.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         final int loopStart = -10;
@@ -71,8 +72,8 @@ public class PlayerInit {
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                //netherTest.loadChunk(x, z);
-                //end.loadChunk(x, z);
+                netherTest.loadChunk(x, z);
+                end.loadChunk(x, z);
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");

@@ -34,41 +34,92 @@ public class StorageLocation {
         this.storageSystem.open(folderPath, storageOptions);
     }
 
+    /**
+     * Get the data associated with a key
+     *
+     * @param key the key
+     * @return the data associated to {@code key}
+     * @see StorageSystem#get(String)
+     */
     public byte[] get(String key) {
         return storageSystem.get(key);
     }
 
+    /**
+     * Set a data associated to a key
+     *
+     * @param key  the key of the data
+     * @param data the data
+     * @see StorageSystem#set(String, byte[])
+     */
     public void set(String key, byte[] data) {
         this.storageSystem.set(key, data);
     }
 
+    /**
+     * Delete a key
+     *
+     * @param key the key
+     * @see StorageSystem#delete(String)
+     */
     public void delete(String key) {
         this.storageSystem.delete(key);
     }
 
+    /**
+     * Close the {@link StorageLocation}
+     *
+     * @see StorageSystem#close()
+     */
     public void close() {
         this.storageSystem.close();
     }
 
+    /**
+     * Set an object associated to a key
+     * <p>
+     * It does use registered {@link DataType} located on {@link DataManager}
+     * So you need to register all the types that you use
+     *
+     * @param key    the key
+     * @param object the data object
+     * @param type   the class of the data
+     * @param <T>    the type of the data
+     */
     public <T> void set(String key, T object, Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only save registered DataType type!");
 
+        // Encode the data
         BinaryWriter binaryWriter = new BinaryWriter();
         dataType.encode(binaryWriter, object); // Encode
         final byte[] encodedValue = binaryWriter.toByteArray(); // Retrieve bytes
 
+        // Write it
         set(key, encodedValue);
     }
 
+    /**
+     * Retrieve a serialized object associated to a key
+     * <p>
+     * It does use registered {@link DataType} located on {@link DataManager}
+     * So you need to register all the types that you use
+     *
+     * @param key  the key
+     * @param type the class of the data
+     * @param <T>  the type of the data
+     * @return the object associated to the key
+     */
     public <T> T get(String key, Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only get registered DataType type!");
 
         final byte[] data = get(key);
+        // No key
         if (data == null)
             return null;
 
+        // Decode the data
         BinaryReader binaryReader = new BinaryReader(data);
         return dataType.decode(binaryReader);
     }

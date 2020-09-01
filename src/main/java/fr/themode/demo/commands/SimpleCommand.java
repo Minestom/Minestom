@@ -1,14 +1,16 @@
 package fr.themode.demo.commands;
 
-import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.notifications.Notification;
-import net.minestom.server.advancements.notifications.NotificationCenter;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.Material;
+import net.minestom.server.instance.*;
+import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.world.DimensionType;
+import net.minestom.server.world.biomes.Biome;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SimpleCommand implements CommandProcessor {
     @Override
@@ -23,53 +25,41 @@ public class SimpleCommand implements CommandProcessor {
 
     @Override
     public boolean process(CommandSender sender, String command, String[] args) {
-
         if (!sender.isPlayer())
             return false;
-        Player player = (Player) sender;
 
-        /*for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            if (!(p instanceof FakePlayer))
-                continue;
-            FakePlayer fakePlayer = (FakePlayer) p;
-            FakePlayerController controller = fakePlayer.getController();
-            BlockPosition blockPosition = new BlockPosition(0, 39, 0);
-            controller.startDigging(blockPosition);
-
-            MinecraftServer.getSchedulerManager().addDelayedTask(new TaskRunnable() {
-                @Override
-                public void run() {
-                    controller.stopDigging(blockPosition);
+        final int word = 2;
+        ChunkGenerator chunkGeneratorDemo = new ChunkGenerator() {
+            @Override
+            public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
+                for (int x = 0; x < 16; x++) {
+                    for (int z = 0; z < 16; z++) {
+                        batch.setBlockStateId(x, 1, z, (short) word);
+                    }
                 }
-            }, new UpdateOption(7, TimeUnit.TICK));
+            }
 
-            break;
-        }*/
+            @Override
+            public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+                Arrays.fill(biomes, Biome.PLAINS);
+            }
 
-        /*for (EntityCreature entityCreature : player.getInstance().getCreatures()) {
-            entityCreature.setPathTo(player.getPosition().clone());
-            //entityCreature.jump(1);
-        }
+            @Override
+            public List<ChunkPopulator> getPopulators() {
+                return null;
+            }
+        };
 
-        System.gc();
-        player.sendMessage("Garbage collector called");*/
+        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.enableAutoChunkLoad(true);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
-        /*Instance instance = player.getInstance();
-
-        ChickenCreature chickenCreature = new ChickenCreature(new Position(-10, 43, -10));
-        chickenCreature.setInstance(instance);
-
-        chickenCreature.setPathTo(player.getPosition());*/
-
-        final Notification notification = new Notification(ColoredText.of(ChatColor.BRIGHT_GREEN + "Welcome to Minestom!"),
-                FrameType.TASK, Material.APPLE);
-
-        NotificationCenter.send(notification, player);
-        NotificationCenter.send(notification, player);
+        SharedInstance instance = instanceManager.createSharedInstance(instanceContainer);
+        sender.asPlayer().setInstance(instance);
+        System.out.println(MinecraftServer.getInstanceManager().getInstances().size());
 
         System.gc();
-
-        player.getInstance().saveChunksToStorage(() -> System.out.println("end save"));
 
         return true;
     }

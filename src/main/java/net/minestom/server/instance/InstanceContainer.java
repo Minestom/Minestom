@@ -497,6 +497,15 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Get all the {@link SharedInstance} linked to this container
+     *
+     * @return an unmodifiable {@link List} containing all the {@link SharedInstance} linked to this container
+     */
+    public List<SharedInstance> getSharedInstances() {
+        return Collections.unmodifiableList(sharedInstances);
+    }
+
+    /**
      * Assign a {@link SharedInstance} to this container
      * <p>
      * Only used by {@link InstanceManager}

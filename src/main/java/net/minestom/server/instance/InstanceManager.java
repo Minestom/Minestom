@@ -71,7 +71,7 @@ public final class InstanceManager {
     /**
      * Register a {@link SharedInstance}
      * <p>
-     * WARNING: the shared instance needs to have an {@link InstanceContainer} assigned to it
+     * WARNING: the {@link SharedInstance} needs to have an {@link InstanceContainer} assigned to it
      *
      * @param sharedInstance the {@link SharedInstance} to register
      * @return the registered {@link SharedInstance}
@@ -111,9 +111,9 @@ public final class InstanceManager {
     }
 
     /**
-     * Register the instance internally
+     * Register the {@link Instance} internally
      *
-     * @param instance the instance to register
+     * @param instance the {@link Instance} to register
      */
     private void registerInstance(Instance instance) {
         instance.setRegistered(true);

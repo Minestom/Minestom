@@ -4,6 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -113,7 +116,9 @@ public abstract class ThreadProvider {
      * @param time     the current time in ms
      */
     protected void updateInstance(Instance instance, long time) {
+        // The instance
         instance.tick(time);
+        updateSharedInstances(instance, sharedInstance -> updateInstance(sharedInstance, time));
     }
 
     /**
@@ -195,13 +200,31 @@ public abstract class ThreadProvider {
      * @param condition the condition which confirm if the update happens or not
      */
     protected void conditionalEntityUpdate(Instance instance, Chunk chunk, long time, Function<Entity, Boolean> condition) {
-        Set<Entity> entities = instance.getChunkEntities(chunk);
+        final Set<Entity> entities = instance.getChunkEntities(chunk);
 
         if (!entities.isEmpty()) {
             for (Entity entity : entities) {
                 if (condition != null && !condition.apply(entity))
                     continue;
                 entity.tick(time);
+            }
+        }
+
+        updateSharedInstances(instance, sharedInstance -> conditionalEntityUpdate(sharedInstance, chunk, time, condition));
+    }
+
+    /**
+     * If {@code instance} is an {@link InstanceContainer}, run a callback for all of its
+     * {@link SharedInstance}
+     *
+     * @param instance the instance
+     * @param callback the callback to run for all the {@link SharedInstance}
+     */
+    private void updateSharedInstances(Instance instance, Consumer<SharedInstance> callback) {
+        if (instance instanceof InstanceContainer) {
+            final InstanceContainer instanceContainer = (InstanceContainer) instance;
+            for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {
+                callback.accept(sharedInstance);
             }
         }
     }

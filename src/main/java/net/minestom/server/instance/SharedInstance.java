@@ -14,7 +14,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * Shared instance is an instance that share the same chunks as instanceContainer,
+ * The {@link SharedInstance} is an instance that shares the same chunks as its linked {@link InstanceContainer},
  * entities are separated.
  */
 public class SharedInstance extends Instance {
