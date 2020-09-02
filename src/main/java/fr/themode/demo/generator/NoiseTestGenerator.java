@@ -4,6 +4,7 @@ import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
@@ -46,7 +47,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
                         batch.setBlock(x, y, z, Block.GRASS_BLOCK);
                     } else if (y > height - 7) {
                         // Data for debugging purpose
-                        SerializableData serializableData = new SerializableData();
+                        SerializableData serializableData = new SerializableDataImpl();
                         serializableData.set("test", 55, Integer.class);
                         batch.setBlockStateId(x, y, z, Block.DIRT.getBlockId(), serializableData);
                     } else {

@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.utils.binary.BinaryReader;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,7 +44,7 @@ public class DataReader {
             }
         }
 
-        SerializableData data = new SerializableData();
+        SerializableData data = new SerializableDataImpl();
         while (true) {
             // Get the class index
             final short typeIndex = reader.readShort();

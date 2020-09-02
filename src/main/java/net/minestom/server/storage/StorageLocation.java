@@ -5,6 +5,7 @@ import net.minestom.server.data.DataContainer;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.reader.DataReader;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -152,7 +153,7 @@ public class StorageLocation {
         if (bytes != null) {
             data = DataReader.readIndexedData(new BinaryReader(bytes));
         } else {
-            data = new SerializableData();
+            data = new SerializableDataImpl();
         }
 
         dataContainer.setData(data);
@@ -183,7 +184,7 @@ public class StorageLocation {
             if (bytes != null) {
                 data = DataReader.readIndexedData(new BinaryReader(bytes));
             } else {
-                data = new SerializableData();
+                data = new SerializableDataImpl();
             }
 
             dataContainer.setData(data);
