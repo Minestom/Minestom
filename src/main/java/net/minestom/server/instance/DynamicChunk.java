@@ -51,13 +51,16 @@ public class DynamicChunk extends Chunk {
         }
 
         final int index = getBlockIndex(x, y, z);
-        if (blockStateId != 0 || customId != 0 && updateConsumer != null) { // Allow custom air block for update purpose, refused if no update consumer has been found
+        // True if the block is not complete air without any custom block capabilities
+        final boolean hasBlock = blockStateId != 0 || customId != 0;
+        if (hasBlock) {
             this.blocksStateId[index] = blockStateId;
             this.customBlocksId[index] = customId;
         } else {
             // Block has been deleted, clear cache and return
 
             this.blocksStateId[index] = 0; // Set to air
+            this.customBlocksId[index] = 0; // Remove custom block
 
             this.blocksData.remove(index);
 

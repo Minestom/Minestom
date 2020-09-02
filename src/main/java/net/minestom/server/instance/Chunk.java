@@ -189,11 +189,22 @@ public abstract class Chunk implements Viewable {
         this.packetUpdated = true;
     }
 
+    /**
+     * Get if a block state id represents a block entity
+     *
+     * @param blockStateId the block state id to check
+     * @return true if {@code blockStateId} represents a block entity
+     */
     protected boolean isBlockEntity(short blockStateId) {
         final Block block = Block.fromStateId(blockStateId);
         return block.hasBlockEntity();
     }
 
+    /**
+     * Get all the block entities in this chunk
+     *
+     * @return the block entities in this chunk
+     */
     public Set<Integer> getBlockEntities() {
         return blockEntities;
     }
@@ -215,11 +226,13 @@ public abstract class Chunk implements Viewable {
     public void retrieveDataBuffer(Consumer<ByteBuf> consumer) {
         final ByteBuf data = getFullDataPacket();
         if (data == null || !packetUpdated) {
+            // Packet has never been wrote or is outdated, write it
             PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), packet -> {
                 setFullDataPacket(packet);
                 consumer.accept(packet);
             });
         } else {
+            // Packet is up-to-date
             consumer.accept(data);
         }
     }
@@ -323,13 +336,16 @@ public abstract class Chunk implements Viewable {
      * @param player the player
      */
     protected void sendChunk(Player player) {
+        // Only send loaded chunk
         if (!isLoaded())
             return;
+        // Only send chunk to netty client (because it sends raw ByteBuf buffer)
         if (!PlayerUtils.isNettyClient(player))
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
+        // Retrieve & send the buffer to the connection
         retrieveDataBuffer(buf -> playerConnection.sendPacket(buf, true));
 
         // TODO do not hardcode
@@ -343,8 +359,8 @@ public abstract class Chunk implements Viewable {
             updateLightPacket.emptyBlockLightMask = 0x3FFC0;
             byte[] bytes = new byte[2048];
             Arrays.fill(bytes, (byte) 0xFF);
-            List<byte[]> temp = new ArrayList<>();
-            List<byte[]> temp2 = new ArrayList<>();
+            List<byte[]> temp = new ArrayList<>(14);
+            List<byte[]> temp2 = new ArrayList<>(6);
             for (int i = 0; i < 14; ++i) {
                 temp.add(bytes);
             }
