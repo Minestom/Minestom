@@ -58,7 +58,7 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    protected byte[] getSerializedData() {
+    public byte[] getSerializedData() {
         return null;
     }
 

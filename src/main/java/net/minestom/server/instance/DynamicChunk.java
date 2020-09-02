@@ -10,11 +10,13 @@ import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 
 public class DynamicChunk extends Chunk {
 
@@ -150,8 +152,15 @@ public class DynamicChunk extends Chunk {
         this.blocksStateId[blockIndex] = blockStateId;
     }
 
+    /**
+     * Serialize this {@link Chunk} based on {@link ChunkReader#readChunk(byte[], Instance, int, int, Consumer)}
+     * <p>
+     * It is also used by the default {@link IChunkLoader} which is {@link MinestomBasicChunkLoader}
+     *
+     * @return the serialized chunk data
+     */
     @Override
-    protected byte[] getSerializedData() {
+    public byte[] getSerializedData() {
 
         // Used for blocks data
         Object2ShortMap<String> typeToIndexMap = new Object2ShortOpenHashMap<>();

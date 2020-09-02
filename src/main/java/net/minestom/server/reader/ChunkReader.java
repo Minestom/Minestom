@@ -20,6 +20,8 @@ public class ChunkReader {
 
     /**
      * Read a chunk from a byte array, the array should contain the whole chunk and only it
+     * <p>
+     * By default you can retrieve this byte array using {@link DynamicChunk#getSerializedData()}
      *
      * @param b        the byte array containing the chunk
      * @param instance the instance of the chunk

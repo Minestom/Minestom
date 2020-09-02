@@ -240,9 +240,9 @@ public abstract class Chunk implements Viewable {
     /**
      * Serialize the chunk
      *
-     * @return the serialized chunk
+     * @return the serialized chunk, can potentially be null if this chunk cannot be serialized
      */
-    protected abstract byte[] getSerializedData();
+    public abstract byte[] getSerializedData();
 
     /**
      * Get a {@link ChunkDataPacket} which should contain the full chunk
