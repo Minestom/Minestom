@@ -1,6 +1,7 @@
 package loottables;
 
 import net.minestom.server.data.Data;
+import net.minestom.server.data.DataImpl;
 import net.minestom.server.gamedata.conditions.SurvivesExplosionCondition;
 import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableManager;
@@ -94,7 +95,7 @@ public class TestLootTables {
     @Test
     public void simpleGenerate() throws FileNotFoundException {
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
-        Data arguments = new Data();
+        Data arguments = new DataImpl();
         List<ItemStack> stacks = lootTable.generate(arguments);
         Assertions.assertEquals(1, stacks.size());
         Assertions.assertEquals(Material.ACACIA_BUTTON, stacks.get(0).getMaterial());
@@ -103,7 +104,7 @@ public class TestLootTables {
     @Test
     public void testExplosion() throws FileNotFoundException {
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
-        Data arguments = new Data();
+        Data arguments = new DataImpl();
         // negative value will force the condition to fail
         arguments.set("explosionPower", -1.0, Double.class);
         List<ItemStack> stacks = lootTable.generate(arguments);

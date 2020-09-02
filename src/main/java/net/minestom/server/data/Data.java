@@ -2,14 +2,12 @@ package net.minestom.server.data;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class Data {
+public interface Data {
 
-    public static final Data EMPTY = new Data() {
+    Data EMPTY = new Data() {
         @Override
-        public <T> void set(String key, T value, Class<T> type) {
-        }
+        public <T> void set(String key, T value, Class<T> type) { }
 
         @Override
         public <T> T get(String key) {
@@ -22,12 +20,25 @@ public class Data {
         }
 
         @Override
+        public Set<String> getKeys() {
+            return Collections.EMPTY_SET;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+
+        @Override
+        public Data clone() {
+            return this;
+        }
+
+        @Override
         public <T> T getOrDefault(String key, T defaultValue) {
             return defaultValue;
         }
     };
-
-    protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
     /**
      * Set a value to a specific key
@@ -37,21 +48,16 @@ public class Data {
      * @param type  the value type
      * @param <T>   the value generic
      */
-    public <T> void set(String key, T value, Class<T> type) {
-        this.data.put(key, value);
-    }
+    <T> void set(String key, T value, Class<T> type);
 
     /**
      * Retrieve a value based on its key
      *
      * @param key the key
      * @param <T> the value type
-     * @return the data associated with the key
-     * @throws NullPointerException if the key is not found
+     * @return the data associated with the key or null
      */
-    public <T> T get(String key) {
-        return (T) data.get(key);
-    }
+    <T> T get(String key);
 
     /**
      * Retrieve a value based on its key, give a default value if not found
@@ -61,9 +67,7 @@ public class Data {
      * @param <T>          the value type
      * @return {@link #get(String)} if found, {@code defaultValue} otherwise
      */
-    public <T> T getOrDefault(String key, T defaultValue) {
-        return (T) data.getOrDefault(key, defaultValue);
-    }
+    <T> T getOrDefault(String key, T defaultValue);
 
     /**
      * Get if the data has a key
@@ -71,37 +75,27 @@ public class Data {
      * @param key the key to check
      * @return true if the data contains the key
      */
-    public boolean hasKey(String key) {
-        return data.containsKey(key);
-    }
+    boolean hasKey(String key);
 
     /**
      * Get the list of data keys
      *
      * @return an unmodifiable set containing all keys
      */
-    public Set<String> getKeys() {
-        return Collections.unmodifiableSet(data.keySet());
-    }
+    Set<String> getKeys();
 
     /**
      * Get if the data is empty or not
      *
      * @return true if the data does not contain anything, false otherwise
      */
-    public boolean isEmpty() {
-        return data.isEmpty();
-    }
+     boolean isEmpty();
 
     /**
      * Clone this data
      *
      * @return a cloned data object
      */
-    public Data clone() {
-        Data data = new Data();
-        data.data.putAll(this.data);
-        return data;
-    }
+    Data clone();
 
 }
