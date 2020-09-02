@@ -517,9 +517,16 @@ public class InstanceContainer extends Instance {
         this.sharedInstances.add(sharedInstance);
     }
 
+    /**
+     * Add a {@link Chunk} to the internal instance map
+     *
+     * @param chunk the chunk to cache
+     */
     private void cacheChunk(Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        this.chunks.put(index, chunk);
+        synchronized (chunks) {
+            this.chunks.put(index, chunk);
+        }
     }
 
     @Override
