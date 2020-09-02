@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public interface IChunkLoader {
 
     /**
-     * Load a specific chunk
+     * Load a specific chunk, all blocks should be set since the {@link ChunkGenerator} is not applied
      *
      * @param instance the instance where the chunk belong
      * @param chunkX   the chunk X

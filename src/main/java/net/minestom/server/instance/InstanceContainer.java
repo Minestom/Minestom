@@ -467,6 +467,7 @@ public class InstanceContainer extends Instance {
         cacheChunk(chunk);
 
         if (chunkGenerator != null && blockProvider == null) {
+            // Execute the chunk generator to populate the chunk
             final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
