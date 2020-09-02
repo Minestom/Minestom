@@ -80,7 +80,7 @@ public class InstanceContainer extends Instance {
         this.storageLocation = storageLocation;
         this.chunkLoader = new MinestomBasicChunkLoader(storageLocation);
 
-        // Get instance data from the saved data if a StorageFolder is defined
+        // Get instance data from the saved data if a StorageLocation is defined
         if (storageLocation != null) {
             // Retrieve instance data
             this.uniqueId = storageLocation.getOrDefault(UUID_KEY, UUID.class, uniqueId);
@@ -324,7 +324,7 @@ public class InstanceContainer extends Instance {
                 callback.accept(chunk);
         } else {
             if (hasEnabledAutoChunkLoad()) {
-                // Load chunk from StorageFolder or with ChunkGenerator
+                // Load chunk from StorageLocation or with ChunkGenerator
                 retrieveChunk(chunkX, chunkZ, callback);
             } else {
                 // Chunk not loaded, return null
@@ -361,7 +361,7 @@ public class InstanceContainer extends Instance {
      * @param callback the callback
      */
     public void saveInstance(Runnable callback) {
-        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageFolder has been defined");
+        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
 
         this.storageLocation.set(UUID_KEY, getUniqueId(), UUID.class);
         final Data data = getData();
@@ -386,13 +386,13 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunkToStorage(Chunk chunk, Runnable callback) {
-        Check.notNull(getStorageLocation(), "You cannot save the chunk if no StorageFolder has been defined");
+        Check.notNull(getStorageLocation(), "You cannot save the chunk if no StorageLocation has been defined");
         chunkLoader.saveChunk(chunk, callback);
     }
 
     @Override
     public void saveChunksToStorage(Runnable callback) {
-        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageFolder has been defined");
+        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
         if (chunkLoader.supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
