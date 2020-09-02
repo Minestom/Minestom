@@ -12,6 +12,7 @@ import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -175,9 +176,7 @@ public class DynamicChunk extends Chunk {
                         continue;
 
                     // Chunk coordinates
-                    binaryWriter.writeByte(x);
-                    binaryWriter.writeShort(y);
-                    binaryWriter.writeByte(z);
+                    binaryWriter.writeShort((short) ChunkUtils.getBlockIndex(x, y, z));
 
                     // Block ids
                     binaryWriter.writeShort(blockStateId);

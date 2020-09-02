@@ -8,6 +8,7 @@ import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 
@@ -54,9 +55,10 @@ public class ChunkReader {
 
             while (true) {
                 // Position
-                final byte x = binaryReader.readByte();
-                final short y = binaryReader.readShort();
-                final byte z = binaryReader.readByte();
+                final short index = binaryReader.readShort();
+                final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
+                final short y = ChunkUtils.blockIndexToChunkPositionY(index);
+                final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
 
                 // Block type
                 final short blockStateId = binaryReader.readShort();

@@ -223,8 +223,8 @@ public final class ChunkUtils {
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position X (O-15) of the specified index
      */
-    public static int blockIndexToChunkPositionX(int index) {
-        return blockIndexToPositionX(index, 0);
+    public static byte blockIndexToChunkPositionX(int index) {
+        return (byte) blockIndexToPositionX(index, 0);
     }
 
     /**
@@ -233,8 +233,8 @@ public final class ChunkUtils {
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position Y (O-255) of the specified index
      */
-    public static int blockIndexToChunkPositionY(int index) {
-        return blockIndexToPositionY(index);
+    public static short blockIndexToChunkPositionY(int index) {
+        return (short) blockIndexToPositionY(index);
     }
 
     /**
@@ -243,8 +243,8 @@ public final class ChunkUtils {
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position Z (O-15) of the specified index
      */
-    public static int blockIndexToChunkPositionZ(int index) {
-        return blockIndexToPositionZ(index, 0);
+    public static byte blockIndexToChunkPositionZ(int index) {
+        return (byte) blockIndexToPositionZ(index, 0);
     }
 
 }
