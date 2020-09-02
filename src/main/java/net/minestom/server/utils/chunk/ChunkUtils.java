@@ -90,8 +90,9 @@ public final class ChunkUtils {
 
     public static short getLocalBlockPosAsShort(int x, int y, int z) {
         x = x % Chunk.CHUNK_SIZE_X;
+        y = y % Chunk.CHUNK_SIZE_Y;
         z = z % Chunk.CHUNK_SIZE_Z;
-        return (short) (x << 8 | y << 4 | z);
+        return (short) (x << 12 | y << 4 | z);
     }
 
     public static int getSectionAt(int y) {
