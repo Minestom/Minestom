@@ -19,8 +19,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class DynamicChunk extends Chunk {
 
     // blocks id based on coordinate, see Chunk#getBlockIndex
-    private final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-    private final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     public DynamicChunk(Biome[] biomes, int chunkX, int chunkZ) {
         super(biomes, chunkX, chunkZ);
