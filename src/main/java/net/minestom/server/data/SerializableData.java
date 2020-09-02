@@ -6,6 +6,9 @@ import net.minestom.server.reader.DataReader;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 
+/**
+ * Represent a {@link Data} object which can be serialized and read back by the {@link DataReader}
+ */
 public interface SerializableData extends Data {
 
     DataManager DATA_MANAGER = MinecraftServer.getDataManager();

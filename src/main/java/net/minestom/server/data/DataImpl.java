@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * {@link Data} implementation which use a {@link ConcurrentHashMap}
+ */
 public class DataImpl implements Data {
 
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();

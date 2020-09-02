@@ -1,8 +1,6 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
@@ -204,10 +202,8 @@ public class DynamicChunk extends Chunk {
             SerializableData.writeDataIndexHeader(indexWriter, typeToIndexMap);
         }
 
-        // Create the final buffer (data index buffer followed by the chunk buffer)
-        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(indexWriter.getBuffer(), binaryWriter.getBuffer());
-        // Change the main writer buffer
-        binaryWriter.setBuffer(finalBuffer);
+        // Add the hasIndex field & the index header if it has it
+        binaryWriter.writeAtStart(indexWriter);
 
         return binaryWriter.toByteArray();
     }

@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+/**
+ * Class used to read from a byte array
+ * WARNING: not thread-safe
+ */
 public class BinaryReader extends InputStream {
 
     private final ByteBuf buffer;

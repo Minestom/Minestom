@@ -3,11 +3,15 @@ package net.minestom.server.data;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Represent an object which contain key/value based data
+ */
 public interface Data {
 
     Data EMPTY = new Data() {
         @Override
-        public <T> void set(String key, T value, Class<T> type) { }
+        public <T> void set(String key, T value, Class<T> type) {
+        }
 
         @Override
         public <T> T get(String key) {
@@ -89,7 +93,7 @@ public interface Data {
      *
      * @return true if the data does not contain anything, false otherwise
      */
-     boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * Clone this data

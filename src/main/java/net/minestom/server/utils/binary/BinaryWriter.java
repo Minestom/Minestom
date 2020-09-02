@@ -16,6 +16,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+/**
+ * Class used to write to a byte array
+ * WARNING: not thread-safe
+ */
 public class BinaryWriter extends OutputStream {
 
     private ByteBuf buffer;
@@ -250,6 +254,34 @@ public class BinaryWriter extends OutputStream {
         final int readerIndex = buffer.readerIndex();
         buffer.getBytes(readerIndex, bytes);
         return bytes;
+    }
+
+    /**
+     * Add a {@link BinaryWriter}'s {@link ByteBuf} at the beginning of this writer
+     *
+     * @param headerWriter the {@link BinaryWriter} to add at the beginning
+     */
+    public void writeAtStart(BinaryWriter headerWriter) {
+        // Get the buffer of the header
+        final ByteBuf headerBuf = headerWriter.getBuffer();
+        // Merge both the headerBuf and this buffer
+        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(headerBuf, buffer);
+        // Change the buffer used by this writer
+        setBuffer(finalBuffer);
+    }
+
+    /**
+     * Add a {@link BinaryWriter}'s {@link ByteBuf} at the end of this writer
+     *
+     * @param footerWriter the {@link BinaryWriter} to add at the end
+     */
+    public void writeAtEnd(BinaryWriter footerWriter) {
+        // Get the buffer of the footer
+        final ByteBuf footerBuf = footerWriter.getBuffer();
+        // Merge both this buffer and the footerBuf
+        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(buffer, footerBuf);
+        // Change the buffer used by this writer
+        setBuffer(finalBuffer);
     }
 
     /**

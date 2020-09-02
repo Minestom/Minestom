@@ -72,7 +72,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
         if (buf.readableBytes() != 0) {
-            int i = Utils.readVarInt(buf);
+            final int i = Utils.readVarInt(buf);
 
             if (i == 0) {
                 out.add(buf.readRetainedSlice(buf.readableBytes()));

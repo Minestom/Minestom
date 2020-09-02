@@ -1,7 +1,5 @@
 package net.minestom.server.data;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.utils.PrimitiveConversion;
@@ -10,6 +8,9 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * {@link SerializableData} implementation based on {@link DataImpl}
+ */
 public class SerializableDataImpl extends DataImpl implements SerializableData {
 
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
@@ -91,10 +92,8 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
             // The buffer containing all the index info (class name to class index)
             BinaryWriter indexWriter = new BinaryWriter();
             SerializableData.writeDataIndexHeader(indexWriter, typeToIndexMap);
-            // Merge the index buffer & the main data buffer
-            final ByteBuf finalBuffer = Unpooled.wrappedBuffer(indexWriter.getBuffer(), binaryWriter.getBuffer());
-            // Change the main writer buffer, so it contains both the indexes and the data
-            binaryWriter.setBuffer(finalBuffer);
+            // Set the header
+            binaryWriter.writeAtStart(indexWriter);
         }
 
         return binaryWriter.toByteArray();

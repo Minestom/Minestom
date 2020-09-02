@@ -44,7 +44,6 @@ import java.util.UUID;
 
 public class PlayerInit {
     private static volatile InstanceContainer instanceContainer;
-    private static volatile InstanceContainer netherTest;
 
     private static volatile Inventory inventory;
 
@@ -52,19 +51,10 @@ public class PlayerInit {
         StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(storageLocation);
-        //instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
         instanceContainer.enableAutoChunkLoad(true);
         //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
-
-        netherTest = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
-        netherTest.enableAutoChunkLoad(true);
-        netherTest.setChunkGenerator(noiseTestGenerator);
-
-        InstanceContainer end = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
-        end.enableAutoChunkLoad(true);
-        end.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         final int loopStart = -10;
@@ -72,8 +62,6 @@ public class PlayerInit {
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
-                netherTest.loadChunk(x, z);
-                end.loadChunk(x, z);
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
