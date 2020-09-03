@@ -152,6 +152,8 @@ public final class ChunkUtils {
 
     /**
      * Get the block index of a position
+     * <p>
+     * This can be cast as a short as long as you don't mind receiving a negative value (not array-friendly)
      *
      * @param x the block X
      * @param y the block Y
