@@ -31,6 +31,8 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
     @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
+        final long loadedChunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+
         Long2ObjectMap<LongSet> chunksGroupMap = getChunksGroupMap(instance);
         Map<LongSet, Instance> instanceMap = getInstanceMap(instance);
 
@@ -51,11 +53,10 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
         if (!findGroup) {
             // Create group of one chunk
-            final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
             LongSet chunkIndexes = new LongArraySet();
-            chunkIndexes.add(chunkIndex);
+            chunkIndexes.add(loadedChunkIndex);
 
-            chunksGroupMap.put(chunkIndex, chunkIndexes);
+            chunksGroupMap.put(loadedChunkIndex, chunkIndexes);
             instanceMap.put(chunkIndexes, instance);
 
             return;
@@ -68,8 +69,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         LongSet finalGroup = new LongArraySet(size);
 
         // Add the newly loaded chunk to the group
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        finalGroup.add(chunkIndex);
+        finalGroup.add(loadedChunkIndex);
 
         // Add all the neighbours groups to the final one
         for (LongSet chunkCoordinates : neighboursGroups) {
