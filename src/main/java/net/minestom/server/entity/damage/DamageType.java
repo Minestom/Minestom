@@ -2,6 +2,8 @@ package net.minestom.server.entity.damage;
 
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.RichMessage;
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -10,7 +12,7 @@ import net.minestom.server.sound.Sound;
 /**
  * Represents a type of damage
  */
-public class DamageType {
+public class DamageType implements DataContainer {
 
     public static final DamageType VOID = new DamageType("attack.outOfWorld");
     public static final DamageType GRAVITY = new DamageType("attack.fall");
@@ -21,6 +23,7 @@ public class DamageType {
         }
     };
     private final String identifier;
+    private Data data;
 
     public DamageType(String identifier) {
         this.identifier = identifier;
@@ -35,7 +38,7 @@ public class DamageType {
     }
 
     public RichMessage buildChatMessage(Player killed) {
-        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + ","+killed.getUsername()+"}"));
+        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + "," + killed.getUsername() + "}"));
         return richMessage;
     }
 
@@ -70,5 +73,15 @@ public class DamageType {
 
     protected Sound getPlayerSound(Player player) {
         return Sound.ENTITY_PLAYER_HURT;
+    }
+
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Data data) {
+        this.data = data;
     }
 }
