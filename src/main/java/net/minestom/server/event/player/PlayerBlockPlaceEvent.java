@@ -37,7 +37,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      * @param customBlock the custom block to place
      */
     public void setCustomBlock(CustomBlock customBlock) {
-        setBlockStateId(customBlock.getBlockStateId());
+        setBlockStateId(customBlock.getDefaultBlockStateId());
         setCustomBlockId(customBlock.getCustomBlockId());
     }
 
@@ -47,7 +47,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      * @param customBlockId the custom block id to place
      */
     public void setCustomBlock(short customBlockId) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setCustomBlock(customBlock);
     }
 
@@ -57,7 +57,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      * @param customBlockId the custom block id to place
      */
     public void setCustomBlock(String customBlockId) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setCustomBlock(customBlock);
     }
 

@@ -55,11 +55,11 @@ public class PlayerDiggingListener {
                                 addEffect(player);
                             }
 
-                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockStateId(),
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getDefaultBlockStateId(),
                                     ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                         } else {
                             // Unsuccessful digging
-                            sendAcknowledgePacket(player, blockPosition, customBlock.getBlockStateId(),
+                            sendAcknowledgePacket(player, blockPosition, customBlock.getDefaultBlockStateId(),
                                     ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                         }
                     } else {

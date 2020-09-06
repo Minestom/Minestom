@@ -9,7 +9,6 @@ import net.minestom.server.instance.block.CustomBlock;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -38,8 +37,8 @@ public class ChunkBatch implements InstanceBatch {
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        addBlockData((byte) x, y, (byte) z, true, customBlock.getBlockStateId(), customBlockId, data);
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        addBlockData((byte) x, y, (byte) z, true, customBlock.getDefaultBlockStateId(), customBlockId, data);
     }
 
     @Override

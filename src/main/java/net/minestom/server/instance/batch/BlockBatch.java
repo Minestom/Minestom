@@ -30,7 +30,7 @@ public class BlockBatch implements InstanceBatch {
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         final Chunk chunk = this.instance.getChunkAt(x, z);
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        addBlockData(chunk, x, y, z, true, customBlock.getBlockStateId(), customBlockId, data);
+        addBlockData(chunk, x, y, z, true, customBlock.getDefaultBlockStateId(), customBlockId, data);
     }
 
     @Override

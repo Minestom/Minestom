@@ -98,7 +98,7 @@ public class InstanceContainer extends Instance {
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        setBlock(x, y, z, customBlock.getBlockStateId(), customBlock, data);
+        setBlock(x, y, z, customBlock.getDefaultBlockStateId(), customBlock, data);
     }
 
     @Override
