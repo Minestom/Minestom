@@ -3,6 +3,8 @@ package net.minestom.server.benchmark;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 
@@ -80,12 +82,34 @@ public class BenchmarkManager {
         threads.add(threadName);
     }
 
+    /**
+     * Get the memory used by the server in bytes
+     *
+     * @return the memory used by the server
+     */
     public long getUsedMemory() {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
     public Map<String, ThreadResult> getResultMap() {
         return Collections.unmodifiableMap(resultMap);
+    }
+
+    public String getCpuMonitoringMessage() {
+        String benchmarkMessage = "";
+        for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
+            final String name = resultEntry.getKey();
+            final ThreadResult result = resultEntry.getValue();
+
+            benchmarkMessage += ChatColor.GRAY + name;
+            benchmarkMessage += ": ";
+            benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
+            benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
+            benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
+            benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
+            benchmarkMessage += "\n";
+        }
+        return benchmarkMessage;
     }
 
     private void refreshData() {

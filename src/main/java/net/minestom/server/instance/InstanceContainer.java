@@ -1,7 +1,5 @@
 package net.minestom.server.instance;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
@@ -32,6 +30,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
@@ -53,8 +52,7 @@ public class InstanceContainer extends Instance {
     private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     private ChunkGenerator chunkGenerator;
-    // WARNING: need to be synchronized properly
-    private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final ConcurrentHashMap<Long, Chunk> chunks = new ConcurrentHashMap<>();
     private final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
@@ -407,13 +405,11 @@ public class InstanceContainer extends Instance {
                 e.printStackTrace();
             }
         } else {
-            synchronized (chunks) {
-                final Iterator<Chunk> chunkIterator = chunks.values().iterator();
-                while (chunkIterator.hasNext()) {
-                    final Chunk chunk = chunkIterator.next();
-                    final boolean isLast = !chunkIterator.hasNext();
-                    saveChunkToStorage(chunk, isLast ? callback : null);
-                }
+            final Iterator<Chunk> chunkIterator = chunks.values().iterator();
+            while (chunkIterator.hasNext()) {
+                final Chunk chunk = chunkIterator.next();
+                final boolean isLast = !chunkIterator.hasNext();
+                saveChunkToStorage(chunk, isLast ? callback : null);
             }
         }
     }
@@ -524,9 +520,7 @@ public class InstanceContainer extends Instance {
      */
     private void cacheChunk(Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        synchronized (chunks) {
-            this.chunks.put(index, chunk);
-        }
+        this.chunks.put(index, chunk);
     }
 
     @Override
