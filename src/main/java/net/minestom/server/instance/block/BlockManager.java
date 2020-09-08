@@ -44,23 +44,22 @@ public class BlockManager {
     /**
      * Get the block placement rule of the specific block
      *
-     * @param blockStateId the block id to check
-     * @return the block placement rule associated with the id, null if not any
+     * @param block the block to check
+     * @return the block placement rule associated with the block, null if not any
      */
-    public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId); // Convert block alternative
-        final short blockId = block.getBlockId();
-        return this.placementRules[blockId];
+    public BlockPlacementRule getBlockPlacementRule(Block block) {
+        return this.placementRules[block.getBlockId()];
     }
 
     /**
      * Get the block placement rule of the specific block
      *
-     * @param block the block to check
-     * @return the block placement rule associated with the block, null if not any
+     * @param blockStateId the block id to check
+     * @return the block placement rule associated with the id, null if not any
      */
-    public BlockPlacementRule getBlockPlacementRule(Block block) {
-        return getBlockPlacementRule(block.getBlockId());
+    public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
+        final Block block = Block.fromStateId(blockStateId); // Convert block alternative
+        return getBlockPlacementRule(block);
     }
 
     /**
