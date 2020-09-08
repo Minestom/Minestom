@@ -1,6 +1,5 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 public class BlockManager {
 
     // custom block id -> custom block
-    private Short2ObjectMap<CustomBlock> customBlocksInternalId = new Short2ObjectOpenHashMap<>();
+    private CustomBlock[] customBlocksInternalId = new CustomBlock[Short.MAX_VALUE];
     // custom block identifier -> custom block
     private Map<String, CustomBlock> customBlocksId = new HashMap<>();
 
@@ -23,9 +22,10 @@ public class BlockManager {
      * @param customBlock the custom block to register
      */
     public void registerCustomBlock(CustomBlock customBlock) {
+        if (customBlock.getCustomBlockId() < 0) throw new IllegalArgumentException("Custom block ID must be > 0, got: " + customBlock.getCustomBlockId());
         final String identifier = customBlock.getIdentifier();
         final short id = customBlock.getCustomBlockId();
-        this.customBlocksInternalId.put(id, customBlock);
+        this.customBlocksInternalId[id] = customBlock;
         this.customBlocksId.put(identifier, customBlock);
     }
 
@@ -77,7 +77,7 @@ public class BlockManager {
      * @return the {@link CustomBlock} associated with the id, null if not any
      */
     public CustomBlock getCustomBlock(short id) {
-        return customBlocksInternalId.get(id);
+        return customBlocksInternalId[id];
     }
 
 }
