@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.codegen.PrismarinePaths;
@@ -37,7 +36,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
     public static void main(String[] args) throws IOException {
         String targetVersion;
-        if(args.length < 1) {
+        if (args.length < 1) {
             System.err.println("Usage: <MC version> [target folder]");
             return;
         }
@@ -51,12 +50,12 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         }
 
         String targetPart = DEFAULT_TARGET_PATH;
-        if(args.length >= 2) {
+        if (args.length >= 2) {
             targetPart = args[1];
         }
 
         File targetFolder = new File(targetPart);
-        if(!targetFolder.exists()) {
+        if (!targetFolder.exists()) {
             targetFolder.mkdirs();
         }
 
@@ -71,6 +70,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
     /**
      * Compiles all block information in a single location
+     *
      * @param dataBlocks
      * @param prismarineJSBlocks
      * @param burgerBlocks
@@ -83,10 +83,10 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         burgerBlocks.sort(Comparator.comparing(block -> NamespaceID.from(block.text_id).toString()));
 
         // if one of these tests fail, you probably forgot to clear the minecraft_data cache before launching this program
-        if(dataBlocks.size() != prismarineJSBlocks.size()) {
+        if (dataBlocks.size() != prismarineJSBlocks.size()) {
             throw new Error("minecraft_data block count is different from PrismarineJS count! Try clearing the minecraft_data cache");
         }
-        if(prismarineJSBlocks.size() != burgerBlocks.size()) {
+        if (prismarineJSBlocks.size() != burgerBlocks.size()) {
             throw new Error("Burger's block count is different from PrismarineJS count! Try clearing the minecraft_data cache");
         }
 
@@ -98,20 +98,20 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
             assert data.name.getPath().equals(prismarine.name) && prismarine.name.equalsIgnoreCase(burger.text_id);
 
             List<BlockContainer.BlockState> states = new LinkedList<>();
-            for(DataReportBlock.BlockState s : data.states) {
+            for (DataReportBlock.BlockState s : data.states) {
                 states.add(new BlockContainer.BlockState(s.id, s.properties));
             }
 
             BlockContainer.BlockState defaultState = new BlockContainer.BlockState(data.defaultState.id, data.defaultState.properties);
 
             BlockContainer block = new BlockContainer(prismarine.id, data.name, prismarine.hardness, burger.resistance, burger.blockEntity == null ? null : NamespaceID.from(burger.blockEntity.name), defaultState, states);
-            if(!"empty".equals(prismarine.boundingBox)) {
+            if (!"empty".equals(prismarine.boundingBox)) {
                 block.setSolid();
             }
-            if(data.name.equals(NamespaceID.from("minecraft:water")) || data.name.equals(NamespaceID.from("minecraft:lava"))) {
+            if (data.name.equals(NamespaceID.from("minecraft:water")) || data.name.equals(NamespaceID.from("minecraft:lava"))) {
                 block.setLiquid();
             }
-            if(data.name.equals(NamespaceID.from("minecraft:air"))) {
+            if (data.name.equals(NamespaceID.from("minecraft:air"))) {
                 block.setAir();
             }
 
@@ -123,22 +123,23 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
     /**
      * Extracts block information from Burger
+     *
      * @param gson
      * @param url
      * @return
      * @throws IOException
      */
     private List<BurgerBlock> parseBlocksFromBurger(Gson gson, String url) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             LOGGER.debug("\tConnection established, reading file");
             JsonObject dictionary = gson.fromJson(bufferedReader, JsonArray.class).get(0).getAsJsonObject();
             JsonObject tileEntityMap = dictionary.getAsJsonObject("tileentity").getAsJsonObject("tileentities");
 
             Map<String, BurgerTileEntity> block2entityMap = new HashMap<>();
-            for(var entry : tileEntityMap.entrySet()) {
+            for (var entry : tileEntityMap.entrySet()) {
                 BurgerTileEntity te = gson.fromJson(entry.getValue(), BurgerTileEntity.class);
-                if(te.blocks != null) {
-                    for(String block : te.blocks) {
+                if (te.blocks != null) {
+                    for (String block : te.blocks) {
                         block2entityMap.put(block, te);
                     }
                 }
@@ -148,7 +149,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
             LOGGER.debug("\tExtracting blocks");
             List<BurgerBlock> blocks = new LinkedList<>();
-            for(var entry : blockMap.entrySet()) {
+            for (var entry : blockMap.entrySet()) {
                 BurgerBlock block = gson.fromJson(entry.getValue(), BurgerBlock.class);
                 block.blockEntity = block2entityMap.get(block.text_id);
                 blocks.add(block);
@@ -162,13 +163,14 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
     /**
      * Extract block information from PrismarineJS (submodule of Minestom)
+     *
      * @param gson
      * @param blockFile
      * @return
      * @throws IOException
      */
     private List<PrismarineJSBlock> parseBlocksFromPrismarineJS(Gson gson, File blockFile) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(blockFile))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(blockFile))) {
             PrismarineJSBlock[] blocks = gson.fromJson(bufferedReader, PrismarineJSBlock[].class);
             return Arrays.asList(blocks);
         } catch (IOException e) {
@@ -178,6 +180,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
     /**
      * Extract block information from reports generated by the data extractor present in minecraft_server.jar
+     *
      * @param gson
      * @param path
      * @return
@@ -188,7 +191,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 
             JsonObject obj = gson.fromJson(bufferedReader, JsonObject.class);
-            for(var entry : obj.entrySet()) {
+            for (var entry : obj.entrySet()) {
                 NamespaceID id = NamespaceID.from(entry.getKey());
                 JsonElement blockInfo = entry.getValue();
                 DataReportBlock block = gson.fromJson(blockInfo, DataReportBlock.class);
@@ -231,7 +234,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         List<PrismarineJSBlock> prismarineJSBlocks = parseBlocksFromPrismarineJS(gson, paths.getBlockFile());
 
         LOGGER.debug("Loading Burger blocks data (requires Internet connection)");
-        List<BurgerBlock> burgerBlocks = parseBlocksFromBurger(gson, BURGER_URL_BASE_URL+targetVersion+".json");
+        List<BurgerBlock> burgerBlocks = parseBlocksFromBurger(gson, BURGER_URL_BASE_URL + targetVersion + ".json");
 
         LOGGER.debug("Compiling information");
         return compile(dataBlocks, prismarineJSBlocks, burgerBlocks);
@@ -246,8 +249,9 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addImport(List.class.getCanonicalName());
         generator.addImport(ArrayList.class.getCanonicalName());
         generator.addImport(Arrays.class.getCanonicalName());
-        generator.addImport(generator.getPackage()+".states.*");
+        generator.addImport(generator.getPackage() + ".states.*");
         generator.addHardcodedField("List<BlockAlternative>", "alternatives", "new ArrayList<BlockAlternative>()");
+
         generator.setParams("String namespaceID", "short defaultID", "double hardness", "double resistance", "boolean isAir", "boolean isSolid", "NamespaceID blockEntity", "boolean singleState");
         generator.addMethod("getBlockId", "()", "short", "return defaultID;");
         generator.addMethod("getName", "()", "String", "return namespaceID;");
@@ -261,7 +265,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addMethod("breaksInstantaneously", "()", "boolean", "return hardness == 0;");
         generator.addMethod("addBlockAlternative", "(BlockAlternative alternative)", "void",
                 "alternatives.add(alternative);",
-                "BlockMap.blocksMap.put(alternative.getId(), this);"
+                "BlockArray.blocks[alternative.getId()] = this;"
         );
         String[] withPropertiesLines = {
                 "for (BlockAlternative alt : alternatives) {",
@@ -280,7 +284,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
                 "return null;");
         generator.addMethod("getAlternatives", "()", "List<BlockAlternative>", "return alternatives;");
         generator.addMethod("withProperties", "(String... properties)", "short", withPropertiesLines);
-        generator.addMethod("fromStateId", "(short blockId)", "static "+className, "return BlockMap.blocksMap.getOrDefault(blockId, AIR);");
+        generator.addMethod("fromStateId", "(short blockStateId)", "static " + className, "return BlockArray.blocks[blockStateId];");
         generator.appendToConstructor("if(singleState) {");
         generator.appendToConstructor("\taddBlockAlternative(new BlockAlternative(defaultID));");
         generator.appendToConstructor("}");
@@ -291,21 +295,21 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
     protected void writeSingle(EnumGenerator generator, BlockContainer block) {
         String instanceName = block.getId().getPath().toUpperCase();
         generator.addInstance(instanceName,
-                "\""+block.getId().toString()+"\"",
-                "(short) "+block.getDefaultState().getId(),
+                "\"" + block.getId().toString() + "\"",
+                "(short) " + block.getDefaultState().getId(),
                 block.getHardness(),
                 block.getResistance(),
                 block.isAir(),
                 block.isSolid(),
-                block.getBlockEntityName() != null ? "NamespaceID.from(\""+block.getBlockEntityName()+"\")" : "null",
+                block.getBlockEntityName() != null ? "NamespaceID.from(\"" + block.getBlockEntityName() + "\")" : "null",
                 block.getStates().size() == 1 // used to avoid duplicates inside the 'alternatives' field due to both constructor addition and subclasses initStates()
         );
 
         // do not add alternative for default states. This will be added by default inside the constructor
-        if(block.getStates().size() > 1) {
+        if (block.getStates().size() > 1) {
             StringBuilder subclass = new StringBuilder();
-            for(BlockContainer.BlockState state : block.getStates()) {
-                if(state == block.getDefaultState())
+            for (BlockContainer.BlockState state : block.getStates()) {
+                if (state == block.getDefaultState())
                     continue;
                 // generate BlockAlternative instance that will be used to lookup block alternatives
 
@@ -313,8 +317,8 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
                 subclass.append("new BlockAlternative(");
                 subclass.append("(short) ").append(state.getId());
 
-                if(state.getProperties() != null) {
-                    for(var property : state.getProperties().entrySet()) {
+                if (state.getProperties() != null) {
+                    for (var property : state.getProperties().entrySet()) {
                         subclass.append(", ");
                         subclass.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
                     }
@@ -331,23 +335,22 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
     @Override
     protected void postGeneration() throws IOException {
         File classFolder = new File(targetFolder, getRelativeFolderPath());
-        if(!classFolder.exists()) {
+        if (!classFolder.exists()) {
             classFolder.mkdirs();
         }
         File subclassFolder = new File(classFolder, "states");
-        if(!subclassFolder.exists()) {
+        if (!subclassFolder.exists()) {
             subclassFolder.mkdirs();
         }
 
-        StringBuilder blockMapClass = new StringBuilder();
-        blockMapClass.append("package "+getPackageName()+";\n")
-                .append("import "+Short2ObjectOpenHashMap.class.getCanonicalName()+";\n")
-                .append("final class BlockMap {\n")
-                .append("\tstatic final Short2ObjectOpenHashMap<"+getClassName()+"> blocksMap = new Short2ObjectOpenHashMap<>();\n")
+        StringBuilder blockArrayClass = new StringBuilder();
+        blockArrayClass.append("package " + getPackageName() + ";\n")
+                .append("final class BlockArray {\n")
+                .append("\tstatic final Block[] blocks = new Block[Short.MAX_VALUE];")
                 .append("}\n");
-        LOGGER.debug("Writing BlockMap to file: "+classFolder+"/BlockMap.java");
-        try(Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, "BlockMap.java")))) {
-            writer.write(blockMapClass.toString());
+        LOGGER.debug("Writing BlockArray to file: " + classFolder + "/BlockArray.java\n");
+        try (Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, "BlockArray.java")))) {
+            writer.write(blockArrayClass.toString());
         }
 
         LOGGER.debug("Writing subclasses for block alternatives...");
@@ -355,7 +358,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         for (var entry : subclassContents.entrySet()) {
             classContents.delete(0, classContents.length());
             String subclass = entry.getKey();
-            LOGGER.debug("\t Writing subclass "+subclass+"... ");
+            LOGGER.debug("\t Writing subclass " + subclass + "... ");
 
             String contents = entry.getValue();
             classContents.append("package ").append(getPackageName()).append(".states;\n");
@@ -369,14 +372,14 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
             classContents.append("\tpublic static void initStates() {\n");
 
             String[] lines = contents.split("\n");
-            for(String line : lines) {
+            for (String line : lines) {
                 classContents.append("\t\t").append(line).append("\n");
             }
 
             classContents.append("\t}\n");
             classContents.append("}\n");
 
-            try(Writer writer = new BufferedWriter(new FileWriter(new File(subclassFolder, subclass+".java")))) {
+            try (Writer writer = new BufferedWriter(new FileWriter(new File(subclassFolder, subclass + ".java")))) {
                 writer.write(classContents.toString());
             }
             LOGGER.debug("\t\t - Done");
