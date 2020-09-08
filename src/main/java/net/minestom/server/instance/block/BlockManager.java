@@ -1,7 +1,5 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 import java.util.HashMap;
@@ -10,22 +8,24 @@ import java.util.Map;
 public class BlockManager {
 
     // custom block id -> custom block
-    private Short2ObjectMap<CustomBlock> customBlocksInternalId = new Short2ObjectOpenHashMap<>();
+    private CustomBlock[] customBlocksInternalId = new CustomBlock[Short.MAX_VALUE];
     // custom block identifier -> custom block
     private Map<String, CustomBlock> customBlocksId = new HashMap<>();
 
     // block id -> block placement rule
-    private Short2ObjectOpenHashMap<BlockPlacementRule> placementRules = new Short2ObjectOpenHashMap<>();
+    private BlockPlacementRule[] placementRules = new BlockPlacementRule[Short.MAX_VALUE];
 
     /**
      * Register a custom block
      *
      * @param customBlock the custom block to register
+     * @throws IllegalArgumentException if {@param customBlock} block id is negative
      */
     public void registerCustomBlock(CustomBlock customBlock) {
-        final String identifier = customBlock.getIdentifier();
         final short id = customBlock.getCustomBlockId();
-        this.customBlocksInternalId.put(id, customBlock);
+        if (id < 0) throw new IllegalArgumentException("Custom block ID must be > 0, got: " + id);
+        final String identifier = customBlock.getIdentifier();
+        this.customBlocksInternalId[id] = customBlock;
         this.customBlocksId.put(identifier, customBlock);
     }
 
@@ -33,9 +33,12 @@ public class BlockManager {
      * Register a block placement rule
      *
      * @param blockPlacementRule the block placement rule to register
+     * @throws IllegalArgumentException if {@param blockPlacementRule} block id is negative
      */
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
-        this.placementRules.put(blockPlacementRule.getBlockId(), blockPlacementRule);
+        final short id = blockPlacementRule.getBlockId();
+        if (id < 0) throw new IllegalArgumentException("Block ID must be > 0, got: " + id);
+        this.placementRules[id] = blockPlacementRule;
     }
 
     /**
@@ -47,7 +50,7 @@ public class BlockManager {
     public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
         final Block block = Block.fromStateId(blockStateId); // Convert block alternative
         final short blockId = block.getBlockId();
-        return this.placementRules.get(blockId);
+        return this.placementRules[blockId];
     }
 
     /**
@@ -77,7 +80,7 @@ public class BlockManager {
      * @return the {@link CustomBlock} associated with the id, null if not any
      */
     public CustomBlock getCustomBlock(short id) {
-        return customBlocksInternalId.get(id);
+        return customBlocksInternalId[id];
     }
 
 }
