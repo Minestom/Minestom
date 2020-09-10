@@ -30,7 +30,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     protected boolean isDead;
 
     private float health;
-    private DamageType lastDamageType;
+    protected DamageType lastDamageSource;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
@@ -42,6 +42,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private boolean riptideSpinAttack;
     // The number of arrows in entity
     private int arrowCount;
+
+    // Abilities
+    protected boolean invulnerable;
 
     /**
      * Time at which this entity must be extinguished
@@ -174,6 +177,24 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Get if the entity is invulnerable
+     *
+     * @return true if the entity is invulnerable
+     */
+    public boolean isInvulnerable() {
+        return invulnerable;
+    }
+
+    /**
+     * Make the entity vulnerable or invulnerable
+     *
+     * @param invulnerable should the entity be invulnerable
+     */
+    public void setInvulnerable(boolean invulnerable) {
+        this.invulnerable = invulnerable;
+    }
+
+    /**
      * Kill the entity, trigger the {@link EntityDeathEvent} event
      */
     public void kill() {
@@ -233,7 +254,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public boolean damage(DamageType type, float value) {
         if (isDead())
             return false;
-        if (isImmune(type)) {
+        if (isInvulnerable() || isImmune(type)) {
             return false;
         }
 
@@ -280,7 +301,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             }
 
             // Set the last damage type since the event is not cancelled
-            this.lastDamageType = entityDamageEvent.getDamageType();
+            this.lastDamageSource = entityDamageEvent.getDamageType();
         });
 
         return !entityDamageEvent.isCancelled();
@@ -321,12 +342,12 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Get the last damage type of this entity
+     * Get the last damage source which damaged of this entity
      *
-     * @return the last damage type, null if not any
+     * @return the last damage source, null if not any
      */
-    public DamageType getLastDamageType() {
-        return lastDamageType;
+    public DamageType getLastDamageSource() {
+        return lastDamageSource;
     }
 
     /**

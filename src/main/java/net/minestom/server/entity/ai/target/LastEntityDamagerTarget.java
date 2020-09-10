@@ -20,7 +20,7 @@ public class LastEntityDamagerTarget extends TargetSelector {
 
     @Override
     public Entity findTarget() {
-        final DamageType damageType = entityCreature.getLastDamageType();
+        final DamageType damageType = entityCreature.getLastDamageSource();
 
         if (!(damageType instanceof EntityDamage)) {
             // No damager recorded, return null

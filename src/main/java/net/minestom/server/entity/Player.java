@@ -110,17 +110,11 @@ public class Player extends LivingEntity implements CommandSender {
 
     private BelowNameTag belowNameTag;
 
-    /**
-     * Last damage source to hit this player, used to display the death message.
-     */
-    private DamageType lastDamageSource;
-
     private int permissionLevel;
 
     private boolean reducedDebugScreenInformation;
 
     // Abilities
-    private boolean invulnerable;
     private boolean flying;
     private boolean allowFlying;
     private boolean instantBreak;
@@ -265,19 +259,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void playerConnectionInit() {
         this.playerConnection.setPlayer(this);
-    }
-
-    @Override
-    public boolean damage(DamageType type, float value) {
-        if (isInvulnerable())
-            return false;
-
-        // Compute final heart based on health and additional hearts
-        final boolean result = super.damage(type, value);
-        if (result) {
-            lastDamageSource = type;
-        }
-        return result;
     }
 
     @Override
@@ -1445,6 +1426,28 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Get if the player is sneaking
+     * <p>
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server
+     *
+     * @return true if the player is sneaking
+     */
+    public boolean isSneaking() {
+        return crouched;
+    }
+
+    /**
+     * Get if the player is sprinting
+     * <p>
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server
+     *
+     * @return true if the player is sprinting
+     */
+    public boolean isSprinting() {
+        return sprinting;
+    }
+
+    /**
      * Used to get the {@link CustomBlock} that the player is currently mining
      *
      * @return the currently mined {@link CustomBlock} by the player, null if there is not
@@ -1642,7 +1645,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @return true if the player is invulnerable, false otherwise
      */
     public boolean isInvulnerable() {
-        return invulnerable;
+        return super.isInvulnerable();
     }
 
     /**
@@ -1652,7 +1655,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param invulnerable should the player be invulnerable
      */
     public void setInvulnerable(boolean invulnerable) {
-        this.invulnerable = invulnerable;
+        super.setInvulnerable(invulnerable);
         refreshAbilities();
     }
 
