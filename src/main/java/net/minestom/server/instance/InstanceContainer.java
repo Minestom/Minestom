@@ -184,12 +184,31 @@ public class InstanceContainer extends Instance {
         }
     }
 
+    /**
+     * Call {@link CustomBlock#onDestroy(Instance, BlockPosition, Data)} for {@code previousBlock}
+     * <p>
+     * WARNING {@code chunk} needs to be synchronized
+     *
+     * @param chunk         the chunk where the block is
+     * @param index         the index of the block
+     * @param previousBlock the block which has been destroyed
+     * @param blockPosition the block position
+     */
     private void callBlockDestroy(Chunk chunk, int index, CustomBlock previousBlock, BlockPosition blockPosition) {
         final Data previousData = chunk.getData(index);
         previousBlock.onDestroy(this, blockPosition, previousData);
         chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
+    /**
+     * Call {@link CustomBlock#onPlace(Instance, BlockPosition, Data)} for the current custom block at the position
+     * <p>
+     * WARNING {@code chunk} needs to be synchronized
+     *
+     * @param chunk         the chunk where the block is
+     * @param index         the index of the block
+     * @param blockPosition the block position
+     */
     private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
         final CustomBlock actualBlock = chunk.getCustomBlock(index);
         if (actualBlock == null)
@@ -198,6 +217,13 @@ public class InstanceContainer extends Instance {
         actualBlock.onPlace(this, blockPosition, previousData);
     }
 
+    /**
+     * Call the {@link BlockPlacementRule} for the specified block state id
+     *
+     * @param blockStateId  the block state id to modify
+     * @param blockPosition the block position
+     * @return the modified block state id
+     */
     private short executeBlockPlacementRule(short blockStateId, BlockPosition blockPosition) {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
         if (blockPlacementRule != null) {
@@ -206,6 +232,13 @@ public class InstanceContainer extends Instance {
         return blockStateId;
     }
 
+    /**
+     * Executed when a block is modified, this is used to modify the states of neighbours blocks
+     * <p>
+     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape
+     *
+     * @param blockPosition the position of the modified block
+     */
     private void executeNeighboursBlockPlacementRule(BlockPosition blockPosition) {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
@@ -356,7 +389,7 @@ public class InstanceContainer extends Instance {
      * <p>
      * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
      *
-     * @param callback the callback
+     * @param callback the callback once the saving is done
      */
     public void saveInstance(Runnable callback) {
         Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
@@ -552,14 +585,33 @@ public class InstanceContainer extends Instance {
         this.storageLocation = storageLocation;
     }
 
+    /**
+     * Get the {@link IChunkLoader} of this instance
+     *
+     * @return the {@link IChunkLoader} of this instance
+     */
     public IChunkLoader getChunkLoader() {
         return chunkLoader;
     }
 
+    /**
+     * Change the {@link IChunkLoader} of this instance (to change how chunks are retrieved when not already loaded)
+     *
+     * @param chunkLoader the new {@link IChunkLoader}
+     */
     public void setChunkLoader(IChunkLoader chunkLoader) {
         this.chunkLoader = chunkLoader;
     }
 
+    /**
+     * Send a {@link BlockChangePacket} at the specified {@link BlockPosition} to set the block as {@code blockStateId}
+     * <p>
+     * WARNING: this does not change the internal block data, this is strictly visual for the players
+     *
+     * @param chunk         the chunk where the block is
+     * @param blockPosition the block position
+     * @param blockStateId  the new state of the block
+     */
     private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockStateId) {
         BlockChangePacket blockChangePacket = new BlockChangePacket();
         blockChangePacket.blockPosition = blockPosition;
@@ -569,20 +621,19 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
-        Instance instance = this;
         final CustomBlock toUpdate = getCustomBlock(position);
         if (toUpdate == null) {
             return;
         }
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            final CustomBlock currentBlock = instance.getCustomBlock(position);
+            final CustomBlock currentBlock = getCustomBlock(position);
             if (currentBlock == null)
                 return;
             if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
                 return;
             }
-            currentBlock.scheduledUpdate(instance, position, getBlockData(position));
+            currentBlock.scheduledUpdate(this, position, getBlockData(position));
         }).delay(time, unit).schedule();
     }
 

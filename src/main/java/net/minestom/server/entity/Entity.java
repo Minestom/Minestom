@@ -448,6 +448,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 } else {
                     drag = 0.98f; // air drag
                 }
+
                 velocity.setX(velocity.getX() * drag);
                 velocity.setZ(velocity.getZ() * drag);
 

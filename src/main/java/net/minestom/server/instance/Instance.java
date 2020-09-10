@@ -98,7 +98,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Used to change the id of the block in a specific position.
+     * Used to change the id of the block in a specific {@link BlockPosition}.
      * <p>
      * In case of a CustomBlock it does not remove it but only refresh its visual
      *
@@ -118,7 +118,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract boolean breakBlock(Player player, BlockPosition blockPosition);
 
     /**
-     * Force the generation of the chunk, even if no file and ChunkGenerator are defined
+     * Force the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
@@ -150,7 +150,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void unloadChunk(Chunk chunk);
 
     /**
-     * Get the specified chunk
+     * Get the specified {@link Chunk}
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -371,7 +371,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the instance world border
+     * Get the instance {@link WorldBorder}
      *
      * @return the world border linked to the instance
      */
@@ -602,7 +602,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the block data at the given position, or null if not any
+     * Get the block data at the given {@link BlockPosition}, or null if not any
      *
      * @param blockPosition the block position
      * @return the block data at the position, null if not any
@@ -612,12 +612,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Set the block data at the given position
+     * Set the block data at the given {@link BlockPosition}
      *
-     * @param x the X position
-     * @param y the Y position
-     * @param z the Z position
-     * @param data the data to be set
+     * @param x    the X position
+     * @param y    the Y position
+     * @param z    the Z position
+     * @param data the data to be set, can be null
      */
     public void setBlockData(int x, int y, int z, Data data) {
         final Chunk chunk = getChunkAt(x, z);
@@ -628,17 +628,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Set the block data at the given position
+     * Set the block data at the given {@link BlockPosition}
      *
      * @param blockPosition the block position
-     * @param data the data to be set
+     * @param data          the data to be set, can be null
      */
     public void setBlockData(BlockPosition blockPosition, Data data) {
         setBlockData(blockPosition.getX(), (byte) blockPosition.getY(), blockPosition.getZ(), data);
     }
 
     /**
-     * Get the chunk at the given position, null if not loaded
+     * Get the chunk at the given {@link BlockPosition}, null if not loaded
      *
      * @param x the X position
      * @param z the Z position
@@ -662,7 +662,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the chunk at the given position, null if not loaded
+     * Get the chunk at the given {@link BlockPosition}, null if not loaded
      *
      * @param blockPosition the chunk position
      * @return the chunk at the given position, null if not loaded
@@ -672,7 +672,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the chunk at the given position, null if not loaded
+     * Get the chunk at the given {@link Position}, null if not loaded
      *
      * @param position the chunk position
      * @return the chunk at the given position, null if not loaded
