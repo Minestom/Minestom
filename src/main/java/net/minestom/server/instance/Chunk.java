@@ -9,6 +9,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
+import net.minestom.server.instance.batch.BlockBatch;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -93,6 +95,20 @@ public abstract class Chunk implements Viewable {
 
     public abstract void UNSAFE_removeCustomBlock(int x, int y, int z);
 
+    /**
+     * Set a block at a position
+     * <p>
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} & {@link BlockBatch}
+     * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
+     *
+     * @param x              the block X
+     * @param y              the block Y
+     * @param z              the block Z
+     * @param blockStateId   the block state id
+     * @param customId       the custom block id
+     * @param data           the data of the block, can be null
+     * @param updateConsumer the update method of the block, can be null
+     */
     protected abstract void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer);
 
     public void setBlockData(int x, int y, int z, Data data) {
