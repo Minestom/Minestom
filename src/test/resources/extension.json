@@ -1,0 +1,8 @@
+{
+  "entrypoint": "testextension.TestExtension",
+  "name": "Test extension",
+  "codeModifiers": [
+    "testextension.TestModifier"
+  ],
+  "mixinConfig": "mixins.testextension.json"
+}

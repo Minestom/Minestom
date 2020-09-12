@@ -30,6 +30,10 @@ allprojects {
         mavenCentral()
         maven { url 'https://libraries.minecraft.net' }
         maven { url 'https://jitpack.io' }
+        maven {
+            name 'sponge'
+            url 'http://repo.spongepowered.org/maven'
+        }
     }
 }
 
@@ -108,6 +112,15 @@ dependencies {
 
     api 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // Code modification
+    api "org.ow2.asm:asm:${asmVersion}"
+    api "org.ow2.asm:asm-tree:${asmVersion}"
+    api "org.ow2.asm:asm-analysis:${asmVersion}"
+    api "org.ow2.asm:asm-util:${asmVersion}"
+    api "org.ow2.asm:asm-commons:${asmVersion}"
+    implementation 'com.google.guava:guava:21.0'
+    api "org.spongepowered:mixin:${mixinVersion}"
 
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.4.2'

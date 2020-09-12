@@ -36,6 +36,7 @@ public class Main {
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
 
+
         StorageManager storageManager = MinecraftServer.getStorageManager();
         storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
 
