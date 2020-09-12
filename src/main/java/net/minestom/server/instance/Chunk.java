@@ -14,7 +14,6 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
@@ -84,16 +83,19 @@ public abstract class Chunk implements Viewable {
      * <p>
      * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} & {@link BlockBatch})
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
+     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called
      *
-     * @param x              the block X
-     * @param y              the block Y
-     * @param z              the block Z
-     * @param blockStateId   the block state id
-     * @param customId       the custom block id
-     * @param data           the data of the block, can be null
-     * @param updateConsumer the update method of the block, can be null
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param blockStateId  the block state id
+     * @param customBlockId the custom block id
+     * @param data          the data of the block, can be null
+     * @param updatable     true if the block has an update method
+     *                      Warning: {@param customBlockId} cannot be 0 and needs to be valid since the update delay and method
+     *                      will be retrieved from the associated {@link CustomBlock} object
      */
-    public abstract void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer);
+    public abstract void setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
 
     /**
      * Set the {@link Data} at a position

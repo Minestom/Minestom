@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.utils.MathUtils;
@@ -30,7 +29,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
+    public void setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable) {
 
         {
             // Update pathfinder
@@ -43,10 +42,10 @@ public class DynamicChunk extends Chunk {
 
         final int index = getBlockIndex(x, y, z);
         // True if the block is not complete air without any custom block capabilities
-        final boolean hasBlock = blockStateId != 0 || customId != 0;
+        final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
         if (hasBlock) {
             this.blocksStateId[index] = blockStateId;
-            this.customBlocksId[index] = customId;
+            this.customBlocksId[index] = customBlockId;
         } else {
             // Block has been deleted, clear cache and return
 
@@ -72,7 +71,7 @@ public class DynamicChunk extends Chunk {
         }
 
         // Set update consumer
-        if (updateConsumer != null) {
+        if (updatable) {
             this.updatableBlocks.add(index);
             this.updatableBlocksLastUpdate.put(index, System.currentTimeMillis());
         } else {

@@ -13,7 +13,6 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
@@ -139,15 +138,15 @@ public class InstanceContainer extends Instance {
 
             // Retrieve custom block values
             short customBlockId = 0;
-            UpdateConsumer updateConsumer = null;
+            boolean hasUpdate = false;
             if (isCustomBlock) {
                 customBlockId = customBlock.getCustomBlockId();
                 data = customBlock.createData(this, blockPosition, data);
-                updateConsumer = CustomBlockUtils.getCustomBlockUpdate(customBlock);
+                hasUpdate = CustomBlockUtils.hasUpdate(customBlock);
             }
 
             // Set the block
-            chunk.setBlock(x, y, z, blockStateId, customBlockId, data, updateConsumer);
+            chunk.setBlock(x, y, z, blockStateId, customBlockId, data, hasUpdate);
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);

@@ -3,31 +3,30 @@ package net.minestom.server.utils.block;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.instance.block.UpdateConsumer;
 
 public class CustomBlockUtils {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     /**
-     * Get the {@link UpdateConsumer} of a custom block id
+     * Get if a custom block id has an update method
      *
      * @param customBlockId the custom block id
-     * @return the {@link UpdateConsumer} of the custom block
+     * @return true if {@param customBlockId} has an update method
      */
-    public static UpdateConsumer getCustomBlockUpdate(short customBlockId) {
+    public static boolean hasUpdate(short customBlockId) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        return getCustomBlockUpdate(customBlock);
+        return hasUpdate(customBlock);
     }
 
     /**
-     * Get the {@link UpdateConsumer} of a {@link CustomBlock}
+     * Get if a {@link CustomBlock} has an update method
      *
      * @param customBlock the {@link CustomBlock}
-     * @return the {@link UpdateConsumer} of the {@link CustomBlock}
+     * @return true if {@param customBlock} has an update method
      */
-    public static UpdateConsumer getCustomBlockUpdate(CustomBlock customBlock) {
-        return customBlock != null && customBlock.hasUpdate() ? customBlock::update : null;
+    public static boolean hasUpdate(CustomBlock customBlock) {
+        return customBlock != null && customBlock.hasUpdate();
     }
 
 }
