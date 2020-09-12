@@ -77,28 +77,12 @@ public abstract class Chunk implements Viewable {
         this.chunkZ = chunkZ;
     }
 
-    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, Data data) {
-        setBlock(x, y, z, blockStateId, (short) 0, data, null);
-    }
-
-    public void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        Check.notNull(customBlock, "The custom block " + customBlockId + " does not exist or isn't registered");
-
-        UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlock, data);
-    }
-
-    protected void UNSAFE_setCustomBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
-        final UpdateConsumer updateConsumer = customBlock.hasUpdate() ? customBlock::update : null;
-        setBlock(x, y, z, blockStateId, customBlock.getCustomBlockId(), data, updateConsumer);
-    }
-
-    public abstract void UNSAFE_removeCustomBlock(int x, int y, int z);
-
     /**
      * Set a block at a position
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} & {@link BlockBatch}
+     * This is used when the previous block has to be destroyed, meaning that it clears the previous data and update method
+     * <p>
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} & {@link BlockBatch})
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
      *
      * @param x              the block X
@@ -109,8 +93,16 @@ public abstract class Chunk implements Viewable {
      * @param data           the data of the block, can be null
      * @param updateConsumer the update method of the block, can be null
      */
-    protected abstract void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer);
+    public abstract void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer);
 
+    /**
+     * Set the {@link Data} at a position
+     *
+     * @param x    the block X
+     * @param y    the block Y
+     * @param z    the block Z
+     * @param data the new data
+     */
     public void setBlockData(int x, int y, int z, Data data) {
         final int index = getBlockIndex(x, y, z);
         if (data != null) {
@@ -120,12 +112,45 @@ public abstract class Chunk implements Viewable {
         }
     }
 
+    /**
+     * Get the block state id at a position
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return the block state id at the position
+     */
     public abstract short getBlockStateId(int x, int y, int z);
 
+    /**
+     * Get the custom block id at a position
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return the custom block id at the position
+     */
     public abstract short getCustomBlockId(int x, int y, int z);
 
-    public abstract CustomBlock getCustomBlock(int x, int y, int z);
+    /**
+     * Get the {@link CustomBlock} at a position
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return the {@link CustomBlock} at the position
+     */
+    public CustomBlock getCustomBlock(int x, int y, int z) {
+        final short customBlockId = getCustomBlockId(x, y, z);
+        return customBlockId != 0 ? BLOCK_MANAGER.getCustomBlock(customBlockId) : null;
+    }
 
+    /**
+     * Get the {@link CustomBlock} at a block index
+     *
+     * @param index the block index
+     * @return the {@link CustomBlock} at the block index
+     */
     protected CustomBlock getCustomBlock(int index) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
@@ -133,25 +158,48 @@ public abstract class Chunk implements Viewable {
         return getCustomBlock(x, y, z);
     }
 
+    /**
+     * Change the block state id and the custom block id at a position
+     *
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the new block state id
+     * @param customId     the new custom block id
+     */
     protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customId);
 
+    /**
+     * Change the block state id at a position (the custom block id stays the same)
+     *
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the new block state id
+     */
     protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
-
-    protected void refreshBlockValue(int x, int y, int z, short blockStateId) {
-        final CustomBlock customBlock = getCustomBlock(x, y, z);
-        final short customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
-        refreshBlockValue(x, y, z, blockStateId, customBlockId);
-    }
 
     public Data getData(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
         return getData(index);
     }
 
+    /**
+     * Get the {@link Data} at a block index
+     *
+     * @param index the block index
+     * @return the {@link Data} at the block index
+     */
     protected Data getData(int index) {
         return blocksData.get(index);
     }
 
+    /**
+     * Execute a tick update for all the updatable blocks in this chunk
+     *
+     * @param time     the time of the update in milliseconds
+     * @param instance the instance linked to this chunk
+     */
     public synchronized void updateBlocks(long time, Instance instance) {
         if (updatableBlocks.isEmpty())
             return;
@@ -181,10 +229,20 @@ public abstract class Chunk implements Viewable {
         return biomes;
     }
 
+    /**
+     * Get the chunk X
+     *
+     * @return the chunk X
+     */
     public int getChunkX() {
         return chunkX;
     }
 
+    /**
+     * Get the chunk Z
+     *
+     * @return the chunk Z
+     */
     public int getChunkZ() {
         return chunkZ;
     }
@@ -455,6 +513,14 @@ public abstract class Chunk implements Viewable {
         this.loaded = false;
     }
 
+    /**
+     * Get the index of a position, used to store blocks
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return the block index
+     */
     protected int getBlockIndex(int x, int y, int z) {
         return ChunkUtils.getBlockIndex(x, y, z);
     }

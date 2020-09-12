@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockProvider;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -21,12 +20,7 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    public void UNSAFE_removeCustomBlock(int x, int y, int z) {
-        //noop
-    }
-
-    @Override
-    protected void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
+    public void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
         //noop
     }
 
@@ -39,12 +33,6 @@ public class StaticChunk extends Chunk {
     public short getCustomBlockId(int x, int y, int z) {
         //noop
         return 0;
-    }
-
-    @Override
-    public CustomBlock getCustomBlock(int x, int y, int z) {
-        //noop
-        return null;
     }
 
     @Override

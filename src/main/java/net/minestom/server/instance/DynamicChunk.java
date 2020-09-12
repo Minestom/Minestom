@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.reader.ChunkReader;
@@ -31,19 +30,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void UNSAFE_removeCustomBlock(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        this.customBlocksId[index] = 0; // Set to none
-        this.blocksData.remove(index);
-
-        this.updatableBlocks.remove(index);
-        this.updatableBlocksLastUpdate.remove(index);
-
-        this.blockEntities.remove(index);
-    }
-
-    @Override
-    protected void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
+    public void setBlock(int x, int y, int z, short blockStateId, short customId, Data data, UpdateConsumer updateConsumer) {
 
         {
             // Update pathfinder
@@ -119,16 +106,6 @@ public class DynamicChunk extends Chunk {
             return 0; // TODO: custom invalid block
         }
         return customBlocksId[index];
-    }
-
-    @Override
-    public CustomBlock getCustomBlock(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
-            return null; // TODO: custom invalid block
-        }
-        final short id = customBlocksId[index];
-        return id != 0 ? BLOCK_MANAGER.getCustomBlock(id) : null;
     }
 
     @Override

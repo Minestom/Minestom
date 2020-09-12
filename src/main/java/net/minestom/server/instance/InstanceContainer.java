@@ -13,6 +13,7 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.UpdateConsumer;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
@@ -22,6 +23,7 @@ import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
@@ -135,13 +137,17 @@ public class InstanceContainer extends Instance {
             // Change id based on neighbors
             blockStateId = executeBlockPlacementRule(blockStateId, blockPosition);
 
-            // Set the block
+            // Retrieve custom block values
+            short customBlockId = 0;
+            UpdateConsumer updateConsumer = null;
             if (isCustomBlock) {
+                customBlockId = customBlock.getCustomBlockId();
                 data = customBlock.createData(this, blockPosition, data);
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlock, data);
-            } else {
-                chunk.UNSAFE_setBlock(x, y, z, blockStateId, data);
+                updateConsumer = CustomBlockUtils.getCustomBlockUpdate(customBlock);
             }
+
+            // Set the block
+            chunk.setBlock(x, y, z, blockStateId, customBlockId, data, updateConsumer);
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);
@@ -197,7 +203,6 @@ public class InstanceContainer extends Instance {
     private void callBlockDestroy(Chunk chunk, int index, CustomBlock previousBlock, BlockPosition blockPosition) {
         final Data previousData = chunk.getData(index);
         previousBlock.onDestroy(this, blockPosition, previousData);
-        chunk.UNSAFE_removeCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     /**

@@ -6,6 +6,7 @@ import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.utils.block.CustomBlockUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,27 +33,26 @@ public class ChunkBatch implements InstanceBatch {
 
     @Override
     public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
-        addBlockData((byte) x, y, (byte) z, false, blockStateId, (short) 0, data);
+        addBlockData((byte) x, y, (byte) z, blockStateId, (short) 0, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        addBlockData((byte) x, y, (byte) z, true, customBlock.getDefaultBlockStateId(), customBlockId, data);
+        addBlockData((byte) x, y, (byte) z, customBlock.getDefaultBlockStateId(), customBlockId, data);
     }
 
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        addBlockData((byte) x, y, (byte) z, true, blockStateId, customBlockId, data);
+        addBlockData((byte) x, y, (byte) z, blockStateId, customBlockId, data);
     }
 
-    private void addBlockData(byte x, int y, byte z, boolean customBlock, short blockStateId, short customBlockId, Data data) {
+    private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, Data data) {
         // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
         BlockData blockData = new BlockData();
         blockData.x = x;
         blockData.y = y;
         blockData.z = z;
-        blockData.hasCustomBlock = customBlock;
         blockData.blockStateId = blockStateId;
         blockData.customBlockId = customBlockId;
         blockData.data = data;
@@ -92,36 +92,33 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     private void singleThreadFlush(Consumer<Chunk> callback) {
-        synchronized (chunk) {
-            if (!chunk.isLoaded())
-                return;
+        synchronized (dataList) {
+            synchronized (chunk) {
+                if (!chunk.isLoaded())
+                    return;
 
-            for (BlockData data : dataList) {
-                data.apply(chunk);
+                for (BlockData data : dataList) {
+                    data.apply(chunk);
+                }
+
+                // Refresh chunk for viewers
+                chunk.sendChunkUpdate();
+
+                if (callback != null)
+                    callback.accept(chunk);
             }
-
-            // Refresh chunk for viewers
-            chunk.sendChunkUpdate();
-
-            if (callback != null)
-                callback.accept(chunk);
         }
     }
 
     private static class BlockData {
 
         private int x, y, z;
-        private boolean hasCustomBlock;
         private short blockStateId;
         private short customBlockId;
         private Data data;
 
         public void apply(Chunk chunk) {
-            if (!hasCustomBlock) {
-                chunk.UNSAFE_setBlock(x, y, z, blockStateId, data);
-            } else {
-                chunk.UNSAFE_setCustomBlock(x, y, z, blockStateId, customBlockId, data);
-            }
+            chunk.setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.getCustomBlockUpdate(customBlockId));
         }
 
     }
