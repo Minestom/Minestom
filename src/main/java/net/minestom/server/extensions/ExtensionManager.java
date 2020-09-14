@@ -82,7 +82,7 @@ public class ExtensionManager {
                 } else
                     version = extensionDescriptionJson.get("version").getAsString();
                 List<String> authors;
-                if (!extensionDescriptionJson.has("")) {
+                if (!extensionDescriptionJson.has("authors")) {
                     authors = new ArrayList<>();
                 } else
                     authors = Arrays.asList(new Gson().fromJson(extensionDescriptionJson.get("authors"), String[].class));
