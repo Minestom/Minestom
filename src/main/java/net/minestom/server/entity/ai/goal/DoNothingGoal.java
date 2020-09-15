@@ -24,7 +24,7 @@ public class DoNothingGoal extends GoalSelector {
     public DoNothingGoal(EntityCreature entityCreature, long time, float chance) {
         super(entityCreature);
         this.time = time;
-        this.chance = MathUtils.setBetween(chance, 0, 1);
+        this.chance = MathUtils.clampFloat(chance, 0, 1);
     }
 
     @Override
