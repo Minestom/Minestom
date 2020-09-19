@@ -50,7 +50,8 @@ public class BossBar implements Viewable {
             return false;
         }
         // Check max boss bar count
-        if (getBossBars(player).size() >= MAX_BOSSBAR) {
+        final Set<BossBar> playerBossBars = getBossBars(player);
+        if (playerBossBars != null && playerBossBars.size() >= MAX_BOSSBAR) {
             return false;
         }
         // Add to the map
