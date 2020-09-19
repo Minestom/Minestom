@@ -20,6 +20,7 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -94,6 +95,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.worldBorder = new WorldBorder(this);
     }
 
+    /**
+     * Schedule a task to be run during the next instance tick
+     * It ensures that the task will be executed in the same thread as the instance and its chunks/entities (depending of the {@link ThreadProvider})
+     *
+     * @param callback the task to execute during the next instance tick
+     */
     public void scheduleNextTick(Consumer<Instance> callback) {
         nextTick.add(callback);
     }
@@ -364,6 +371,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.timeUpdate = timeUpdate;
     }
 
+    /**
+     * Get a {@link TimeUpdatePacket} with the current age and time of this instance
+     *
+     * @return the {@link TimeUpdatePacket} with this instance datal
+     */
     private TimeUpdatePacket getTimePacket() {
         TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
         timeUpdatePacket.worldAge = worldAge;
@@ -574,6 +586,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
+    /**
+     * Send a {@link BlockActionPacket} for all the viewers of the specific position
+     *
+     * @param blockPosition
+     * @param actionId
+     * @param actionParam
+     * @see <a href="https://wiki.vg/Protocol#Block_Action">Packet information</a> for the action id & param
+     */
     public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
         final short blockStateId = getBlockStateId(blockPosition);
         final Block block = Block.fromStateId(blockStateId);
@@ -883,7 +903,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Performs a single tick in the instance.
-     * By default, does nothing
+     * <p>
+     * Warning: this does not update chunks and entities
      *
      * @param time the current time
      */
@@ -943,7 +964,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Return the registered explosion supplier, or null if none was provided
+     * Return the registered {@link ExplosionSupplier}, or null if none was provided
      *
      * @return the instance explosion supplier, null if none was provided
      */
