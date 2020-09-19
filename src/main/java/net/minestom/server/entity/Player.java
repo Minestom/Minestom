@@ -1153,6 +1153,15 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Get the percentage displayed in the experience bar
+     *
+     * @return the exp percentage 0-1
+     */
+    public float getExp() {
+        return exp;
+    }
+
+    /**
      * Used to change the percentage experience bar
      * This cannot change the displayed level, see {@link #setLevel(int)}
      *
@@ -1163,6 +1172,15 @@ public class Player extends LivingEntity implements CommandSender {
 
         this.exp = exp;
         sendExperienceUpdatePacket();
+    }
+
+    /**
+     * Get the level of the player displayed in the experience bar
+     *
+     * @return the player level
+     */
+    public int getLevel() {
+        return level;
     }
 
     /**
