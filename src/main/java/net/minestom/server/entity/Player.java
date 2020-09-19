@@ -44,6 +44,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -571,7 +572,7 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
             final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
 
-            Consumer<Chunk> callback = (chunk) -> {
+            ChunkCallback callback = (chunk) -> {
                 if (chunk != null) {
                     chunk.addViewer(this);
                     if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))

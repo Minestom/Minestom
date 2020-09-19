@@ -7,11 +7,11 @@ import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.utils.chunk.ChunkCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Use chunk coordinate (0-16) instead of world's
@@ -60,7 +60,7 @@ public class ChunkBatch implements InstanceBatch {
         this.dataList.add(blockData);
     }
 
-    public void flushChunkGenerator(ChunkGenerator chunkGenerator, Consumer<Chunk> callback) {
+    public void flushChunkGenerator(ChunkGenerator chunkGenerator, ChunkCallback callback) {
         batchesPool.execute(() -> {
             final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
             final boolean hasPopulator = populators != null && !populators.isEmpty();
@@ -81,7 +81,7 @@ public class ChunkBatch implements InstanceBatch {
         });
     }
 
-    public void flush(Consumer<Chunk> callback) {
+    public void flush(ChunkCallback callback) {
         batchesPool.execute(() -> {
             singleThreadFlush(callback);
         });
@@ -91,7 +91,7 @@ public class ChunkBatch implements InstanceBatch {
         dataList.clear();
     }
 
-    private void singleThreadFlush(Consumer<Chunk> callback) {
+    private void singleThreadFlush(ChunkCallback callback) {
         synchronized (dataList) {
             synchronized (chunk) {
                 if (!chunk.isLoaded())
@@ -104,8 +104,11 @@ public class ChunkBatch implements InstanceBatch {
                 // Refresh chunk for viewers
                 chunk.sendChunkUpdate();
 
-                if (callback != null)
-                    callback.accept(chunk);
+                if (callback != null) {
+                    instance.scheduleNextTick(inst -> {
+                        callback.accept(chunk);
+                    });
+                }
             }
         }
     }

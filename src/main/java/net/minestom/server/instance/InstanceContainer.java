@@ -23,6 +23,7 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
@@ -38,7 +39,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -338,7 +338,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public void loadChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
@@ -351,7 +351,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
@@ -463,7 +463,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    protected void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
             callChunkLoadEvent(chunkX, chunkZ);
@@ -479,7 +479,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void createChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
@@ -646,7 +646,9 @@ public class InstanceContainer extends Instance {
         // Unload all waiting chunks
         UNSAFE_unloadChunks();
 
+        // Time/world border
         super.tick(time);
+
         Lock wrlock = changingBlockLock.writeLock();
         wrlock.lock();
         currentlyChangingBlocks.clear();

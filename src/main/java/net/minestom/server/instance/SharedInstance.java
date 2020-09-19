@@ -7,11 +7,11 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 /**
  * The {@link SharedInstance} is an instance that shares the same chunks as its linked {@link InstanceContainer},
@@ -37,12 +37,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public void loadChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         instanceContainer.loadChunk(chunkX, chunkZ, callback);
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
@@ -102,12 +102,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
     }
 
     @Override
-    protected void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    protected void createChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         instanceContainer.createChunk(chunkX, chunkZ, callback);
     }
 

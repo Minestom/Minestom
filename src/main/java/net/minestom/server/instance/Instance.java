@@ -22,6 +22,7 @@ import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -125,7 +126,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback consumer called after the chunk has been generated,
      *                 the returned chunk will never be null
      */
-    public abstract void loadChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    public abstract void loadChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
      * Load the chunk if the chunk is already loaded or if
@@ -136,7 +137,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback consumer called after the chunk has tried to be loaded,
      *                 contains a chunk if it is successful, null otherwise
      */
-    public abstract void loadOptionalChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    public abstract void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
      * Schedule the removal of a chunk, this method does not promise when it will be done
@@ -226,9 +227,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public abstract void setStorageLocation(StorageLocation storageLocation);
 
-    protected abstract void retrieveChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    protected abstract void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
-    protected abstract void createChunk(int chunkX, int chunkZ, Consumer<Chunk> callback);
+    protected abstract void createChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
      * When set to true, chunks will load with players moving closer
@@ -489,13 +490,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @param callback the callback to run when the chunk is loaded
      */
-    public void loadChunk(Position position, Consumer<Chunk> callback) {
+    public void loadChunk(Position position, ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadChunk(chunkX, chunkZ, callback);
     }
 
-    public void loadOptionalChunk(Position position, Consumer<Chunk> callback) {
+    public void loadOptionalChunk(Position position, ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);

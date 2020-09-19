@@ -1,6 +1,6 @@
 package net.minestom.server.instance;
 
-import java.util.function.Consumer;
+import net.minestom.server.utils.chunk.ChunkCallback;
 
 /**
  * Interface implemented to change the way chunks are loaded/saved
@@ -17,7 +17,7 @@ public interface IChunkLoader {
      * @param callback the callback executed when the chunk is done loading
      * @return true if the chunk loaded successfully, false otherwise
      */
-    boolean loadChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback);
+    boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
      * Save a specific chunk with a callback for when it is done

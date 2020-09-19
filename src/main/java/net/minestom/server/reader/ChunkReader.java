@@ -8,11 +8,10 @@ import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
-
-import java.util.function.Consumer;
 
 public class ChunkReader {
 
@@ -29,7 +28,7 @@ public class ChunkReader {
      * @param chunkZ   the chunk Z
      * @param callback the consumer called once the chunk has been read
      */
-    public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public static void readChunk(byte[] b, Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
         BinaryReader binaryReader = new BinaryReader(b);
 
         // Used for blocks data

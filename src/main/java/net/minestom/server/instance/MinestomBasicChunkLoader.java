@@ -2,10 +2,9 @@ package net.minestom.server.instance;
 
 import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.function.Consumer;
 
 public class MinestomBasicChunkLoader implements IChunkLoader {
 
@@ -42,7 +41,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(Instance instance, int chunkX, int chunkZ, Consumer<Chunk> callback) {
+    public boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
         final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 
         if (bytes == null) {
