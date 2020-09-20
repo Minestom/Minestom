@@ -626,7 +626,7 @@ public class ItemStack implements DataContainer {
      *
      * @param player the player
      * @return the custom {@link ItemDisplay} for {@code player},
-     * null to use the normal item display name & lore
+     * null to use the normal item display name &amp; lore
      */
     public ItemDisplay getCustomDisplay(Player player) {
         throw new UnsupportedOperationException("Not implemented yet");

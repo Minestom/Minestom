@@ -74,6 +74,9 @@ java {
         withJavadocJar()
         withSourcesJar()
     }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {

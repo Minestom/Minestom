@@ -19,7 +19,7 @@ public class BlockManager {
      * Register a {@link CustomBlock}
      *
      * @param customBlock the custom block to register
-     * @throws IllegalArgumentException if {@param customBlock} block id is negative
+     * @throws IllegalArgumentException if <code>customBlock</code> block id is negative
      */
     public void registerCustomBlock(CustomBlock customBlock) {
         final short id = customBlock.getCustomBlockId();
@@ -33,7 +33,7 @@ public class BlockManager {
      * Register a {@link BlockPlacementRule}
      *
      * @param blockPlacementRule the block placement rule to register
-     * @throws IllegalArgumentException if {@param blockPlacementRule} block id is negative
+     * @throws IllegalArgumentException if <code>blockPlacementRule</code> block id is negative
      */
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
         final short id = blockPlacementRule.getBlockId();

@@ -55,7 +55,7 @@ public interface CommandSender {
 
     /**
      * Checks if the given permission is possessed by this command sender.
-     * Simple shortcut to <pre>getAllPermissions().contains(permission) && permission.isValidFor(this)</pre> for readability.
+     * Simple shortcut to <pre>getAllPermissions().contains(permission) &amp;&amp; permission.isValidFor(this)</pre> for readability.
      * @param p permission to check against
      * @return
      */

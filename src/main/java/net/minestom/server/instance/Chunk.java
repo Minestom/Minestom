@@ -81,7 +81,7 @@ public abstract class Chunk implements Viewable {
      * <p>
      * This is used when the previous block has to be destroyed, meaning that it clears the previous data and update method
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} & {@link BlockBatch})
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} &amp; {@link BlockBatch})
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
      * Otherwise, you can simply do not forget to have this chunk synchronized when this is called
      *
@@ -92,7 +92,7 @@ public abstract class Chunk implements Viewable {
      * @param customBlockId the custom block id
      * @param data          the data of the block, can be null
      * @param updatable     true if the block has an update method
-     *                      Warning: {@param customBlockId} cannot be 0 and needs to be valid since the update delay and method
+     *                      Warning: <code>customBlockId</code> cannot be 0 and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
      */
     public abstract void setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);

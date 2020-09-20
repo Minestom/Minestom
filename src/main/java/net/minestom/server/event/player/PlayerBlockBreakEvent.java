@@ -91,7 +91,7 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      * Get the custom block id result, which will be placed after the event
      * <p>
      * Warning: the visual block will not be changed, be sure to call {@link #setResultBlockId(short)}
-     * if you want the visual to be the same as {@link CustomBlock#getBlockStateId()}
+     * if you want the visual to be the same as {@link CustomBlock#getDefaultBlockStateId()} ()} ()}
      *
      * @return the custom block id that will be set at {@link #getBlockPosition()}
      * set to 0 to remove

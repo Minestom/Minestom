@@ -12,7 +12,7 @@ public class CustomBlockUtils {
      * Get if a custom block id has an update method
      *
      * @param customBlockId the custom block id
-     * @return true if {@param customBlockId} has an update method
+     * @return true if <code>customBlockId</code> has an update method
      */
     public static boolean hasUpdate(short customBlockId) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
@@ -23,7 +23,7 @@ public class CustomBlockUtils {
      * Get if a {@link CustomBlock} has an update method
      *
      * @param customBlock the {@link CustomBlock}
-     * @return true if {@param customBlock} has an update method
+     * @return true if <code>customBlock</code> has an update method
      */
     public static boolean hasUpdate(CustomBlock customBlock) {
         return customBlock != null && customBlock.hasUpdate();

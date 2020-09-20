@@ -40,7 +40,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
      * Change the final held slot of the player
      *
      * @param slot the new held slot
-     * @throws IllegalArgumentException if {@param slot} is not between 0 and 8
+     * @throws IllegalArgumentException if <code>slot</code> is not between 0 and 8
      */
     public void setSlot(byte slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "The held slot needs to be between 0 and 8");

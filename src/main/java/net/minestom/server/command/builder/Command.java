@@ -128,7 +128,7 @@ public class Command {
 
     /**
      * Allow for tab auto completion, this is called everytime the player press a key in the chat
-     * when in a dynamic argument ({@link ArgumentDynamicWord} & {@link ArgumentDynamicStringArray})
+     * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray})
      *
      * @param text the whole player text
      * @return the array containing all the suggestion for the current arg (split " ")

@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -129,7 +130,7 @@ public class DynamicChunk extends Chunk {
     }
 
     /**
-     * Serialize this {@link Chunk} based on {@link ChunkReader#readChunk(byte[], Instance, int, int, Consumer)}
+     * Serialize this {@link Chunk} based on {@link ChunkReader#readChunk(byte[], Instance, int, int, ChunkCallback)}
      * <p>
      * It is also used by the default {@link IChunkLoader} which is {@link MinestomBasicChunkLoader}
      *

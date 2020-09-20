@@ -29,7 +29,7 @@ public class DataReader {
      * <p>
      * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
      *
-     * @param typeToIndexMap the map which index all the type contained in the data (className->classIndex)
+     * @param typeToIndexMap the map which index all the type contained in the data (className-&gt;classIndex)
      * @param reader         the reader
      * @return a {@link SerializableData} based on the data input
      */
@@ -92,7 +92,7 @@ public class DataReader {
     }
 
     /**
-     * Get a map containing the indexes of your data (type name -> type index)
+     * Get a map containing the indexes of your data (type name -&gt; type index)
      *
      * @param binaryReader the reader
      * @return a map containing the indexes of your data

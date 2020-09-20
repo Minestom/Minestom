@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Represent multiple {@link ColoredText} batched together with the possibility to add
- * click & hover events
+ * click and hover events
  */
 public class RichMessage {
 

@@ -244,7 +244,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     /**
      * Change the cursor item of a viewer,
-     * does nothing if {@param player} is not a viewer
+     * does nothing if <code>player</code> is not a viewer
      *
      * @param player     the player to change the cursor item
      * @param cursorItem the new player cursor item
@@ -313,7 +313,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @param property the property to send
      * @param value    the value of the property
-     * @see <a href="https://wiki.vg/Protocol#Window_Property</a>
+     * @see <a href="https://wiki.vg/Protocol#Window_Property">https://wiki.vg/Protocol#Window_Property</a>
      */
     protected void sendProperty(InventoryProperty property, short value) {
         WindowPropertyPacket windowPropertyPacket = new WindowPropertyPacket();

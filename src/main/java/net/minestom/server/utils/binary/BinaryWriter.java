@@ -214,7 +214,7 @@ public class BinaryWriter extends OutputStream {
 
     /**
      * Write an {@link UUID}
-     * It is done by writing both long, the most & least significant bits
+     * It is done by writing both long, the most and least significant bits
      *
      * @param uuid the {@link UUID} to write
      */

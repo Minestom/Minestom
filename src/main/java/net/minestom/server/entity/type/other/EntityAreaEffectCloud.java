@@ -110,7 +110,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
      * Used to add data to the particle
      *
      * @param particleDataConsumer the particle data consumer
-     * @see @see <a href="https://wiki.vg/Data_types#Particle">Particle data</a>
+     * @see <a href="https://wiki.vg/Data_types#Particle">Particle data</a>
      */
     public void setParticleDataConsumer(Consumer<BinaryWriter> particleDataConsumer) {
         this.particleDataConsumer = particleDataConsumer;

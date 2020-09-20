@@ -327,7 +327,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Change the entity health, kill it if {@code health} is <= 0 and is not dead yet
+     * Change the entity health, kill it if {@code health} is &gt;= 0 and is not dead yet
      *
      * @param health the new entity health
      */

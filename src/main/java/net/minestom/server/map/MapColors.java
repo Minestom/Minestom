@@ -332,7 +332,7 @@ public enum MapColors {
     }
 
     /**
-     * How does Minestom compute RGB->MapColor transitions?
+     * How does Minestom compute RGB to MapColor transitions?
      */
     public enum ColorMappingStrategy {
         /**

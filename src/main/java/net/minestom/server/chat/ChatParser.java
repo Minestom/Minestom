@@ -16,7 +16,7 @@ public class ChatParser {
     /**
      * Convert a simple colored message json (text/color) to a {@link ColoredText}
      *
-     * @param json the json containing the text & color
+     * @param json the json containing the text and color
      * @return a {@link ColoredText} representing the text
      */
     public static ColoredText toColoredText(String json) {
