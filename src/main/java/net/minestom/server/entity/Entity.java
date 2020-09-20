@@ -37,6 +37,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
@@ -556,6 +557,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         Check.notNull(eventClass, "Event class cannot be null");
         return eventCallbacks.computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
+    }
+
+    @Override
+    public Stream<EventCallback> getEventCallbacks() {
+        return eventCallbacks.values().stream().flatMap(Collection::stream);
     }
 
     /**

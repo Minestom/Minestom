@@ -36,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Instances are what are called "worlds" in Minecraft
@@ -752,6 +753,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     @Override
     public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
         return eventCallbacks.computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
+    }
+
+    @Override
+    public Stream<EventCallback> getEventCallbacks() {
+        return eventCallbacks.values().stream().flatMap(Collection::stream);
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)

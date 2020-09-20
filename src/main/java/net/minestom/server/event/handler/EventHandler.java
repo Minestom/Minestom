@@ -5,6 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface EventHandler {
 
@@ -34,6 +35,14 @@ public interface EventHandler {
      * @return all event callbacks for the specified type {@code eventClass}
      */
     <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass);
+
+
+    /**
+     * Get a {@link Stream} containing all the added callbacks, no matter to which event they are linked
+     *
+     * @return a {@link Stream} containing all the added callbacks
+     */
+    Stream<EventCallback> getEventCallbacks();
 
     /**
      * Call the specified event type using the Event object parameter
