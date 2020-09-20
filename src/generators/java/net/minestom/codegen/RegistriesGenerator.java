@@ -42,7 +42,6 @@ public class RegistriesGenerator implements CodeGenerator {
             "AIR",
             "AIR",
             null,
-            null,
             "PIG",
             null,
             null,

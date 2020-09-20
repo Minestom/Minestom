@@ -16,7 +16,7 @@ import java.io.IOException;
 public class AllGenerators {
 
     public static void main(String[] args) throws IOException {
-        //BlockEnumGenerator.main(args);
+        BlockEnumGenerator.main(args);
         ItemEnumGenerator.main(args); // must be done after block
         PotionEnumGenerator.main(args);
         EnchantmentEnumGenerator.main(args);

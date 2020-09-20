@@ -111,7 +111,8 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
             if (data.name.equals(NamespaceID.from("minecraft:water")) || data.name.equals(NamespaceID.from("minecraft:lava"))) {
                 block.setLiquid();
             }
-            if (data.name.equals(NamespaceID.from("minecraft:air"))) {
+            boolean isAir = data.name.equals(NamespaceID.from("minecraft:air")) || data.name.getPath().endsWith("_air");
+            if (isAir) {
                 block.setAir();
             }
 
