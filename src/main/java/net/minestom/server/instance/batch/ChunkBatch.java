@@ -92,23 +92,21 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     private void singleThreadFlush(ChunkCallback callback) {
-        synchronized (dataList) {
-            synchronized (chunk) {
-                if (!chunk.isLoaded())
-                    return;
+        synchronized (chunk) {
+            if (!chunk.isLoaded())
+                return;
 
-                for (BlockData data : dataList) {
-                    data.apply(chunk);
-                }
+            for (BlockData data : dataList) {
+                data.apply(chunk);
+            }
 
-                // Refresh chunk for viewers
-                chunk.sendChunkUpdate();
+            // Refresh chunk for viewers
+            chunk.sendChunkUpdate();
 
-                if (callback != null) {
-                    instance.scheduleNextTick(inst -> {
-                        callback.accept(chunk);
-                    });
-                }
+            if (callback != null) {
+                instance.scheduleNextTick(inst -> {
+                    callback.accept(chunk);
+                });
             }
         }
     }
