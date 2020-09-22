@@ -11,6 +11,8 @@ Minestom is an alternative to the popular Minecraft server API called Bukkit.
 The main difference is that our implementation of the Notchian server does not contain any features by default!
 However, we have a complete API which allows you to make anything possible with current spigot plugins.
 
+This is a developer API not meant to be used by the end-users. Replacing Spigot/Paper with this will **not** work since we do not implement the Bukkit API
+
 # Table of contents
 - [Install](#install)
 - [Usage](#usage)
