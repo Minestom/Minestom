@@ -66,7 +66,7 @@ public class ChunkBatch implements InstanceBatch {
             final boolean hasPopulator = populators != null && !populators.isEmpty();
 
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
-            singleThreadFlush(hasPopulator ? null : callback);
+            singleThreadFlush(hasPopulator ? null : callback, true);
 
             clearData(); // So the populators won't place those blocks again
 
@@ -74,16 +74,32 @@ public class ChunkBatch implements InstanceBatch {
                 for (ChunkPopulator chunkPopulator : populators) {
                     chunkPopulator.populateChunk(this, chunk);
                 }
-                singleThreadFlush(callback);
+                singleThreadFlush(callback, true);
 
                 clearData(); // Clear populators blocks
             }
         });
     }
 
+    /**
+     * Execute the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
+     *
+     * @param callback the callback to execute once the blocks are placed
+     */
     public void flush(ChunkCallback callback) {
         batchesPool.execute(() -> {
-            singleThreadFlush(callback);
+            singleThreadFlush(callback, true);
+        });
+    }
+
+    /**
+     * Execute the batch in the dedicated pool and run the callback once blocks are placed (in the current thread)
+     *
+     * @param callback the callback to execute once the blocks are placed
+     */
+    public void unsafeFlush(ChunkCallback callback) {
+        batchesPool.execute(() -> {
+            singleThreadFlush(callback, false);
         });
     }
 
@@ -91,22 +107,34 @@ public class ChunkBatch implements InstanceBatch {
         dataList.clear();
     }
 
-    private void singleThreadFlush(ChunkCallback callback) {
-        synchronized (chunk) {
-            if (!chunk.isLoaded())
-                return;
+    /**
+     * Execute the batch in the current thread
+     *
+     * @param callback     the callback to execute once the blocks are placed
+     * @param safeCallback true to run the callback in the instance update thread, otherwise run in the current one
+     */
+    private void singleThreadFlush(ChunkCallback callback, boolean safeCallback) {
+        synchronized (dataList) {
+            synchronized (chunk) {
+                if (!chunk.isLoaded())
+                    return;
 
-            for (BlockData data : dataList) {
-                data.apply(chunk);
-            }
+                for (BlockData data : dataList) {
+                    data.apply(chunk);
+                }
 
-            // Refresh chunk for viewers
-            chunk.sendChunkUpdate();
+                // Refresh chunk for viewers
+                chunk.sendChunkUpdate();
 
-            if (callback != null) {
-                instance.scheduleNextTick(inst -> {
-                    callback.accept(chunk);
-                });
+                if (callback != null) {
+                    if (safeCallback) {
+                        instance.scheduleNextTick(inst -> {
+                            callback.accept(chunk);
+                        });
+                    } else {
+                        callback.accept(chunk);
+                    }
+                }
             }
         }
     }
