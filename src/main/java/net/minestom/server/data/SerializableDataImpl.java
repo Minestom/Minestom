@@ -16,13 +16,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SerializableDataImpl extends DataImpl implements SerializableData {
 
-    private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
-
     /**
      * Class name -> Class
      * Used to cache data so we don't load class by name each time
      */
     private static ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
+
+    /**
+     * Data key -> Class
+     * Used to know the type of an element of this data object (for serialization purpose)
+     */
+    private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     /**
      * Set a value to a specific key
@@ -142,7 +146,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
      *
      * @param data           the object to append the data
-     * @param typeToIndexMap the map which index all the type contained in the data (className->classIndex)
+     * @param typeToIndexMap the map which index all the type contained in the data (className-&gt;classIndex)
      * @param reader         the reader
      */
     private static void readIndexedData(SerializableData data, Object2ShortMap<String> typeToIndexMap, BinaryReader reader) {
@@ -167,8 +171,10 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
 
             final Class type;
             {
+                // Retrieve the class type
                 final String className = indexToTypeMap.get(typeIndex);
                 type = nameToClassMap.computeIfAbsent(className, s -> {
+                    // First time that this type is retrieved
                     try {
                         return Class.forName(className);
                     } catch (ClassNotFoundException e) {

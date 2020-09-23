@@ -64,6 +64,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     protected float cacheYaw, cachePitch;
+    protected boolean onGround;
 
     private BoundingBox boundingBox;
 
@@ -72,6 +73,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
     protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
+    private long velocityUpdatePeriod;
 
     protected float gravityDragPerTick;
     protected float eyeHeight;
@@ -91,10 +93,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     private long lastUpdate;
     private final EntityType entityType;
 
-    // Synchronization
+    // Network synchronization
     private static final long SYNCHRONIZATION_DELAY = 1500; // In ms
     private long lastSynchronizationTime;
 
+    // Events
     private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Metadata
@@ -114,9 +117,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected Pose pose = Pose.STANDING;
 
     protected final List<Consumer<Entity>> nextTick = Collections.synchronizedList(new ArrayList<>());
-
-    private long velocityUpdatePeriod;
-    protected boolean onGround;
 
     // Tick related
     private long ticks;
@@ -562,6 +562,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     @Override
     public Stream<EventCallback> getEventCallbacks() {
         return eventCallbacks.values().stream().flatMap(Collection::stream);
+    }
+
+    @Override
+    public <E extends Event> void callEvent(Class<E> eventClass, E event) {
+        EventHandler.super.callEvent(eventClass, event);
+
+        // Call the same event for the current entity instance
+        if (instance != null) {
+            instance.callEvent(eventClass, event);
+        }
     }
 
     /**
