@@ -33,7 +33,7 @@ public class Biome {
 					.build())
 			.build();
 
-	private int id = idCounter.getAndIncrement();
+	private final int id = idCounter.getAndIncrement();
 
 	private final NamespaceID name;
 	@Builder.Default
@@ -52,10 +52,15 @@ public class Biome {
 	@Builder.Default
 	private TemperatureModifier temperature_modifier = TemperatureModifier.NONE;
 
+	// allows mixins to remap ID if necessary
+	public int getId() {
+		return id;
+	}
+
 	public NBTCompound toNbt() {
 		NBTCompound nbt = new NBTCompound();
 		nbt.setString("name", name.toString());
-		nbt.setInt("id", id);
+		nbt.setInt("id", getId());
 
 		NBTCompound element = new NBTCompound();
 		element.setFloat("depth", depth);
