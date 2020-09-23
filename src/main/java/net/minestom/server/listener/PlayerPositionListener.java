@@ -56,16 +56,21 @@ public class PlayerPositionListener {
             return;
         }
 
+        final Position currentPosition = player.getPosition().clone();
         Position newPosition = new Position(x, y, z, yaw, pitch);
         final Position cachedPosition = newPosition.clone();
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
-        if (!playerMoveEvent.isCancelled()) {
+
+        // True if the event call changed the player position (possibly a teleport)
+        final boolean positionChanged = !currentPosition.equals(player.getPosition());
+
+        if (!playerMoveEvent.isCancelled() && !positionChanged) {
             // Move the player
             newPosition = playerMoveEvent.getNewPosition();
             if (!newPosition.equals(cachedPosition)) {
-                // Position changed, teleport the player
+                // New position from the event changed, teleport the player
                 player.teleport(newPosition);
             }
             // Change the internal data
