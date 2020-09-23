@@ -33,7 +33,7 @@ public class Biome {
 					.build())
 			.build();
 
-	private final int id = idCounter.getAndIncrement();
+	private int id = idCounter.getAndIncrement();
 
 	private final NamespaceID name;
 	@Builder.Default
