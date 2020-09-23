@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public final class EntityManager {
 
-    private ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
 
     /**
      * Connect waiting players

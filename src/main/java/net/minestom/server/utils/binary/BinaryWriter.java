@@ -28,7 +28,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Create a {@link BinaryWriter} with a custom initial capacity
      *
-     * @param initialCapacity
+     * @param initialCapacity the initial capacity of the binary writer
      */
     public BinaryWriter(int initialCapacity) {
         this.buffer = Unpooled.buffer(initialCapacity);

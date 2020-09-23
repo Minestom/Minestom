@@ -19,7 +19,7 @@ class VersionInfo {
         return downloads;
     }
 
-    class DownloadObject {
+    static class DownloadObject {
         private String url;
         private String sha1;
         private long size;

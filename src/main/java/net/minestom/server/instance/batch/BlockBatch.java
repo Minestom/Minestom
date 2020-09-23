@@ -16,7 +16,7 @@ public class BlockBatch implements InstanceBatch {
 
     private InstanceContainer instance;
 
-    private Map<Chunk, List<BlockData>> data = new HashMap<>();
+    private final Map<Chunk, List<BlockData>> data = new HashMap<>();
 
     public BlockBatch(InstanceContainer instance) {
         this.instance = instance;

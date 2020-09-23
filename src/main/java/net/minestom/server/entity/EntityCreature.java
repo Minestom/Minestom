@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity {
 
-    private PFPathingEntity pathingEntity = new PFPathingEntity(this);
+    private final PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
     private IPath path;
     private Position pathPosition;
@@ -51,7 +51,7 @@ public abstract class EntityCreature extends LivingEntity {
     private ItemStack leggings;
     private ItemStack boots;
 
-    private ReentrantLock pathLock = new ReentrantLock();
+    private final ReentrantLock pathLock = new ReentrantLock();
 
 
     public EntityCreature(EntityType entityType, Position spawnPosition) {

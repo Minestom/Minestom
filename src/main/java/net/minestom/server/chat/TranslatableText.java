@@ -43,7 +43,7 @@ public class TranslatableText {
 
         if (arguments != null && arguments.length > 0) {
             for (String arg : arguments) {
-                content.append("," + arg);
+                content.append(",").append(arg);
             }
         }
 

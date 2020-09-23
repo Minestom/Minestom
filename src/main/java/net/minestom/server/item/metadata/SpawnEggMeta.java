@@ -24,7 +24,7 @@ public class SpawnEggMeta implements ItemMeta {
     @Override
     public void read(NBTCompound compound) {
         if (compound.containsKey("EntityTag")) {
-
+            // TODO
         }
     }
 

@@ -51,7 +51,7 @@ public abstract class ObjectEntity extends Entity {
             playerConnection.sendPacket(getPassengersPacket());
         }
 
-        return result;
+        return true;
     }
 
 }

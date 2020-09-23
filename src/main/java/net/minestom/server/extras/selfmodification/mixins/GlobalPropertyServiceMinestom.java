@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class GlobalPropertyServiceMinestom implements IGlobalPropertyService {
 
-    private class BasicProperty implements IPropertyKey {
+    private static class BasicProperty implements IPropertyKey {
 
         private final String name;
 

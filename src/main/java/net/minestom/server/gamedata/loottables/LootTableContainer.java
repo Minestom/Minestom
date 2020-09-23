@@ -95,7 +95,7 @@ class LootTableContainer {
         }
     }
 
-    private class FunctionContainer {
+    private static class FunctionContainer {
         private String function;
         private ConditionContainer[] conditions;
 

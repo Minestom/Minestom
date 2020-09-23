@@ -207,7 +207,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
         // Remove passengers if any
         if (hasPassenger()) {
-            getPassengers().forEach(entity -> removePassenger(entity));
+            getPassengers().forEach(this::removePassenger);
         }
 
         EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);

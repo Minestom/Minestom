@@ -7,7 +7,6 @@ import com.google.gson.JsonParser;
 import net.minestom.server.utils.url.URLUtils;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 /**
  * Contains all the data required to store a skin
@@ -44,7 +43,7 @@ public class PlayerSkin {
      * Get a skin from a Mojang UUID
      *
      * @param uuid Mojang UUID
-     * @return a player skin based on the UUID
+     * @return a player skin based on the UUID, null if not found
      */
     public static PlayerSkin fromUuid(String uuid) {
         final String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
@@ -54,9 +53,8 @@ public class PlayerSkin {
             final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
             final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
 
-            final Iterator<JsonElement> iterator = propertiesArray.iterator();
-            while (iterator.hasNext()) {
-                final JsonObject propertyObject = iterator.next().getAsJsonObject();
+            for (JsonElement jsonElement : propertiesArray) {
+                final JsonObject propertyObject = jsonElement.getAsJsonObject();
                 final String name = propertyObject.get("name").getAsString();
                 if (!name.equals("textures"))
                     continue;
@@ -75,7 +73,7 @@ public class PlayerSkin {
      * Get a skin from a Minecraft username
      *
      * @param username the Minecraft username
-     * @return a skin based on a Minecraft username
+     * @return a skin based on a Minecraft username, null if not found
      */
     public static PlayerSkin fromUsername(String username) {
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;

@@ -31,16 +31,13 @@ public class ArgumentWord extends Argument<String> {
 
     @Override
     public int getConditionResult(String value) {
-
         // Check restrictions
-        boolean findRestriction = false;
         if (restrictions != null && restrictions.length > 0) {
             for (String r : restrictions) {
                 if (value.equalsIgnoreCase(r))
                     return SUCCESS;
             }
-            if (!findRestriction)
-                return RESTRICTION_ERROR;
+            return RESTRICTION_ERROR;
         }
 
         return SUCCESS;

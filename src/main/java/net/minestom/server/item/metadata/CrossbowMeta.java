@@ -115,9 +115,9 @@ public class CrossbowMeta implements ItemMeta {
         if (!checkCount)
             return false;
 
-        if (triple && (projectile1.isSimilar(crossbowMeta.projectile1)) &&
-                (projectile2.isSimilar(crossbowMeta.projectile2)) &&
-                (projectile3.isSimilar(crossbowMeta.projectile3))) {
+        if (projectile1.isSimilar(crossbowMeta.projectile1) &&
+                projectile2.isSimilar(crossbowMeta.projectile2) &&
+                projectile3.isSimilar(crossbowMeta.projectile3)) {
             return true;
         }
 

@@ -60,8 +60,7 @@ public class ItemStack implements DataContainer {
     {
         if (defaultStackingRule == null)
             defaultStackingRule = DEFAULT_STACKING_RULE;
-        if (this.stackingRule == null)
-            this.stackingRule = defaultStackingRule;
+        this.stackingRule = defaultStackingRule;
     }
 
     public ItemStack(Material material, byte amount) {

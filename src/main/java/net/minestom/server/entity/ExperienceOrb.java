@@ -40,7 +40,7 @@ public class ExperienceOrb extends Entity {
         playerConnection.sendPacket(experienceOrbPacket);
         playerConnection.sendPacket(getVelocityPacket());
 
-        return result;
+        return true;
     }
 
     /**
@@ -59,10 +59,10 @@ public class ExperienceOrb extends Entity {
      */
     public void setExperienceCount(short experienceCount) {
         // Remove the entity in order to respawn it with the correct experience count
-        getViewers().forEach(player -> removeViewer(player));
+        getViewers().forEach(this::removeViewer);
 
         this.experienceCount = experienceCount;
 
-        getViewers().forEach(player -> addViewer(player));
+        getViewers().forEach(this::addViewer);
     }
 }

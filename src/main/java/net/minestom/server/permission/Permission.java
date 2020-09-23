@@ -13,19 +13,23 @@ public interface Permission {
 
     /**
      * Does the given commandSender have the permission represented by this object?
-     * @param commandSender
+     *
+     * @param commandSender the command sender
      * @return true if the commandSender possesses this permission
      */
     boolean isValidFor(CommandSender commandSender);
 
     /**
      * Writes any required data for this permission inside the given destination
+     *
      * @param destination Data to write to
      */
-    default void write(@NotNull Data destination) {}
+    default void write(@NotNull Data destination) {
+    }
 
     /**
      * Reads any required data for this permission from the given destination
+     *
      * @param source Data to read from
      * @return this for chaining
      */

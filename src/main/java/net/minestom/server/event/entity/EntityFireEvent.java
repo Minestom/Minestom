@@ -6,7 +6,7 @@ import net.minestom.server.utils.time.TimeUnit;
 
 public class EntityFireEvent extends CancellableEvent {
 
-    private Entity entity;
+    private final Entity entity;
     private int duration;
     private TimeUnit timeUnit;
 

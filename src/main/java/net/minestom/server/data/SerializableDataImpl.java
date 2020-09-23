@@ -132,7 +132,6 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      *
      * @param data   the object to append the data
      * @param reader the reader
-     * @return the deserialized {@link SerializableData}
      */
     private static void readData(SerializableData data, BinaryReader reader) {
         final Object2ShortMap<String> typeToIndexMap = SerializableData.readDataIndexes(reader);

@@ -1363,7 +1363,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void sendDimension(DimensionType dimensionType) {
         Check.notNull(dimensionType, "Dimension cannot be null!");
-        Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension need to be different than the current one!");
+        Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension needs to be different than the current one!");
 
         this.dimensionType = dimensionType;
         RespawnPacket respawnPacket = new RespawnPacket();
@@ -1941,8 +1941,7 @@ public class Player extends LivingEntity implements CommandSender {
         // Get the stage from the custom block object if it is, otherwise use the local fieldl
         final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
         // Retrieve the break delay for the current stage
-        final int breakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
-        this.targetBreakDelay = breakDelay;
+        this.targetBreakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
     }
 
     /**

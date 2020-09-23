@@ -459,7 +459,7 @@ public abstract class CustomBlock {
      * Class used to store block break stage
      * Only used if multi player breaking is enabled
      */
-    private class InstanceBreakData {
+    private static class InstanceBreakData {
         // Contains all the breakers of a block
         private final Map<BlockPosition, Set<Player>> breakersMap = new HashMap<>();
         // Contains the current break stage of a block

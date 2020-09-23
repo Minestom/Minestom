@@ -66,17 +66,14 @@ public class ColoredText {
         for (int i = 0; i < message.length(); i++) {
             final char c = message.charAt(i);
             if (c == colorChar) {
-                final boolean hasNextChar = i < message.length();
-                if (hasNextChar) {
-                    final char nextChar = message.charAt(i + 1);
-                    final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
-                    if (color != ChatColor.NO_COLOR) {
-                        final String replacement = color.toString();
-                        result.append(replacement);
-                        i++; // Increment to ignore the color code
-                    } else {
-                        result.append(c);
-                    }
+                final char nextChar = message.charAt(i + 1);
+                final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
+                if (color != ChatColor.NO_COLOR) {
+                    final String replacement = color.toString();
+                    result.append(replacement);
+                    i++; // Increment to ignore the color code
+                } else {
+                    result.append(c);
                 }
             } else {
                 result.append(c);

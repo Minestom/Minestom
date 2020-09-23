@@ -4,9 +4,9 @@ public enum GameMode {
 
     SURVIVAL((byte) 0, true), CREATIVE((byte) 1, false), ADVENTURE((byte) 2, true), SPECTATOR((byte) 3, false);
 
-    private byte id;
+    private final byte id;
     private boolean hardcore;
-    private boolean canTakeDamage;
+    private final boolean canTakeDamage;
 
     GameMode(byte id, boolean canTakeDamage) {
         this.id = id;
