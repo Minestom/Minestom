@@ -32,7 +32,14 @@ public abstract class Recipe {
     }
 
     protected enum RecipeType {
-        SHAPELESS, SHAPED, SMELTING, STONECUTTER
+        SHAPELESS,
+        SHAPED,
+        SMELTING,
+        BLASTING,
+        SMOKING,
+        CAMPFIRE_COOKING,
+        STONECUTTING,
+        SMITHING
     }
 
 }
