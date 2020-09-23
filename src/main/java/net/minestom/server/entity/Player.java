@@ -1347,9 +1347,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Returns true iff this player is in creative. Used for code readability
+     * Get if this player is in creative. Used for code readability
      *
-     * @return true if the player is in creative mode, false otherwise
+     * @return true if the player is in creative mode
      */
     public boolean isCreative() {
         return gameMode == GameMode.CREATIVE;
@@ -1361,7 +1361,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param dimensionType the new player dimension
      */
-    public void sendDimension(DimensionType dimensionType) {
+    protected void sendDimension(DimensionType dimensionType) {
         Check.notNull(dimensionType, "Dimension cannot be null!");
         Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension need to be different than the current one!");
 
