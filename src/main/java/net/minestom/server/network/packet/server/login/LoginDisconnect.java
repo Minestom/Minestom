@@ -4,20 +4,21 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 public class LoginDisconnect implements ServerPacket {
-	private String kickMessage;
 
-	public LoginDisconnect(String kickMessage) {
-		this.kickMessage = kickMessage;
-	}
+    private String kickMessage;
 
-	@Override
-	public void write(BinaryWriter writer) {
-		writer.writeSizedString(kickMessage);
-	}
+    public LoginDisconnect(String kickMessage) {
+        this.kickMessage = kickMessage;
+    }
 
-	@Override
-	public int getId() {
-		return 0x00;
-	}
+    @Override
+    public void write(BinaryWriter writer) {
+        writer.writeSizedString(kickMessage);
+    }
+
+    @Override
+    public int getId() {
+        return 0x00;
+    }
 
 }

@@ -11,6 +11,11 @@ import net.minestom.server.utils.binary.BinaryReader;
 
 public class HandshakePacket implements ClientPreplayPacket {
 
+    /**
+     * Text sent if a player tries to connect with an invalid version of the client
+     */
+    private static final ColoredText INVALID_VERSION_TEXT = ColoredText.of(ChatColor.RED, "Invalid Version, please use " + MinecraftServer.VERSION_NAME);
+
     private int protocolVersion;
     private String serverAddress;
     private int serverPort;
@@ -33,7 +38,7 @@ public class HandshakePacket implements ClientPreplayPacket {
             case 2:
                 connection.setConnectionState(ConnectionState.LOGIN);
                 if (protocolVersion != MinecraftServer.PROTOCOL_VERSION) {
-                    connection.sendPacket(new LoginDisconnect(ColoredText.of(ChatColor.RED, "Invalid Version").toString()));
+                    connection.sendPacket(new LoginDisconnect(INVALID_VERSION_TEXT.toString()));
                     connection.disconnect();
                 }
                 break;
