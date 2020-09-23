@@ -46,7 +46,9 @@ public class RecipeManager {
                 case SHAPELESS: {
                     packetRecipe.recipeType = "crafting_shapeless";
                     packetRecipe.group = recipe.getGroup();
+
                     ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
+
                     List<DeclareRecipesPacket.Ingredient> ingredients = shapelessRecipe.getIngredients();
                     packetRecipe.ingredients = ingredients.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapelessRecipe.getResult();
@@ -55,7 +57,9 @@ public class RecipeManager {
                 case SHAPED: {
                     packetRecipe.recipeType = "crafting_shaped";
                     packetRecipe.group = recipe.getGroup();
+
                     ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
+
                     List<DeclareRecipesPacket.Ingredient> ingredients2 = shapedRecipe.getIngredients();
                     packetRecipe.ingredients = ingredients2.toArray(new DeclareRecipesPacket.Ingredient[0]);
                     packetRecipe.result = shapedRecipe.getResult();
@@ -64,19 +68,69 @@ public class RecipeManager {
                 case SMELTING: {
                     packetRecipe.recipeType = "smelting";
                     packetRecipe.group = recipe.getGroup();
+
                     SmeltingRecipe smeltingRecipe = (SmeltingRecipe) recipe;
+
                     packetRecipe.ingredient = smeltingRecipe.getIngredient();
                     packetRecipe.result = smeltingRecipe.getResult();
                     packetRecipe.experience = smeltingRecipe.getExperience();
                     packetRecipe.cookingTime = smeltingRecipe.getCookingTime();
                     break;
                 }
-                case STONECUTTER: {
+                case BLASTING: {
+                    packetRecipe.recipeType = "blasting";
+                    packetRecipe.group = recipe.getGroup();
+
+                    BlastingRecipe blastingRecipe = (BlastingRecipe) recipe;
+
+                    packetRecipe.ingredient = blastingRecipe.getIngredient();
+                    packetRecipe.result = blastingRecipe.getResult();
+                    packetRecipe.experience = blastingRecipe.getExperience();
+                    packetRecipe.cookingTime = blastingRecipe.getCookingTime();
+                    break;
+                }
+                case SMOKING: {
+                    packetRecipe.recipeType = "smoking";
+                    packetRecipe.group = recipe.getGroup();
+
+                    SmokingRecipe smokingRecipe = (SmokingRecipe) recipe;
+
+                    packetRecipe.ingredient = smokingRecipe.getIngredient();
+                    packetRecipe.result = smokingRecipe.getResult();
+                    packetRecipe.experience = smokingRecipe.getExperience();
+                    packetRecipe.cookingTime = smokingRecipe.getCookingTime();
+                    break;
+                }
+                case CAMPFIRE_COOKING: {
+                    packetRecipe.recipeType = "campfire_cooking";
+                    packetRecipe.group = recipe.getGroup();
+
+                    CampfireCookingRecipe campfireCookingRecipe = (CampfireCookingRecipe) recipe;
+
+                    packetRecipe.ingredient = campfireCookingRecipe.getIngredient();
+                    packetRecipe.result = campfireCookingRecipe.getResult();
+                    packetRecipe.experience = campfireCookingRecipe.getExperience();
+                    packetRecipe.cookingTime = campfireCookingRecipe.getCookingTime();
+                    break;
+                }
+                case STONECUTTING: {
                     packetRecipe.recipeType = "stonecutting";
                     packetRecipe.group = recipe.getGroup();
+
                     StonecutterRecipe stonecuttingRecipe = (StonecutterRecipe) recipe;
+
                     packetRecipe.ingredient = stonecuttingRecipe.getIngredient();
                     packetRecipe.result = stonecuttingRecipe.getResult();
+                    break;
+                }
+                case SMITHING: {
+                    packetRecipe.recipeType = "smithing";
+
+                    SmithingRecipe smithingRecipe = (SmithingRecipe) recipe;
+
+                    packetRecipe.ingredient = smithingRecipe.getBaseIngredient();
+                    packetRecipe.additionIngredient = smithingRecipe.getAdditionIngredient();
+                    packetRecipe.result = smithingRecipe.getResult();
                     break;
                 }
             }

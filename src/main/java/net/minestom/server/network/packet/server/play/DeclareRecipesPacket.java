@@ -44,14 +44,20 @@ public class DeclareRecipesPacket implements ServerPacket {
         // ++ ingredients
         // ++ result
 
-        // smelting
+        // smelting, blasting, smoking and campfire
         // ++ group
-        public Ingredient ingredient;
+        // ++ ingredient
         // ++ result
         public float experience;
         public int cookingTime;
 
+        // smithing
+        // ++ ingredient (base)
+        public Ingredient additionIngredient;
+        // ++ result
 
+
+        public Ingredient ingredient;
         public Ingredient[] ingredients;
         public ItemStack result;
 
@@ -80,7 +86,10 @@ public class DeclareRecipesPacket implements ServerPacket {
                     writer.writeItemStack(result);
                     break;
                 }
-                case "smelting": {
+                case "smelting":
+                case "blasting":
+                case "smoking":
+                case "campfire_cooking": {
                     writer.writeSizedString(group);
                     ingredient.write(writer);
                     writer.writeItemStack(result);
@@ -94,9 +103,14 @@ public class DeclareRecipesPacket implements ServerPacket {
                     writer.writeItemStack(result);
                     break;
                 }
+                case "smithing": {
+                    ingredient.write(writer);
+                    additionIngredient.write(writer);
+                    writer.writeItemStack(result);
+                    break;
+                }
             }
         }
-
     }
 
     public static class Ingredient {
