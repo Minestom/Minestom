@@ -56,7 +56,7 @@ public interface SerializableData extends Data {
     void readIndexedSerializedData(BinaryReader reader);
 
     /**
-     * Get the index info (class name -> class index)
+     * Get the index info (class name -&gt; class index)
      * <p>
      * Sized by a var-int
      *

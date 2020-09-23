@@ -67,10 +67,16 @@ sourceSets {
     }
 }
 
-// Minestom uses LWJGL libs as optional dependency if interfacing with a GPU is asked
 java {
+    // Minestom uses LWJGL libs as optional dependency if interfacing with a GPU is asked
     registerFeature("lwjgl") {
         usingSourceSet(sourceSets.lwjgl)
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    registerFeature("generators") {
+        usingSourceSet(sourceSets.generators)
         withJavadocJar()
         withSourcesJar()
     }
