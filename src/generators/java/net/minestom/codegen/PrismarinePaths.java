@@ -1,27 +1,37 @@
 package net.minestom.codegen;
 
+import lombok.Getter;
+
 import java.io.File;
 
 public class PrismarinePaths {
 
-    private String blocks;
-    private String biomes;
-    private String effects;
-    private String items;
-    private String recipes;
-    private String instruments;
-    private String materials;
-    private String entities;
-    private String protocol;
-    private String windows;
-    private String version;
-    private String language;
+    @Getter private String blocks;
+    @Getter private String biomes;
+    @Getter private String effects;
+    @Getter private String items;
+    @Getter private String recipes;
+    @Getter private String instruments;
+    @Getter private String materials;
+    @Getter private String entities;
+    @Getter private String protocol;
+    @Getter private String windows;
+    @Getter private String version;
+    @Getter private String language;
 
     public File getBlockFile() {
-        return new File("prismarine-minecraft-data/data/"+blocks+"/blocks.json");
+        return getFile(blocks, "blocks");
     }
 
     public File getItemsFile() {
-        return new File("prismarine-minecraft-data/data/"+items+"/items.json");
+        return getFile(items, "items");
+    }
+
+    public File getBiomesFile() {
+        return getFile(biomes, "biomes");
+    }
+
+    public File getFile(String path, String type) {
+        return new File("prismarine-minecraft-data/data/"+path+"/"+type+".json");
     }
 }
