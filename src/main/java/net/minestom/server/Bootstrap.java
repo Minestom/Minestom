@@ -33,6 +33,7 @@ public final class Bootstrap {
 
             Class<?> mainClass = classLoader.loadClass(mainClassFullName);
             Method main = mainClass.getDeclaredMethod("main", String[].class);
+            main.setAccessible(true);
             main.invoke(null, new Object[] { args });
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
