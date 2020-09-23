@@ -2,7 +2,10 @@ package net.minestom.server.data;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
+import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.utils.PrimitiveConversion;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.Map;
@@ -14,6 +17,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SerializableDataImpl extends DataImpl implements SerializableData {
 
     private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
+
+    /**
+     * Class name -> Class
+     * Used to cache data so we don't load class by name each time
+     */
+    private static ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
 
     /**
      * Set a value to a specific key
@@ -104,4 +113,79 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
         return getSerializedData(new Object2ShortOpenHashMap<>(), true);
     }
 
+    @Override
+    public void readSerializedData(BinaryReader reader, Object2ShortMap<String> typeToIndexMap) {
+        readIndexedData(this, typeToIndexMap, reader);
+    }
+
+    @Override
+    public void readIndexedSerializedData(BinaryReader reader) {
+        readData(this, reader);
+    }
+
+    /**
+     * Read the indexes of the data + the data
+     *
+     * @param data   the object to append the data
+     * @param reader the reader
+     * @return the deserialized {@link SerializableData}
+     */
+    private static void readData(SerializableData data, BinaryReader reader) {
+        final Object2ShortMap<String> typeToIndexMap = SerializableData.readDataIndexes(reader);
+        readIndexedData(data, typeToIndexMap, reader);
+    }
+
+    /**
+     * Convert a buffer into a {@link SerializableData}, this will not read the data index header.
+     * Use {@link #readData(SerializableData, BinaryReader)} to read the whole data object (if your data contains the indexes)
+     * <p>
+     * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
+     *
+     * @param data           the object to append the data
+     * @param typeToIndexMap the map which index all the type contained in the data (className->classIndex)
+     * @param reader         the reader
+     */
+    private static void readIndexedData(SerializableData data, Object2ShortMap<String> typeToIndexMap, BinaryReader reader) {
+        final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
+        {
+            // Fill the indexToType map
+            for (Object2ShortMap.Entry<String> entry : typeToIndexMap.object2ShortEntrySet()) {
+                final String type = entry.getKey();
+                final short index = entry.getShortValue();
+                indexToTypeMap.put(index, type);
+            }
+        }
+
+        while (true) {
+            // Get the class index
+            final short typeIndex = reader.readShort();
+
+            if (typeIndex == 0) {
+                // End of data
+                break;
+            }
+
+            final Class type;
+            {
+                final String className = indexToTypeMap.get(typeIndex);
+                type = nameToClassMap.computeIfAbsent(className, s -> {
+                    try {
+                        return Class.forName(className);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
+            }
+
+            // Get the key
+            final String name = reader.readSizedString();
+
+            // Get the data
+            final Object value = DATA_MANAGER.getDataType(type).decode(reader);
+
+            // Set the data
+            data.set(name, value, type);
+        }
+    }
 }

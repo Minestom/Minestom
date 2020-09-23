@@ -2,7 +2,7 @@ package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.reader.DataReader;
+import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 
@@ -16,6 +16,8 @@ public class SerializableDataData extends DataType<SerializableData> {
 
     @Override
     public SerializableData decode(BinaryReader reader) {
-        return DataReader.readIndexedData(reader);
+        SerializableData serializableData = new SerializableDataImpl();
+        serializableData.readIndexedSerializedData(reader);
+        return serializableData;
     }
 }

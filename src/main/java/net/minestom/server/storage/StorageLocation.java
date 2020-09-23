@@ -1,12 +1,7 @@
 package net.minestom.server.storage;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.DataContainer;
-import net.minestom.server.data.DataManager;
-import net.minestom.server.data.DataType;
-import net.minestom.server.data.SerializableData;
-import net.minestom.server.data.SerializableDataImpl;
-import net.minestom.server.reader.DataReader;
+import net.minestom.server.data.*;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
@@ -147,14 +142,7 @@ public class StorageLocation {
         }
 
         // Load it from the storage system
-        final byte[] bytes = get(key);
-        SerializableData data;
-
-        if (bytes != null) {
-            data = DataReader.readIndexedData(new BinaryReader(bytes));
-        } else {
-            data = new SerializableDataImpl();
-        }
+        SerializableData data = getOrDefault(key, SerializableData.class, new SerializableDataImpl());
 
         dataContainer.setData(data);
 
@@ -178,14 +166,7 @@ public class StorageLocation {
             }
 
             // Load it from the storage system and cache it
-            final byte[] bytes = get(key);
-            SerializableData data;
-
-            if (bytes != null) {
-                data = DataReader.readIndexedData(new BinaryReader(bytes));
-            } else {
-                data = new SerializableDataImpl();
-            }
+            SerializableData data = getOrDefault(key, SerializableData.class, new SerializableDataImpl());
 
             dataContainer.setData(data);
 

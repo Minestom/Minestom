@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 
@@ -13,8 +15,8 @@ public class StaticChunk extends Chunk {
 
     protected final BlockProvider blockProvider;
 
-    public StaticChunk(Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
-        super(biomes, chunkX, chunkZ);
+    public StaticChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
+        super(instance, biomes, chunkX, chunkZ);
         this.blockProvider = blockProvider;
     }
 
@@ -47,6 +49,11 @@ public class StaticChunk extends Chunk {
     @Override
     public byte[] getSerializedData() {
         return null;
+    }
+
+    @Override
+    public void readChunk(BinaryReader reader, ChunkCallback callback) {
+        callback.accept(this);
     }
 
     @Override

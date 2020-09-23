@@ -20,12 +20,15 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
+import net.minestom.server.world.biomes.BiomeManager;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -35,6 +38,7 @@ import java.util.function.Consumer;
 public abstract class Chunk implements Viewable {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
+    protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Y = 256;
@@ -45,6 +49,7 @@ public abstract class Chunk implements Viewable {
 
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks
 
+    protected final Instance instance;
     protected Biome[] biomes;
     protected int chunkX, chunkZ;
 
@@ -70,10 +75,16 @@ public abstract class Chunk implements Viewable {
     protected Set<Player> viewers = new CopyOnWriteArraySet<>();
     protected ByteBuf fullDataPacket;
 
-    public Chunk(Biome[] biomes, int chunkX, int chunkZ) {
-        this.biomes = biomes;
+    public Chunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
+        this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+
+        if (biomes != null && biomes.length == BIOME_COUNT) {
+            this.biomes = biomes;
+        } else {
+            this.biomes = new Biome[BIOME_COUNT];
+        }
     }
 
     /**
@@ -314,11 +325,22 @@ public abstract class Chunk implements Viewable {
     }
 
     /**
-     * Serialize the chunk
+     * Serialize the chunk into bytes
      *
      * @return the serialized chunk, can potentially be null if this chunk cannot be serialized
      */
     public abstract byte[] getSerializedData();
+
+    /**
+     * Read the chunk from binary
+     * <p>
+     * Used if the chunk is loaded from file
+     *
+     * @param reader   the data reader
+     * @param callback the callback to execute once the chunk is done reading
+     *                 WARNING: this need to be called to notify the instance
+     */
+    public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
 
     /**
      * Get a {@link ChunkDataPacket} which should contain the full chunk

@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,9 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             return false;
         } else {
             // Found, load from result bytes
-            ChunkReader.readChunk(bytes, instance, chunkX, chunkZ, callback);
+            BinaryReader reader = new BinaryReader(bytes);
+            Chunk chunk = new DynamicChunk(instance, null, chunkX, chunkZ);
+            chunk.readChunk(reader, callback);
             return true;
         }
     }

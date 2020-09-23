@@ -22,7 +22,7 @@ public class ChunkBatch implements InstanceBatch {
     private final Chunk chunk;
 
     // Give it the max capacity by default (avoid resizing)
-    private List<BlockData> dataList =
+    private final List<BlockData> dataList =
             Collections.synchronizedList(new ArrayList<>(
                     Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z));
 
@@ -88,9 +88,7 @@ public class ChunkBatch implements InstanceBatch {
      * @param callback the callback to execute once the blocks are placed
      */
     public void flush(ChunkCallback callback) {
-        batchesPool.execute(() -> {
-            singleThreadFlush(callback, true);
-        });
+        batchesPool.execute(() -> singleThreadFlush(callback, true));
     }
 
     /**
@@ -99,9 +97,7 @@ public class ChunkBatch implements InstanceBatch {
      * @param callback the callback to execute once the blocks are placed
      */
     public void unsafeFlush(ChunkCallback callback) {
-        batchesPool.execute(() -> {
-            singleThreadFlush(callback, false);
-        });
+        batchesPool.execute(() -> singleThreadFlush(callback, false));
     }
 
     public void clearData() {
@@ -129,9 +125,7 @@ public class ChunkBatch implements InstanceBatch {
 
                 if (callback != null) {
                     if (safeCallback) {
-                        instance.scheduleNextTick(inst -> {
-                            callback.accept(chunk);
-                        });
+                        instance.scheduleNextTick(inst -> callback.accept(chunk));
                     } else {
                         callback.accept(chunk);
                     }

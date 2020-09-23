@@ -491,10 +491,10 @@ public class InstanceContainer extends Instance {
         final BlockProvider blockProvider = chunkDecider != null ? chunkDecider.apply(chunkX, chunkZ) : null;
         if (blockProvider != null) {
             // Use static chunk
-            chunk = new StaticChunk(biomes, chunkX, chunkZ, blockProvider);
+            chunk = new StaticChunk(this, biomes, chunkX, chunkZ, blockProvider);
         } else {
             // Use dynamic chunk
-            chunk = new DynamicChunk(biomes, chunkX, chunkZ);
+            chunk = new DynamicChunk(this, biomes, chunkX, chunkZ);
         }
 
         cacheChunk(chunk);

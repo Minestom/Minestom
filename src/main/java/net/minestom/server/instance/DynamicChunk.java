@@ -6,16 +6,18 @@ import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
+import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.reader.ChunkReader;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 
 public class DynamicChunk extends Chunk {
 
@@ -25,8 +27,8 @@ public class DynamicChunk extends Chunk {
     protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
     protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
-    public DynamicChunk(Biome[] biomes, int chunkX, int chunkZ) {
-        super(biomes, chunkX, chunkZ);
+    public DynamicChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
+        super(instance, biomes, chunkX, chunkZ);
     }
 
     @Override
@@ -130,7 +132,7 @@ public class DynamicChunk extends Chunk {
     }
 
     /**
-     * Serialize this {@link Chunk} based on {@link ChunkReader#readChunk(byte[], Instance, int, int, ChunkCallback)}
+     * Serialize this {@link Chunk} based on {@link #readChunk(BinaryReader, ChunkCallback)}
      * <p>
      * It is also used by the default {@link IChunkLoader} which is {@link MinestomBasicChunkLoader}
      *
@@ -195,6 +197,63 @@ public class DynamicChunk extends Chunk {
         binaryWriter.writeAtStart(indexWriter);
 
         return binaryWriter.toByteArray();
+    }
+
+    @Override
+    public void readChunk(BinaryReader reader, ChunkCallback callback) {
+        // Used for blocks data
+        Object2ShortMap<String> typeToIndexMap = null;
+
+        ChunkBatch chunkBatch = instance.createChunkBatch(this);
+        try {
+
+            // Get if the chunk has data indexes (used for blocks data)
+            final boolean hasIndex = reader.readBoolean();
+            if (hasIndex) {
+                // Get the data indexes which will be used to read all the individual data
+                typeToIndexMap = SerializableData.readDataIndexes(reader);
+            }
+
+            for (int i = 0; i < BIOME_COUNT; i++) {
+                final byte id = reader.readByte();
+                this.biomes[i] = BIOME_MANAGER.getById(id);
+            }
+
+            while (true) {
+                // Position
+                final short index = reader.readShort();
+                final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
+                final short y = ChunkUtils.blockIndexToChunkPositionY(index);
+                final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
+
+                // Block type
+                final short blockStateId = reader.readShort();
+                final short customBlockId = reader.readShort();
+
+                // Data
+                SerializableData data = null;
+                {
+                    final boolean hasData = reader.readBoolean();
+                    // Data deserializer
+                    if (hasData) {
+                        // Read the data with the deserialized index map
+                        data = new SerializableDataImpl();
+                        data.readSerializedData(reader, typeToIndexMap);
+                    }
+                }
+
+                if (customBlockId != 0) {
+                    chunkBatch.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
+                } else {
+                    chunkBatch.setBlockStateId(x, y, z, blockStateId, data);
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            // Finished reading
+        }
+
+        // Place all the blocks from the batch
+        chunkBatch.unsafeFlush(callback); // Success, null if file isn't properly encoded
     }
 
     @Override
