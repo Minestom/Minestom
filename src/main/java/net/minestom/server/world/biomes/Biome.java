@@ -52,11 +52,6 @@ public class Biome {
 	@Builder.Default
 	private TemperatureModifier temperature_modifier = TemperatureModifier.NONE;
 
-	// allows mixins to remap ID if necessary
-	public int getId() {
-		return id;
-	}
-
 	public NBTCompound toNbt() {
 		NBTCompound nbt = new NBTCompound();
 		nbt.setString("name", name.toString());
