@@ -43,8 +43,7 @@ Minestom isn't perfect, our choices make it much better for some cases, worse fo
 
 ## Advantages
 * Remove the overhead of vanilla features
-* Multi-threaded (Chunks & Entities)
-* 100% Thread-Safe
+* Multi-threaded
 * Instance system which is much more scalable than worlds
 * Open-source
 * Modern API
