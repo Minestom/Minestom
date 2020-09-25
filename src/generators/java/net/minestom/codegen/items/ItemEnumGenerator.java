@@ -39,7 +39,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         targetVersion = args[0];
 
         try {
-            ResourceGatherer.ensureResourcesArePresent(targetVersion, null); // TODO
+            ResourceGatherer.ensureResourcesArePresent(targetVersion); // TODO
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -17,7 +17,7 @@ public class EntityTypeEnumGenerator extends BasicEnumGenerator {
         targetVersion = args[0];
 
         try {
-            ResourceGatherer.ensureResourcesArePresent(targetVersion, null); // TODO
+            ResourceGatherer.ensureResourcesArePresent(targetVersion); // TODO
         } catch (IOException e) {
             e.printStackTrace();
         }
