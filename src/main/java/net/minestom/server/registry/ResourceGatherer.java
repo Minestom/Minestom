@@ -1,21 +1,36 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * Responsible for making sure Minestom has the necessary files to run (notably registry files)
  */
 public class ResourceGatherer {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceGatherer.class);
-
     public static final File DATA_FOLDER = new File("./minecraft_data/");
+    private static final Gson GSON = new Gson();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceGatherer.class);
     private static final File TMP_FOLDER = new File("./.minestom_tmp/");
 
     /**
@@ -23,7 +38,7 @@ public class ResourceGatherer {
      * If it is not, download the minecraft server jar, run the data generator and extract the wanted files
      * If it is already present, directly return
      */
-    public static void ensureResourcesArePresent(String version, File minecraftFolderOverride) throws IOException {
+    public static void ensureResourcesArePresent(String version) throws IOException {
         if (DATA_FOLDER.exists()) {
             return;
         }
@@ -34,11 +49,7 @@ public class ResourceGatherer {
         }
 
         LOGGER.info("Starting download of Minecraft server jar for version " + version + " from Mojang servers...");
-        File minecraftFolder = getMinecraftFolder(minecraftFolderOverride);
-        if (!minecraftFolder.exists()) {
-            throw new IOException("Could not find Minecraft installation folder, attempted location " + minecraftFolder + ". If this location is not the correct one, please supply the correct one as argument of ResourceGatherer#ensureResourcesArePresent");
-        }
-        File serverJar = downloadServerJar(minecraftFolder, version);
+        File serverJar = downloadServerJar(version);
         LOGGER.info("Download complete.");
 
         runDataGenerator(serverJar);
@@ -113,56 +124,75 @@ public class ResourceGatherer {
         }
     }
 
-    /**
-     * Finds the URL for the server jar inside the versions/ folder of the game installation and download the .jar file from there
-     *
-     * @param minecraftFolder
-     * @param version
-     * @return
-     */
-    private static File downloadServerJar(File minecraftFolder, String version) throws IOException {
-        File versionInfoFile = new File(minecraftFolder, "versions/" + version + "/" + version + ".json");
-        if (!versionInfoFile.exists()) {
-            throw new IOException("Could not find " + version + ".json in your Minecraft installation. Make sure to launch this version at least once before running Minestom");
+    private static File downloadServerJar(String version) throws IOException {
+        // Mojang's version manifest is located at https://launchermeta.mojang.com/mc/game/version_manifest.json
+        // If we query this (it's a json object), we can then search for the id we want.
+        InputStream versionManifestStream = new URL("https://launchermeta.mojang.com/mc/game/version_manifest.json").openStream();
+        LOGGER.debug("Successfully queried Mojang's version_manifest.json.");
+
+        JsonObject versionManifestJson = GSON.fromJson(new InputStreamReader(versionManifestStream), JsonObject.class);
+        LOGGER.debug("Successfully read Mojang's version_manifest.json into a json object.");
+
+        JsonArray versionArray = versionManifestJson.getAsJsonArray("versions");
+        LOGGER.debug("Iterating over the version manifest to find a version with the id {}.", version);
+
+        JsonObject versionEntry = null;
+        for (JsonElement element : versionArray) {
+            if (element.isJsonObject()) {
+                JsonObject entry = element.getAsJsonObject();
+                if (entry.get("id").getAsString().equals(version)) {
+                    LOGGER.debug("Successfully found a version with the id {}.", version);
+                    versionEntry = entry;
+                    break;
+                }
+            }
         }
+        if (versionEntry == null) {
+            throw new IOException("Could not find " + version + " in Mojang's official list of minecraft versions.");
+        }
+        // We now have the entry we want and it gives us access to the json file containing the downloads.
+        String versionUrl = versionEntry.get("url").getAsString();
+        InputStream versionStream = new URL(versionUrl).openStream();
+        LOGGER.debug("Successfully queried {}.json.", version);
 
-        try (FileReader fileReader = new FileReader(versionInfoFile)) {
-            Gson gson = new Gson();
-            VersionInfo versionInfo = gson.fromJson(fileReader, VersionInfo.class);
-            VersionInfo.DownloadObject serverJarInfo = versionInfo.getDownloadableFiles().get("server");
-            String downloadURL = serverJarInfo.getUrl();
+        JsonObject versionJson = GSON.fromJson(new InputStreamReader(versionStream), JsonObject.class);
+        LOGGER.debug("Successfully read {}.json into a json object.", version);
 
-            LOGGER.info("Found URL, starting download from " + downloadURL + "...");
-            return download(version, downloadURL);
+        // Now we need to navigate to "downloads.client.url" and "downloads.server.url" }
+        JsonObject downloadsJson = versionJson.getAsJsonObject("downloads");
+
+        // Designated spot if we ever need the client.
+
+        // Server
+        {
+            JsonObject serverJson = downloadsJson.getAsJsonObject("server");
+            String jarURL = serverJson.get("url").getAsString();
+            String sha1 = serverJson.get("sha1").getAsString();
+
+            LOGGER.debug("Found all information required to download the server JAR file.");
+            LOGGER.debug("Attempting download.");
+            return download(version, jarURL, sha1);
         }
     }
 
-    private static File download(String version, String url) throws IOException {
+    private static File download(@NotNull String version, @NotNull String url, @NotNull String sha1Source) throws IOException {
         File target = new File(TMP_FOLDER, "server_" + version + ".jar");
+        // Download
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream())) {
             Files.copy(in, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new IOException("Failed to download Minecraft server jar.", e);
         }
+        // Verify checksum
+        try (FileInputStream fis = new FileInputStream(target)) {
+            String sha1Target = DigestUtils.sha1Hex(fis);
+            if (!sha1Target.equals(sha1Source)) {
+                LOGGER.debug("The checksum test failed after downloading the Minecraft server jar.");
+                LOGGER.debug("The expected checksum was: {}.", sha1Source);
+                LOGGER.debug("The calculated checksum was: {}.", sha1Target);
+                throw new IOException("Failed to download Minecraft server jar.");
+            }
+        }
         return target;
-    }
-
-    private static File getMinecraftFolder(File minecraftFolderOverride) {
-        if (minecraftFolderOverride != null) {
-            return minecraftFolderOverride;
-        }
-
-        // https://help.minecraft.net/hc/en-us/articles/360035131551-Where-are-Minecraft-files-stored-
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
-            String user = System.getProperty("user.home");
-            return new File(user + "/AppData/Roaming/.minecraft/");
-        }
-        if (os.contains("mac")) {
-            String user = System.getProperty("user.home");
-            return new File(user + "/Library/Application Support/minecraft");
-        }
-
-        return new File(System.getProperty("user.home") + "/.minecraft");
     }
 }
