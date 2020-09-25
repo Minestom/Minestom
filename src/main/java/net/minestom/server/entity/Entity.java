@@ -212,8 +212,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
         final Runnable runnable = () -> {
-            refreshPosition(position.getX(), position.getY(), position.getZ());
-            refreshView(position.getYaw(), position.getPitch());
+            if (!this.position.isSimilar(position)) {
+                refreshPosition(position.getX(), position.getY(), position.getZ());
+            }
+            if (!this.position.hasSimilarView(position)) {
+                refreshView(position.getYaw(), position.getPitch());
+            }
             sendSynchronization();
             if (callback != null)
                 callback.run();

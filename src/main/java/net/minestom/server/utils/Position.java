@@ -196,7 +196,20 @@ public class Position {
      * @return true if the two positions are similar
      */
     public boolean isSimilar(Position position) {
-        return position.x == x && position.y == y && position.z == z;
+        return Float.compare(position.x, x) == 0 &&
+                Float.compare(position.y, y) == 0 &&
+                Float.compare(position.z, z) == 0;
+    }
+
+    /**
+     * Check if two positions have a similar view (yaw/pitch)
+     *
+     * @param position the position to compare
+     * @return true if the two positions have the same view
+     */
+    public boolean hasSimilarView(Position position) {
+        return Float.compare(position.yaw, yaw) == 0 &&
+                Float.compare(position.pitch, pitch) == 0;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class PlayerDiggingListener {
                         Block.fromStateId(blockStateId).breaksInstantaneously();
 
                 if (instantBreak) {
-                    breakBlock(instance, player, blockPosition);
+                    breakBlock(instance, player, blockPosition, blockStateId);
                 } else {
                     final CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                     if (customBlock != null) {
@@ -76,7 +76,7 @@ public class PlayerDiggingListener {
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
-                breakBlock(instance, player, blockPosition);
+                breakBlock(instance, player, blockPosition, blockStateId);
                 break;
             case DROP_ITEM_STACK:
                 final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
@@ -117,16 +117,21 @@ public class PlayerDiggingListener {
         }
     }
 
-    private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition) {
+    private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition, int blockStateId) {
         // Finished digging, remove effect if any
         player.resetTargetBlock();
 
         // Unverified block break, client is fully responsive
-        instance.breakBlock(player, blockPosition);
+        final boolean result = instance.breakBlock(player, blockPosition);
 
-        // Send acknowledge packet to confirm the digging process
-        sendAcknowledgePacket(player, blockPosition, 0,
-                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, true);
+        final int updatedBlockId = result ? 0 : blockStateId;
+        final ClientPlayerDiggingPacket.Status status = result ?
+                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING :
+                ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
+
+        // Send acknowledge packet to allow or cancel the digging process
+        sendAcknowledgePacket(player, blockPosition, updatedBlockId,
+                status, result);
     }
 
     private static void dropItem(Player player, ItemStack droppedItem, ItemStack handItem) {

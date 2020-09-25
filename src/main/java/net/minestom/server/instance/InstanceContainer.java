@@ -310,8 +310,8 @@ public class InstanceContainer extends Instance {
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockStateId, customBlock, (short) 0, (short) 0);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
-        final boolean result = !blockBreakEvent.isCancelled();
-        if (result) {
+        final boolean allowed = !blockBreakEvent.isCancelled();
+        if (allowed) {
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockStateId(), blockBreakEvent.getResultCustomBlockId());
 
@@ -330,11 +330,19 @@ public class InstanceContainer extends Instance {
             });
 
         } else {
-            // Cancelled so we need to refresh player chunk section
-            final int section = ChunkUtils.getSectionAt(blockPosition.getY());
-            chunk.sendChunkSectionUpdate(section, player);
+
+            final boolean solid = Block.fromStateId(blockStateId).isSolid();
+            if (solid) {
+                final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
+
+                // Teleport the player back if he broke a solid block just below him
+                if (playerBlockPosition.subtract(0, 1, 0).equals(blockPosition)) {
+                    player.teleport(player.getPosition());
+                }
+            }
         }
-        return result;
+
+        return allowed;
     }
 
     @Override
