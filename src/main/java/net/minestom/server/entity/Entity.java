@@ -684,7 +684,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.instance = instance;
         instance.addEntity(this);
         spawn();
-        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(instance);
+        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
     }
 

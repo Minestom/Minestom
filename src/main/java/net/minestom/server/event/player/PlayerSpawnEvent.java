@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.instance.Instance;
 
@@ -10,8 +11,8 @@ public class PlayerSpawnEvent extends EntitySpawnEvent {
 
     private final boolean firstSpawn;
 
-    public PlayerSpawnEvent(Instance spawnInstance, boolean firstSpawn) {
-        super(spawnInstance);
+    public PlayerSpawnEvent(Entity entity, Instance spawnInstance, boolean firstSpawn) {
+        super(entity, spawnInstance);
         this.firstSpawn = firstSpawn;
     }
 
