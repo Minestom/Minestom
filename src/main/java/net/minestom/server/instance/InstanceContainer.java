@@ -329,17 +329,6 @@ public class InstanceContainer extends Instance {
                 }
             });
 
-        } else {
-
-            final boolean solid = Block.fromStateId(blockStateId).isSolid();
-            if (solid) {
-                final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
-
-                // Teleport the player back if he broke a solid block just below him
-                if (playerBlockPosition.subtract(0, 1, 0).equals(blockPosition)) {
-                    player.teleport(player.getPosition());
-                }
-            }
         }
 
         return allowed;
@@ -353,7 +342,7 @@ public class InstanceContainer extends Instance {
             if (callback != null)
                 callback.accept(chunk);
         } else {
-            // Retrieve chunk from somewhere else (file or create a new use using the ChunkGenerator)
+            // Retrieve chunk from somewhere else (file or create a new one using the ChunkGenerator)
             retrieveChunk(chunkX, chunkZ, callback);
         }
     }
