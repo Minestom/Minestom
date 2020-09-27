@@ -386,7 +386,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the instance {@link WorldBorder}
      *
-     * @return the world border linked to the instance
+     * @return the {@link WorldBorder} linked to the instance
      */
     public WorldBorder getWorldBorder() {
         return worldBorder;
@@ -395,7 +395,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the entities in the instance
      *
-     * @return an unmodifiable list containing all the entities in the instance
+     * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public Set<Entity> getEntities() {
         return Collections.unmodifiableSet(entities);
@@ -404,7 +404,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the players in the instance
      *
-     * @return an unmodifiable list containing all the players in the instance
+     * @return an unmodifiable {@link Set} containing all the players in the instance
      */
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
@@ -413,7 +413,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the creatures in the instance
      *
-     * @return an unmodifiable list containing all the creatures in the instance
+     * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
@@ -422,7 +422,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the object entities in the instance
      *
-     * @return an unmodifiable list containing all the object entities in the instance
+     * @return an unmodifiable {@link Set} containing all the object entities in the instance
      */
     public Set<ObjectEntity> getObjectEntities() {
         return Collections.unmodifiableSet(objectEntities);
@@ -431,7 +431,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Get the experience orbs in the instance
      *
-     * @return an unmodifiable list containing all the experience orbs in the instance
+     * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
     public Set<ExperienceOrb> getExperienceOrbs() {
         return Collections.unmodifiableSet(experienceOrbs);
@@ -441,7 +441,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Get the entities located in the chunk
      *
      * @param chunk the chunk to get the entities from
-     * @return an unmodifiable set containing all the entities in a chunk,
+     * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public Set<Entity> getChunkEntities(Chunk chunk) {

@@ -127,7 +127,7 @@ public final class InstanceManager {
     /**
      * Get all the registered instances
      *
-     * @return an unmodifiable set containing all the registered instances
+     * @return an unmodifiable {@link Set} containing all the registered instances
      */
     public Set<Instance> getInstances() {
         return Collections.unmodifiableSet(instances);

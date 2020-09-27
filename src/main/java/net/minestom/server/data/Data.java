@@ -84,7 +84,7 @@ public interface Data {
     /**
      * Get the list of data keys
      *
-     * @return an unmodifiable set containing all keys
+     * @return an unmodifiable {@link Set} containing all keys
      */
     Set<String> getKeys();
 
