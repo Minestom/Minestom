@@ -111,15 +111,17 @@ public final class InstanceManager {
     public void unregisterInstance(Instance instance) {
         Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players");
 
-        // Unload all chunks
-        if (instance instanceof InstanceContainer) {
-            InstanceContainer instanceContainer = (InstanceContainer) instance;
-            instanceContainer.scheduledChunksToRemove.addAll(instanceContainer.getChunks());
-            instanceContainer.UNSAFE_unloadChunks();
-        }
+        synchronized (instance) {
+            // Unload all chunks
+            if (instance instanceof InstanceContainer) {
+                InstanceContainer instanceContainer = (InstanceContainer) instance;
+                instanceContainer.scheduledChunksToRemove.addAll(instanceContainer.getChunks());
+                instanceContainer.UNSAFE_unloadChunks();
+            }
 
-        instance.setRegistered(false);
-        this.instances.remove(instance);
+            instance.setRegistered(false);
+            this.instances.remove(instance);
+        }
     }
 
     /**
