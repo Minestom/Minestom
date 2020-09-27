@@ -67,6 +67,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
+    protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
     protected final Set<Player> players = new CopyOnWriteArraySet<>();
     protected final Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
     protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
@@ -389,6 +390,15 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public WorldBorder getWorldBorder() {
         return worldBorder;
+    }
+
+    /**
+     * Get the entities in the instance
+     *
+     * @return an unmodifiable list containing all the entities in the instance
+     */
+    public Set<Entity> getEntities() {
+        return Collections.unmodifiableSet(entities);
     }
 
     /**
@@ -845,6 +855,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             entities.add(entity);
             this.chunkEntities.put(chunkIndex, entities);
 
+            this.entities.add(entity);
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
@@ -878,6 +889,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 }
             }
 
+            this.entities.remove(entity);
             if (entity instanceof Player) {
                 this.players.remove(entity);
             } else if (entity instanceof EntityCreature) {
