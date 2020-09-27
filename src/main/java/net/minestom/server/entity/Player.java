@@ -1606,9 +1606,6 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
-        if (teleportId == Integer.MAX_VALUE) {
-            teleportId = 0;
-        }
         positionAndLookPacket.teleportId = teleportId++;
         playerConnection.sendPacket(positionAndLookPacket);
     }

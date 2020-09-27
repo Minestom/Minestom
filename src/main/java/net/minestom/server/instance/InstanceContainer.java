@@ -54,7 +54,7 @@ public class InstanceContainer extends Instance {
 
     private ChunkGenerator chunkGenerator;
     private final ConcurrentHashMap<Long, Chunk> chunks = new ConcurrentHashMap<>();
-    private final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
+    protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
@@ -657,7 +657,7 @@ public class InstanceContainer extends Instance {
      * <p>
      * Unsafe because it has to be done on the same thread as the instance/chunks tick update
      */
-    private void UNSAFE_unloadChunks() {
+    protected void UNSAFE_unloadChunks() {
         synchronized (this.scheduledChunksToRemove) {
             for (Chunk chunk : scheduledChunksToRemove) {
                 final int chunkX = chunk.getChunkX();

@@ -102,6 +102,27 @@ public final class InstanceManager {
     }
 
     /**
+     * Unregister the {@link Instance} internally
+     * <p>
+     * If {@code instance} is an {@link InstanceContainer} all chunks are unloaded
+     *
+     * @param instance the {@link Instance} to unregister
+     */
+    public void unregisterInstance(Instance instance) {
+        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players");
+
+        // Unload all chunks
+        if (instance instanceof InstanceContainer) {
+            InstanceContainer instanceContainer = (InstanceContainer) instance;
+            instanceContainer.scheduledChunksToRemove.addAll(instanceContainer.getChunks());
+            instanceContainer.UNSAFE_unloadChunks();
+        }
+
+        instance.setRegistered(false);
+        this.instances.remove(instance);
+    }
+
+    /**
      * Get all the registered instances
      *
      * @return an unmodifiable set containing all the registered instances
