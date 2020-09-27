@@ -168,19 +168,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
-     * Save a {@link Chunk} into the defined {@link StorageLocation}
+     * Save a {@link Chunk}
      *
      * @param chunk    the {@link Chunk} to save
      * @param callback called when the {@link Chunk} is done saving
-     * @throws NullPointerException if {@link #getStorageLocation()} returns null
      */
     public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
 
     /**
-     * Save multiple chunks into the defined {@link StorageLocation}
+     * Save multiple chunks
      *
      * @param callback called when the chunks are done saving
-     * @throws NullPointerException if {@link #getStorageLocation()} returns null
      */
     public abstract void saveChunksToStorage(Runnable callback);
 
@@ -704,7 +702,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Save a chunk to the instance {@link StorageLocation} without any callback
+     * Save a chunk without any callback
      *
      * @param chunk the chunk to save
      */
@@ -713,7 +711,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Save all chunks to the instance {@link StorageLocation} without any callback
+     * Save all chunks without any callback
      */
     public void saveChunksToStorage() {
         saveChunksToStorage(null);

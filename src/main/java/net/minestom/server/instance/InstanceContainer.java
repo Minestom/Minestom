@@ -418,13 +418,11 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunkToStorage(Chunk chunk, Runnable callback) {
-        Check.notNull(getStorageLocation(), "You cannot save the chunk if no StorageLocation has been defined");
         chunkLoader.saveChunk(chunk, callback);
     }
 
     @Override
     public void saveChunksToStorage(Runnable callback) {
-        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
         if (chunkLoader.supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {

@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.validate.Check;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
     @Override
     public void saveChunk(Chunk chunk, Runnable callback) {
+        Check.notNull(storageLocation, "You cannot save the chunk if no StorageLocation has been defined");
         if (storageLocation == null) {
             callback.run();
             LOGGER.warn("No storage location to save chunk!");
