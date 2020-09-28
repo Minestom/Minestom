@@ -17,14 +17,17 @@ public final class InstanceManager {
     private final Set<Instance> instances = new CopyOnWriteArraySet<>();
 
     /**
-     * Register an {@link InstanceContainer}
+     * Register an {@link Instance} internally
+     * <p>
+     * Note: not necessary if you created your instance using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer)}
+     * but only if you instantiated your instance object manually
      *
-     * @param instanceContainer the instance to register
-     * @return the registered {@link InstanceContainer}
+     * @param instance the {@link Instance} to register
      */
-    public InstanceContainer registerInstanceContainer(InstanceContainer instanceContainer) {
-        registerInstance(instanceContainer);
-        return instanceContainer;
+    public void registerInstance(Instance instance) {
+        Check.stateCondition(instance instanceof SharedInstance,
+                "Please use InstanceManager#registerSharedInstance to register a shared instance");
+        UNSAFE_registerInstance(instance);
     }
 
     /**
@@ -35,8 +38,9 @@ public final class InstanceManager {
      * @return the created {@link InstanceContainer}
      */
     public InstanceContainer createInstanceContainer(DimensionType dimensionType, StorageLocation storageLocation) {
-        final InstanceContainer instance = new InstanceContainer(UUID.randomUUID(), dimensionType, storageLocation);
-        return registerInstanceContainer(instance);
+        final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, storageLocation);
+        registerInstance(instanceContainer);
+        return instanceContainer;
     }
 
     /**
@@ -82,7 +86,7 @@ public final class InstanceManager {
         Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
         instanceContainer.addSharedInstance(sharedInstance);
-        registerInstance(sharedInstance);
+        UNSAFE_registerInstance(sharedInstance);
         return sharedInstance;
     }
 
@@ -134,11 +138,13 @@ public final class InstanceManager {
     }
 
     /**
-     * Register the {@link Instance} internally
+     * Register an {@link Instance} internally
+     * <p>
+     * Unsafe because it does not check if {@code instance} is a {@link SharedInstance} to verify its container
      *
      * @param instance the {@link Instance} to register
      */
-    private void registerInstance(Instance instance) {
+    private void UNSAFE_registerInstance(Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
     }

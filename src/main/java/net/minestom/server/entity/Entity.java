@@ -674,7 +674,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     public void setInstance(Instance instance) {
         Check.notNull(instance, "instance cannot be null!");
         Check.stateCondition(!instance.isRegistered(),
-                "Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#createSharedInstance");
+                "Instances need to be registered with InstanceManager#createInstanceContainer or InstanceManager#registerInstance");
 
         if (this.instance != null) {
             this.instance.removeEntity(this);
