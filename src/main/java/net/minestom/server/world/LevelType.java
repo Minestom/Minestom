@@ -1,5 +1,7 @@
 package net.minestom.server.world;
 
+import org.jetbrains.annotations.Nullable;
+
 public enum LevelType {
 
     DEFAULT("default"),
@@ -8,12 +10,13 @@ public enum LevelType {
     AMPLIFIED("amplified"),
     DEFAULT_1_1("default_1_1");
 
-    private String type;
+    private final String type;
 
-    LevelType(String type) {
+    LevelType(@Nullable String type) {
         this.type = type;
     }
 
+    @Nullable
     public String getType() {
         return type;
     }

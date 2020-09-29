@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The packet creates or updates teams
@@ -159,6 +160,7 @@ public class TeamsPacket implements ServerPacket {
          *
          * @return the identifier
          */
+        @NotNull
         public String getIdentifier() {
             return identifier;
         }
@@ -204,6 +206,7 @@ public class TeamsPacket implements ServerPacket {
          *
          * @return the identifier
          */
+        @NotNull
         public String getIdentifier() {
             return identifier;
         }

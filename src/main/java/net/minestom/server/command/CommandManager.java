@@ -558,7 +558,7 @@ public class CommandManager {
     private enum NodeType {
         ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
 
-        private int mask;
+        private final int mask;
 
         NodeType(int mask) {
             this.mask = mask;

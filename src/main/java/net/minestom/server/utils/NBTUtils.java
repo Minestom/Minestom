@@ -153,14 +153,16 @@ public final class NBTUtils {
                 // Wrong attribute name, stop here
                 if (attribute == null)
                     break;
-                final AttributeOperation attributeOperation = AttributeOperation.byId(operation);
+                final AttributeOperation attributeOperation = AttributeOperation.fromId(operation);
                 // Wrong attribute operation, stop here
-                if (attributeOperation == null)
+                if (attributeOperation == null) {
                     break;
+                }
                 final AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
                 // Wrong attribute slot, stop here
-                if (attributeSlot == null)
+                if (attributeSlot == null) {
                     break;
+                }
 
                 // Add attribute
                 final ItemAttribute itemAttribute =
