@@ -1,5 +1,7 @@
 package net.minestom.server.attribute;
 
+import org.jetbrains.annotations.Nullable;
+
 public enum AttributeOperation {
     ADDITION(0),
     MULTIPLY_BASE(1),
@@ -12,15 +14,15 @@ public enum AttributeOperation {
         this.id = id;
     }
 
-    public static AttributeOperation byId(int id) {
-        if (id >= 0 && id < VALUES.length) {
-            return VALUES[id];
-        } else {
-            throw new IllegalArgumentException("No operation with value " + id);
-        }
-    }
-
     public int getId() {
         return this.id;
+    }
+
+    @Nullable
+    public static AttributeOperation fromId(int id) {
+        if (id >= 0 && id < VALUES.length) {
+            return VALUES[id];
+        }
+        return null;
     }
 }
