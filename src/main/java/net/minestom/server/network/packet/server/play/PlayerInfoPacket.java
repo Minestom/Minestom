@@ -5,6 +5,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -44,12 +45,13 @@ public class PlayerInfoPacket implements ServerPacket {
         UPDATE_DISPLAY_NAME(UpdateDisplayName.class),
         REMOVE_PLAYER(RemovePlayer.class);
 
-        private Class<? extends PlayerInfo> clazz;
+        private final Class<? extends PlayerInfo> clazz;
 
         Action(Class<? extends PlayerInfo> clazz) {
             this.clazz = clazz;
         }
 
+        @NotNull
         public Class<? extends PlayerInfo> getClazz() {
             return clazz;
         }

@@ -5,6 +5,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -49,12 +50,13 @@ public class EntityMooshroom extends EntityCreature implements Animal {
         RED("red"),
         BROWN("brown");
 
-        private String identifier;
+        private final String identifier;
 
         MooshroomType(String identifier) {
             this.identifier = identifier;
         }
 
+        @NotNull
         private String getIdentifier() {
             return identifier;
         }

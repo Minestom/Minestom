@@ -76,7 +76,7 @@ public class EntityCreeper extends EntityCreature implements Monster {
         IDLE(-1),
         FUSE(1);
 
-        private int state;
+        private final int state;
 
         CreeperState(int state) {
             this.state = state;

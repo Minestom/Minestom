@@ -59,7 +59,7 @@ public enum Effects {
     ENDERDRAGON_GROWL(3001),
     ;
 
-    private int id;
+    private final int id;
 
     Effects(int id) {
         this.id = id;

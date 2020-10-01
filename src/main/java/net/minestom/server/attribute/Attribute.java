@@ -1,5 +1,8 @@
 package net.minestom.server.attribute;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum Attribute {
 
     MAX_HEALTH("generic.max_health", 20, 1024),
@@ -16,9 +19,9 @@ public enum Attribute {
     HORSE_JUMP_STRENGTH("horse.jump_strength", 0.7f, 2),
     ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawn_reinforcements", 0, 1);
 
-    private String key;
-    private float defaultValue;
-    private float maxVanillaValue;
+    private final String key;
+    private final float defaultValue;
+    private final float maxVanillaValue;
 
     Attribute(String key, float defaultValue, float maxVanillaValue) {
         this.key = key;
@@ -26,6 +29,7 @@ public enum Attribute {
         this.maxVanillaValue = maxVanillaValue;
     }
 
+    @NotNull
     public String getKey() {
         return key;
     }
@@ -38,7 +42,8 @@ public enum Attribute {
         return maxVanillaValue;
     }
 
-    public static Attribute fromKey(String key) {
+    @Nullable
+    public static Attribute fromKey(@NotNull String key) {
         for (Attribute attribute : values()) {
             if (attribute.getKey().equals(key))
                 return attribute;
