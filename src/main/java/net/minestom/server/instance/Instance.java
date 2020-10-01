@@ -239,7 +239,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected abstract void createChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
-     * When set to true, chunks will load with players moving closer
+     * When set to true, chunks will load automatically when requested.
      * Otherwise using {@link #loadChunk(int, int)} will be required to even spawn a player
      *
      * @param enable enable the auto chunk load
@@ -247,7 +247,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void enableAutoChunkLoad(boolean enable);
 
     /**
-     * Get if the instance should auto load chunks
+     * Get if the instance should auto load chunks.
      *
      * @return true if auto chunk load is enabled, false otherwise
      */

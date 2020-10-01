@@ -106,9 +106,50 @@ public class InstanceContainer extends Instance {
         setBlock(x, y, z, blockStateId, customBlock, data);
     }
 
+    /**
+     * Set a block at the position
+     * <p>
+     * Verifies if the {@link Chunk} at the position is loaded, place the block if yes.
+     * Otherwise, check if {@link #hasEnabledAutoChunkLoad()} is true to load the chunk automatically and place the block.
+     *
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the block state id
+     * @param customBlock  the {@link CustomBlock}, null if none
+     * @param data         the {@link Data}, null if none
+     */
     private synchronized void setBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
         final Chunk chunk = getChunkAt(x, z);
-        Check.stateCondition(!ChunkUtils.isLoaded(chunk), "The chunk at " + x + " : " + z + " is not loaded!");
+        if (ChunkUtils.isLoaded(chunk)) {
+            UNSAFE_setBlock(chunk, x, y, z, blockStateId, customBlock, data);
+        } else {
+            if (hasEnabledAutoChunkLoad()) {
+                final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
+                final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
+                loadChunk(chunkX, chunkZ, c -> {
+                    UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data);
+                });
+            } else {
+                throw new IllegalStateException("Tried to set a block to an unloaded chunk with auto chunk load disabled");
+            }
+        }
+    }
+
+    /**
+     * Set a block at the position
+     * <p>
+     * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not
+     *
+     * @param chunk        the {@link Chunk} which should be loaded
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the block state id
+     * @param customBlock  the {@link CustomBlock}, null if none
+     * @param data         the {@link Data}, null if none
+     */
+    private void UNSAFE_setBlock(Chunk chunk, int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
         synchronized (chunk) {
 
             final boolean isCustomBlock = customBlock != null;
