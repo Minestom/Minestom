@@ -108,6 +108,7 @@ public class InstanceContainer extends Instance {
 
     private synchronized void setBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
         final Chunk chunk = getChunkAt(x, z);
+        Check.stateCondition(!ChunkUtils.isLoaded(chunk), "The chunk at " + x + " : " + z + " is not loaded!");
         synchronized (chunk) {
 
             final boolean isCustomBlock = customBlock != null;
