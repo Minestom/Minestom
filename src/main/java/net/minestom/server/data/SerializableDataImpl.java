@@ -1,7 +1,6 @@
 package net.minestom.server.data;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
-import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.utils.PrimitiveConversion;
@@ -113,42 +112,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
     }
 
     @Override
-    public byte[] getIndexedSerializedData() {
-        return getSerializedData(new Object2ShortOpenHashMap<>(), true);
-    }
-
-    @Override
     public void readSerializedData(BinaryReader reader, Object2ShortMap<String> typeToIndexMap) {
-        readIndexedData(this, typeToIndexMap, reader);
-    }
-
-    @Override
-    public void readIndexedSerializedData(BinaryReader reader) {
-        readData(this, reader);
-    }
-
-    /**
-     * Read the indexes of the data + the data
-     *
-     * @param data   the object to append the data
-     * @param reader the reader
-     */
-    private static void readData(SerializableData data, BinaryReader reader) {
-        final Object2ShortMap<String> typeToIndexMap = SerializableData.readDataIndexes(reader);
-        readIndexedData(data, typeToIndexMap, reader);
-    }
-
-    /**
-     * Convert a buffer into a {@link SerializableData}, this will not read the data index header.
-     * Use {@link #readData(SerializableData, BinaryReader)} to read the whole data object (if your data contains the indexes)
-     * <p>
-     * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
-     *
-     * @param data           the object to append the data
-     * @param typeToIndexMap the map which index all the types contained in the data (className-&gt;classIndex)
-     * @param reader         the reader
-     */
-    private static void readIndexedData(SerializableData data, Object2ShortMap<String> typeToIndexMap, BinaryReader reader) {
         // Map used to convert an index to the class name (opposite of typeToIndexMap)
         final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
         {
@@ -191,7 +155,8 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
             final Object value = DATA_MANAGER.getDataType(type).decode(reader);
 
             // Set the data
-            data.set(name, value, type);
+            set(name, value, type);
         }
     }
+
 }
