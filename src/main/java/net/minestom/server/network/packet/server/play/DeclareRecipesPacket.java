@@ -41,7 +41,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredShapelessCraftingRecipe extends DeclaredRecipe {
+    public static class DeclaredShapelessCraftingRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient[] ingredients;
         private final ItemStack result;
@@ -72,7 +72,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredShapedCraftingRecipe extends DeclaredRecipe {
+    public static class DeclaredShapedCraftingRecipe extends DeclaredRecipe {
         public final int width;
         public final int height;
         private final String group;
@@ -110,7 +110,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredSmeltingRecipe extends DeclaredRecipe {
+    public static class DeclaredSmeltingRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient ingredient;
         private final ItemStack result;
@@ -146,7 +146,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredBlastingRecipe extends DeclaredRecipe {
+    public static class DeclaredBlastingRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient ingredient;
         private final ItemStack result;
@@ -182,7 +182,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredSmokingRecipe extends DeclaredRecipe {
+    public static class DeclaredSmokingRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient ingredient;
         private final ItemStack result;
@@ -218,7 +218,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredCampfireCookingRecipe extends DeclaredRecipe {
+    public static class DeclaredCampfireCookingRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient ingredient;
         private final ItemStack result;
@@ -254,7 +254,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
     }
 
-    public final static class DeclaredStonecutterRecipe extends DeclaredRecipe {
+    public static class DeclaredStonecutterRecipe extends DeclaredRecipe {
         private final String group;
         private final Ingredient ingredient;
         private final ItemStack result;
