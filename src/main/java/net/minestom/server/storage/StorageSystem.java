@@ -1,8 +1,8 @@
 package net.minestom.server.storage;
 
 /**
- * Represent a way of storing data
- * It works by using keys and values assigned to each one
+ * Represent a way of storing data by key/value.
+ * The location does not have to be a file or folder path. It is the 'identifier' of the data location
  */
 public interface StorageSystem {
 
@@ -15,9 +15,9 @@ public interface StorageSystem {
     boolean exists(String location);
 
     /**
-     * Called when a location is opened with this {@link StorageSystem}
+     * Called when a {@link StorageLocation} is opened with this {@link StorageSystem}
      *
-     * @param location     the location name
+     * @param location       the location name
      * @param storageOptions the {@link StorageOptions}
      */
     void open(String location, StorageOptions storageOptions);

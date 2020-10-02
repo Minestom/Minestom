@@ -10,28 +10,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represent an area which contain data
+ * Represent an area which contain data.
+ * <p>
+ * Each {@link StorageLocation} has a {@link StorageSystem} associated to it which is used to save and retrieve data from keys.
  */
 public class StorageLocation {
 
     private static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     private final StorageSystem storageSystem;
-    private final String folderPath;
+    private final String location;
 
     private final Map<String, SerializableData> cachedData;
 
-    protected StorageLocation(StorageSystem storageSystem, String folderPath, StorageOptions storageOptions) {
+    protected StorageLocation(StorageSystem storageSystem, String location, StorageOptions storageOptions) {
         this.storageSystem = storageSystem;
-        this.folderPath = folderPath;
+        this.location = location;
 
         this.cachedData = new HashMap<>();
 
-        this.storageSystem.open(folderPath, storageOptions);
+        this.storageSystem.open(location, storageOptions);
     }
 
     /**
-     * Get the data associated with a key
+     * Get the data associated with a key using {@link StorageSystem#get(String)}
      *
      * @param key the key
      * @return the data associated to {@code key}
@@ -42,7 +44,7 @@ public class StorageLocation {
     }
 
     /**
-     * Set a data associated to a key
+     * Set a data associated to a key using {@link StorageSystem#set(String, byte[])}
      *
      * @param key  the key of the data
      * @param data the data
@@ -53,7 +55,7 @@ public class StorageLocation {
     }
 
     /**
-     * Delete a key
+     * Delete a key using the associated {@link StorageSystem}
      *
      * @param key the key
      * @see StorageSystem#delete(String)
@@ -63,7 +65,7 @@ public class StorageLocation {
     }
 
     /**
-     * Close the {@link StorageLocation}
+     * Close the {@link StorageLocation} using {@link StorageSystem#close()}
      *
      * @see StorageSystem#close()
      */
@@ -217,7 +219,14 @@ public class StorageLocation {
         }
     }
 
-    public String getFolderPath() {
-        return folderPath;
+    /**
+     * Get the location of this storage
+     * <p>
+     * WARNING: this is not necessary a file or folder path
+     *
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
     }
 }
