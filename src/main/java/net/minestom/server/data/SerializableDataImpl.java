@@ -145,10 +145,11 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * WARNING: the {@link DataManager} needs to have all the required types as the {@link SerializableData} has
      *
      * @param data           the object to append the data
-     * @param typeToIndexMap the map which index all the type contained in the data (className-&gt;classIndex)
+     * @param typeToIndexMap the map which index all the types contained in the data (className-&gt;classIndex)
      * @param reader         the reader
      */
     private static void readIndexedData(SerializableData data, Object2ShortMap<String> typeToIndexMap, BinaryReader reader) {
+        // Map used to convert an index to the class name (opposite of typeToIndexMap)
         final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
         {
             // Fill the indexToType map

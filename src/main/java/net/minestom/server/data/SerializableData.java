@@ -41,6 +41,8 @@ public interface SerializableData extends Data {
 
     /**
      * Read the data of a {@link SerializableData} when you already have the index map
+     * <p>
+     * WARNING: the data to read should not have any index to read and your index map should be COMPLETE
      *
      * @param reader         the binary reader
      * @param typeToIndexMap the index map
@@ -56,7 +58,7 @@ public interface SerializableData extends Data {
     void readIndexedSerializedData(BinaryReader reader);
 
     /**
-     * Get the index info (class name -&gt; class index)
+     * Write the index info (class name -&gt; class index), used to write the header for indexed serialized data
      * <p>
      * Sized by a var-int
      *
@@ -78,7 +80,9 @@ public interface SerializableData extends Data {
     }
 
     /**
-     * Get a map containing the indexes of your data (type name -&gt; type index)
+     * Read a data index map (type name -&gt; type index)
+     * <p>
+     * Can then be used with {@link SerializableData#readSerializedData(BinaryReader, Object2ShortMap)}
      *
      * @param binaryReader the reader
      * @return a map containing the indexes of your data
