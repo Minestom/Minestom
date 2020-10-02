@@ -103,14 +103,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         packet.windowType = getInventoryType().getWindowType();
         packet.title = title;
 
-        sendPacketToViewersAndSelf(packet);
+        // Re-open the inventory
+        sendPacketToViewers(packet);
+        // Send inventory items
         update();
     }
 
     /**
      * Get this window id
      * <p>
-     * This is the id that the client will send to identify the affected inventory
+     * This is the id that the client will send to identify the affected inventory, mostly used by packets
      *
      * @return the window id
      */
@@ -163,6 +165,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             setItemStackInternal(i, ItemStack.getAirItem());
         }
         // Send the cleared inventory to viewers
+        // TODO cached packet with empty content
         update();
     }
 
