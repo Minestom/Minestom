@@ -1,32 +1,25 @@
 package net.minestom.server.recipe;
 
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Recipe {
+    protected final RecipeType recipeType;
+    protected final String recipeId;
 
-    protected RecipeType recipeType;
-    protected String recipeId;
-    protected String group;
-
-    protected Recipe(RecipeType recipeType, String recipeId) {
+    protected Recipe(@NotNull RecipeType recipeType, @NotNull String recipeId) {
         this.recipeType = recipeType;
         this.recipeId = recipeId;
     }
 
-    public abstract boolean shouldShow(Player player);
+    public abstract boolean shouldShow(@NotNull Player player);
 
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
+    @NotNull
     public RecipeType getRecipeType() {
         return recipeType;
     }
 
+    @NotNull
     public String getRecipeId() {
         return recipeId;
     }

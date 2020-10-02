@@ -5,17 +5,18 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 public class DeclareRecipesPacket implements ServerPacket {
 
-    public Recipe[] recipes;
+    public DeclaredRecipe[] recipes;
 
     @Override
     public void write(BinaryWriter writer) {
         Check.notNull(recipes, "Recipes cannot be null!");
 
         writer.writeVarInt(recipes.length);
-        for (Recipe recipe : recipes) {
+        for (DeclaredRecipe recipe : recipes) {
             recipe.write(writer);
         }
     }
@@ -25,91 +26,287 @@ public class DeclareRecipesPacket implements ServerPacket {
         return ServerPacketIdentifier.DECLARE_RECIPES;
     }
 
-    public static class Recipe {
+    public abstract static class DeclaredRecipe {
+        protected final String recipeId;
+        protected final String recipeType;
 
-        public String recipeId;
-        public String recipeType;
+        protected DeclaredRecipe(@NotNull String recipeId, @NotNull String recipeType) {
+            this.recipeId = recipeId;
+            this.recipeType = recipeType;
+        }
 
-        public String group;
-
-        // crafting_shapeless
-        // ++ group
-        // ++ ingredients
-        // ++ result
-
-        // crafting_shaped
-        public int width;
-        public int height;
-        // ++ group
-        // ++ ingredients
-        // ++ result
-
-        // smelting, blasting, smoking and campfire
-        // ++ group
-        // ++ ingredient
-        // ++ result
-        public float experience;
-        public int cookingTime;
-
-        // smithing
-        // ++ ingredient (base)
-        public Ingredient additionIngredient;
-        // ++ result
-
-
-        public Ingredient ingredient;
-        public Ingredient[] ingredients;
-        public ItemStack result;
-
-
-        private void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(recipeType);
             writer.writeSizedString(recipeId);
+        }
+    }
 
-            switch (recipeType) {
-                case "crafting_shapeless": {
-                    writer.writeSizedString(group);
-                    writer.writeVarInt(ingredients.length);
-                    for (Ingredient ingredient : ingredients) {
-                        ingredient.write(writer);
-                    }
-                    writer.writeItemStack(result);
-                    break;
-                }
-                case "crafting_shaped": {
-                    writer.writeVarInt(width);
-                    writer.writeVarInt(height);
-                    writer.writeSizedString(group);
-                    for (Ingredient ingredient : ingredients) {
-                        ingredient.write(writer);
-                    }
-                    writer.writeItemStack(result);
-                    break;
-                }
-                case "smelting":
-                case "blasting":
-                case "smoking":
-                case "campfire_cooking": {
-                    writer.writeSizedString(group);
-                    ingredient.write(writer);
-                    writer.writeItemStack(result);
-                    writer.writeFloat(experience);
-                    writer.writeVarInt(cookingTime);
-                    break;
-                }
-                case "stonecutting": {
-                    writer.writeSizedString(group);
-                    ingredient.write(writer);
-                    writer.writeItemStack(result);
-                    break;
-                }
-                case "smithing": {
-                    ingredient.write(writer);
-                    additionIngredient.write(writer);
-                    writer.writeItemStack(result);
-                    break;
-                }
+    public static class DeclaredShapelessCraftingRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient[] ingredients;
+        private final ItemStack result;
+
+        public DeclaredShapelessCraftingRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient[] ingredients,
+                @NotNull ItemStack result
+        ) {
+            super(recipeId, "crafting_shapeless");
+            this.group = group;
+            this.ingredients = ingredients;
+            this.result = result;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            writer.writeVarInt(ingredients.length);
+            for (Ingredient ingredient : ingredients) {
+                ingredient.write(writer);
             }
+            writer.writeItemStack(result);
+        }
+    }
+
+    public static class DeclaredShapedCraftingRecipe extends DeclaredRecipe {
+        public final int width;
+        public final int height;
+        private final String group;
+        private final Ingredient[] ingredients;
+        private final ItemStack result;
+
+        public DeclaredShapedCraftingRecipe(
+                @NotNull String recipeId,
+                int width,
+                int height,
+                @NotNull String group,
+                @NotNull Ingredient[] ingredients,
+                @NotNull ItemStack result
+        ) {
+            super(recipeId, "crafting_shaped");
+            this.group = group;
+            this.ingredients = ingredients;
+            this.result = result;
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeVarInt(width);
+            writer.writeVarInt(height);
+            writer.writeSizedString(group);
+            for (Ingredient ingredient : ingredients) {
+                ingredient.write(writer);
+            }
+            writer.writeItemStack(result);
+        }
+    }
+
+    public static class DeclaredSmeltingRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient ingredient;
+        private final ItemStack result;
+        private final float experience;
+        private final int cookingTime;
+
+        public DeclaredSmeltingRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient ingredient,
+                @NotNull ItemStack result,
+                float experience,
+                int cookingTime
+        ) {
+            super(recipeId, "smelting");
+            this.group = group;
+            this.ingredient = ingredient;
+            this.result = result;
+            this.experience = experience;
+            this.cookingTime = cookingTime;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            ingredient.write(writer);
+            writer.writeItemStack(result);
+            writer.writeFloat(experience);
+            writer.writeVarInt(cookingTime);
+        }
+    }
+
+    public static class DeclaredBlastingRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient ingredient;
+        private final ItemStack result;
+        private final float experience;
+        private final int cookingTime;
+
+        public DeclaredBlastingRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient ingredient,
+                @NotNull ItemStack result,
+                float experience,
+                int cookingTime
+        ) {
+            super(recipeId, "blasting");
+            this.group = group;
+            this.ingredient = ingredient;
+            this.result = result;
+            this.experience = experience;
+            this.cookingTime = cookingTime;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            ingredient.write(writer);
+            writer.writeItemStack(result);
+            writer.writeFloat(experience);
+            writer.writeVarInt(cookingTime);
+        }
+    }
+
+    public static class DeclaredSmokingRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient ingredient;
+        private final ItemStack result;
+        private final float experience;
+        private final int cookingTime;
+
+        public DeclaredSmokingRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient ingredient,
+                @NotNull ItemStack result,
+                float experience,
+                int cookingTime
+        ) {
+            super(recipeId, "smoking");
+            this.group = group;
+            this.ingredient = ingredient;
+            this.result = result;
+            this.experience = experience;
+            this.cookingTime = cookingTime;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            ingredient.write(writer);
+            writer.writeItemStack(result);
+            writer.writeFloat(experience);
+            writer.writeVarInt(cookingTime);
+        }
+    }
+
+    public static class DeclaredCampfireCookingRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient ingredient;
+        private final ItemStack result;
+        private final float experience;
+        private final int cookingTime;
+
+        public DeclaredCampfireCookingRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient ingredient,
+                @NotNull ItemStack result,
+                float experience,
+                int cookingTime
+        ) {
+            super(recipeId, "campfire_cooking");
+            this.group = group;
+            this.ingredient = ingredient;
+            this.result = result;
+            this.experience = experience;
+            this.cookingTime = cookingTime;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            ingredient.write(writer);
+            writer.writeItemStack(result);
+            writer.writeFloat(experience);
+            writer.writeVarInt(cookingTime);
+        }
+    }
+
+    public static class DeclaredStonecutterRecipe extends DeclaredRecipe {
+        private final String group;
+        private final Ingredient ingredient;
+        private final ItemStack result;
+
+        public DeclaredStonecutterRecipe(
+                @NotNull String recipeId,
+                @NotNull String group,
+                @NotNull Ingredient ingredient,
+                @NotNull ItemStack result
+        ) {
+            super(recipeId, "stonecutter");
+            this.group = group;
+            this.ingredient = ingredient;
+            this.result = result;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            writer.writeSizedString(group);
+            ingredient.write(writer);
+            writer.writeItemStack(result);
+        }
+    }
+
+    public final static class DeclaredSmithingRecipe extends DeclaredRecipe {
+        private final Ingredient base;
+        private final Ingredient addition;
+        private final ItemStack result;
+
+        public DeclaredSmithingRecipe(
+                @NotNull String recipeId,
+                @NotNull Ingredient base,
+                @NotNull Ingredient addition,
+                @NotNull ItemStack result
+        ) {
+            super(recipeId, "smithing");
+            this.base = base;
+            this.addition = addition;
+            this.result = result;
+        }
+
+        @Override
+        public void write(@NotNull BinaryWriter writer) {
+            // Write type & id
+            super.write(writer);
+            // Write recipe specific stuff.
+            base.write(writer);
+            addition.write(writer);
+            writer.writeItemStack(result);
         }
     }
 
