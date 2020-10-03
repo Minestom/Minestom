@@ -65,7 +65,7 @@ public class BlockBatch implements InstanceBatch {
             for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
                 final Chunk chunk = entry.getKey();
                 final List<BlockData> dataList = entry.getValue();
-                batchesPool.execute(() -> {
+                BLOCK_BATCH_POOL.execute(() -> {
                     synchronized (chunk) {
                         if (!chunk.isLoaded())
                             return;

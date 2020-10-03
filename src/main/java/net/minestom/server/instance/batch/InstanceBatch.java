@@ -8,6 +8,6 @@ import java.util.concurrent.ExecutorService;
 
 public interface InstanceBatch extends BlockModifier {
 
-    ExecutorService batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_BATCH, MinecraftServer.THREAD_NAME_BLOCK_BATCH);
+    ExecutorService BLOCK_BATCH_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_BATCH, MinecraftServer.THREAD_NAME_BLOCK_BATCH);
 
 }
