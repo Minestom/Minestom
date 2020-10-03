@@ -17,7 +17,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
 
     /**
      * Class name -> Class
-     * Used to cache data so we don't load class by name each time
+     * Used to cache class instances so we don't load them by name every time
      */
     private static ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
 
