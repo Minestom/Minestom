@@ -964,17 +964,16 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Creates an explosion at the given position with the given strength.
      * The algorithm used to compute damages is provided by {@link #getExplosionSupplier()}.
      *
-     * @param centerX
-     * @param centerY
-     * @param centerZ
-     * @param strength
+     * @param centerX        center X of the explosion
+     * @param centerY        center Y of the explosion
+     * @param centerZ        center Z of the explosion
+     * @param strength       the strength of the explosion
      * @param additionalData data to pass to the explosion supplier
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
     public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
         final ExplosionSupplier explosionSupplier = getExplosionSupplier();
-        if (explosionSupplier == null)
-            throw new IllegalStateException("Tried to create an explosion with no explosion supplier");
+        Check.stateCondition(explosionSupplier == null, "Tried to create an explosion with no explosion supplier");
         final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
         explosion.apply(this);
     }
@@ -989,7 +988,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Registers the explosion supplier to use in this instance
+     * Registers the {@link ExplosionSupplier} to use in this instance
      *
      * @param supplier the explosion supplier
      */

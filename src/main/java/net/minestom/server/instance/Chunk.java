@@ -48,7 +48,7 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     public static final int CHUNK_SECTION_COUNT = CHUNK_SIZE_Y / CHUNK_SECTION_SIZE;
 
-    public static final int BIOME_COUNT = 1024; // 4x4x4 blocks
+    public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
     protected final Instance instance;
     protected Biome[] biomes;
@@ -58,7 +58,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Key is still chunk coord
     protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
 
-    // Contains CustomBlocks' index which are updatable
+    // Contains CustomBlocks' block index which are updatable
     protected IntSet updatableBlocks = new IntOpenHashSet();
     // (block index)/(last update in ms)
     protected Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
@@ -178,13 +178,13 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Change the block state id and the custom block id at a position
      *
-     * @param x            the block X
-     * @param y            the block Y
-     * @param z            the block Z
-     * @param blockStateId the new block state id
-     * @param customId     the new custom block id
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param blockStateId  the new block state id
+     * @param customBlockId the new custom block id
      */
-    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customId);
+    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
 
     /**
      * Change the block state id at a position (the custom block id stays the same)
@@ -339,7 +339,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Serialize the chunk into bytes
      *
-     * @return the serialized chunk, can potentially be null if this chunk cannot be serialized
+     * @return the serialized chunk, can be null if this chunk cannot be serialized
      */
     public abstract byte[] getSerializedData();
 

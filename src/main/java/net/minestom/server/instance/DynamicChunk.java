@@ -111,14 +111,14 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customId) {
+    protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
         final int blockIndex = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(blockIndex, 0, blocksStateId.length)) {
             return;
         }
 
         this.blocksStateId[blockIndex] = blockStateId;
-        this.customBlocksId[blockIndex] = customId;
+        this.customBlocksId[blockIndex] = customBlockId;
     }
 
     @Override
@@ -161,6 +161,7 @@ public class DynamicChunk extends Chunk {
             binaryWriter.writeByte(id);
         }
 
+        // Loop all blocks
         for (byte x = 0; x < CHUNK_SIZE_X; x++) {
             for (short y = 0; y < CHUNK_SIZE_Y; y++) {
                 for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
@@ -230,11 +231,13 @@ public class DynamicChunk extends Chunk {
                 serializableData.readSerializedData(reader, typeToIndexMap);
             }
 
+            // Biomes
             for (int i = 0; i < BIOME_COUNT; i++) {
                 final byte id = reader.readByte();
                 this.biomes[i] = BIOME_MANAGER.getById(id);
             }
 
+            // Loop for all blocks in the chunk
             while (true) {
                 // Position
                 final short index = reader.readShort();
