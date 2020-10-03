@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
+import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
@@ -35,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 // TODO light data & API
-public abstract class Chunk implements Viewable {
+public abstract class Chunk implements Viewable, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
@@ -74,6 +75,9 @@ public abstract class Chunk implements Viewable {
     protected volatile boolean loaded = true;
     protected Set<Player> viewers = new CopyOnWriteArraySet<>();
     protected ByteBuf fullDataPacket;
+
+    // Data
+    protected Data data;
 
     public Chunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
         this.instance = instance;
@@ -192,18 +196,26 @@ public abstract class Chunk implements Viewable {
      */
     protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
 
-    public Data getData(int x, int y, int z) {
+    /**
+     * Get the {@link Data} at a position
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     * @return the {@link Data} at the position, null if none
+     */
+    public Data getBlockData(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
-        return getData(index);
+        return getBlockData(index);
     }
 
     /**
      * Get the {@link Data} at a block index
      *
      * @param index the block index
-     * @return the {@link Data} at the block index
+     * @return the {@link Data} at the block index, null if none
      */
-    protected Data getData(int index) {
+    protected Data getBlockData(int index) {
         return blocksData.get(index);
     }
 
@@ -233,7 +245,7 @@ public abstract class Chunk implements Viewable {
             this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
             final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-            final Data data = getData(index);
+            final Data data = getBlockData(index);
             customBlock.update(instance, blockPosition, data);
         }
     }
@@ -426,6 +438,16 @@ public abstract class Chunk implements Viewable {
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
+    }
+
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Data data) {
+        this.data = data;
     }
 
     /**

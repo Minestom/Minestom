@@ -146,6 +146,15 @@ public class DynamicChunk extends Chunk {
 
         BinaryWriter binaryWriter = new BinaryWriter();
 
+        // Chunk data
+        final boolean hasChunkData = data instanceof SerializableData && !data.isEmpty();
+        binaryWriter.writeBoolean(hasChunkData);
+        if (hasChunkData) {
+            // Get the un-indexed data
+            final byte[] serializedData = ((SerializableData) data).getSerializedData(typeToIndexMap, false);
+            binaryWriter.writeBytes(serializedData);
+        }
+
         // Write the biomes id
         for (int i = 0; i < BIOME_COUNT; i++) {
             final byte id = (byte) biomes[i].getId();
@@ -173,9 +182,9 @@ public class DynamicChunk extends Chunk {
 
                     // Data
                     final Data data = blocksData.get(index);
-                    final boolean hasData = data instanceof SerializableData;
-                    binaryWriter.writeBoolean(hasData);
-                    if (hasData) {
+                    final boolean hasBlockData = data instanceof SerializableData && !data.isEmpty();
+                    binaryWriter.writeBoolean(hasBlockData);
+                    if (hasBlockData) {
                         // Get the un-indexed data
                         final byte[] serializedData = ((SerializableData) data).getSerializedData(typeToIndexMap, false);
                         binaryWriter.writeBytes(serializedData);
@@ -214,6 +223,13 @@ public class DynamicChunk extends Chunk {
                 typeToIndexMap = SerializableData.readDataIndexes(reader);
             }
 
+            // Chunk data
+            final boolean hasChunkData = reader.readBoolean();
+            if (hasChunkData) {
+                SerializableData serializableData = new SerializableDataImpl();
+                serializableData.readSerializedData(reader, typeToIndexMap);
+            }
+
             for (int i = 0; i < BIOME_COUNT; i++) {
                 final byte id = reader.readByte();
                 this.biomes[i] = BIOME_MANAGER.getById(id);
@@ -233,9 +249,9 @@ public class DynamicChunk extends Chunk {
                 // Data
                 SerializableData data = null;
                 {
-                    final boolean hasData = reader.readBoolean();
+                    final boolean hasBlockData = reader.readBoolean();
                     // Data deserializer
-                    if (hasData) {
+                    if (hasBlockData) {
                         // Read the data with the deserialized index map
                         data = new SerializableDataImpl();
                         data.readSerializedData(reader, typeToIndexMap);

@@ -242,7 +242,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the block position
      */
     private void callBlockDestroy(Chunk chunk, int index, CustomBlock previousBlock, BlockPosition blockPosition) {
-        final Data previousData = chunk.getData(index);
+        final Data previousData = chunk.getBlockData(index);
         previousBlock.onDestroy(this, blockPosition, previousData);
     }
 
@@ -259,7 +259,7 @@ public class InstanceContainer extends Instance {
         final CustomBlock actualBlock = chunk.getCustomBlock(index);
         if (actualBlock == null)
             return;
-        final Data previousData = chunk.getData(index);
+        final Data previousData = chunk.getBlockData(index);
         actualBlock.onPlace(this, blockPosition, previousData);
     }
 
