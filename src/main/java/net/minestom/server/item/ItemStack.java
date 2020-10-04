@@ -324,6 +324,20 @@ public class ItemStack implements DataContainer {
     }
 
     /**
+     * Get the {@link ItemAttribute} with the specified internal name
+     *
+     * @param internalName the internal name of the attribute
+     * @return the {@link ItemAttribute} with the internal name, null if not found
+     */
+    public ItemAttribute getAttribute(String internalName) {
+        for (ItemAttribute itemAttribute : attributes) {
+            if (itemAttribute.getInternalName().equals(internalName))
+                return itemAttribute;
+        }
+        return null;
+    }
+
+    /**
      * Add an attribute to the item
      *
      * @param itemAttribute the attribute to add
