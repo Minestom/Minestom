@@ -141,7 +141,7 @@ public class DynamicChunk extends Chunk {
     @Override
     public byte[] getSerializedData() {
 
-        // Used for blocks data
+        // Used for blocks data (unused if empty at the end)
         Object2ShortMap<String> typeToIndexMap = new Object2ShortOpenHashMap<>();
 
         BinaryWriter binaryWriter = new BinaryWriter();
@@ -196,9 +196,9 @@ public class DynamicChunk extends Chunk {
 
         // If the chunk data contains SerializableData type, it needs to be added in the header
         BinaryWriter indexWriter = new BinaryWriter();
-        final boolean hasIndex = !typeToIndexMap.isEmpty();
-        indexWriter.writeBoolean(hasIndex);
-        if (hasIndex) {
+        final boolean hasDataIndex = !typeToIndexMap.isEmpty();
+        indexWriter.writeBoolean(hasDataIndex);
+        if (hasDataIndex) {
             // Get the index buffer (prefixed by true to say that the chunk contains data indexes)
             SerializableData.writeDataIndexHeader(indexWriter, typeToIndexMap);
         }
@@ -218,8 +218,8 @@ public class DynamicChunk extends Chunk {
         try {
 
             // Get if the chunk has data indexes (used for blocks data)
-            final boolean hasIndex = reader.readBoolean();
-            if (hasIndex) {
+            final boolean hasDataIndex = reader.readBoolean();
+            if (hasDataIndex) {
                 // Get the data indexes which will be used to read all the individual data
                 typeToIndexMap = SerializableData.readDataIndexes(reader);
             }

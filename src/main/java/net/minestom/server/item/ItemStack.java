@@ -460,10 +460,15 @@ public class ItemStack implements DataContainer {
      * @return true if the item has nbt tag, false otherwise
      */
     public boolean hasNbtTag() {
-        return hasDisplayName() || hasLore() || damage != 0 || isUnbreakable() ||
+        return hasDisplayName() ||
+                hasLore() ||
+                damage != 0 ||
+                isUnbreakable() ||
                 !enchantmentMap.isEmpty() ||
                 !attributes.isEmpty() ||
-                hideFlag != 0 || customModelData != 0 || (itemMeta != null && itemMeta.hasNbt());
+                hideFlag != 0 ||
+                customModelData != 0 ||
+                (itemMeta != null && itemMeta.hasNbt());
     }
 
     /**
