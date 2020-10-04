@@ -160,7 +160,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void unloadChunk(Chunk chunk);
 
     /**
-     * Get the specified {@link Chunk}
+     * Get the loaded {@link Chunk} at a position.
+     * <p>
+     * WARNING: this should only return already-loaded chunk, use {@link #loadChunk(int, int)} or similar to load one instead.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -169,7 +171,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
-     * Save a {@link Chunk}
+     * Save a {@link Chunk} to permanent storage
      *
      * @param chunk    the {@link Chunk} to save
      * @param callback called when the {@link Chunk} is done saving
@@ -177,7 +179,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
 
     /**
-     * Save multiple chunks
+     * Save multiple chunks to permanent storage
      *
      * @param callback called when the chunks are done saving
      */
@@ -234,8 +236,27 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public abstract void setStorageLocation(StorageLocation storageLocation);
 
+    /**
+     * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
+     * Could be read from disk, or generated from scratch
+     * <p>
+     * WARNING: it has to retrieve a chunk, this is not optional.
+     *
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk X
+     * @param callback the callback executed once the {@link Chunk} has been retrieved
+     */
     protected abstract void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
+    /**
+     * Called to generated a new {@link Chunk} from scratch.
+     * <p>
+     * This is where you can put your chunk generation code.
+     *
+     * @param chunkX   the chunk X
+     * @param chunkZ   the chunk Z
+     * @param callback the callback executed with the newly created {@link Chunk}
+     */
     protected abstract void createChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
@@ -517,6 +538,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         loadChunk(chunkX, chunkZ, callback);
     }
 
+    /**
+     * Load chunk (if {@link #hasEnabledAutoChunkLoad()} returns true) at the given position with a callback
+     *
+     * @param position the chunk position
+     * @param callback the callback executed when the chunk is loaded (or with a null chunk if not)
+     */
     public void loadOptionalChunk(Position position, ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
@@ -668,7 +695,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the chunk at the given {@link BlockPosition}, null if not loaded
+     * Get the chunk at the given {@link BlockPosition}, null if not loaded.
      *
      * @param x the X position
      * @param z the Z position

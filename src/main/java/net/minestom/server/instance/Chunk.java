@@ -36,6 +36,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 // TODO light data & API
+
+/**
+ * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
+ * Should contains all the blocks located at those positions and manage their tick updates.
+ */
 public abstract class Chunk implements Viewable, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
