@@ -1792,6 +1792,10 @@ public class Player extends LivingEntity implements CommandSender {
         return vehicleInformation;
     }
 
+    /**
+     * Send to the player a {@link PlayerAbilitiesPacket} with all the updated fields
+     * (walkingSpeed sets to 0.1)
+     */
     protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
         playerAbilitiesPacket.invulnerable = invulnerable;
