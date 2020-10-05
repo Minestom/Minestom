@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
@@ -19,14 +18,11 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.time.CooldownUtils;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -59,27 +55,15 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected Biome[] biomes;
     protected int chunkX, chunkZ;
 
-    // Used to get all blocks with data (no null)
-    // Key is still chunk coord
-    protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
-
-    // Contains CustomBlocks' block index which are updatable
-    protected IntSet updatableBlocks = new IntOpenHashSet();
-    // (block index)/(last update in ms)
-    protected Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
-
+    // Packet cache
     protected volatile boolean packetUpdated;
+    private ByteBuf fullDataPacket;
 
-    // Block entities
-    protected Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
+    protected volatile boolean loaded = true;
+    protected Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
-
-    // Cache
-    protected volatile boolean loaded = true;
-    protected Set<Player> viewers = new CopyOnWriteArraySet<>();
-    protected ByteBuf fullDataPacket;
 
     // Data
     protected Data data;
@@ -118,21 +102,16 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
 
     /**
-     * Set the {@link Data} at a position
+     * Execute a chunk tick
+     * <p>
+     * Should be used to update all the blocks in the chunk
+     * <p>
+     * WARNING: this method doesn't necessary have to be thread-safe, proceed with caution
      *
-     * @param x    the block X
-     * @param y    the block Y
-     * @param z    the block Z
-     * @param data the new data
+     * @param time     the time of the update in milliseconds
+     * @param instance the instance linked to this chunk
      */
-    public void setBlockData(int x, int y, int z, Data data) {
-        final int index = getBlockIndex(x, y, z);
-        if (data != null) {
-            this.blocksData.put(index, data);
-        } else {
-            this.blocksData.remove(index);
-        }
-    }
+    public abstract void tick(long time, Instance instance);
 
     /**
      * Get the block state id at a position
@@ -153,6 +132,75 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return the custom block id at the position
      */
     public abstract short getCustomBlockId(int x, int y, int z);
+
+    /**
+     * Change the block state id and the custom block id at a position
+     *
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param blockStateId  the new block state id
+     * @param customBlockId the new custom block id
+     */
+    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
+
+    /**
+     * Change the block state id at a position (the custom block id stays the same)
+     *
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the new block state id
+     */
+    protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
+
+    /**
+     * Get the {@link Data} at a block index
+     *
+     * @param index the block index
+     * @return the {@link Data} at the block index, null if none
+     */
+    protected abstract Data getBlockData(int index);
+
+    /**
+     * Set the {@link Data} at a position
+     *
+     * @param x    the block X
+     * @param y    the block Y
+     * @param z    the block Z
+     * @param data the new data
+     */
+    public abstract void setBlockData(int x, int y, int z, Data data);
+
+    /**
+     * Get all the block entities in this chunk
+     *
+     * @return the block entities in this chunk
+     */
+    public abstract Set<Integer> getBlockEntities();
+
+    /**
+     * Serialize the chunk into bytes
+     *
+     * @return the serialized chunk, can be null if this chunk cannot be serialized
+     */
+    public abstract byte[] getSerializedData();
+
+    /**
+     * Read the chunk from binary
+     * <p>
+     * Used if the chunk is loaded from file
+     *
+     * @param reader   the data reader
+     * @param callback the callback to execute once the chunk is done reading
+     *                 WARNING: this need to be called to notify the instance
+     */
+    public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
+
+    /**
+     * @return a {@link ChunkDataPacket} containing a copy this chunk data
+     */
+    protected abstract ChunkDataPacket getFreshPacket();
 
     /**
      * Get the {@link CustomBlock} at a position
@@ -181,27 +229,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Change the block state id and the custom block id at a position
-     *
-     * @param x             the block X
-     * @param y             the block Y
-     * @param z             the block Z
-     * @param blockStateId  the new block state id
-     * @param customBlockId the new custom block id
-     */
-    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
-
-    /**
-     * Change the block state id at a position (the custom block id stays the same)
-     *
-     * @param x            the block X
-     * @param y            the block Y
-     * @param z            the block Z
-     * @param blockStateId the new block state id
-     */
-    protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
-
-    /**
      * Get the {@link Data} at a position
      *
      * @param x the block X
@@ -212,47 +239,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     public Data getBlockData(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
         return getBlockData(index);
-    }
-
-    /**
-     * Get the {@link Data} at a block index
-     *
-     * @param index the block index
-     * @return the {@link Data} at the block index, null if none
-     */
-    protected Data getBlockData(int index) {
-        return blocksData.get(index);
-    }
-
-    /**
-     * Execute a tick update for all the updatable blocks in this chunk
-     *
-     * @param time     the time of the update in milliseconds
-     * @param instance the instance linked to this chunk
-     */
-    public synchronized void updateBlocks(long time, Instance instance) {
-        if (updatableBlocks.isEmpty())
-            return;
-
-        // Block all chunk operation during the update
-        final IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
-        while (iterator.hasNext()) {
-            final int index = iterator.nextInt();
-            final CustomBlock customBlock = getCustomBlock(index);
-
-            // Update cooldown
-            final UpdateOption updateOption = customBlock.getUpdateOption();
-            final long lastUpdate = updatableBlocksLastUpdate.get(index);
-            final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
-            if (hasCooldown)
-                continue;
-
-            this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
-
-            final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-            final Data data = getBlockData(index);
-            customBlock.update(instance, blockPosition, data);
-        }
     }
 
     public Biome[] getBiomes() {
@@ -288,29 +274,14 @@ public abstract class Chunk implements Viewable, DataContainer {
         return fullDataPacket;
     }
 
+    /**
+     * Set the cached {@link ChunkDataPacket} of this chunk
+     *
+     * @param fullDataPacket the new cached chunk packet
+     */
     public void setFullDataPacket(ByteBuf fullDataPacket) {
         this.fullDataPacket = fullDataPacket;
         this.packetUpdated = true;
-    }
-
-    /**
-     * Get if a block state id represents a block entity
-     *
-     * @param blockStateId the block state id to check
-     * @return true if {@code blockStateId} represents a block entity
-     */
-    protected boolean isBlockEntity(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId);
-        return block.hasBlockEntity();
-    }
-
-    /**
-     * Get all the block entities in this chunk
-     *
-     * @return the block entities in this chunk
-     */
-    public Set<Integer> getBlockEntities() {
-        return blockEntities;
     }
 
     /**
@@ -342,24 +313,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Serialize the chunk into bytes
-     *
-     * @return the serialized chunk, can be null if this chunk cannot be serialized
-     */
-    public abstract byte[] getSerializedData();
-
-    /**
-     * Read the chunk from binary
-     * <p>
-     * Used if the chunk is loaded from file
-     *
-     * @param reader   the data reader
-     * @param callback the callback to execute once the chunk is done reading
-     *                 WARNING: this need to be called to notify the instance
-     */
-    public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
-
-    /**
      * Get a {@link ChunkDataPacket} which should contain the full chunk
      *
      * @return a fresh full chunk data packet
@@ -380,11 +333,6 @@ public abstract class Chunk implements Viewable, DataContainer {
         fullDataPacket.fullChunk = false;
         return fullDataPacket;
     }
-
-    /**
-     * @return a {@link ChunkDataPacket} containing a copy this chunk data
-     */
-    protected abstract ChunkDataPacket getFreshPacket();
 
     /**
      * Used to verify if the chunk should still be kept in memory
@@ -562,6 +510,17 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     protected void unload() {
         this.loaded = false;
+    }
+
+    /**
+     * Get if a block state id represents a block entity
+     *
+     * @param blockStateId the block state id to check
+     * @return true if {@code blockStateId} represents a block entity
+     */
+    protected boolean isBlockEntity(short blockStateId) {
+        final Block block = Block.fromStateId(blockStateId);
+        return block.hasBlockEntity();
     }
 
     /**

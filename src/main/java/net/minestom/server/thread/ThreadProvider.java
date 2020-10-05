@@ -129,7 +129,7 @@ public abstract class ThreadProvider {
      * @param time     the current time in ms
      */
     protected void updateChunk(Instance instance, Chunk chunk, long time) {
-        chunk.updateBlocks(time, instance);
+        chunk.tick(time, instance);
     }
 
     /**

@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.data.Data;
@@ -9,14 +9,20 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.world.biomes.Biome;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class DynamicChunk extends Chunk {
@@ -26,6 +32,18 @@ public class DynamicChunk extends Chunk {
     // and modifying them can cause issue with block data, update, block entity and the cached chunk packet
     protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
     protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+
+    // Used to get all blocks with data (no null)
+    // Key is still chunk coord
+    protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
+
+    // Contains CustomBlocks' block index which are updatable
+    protected IntSet updatableBlocks = new IntOpenHashSet();
+    // (block index)/(last update in ms)
+    protected Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
+
+    // Block entities
+    protected Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
     public DynamicChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
         super(instance, biomes, chunkX, chunkZ);
@@ -93,6 +111,32 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
+    public void tick(long time, Instance instance) {
+        if (updatableBlocks.isEmpty())
+            return;
+
+        // Block all chunk operation during the update
+        final IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
+        while (iterator.hasNext()) {
+            final int index = iterator.nextInt();
+            final CustomBlock customBlock = getCustomBlock(index);
+
+            // Update cooldown
+            final UpdateOption updateOption = customBlock.getUpdateOption();
+            final long lastUpdate = updatableBlocksLastUpdate.get(index);
+            final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
+            if (hasCooldown)
+                continue;
+
+            this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
+
+            final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+            final Data data = getBlockData(index);
+            customBlock.update(instance, blockPosition, data);
+        }
+    }
+
+    @Override
     public short getBlockStateId(int x, int y, int z) {
         final int index = getBlockIndex(x, y, z);
         if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
@@ -129,6 +173,26 @@ public class DynamicChunk extends Chunk {
         }
 
         this.blocksStateId[blockIndex] = blockStateId;
+    }
+
+    @Override
+    protected Data getBlockData(int index) {
+        return blocksData.get(index);
+    }
+
+    @Override
+    public void setBlockData(int x, int y, int z, Data data) {
+        final int index = getBlockIndex(x, y, z);
+        if (data != null) {
+            this.blocksData.put(index, data);
+        } else {
+            this.blocksData.remove(index);
+        }
+    }
+
+    @Override
+    public Set<Integer> getBlockEntities() {
+        return blockEntities;
     }
 
     /**
@@ -182,7 +246,7 @@ public class DynamicChunk extends Chunk {
                     binaryWriter.writeShort(customBlockId);
 
                     // Data
-                    final Data data = blocksData.get(index);
+                    final Data data = getBlockData(index);
                     final boolean hasBlockData = data instanceof SerializableData && !data.isEmpty();
                     binaryWriter.writeBoolean(hasBlockData);
                     if (hasBlockData) {
@@ -283,7 +347,7 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.chunkZ = chunkZ;
         fullDataPacket.blocksStateId = blocksStateId.clone();
         fullDataPacket.customBlocksId = customBlocksId.clone();
-        fullDataPacket.blockEntities = new CopyOnWriteArraySet<>(blockEntities);
+        fullDataPacket.blockEntities = new HashSet<>(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
     }

@@ -1794,7 +1794,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Send to the player a {@link PlayerAbilitiesPacket} with all the updated fields
-     * (walkingSpeed sets to 0.1)
+     * (walkingSpeed set to 0.1)
      */
     protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();

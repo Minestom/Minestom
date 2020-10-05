@@ -252,7 +252,7 @@ public class InstanceContainer extends Instance {
      * WARNING {@code chunk} needs to be synchronized
      *
      * @param chunk         the chunk where the block is
-     * @param index         the index of the block
+     * @param index         the block index
      * @param blockPosition the block position
      */
     private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {

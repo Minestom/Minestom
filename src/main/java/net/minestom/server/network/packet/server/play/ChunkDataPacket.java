@@ -108,7 +108,7 @@ public class ChunkDataPacket implements ServerPacket {
             final short customBlockId = customBlocksId[index];
             final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
             if (customBlock != null) {
-                Data data = blocksData.get(index);
+                final Data data = blocksData.get(index);
                 customBlock.writeBlockEntity(blockPosition, data, nbt);
             }
             writer.writeNBT("", nbt);
