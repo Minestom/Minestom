@@ -102,7 +102,7 @@ public class BlockBatch implements InstanceBatch {
         private Data data;
 
         public void apply(Chunk chunk) {
-            chunk.setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+            chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
         }
 
     }

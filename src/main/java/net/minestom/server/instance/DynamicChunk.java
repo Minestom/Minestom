@@ -32,7 +32,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable) {
+    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable) {
 
         {
             // Update pathfinder

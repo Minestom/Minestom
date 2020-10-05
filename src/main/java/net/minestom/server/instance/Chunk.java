@@ -115,7 +115,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *                      Warning: <code>customBlockId</code> cannot be 0 and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
      */
-    public abstract void setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
+    public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
 
     /**
      * Set the {@link Data} at a position
