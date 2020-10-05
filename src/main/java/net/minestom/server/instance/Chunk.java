@@ -183,6 +183,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * Serialize the chunk into bytes
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
+     * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
      */
     public abstract byte[] getSerializedData();
 
@@ -194,6 +195,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param reader   the data reader
      * @param callback the callback to execute once the chunk is done reading
      *                 WARNING: this need to be called to notify the instance
+     * @see #getSerializedData() which is responsive for the serialized data given
      */
     public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
 
@@ -226,19 +228,6 @@ public abstract class Chunk implements Viewable, DataContainer {
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
         return getCustomBlock(x, y, z);
-    }
-
-    /**
-     * Get the {@link Data} at a position
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the {@link Data} at the position, null if none
-     */
-    public Data getBlockData(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        return getBlockData(index);
     }
 
     public Biome[] getBiomes() {
@@ -345,7 +334,7 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     @Override
     public String toString() {
-        return "Chunk[" + chunkX + ":" + chunkZ + "]";
+        return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
     }
 
     /**

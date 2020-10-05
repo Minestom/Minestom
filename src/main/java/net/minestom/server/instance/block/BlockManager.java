@@ -19,11 +19,11 @@ public class BlockManager {
      * Register a {@link CustomBlock}
      *
      * @param customBlock the custom block to register
-     * @throws IllegalArgumentException if <code>customBlock</code> block id is negative
+     * @throws IllegalArgumentException if <code>customBlock</code> block id is not greater than 0
      */
     public void registerCustomBlock(CustomBlock customBlock) {
         final short id = customBlock.getCustomBlockId();
-        if (id < 0) throw new IllegalArgumentException("Custom block ID must be > 0, got: " + id);
+        if (id <= 0) throw new IllegalArgumentException("Custom block ID must be greater than 0, got: " + id);
         final String identifier = customBlock.getIdentifier();
         this.customBlocksInternalId[id] = customBlock;
         this.customBlocksId.put(identifier, customBlock);
@@ -37,7 +37,7 @@ public class BlockManager {
      */
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
         final short id = blockPlacementRule.getBlockId();
-        if (id < 0) throw new IllegalArgumentException("Block ID must be > 0, got: " + id);
+        if (id < 0) throw new IllegalArgumentException("Block ID must be >= 0, got: " + id);
         this.placementRules[id] = blockPlacementRule;
     }
 

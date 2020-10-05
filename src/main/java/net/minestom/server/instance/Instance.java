@@ -655,7 +655,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public Data getBlockData(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        return chunk.getBlockData(x, (byte) y, z);
+        final int index = ChunkUtils.getBlockIndex(x,y,z);
+        return chunk.getBlockData(index);
     }
 
     /**
