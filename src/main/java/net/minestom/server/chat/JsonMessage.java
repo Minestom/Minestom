@@ -13,7 +13,7 @@ public abstract class JsonMessage {
 
     // true if the compiled string is up-to-date, false otherwise
     private boolean updated;
-    // the compiled json string of this colored text (can be outdated)
+    // the compiled json string of the message (can be outdated)
     private String compiledJson;
 
     /**

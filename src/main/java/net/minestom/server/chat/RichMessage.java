@@ -137,7 +137,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Process the components to add click/hover event
+     * Process the components to add click/hover events
      *
      * @param component the rich component to process
      * @return a list of processed components

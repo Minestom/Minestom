@@ -33,10 +33,8 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  * Instances are what are called "worlds" in Minecraft
@@ -64,7 +62,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.TICK);
     private long lastTimeUpdate;
 
-    private final Map<Class<? extends Event>, List<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
     protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
@@ -655,7 +653,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public Data getBlockData(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        final int index = ChunkUtils.getBlockIndex(x,y,z);
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
         return chunk.getBlockData(index);
     }
 
@@ -775,25 +773,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     @Override
-    public <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
-        List<EventCallback> callbacks = getEventCallbacks(eventClass);
-        callbacks.add(eventCallback);
-    }
-
-    @Override
-    public <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
-        List<EventCallback> callbacks = getEventCallbacks(eventClass);
-        callbacks.remove(eventCallback);
-    }
-
-    @Override
-    public <E extends Event> List<EventCallback> getEventCallbacks(Class<E> eventClass) {
-        return eventCallbacks.computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
-    }
-
-    @Override
-    public Stream<EventCallback> getEventCallbacks() {
-        return eventCallbacks.values().stream().flatMap(Collection::stream);
+    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
+        return eventCallbacks;
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
