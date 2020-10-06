@@ -65,14 +65,14 @@ public interface EventHandler {
     /**
      * Get a {@link Stream} containing all the {@link EventCallback}, no matter to which {@link Event} they are linked
      *
-     * @return a {@link Stream} containing all the added callbacks
+     * @return a {@link Stream} containing all the callbacks
      */
     default Stream<EventCallback> getEventCallbacks() {
         return getEventCallbacksMap().values().stream().flatMap(Collection::stream);
     }
 
     /**
-     * Call the specified {@link Event}
+     * Call the specified {@link Event} with all the assigned {@link EventCallback}
      *
      * @param eventClass the event class
      * @param event      the event object
@@ -87,20 +87,20 @@ public interface EventHandler {
     }
 
     /**
-     * Call a {@link CancellableEvent} and execute {@code runnable} if the event is not cancelled
+     * Call a {@link CancellableEvent} and execute {@code successCallback} if the event is not cancelled
      * <p>
      * Does call {@link #callEvent(Class, Event)} internally
      *
-     * @param eventClass the event class
-     * @param event      the event object
-     * @param runnable   the callback called when the event is not cancelled
-     * @param <E>        the event type
+     * @param eventClass      the event class
+     * @param event           the event object
+     * @param successCallback the callback called when the event is not cancelled
+     * @param <E>             the event type
      * @see #callEvent(Class, Event)
      */
-    default <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable runnable) {
+    default <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable successCallback) {
         callEvent(eventClass, event);
         if (!event.isCancelled()) {
-            runnable.run();
+            successCallback.run();
         }
     }
 

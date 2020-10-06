@@ -38,7 +38,7 @@ public class DamageType implements DataContainer {
     }
 
     public RichMessage buildChatMessage(Player killed) {
-        RichMessage richMessage = RichMessage.of(ColoredText.ofFormat("{@death." + identifier + "," + killed.getUsername() + "}"));
+        RichMessage richMessage = RichMessage.of(ColoredText.of("{@death." + identifier + "," + killed.getUsername() + "}"));
         return richMessage;
     }
 
@@ -51,7 +51,7 @@ public class DamageType implements DataContainer {
     }
 
     public ColoredText buildDeathScreenMessage(Player killed) {
-        return ColoredText.ofFormat("{@death." + identifier + "}");
+        return ColoredText.of("{@death." + identifier + "}");
     }
 
     /**

@@ -23,66 +23,73 @@ public class ColoredText extends JsonMessage {
         refreshUpdate();
     }
 
+    /**
+     * Create a {@link ColoredText}
+     *
+     * @param color   the text color
+     * @param message the text message
+     * @return the created {@link ColoredText}
+     */
     public static ColoredText of(ChatColor color, String message) {
         return new ColoredText(color + message);
     }
 
+    /**
+     * Create a {@link ColoredText}
+     *
+     * @param message the text message
+     * @return the created {@link ColoredText}
+     */
     public static ColoredText of(String message) {
         return of(ChatColor.WHITE, message);
     }
 
-    public static ColoredText ofFormat(String message) {
-        return new ColoredText(message);
-    }
-
+    /**
+     * Create a {@link ColoredText} with a legacy text
+     *
+     * @param message   the text message
+     * @param colorChar the char used before the color code
+     * @return the created {@link ColoredText}
+     */
     public static ColoredText ofLegacy(String message, char colorChar) {
         String legacy = toLegacy(message, colorChar);
 
-        return ofFormat(legacy);
+        return of(legacy);
     }
 
+    /**
+     * Append the text
+     *
+     * @param color   the text color
+     * @param message the text message
+     * @return this {@link ColoredText}
+     */
     public ColoredText append(ChatColor color, String message) {
         this.message += color + message;
         refreshUpdate();
         return this;
     }
 
+    /**
+     * Append the text
+     *
+     * @param message the text message
+     * @return this {@link ColoredText}
+     */
     public ColoredText append(String message) {
         return append(ChatColor.NO_COLOR, message);
     }
 
-    public ColoredText appendFormat(String message) {
-        this.message += message;
-        refreshUpdate();
-        return this;
-    }
-
-    private static String toLegacy(String message, char colorChar) {
-        StringBuilder result = new StringBuilder();
-
-        for (int i = 0; i < message.length(); i++) {
-            final char c = message.charAt(i);
-            if (c == colorChar) {
-                final char nextChar = message.charAt(i + 1);
-                final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
-                if (color != ChatColor.NO_COLOR) {
-                    final String replacement = color.toString();
-                    result.append(replacement);
-                    i++; // Increment to ignore the color code
-                } else {
-                    result.append(c);
-                }
-            } else {
-                result.append(c);
-            }
-        }
-
-        return result.toString();
-    }
-
+    /**
+     * Add legacy text
+     *
+     * @param message   the legacy text
+     * @param colorChar the char used before the color code
+     * @return this {@link ColoredText}
+     */
     public ColoredText appendLegacy(String message, char colorChar) {
-        String legacy = toLegacy(message, colorChar);
-        return appendFormat(legacy);
+        final String legacy = toLegacy(message, colorChar);
+        return of(legacy);
     }
 
     /**
@@ -287,6 +294,41 @@ public class ColoredText extends JsonMessage {
         return value ? "true" : "false";
     }
 
+    /**
+     * Convert a legacy text to our format which can be used by {@link #of(String)} etc...
+     * <p>
+     * eg: "&fHey" -> "{#white}Hey"
+     *
+     * @param message   the legacy text
+     * @param colorChar the char used before the color code
+     * @return the converted legacy text
+     */
+    private static String toLegacy(String message, char colorChar) {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < message.length(); i++) {
+            final char c = message.charAt(i);
+            if (c == colorChar) {
+                final char nextChar = message.charAt(i + 1);
+                final ChatColor color = ChatColor.fromLegacyColorCodes(nextChar);
+                if (color != ChatColor.NO_COLOR) {
+                    final String replacement = color.toString();
+                    result.append(replacement);
+                    i++; // Increment to ignore the color code
+                } else {
+                    result.append(c);
+                }
+            } else {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * Represents an element which can change based on the client which receive the text
+     */
     private enum MessageType {
         RAW, KEYBIND, TRANSLATABLE
     }
