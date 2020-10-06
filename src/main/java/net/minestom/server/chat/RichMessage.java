@@ -13,7 +13,7 @@ import java.util.List;
  * Represent multiple {@link ColoredText} batched together with the possibility to add
  * click and hover events
  * <p>
- * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText)})
+ * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText})
  */
 public class RichMessage extends JsonMessage {
 
