@@ -10,16 +10,13 @@ import java.util.regex.Pattern;
 
 /**
  * Represent a text with one or multiple colors
+ * <p>
+ * Used when the message can contain colors but not events like in {@link RichMessage}
  */
-public class ColoredText {
+public class ColoredText extends JsonMessage {
 
     // the raw text
     private String message;
-
-    // true if the compiled string is up-to-date, false otherwise
-    private boolean updated;
-    // the compiled json string of this colored text (can be outdated)
-    private String compiledJson;
 
     private ColoredText(String message) {
         this.message = message;
@@ -98,27 +95,13 @@ public class ColoredText {
     }
 
     /**
-     * Compile this text and cache it for further execution
-     *
-     * @return the raw json string of this colored text
-     */
-    @Override
-    public String toString() {
-        if (!updated) {
-            this.compiledJson = getJsonObject().toString();
-            this.updated = true;
-        }
-
-        return compiledJson;
-    }
-
-    /**
      * Get the Json representation of this colored text
      * <p>
      * Used to send a message
      *
      * @return the Json representation of the text
      */
+    @Override
     public JsonObject getJsonObject() {
         final List<JsonObject> components = getComponents();
 
@@ -169,7 +152,7 @@ public class ColoredText {
             if ((p == null || (p != '/')) && c == '{' && !inFormat) {
 
                 formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
-                String rawMessage = message.substring(formatEnd, i);
+                final String rawMessage = message.substring(formatEnd, i);
                 if (!rawMessage.isEmpty()) {
                     objects.add(getMessagePart(MessageType.RAW, rawMessage, currentColor, specialComponentContainer));
                 }
@@ -179,7 +162,7 @@ public class ColoredText {
                 continue;
             } else if ((p == null || (p != '/')) && c == '}' && inFormat) {
                 // Represent the custom format between the brackets
-                String formatString = message.substring(formatStart + 1, i);
+                final String formatString = message.substring(formatStart + 1, i);
                 if (formatString.isEmpty())
                     continue;
 
@@ -223,6 +206,8 @@ public class ColoredText {
                     final String translatableCode = formatString.substring(1);
                     final boolean hasArgs = translatableCode.contains(",");
                     if (!hasArgs) {
+                        // Without argument
+                        // ex: {@translatable.key}
                         objects.add(getMessagePart(MessageType.TRANSLATABLE, translatableCode, currentColor, specialComponentContainer));
                     } else {
                         // Arguments parsing
@@ -245,6 +230,7 @@ public class ColoredText {
                 }
                 // Keybind component
                 if (formatString.startsWith("&")) {
+                    // ex: {&key.drop}
                     final String keybindCode = formatString.substring(1);
                     objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
                     continue;
@@ -301,14 +287,13 @@ public class ColoredText {
         return value ? "true" : "false";
     }
 
-    private void refreshUpdate() {
-        this.updated = false;
-    }
-
     private enum MessageType {
         RAW, KEYBIND, TRANSLATABLE
     }
 
+    /**
+     * Used to keep a "color" state in the text
+     */
     private static class SpecialComponentContainer {
         boolean bold = false;
 

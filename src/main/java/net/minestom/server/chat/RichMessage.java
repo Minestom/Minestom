@@ -10,8 +10,10 @@ import java.util.List;
 /**
  * Represent multiple {@link ColoredText} batched together with the possibility to add
  * click and hover events
+ * <p>
+ * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText)})
  */
-public class RichMessage {
+public class RichMessage extends JsonMessage {
 
     private List<RichComponent> components = new ArrayList<>();
     private RichComponent currentComponent;
@@ -101,22 +103,8 @@ public class RichMessage {
         return append(coloredText, FormatRetention.ALL);
     }
 
-    /**
-     * Get the string representation of this json message
-     *
-     * @return the string representation of this json message
-     */
     @Override
-    public String toString() {
-        return getJsonObject().toString();
-    }
-
-    /**
-     * Get the json object representing the whole rich message
-     *
-     * @return the json representation of this rich message
-     */
-    private JsonObject getJsonObject() {
+    public JsonObject getJsonObject() {
         List<RichComponent> cacheComponents = new ArrayList<>(components);
 
         // No component, return empty json object

@@ -168,7 +168,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param x    the block X
      * @param y    the block Y
      * @param z    the block Z
-     * @param data the new data
+     * @param data the new data, can be null
      */
     public abstract void setBlockData(int x, int y, int z, Data data);
 
