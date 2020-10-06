@@ -160,7 +160,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param index the block index
      * @return the {@link Data} at the block index, null if none
      */
-    protected abstract Data getBlockData(int index);
+    public abstract Data getBlockData(int index);
 
     /**
      * Set the {@link Data} at a position

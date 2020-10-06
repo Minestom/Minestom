@@ -53,7 +53,7 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    protected Data getBlockData(int index) {
+    public Data getBlockData(int index) {
         return null;
     }
 
