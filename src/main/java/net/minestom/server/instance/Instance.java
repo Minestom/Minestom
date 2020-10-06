@@ -626,7 +626,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @param actionId
      * @param actionParam
-     * @see <a href="https://wiki.vg/Protocol#Block_Action">Packet information</a> for the action id &amp; param
+     * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
     public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
         final short blockStateId = getBlockStateId(blockPosition);

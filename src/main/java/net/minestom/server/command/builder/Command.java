@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represent a command which have suggestion/auto-completion
+ * Represents a command which have suggestion/auto-completion
  */
 public class Command {
 
