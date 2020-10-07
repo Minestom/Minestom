@@ -234,7 +234,11 @@ public class CommandDispatcher {
 
     }
 
+    /**
+     * Represents a command ready to be executed (already parsed)
+     */
     private static class CommandResult {
+
         // Command
         private Command command;
 
@@ -271,7 +275,7 @@ public class CommandDispatcher {
                 // An executor has been found
                 executor.apply(source, arguments);
             } else if (callback != null) {
-                // No syntax has been validated but the faulty argument has been found
+                // No syntax has been validated but the faulty argument with a callback has been found
                 // Execute the faulty argument callback
                 callback.apply(source, value, error);
             }

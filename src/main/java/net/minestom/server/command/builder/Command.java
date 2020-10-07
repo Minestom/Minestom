@@ -102,6 +102,7 @@ public class Command {
 
     /**
      * Get the default executor (which is called when there is no argument)
+     * or if no corresponding syntax has been found
      *
      * @return the default executor
      */
@@ -144,6 +145,8 @@ public class Command {
      * <p>
      * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
      * this is called every time a {@link CommandSender} send a command which start by {@link #getName()} or {@link #getAliases()}.
+     * <p>
+     * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
      * @param sender    the {@link CommandSender}
      * @param arguments the UNCHECKED arguments of the command, some can be null even when unexpected
