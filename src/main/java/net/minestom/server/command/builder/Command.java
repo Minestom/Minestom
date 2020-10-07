@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
@@ -36,7 +37,7 @@ public class Command {
      * Get the command condition
      * <p>
      * It is called no matter the syntax used and can be used to check permissions or
-     * the {@link net.minestom.server.command.CommandSender} type
+     * the {@link CommandSender} type
      *
      * @return the command condition
      */
@@ -135,6 +136,20 @@ public class Command {
      */
     public String[] onDynamicWrite(String text) {
         return null;
+    }
+
+    /**
+     * Called when a {@link CommandSender} executes this command.
+     * Executed before any syntax callback.
+     * <p>
+     * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
+     * this is called every time a {@link CommandSender} send a command which start by {@link #getName()} or {@link #getAliases()}.
+     *
+     * @param sender    the {@link CommandSender}
+     * @param arguments the UNCHECKED arguments of the command, some can be null even when unexpected
+     * @param command   the raw UNCHECKED received command
+     */
+    public void globalListener(CommandSender sender, Arguments arguments, String command) {
     }
 
 }

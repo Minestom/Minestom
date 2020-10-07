@@ -47,7 +47,7 @@ public class CommandDispatcher {
 
     public void execute(CommandSender source, String commandString) {
         CommandResult result = parse(commandString);
-        result.execute(source);
+        result.execute(source, commandString);
     }
 
     public Set<Command> getCommands() {
@@ -235,7 +235,6 @@ public class CommandDispatcher {
     }
 
     private static class CommandResult {
-
         // Command
         private Command command;
 
@@ -254,9 +253,12 @@ public class CommandDispatcher {
          * The command will not be executed if the {@link CommandCondition} of the command
          * is not validated
          *
-         * @param source the command source
+         * @param source        the command source
+         * @param commandString the command string
          */
-        public void execute(CommandSender source) {
+        public void execute(CommandSender source, String commandString) {
+            // Global listener
+            command.globalListener(source, arguments, commandString);
             // Condition check
             final CommandCondition condition = command.getCondition();
             if (condition != null) {
