@@ -105,6 +105,15 @@ public class Task implements Runnable {
     }
 
     /**
+     * Get the id of this task
+     *
+     * @return the task id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
      * Removes the task
      */
     private void finish() {
