@@ -1,10 +1,16 @@
 package net.minestom.server.timer;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.thread.MinestomThread;
 
-import java.util.List;
-import java.util.concurrent.*;
+import java.util.Collection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -21,10 +27,10 @@ public class SchedulerManager {
     private final ExecutorService batchesPool;
     // A single threaded scheduled execution
     private final ScheduledExecutorService timerExecutionService;
-    // A list with all normal registered tasks
-    private final List<Task> tasks;
-    // A list with all registered shutdown tasks
-    private final List<Task> shutdownTasks;
+    // All the registered tasks (task id = task)
+    protected final Int2ObjectMap<Task> tasks;
+    // All the registered shutdown tasks (task id = task)
+    protected final Int2ObjectMap<Task> shutdownTasks;
 
     /**
      * Default constructor
@@ -40,8 +46,8 @@ public class SchedulerManager {
 
         this.batchesPool = new MinestomThread(MinecraftServer.THREAD_COUNT_SCHEDULER, MinecraftServer.THREAD_NAME_SCHEDULER);
         this.timerExecutionService = Executors.newSingleThreadScheduledExecutor();
-        this.tasks = new CopyOnWriteArrayList<>();
-        this.shutdownTasks = new CopyOnWriteArrayList<>();
+        this.tasks = new Int2ObjectOpenHashMap<>();
+        this.shutdownTasks = new Int2ObjectOpenHashMap<>();
     }
 
     /**
@@ -70,7 +76,7 @@ public class SchedulerManager {
      * @param task The task to remove
      */
     public void removeTask(Task task) {
-        this.tasks.removeIf(toRemove -> toRemove.equals(task));
+        this.tasks.remove(task.getId());
     }
 
     /**
@@ -79,7 +85,7 @@ public class SchedulerManager {
      * @param task The task to remove
      */
     public void removeShutdownTask(Task task) {
-        this.tasks.removeIf(toRemove -> toRemove.equals(task));
+        this.shutdownTasks.remove(task.getId());
     }
 
     /**
@@ -104,7 +110,7 @@ public class SchedulerManager {
      *
      * @return the updated counter value
      */
-    public int getCounterIdentifier() {
+    protected int getCounterIdentifier() {
         return this.counter.incrementAndGet();
     }
 
@@ -113,26 +119,26 @@ public class SchedulerManager {
      *
      * @return the updated shutdown counter value
      */
-    public int getShutdownCounterIdentifier() {
+    protected int getShutdownCounterIdentifier() {
         return this.shutdownCounter.incrementAndGet();
     }
 
     /**
-     * Gets a {@link List} with all registered tasks
+     * Gets a {@link Collection} with all registered tasks
      *
-     * @return a {@link List} with all registered tasks
+     * @return a {@link Collection} with all registered tasks
      */
-    public List<Task> getTasks() {
-        return tasks;
+    public ObjectCollection<Task> getTasks() {
+        return tasks.values();
     }
 
     /**
-     * Gets a {@link List} with all registered shutdown tasks
+     * Gets a {@link Collection} with all registered shutdown tasks
      *
-     * @return a {@link List} with all registered shutdown tasks
+     * @return a {@link Collection} with all registered shutdown tasks
      */
-    public List<Task> getShutdownTasks() {
-        return shutdownTasks;
+    public ObjectCollection<Task> getShutdownTasks() {
+        return shutdownTasks.values();
     }
 
     /**

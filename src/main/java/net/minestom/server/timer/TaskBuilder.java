@@ -100,9 +100,9 @@ public class TaskBuilder {
                 this.delay,
                 this.repeat);
         if (this.shutdown) {
-            this.schedulerManager.getShutdownTasks().add(task);
+            this.schedulerManager.shutdownTasks.put(task.getId(), task);
         } else {
-            this.schedulerManager.getTasks().add(task);
+            this.schedulerManager.tasks.put(task.getId(), task);
             task.schedule();
         }
         return task;
