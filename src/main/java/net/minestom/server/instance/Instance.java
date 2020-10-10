@@ -33,6 +33,7 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
@@ -72,9 +73,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
     protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+
+    // the uuid of this instance
     protected UUID uniqueId;
 
-    protected final List<Consumer<Instance>> nextTick = Collections.synchronizedList(new ArrayList<>());
+    // list of scheduled tasks to be executed during the next instance tick
+    protected final List<Consumer<Instance>> nextTick = new CopyOnWriteArrayList<>();
 
     private Data data;
     private ExplosionSupplier explosionSupplier;
@@ -85,8 +89,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Create a new instance
      *
-     * @param uniqueId      the unique id of the instance
-     * @param dimensionType the dimension type of the instance
+     * @param uniqueId      the {@link UUID} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(UUID uniqueId, DimensionType dimensionType) {
         this.uniqueId = uniqueId;
@@ -934,12 +938,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the current time
      */
     public void tick(long time) {
-        synchronized (nextTick) {
-            for (final Consumer<Instance> e : nextTick) {
-                e.accept(this);
-            }
-            nextTick.clear();
+        for (final Consumer<Instance> e : nextTick) {
+            e.accept(this);
+            this.nextTick.remove(e);
         }
+
         {
             // time
             this.worldAge++;

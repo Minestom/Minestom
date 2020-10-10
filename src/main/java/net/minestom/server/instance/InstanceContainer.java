@@ -514,11 +514,13 @@ public class InstanceContainer extends Instance {
     protected void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
-            // FIXME: the event is not necessary called in the instance thread
-            callChunkLoadEvent(chunkX, chunkZ);
             UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
-            if (callback != null)
-                callback.accept(chunk);
+            // Execute callback and event in the instance thread
+            scheduleNextTick(instance -> {
+                callChunkLoadEvent(chunkX, chunkZ);
+                if (callback != null)
+                    callback.accept(chunk);
+            });
         });
 
         if (!loaded) {
