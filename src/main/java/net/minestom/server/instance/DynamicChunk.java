@@ -4,17 +4,18 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
@@ -275,68 +276,68 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void readChunk(BinaryReader reader, ChunkCallback callback) {
-        // Used for blocks data
-        Object2ShortMap<String> typeToIndexMap = null;
+        // Run in the scheduler thread pool
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            synchronized (this) {
+                // Used for blocks data
+                Object2ShortMap<String> typeToIndexMap = null;
 
-        ChunkBatch chunkBatch = instance.createChunkBatch(this);
-        try {
+                try {
 
-            // Get if the chunk has data indexes (used for blocks data)
-            final boolean hasDataIndex = reader.readBoolean();
-            if (hasDataIndex) {
-                // Get the data indexes which will be used to read all the individual data
-                typeToIndexMap = SerializableData.readDataIndexes(reader);
-            }
+                    // Get if the chunk has data indexes (used for blocks data)
+                    final boolean hasDataIndex = reader.readBoolean();
+                    if (hasDataIndex) {
+                        // Get the data indexes which will be used to read all the individual data
+                        typeToIndexMap = SerializableData.readDataIndexes(reader);
+                    }
 
-            // Chunk data
-            final boolean hasChunkData = reader.readBoolean();
-            if (hasChunkData) {
-                SerializableData serializableData = new SerializableDataImpl();
-                serializableData.readSerializedData(reader, typeToIndexMap);
-            }
+                    // Chunk data
+                    final boolean hasChunkData = reader.readBoolean();
+                    if (hasChunkData) {
+                        SerializableData serializableData = new SerializableDataImpl();
+                        serializableData.readSerializedData(reader, typeToIndexMap);
+                    }
 
-            // Biomes
-            for (int i = 0; i < BIOME_COUNT; i++) {
-                final byte id = reader.readByte();
-                this.biomes[i] = BIOME_MANAGER.getById(id);
-            }
+                    // Biomes
+                    for (int i = 0; i < BIOME_COUNT; i++) {
+                        final byte id = reader.readByte();
+                        this.biomes[i] = BIOME_MANAGER.getById(id);
+                    }
 
-            // Loop for all blocks in the chunk
-            while (true) {
-                // Position
-                final short index = reader.readShort();
-                final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
-                final short y = ChunkUtils.blockIndexToChunkPositionY(index);
-                final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                    // Loop for all blocks in the chunk
+                    while (true) {
+                        // Position
+                        final short index = reader.readShort();
+                        final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
+                        final short y = ChunkUtils.blockIndexToChunkPositionY(index);
+                        final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
 
-                // Block type
-                final short blockStateId = reader.readShort();
-                final short customBlockId = reader.readShort();
+                        // Block type
+                        final short blockStateId = reader.readShort();
+                        final short customBlockId = reader.readShort();
 
-                // Data
-                SerializableData data = null;
-                {
-                    final boolean hasBlockData = reader.readBoolean();
-                    // Data deserializer
-                    if (hasBlockData) {
-                        // Read the data with the deserialized index map
-                        data = new SerializableDataImpl();
-                        data.readSerializedData(reader, typeToIndexMap);
+                        // Data
+                        SerializableData data = null;
+                        {
+                            final boolean hasBlockData = reader.readBoolean();
+                            // Data deserializer
+                            if (hasBlockData) {
+                                // Read the data with the deserialized index map
+                                data = new SerializableDataImpl();
+                                data.readSerializedData(reader, typeToIndexMap);
+                            }
+                        }
+
+                        UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    // Finished reading
+                    if (callback != null) {
+                        callback.accept(this);
                     }
                 }
-
-                if (customBlockId != 0) {
-                    chunkBatch.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
-                } else {
-                    chunkBatch.setBlockStateId(x, y, z, blockStateId, data);
-                }
             }
-        } catch (IndexOutOfBoundsException e) {
-            // Finished reading
-        }
-
-        // Place all the blocks from the batch
-        chunkBatch.unsafeFlush(callback); // Success, null if file isn't properly encoded
+        }).schedule();
     }
 
     @Override
