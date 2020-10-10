@@ -75,11 +75,11 @@ public class InstanceContainer extends Instance {
 
         this.storageLocation = storageLocation;
 
-        // Set the default chunk loader which use the instance's StorageLocation to save and load chunks
-        setChunkLoader(new MinestomBasicChunkLoader(storageLocation));
-
         // Set the default chunk supplier using DynamicChunk
         setChunkSupplier((instance, biomes, chunkX, chunkZ) -> new DynamicChunk(instance, biomes, chunkX, chunkZ));
+
+        // Set the default chunk loader which use the instance's StorageLocation and ChunkSupplier to save and load chunks
+        setChunkLoader(new MinestomBasicChunkLoader(this));
 
         // Get instance data from the saved data if a StorageLocation is defined
         if (storageLocation != null) {
@@ -566,6 +566,10 @@ public class InstanceContainer extends Instance {
      * Change which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
+     * <p>
+     * WARNING: if you need to save this instance's chunks later,
+     * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int, ChunkCallback)}
+     * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random
      *
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
@@ -573,6 +577,17 @@ public class InstanceContainer extends Instance {
     public void setChunkSupplier(ChunkSupplier chunkSupplier) {
         Check.notNull(chunkSupplier, "The chunk supplier cannot be null, you can use a StaticChunk for a lightweight implementation");
         this.chunkSupplier = chunkSupplier;
+    }
+
+    /**
+     * Get the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
     }
 
     /**

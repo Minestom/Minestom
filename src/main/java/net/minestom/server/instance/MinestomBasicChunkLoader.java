@@ -8,44 +8,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A {@link IChunkLoader} used by default by {@link InstanceContainer}
- * which is based on the {@link StorageLocation} associated to it
+ * A {@link IChunkLoader} used by {@link InstanceContainer}
+ * which is based on the {@link StorageLocation} and {@link ChunkSupplier} associated to it.
  * <p>
  * It simply save chunk serialized data from {@link Chunk#getSerializedData()}
- * and deserialize it later with {@link Chunk#readChunk(BinaryReader, ChunkCallback)}
+ * and deserialize it later with {@link Chunk#readChunk(BinaryReader, ChunkCallback)}.
  * <p>
- * The key used in the {@link StorageLocation} is defined by {@link #getChunkKey(int, int)} and should NOT be changed
+ * The key used in the {@link StorageLocation} is defined by {@link #getChunkKey(int, int)} and should NOT be changed.
  */
 public class MinestomBasicChunkLoader implements IChunkLoader {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
-    private final StorageLocation storageLocation;
-
-    private final ChunkSupplier chunkSupplier;
+    private final InstanceContainer instanceContainer;
 
     /**
      * Create an {@link IChunkLoader} which use a {@link StorageLocation}.
      * <p>
      * The {@link ChunkSupplier} is used to customize which type of {@link Chunk} this loader should use for loading.
      * <p>
-     * WARNING: {@link Chunk} implementations do not have to have the size serializing format, be careful.
+     * WARNING: {@link Chunk} implementations do not need to have the same serializing format, be careful.
      *
-     * @param storageLocation the {@link StorageLocation}
-     * @param chunkSupplier   the {@link ChunkSupplier} executed when a chunk object needs to be created
+     * @param instanceContainer the {@link InstanceContainer} linked to this loader
      */
-    public MinestomBasicChunkLoader(StorageLocation storageLocation, ChunkSupplier chunkSupplier) {
-        this.storageLocation = storageLocation;
-        this.chunkSupplier = chunkSupplier;
-    }
-
-    public MinestomBasicChunkLoader(StorageLocation storageLocation) {
-        this(storageLocation, (instance, biomes, chunkX, chunkZ) ->
-                new DynamicChunk(instance, biomes, chunkX, chunkZ)
-        );
+    public MinestomBasicChunkLoader(InstanceContainer instanceContainer) {
+        this.instanceContainer = instanceContainer;
     }
 
     @Override
     public void saveChunk(Chunk chunk, Runnable callback) {
+        final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         if (storageLocation == null) {
             callback.run();
             LOGGER.warn("No storage location to save chunk!");
@@ -75,6 +66,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
 
     @Override
     public boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+        final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 
         if (bytes == null) {
@@ -83,8 +75,9 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         } else {
             // Found, load from result bytes
             BinaryReader reader = new BinaryReader(bytes);
-            Chunk chunk = chunkSupplier.getChunk(instance, null, chunkX, chunkZ);
-            // Execute the callback once all blocks are placed (allow for multithreaded implementation)
+            // Create the chunk object using the instance's ChunkSupplier to support multiple implementations
+            Chunk chunk = instanceContainer.getChunkSupplier().getChunk(instance, null, chunkX, chunkZ);
+            // Execute the callback once all blocks are placed (allow for multithreaded implementations)
             chunk.readChunk(reader, callback);
             return true;
         }
