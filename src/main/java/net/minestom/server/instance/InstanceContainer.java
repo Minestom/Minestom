@@ -525,6 +525,7 @@ public class InstanceContainer extends Instance {
         }
 
         final Chunk chunk = chunkSupplier.getChunk(this, biomes, chunkX, chunkZ);
+        Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
 
         cacheChunk(chunk);
 
