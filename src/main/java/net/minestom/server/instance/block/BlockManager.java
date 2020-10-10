@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +21,13 @@ public class BlockManager {
      *
      * @param customBlock the custom block to register
      * @throws IllegalArgumentException if <code>customBlock</code> block id is not greater than 0
+     * @throws IllegalStateException    if the id of <code>customBlock</code> is already registered
      */
     public void registerCustomBlock(CustomBlock customBlock) {
         final short id = customBlock.getCustomBlockId();
-        if (id <= 0) throw new IllegalArgumentException("Custom block ID must be greater than 0, got: " + id);
+        Check.argCondition(id <= 0, "Custom block ID must be greater than 0, got: " + id);
+        Check.stateCondition(customBlocksInternalId[id] != null, "a CustomBlock with the id " + id + " already exists");
+
         final String identifier = customBlock.getIdentifier();
         this.customBlocksInternalId[id] = customBlock;
         this.customBlocksId.put(identifier, customBlock);
@@ -37,7 +41,8 @@ public class BlockManager {
      */
     public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
         final short id = blockPlacementRule.getBlockId();
-        if (id < 0) throw new IllegalArgumentException("Block ID must be >= 0, got: " + id);
+        Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
+
         this.placementRules[id] = blockPlacementRule;
     }
 

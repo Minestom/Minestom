@@ -74,9 +74,11 @@ public class InstanceContainer extends Instance {
         super(uniqueId, dimensionType);
 
         this.storageLocation = storageLocation;
-        this.chunkLoader = new MinestomBasicChunkLoader(storageLocation);
 
-        // Set the default chunk supplier
+        // Set the default chunk loader which use the instance's StorageLocation to save and load chunks
+        setChunkLoader(new MinestomBasicChunkLoader(storageLocation));
+
+        // Set the default chunk supplier using DynamicChunk
         setChunkSupplier((instance, biomes, chunkX, chunkZ) -> new DynamicChunk(instance, biomes, chunkX, chunkZ));
 
         // Get instance data from the saved data if a StorageLocation is defined
@@ -561,11 +563,11 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Change which type of {@link Chunk} implementation to use once one needs to be loaded
+     * Change which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
      *
-     * @param chunkSupplier the new {@link ChunkSupplier} of this instance
+     * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     public void setChunkSupplier(ChunkSupplier chunkSupplier) {
@@ -583,9 +585,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Assign a {@link SharedInstance} to this container
+     * Assign a {@link SharedInstance} to this container.
      * <p>
-     * Only used by {@link InstanceManager}
+     * Only used by {@link InstanceManager}, mostly unsafe.
      *
      * @param sharedInstance the shared instance to assign to this container
      */
