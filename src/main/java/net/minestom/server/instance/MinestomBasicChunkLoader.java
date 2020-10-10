@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +21,27 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
     private final StorageLocation storageLocation;
 
-    public MinestomBasicChunkLoader(StorageLocation storageLocation) {
+    private final ChunkSupplier chunkSupplier;
+
+    /**
+     * Create an {@link IChunkLoader} which use a {@link StorageLocation}.
+     * <p>
+     * The {@link ChunkSupplier} is used to customize which type of {@link Chunk} this loader should use for loading.
+     * <p>
+     * WARNING: {@link Chunk} implementations do not have to have the size serializing format, be careful.
+     *
+     * @param storageLocation the {@link StorageLocation}
+     * @param chunkSupplier   the {@link ChunkSupplier} executed when a chunk object needs to be created
+     */
+    public MinestomBasicChunkLoader(StorageLocation storageLocation, ChunkSupplier chunkSupplier) {
         this.storageLocation = storageLocation;
+        this.chunkSupplier = chunkSupplier;
+    }
+
+    public MinestomBasicChunkLoader(StorageLocation storageLocation) {
+        this(storageLocation, (instance, biomes, chunkX, chunkZ) ->
+                new DynamicChunk(instance, biomes, chunkX, chunkZ)
+        );
     }
 
     @Override
@@ -63,7 +83,8 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         } else {
             // Found, load from result bytes
             BinaryReader reader = new BinaryReader(bytes);
-            Chunk chunk = new DynamicChunk(instance, null, chunkX, chunkZ);
+            Chunk chunk = chunkSupplier.getChunk(instance, null, chunkX, chunkZ);
+            // Execute the callback once all blocks are placed (allow for multithreaded implementation)
             chunk.readChunk(reader, callback);
             return true;
         }

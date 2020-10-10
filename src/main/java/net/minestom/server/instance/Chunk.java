@@ -55,6 +55,9 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected Biome[] biomes;
     protected int chunkX, chunkZ;
 
+    // Options
+    private boolean shouldGenerate;
+
     // Packet cache
     protected volatile boolean packetUpdated;
     private ByteBuf fullDataPacket;
@@ -68,10 +71,11 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Data
     protected Data data;
 
-    public Chunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
+    public Chunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+        this.shouldGenerate = shouldGenerate;
 
         if (biomes != null && biomes.length == BIOME_COUNT) {
             this.biomes = biomes;
@@ -250,6 +254,15 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    /**
+     * Get if this chunk will or had been loaded with a {@link ChunkGenerator}
+     *
+     * @return true if this chunk is affected by a {@link ChunkGenerator}
+     */
+    public boolean shouldGenerate() {
+        return shouldGenerate;
     }
 
     /**

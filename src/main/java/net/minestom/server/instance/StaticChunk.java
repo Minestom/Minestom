@@ -17,7 +17,7 @@ public class StaticChunk extends Chunk {
     protected final BlockProvider blockProvider;
 
     public StaticChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
-        super(instance, biomes, chunkX, chunkZ);
+        super(instance, biomes, chunkX, chunkZ, false);
         this.blockProvider = blockProvider;
     }
 

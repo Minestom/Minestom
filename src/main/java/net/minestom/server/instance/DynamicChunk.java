@@ -46,7 +46,7 @@ public class DynamicChunk extends Chunk {
     protected Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
     public DynamicChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
-        super(instance, biomes, chunkX, chunkZ);
+        super(instance, biomes, chunkX, chunkZ, true);
     }
 
     @Override

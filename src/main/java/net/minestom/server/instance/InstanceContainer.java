@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
@@ -11,7 +10,6 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
@@ -24,6 +22,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
@@ -38,7 +37,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.BiFunction;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -62,8 +60,7 @@ public class InstanceContainer extends Instance {
 
     private boolean autoChunkLoad;
 
-    @Setter
-    private BiFunction<Integer, Integer, BlockProvider> chunkDecider;
+    private ChunkSupplier chunkSupplier;
 
     /**
      * Create an {@link InstanceContainer}
@@ -78,6 +75,9 @@ public class InstanceContainer extends Instance {
 
         this.storageLocation = storageLocation;
         this.chunkLoader = new MinestomBasicChunkLoader(storageLocation);
+
+        // Set the default chunk supplier
+        setChunkSupplier((instance, biomes, chunkX, chunkZ) -> new DynamicChunk(instance, biomes, chunkX, chunkZ));
 
         // Get instance data from the saved data if a StorageLocation is defined
         if (storageLocation != null) {
@@ -524,19 +524,11 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        final Chunk chunk;
-        final BlockProvider blockProvider = chunkDecider != null ? chunkDecider.apply(chunkX, chunkZ) : null;
-        if (blockProvider != null) {
-            // Use static chunk
-            chunk = new StaticChunk(this, biomes, chunkX, chunkZ, blockProvider);
-        } else {
-            // Use dynamic chunk
-            chunk = new DynamicChunk(this, biomes, chunkX, chunkZ);
-        }
+        final Chunk chunk = chunkSupplier.getChunk(this, biomes, chunkX, chunkZ);
 
         cacheChunk(chunk);
 
-        if (chunkGenerator != null && blockProvider == null) {
+        if (chunkGenerator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
             final ChunkBatch chunkBatch = createChunkBatch(chunk);
 
@@ -565,6 +557,19 @@ public class InstanceContainer extends Instance {
     public boolean isInVoid(Position position) {
         // TODO: customizable
         return position.getY() < -64;
+    }
+
+    /**
+     * Change which type of {@link Chunk} implementation to use once one needs to be loaded
+     * <p>
+     * Uses {@link DynamicChunk} by default.
+     *
+     * @param chunkSupplier the new {@link ChunkSupplier} of this instance
+     * @throws NullPointerException if {@code chunkSupplier} is null
+     */
+    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
+        Check.notNull(chunkSupplier, "The chunk supplier cannot be null, you can use a StaticChunk for a lightweight implementation");
+        this.chunkSupplier = chunkSupplier;
     }
 
     /**
