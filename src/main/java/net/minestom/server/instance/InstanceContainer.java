@@ -46,20 +46,29 @@ public class InstanceContainer extends Instance {
     private static final String UUID_KEY = "uuid";
     private static final String DATA_KEY = "data";
 
+    // the storage location of this instance, can be null
     private StorageLocation storageLocation;
 
+    // the shared instances assigned to this instance
     private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
+    // the chunk generator used, can be null
     private ChunkGenerator chunkGenerator;
+    // (chunk index -> chunk) map, contains all the chunks in the instance
     private final ConcurrentHashMap<Long, Chunk> chunks = new ConcurrentHashMap<>();
+    // contains all the chunks to remove during the next instance tick
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+
+    // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
 
+    // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad;
 
+    // used to supply a new chunk object at a position when requested
     private ChunkSupplier chunkSupplier;
 
     /**
@@ -505,6 +514,7 @@ public class InstanceContainer extends Instance {
     protected void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
+            // FIXME: the event is not necessary called in the instance thread
             callChunkLoadEvent(chunkX, chunkZ);
             UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
             if (callback != null)

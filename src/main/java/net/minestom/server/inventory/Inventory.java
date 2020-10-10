@@ -31,24 +31,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
 
+    // incremented each time an inventory is created (used in the window packets)
     private static AtomicInteger lastInventoryId = new AtomicInteger();
 
+    // the id of this inventory
     private final byte id;
+    // the type of this inventory
     private final InventoryType inventoryType;
+    // the title of this inventory)
     private String title;
 
+    // the size based on the inventory type
     private final int size;
 
     private final int offset;
 
+    // the items in this inventory
     private final ItemStack[] itemStacks;
+    // the players currently viewing this inventory
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    // (player -> cursor item) map, used by the click listeners
     private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
+    // list of conditions/callbacks assigned to this inventory
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
+    // the click processor which process all the clicks in the inventory
     private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
-
-    // Cached windows packet
 
     public Inventory(InventoryType inventoryType, String title) {
         this.id = generateId();

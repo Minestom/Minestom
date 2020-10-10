@@ -25,13 +25,13 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -1946,6 +1946,9 @@ public class Player extends LivingEntity implements CommandSender {
      * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen
      */
     public void resetTargetBlock() {
+        // Remove effect
+        PlayerDiggingListener.removeEffect(this);
+
         if (targetCustomBlock != null) {
             targetCustomBlock.stopDigging(instance, targetBlockPosition, this);
             this.targetCustomBlock = null;
@@ -1953,12 +1956,6 @@ public class Player extends LivingEntity implements CommandSender {
             this.targetBreakDelay = 0;
             this.targetBlockBreakCount = 0;
             this.targetStage = 0;
-
-            // Remove effect
-            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-            removeEntityEffectPacket.entityId = getEntityId();
-            removeEntityEffectPacket.effect = PotionType.AWKWARD;
-            playerConnection.sendPacket(removeEntityEffectPacket);
         }
     }
 
