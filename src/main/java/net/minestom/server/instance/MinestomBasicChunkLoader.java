@@ -83,6 +83,16 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         }
     }
 
+    @Override
+    public boolean supportsParallelSaving() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsParallelLoading() {
+        return true;
+    }
+
     /**
      * Get the chunk key used by the {@link StorageLocation}
      *

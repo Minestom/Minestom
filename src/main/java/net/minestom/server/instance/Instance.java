@@ -33,7 +33,7 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
@@ -78,7 +78,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected UUID uniqueId;
 
     // list of scheduled tasks to be executed during the next instance tick
-    protected final List<Consumer<Instance>> nextTick = new CopyOnWriteArrayList<>();
+    protected final ConcurrentLinkedQueue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
 
     private Data data;
     private ExplosionSupplier explosionSupplier;
@@ -931,16 +931,19 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void scheduleUpdate(int time, TimeUnit unit, BlockPosition position);
 
     /**
-     * Performs a single tick in the instance.
+     * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.
      * <p>
      * Warning: this does not update chunks and entities
      *
      * @param time the current time
      */
     public void tick(long time) {
-        for (final Consumer<Instance> e : nextTick) {
-            e.accept(this);
-            this.nextTick.remove(e);
+        {
+            // scheduled tasks
+            Consumer<Instance> callback;
+            while ((callback = nextTick.poll()) != null) {
+                callback.accept(this);
+            }
         }
 
         {
@@ -949,12 +952,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
             this.time += timeRate;
 
+            // time needs to be send to players
             if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());
                 this.lastTimeUpdate = time;
             }
 
         }
+
         this.worldBorder.update();
     }
 
