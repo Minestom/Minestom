@@ -3,24 +3,24 @@ package net.minestom.server.advancements;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Used to manage advancement tabs
+ * Used to manage all the registered {@link AdvancementTab}
  * <p>
  * Use {@link #createTab(String, AdvancementRoot)} to create a tab with the appropriate {@link AdvancementRoot}
  */
 public class AdvancementManager {
 
-    private final Map<String, AdvancementTab> advancementTabMap = new HashMap<>();
+    private final Map<String, AdvancementTab> advancementTabMap = new ConcurrentHashMap<>();
 
     /**
-     * Create a new tab with a single {@link Advancement}
+     * Create a new {@link AdvancementTab} with a single {@link AdvancementRoot}
      *
      * @param rootIdentifier the root identifier
      * @param root           the root advancement
-     * @return the {@link AdvancementTab} created
+     * @return the newly created {@link AdvancementTab}
      * @throws IllegalStateException if a tab with the identifier {@code rootIdentifier} already exists
      */
     public AdvancementTab createTab(String rootIdentifier, AdvancementRoot root) {
