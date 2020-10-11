@@ -12,10 +12,21 @@ public class TestCommand extends Command {
     public TestCommand() {
         super("testcmd");
         setDefaultExecutor(this::usage);
+        {
+            //Argument dynamicWord = ArgumentType.DynamicWord("test");
 
-        Argument dynamicWord = ArgumentType.DynamicWord("test");
+            //addSyntax(this::execute, dynamicWord);
+        }
 
-        addSyntax(this::execute, dynamicWord);
+        Argument test = ArgumentType.Word("test").from("hey");
+        Argument num = ArgumentType.Integer("num");
+        Argument test2 = ArgumentType.Word("test2").from("oh");
+        Argument num2 = ArgumentType.Float("num2");
+
+        addSyntax((source, args) -> {
+        }, test, num);
+        addSyntax((source, args) -> {
+        }, test2, num2);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

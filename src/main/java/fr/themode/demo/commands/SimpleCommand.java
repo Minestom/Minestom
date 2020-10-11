@@ -20,7 +20,7 @@ public class SimpleCommand implements CommandProcessor {
         if (!sender.isPlayer())
             return false;
 
-        sender.asPlayer().getInstance().saveChunksToStorage(() -> System.out.println("END SAVE"));
+        //sender.asPlayer().getInstance().saveChunksToStorage(() -> System.out.println("END SAVE"));
 
         System.gc();
 

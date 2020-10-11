@@ -30,7 +30,7 @@ public class GamemodeCommand extends Command {
         }
         Argument mode = ArgumentType.Word("mode").from(names);
 
-        addCallback(this::gameModeCallback, mode);
+        setArgumentCallback(this::gameModeCallback, mode);
 
         addSyntax(this::executeOnSelf, mode);
         addSyntax(this::executeOnOther, player, mode);

@@ -11,7 +11,7 @@ import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 
 /**
- * Class listing all the basic arguments
+ * Convenient class listing all the basic {@link Argument}
  */
 public class ArgumentType {
 
@@ -55,7 +55,7 @@ public class ArgumentType {
         return new ArgumentDynamicStringArray(id);
     }
 
-    // Minecraft specific
+    // Minecraft specific arguments
 
     public static ArgumentColor Color(String id) {
         return new ArgumentColor(id);
@@ -89,6 +89,7 @@ public class ArgumentType {
         return new ArgumentFloatRange(id);
     }
 
+    @Deprecated
     public static ArgumentEntities Entities(String id) {
         return new ArgumentEntities(id);
     }

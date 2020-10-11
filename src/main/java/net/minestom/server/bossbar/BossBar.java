@@ -11,7 +11,11 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Represent a bossbar which can be showed to any player {@link #addViewer(Player)}
+ * Represents a boss bar which is displayed on the top of the client screen (max amount of boss bar defined by {@link #MAX_BOSSBAR}).
+ * <p>
+ * To use it, create a new instance and add the players you want using {@link #addViewer(Player)} and remove them using {@link #removeViewer(Player)}.
+ * <p>
+ * You can retrieve all the boss bars of a player with {@link #getBossBars(Player)}.
  */
 public class BossBar implements Viewable {
 
@@ -27,6 +31,13 @@ public class BossBar implements Viewable {
     private BarDivision division;
     private byte flags;
 
+    /**
+     * Create a new {@link BossBar}
+     *
+     * @param title    the boss bar title
+     * @param color    the boss bar color
+     * @param division the boss bar division
+     */
     public BossBar(ColoredText title, BarColor color, BarDivision division) {
         this.title = title;
         this.color = color;
@@ -34,7 +45,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get all the visible boss bars of a player
+     * Get all the visible boss bars of a {@link Player}
      *
      * @param player the player to check the boss bars
      * @return all the visible boss bars of the player, null if not any

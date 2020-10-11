@@ -4,10 +4,14 @@ import fr.themode.demo.blocks.StoneBlock;
 import fr.themode.demo.generator.ChunkGeneratorDemo;
 import fr.themode.demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.RichMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
@@ -24,14 +28,15 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.attribute.AttributeSlot;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.scoreboard.Sidebar;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -48,17 +53,17 @@ public class PlayerInit {
     private static volatile Inventory inventory;
 
     static {
-        StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
+        //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        final int loopStart = -10;
-        final int loopEnd = 10;
+        final int loopStart = -3;
+        final int loopEnd = 3;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 instanceContainer.loadChunk(x, z);
@@ -70,7 +75,7 @@ public class PlayerInit {
             System.out.println("slot inv: " + slot);
             inventoryConditionResult.setCancel(false);
         });
-        inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
+        //inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
     }
 
     public static void init() {
@@ -266,8 +271,25 @@ public class PlayerInit {
 
                 //player.setHeldItemSlot((byte) 5);
 
+                ColoredText coloredText = ColoredText.of(ChatColor.RED + "" + ChatColor.BOLD + " test" + ChatColor.BRIGHT_GREEN + " lol");
+                coloredText.append("test");
+                player.sendMessage(coloredText);
+                System.out.println(coloredText.toString());
+                {
+                    RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + " HEY MESSAGE"));
+                    richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.STONE, (byte) 5)));
+                    //player.sendMessage(richMessage);
+                }
+
+                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 1));
+
                 player.setGlowing(true);
-                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 127));
+                ItemStack stone = new ItemStack(Material.DIAMOND_SWORD, (byte) 127);
+                stone.setEnchantment(Enchantment.AQUA_AFFINITY, (short) 1);
+                stone.addAttribute(new ItemAttribute(UUID.randomUUID(),
+                        "test_name",
+                        Attribute.ATTACK_DAMAGE, AttributeOperation.ADDITION, 50, AttributeSlot.MAINHAND));
+                player.getInventory().addItemStack(stone);
                 /*for (int i = 0; i < 9; i++) {
                     player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
                 }*/
@@ -293,11 +315,11 @@ public class PlayerInit {
                 //item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
                 //item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 //item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
-                player.getInventory().addItemStack(item);
+                //player.getInventory().addItemStack(item);
 
-                player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
+                //player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
 
-                inventory.addItemStack(item.clone());
+                //inventory.addItemStack(item.clone());
                 //player.openInventory(inventory);
 
                 //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
@@ -340,6 +362,10 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
                 event.setRespawnPosition(new Position(0f, 75f, 0f));
+            });
+
+            player.addEventCallback(PlayerStartDiggingEvent.class, event -> {
+                //event.setCancelled(true);
             });
 
             player.addEventCallback(PlayerCommandEvent.class, event -> {

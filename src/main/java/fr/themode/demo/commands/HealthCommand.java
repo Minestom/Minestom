@@ -21,8 +21,8 @@ public class HealthCommand extends Command {
 
         Argument arg1 = ArgumentType.Integer("value").between(0, 100);
 
-        addCallback(this::modeCallback, arg0);
-        addCallback(this::valueCallback, arg1);
+        setArgumentCallback(this::modeCallback, arg0);
+        setArgumentCallback(this::valueCallback, arg1);
 
         addSyntax(this::execute2, arg0, arg1);
         addSyntax(this::execute, arg0);

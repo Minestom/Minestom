@@ -1,7 +1,15 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.ArgumentCallback;
+import net.minestom.server.command.builder.Command;
 
+/**
+ * An argument is meant to be parsed when added into a {@link Command} syntax.
+ * <p>
+ * You can create your own with your own special conditions.
+ *
+ * @param <T> the type of this parsed argument
+ */
 public abstract class Argument<T> {
 
     public static final int SUCCESS = 0;
@@ -93,7 +101,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Set the argument callback
+     * Set the {@link ArgumentCallback}
      *
      * @param callback the argument callback
      */

@@ -42,7 +42,7 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
-        return -2;
+        return 2;
     }
 
     @Override

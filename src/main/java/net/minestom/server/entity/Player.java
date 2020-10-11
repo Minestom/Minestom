@@ -11,6 +11,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -26,10 +27,13 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.recipe.Recipe;
@@ -57,6 +61,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+/**
+ * Those are the major actors of the server, they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}
+ * <p>
+ * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
+ */
 public class Player extends LivingEntity implements CommandSender {
 
     private long lastKeepAlive;

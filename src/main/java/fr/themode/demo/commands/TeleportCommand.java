@@ -18,7 +18,7 @@ public class TeleportCommand extends Command {
         Argument z = ArgumentType.Float("z");
         Argument playerArg = ArgumentType.Word("pl");
 
-        addCallback((source, value, error) -> {
+        setArgumentCallback((source, value, error) -> {
             System.out.println("error: " + error);
         }, x);
 

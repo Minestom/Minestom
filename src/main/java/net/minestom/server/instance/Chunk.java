@@ -21,6 +21,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.validate.Check;
@@ -36,6 +37,8 @@ import java.util.function.Consumer;
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
+ * <p>
+ * You can create your own implementation of this class by extending it and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
  */
 public abstract class Chunk implements Viewable, DataContainer {
 

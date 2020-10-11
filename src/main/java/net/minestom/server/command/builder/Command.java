@@ -4,6 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.CommandCondition;
 
 import java.util.ArrayList;
@@ -12,6 +13,23 @@ import java.util.List;
 
 /**
  * Represents a command which have suggestion/auto-completion
+ * <p>
+ * The command works using a list of valid syntaxes.
+ * For instance we could build the command
+ * "/health set Notch 50" into multiple argument types -> "/health [set/add/remove] [Username] [Integer]"
+ * <p>
+ * All the default argument types can be found in {@link ArgumentType}
+ * and the syntax be created/registered using {@link #addSyntax(CommandExecutor, Argument[])}.
+ * <p>
+ * If the command is executed with an incorrect syntax or without any argument, the default {@link CommandExecutor} will be executed,
+ * you can set it using {@link #setDefaultExecutor(CommandExecutor)}.
+ * <p>
+ * Before any syntax to be successfully executed the {@link CommandSender} needs to validate
+ * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition)} (ignored if null).
+ * <p>
+ * Some {@link Argument} could also require additional condition (eg: a number which need to be between 2 values),
+ * in this case, if the whole syntax is correct but not the argument condition,
+ * you can listen to its error code using {@link #setArgumentCallback(ArgumentCallback, Argument)} or {@link Argument#setCallback(ArgumentCallback)}.
  */
 public class Command {
 
@@ -22,6 +40,13 @@ public class Command {
     private CommandCondition condition;
     private List<CommandSyntax> syntaxes;
 
+    /**
+     * Create a {@link Command} with a name and one or multiple aliases
+     *
+     * @param name    the name of the command
+     * @param aliases the command aliases
+     * @see #Command(String)
+     */
     public Command(String name, String... aliases) {
         this.name = name;
         this.aliases = aliases;
@@ -29,12 +54,18 @@ public class Command {
         this.syntaxes = new ArrayList<>();
     }
 
+    /**
+     * Create a {@link Command} with a name without any aliases
+     *
+     * @param name the name of the command
+     * @see #Command(String, String...)
+     */
     public Command(String name) {
         this(name, new String[0]);
     }
 
     /**
-     * Get the command condition
+     * Get the {@link CommandCondition}
      * <p>
      * It is called no matter the syntax used and can be used to check permissions or
      * the {@link CommandSender} type
@@ -46,7 +77,7 @@ public class Command {
     }
 
     /**
-     * Set the command condition
+     * Set the {@link CommandCondition}
      *
      * @param commandCondition the new command condition
      */
@@ -55,14 +86,14 @@ public class Command {
     }
 
     /**
-     * Add an argument callback
+     * Set an {@link ArgumentCallback}
      * <p>
      * The argument callback is called when there's an error in the argument
      *
      * @param callback the callback for the argument
      * @param argument the argument which get the callback
      */
-    public void addCallback(ArgumentCallback callback, Argument argument) {
+    public void setArgumentCallback(ArgumentCallback callback, Argument argument) {
         argument.setCallback(callback);
     }
 
@@ -101,7 +132,7 @@ public class Command {
     }
 
     /**
-     * Get the default executor (which is called when there is no argument)
+     * Get the default {@link CommandExecutor} (which is called when there is no argument)
      * or if no corresponding syntax has been found
      *
      * @return the default executor
@@ -111,7 +142,7 @@ public class Command {
     }
 
     /**
-     * Set the default executor (which is called when there is no argument)
+     * Set the default {@link CommandExecutor} (which is called when there is no argument)
      *
      * @param executor the new default executor
      */
