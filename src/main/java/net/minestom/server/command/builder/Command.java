@@ -21,10 +21,10 @@ import java.util.List;
  * All the default argument types can be found in {@link ArgumentType}
  * and the syntax be created/registered using {@link #addSyntax(CommandExecutor, Argument[])}.
  * <p>
- * If the command is executed with an incorrect syntax or without any argument, the default {@link CommandExecutor} will be executed,
+ * If the command is executed with an incorrect syntax or without any argument, the default {@link CommandExecutor} will be called,
  * you can set it using {@link #setDefaultExecutor(CommandExecutor)}.
  * <p>
- * Before any syntax to be successfully executed the {@link CommandSender} needs to validate
+ * Before any syntax to be successfully executed the {@link CommandSender} needs to validated
  * the {@link CommandCondition} sets with {@link #setCondition(CommandCondition)} (ignored if null).
  * <p>
  * Some {@link Argument} could also require additional condition (eg: a number which need to be between 2 values),
