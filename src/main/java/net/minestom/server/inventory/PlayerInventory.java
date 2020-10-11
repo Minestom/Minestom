@@ -26,6 +26,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
+/**
+ * Represents the inventory of a {@link Player}
+ */
 public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler {
 
     public static final int INVENTORY_SIZE = 46;

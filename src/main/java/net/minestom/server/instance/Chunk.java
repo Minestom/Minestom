@@ -38,6 +38,9 @@ import java.util.function.Consumer;
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
  * <p>
+ * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
+ * allowing you to implement your own storage solution if needed.
+ * <p>
  * You can create your own implementation of this class by extending it and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
  */
 public abstract class Chunk implements Viewable, DataContainer {

@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Represents a {@link Chunk} which store each individual block in memory.
+ */
 public class DynamicChunk extends Chunk {
 
     // blocks id based on coordinate, see Chunk#getBlockIndex

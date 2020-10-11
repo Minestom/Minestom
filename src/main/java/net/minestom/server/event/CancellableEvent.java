@@ -1,25 +1,25 @@
 package net.minestom.server.event;
 
 /**
- * Represent an event which can be cancelled
+ * Represent an {@link Event} which can be cancelled
  */
 public class CancellableEvent extends Event {
 
     private boolean cancelled;
 
     /**
-     * Get if the event will be cancelled or not
+     * Get if the {@link Event} should be cancelled or not
      *
-     * @return true if the event should be cancelled, false otherwise
+     * @return true if the {@link Event} should be cancelled
      */
     public boolean isCancelled() {
         return cancelled;
     }
 
     /**
-     * Mark the event as cancelled or not
+     * Mark the {@link Event} as cancelled or not
      *
-     * @param cancel true if the event should be cancelled, false otherwise
+     * @param cancel true if the {@link Event} should be cancelled, false otherwise
      */
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;

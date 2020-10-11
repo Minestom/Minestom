@@ -6,13 +6,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Representation of a permission granted to a CommandSender
+ * Representation of a permission granted to a {@link CommandSender}
  */
 @FunctionalInterface
 public interface Permission {
 
     /**
-     * Does the given commandSender have the permission represented by this object?
+     * Does the given {@link CommandSender} have the permission represented by this object?
+     * <p>
+     * Called with {@link CommandSender#hasPermission(Permission)}, the {@link CommandSender} requires to both
+     * have this permission and validate the condition in this method.
      *
      * @param commandSender the command sender
      * @return true if the commandSender possesses this permission
@@ -22,7 +25,7 @@ public interface Permission {
     /**
      * Writes any required data for this permission inside the given destination
      *
-     * @param destination Data to write to
+     * @param destination {@link Data} to write to
      */
     default void write(@NotNull Data destination) {
     }
@@ -30,7 +33,7 @@ public interface Permission {
     /**
      * Reads any required data for this permission from the given destination
      *
-     * @param source Data to read from
+     * @param source {@link Data} to read from
      * @return this for chaining
      */
     default Permission read(@Nullable Data source) {

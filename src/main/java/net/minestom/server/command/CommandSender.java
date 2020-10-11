@@ -33,55 +33,59 @@ public interface CommandSender {
     /**
      * Return all permissions associated to this command sender.
      * The returned collection should be modified only by subclasses
-     * @return
+     *
+     * @return the permissions of this command sender.
      */
     Collection<Permission> getAllPermissions();
 
     /**
-     * Adds a permission to this commandSender
-     * @param permission
+     * Adds a {@link Permission} to this commandSender
+     *
+     * @param permission the permission to add
      */
     default void addPermission(Permission permission) {
         getAllPermissions().add(permission);
     }
 
     /**
-     * Removes a permission from this commandSender
-     * @param permission
+     * Removes a {@link Permission} from this commandSender
+     *
+     * @param permission the permission to remove
      */
     default void removePermission(Permission permission) {
         getAllPermissions().remove(permission);
     }
 
     /**
-     * Checks if the given permission is possessed by this command sender.
+     * Checks if the given {@link Permission} is possessed by this command sender.
      * Simple shortcut to <pre>getAllPermissions().contains(permission) &amp;&amp; permission.isValidFor(this)</pre> for readability.
+     *
      * @param p permission to check against
-     * @return
+     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
      */
     default boolean hasPermission(Permission p) {
         return getAllPermissions().contains(p) && p.isValidFor(this);
     }
 
     /**
-     * Checks if the given permission is possessed by this command sender.
-     * Will call {@link Permission#isValidFor(CommandSender)} on all permissions that are an instance of permissionClass.
+     * Checks if the given {@link Permission} is possessed by this command sender.
+     * Will call {@link Permission#isValidFor(CommandSender)} on all permissions that are an instance of {@code permissionClass}.
      * If no matching permission is found, this result returns false.
      *
-     * @param permissionClass
+     * @param permissionClass the permission class to check
+     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
      * @see #getAllPermissions()
-     * @return
      */
     default boolean hasPermission(Class<? extends Permission> permissionClass) {
         boolean result = true;
         boolean foundPerm = false;
-        for(Permission p : getAllPermissions()) {
-            if(permissionClass.isInstance(p)) {
+        for (Permission p : getAllPermissions()) {
+            if (permissionClass.isInstance(p)) {
                 foundPerm = true;
                 result &= p.isValidFor(this);
             }
         }
-        if(!foundPerm)
+        if (!foundPerm)
             return false;
         return result;
     }
@@ -105,20 +109,22 @@ public interface CommandSender {
     }
 
     /**
-     * Casts this object to a Player
+     * Casts this object to a {@link Player}
      * No checks are performed, {@link ClassCastException} can very much happen
+     *
      * @see #isPlayer()
      */
     default Player asPlayer() {
-        return (Player)this;
+        return (Player) this;
     }
 
     /**
-     * Casts this object to a ConsoleSender
+     * Casts this object to a {@link ConsoleSender}
      * No checks are performed, {@link ClassCastException} can very much happen
+     *
      * @see #isConsole()
      */
     default ConsoleSender asConsole() {
-        return (ConsoleSender)this;
+        return (ConsoleSender) this;
     }
 }

@@ -2,6 +2,9 @@ package net.minestom.server.inventory.condition;
 
 import net.minestom.server.item.ItemStack;
 
+/**
+ * Used by {@link InventoryCondition} to step in inventory click processing.
+ */
 public class InventoryConditionResult {
 
     private ItemStack clickedItem, cursorItem;

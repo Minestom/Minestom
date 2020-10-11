@@ -11,7 +11,7 @@ import java.util.List;
 public interface InventoryModifier {
 
     /**
-     * Set an item at the specified slot
+     * Set an {@link ItemStack} at the specified slot
      *
      * @param slot      the slot to set the item
      * @param itemStack the item to set
@@ -19,7 +19,7 @@ public interface InventoryModifier {
     void setItemStack(int slot, ItemStack itemStack);
 
     /**
-     * Add an item to the inventory
+     * Add an {@link ItemStack} to the inventory
      *
      * @param itemStack the item to add
      * @return true if the item has been sucessfully fully added, false otherwise
@@ -32,7 +32,7 @@ public interface InventoryModifier {
     void clear();
 
     /**
-     * Get the item at the specified slot
+     * Get the {@link ItemStack} at the specified slot
      *
      * @param slot the slot to check
      * @return the item in the slot {@code slot}
@@ -40,7 +40,7 @@ public interface InventoryModifier {
     ItemStack getItemStack(int slot);
 
     /**
-     * Get all the items in the inventory
+     * Get all the {@link ItemStack} in the inventory
      *
      * @return an array containing all the inventory's items
      */
@@ -54,14 +54,14 @@ public interface InventoryModifier {
     int getSize();
 
     /**
-     * Get all the inventory conditions of this inventory
+     * Get all the {@link InventoryCondition} of this inventory
      *
      * @return the inventory conditions
      */
     List<InventoryCondition> getInventoryConditions();
 
     /**
-     * Add a new inventory condition to this inventory
+     * Add a new {@link InventoryCondition} to this inventory
      *
      * @param inventoryCondition the inventory condition to add
      */

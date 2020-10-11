@@ -87,7 +87,7 @@ public interface EventHandler {
     }
 
     /**
-     * Call a {@link CancellableEvent} and execute {@code successCallback} if the event is not cancelled
+     * Call a {@link CancellableEvent} and execute {@code successCallback} if the {@link Event} is not cancelled
      * <p>
      * Does call {@link #callEvent(Class, Event)} internally
      *

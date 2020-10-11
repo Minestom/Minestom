@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Used to register instances
+ * Used to register {@link Instance}
  */
 public final class InstanceManager {
 

@@ -33,12 +33,13 @@ import java.util.List;
  */
 public class Command {
 
-    private String name;
-    private String[] aliases;
+    private final String name;
+    private final String[] aliases;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
-    private List<CommandSyntax> syntaxes;
+
+    private final List<CommandSyntax> syntaxes;
 
     /**
      * Create a {@link Command} with a name and one or multiple aliases
@@ -93,7 +94,7 @@ public class Command {
      * @param callback the callback for the argument
      * @param argument the argument which get the callback
      */
-    public void setArgumentCallback(ArgumentCallback callback, Argument argument) {
+    public void setArgumentCallback(ArgumentCallback callback, Argument<?> argument) {
         argument.setCallback(callback);
     }
 
@@ -105,7 +106,7 @@ public class Command {
      * @param executor the executor to call when the syntax is successfully received
      * @param args     all the arguments of the syntax
      */
-    public void addSyntax(CommandExecutor executor, Argument... args) {
+    public void addSyntax(CommandExecutor executor, Argument<?>... args) {
         CommandSyntax syntax = new CommandSyntax(args);
         syntax.setExecutor(executor);
         this.syntaxes.add(syntax);
@@ -163,7 +164,7 @@ public class Command {
      * Allow for tab auto completion, this is called everytime the player press a key in the chat
      * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray})
      *
-     * @param text the whole player text
+     * @param text the whole player's text
      * @return the array containing all the suggestion for the current arg (split " ")
      */
     public String[] onDynamicWrite(String text) {

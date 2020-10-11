@@ -12,6 +12,14 @@ import net.minestom.server.world.biomes.Biome;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents a {@link Chunk} which does not store any block, it makes use of a {@link BlockProvider}
+ * instead to use less memory.
+ * <p>
+ * Can be used for very simple chunks such as flat or others with not any random factor.
+ * <p>
+ * WARNING: adding blocks or anything to this chunk would not work, it is static.
+ */
 public class StaticChunk extends Chunk {
 
     protected final BlockProvider blockProvider;

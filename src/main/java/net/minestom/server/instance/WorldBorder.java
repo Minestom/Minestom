@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.play.WorldBorderPacket;
 import net.minestom.server.utils.Position;
 
 /**
- * Represent the world border of an instance
+ * Represent the world border of an {@link Instance}
  */
 public class WorldBorder {
 

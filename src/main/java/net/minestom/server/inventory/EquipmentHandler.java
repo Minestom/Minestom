@@ -11,43 +11,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represent an entity which can have item in hand and armor slots
+ * Represent an {@link Entity} which can have {@link ItemStack} in hands and armor slots
  */
 public interface EquipmentHandler {
 
     /**
-     * Get the item in main hand
+     * Get the {@link ItemStack} in main hand
      *
-     * @return the item in main hand
+     * @return the {@link ItemStack} in main hand
      */
     ItemStack getItemInMainHand();
 
     /**
-     * Change the main hand item
+     * Change the main hand {@link ItemStack}
      *
-     * @param itemStack the main hand item
+     * @param itemStack the main hand {@link ItemStack}
      */
     void setItemInMainHand(ItemStack itemStack);
 
     /**
-     * Get the item in off hand
+     * Get the {@link ItemStack} in off hand
      *
      * @return the item in off hand
      */
     ItemStack getItemInOffHand();
 
     /**
-     * Change the off hand item
+     * Change the off hand {@link ItemStack}
      *
-     * @param itemStack the off hand item
+     * @param itemStack the off hand {@link ItemStack}
      */
     void setItemInOffHand(ItemStack itemStack);
 
     /**
-     * Get the item in the specific hand
+     * Get the {@link ItemStack} in the specific hand
      *
-     * @param hand the hand to get the item from
-     * @return the item in {@code hand}
+     * @param hand the hand to get the {@link ItemStack} from
+     * @return the {@link ItemStack} in {@code hand}
      */
     default ItemStack getItemInHand(Player.Hand hand) {
         switch (hand) {
@@ -63,10 +63,10 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Change the item in the specific hand
+     * Change the {@link ItemStack} in the specific hand
      *
      * @param hand  the hand to set the item to
-     * @param stack the itemstack to set
+     * @param stack the {@link ItemStack} to set
      */
     default void setItemInHand(Player.Hand hand, ItemStack stack) {
         switch (hand) {
@@ -140,7 +140,7 @@ public interface EquipmentHandler {
      * Get the equipment in a specific slot
      *
      * @param slot the equipment to get the item from
-     * @return the equipment item
+     * @return the equipment {@link ItemStack}
      */
     default ItemStack getEquipment(EntityEquipmentPacket.Slot slot) {
         switch (slot) {

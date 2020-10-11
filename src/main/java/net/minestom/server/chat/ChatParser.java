@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 /**
  * Class used to convert JSON string to proper chat message representation
  */
-public class ChatParser {
+public final class ChatParser {
 
     public static final char COLOR_CHAR = (char) 0xA7; // Represent the character '§'
 

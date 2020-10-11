@@ -26,7 +26,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class CommandManager {
+/**
+ * Manager used to register {@link Command} and {@link CommandProcessor}.
+ * <p>
+ * It is also possible to simulate a command using {@link #execute(CommandSender, String)}.
+ */
+public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
 
@@ -66,7 +71,7 @@ public class CommandManager {
     }
 
     /**
-     * Register a command with all the auto-completion features
+     * Register a {@link Command}
      *
      * @param command the command to register
      */
@@ -75,7 +80,7 @@ public class CommandManager {
     }
 
     /**
-     * Get the command register by {@link #register(Command)}
+     * Get the {@link Command} registered by {@link #register(Command)}
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
@@ -85,7 +90,7 @@ public class CommandManager {
     }
 
     /**
-     * Register a simple command without auto-completion
+     * Register a {@link CommandProcessor}
      *
      * @param commandProcessor the command to register
      */
@@ -101,7 +106,7 @@ public class CommandManager {
     }
 
     /**
-     * Get the command register by {@link #register(CommandProcessor)}
+     * Get the {@link CommandProcessor} registered by {@link #register(CommandProcessor)}
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
@@ -111,7 +116,7 @@ public class CommandManager {
     }
 
     /**
-     * Execute a command for a sender
+     * Execute a command for a {@link ConsoleSender}
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
@@ -154,16 +159,16 @@ public class CommandManager {
     }
 
     /**
-     * Get the console sender (which is used as a {@link CommandSender})
+     * Get the {@link ConsoleSender} (which is used as a {@link CommandSender})
      *
-     * @return the console sender
+     * @return the {@link ConsoleSender}
      */
     public ConsoleSender getConsoleSender() {
         return consoleSender;
     }
 
     /**
-     * Get the declare commands packet for a specific player
+     * Get the {@link DeclareCommandsPacket} for a specific player
      * <p>
      * Can be used to update the player auto-completion list
      *
