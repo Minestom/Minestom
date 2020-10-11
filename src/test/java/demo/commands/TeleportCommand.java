@@ -1,4 +1,4 @@
-package fr.themode.demo.commands;
+package demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;

@@ -1,4 +1,4 @@
-package fr.themode.demo.generator;
+package demo.generator;
 
 import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;

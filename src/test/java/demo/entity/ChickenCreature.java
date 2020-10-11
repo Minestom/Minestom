@@ -1,4 +1,4 @@
-package fr.themode.demo.entity;
+package demo.entity;
 
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.LivingEntity;

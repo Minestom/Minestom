@@ -1,8 +1,8 @@
-package fr.themode.demo;
+package demo;
 
-import fr.themode.demo.blocks.StoneBlock;
-import fr.themode.demo.generator.ChunkGeneratorDemo;
-import fr.themode.demo.generator.NoiseTestGenerator;
+import demo.blocks.StoneBlock;
+import demo.generator.ChunkGeneratorDemo;
+import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;

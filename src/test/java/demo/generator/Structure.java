@@ -1,4 +1,4 @@
-package fr.themode.demo.generator;
+package demo.generator;
 
 import lombok.Data;
 import net.minestom.server.instance.Chunk;

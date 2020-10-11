@@ -1,4 +1,4 @@
-package fr.themode.demo.blocks;
+package demo.blocks;
 
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;

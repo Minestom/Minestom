@@ -1,9 +1,9 @@
-package fr.themode.demo;
+package demo;
 
-import fr.themode.demo.blocks.BurningTorchBlock;
-import fr.themode.demo.blocks.StoneBlock;
-import fr.themode.demo.blocks.UpdatableBlockDemo;
-import fr.themode.demo.commands.*;
+import demo.blocks.BurningTorchBlock;
+import demo.blocks.StoneBlock;
+import demo.blocks.UpdatableBlockDemo;
+import demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.instance.block.BlockManager;

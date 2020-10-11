@@ -1,4 +1,4 @@
-package fr.themode.demo;
+package net.minestom.demo.largeframebuffers;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;

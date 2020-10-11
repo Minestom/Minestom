@@ -1,6 +1,5 @@
 package net.minestom.demo.largeframebuffers;
 
-import fr.themode.demo.MainDemo;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.GameMode;
@@ -49,9 +48,10 @@ public class Demo {
         MapColorRenderer renderer = new MapColorRenderer(glfwFramebuffer, OpenGLRendering::render);
         glfwFramebuffer.unbindContextFromThread();
 
-     //   renderingLoop(0, directFramebuffer, Demo::directRendering);
-     //   renderingLoop(101, graphics2DFramebuffer, Demo::graphics2DRendering);
-        renderingLoop(201, glfwFramebuffer, f -> {});
+        //   renderingLoop(0, directFramebuffer, Demo::directRendering);
+        //   renderingLoop(101, graphics2DFramebuffer, Demo::graphics2DRendering);
+        renderingLoop(201, glfwFramebuffer, f -> {
+        });
 
         glfwFramebuffer.setupRenderLoop(15, TimeUnit.MILLISECOND, renderer);
 
@@ -68,27 +68,27 @@ public class Demo {
     private static void createFrame(Instance instance, int id, int x, int y, int z) {
         EntityItemFrame itemFrame = new EntityItemFrame(new Position(x, y, z), EntityItemFrame.ItemFrameOrientation.NORTH);
         itemFrame.getPosition().setYaw(180f);
-        ItemStack map = new ItemStack(Material.FILLED_MAP, (byte)1);
+        ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
         map.setItemMeta(new MapMeta(id));
         itemFrame.setItemStack(map);
         itemFrame.setInstance(instance);
         itemFrame.setCustomNameVisible(true);
-        itemFrame.setCustomName(ColoredText.of("MapID: "+id));
+        itemFrame.setCustomName(ColoredText.of("MapID: " + id));
     }
 
     private static void setupMaps(Instance instance, int mapIDStart, int zCoordinate) {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
-                createFrame(instance, mapIDStart+y*4+x, 2-x, 45-y, zCoordinate);
+                createFrame(instance, mapIDStart + y * 4 + x, 2 - x, 45 - y, zCoordinate);
             }
         }
     }
 
     private static <T extends LargeFramebuffer> void renderingLoop(int mapIDStart, T framebuffer, Consumer<T> renderingCode) {
-        final Framebuffer[] subviews = new Framebuffer[4*4];
+        final Framebuffer[] subviews = new Framebuffer[4 * 4];
         for (int i = 0; i < subviews.length; i++) {
-            int x = (i % 4)*128;
-            int y = (i / 4)*128;
+            int x = (i % 4) * 128;
+            int y = (i / 4) * 128;
             subviews[i] = framebuffer.createSubView(x, y);
         }
         MinecraftServer.getSchedulerManager().buildTask(() -> {
@@ -109,14 +109,14 @@ public class Demo {
     }
 
     private static void directRendering(LargeDirectFramebuffer framebuffer) {
-        Arrays.fill(framebuffer.getColors(), 0, 512*40+128, MapColors.COLOR_CYAN.baseColor());
-        Arrays.fill(framebuffer.getColors(), 512*40+128, framebuffer.getColors().length, MapColors.COLOR_RED.baseColor());
+        Arrays.fill(framebuffer.getColors(), 0, 512 * 40 + 128, MapColors.COLOR_CYAN.baseColor());
+        Arrays.fill(framebuffer.getColors(), 512 * 40 + 128, framebuffer.getColors().length, MapColors.COLOR_RED.baseColor());
     }
 
     private static void graphics2DRendering(LargeGraphics2DFramebuffer framebuffer) {
         Graphics2D renderer = framebuffer.getRenderer();
         renderer.setColor(Color.BLACK);
-        renderer.clearRect(0,0,512,512);
+        renderer.clearRect(0, 0, 512, 512);
         renderer.setColor(Color.WHITE);
         renderer.drawString("Here's a very very long string that needs multiple maps to fit", 0, 100);
     }

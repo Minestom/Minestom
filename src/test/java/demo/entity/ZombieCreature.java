@@ -1,4 +1,4 @@
-package fr.themode.demo.entity;
+package demo.entity;
 
 import net.minestom.server.entity.ai.goal.RandomLookAroundGoal;
 import net.minestom.server.entity.type.monster.EntityZombie;
