@@ -19,13 +19,13 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * Class name -> Class
      * Used to cache class instances so we don't load them by name every time
      */
-    private static ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
 
     /**
      * Data key -> Class
      * Used to know the type of an element of this data object (for serialization purpose)
      */
-    private ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     /**
      * Set a value to a specific key

@@ -14,7 +14,7 @@ import net.minestom.server.item.ItemStack;
 public interface InventoryClickHandler {
 
     /**
-     * Called when a player left click in the inventory. Can also be to drop the cursor item
+     * Called when a {@link Player} left click in the inventory. Can also be to drop the cursor item
      *
      * @param player the player who clicked
      * @param slot   the slot number
@@ -23,7 +23,7 @@ public interface InventoryClickHandler {
     boolean leftClick(Player player, int slot);
 
     /**
-     * Called when a player right click in the inventory. Can also be to drop the cursor item
+     * Called when a {@link Player} right click in the inventory. Can also be to drop the cursor item
      *
      * @param player the player who clicked
      * @param slot   the slot number
@@ -32,7 +32,7 @@ public interface InventoryClickHandler {
     boolean rightClick(Player player, int slot);
 
     /**
-     * Called when a player shift click in the inventory
+     * Called when a {@link Player} shift click in the inventory
      *
      * @param player the player who clicked
      * @param slot   the slot number
@@ -41,7 +41,7 @@ public interface InventoryClickHandler {
     boolean shiftClick(Player player, int slot); // shift + left/right click have the same behavior
 
     /**
-     * Called when a player held click in the inventory
+     * Called when a {@link Player} held click in the inventory
      *
      * @param player the player who clicked
      * @param slot   the slot number
@@ -53,7 +53,7 @@ public interface InventoryClickHandler {
     boolean middleClick(Player player, int slot);
 
     /**
-     * Called when a player press the drop button
+     * Called when a {@link Player} press the drop button
      *
      * @param player the player who clicked
      * @param mode
@@ -66,7 +66,7 @@ public interface InventoryClickHandler {
     boolean dragging(Player player, int slot, int button);
 
     /**
-     * Called when a player double click in the inventory
+     * Called when a {@link Player} double click in the inventory
      *
      * @param player the player who clicked
      * @param slot   the slot number

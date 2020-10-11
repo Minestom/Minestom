@@ -178,7 +178,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save a specified cached data and remove it from memory
+     * Save a specified cached {@link SerializableData} and remove it from memory
      *
      * @param key the specified cached data key
      */
@@ -197,18 +197,16 @@ public class StorageLocation {
     }
 
     /**
-     * Save the whole cached data
+     * Save the all the cached {@link SerializableData}
      */
     public void saveCachedData() {
         synchronized (cachedData) {
-            cachedData.forEach((key, data) -> {
-                set(key, data.getIndexedSerializedData());
-            });
+            cachedData.forEach((key, data) -> set(key, data.getIndexedSerializedData()));
         }
     }
 
     /**
-     * Save an unique cached data
+     * Save an unique cached {@link SerializableData}
      *
      * @param key the data key
      */

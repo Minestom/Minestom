@@ -1,5 +1,8 @@
 package net.minestom.server.inventory;
 
+/**
+ * Represents a type of {@link Inventory}
+ */
 public enum InventoryType {
 
     CHEST_1_ROW(0, 9),

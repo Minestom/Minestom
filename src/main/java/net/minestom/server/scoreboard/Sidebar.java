@@ -18,7 +18,14 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}'s
+ * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
+ * <p>
+ * In order to use it you need to create a new instance using {@link #Sidebar(String)} and create new lines
+ * with {@link #createLine(ScoreboardLine)}. You can then add a {@link Player} to the viewing list using {@link #addViewer(Player)}
+ * and remove him later with {@link #removeViewer(Player)}.
+ * <p>
+ * Lines can be modified using their respective identifier using
+ * {@link #updateLineContent(String, ColoredText)} and {@link #updateLineScore(String, int)}.
  */
 public class Sidebar implements Scoreboard {
 
@@ -106,10 +113,10 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
-     * Updates a line content through the given identifier
+     * Updates a {@link ScoreboardLine} content through the given identifier
      *
-     * @param id      The identifier of the line
-     * @param content The new content for the line
+     * @param id      The identifier of the {@link ScoreboardLine}
+     * @param content The new content for the {@link ScoreboardLine}
      */
     public void updateLineContent(String id, ColoredText content) {
         final ScoreboardLine scoreboardLine = getLine(id);
@@ -120,10 +127,10 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
-     * Updates the score of a line through the given identifier
+     * Updates the score of a {@link ScoreboardLine} through the given identifier
      *
      * @param id    The identifier of the team
-     * @param score The new score for the line
+     * @param score The new score for the {@link ScoreboardLine}
      */
     public void updateLineScore(String id, int score) {
         final ScoreboardLine scoreboardLine = getLine(id);
@@ -150,7 +157,7 @@ public class Sidebar implements Scoreboard {
     /**
      * Removes a {@link ScoreboardLine} through the given identifier
      *
-     * @param id The identifier of the line
+     * @param id the identifier of the {@link ScoreboardLine}
      */
     public void removeLine(String id) {
         synchronized (lines) {
@@ -189,7 +196,7 @@ public class Sidebar implements Scoreboard {
 
     @Override
     public boolean removeViewer(Player player) {
-        boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         playerConnection.sendPacket(scoreboardObjectivePacket);
@@ -219,17 +226,17 @@ public class Sidebar implements Scoreboard {
         /**
          * The identifier is used to modify the line later
          */
-        private String id;
+        private final String id;
         /**
          * The content for the line
          */
-        private ColoredText content;
+        private final ColoredText content;
         /**
          * The score of the line
          */
         private int line;
 
-        private String teamName;
+        private final String teamName;
         /**
          * The name of the score ({@code entityName}) which is essentially an identifier
          */
@@ -350,19 +357,19 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
-     * This class is used to create a team for the sidebar
+     * This class is used to create a team for the {@link Sidebar}
      */
     private static class SidebarTeam {
 
-        private String teamName;
+        private final String teamName;
         private ColoredText prefix, suffix;
-        private String entityName;
+        private final String entityName;
 
-        private ColoredText teamDisplayName = ColoredText.of("displaynametest");
-        private byte friendlyFlags = 0x00;
-        private TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
-        private TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private int teamColor = 2;
+        private final ColoredText teamDisplayName = ColoredText.of("displaynametest");
+        private final byte friendlyFlags = 0x00;
+        private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
+        private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
+        private final int teamColor = 2;
 
 
         /**

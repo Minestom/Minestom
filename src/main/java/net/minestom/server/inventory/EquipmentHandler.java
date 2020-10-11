@@ -46,7 +46,7 @@ public interface EquipmentHandler {
     /**
      * Get the {@link ItemStack} in the specific hand
      *
-     * @param hand the hand to get the {@link ItemStack} from
+     * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
      */
     default ItemStack getItemInHand(Player.Hand hand) {

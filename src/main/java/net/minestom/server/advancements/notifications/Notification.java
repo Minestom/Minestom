@@ -38,7 +38,7 @@ public class Notification {
     }
 
     /**
-     * Get the frame type of the notification
+     * Get the {@link FrameType} of the notification
      *
      * @return the notification frame type
      */

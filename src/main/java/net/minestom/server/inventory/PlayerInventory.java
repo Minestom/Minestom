@@ -27,18 +27,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
- * Represents the inventory of a {@link Player}
+ * Represents the inventory of a {@link Player}.
  */
 public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler {
 
     public static final int INVENTORY_SIZE = 46;
 
-    private Player player;
-    private ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+    private final Player player;
+    private final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.getAirItem();
 
-    private List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    private InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
+    private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
+    private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     public PlayerInventory(Player player) {
         this.player = player;
@@ -425,11 +425,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot, OFFSET);
 
-        final boolean hotbarClick = convertToPacketSlot(slot) < 9;
+        final boolean hotBarClick = convertToPacketSlot(slot) < 9;
         final InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
                 new InventoryClickLoopHandler(0, items.length, 1,
                         i -> {
-                            if (hotbarClick) {
+                            if (hotBarClick) {
                                 return i < 9 ? i + 9 : i - 9;
                             } else {
                                 return convertSlot(i, OFFSET);
@@ -507,7 +507,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 new InventoryClickLoopHandler(0, items.length, 1,
                         i -> i < 9 ? i + 9 : i - 9,
                         index -> items[index],
-                        (index, itemStack) -> setItemStack(index, itemStack)));
+                        this::setItemStack));
 
         if (clickResult == null)
             return false;

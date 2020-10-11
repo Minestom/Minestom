@@ -10,13 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class StorageManager {
+public final class StorageManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageManager.class);
 
     private Supplier<StorageSystem> defaultStorageSystemSupplier = null;
 
     // Location -> storage location object
-    private Map<String, StorageLocation> locationMap = new HashMap<>();
+    private final Map<String, StorageLocation> locationMap = new HashMap<>();
 
     /**
      * Used to get an access to the specified location

@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
 
     // incremented each time an inventory is created (used in the window packets)
-    private static AtomicInteger lastInventoryId = new AtomicInteger();
+    private static final AtomicInteger LAST_INVENTORY_ID = new AtomicInteger();
 
     // the id of this inventory
     private final byte id;
@@ -73,7 +73,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     private static byte generateId() {
-        byte newInventoryId = (byte) lastInventoryId.incrementAndGet();
+        byte newInventoryId = (byte) LAST_INVENTORY_ID.incrementAndGet();
         if (newInventoryId == Byte.MAX_VALUE)
             newInventoryId = 1;
         return newInventoryId;
@@ -366,11 +366,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
-            setCursorPlayerItem(player, clickResult.getCursor());
         } else {
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
-            setCursorPlayerItem(player, clickResult.getCursor());
         }
+        setCursorPlayerItem(player, clickResult.getCursor());
 
         if (!clickResult.isCancel())
             callClickEvent(player, this, slot, ClickType.LEFT_CLICK, clicked, cursor);
@@ -393,11 +392,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
-            setCursorPlayerItem(player, clickResult.getCursor());
         } else {
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
-            setCursorPlayerItem(player, clickResult.getCursor());
         }
+        setCursorPlayerItem(player, clickResult.getCursor());
 
         if (!clickResult.isCancel())
             callClickEvent(player, this, slot, ClickType.RIGHT_CLICK, clicked, cursor);
@@ -419,7 +417,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
                     // Player inventory loop
                     new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
-                            i -> PlayerInventoryUtils.convertToPacketSlot(i),
+                            PlayerInventoryUtils::convertToPacketSlot,
                             index -> isClickInWindow(index) ? getItemStack(index) : playerInventory.getItemStack(index, offset),
                             (index, itemStack) -> {
                                 if (isClickInWindow(index)) {
@@ -511,12 +509,11 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (isInWindow) {
             if (resultClicked != null)
                 setItemStack(slot, resultClicked);
-            setCursorPlayerItem(player, clickResult.getCursor());
         } else {
             if (resultClicked != null)
                 playerInventory.setItemStack(slot, offset, resultClicked);
-            setCursorPlayerItem(player, clickResult.getCursor());
         }
+        setCursorPlayerItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
     }
@@ -567,20 +564,18 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 // Start by looping through the opened inventory
                 new InventoryClickLoopHandler(0, getSize(), 1,
                         i -> i,
-                        index -> getItemStack(index),
-                        (index, itemStack) -> setItemStack(index, itemStack)),
+                        this::getItemStack,
+                        this::setItemStack),
                 // Looping through player inventory
                 new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE - 9, 1,
-                        i -> PlayerInventoryUtils.convertToPacketSlot(i),
+                        PlayerInventoryUtils::convertToPacketSlot,
                         index -> playerInventory.getItemStack(index, offset),
                         (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)),
-                // Player hotbar
+                // Player hot bar
                 new InventoryClickLoopHandler(0, 9, 1,
-                        i -> PlayerInventoryUtils.convertToPacketSlot(i),
+                        PlayerInventoryUtils::convertToPacketSlot,
                         index -> playerInventory.getItemStack(index, offset),
-                        (index, itemStack) -> {
-                            playerInventory.setItemStack(index, offset, itemStack);
-                        }));
+                        (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)));
 
         if (clickResult == null)
             return false;

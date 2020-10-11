@@ -25,7 +25,7 @@ public interface Data {
 
         @Override
         public Set<String> getKeys() {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
 
         @Override

@@ -469,9 +469,8 @@ public class Player extends LivingEntity implements CommandSender {
                         ColoredText.of(getUsername() + " was killed by poor programming.");
                 chatMessage = RichMessage.of(coloredChatMessage);
             }
-            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
-                player.sendMessage(chatMessage);
-            });
+            MinecraftServer.getConnectionManager().getOnlinePlayers()
+                    .forEach(player -> player.sendMessage(chatMessage));
         }
         super.kill();
     }

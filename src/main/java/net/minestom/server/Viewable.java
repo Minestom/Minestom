@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represent something in the instance which can be showed or hidden to players
+ * Represent something which can be displayed or hidden to players
  */
 public interface Viewable {
 

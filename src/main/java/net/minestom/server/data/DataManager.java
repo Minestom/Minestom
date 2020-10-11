@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public final class DataManager {
 
-    private Map<Class, DataType> dataTypeMap = new HashMap<>();
+    private final Map<Class, DataType> dataTypeMap = new HashMap<>();
 
     {
         registerType(Byte.class, new ByteData());

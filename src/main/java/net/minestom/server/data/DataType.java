@@ -3,6 +3,14 @@ package net.minestom.server.data;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 
+/**
+ * Represents an object which can be encoded and decoded back.
+ * <p>
+ * Used by {@link DataManager} for {@link SerializableDataImpl}
+ * and by the storage API in {@link net.minestom.server.storage.StorageLocation}.
+ *
+ * @param <T> the type of the object
+ */
 public abstract class DataType<T> {
 
     /**

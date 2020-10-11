@@ -10,7 +10,11 @@ import java.sql.Date;
 import java.util.Collection;
 
 /**
- * Used to send one or multiples {@link Notification}
+ * Used to send one or multiples {@link Notification}.
+ * <p>
+ * Works by sending a completed advancement and remove it immediately.
+ * <p>
+ * You can simply create a {@link Notification} object and call {@link #send(Notification, Player)}.
  */
 public class NotificationCenter {
 
