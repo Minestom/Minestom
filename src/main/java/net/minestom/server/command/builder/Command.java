@@ -16,7 +16,7 @@ import java.util.List;
  * <p>
  * The command works using a list of valid syntaxes.
  * For instance we could build the command
- * "/health set Notch 50" into multiple argument types -> "/health [set/add/remove] [Username] [Integer]"
+ * "/health set Notch 50" into multiple argument types "/health [set/add/remove] [Username] [Integer]"
  * <p>
  * All the default argument types can be found in {@link ArgumentType}
  * and the syntax be created/registered using {@link #addSyntax(CommandExecutor, Argument[])}.
