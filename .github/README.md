@@ -29,7 +29,7 @@ It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
 # Usage
-An example of how to use the Minestom library is available [here](https://github.com/Minestom/Minestom/tree/master/src/main/java/fr/themode/demo).
+An example of how to use the Minestom library is available [here](/src/test/java/demo).
 Alternatively you can check the official wiki [here](https://github.com/Minestom/Minestom/wiki).
 
 # Why Minestom?
