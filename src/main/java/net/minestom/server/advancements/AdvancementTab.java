@@ -13,6 +13,12 @@ import java.util.*;
 
 /**
  * Represents a tab which can be shared between multiple players
+ * <p>
+ * Each tab requires a root advancement and all succeeding advancements need to have a parent in the tab.
+ * You can create a new advancement using {@link #createAdvancement(String, Advancement, Advancement)}
+ * <p>
+ * Be sure to use {@link #addViewer(Player)} and {@link #removeViewer(Player)} to control which players can see this tab.
+ * (all viewers will see the same tab, with the same amount of validated advancements etc... so shared)
  */
 public class AdvancementTab implements Viewable {
 

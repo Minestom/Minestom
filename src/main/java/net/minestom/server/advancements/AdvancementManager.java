@@ -7,14 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Used to manages advancement tabs
+ * Used to manage advancement tabs
+ * <p>
+ * Use {@link #createTab(String, AdvancementRoot)} to create a tab with the appropriate {@link AdvancementRoot}
  */
 public class AdvancementManager {
 
     private final Map<String, AdvancementTab> advancementTabMap = new HashMap<>();
 
     /**
-     * Create a new tab with a single advancement
+     * Create a new tab with a single {@link Advancement}
      *
      * @param rootIdentifier the root identifier
      * @param root           the root advancement
@@ -40,7 +42,7 @@ public class AdvancementManager {
     }
 
     /**
-     * Get all the created tab
+     * Get all the created {@link AdvancementTab}
      *
      * @return the collection containing all created {@link AdvancementTab}
      */

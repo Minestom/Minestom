@@ -10,7 +10,9 @@ import net.minestom.server.network.player.PlayerConnection;
 import java.util.Date;
 
 /**
- * Represent an advancement situated in an {@link AdvancementTab}
+ * Represents an advancement located in an {@link AdvancementTab}
+ * <p>
+ * All fields are dynamic, changing one will update the advancement in the specific {@link AdvancementTab}
  */
 public class Advancement {
 
@@ -232,18 +234,43 @@ public class Advancement {
         update();
     }
 
+    /**
+     * Set the background
+     * <p>
+     * Only available for {@link AdvancementRoot}
+     *
+     * @param background the new background
+     */
     protected void setBackground(String background) {
         this.background = background;
     }
 
+    /**
+     * Get the identifier of this advancement, used to register the advancement, use it as a parent and to retrieve it later
+     * in the {@link AdvancementTab}
+     *
+     * @return the advancement identifier
+     */
     protected String getIdentifier() {
         return identifier;
     }
 
+    /**
+     * Change the advancement identifier
+     * <p>
+     * WARNING: unsafe, only used by {@link AdvancementTab} to intialize the advancement
+     *
+     * @param identifier the new advancement identifier
+     */
     protected void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
+    /**
+     * Get the advancement parent
+     *
+     * @return the advancement parent, null for {@link AdvancementRoot}
+     */
     protected Advancement getParent() {
         return parent;
     }
@@ -342,6 +369,7 @@ public class Advancement {
             final ByteBuf removeBuffer = tab.removeBuffer;
             tab.getViewers().forEach(player -> {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
+                // Receive order is important
                 playerConnection.sendPacket(removeBuffer, true);
                 playerConnection.sendPacket(createBuffer, true);
             });
