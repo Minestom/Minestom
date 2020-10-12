@@ -146,6 +146,11 @@ public class SharedInstance extends Instance {
         instanceContainer.scheduleUpdate(time, unit, position);
     }
 
+    /**
+     * Get the {@link InstanceContainer} from where this instance takes its {@link Chunk} from.
+     *
+     * @return the associated {@link InstanceContainer}
+     */
     public InstanceContainer getInstanceContainer() {
         return instanceContainer;
     }
