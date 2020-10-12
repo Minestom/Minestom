@@ -82,7 +82,7 @@ public class Player extends LivingEntity implements CommandSender {
     private DimensionType dimensionType;
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
-    private int teleportId = 0;
+    private final AtomicInteger teleportId = new AtomicInteger();
 
     protected boolean onGround;
     private final ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
@@ -1607,9 +1607,9 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void updatePlayerPosition() {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = position.clone();
+        positionAndLookPacket.position = position.clone(); // clone needed to prevent synchronization issue
         positionAndLookPacket.flags = 0x00;
-        positionAndLookPacket.teleportId = teleportId++;
+        positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
     }
 

@@ -9,16 +9,16 @@ public class EntityActionListener {
         ClientEntityActionPacket.Action action = packet.action;
         switch (action) {
             case START_SNEAKING:
-                player.refreshSneaking(true);
+                player.setSneaking(true);
                 break;
             case STOP_SNEAKING:
-                player.refreshSneaking(false);
+                player.setSneaking(false);
                 break;
             case START_SPRINTING:
-                player.refreshSprinting(true);
+                player.setSprinting(true);
                 break;
             case STOP_SPRINTING:
-                player.refreshSprinting(false);
+                player.setSprinting(false);
                 break;
             // TODO do remaining actions
         }

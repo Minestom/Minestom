@@ -955,7 +955,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      * - update the viewable chunks (load and unload)
      * - add/remove players from the viewers list if {@link #isAutoViewable()} is enabled
      * <p>
-     * WARNING: unsafe, should only be used internally in Minestom
+     * WARNING: unsafe, should only be used internally in Minestom. Use {@link #teleport(Position)} instead.
      *
      * @param x new position X
      * @param y new position Y
@@ -1000,6 +1000,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         refreshPosition(position.getX(), position.getY(), position.getZ());
     }
 
+    /**
+     * Manage viewable entities automatically if {@link #isAutoViewable()} is enabled.
+     * <p>
+     * Called by {@link #refreshPosition(float, float, float)} when the new position is in a different {@link Chunk}.
+     *
+     * @param lastChunk the previous {@link Chunk} of this entity
+     * @param newChunk  the new {@link Chunk} of this entity
+     */
     private void updateView(Chunk lastChunk, Chunk newChunk) {
         final boolean isPlayer = this instanceof Player;
 
@@ -1010,6 +1018,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         final long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
         final long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), MinecraftServer.ENTITY_VIEW_DISTANCE);
 
+        // Remove from previous chunks
         final int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
         for (int index : oldChunksEntity) {
             final long chunkIndex = lastVisibleChunksEntity[index];
@@ -1032,6 +1041,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             });
         }
 
+        // Add to new chunks
         final int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
         for (int index : newChunksEntity) {
             final long chunkIndex = updatedVisibleChunksEntity[index];
@@ -1072,14 +1082,28 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.cachePitch = pitch;
     }
 
-    public void refreshSneaking(boolean sneaking) {
+    /**
+     * Make the entity sneak.
+     * <p>
+     * WARNING: this will not work for the client itself.
+     *
+     * @param sneaking true to make the entity sneak
+     */
+    public void setSneaking(boolean sneaking) {
         this.crouched = sneaking;
         this.pose = sneaking ? Pose.SNEAKING : Pose.STANDING;
         sendMetadataIndex(0);
         sendMetadataIndex(6);
     }
 
-    public void refreshSprinting(boolean sprinting) {
+    /**
+     * Make the entity sprint.
+     * <p>
+     * WARNING: this will not work on the client itself.
+     *
+     * @param sprinting true to make the entity sprint
+     */
+    public void setSprinting(boolean sprinting) {
         this.sprinting = sprinting;
         sendMetadataIndex(0);
     }
@@ -1140,8 +1164,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Remove the entity from the server immediately
-     * WARNING: this do not trigger the {@link EntityDeathEvent} event
+     * Remove the entity from the server immediately.
+     * <p>
+     * WARNING: this do not trigger the {@link EntityDeathEvent} event.
      */
     public void remove() {
         this.removed = true;
@@ -1177,9 +1202,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity removal is scheduled
+     * Get if the entity removal has been scheduled with {@link #scheduleRemove(long, TimeUnit)}.
      *
-     * @return true if {@link #scheduleRemove(long, TimeUnit)} has been called, false otherwise
+     * @return true if the entity removal has been scheduled
      */
     public boolean isRemoveScheduled() {
         return scheduledRemoveTime != 0;
@@ -1196,7 +1221,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Used to sync entities together, and sent when adding viewers
+     * Get an {@link EntityMetaDataPacket} sent when adding viewers. Used for synchronization.
      *
      * @return The {@link EntityMetaDataPacket} related to this entity
      */

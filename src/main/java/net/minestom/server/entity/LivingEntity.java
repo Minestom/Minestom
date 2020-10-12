@@ -450,10 +450,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         sendPacketToViewers(getMetadataPacket());
     }
 
+    /**
+     * Used to change the {@code isDead} internal field.
+     *
+     * @param isDead the new field value
+     */
     protected void refreshIsDead(boolean isDead) {
         this.isDead = isDead;
     }
 
+    /**
+     * Get an {@link EntityPropertiesPacket} for this entity with all of its attributes values.
+     *
+     * @return an {@link EntityPropertiesPacket} linked to this entity
+     */
     protected EntityPropertiesPacket getPropertiesPacket() {
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
@@ -477,7 +487,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Set all the attributes to {@link Attribute#getDefaultValue()}
+     * Sets all the attributes to {@link Attribute#getDefaultValue()}
      */
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
