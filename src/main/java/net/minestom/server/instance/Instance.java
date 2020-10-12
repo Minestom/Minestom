@@ -938,8 +938,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the current time
      */
     public void tick(long time) {
-        {
-            // scheduled tasks
+        // scheduled tasks
+        if (!nextTick.isEmpty()) {
             Consumer<Instance> callback;
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);

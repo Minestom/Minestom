@@ -176,8 +176,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used when the player is created
-     * Init the player and spawn him
+     * Used when the player is created.
+     * Init the player and spawn him.
+     * <p>
+     * WARNING: executed in the main update thread
      */
     protected void init() {
         JoinGamePacket joinGamePacket = new JoinGamePacket();

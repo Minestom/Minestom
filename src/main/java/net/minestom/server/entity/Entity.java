@@ -20,6 +20,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -33,6 +34,7 @@ import net.minestom.server.utils.validate.Check;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -114,7 +116,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
-    protected final List<Consumer<Entity>> nextTick = Collections.synchronizedList(new ArrayList<>());
+    // list of scheduled tasks to be executed during the next entity tick
+    protected final ConcurrentLinkedQueue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -134,8 +137,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         setVelocityUpdatePeriod(5);
     }
 
+    /**
+     * Schedule a task to be run during the next entity tick
+     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider})
+     *
+     * @param callback the task to execute during the next entity tick
+     */
     public void scheduleNextTick(Consumer<Entity> callback) {
-        nextTick.add(callback);
+        this.nextTick.add(callback);
     }
 
     public Entity(EntityType entityType) {
@@ -353,12 +362,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
-        synchronized (nextTick) {
-            for (final Consumer<Entity> e : nextTick) {
-                e.accept(this);
+        // scheduled tasks
+        if (!nextTick.isEmpty()) {
+            Consumer<Entity> callback;
+            while ((callback = nextTick.poll()) != null) {
+                callback.accept(this);
             }
-            nextTick.clear();
         }
+
         // Synchronization with updated fields in #getPosition()
         {
             // X/Y/Z axis

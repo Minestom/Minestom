@@ -70,7 +70,7 @@ public final class UpdateManager {
                     futures = threadProvider.update(time);
                 }
 
-                // Waiting players update (newly connected waiting to get into the server)
+                // Waiting players update (newly connected clients waiting to get into the server)
                 entityManager.updateWaitingPlayers();
 
                 // Keep Alive Handling
