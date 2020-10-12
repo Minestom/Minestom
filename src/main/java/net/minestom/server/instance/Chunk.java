@@ -93,9 +93,9 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Set a block at a position.
      * <p>
-     * This is used when the previous block has to be destroyed, meaning that it clears the previous data and update method.
+     * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} &amp; {@link BlockBatch})
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} and {@link BlockBatch})
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
      * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
      *

@@ -7,9 +7,9 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 /**
- * Represent a {@link Data} object which can be serialized and read back.
+ * Represents a {@link Data} object which can be serialized and read back.
  * <p>
- * Please see {@link SerializableDataImpl} for the default implementation.
+ * See {@link SerializableDataImpl} for the default implementation.
  */
 public interface SerializableData extends Data {
 

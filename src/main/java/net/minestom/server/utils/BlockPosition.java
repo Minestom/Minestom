@@ -3,22 +3,50 @@ package net.minestom.server.utils;
 import java.util.Objects;
 
 // TODO: pool block positions?
+
+/**
+ * Represents the position of a block, so with integers instead of floating numbers.
+ */
 public class BlockPosition {
 
     private int x, y, z;
 
+    /**
+     * Create a new {@link BlockPosition}.
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     */
     public BlockPosition(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     * Create a new {@link BlockPosition}.
+     * <p>
+     * Float positions are converted to block position, notably used by {@link Position#toBlockPosition()}.
+     *
+     * @param x the block X
+     * @param y the block Y
+     * @param z the block Z
+     */
     public BlockPosition(float x, float y, float z) {
+        final int castedY = (int) y;
+
         this.x = (int) Math.floor(x);
-        this.y = (int) Math.floor(y);
+        this.y = (y == castedY) ? castedY : castedY + 1;
         this.z = (int) Math.floor(z);
     }
 
+    /**
+     * Create a new {@link BlockPosition} from a {@link Vector}.
+     *
+     * @param position the position vector
+     * @see #BlockPosition(float, float, float)
+     */
     public BlockPosition(Vector position) {
         this(position.getX(), position.getY(), position.getZ());
     }

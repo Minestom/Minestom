@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * Represents an object which contain key/value based data.
  * <p>
- * Please see {@link DataImpl} for the default implementation.
+ * See {@link DataImpl} for the default implementation.
  */
 public interface Data {
 
