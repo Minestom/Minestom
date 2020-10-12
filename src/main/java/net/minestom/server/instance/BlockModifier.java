@@ -2,17 +2,63 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
+import net.minestom.server.instance.batch.BlockBatch;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.validate.Check;
 
+/**
+ * Represents an element which can place blocks at position.
+ * <p>
+ * Notably used by {@link Instance}, {@link BlockBatch} and {@link ChunkBatch}.
+ */
 public interface BlockModifier {
 
     BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
+    /**
+     * Set a block at a position.
+     * <p>
+     * You can use {@link #setBlock(int, int, int, Block)} if you want it to be more explicit.
+     *
+     * @param x            the block X
+     * @param y            the block Y
+     * @param z            the block Z
+     * @param blockStateId the block state id
+     * @param data         the block {@link Data}, can be null
+     */
     void setBlockStateId(int x, int y, int z, short blockStateId, Data data);
+
+    /**
+     * Set a {@link CustomBlock} at a position.
+     * <p>
+     * The custom block id should be the one returned by {@link CustomBlock#getCustomBlockId()}.
+     *
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param customBlockId the custom block id
+     * @param data          the block {@link Data}, can be null
+     */
+    void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
+
+    /**
+     * Set a {@link CustomBlock} at a position with a custom state id.
+     * <p>
+     * The custom block id should be the one returned by {@link CustomBlock#getCustomBlockId()},
+     * and the block state id can be anything you want, state id can be retrieved using {@link Block#getBlockId()}.
+     *
+     * @param x             the block X
+     * @param y             the block Y
+     * @param z             the block Z
+     * @param blockStateId  the block state id
+     * @param customBlockId the custom block id
+     * @param data          the block {@link Data}, can be null
+     */
+    void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data);
 
     default void setBlockStateId(int x, int y, int z, short blockStateId) {
         setBlockStateId(x, y, z, blockStateId, null);
@@ -33,9 +79,6 @@ public interface BlockModifier {
         setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockStateId);
     }
 
-
-    void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
-
     default void setCustomBlock(int x, int y, int z, short customBlockId) {
         setCustomBlock(x, y, z, customBlockId, null);
     }
@@ -55,8 +98,6 @@ public interface BlockModifier {
         Check.notNull(blockPosition, "The block position cannot be null");
         setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), customBlockId);
     }
-
-    void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data);
 
     default void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId) {
         setSeparateBlocks(x, y, z, blockStateId, customBlockId, null);
