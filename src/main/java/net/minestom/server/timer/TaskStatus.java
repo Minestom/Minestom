@@ -1,7 +1,7 @@
 package net.minestom.server.timer;
 
 /**
- * An enumeration that representing all available statuses for a task
+ * An enumeration that representing all available statuses for a {@link Task}
  */
 public enum TaskStatus {
 

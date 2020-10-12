@@ -91,20 +91,20 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set a block at a position
+     * Set a block at a position.
      * <p>
-     * This is used when the previous block has to be destroyed, meaning that it clears the previous data and update method
+     * This is used when the previous block has to be destroyed, meaning that it clears the previous data and update method.
      * <p>
      * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} &amp; {@link BlockBatch})
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
-     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called
+     * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
      *
      * @param x             the block X
      * @param y             the block Y
      * @param z             the block Z
      * @param blockStateId  the block state id
      * @param customBlockId the custom block id
-     * @param data          the data of the block, can be null
+     * @param data          the {@link Data} of the block, can be null
      * @param updatable     true if the block has an update method
      *                      Warning: <code>customBlockId</code> cannot be 0 and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
@@ -112,19 +112,19 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
 
     /**
-     * Execute a chunk tick
+     * Execute a chunk tick.
      * <p>
-     * Should be used to update all the blocks in the chunk
+     * Should be used to update all the blocks in the chunk.
      * <p>
-     * WARNING: this method doesn't necessary have to be thread-safe, proceed with caution
+     * WARNING: this method doesn't necessary have to be thread-safe, proceed with caution.
      *
      * @param time     the time of the update in milliseconds
-     * @param instance the instance linked to this chunk
+     * @param instance the {@link Instance} linked to this chunk
      */
     public abstract void tick(long time, Instance instance);
 
     /**
-     * Get the block state id at a position
+     * Get the block state id at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -134,7 +134,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract short getBlockStateId(int x, int y, int z);
 
     /**
-     * Get the custom block id at a position
+     * Get the custom block id at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -144,7 +144,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract short getCustomBlockId(int x, int y, int z);
 
     /**
-     * Change the block state id and the custom block id at a position
+     * Change the block state id and the custom block id at a position.
      *
      * @param x             the block X
      * @param y             the block Y
@@ -155,7 +155,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
 
     /**
-     * Change the block state id at a position (the custom block id stays the same)
+     * Change the block state id at a position (the custom block id stays the same).
      *
      * @param x            the block X
      * @param y            the block Y
@@ -165,7 +165,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
 
     /**
-     * Get the {@link Data} at a block index
+     * Get the {@link Data} at a block index.
      *
      * @param index the block index
      * @return the {@link Data} at the block index, null if none
@@ -173,7 +173,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract Data getBlockData(int index);
 
     /**
-     * Set the {@link Data} at a position
+     * Set the {@link Data} at a position.
      *
      * @param x    the block X
      * @param y    the block Y
@@ -183,14 +183,14 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void setBlockData(int x, int y, int z, Data data);
 
     /**
-     * Get all the block entities in this chunk
+     * Get all the block entities in this chunk.
      *
      * @return the block entities in this chunk
      */
     public abstract Set<Integer> getBlockEntities();
 
     /**
-     * Serialize the chunk into bytes
+     * Serialize the chunk into bytes.
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
      * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
@@ -198,9 +198,9 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract byte[] getSerializedData();
 
     /**
-     * Read the chunk from binary
+     * Read the chunk from binary.
      * <p>
-     * Used if the chunk is loaded from file
+     * Used if the chunk is loaded from file.
      *
      * @param reader   the data reader
      *                 WARNING: the data will not necessary be read directly in the same thread,
@@ -217,7 +217,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract ChunkDataPacket getFreshPacket();
 
     /**
-     * Get the {@link CustomBlock} at a position
+     * Get the {@link CustomBlock} at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -230,7 +230,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the {@link CustomBlock} at a block index
+     * Get the {@link CustomBlock} at a block index.
      *
      * @param index the block index
      * @return the {@link CustomBlock} at the block index
@@ -247,7 +247,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the chunk X
+     * Get the chunk X.
      *
      * @return the chunk X
      */
@@ -256,7 +256,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the chunk Z
+     * Get the chunk Z.
      *
      * @return the chunk Z
      */
@@ -304,7 +304,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Retrieve (and save if needed) the updated data packet
+     * Retrieve (and save if needed) the updated data packet.
      *
      * @param consumer the consumer called once the packet is sure to be up-to-date
      */
@@ -323,7 +323,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get a {@link ChunkDataPacket} which should contain the full chunk
+     * Get a {@link ChunkDataPacket} which should contain the full chunk.
      *
      * @return a fresh full chunk data packet
      */
@@ -334,7 +334,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get a {@link ChunkDataPacket} which should contain the non-full chunk
+     * Get a {@link ChunkDataPacket} which should contain the non-full chunk.
      *
      * @return a fresh non-full chunk data packet
      */
@@ -345,7 +345,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Used to verify if the chunk should still be kept in memory
+     * Used to verify if the chunk should still be kept in memory.
      *
      * @return true if the chunk is loaded
      */
@@ -516,14 +516,14 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set the chunk as "unloaded"
+     * Set the chunk as "unloaded".
      */
     protected void unload() {
         this.loaded = false;
     }
 
     /**
-     * Get if a block state id represents a block entity
+     * Get if a block state id represents a block entity.
      *
      * @param blockStateId the block state id to check
      * @return true if {@code blockStateId} represents a block entity
@@ -534,7 +534,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the index of a position, used to store blocks
+     * Get the index of a position, used to store blocks.
      *
      * @param x the block X
      * @param y the block Y

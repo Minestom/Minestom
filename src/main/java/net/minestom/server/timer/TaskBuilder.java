@@ -3,7 +3,10 @@ package net.minestom.server.timer;
 import net.minestom.server.utils.time.TimeUnit;
 
 /**
- * A builder which represents a fluent Object to schedule tasks
+ * A builder which represents a fluent Object to schedule tasks.
+ * <p>
+ * You can specify a delay with {@link #delay(long, TimeUnit)} or {@link #repeat(long, TimeUnit)}
+ * and then schedule the {@link Task} with {@link #schedule()}.
  */
 public class TaskBuilder {
 
@@ -44,7 +47,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Specifies that the task should delay its execution by the specified amount of time.
+     * Specifies that the {@link Task} should delay its execution by the specified amount of time.
      *
      * @param time The time to delay
      * @param unit The unit of time for {@code time}
@@ -56,10 +59,10 @@ public class TaskBuilder {
     }
 
     /**
-     * Specifies that the task should continue to run after waiting for the specified value until it is terminated.
+     * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
      *
      * @param time The time until the repetition
-     * @param unit The unit of time for {@code time}
+     * @param unit The {@link TimeUnit} for {@code time}
      * @return this builder, for chaining
      */
     public TaskBuilder repeat(long time, TimeUnit unit) {
@@ -68,7 +71,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Clears the delay interval of the task
+     * Clears the delay interval of the {@link Task}
      *
      * @return this builder, for chaining
      */
@@ -78,7 +81,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Clears the repeat interval of the task
+     * Clears the repeat interval of the {@link Task}
      *
      * @return this builder, for chaining
      */
@@ -88,9 +91,9 @@ public class TaskBuilder {
     }
 
     /**
-     * Schedule this task for execution
+     * Schedule this {@link Task} for execution
      *
-     * @return the built task
+     * @return the built {@link Task}
      */
     public Task schedule() {
         Task task = new Task(

@@ -12,7 +12,8 @@ import java.util.Map;
 /**
  * Represent an area which contain data.
  * <p>
- * Each {@link StorageLocation} has a {@link StorageSystem} associated to it which is used to save and retrieve data from keys.
+ * Each {@link StorageLocation} has a {@link StorageSystem} associated to it
+ * which is used to save and retrieve data from keys.
  */
 public class StorageLocation {
 
@@ -33,7 +34,7 @@ public class StorageLocation {
     }
 
     /**
-     * Get the data associated with a key using {@link StorageSystem#get(String)}
+     * Get the data associated with a key using {@link StorageSystem#get(String)}.
      *
      * @param key the key
      * @return the data associated to {@code key}
@@ -44,7 +45,7 @@ public class StorageLocation {
     }
 
     /**
-     * Set a data associated to a key using {@link StorageSystem#set(String, byte[])}
+     * Set a data associated to a key using {@link StorageSystem#set(String, byte[])}.
      *
      * @param key  the key of the data
      * @param data the data
@@ -55,7 +56,7 @@ public class StorageLocation {
     }
 
     /**
-     * Delete a key using the associated {@link StorageSystem}
+     * Delete a key using the associated {@link StorageSystem}.
      *
      * @param key the key
      * @see StorageSystem#delete(String)
@@ -65,7 +66,7 @@ public class StorageLocation {
     }
 
     /**
-     * Close the {@link StorageLocation} using {@link StorageSystem#close()}
+     * Close the {@link StorageLocation} using {@link StorageSystem#close()}.
      *
      * @see StorageSystem#close()
      */
@@ -74,10 +75,10 @@ public class StorageLocation {
     }
 
     /**
-     * Set an object associated to a key
+     * Set an object associated to a key.
      * <p>
      * It does use registered {@link DataType} located on {@link DataManager}
-     * So you need to register all the types that you use
+     * So you need to register all the types that you use.
      *
      * @param key    the key
      * @param object the data object
@@ -98,10 +99,10 @@ public class StorageLocation {
     }
 
     /**
-     * Retrieve a serialized object associated to a key
+     * Retrieve a serialized object associated to a key.
      * <p>
-     * It does use registered {@link DataType} located on {@link DataManager}
-     * So you need to register all the types that you use
+     * It does use registered {@link DataType} located on {@link DataManager}.
+     * So you need to register all the types that you use.
      *
      * @param key  the key
      * @param type the class of the data
@@ -128,7 +129,8 @@ public class StorageLocation {
     }
 
     /**
-     * Get an unique {@link SerializableData} which is cloned if cached or retrieved with the default {@link StorageSystem}
+     * Get an unique {@link SerializableData}
+     * which is cloned if cached or retrieved with the default {@link StorageSystem}.
      *
      * @param key           the key of the data
      * @param dataContainer the {@link DataContainer} which will contain the new data
@@ -178,7 +180,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save a specified cached {@link SerializableData} and remove it from memory
+     * Save a specified cached {@link SerializableData} and remove it from memory.
      *
      * @param key the specified cached data key
      */
@@ -197,7 +199,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save the all the cached {@link SerializableData}
+     * Save the all the cached {@link SerializableData}.
      */
     public void saveCachedData() {
         synchronized (cachedData) {
@@ -206,7 +208,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save an unique cached {@link SerializableData}
+     * Save an unique cached {@link SerializableData}.
      *
      * @param key the data key
      */
@@ -218,9 +220,9 @@ public class StorageLocation {
     }
 
     /**
-     * Get the location of this storage
+     * Get the location of this storage.
      * <p>
-     * WARNING: this is not necessary a file or folder path
+     * WARNING: this is not necessary a file or folder path.
      *
      * @return the location
      */

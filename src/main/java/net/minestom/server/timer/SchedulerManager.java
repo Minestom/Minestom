@@ -14,7 +14,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * An object which manages all the {@link Task}'s
+ * An object which manages all the {@link Task}'s.
+ * <p>
+ * {@link Task} first need to be built with {@link #buildTask(Runnable)}, you can then specify a delay with as example
+ * {@link TaskBuilder#delay(long, net.minestom.server.utils.time.TimeUnit)}
+ * or {@link TaskBuilder#repeat(long, net.minestom.server.utils.time.TimeUnit)}
+ * and to finally schedule {@link TaskBuilder#schedule()}.
+ * <p>
+ * Shutdown {@link Task} are built with {@link #buildShutdownTask(Runnable)}.
  */
 public class SchedulerManager {
 
@@ -51,38 +58,38 @@ public class SchedulerManager {
     }
 
     /**
-     * Initializes a new {@link TaskBuilder} for creating a task.
+     * Initializes a new {@link TaskBuilder} for creating a {@link Task}.
      *
-     * @param runnable The task to run when scheduled
-     * @return the task builder
+     * @param runnable The {@link Task} to run when scheduled
+     * @return the {@link TaskBuilder}
      */
     public TaskBuilder buildTask(Runnable runnable) {
         return new TaskBuilder(this, runnable);
     }
 
     /**
-     * Initializes a new {@link TaskBuilder} for creating a shutdown task
+     * Initializes a new {@link TaskBuilder} for creating a shutdown {@link Task}
      *
-     * @param runnable The shutdown task to run when scheduled
-     * @return the task builder
+     * @param runnable The shutdown {@link Task} to run when scheduled
+     * @return the {@link TaskBuilder}
      */
     public TaskBuilder buildShutdownTask(Runnable runnable) {
         return new TaskBuilder(this, runnable, true);
     }
 
     /**
-     * Removes/Forces the end of a task
+     * Removes/Forces the end of a {@link Task}
      *
-     * @param task The task to remove
+     * @param task The {@link Task} to remove
      */
     public void removeTask(Task task) {
         this.tasks.remove(task.getId());
     }
 
     /**
-     * Removes/Forces the end of a task
+     * Removes/Forces the end of a {@link Task}
      *
-     * @param task The task to remove
+     * @param task The {@link Task} to remove
      */
     public void removeShutdownTask(Task task) {
         this.shutdownTasks.remove(task.getId());
@@ -124,36 +131,36 @@ public class SchedulerManager {
     }
 
     /**
-     * Gets a {@link Collection} with all registered tasks
+     * Gets a {@link Collection} with all the registered {@link Task}
      *
-     * @return a {@link Collection} with all registered tasks
+     * @return a {@link Collection} with all the registered {@link Task}
      */
     public ObjectCollection<Task> getTasks() {
         return tasks.values();
     }
 
     /**
-     * Gets a {@link Collection} with all registered shutdown tasks
+     * Gets a {@link Collection} with all the registered shutdown {@link Task}
      *
-     * @return a {@link Collection} with all registered shutdown tasks
+     * @return a {@link Collection} with all the registered shutdown {@link Task}
      */
     public ObjectCollection<Task> getShutdownTasks() {
         return shutdownTasks.values();
     }
 
     /**
-     * Gets the execution service for all registered tasks
+     * Gets the execution service for all the registered {@link Task}
      *
-     * @return the execution service for all registered tasks
+     * @return the execution service for all the registered {@link Task}
      */
     public ExecutorService getBatchesPool() {
         return batchesPool;
     }
 
     /**
-     * Gets the scheduled execution service for all registered tasks
+     * Gets the scheduled execution service for all the registered {@link Task}
      *
-     * @return the scheduled execution service for all registered tasks
+     * @return the scheduled execution service for all the registered {@link Task}
      */
     public ScheduledExecutorService getTimerExecutionService() {
         return timerExecutionService;

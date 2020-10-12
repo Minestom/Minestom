@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * Manager used to retrieve {@link StorageLocation} with {@link #getLocation(String, StorageOptions, StorageSystem)}
+ * and define the default {@link StorageSystem} with {@link #defineDefaultStorageSystem(Supplier)}.
+ */
 public final class StorageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageManager.class);
@@ -52,8 +56,8 @@ public final class StorageManager {
     }
 
     /**
-     * Used to get an access to the specified location
-     * The default {@link StorageSystem} provider will be used
+     * Used to get an access to the specified location.
+     * The default {@link StorageSystem} provider will be used.
      *
      * @param location the location
      * @return the {@link StorageLocation} at {@code location} with the default {@link StorageSystem}
@@ -85,7 +89,7 @@ public final class StorageManager {
     }
 
     /**
-     * Get all locations which have been loaded by {@link #getLocation(String)}
+     * Get all the {@link StorageLocation} which have been loaded by {@link #getLocation(String)}
      * or {@link #getLocation(String, StorageOptions, StorageSystem)}
      *
      * @return an unmodifiable list of all the loaded {@link StorageLocation}

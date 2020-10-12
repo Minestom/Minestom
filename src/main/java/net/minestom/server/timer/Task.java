@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * An Object that represents a task that is scheduled for execution on the application.
+ * <p>
+ * Tasks are built in {@link SchedulerManager} and scheduled by a {@link TaskBuilder}.
  */
 public class Task implements Runnable {
 
@@ -30,10 +32,10 @@ public class Task implements Runnable {
      * Creates a task
      *
      * @param schedulerManager The manager for the task
-     * @param runnable The task to run when scheduled
-     * @param shutdown Defines whether the task is a shutdown task
-     * @param delay The time to delay
-     * @param repeat The time until the repetition
+     * @param runnable         The task to run when scheduled
+     * @param shutdown         Defines whether the task is a shutdown task
+     * @param delay            The time to delay
+     * @param repeat           The time until the repetition
      */
     public Task(SchedulerManager schedulerManager, Runnable runnable, boolean shutdown, long delay, long repeat) {
         this.schedulerManager = schedulerManager;

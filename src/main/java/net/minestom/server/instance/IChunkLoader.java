@@ -11,11 +11,11 @@ public interface IChunkLoader {
     /**
      * Load a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied
      *
-     * @param instance the instance where the chunk belong
+     * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @param callback the callback executed when the chunk is done loading,
-     *                 never called if something went wrong
+     * @param callback the callback executed when the {@link Chunk} is done loading,
+     *                 never called if the method returns false.
      * @return true if the chunk loaded successfully, false otherwise
      */
     boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback);
@@ -23,8 +23,8 @@ public interface IChunkLoader {
     /**
      * Save a {@link Chunk} with a callback for when it is done
      *
-     * @param chunk    the chunk to save
-     * @param callback the callback executed when the chunk is done saving,
+     * @param chunk    the {@link Chunk} to save
+     * @param callback the callback executed when the {@link Chunk} is done saving,
      *                 should be called even if the saving failed (you can throw an exception)
      */
     void saveChunk(Chunk chunk, Runnable callback);

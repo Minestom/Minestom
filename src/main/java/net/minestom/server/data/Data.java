@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Represent an object which contain key/value based data.
+ * Represents an object which contain key/value based data.
  * <p>
  * Please see {@link DataImpl} for the default implementation.
  */
@@ -47,7 +47,7 @@ public interface Data {
     };
 
     /**
-     * Set a value to a specific key
+     * Set a value to a specific key.
      *
      * @param key   the key
      * @param value the value object
@@ -57,7 +57,7 @@ public interface Data {
     <T> void set(String key, T value, Class<T> type);
 
     /**
-     * Retrieve a value based on its key
+     * Retrieve a value based on its key.
      *
      * @param key the key
      * @param <T> the value type
@@ -66,7 +66,7 @@ public interface Data {
     <T> T get(String key);
 
     /**
-     * Retrieve a value based on its key, give a default value if not found
+     * Retrieve a value based on its key, give a default value if not found.
      *
      * @param key          the key
      * @param defaultValue the value to return if the key is not found
@@ -76,7 +76,7 @@ public interface Data {
     <T> T getOrDefault(String key, T defaultValue);
 
     /**
-     * Get if the data has a key
+     * Get if the data has a key.
      *
      * @param key the key to check
      * @return true if the data contains the key
@@ -84,21 +84,21 @@ public interface Data {
     boolean hasKey(String key);
 
     /**
-     * Get the list of data keys
+     * Get the list of data keys.
      *
      * @return an unmodifiable {@link Set} containing all keys
      */
     Set<String> getKeys();
 
     /**
-     * Get if the data is empty or not
+     * Get if the data is empty or not.
      *
      * @return true if the data does not contain anything, false otherwise
      */
     boolean isEmpty();
 
     /**
-     * Clone this data
+     * Clone this data.
      *
      * @return a cloned data object
      */
