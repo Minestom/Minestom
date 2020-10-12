@@ -5,8 +5,8 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.utils.BlockPosition;
 
 /**
- * Called when a player start digging a block,
- * can be used to forbid the player from mining it.
+ * Called when a {@link Player} start digging a block,
+ * can be used to forbid the {@link Player} from mining it.
  */
 public class PlayerStartDiggingEvent extends CancellableEvent {
 
@@ -23,18 +23,18 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who started digging the block
+     * Get the {@link Player} who started digging the block
      *
-     * @return the player
+     * @return the {@link Player}
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Get the block position
+     * Get the {@link BlockPosition}
      *
-     * @return the block position
+     * @return the {@link BlockPosition}
      */
     public BlockPosition getBlockPosition() {
         return blockPosition;

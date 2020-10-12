@@ -14,14 +14,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 /**
- * Utils class used to write packets in the appropriate thread pool
+ * Utils class used to write {@link ServerPacket} in the appropriate thread pool.
+ * <p>
+ * WARNING: those methods do not guarantee a receive order.
  */
 public final class PacketWriterUtils {
 
     private static final ExecutorService PACKET_WRITER_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, MinecraftServer.THREAD_NAME_PACKET_WRITER);
 
     /**
-     * Write the packet in the writer thread pool
+     * Write the {@link ServerPacket} in the writer thread pool.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -36,7 +38,7 @@ public final class PacketWriterUtils {
     }
 
     /**
-     * Write a packet in the writer thread pool and send it to every players in {@code players}
+     * Write a {@link ServerPacket} in the writer thread pool and send it to every players in {@code players}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -62,7 +64,7 @@ public final class PacketWriterUtils {
     }
 
     /**
-     * Write a packet and send it to a player connection
+     * Write a {@link ServerPacket} and send it to a {@link PlayerConnection}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -71,12 +73,18 @@ public final class PacketWriterUtils {
      */
     public static void writeAndSend(PlayerConnection playerConnection, ServerPacket serverPacket) {
         PACKET_WRITER_POOL.execute(() -> {
-            playerConnection.sendPacket(serverPacket);
+            if (PlayerUtils.isNettyClient(playerConnection)) {
+                final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
+                playerConnection.writePacket(buffer, true);
+                buffer.release();
+            } else {
+                playerConnection.sendPacket(serverPacket);
+            }
         });
     }
 
     /**
-     * Write a packet and send it to a player
+     * Write a {@link ServerPacket} and send it to a {@link Player}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *

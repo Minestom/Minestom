@@ -10,7 +10,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import java.util.Optional;
 
 /**
- * Packet sent during combat to a player.
+ * Packet sent during combat to a {@link Player}.
  * Only death is supported for the moment (other events are ignored anyway as of 1.15.2)
  */
 public class CombatEventPacket implements ServerPacket {

@@ -126,6 +126,7 @@ public final class CommandManager {
         Check.notNull(sender, "Source cannot be null");
         Check.notNull(command, "Command string cannot be null");
 
+        // Command event
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
@@ -138,14 +139,15 @@ public final class CommandManager {
             command = playerCommandEvent.getCommand();
         }
 
+        // Process the command
         try {
             // Check for rich-command
             this.dispatcher.execute(sender, command);
             return true;
         } catch (NullPointerException e) {
             // Check for legacy-command
-            final String[] splitted = command.split(" ");
-            final String commandName = splitted[0];
+            final String[] splitCommand = command.split(" ");
+            final String commandName = splitCommand[0];
             final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
             if (commandProcessor == null)
                 return false;
@@ -170,7 +172,7 @@ public final class CommandManager {
     /**
      * Get the {@link DeclareCommandsPacket} for a specific player
      * <p>
-     * Can be used to update the player auto-completion list
+     * Can be used to update the {@link Player} auto-completion list
      *
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
@@ -180,7 +182,7 @@ public final class CommandManager {
     }
 
     /**
-     * Build the {@link DeclareCommandsPacket} for a player
+     * Build the {@link DeclareCommandsPacket} for a {@link Player}
      *
      * @param player the player to build the packet for
      * @return the commands packet for the specific player

@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Represent an object which contain key/value based data
+ * Represent an object which contain key/value based data.
+ * <p>
+ * Please see {@link DataImpl} for the default implementation.
  */
 public interface Data {
 

@@ -214,26 +214,26 @@ public final class ConnectionManager {
     }
 
     /**
-     * Those are all the consumers called when a new player join
+     * Those are all the consumers called when a new {@link Player} join
      *
-     * @return an unmodifiable list containing all the player initialization consumer
+     * @return an unmodifiable list containing all the {@link Player} initialization consumer
      */
     public List<Consumer<Player>> getPlayerInitializations() {
         return Collections.unmodifiableList(playerInitializations);
     }
 
     /**
-     * Add a new player initialization consumer. Those are called when a player join,
+     * Add a new player initialization consumer. Those are called when a {@link Player} join,
      * mainly to add event callbacks to the player
      *
-     * @param playerInitialization the player initialization consumer
+     * @param playerInitialization the {@link Player} initialization consumer
      */
     public void addPlayerInitialization(Consumer<Player> playerInitialization) {
         this.playerInitializations.add(playerInitialization);
     }
 
     /**
-     * Add a new player in the players list
+     * Add a new {@link Player} in the players list
      * Is currently used at
      * {@link LoginStartPacket#process(PlayerConnection)}
      * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}
@@ -246,7 +246,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Create a player object and register it
+     * Create a {@link Player} object and register it
      *
      * @param uuid       the new player uuid
      * @param username   the new player username
@@ -258,8 +258,8 @@ public final class ConnectionManager {
     }
 
     /**
-     * Remove a player from the players list
-     * used at player disconnection
+     * Remove a {@link Player} from the players list
+     * used during disconnection
      *
      * @param connection the player connection
      */

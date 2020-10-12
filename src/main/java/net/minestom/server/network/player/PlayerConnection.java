@@ -16,7 +16,7 @@ import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A PlayerConnection is an object needed for all created player
+ * A PlayerConnection is an object needed for all created {@link Player}
  * It can be extended to create a new kind of player (NPC for instance)
  */
 public abstract class PlayerConnection {

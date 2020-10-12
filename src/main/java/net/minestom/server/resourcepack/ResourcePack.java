@@ -1,9 +1,10 @@
 package net.minestom.server.resourcepack;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 
 /**
- * Represent a resource pack which can be send to a player
+ * Represents a resource pack which can be send to a {@link Player}.
  */
 public class ResourcePack {
 

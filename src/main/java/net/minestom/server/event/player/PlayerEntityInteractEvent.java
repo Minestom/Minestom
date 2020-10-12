@@ -5,7 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called when a player interacts (right-click) with an entity
+ * Called when a {@link Player} interacts (right-click) with an {@link Entity}
  */
 public class PlayerEntityInteractEvent extends Event {
 
@@ -20,18 +20,18 @@ public class PlayerEntityInteractEvent extends Event {
     }
 
     /**
-     * Get the player who is interacting
+     * Get the {@link Player} who is interacting
      *
-     * @return the player
+     * @return the {@link Player}
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Get the entity with who {@link #getPlayer()} is interacting
+     * Get the {@link Entity} with who {@link #getPlayer()} is interacting
      *
-     * @return the entity
+     * @return the {@link Entity}
      */
     public Entity getTarget() {
         return entityTarget;

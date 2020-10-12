@@ -91,7 +91,7 @@ public interface CommandSender {
     }
 
     /**
-     * Get if the sender is a player
+     * Get if the sender is a {@link Player}.
      *
      * @return true if 'this' is a player, false otherwise
      */
@@ -100,7 +100,7 @@ public interface CommandSender {
     }
 
     /**
-     * Get if the sender is the console
+     * Get if the sender is a {@link ConsoleSender}.
      *
      * @return true if 'this' is the console, false otherwise
      */
@@ -109,8 +109,8 @@ public interface CommandSender {
     }
 
     /**
-     * Casts this object to a {@link Player}
-     * No checks are performed, {@link ClassCastException} can very much happen
+     * Casts this object to a {@link Player}.
+     * No checks are performed, {@link ClassCastException} can very much happen.
      *
      * @see #isPlayer()
      */
@@ -119,8 +119,8 @@ public interface CommandSender {
     }
 
     /**
-     * Casts this object to a {@link ConsoleSender}
-     * No checks are performed, {@link ClassCastException} can very much happen
+     * Casts this object to a {@link ConsoleSender}.
+     * No checks are performed, {@link ClassCastException} can very much happen.
      *
      * @see #isConsole()
      */

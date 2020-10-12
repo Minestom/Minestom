@@ -3,13 +3,13 @@ package net.minestom.server.instance;
 import net.minestom.server.utils.chunk.ChunkCallback;
 
 /**
- * Interface implemented to change the way chunks are loaded/saved
- * see {@link MinestomBasicChunkLoader} for the default implementation used in {@link InstanceContainer}
+ * Interface implemented to change the way chunks are loaded/saved.
+ * See {@link MinestomBasicChunkLoader} for the default implementation used in {@link InstanceContainer}.
  */
 public interface IChunkLoader {
 
     /**
-     * Load a specific chunk, all blocks should be set since the {@link ChunkGenerator} is not applied
+     * Load a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied
      *
      * @param instance the instance where the chunk belong
      * @param chunkX   the chunk X
@@ -21,7 +21,7 @@ public interface IChunkLoader {
     boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
-     * Save a specific chunk with a callback for when it is done
+     * Save a {@link Chunk} with a callback for when it is done
      *
      * @param chunk    the chunk to save
      * @param callback the callback executed when the chunk is done saving,
@@ -30,7 +30,7 @@ public interface IChunkLoader {
     void saveChunk(Chunk chunk, Runnable callback);
 
     /**
-     * Does this ChunkLoader allow for multi-threaded saving of chunks?
+     * Does this {@link IChunkLoader} allow for multi-threaded saving of {@link Chunk}?
      *
      * @return true if the chunk loader supports parallel saving
      */
@@ -39,7 +39,7 @@ public interface IChunkLoader {
     }
 
     /**
-     * Does this ChunkLoader allow for multi-threaded loading of chunks?
+     * Does this {@link IChunkLoader} allow for multi-threaded loading of {@link Chunk}?
      *
      * @return true if the chunk loader supports parallel loading
      */

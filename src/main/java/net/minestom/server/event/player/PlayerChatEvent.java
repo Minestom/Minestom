@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Called every time a player write and send something in the chat.
- * The event can be cancelled to do not send anything, and the format can be changed
+ * Called every time a {@link Player} write and send something in the chat.
+ * The event can be cancelled to do not send anything, and the format can be changed.
  */
 public class PlayerChatEvent extends CancellableEvent {
 
@@ -44,7 +44,7 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * This is all the players who will receive the message
+     * This is all the {@link Player} who will receive the message
      * It can be modified to add or remove recipient
      *
      * @return a modifiable list of message targets
