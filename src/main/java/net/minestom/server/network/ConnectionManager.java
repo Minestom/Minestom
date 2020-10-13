@@ -1,7 +1,6 @@
 package net.minestom.server.network;
 
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.RichMessage;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.listener.manager.PacketConsumer;
@@ -15,6 +14,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * Manage the connected clients.
+ */
 public final class ConnectionManager {
 
     private Set<Player> players = new CopyOnWriteArraySet<>();
@@ -81,51 +83,27 @@ public final class ConnectionManager {
     }
 
     /**
-     * Send a rich message to all online players who validate the condition {@code condition}
+     * Send a {@link JsonMessage} to all online players who validate the condition {@code condition}.
      *
-     * @param richMessage the rich message to send
+     * @param jsonMessage the message to send
      * @param condition   the condition to receive the message
      */
-    public void broadcastMessage(RichMessage richMessage, Function<Player, Boolean> condition) {
+    public void broadcastMessage(JsonMessage jsonMessage, Function<Player, Boolean> condition) {
         final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
-            final String jsonText = richMessage.toString();
+            final String jsonText = jsonMessage.toString();
             broadcastJson(jsonText, recipients);
         }
     }
 
     /**
-     * Send a rich message to all online players without exception
+     * Send a {@link JsonMessage} to all online players.
      *
-     * @param richMessage the rich message to send
+     * @param jsonMessage the message to send
      */
-    public void broadcastMessage(RichMessage richMessage) {
-        broadcastMessage(richMessage, null);
-    }
-
-    /**
-     * Send a message to all online players who validate the condition {@code condition}
-     *
-     * @param coloredText the message to send
-     * @param condition   the condition to receive the message
-     */
-    public void broadcastMessage(ColoredText coloredText, Function<Player, Boolean> condition) {
-        final Collection<Player> recipients = getRecipients(condition);
-
-        if (!recipients.isEmpty()) {
-            final String jsonText = coloredText.toString();
-            broadcastJson(jsonText, recipients);
-        }
-    }
-
-    /**
-     * Send a message to all online players without exception
-     *
-     * @param coloredText the message to send
-     */
-    public void broadcastMessage(ColoredText coloredText) {
-        broadcastMessage(coloredText, null);
+    public void broadcastMessage(JsonMessage jsonMessage) {
+        broadcastMessage(jsonMessage, null);
     }
 
     private void broadcastJson(String json, Collection<Player> recipients) {
@@ -171,7 +149,9 @@ public final class ConnectionManager {
     }
 
     /**
-     * Shouldn't be override if already defined
+     * Change how {@link UUID} are attributed to players.
+     * <p>
+     * Shouldn't be override if already defined.
      *
      * @param uuidProvider the new player connection uuid provider
      * @see #getPlayerConnectionUuid(PlayerConnection, String)
@@ -183,7 +163,7 @@ public final class ConnectionManager {
     /**
      * Compute the UUID of the specified connection
      * Used in {@link net.minestom.server.network.packet.client.login.LoginStartPacket} in order
-     * to give the player the right UUID
+     * to give the player the right {@link UUID}.
      *
      * @param playerConnection the player connection
      * @return the uuid based on {@code playerConnection}
@@ -258,8 +238,8 @@ public final class ConnectionManager {
     }
 
     /**
-     * Remove a {@link Player} from the players list
-     * used during disconnection
+     * Remove a {@link Player} from the players list,
+     * used during disconnection.
      *
      * @param connection the player connection
      */

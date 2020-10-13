@@ -125,7 +125,7 @@ public class PlayerDiggingListener {
         // Finished digging, remove effect if any
         player.resetTargetBlock();
 
-        // Unverified block break, client is fully responsive
+        // Unverified block break, client is fully responsible
         final boolean result = instance.breakBlock(player, blockPosition);
 
         final int updatedBlockId = result ? 0 : blockStateId;

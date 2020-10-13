@@ -8,7 +8,7 @@ import net.minestom.server.item.Material;
  * Represents an {@link Advancement} which is the root of an {@link AdvancementTab}.
  * Every tab requires one since advancements needs to be linked to a parent.
  * <p>
- * The difference between this and an {@link Advancement} is that the root is responsive for the tab background.
+ * The difference between this and an {@link Advancement} is that the root is responsible for the tab background.
  */
 public class AdvancementRoot extends Advancement {
 

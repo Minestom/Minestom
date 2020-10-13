@@ -207,7 +207,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *                 be sure that the data is only used for this reading.
      * @param callback the callback to execute once the chunk is done reading
      *                 WARNING: this need to be called to notify the instance.
-     * @see #getSerializedData() which is responsive for the serialized data given
+     * @see #getSerializedData() which is responsible for the serialized data given
      */
     public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
 

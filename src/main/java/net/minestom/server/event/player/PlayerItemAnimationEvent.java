@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 
 /**
- * Used when the player finish the animation of an item
+ * Used when a {@link Player} finish the animation of an item
  *
  * @see ItemAnimationType
  */
@@ -19,7 +19,7 @@ public class PlayerItemAnimationEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who is responsive for the animation
+     * Get the {@link Player} who is responsible for the animation.
      *
      * @return the player
      */

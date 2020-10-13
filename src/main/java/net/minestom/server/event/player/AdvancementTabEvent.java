@@ -5,8 +5,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called when the players open the advancement screens or switch the tab
- * and when he closes the screen
+ * Called when a {@link Player} opens the advancement screens or switch the tab
+ * and when he closes the screen.
  */
 public class AdvancementTabEvent extends Event {
 
@@ -21,7 +21,7 @@ public class AdvancementTabEvent extends Event {
     }
 
     /**
-     * Get the player responsive for the event
+     * Get the {@link Player} responsible for the event
      *
      * @return the player
      */

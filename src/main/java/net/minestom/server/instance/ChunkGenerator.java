@@ -7,7 +7,7 @@ import net.minestom.server.world.biomes.Biome;
 import java.util.List;
 
 /**
- * Responsive for the {@link Chunk} generation, can be set using {@link Instance#setChunkGenerator(ChunkGenerator)}.
+ * Responsible for the {@link Chunk} generation, can be set using {@link Instance#setChunkGenerator(ChunkGenerator)}.
  * <p>
  * Called if {@link IChunkLoader} hasn't been able to load it.
  */

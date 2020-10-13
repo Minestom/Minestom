@@ -42,7 +42,7 @@ public class NotificationCenter {
     }
 
     /**
-     * Create the packet responsive for showing the Toast to players
+     * Create the packet responsible for showing the Toast to players
      *
      * @param notification the notification
      * @return the packet used to show the Toast

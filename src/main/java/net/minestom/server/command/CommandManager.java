@@ -62,7 +62,7 @@ public final class CommandManager {
     }
 
     /**
-     * Stop the console responsive for the console commands processing
+     * Stop the console responsible for the console commands processing
      * <p>
      * WARNING: it cannot be re-run later
      */

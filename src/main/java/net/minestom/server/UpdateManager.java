@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 /**
- * Manager responsive for the server ticks.
+ * Manager responsible for the server ticks.
  * <p>
  * The {@link ThreadProvider} manages the multi-thread aspect for {@link Instance} ticks,
  * it can be modified with {@link #setThreadProvider(ThreadProvider)}.

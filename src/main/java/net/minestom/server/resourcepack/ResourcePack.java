@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.utils.validate.Check;
 
 /**
- * Represents a resource pack which can be send to a {@link Player}.
+ * Represents a resource pack which can be sent using {@link Player#setResourcePack(ResourcePack)}.
  */
 public class ResourcePack {
 
@@ -19,7 +19,7 @@ public class ResourcePack {
     }
 
     /**
-     * Get the resource pack URL
+     * Get the resource pack URL.
      *
      * @return the resource pack URL
      */
@@ -28,10 +28,10 @@ public class ResourcePack {
     }
 
     /**
-     * Get the resource pack hash
+     * Get the resource pack hash.
      * <p>
      * WARNING: if null or empty, the player will probably waste bandwidth by re-downloading
-     * the resource pack
+     * the resource pack.
      *
      * @return the resource pack hash
      */
