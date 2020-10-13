@@ -35,6 +35,12 @@ allprojects {
             url 'http://repo.spongepowered.org/maven'
         }
     }
+    javadoc {
+        options {
+            addBooleanOption('html5', true)
+            addBooleanOption('-no-module-directories', true)
+        }
+    }
 }
 
 group 'net.minestom.server'
