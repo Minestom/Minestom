@@ -41,7 +41,11 @@ import java.util.function.Consumer;
  * Instances are what are called "worlds" in Minecraft
  * <p>
  * An instance has entities and chunks, each instance contains its own entity list but the
- * chunk implementation has to be defined, see {@link InstanceContainer}
+ * chunk implementation has to be defined, see {@link InstanceContainer}.
+ * <p>
+ * WARNING: when making your own implementation, for chunks and entities within it,
+ * you need to be sure to signal the {@link UpdateManager} of the changes using
+ * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
  */
 public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
 

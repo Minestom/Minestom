@@ -5,6 +5,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.thread.PerGroupChunkProvider;
@@ -134,6 +135,8 @@ public final class UpdateManager {
 
     /**
      * Signal the {@link ThreadProvider} that an instance has been created.
+     * <p>
+     * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
@@ -145,6 +148,8 @@ public final class UpdateManager {
 
     /**
      * Signal the {@link ThreadProvider} that an instance has been deleted.
+     * <p>
+     * WARNING: should be automatically done by the {@link InstanceManager}.
      *
      * @param instance the instance
      */
@@ -155,7 +160,9 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that a chunk has been loaded
+     * Signal the {@link ThreadProvider} that a chunk has been loaded.
+     * <p>
+     * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param instance the instance of the chunk
      * @param chunkX   the chunk X
@@ -168,7 +175,9 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that a chunk has been unloaded
+     * Signal the {@link ThreadProvider} that a chunk has been unloaded.
+     * <p>
+     * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param instance the instance of the chunk
      * @param chunkX   the chunk X
