@@ -19,6 +19,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
+/**
+ * Manager responsive for the server ticks.
+ * <p>
+ * The {@link ThreadProvider} manages the multi-thread aspect for {@link Instance} ticks,
+ * it can be modified with {@link #setThreadProvider(ThreadProvider)}.
+ */
 public final class UpdateManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;

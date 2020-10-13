@@ -1,10 +1,7 @@
 package net.minestom.server.instance.batch;
 
 import net.minestom.server.data.Data;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.ChunkGenerator;
-import net.minestom.server.instance.ChunkPopulator;
-import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -14,7 +11,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Use chunk coordinate (0-16) instead of world's
+ * Used when all the blocks you want to place can be contained within only one {@link Chunk},
+ * use a {@link BlockBatch} instead otherwise.
+ * Can be created using {@link Instance#createChunkBatch(Chunk)}.
+ * <p>
+ * Use chunk coordinate (0-15) instead of world's
+ *
+ * @see InstanceBatch
  */
 public class ChunkBatch implements InstanceBatch {
 

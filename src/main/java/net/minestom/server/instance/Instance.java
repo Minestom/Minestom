@@ -38,12 +38,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 /**
- * Instances are what are called "worlds" in Minecraft
+ * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
  * <p>
  * An instance has entities and chunks, each instance contains its own entity list but the
  * chunk implementation has to be defined, see {@link InstanceContainer}.
  * <p>
- * WARNING: when making your own implementation, for chunks and entities within it,
+ * WARNING: when making your own implementation registering the instance manually is required
+ * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
  */
