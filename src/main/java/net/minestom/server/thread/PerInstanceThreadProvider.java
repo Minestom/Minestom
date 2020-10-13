@@ -19,6 +19,16 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     private Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
 
     @Override
+    public void onInstanceCreate(Instance instance) {
+        this.instanceChunkMap.put(instance, new LongArraySet());
+    }
+
+    @Override
+    public void onInstanceDelete(Instance instance) {
+        this.instanceChunkMap.remove(instance);
+    }
+
+    @Override
     public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
         // Add the loaded chunk to the instance chunks list
         LongSet chunkCoordinates = getChunkCoordinates(instance);
@@ -52,7 +62,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     }
 
     private LongSet getChunkCoordinates(Instance instance) {
-        return instanceChunkMap.computeIfAbsent(instance, inst -> new LongArraySet());
+        return instanceChunkMap.get(instance);
     }
 
 }

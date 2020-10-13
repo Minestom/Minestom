@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -125,6 +126,7 @@ public final class InstanceManager {
 
             instance.setRegistered(false);
             this.instances.remove(instance);
+            MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
         }
     }
 
@@ -147,6 +149,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
+        MinecraftServer.getUpdateManager().signalInstanceCreate(instance);
     }
 
 }

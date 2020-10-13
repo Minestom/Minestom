@@ -133,7 +133,29 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the thread provider that a chunk has been loaded
+     * Signal the {@link ThreadProvider} that an instance has been created.
+     *
+     * @param instance the instance
+     */
+    public synchronized void signalInstanceCreate(Instance instance) {
+        if (this.threadProvider == null)
+            return;
+        this.threadProvider.onInstanceCreate(instance);
+    }
+
+    /**
+     * Signal the {@link ThreadProvider} that an instance has been deleted.
+     *
+     * @param instance the instance
+     */
+    public synchronized void signalInstanceDelete(Instance instance) {
+        if (this.threadProvider == null)
+            return;
+        this.threadProvider.onInstanceDelete(instance);
+    }
+
+    /**
+     * Signal the {@link ThreadProvider} that a chunk has been loaded
      *
      * @param instance the instance of the chunk
      * @param chunkX   the chunk X
@@ -146,7 +168,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the thread provider that a chunk has been unloaded
+     * Signal the {@link ThreadProvider} that a chunk has been unloaded
      *
      * @param instance the instance of the chunk
      * @param chunkX   the chunk X

@@ -37,6 +37,20 @@ public abstract class ThreadProvider {
     }
 
     /**
+     * Called when an {@link Instance} is created.
+     *
+     * @param instance the newly create {@link Instance}
+     */
+    public abstract void onInstanceCreate(Instance instance);
+
+    /**
+     * Called when an {@link Instance} is deleted.
+     *
+     * @param instance the deleted {@link Instance}
+     */
+    public abstract void onInstanceDelete(Instance instance);
+
+    /**
      * Called when a chunk is loaded
      *
      * @param instance the instance of the chunk
