@@ -18,15 +18,15 @@ public interface Framebuffer {
 
     default void preparePacket(MapDataPacket packet, int minX, int minY, int width, int height) {
         byte[] colors;
-        if(minX == 0 && minY == 0 && width == WIDTH && height == HEIGHT) {
+        if (minX == 0 && minY == 0 && width == WIDTH && height == HEIGHT) {
             colors = toMapColors();
         } else {
-            colors = new byte[width*height];
-            byte[] mapColors = toMapColors();
-            for (int y = minY; y < Math.min(HEIGHT, minY+height); y++) {
-                for (int x = minX; x < Math.min(WIDTH, minX+width); x++) {
+            colors = new byte[width * height];
+            final byte[] mapColors = toMapColors();
+            for (int y = minY; y < Math.min(HEIGHT, minY + height); y++) {
+                for (int x = minX; x < Math.min(WIDTH, minX + width); x++) {
                     byte color = mapColors[index(x, y, WIDTH)];
-                    colors[index(x-minX, y-minY, width)] = color;
+                    colors[index(x - minX, y - minY, width)] = color;
                 }
             }
         }
@@ -44,7 +44,7 @@ public interface Framebuffer {
     }
 
     static int index(int x, int z, int stride) {
-        return z*stride + x;
+        return z * stride + x;
     }
 
 }

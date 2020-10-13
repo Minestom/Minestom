@@ -5,8 +5,8 @@ import net.minestom.server.map.LargeFramebuffer;
 import net.minestom.server.map.MapColors;
 
 /**
- * Large framebuffer with direct access to the colors array.
- *
+ * {@link LargeFramebuffer} with direct access to the colors array.
+ * <p>
  * This implementation does not throw errors when accessing out-of-bounds coordinates through sub-views, and will instead
  * use {@link MapColors#NONE}. This is only the case for sub-views, access through {@link #setMapColor(int, int, byte)}
  * and {@link #getMapColor(int, int)} will throw an exception if out-of-bounds coordinates are inputted.
@@ -19,13 +19,14 @@ public class LargeDirectFramebuffer implements LargeFramebuffer {
 
     /**
      * Creates a new {@link LargeDirectFramebuffer} with the desired size
+     *
      * @param width
      * @param height
      */
     public LargeDirectFramebuffer(int width, int height) {
         this.width = width;
         this.height = height;
-        this.colors = new byte[width*height];
+        this.colors = new byte[width * height];
     }
 
     @Override
@@ -44,15 +45,15 @@ public class LargeDirectFramebuffer implements LargeFramebuffer {
     }
 
     public LargeDirectFramebuffer setMapColor(int x, int y, byte color) {
-        if(!bounds(x, y)) throw new IndexOutOfBoundsException("Invalid x;y coordinate: "+x+";"+y);
-        colors[y*width+x] = color;
+        if (!bounds(x, y)) throw new IndexOutOfBoundsException("Invalid x;y coordinate: " + x + ";" + y);
+        colors[y * width + x] = color;
         return this;
     }
 
     @Override
     public byte getMapColor(int x, int y) {
-        if(!bounds(x, y)) throw new IndexOutOfBoundsException("Invalid x;y coordinate: "+x+";"+y);
-        return colors[y*width+x];
+        if (!bounds(x, y)) throw new IndexOutOfBoundsException("Invalid x;y coordinate: " + x + ";" + y);
+        return colors[y * width + x];
     }
 
     private boolean bounds(int x, int y) {

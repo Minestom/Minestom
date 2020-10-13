@@ -9,7 +9,7 @@ public final class AdvancementUtils {
     }
 
     /**
-     * Get an {@link AdvancementsPacket} which remove the specified identifiers
+     * Get an {@link AdvancementsPacket} which remove the specified identifiers.
      *
      * @param identifiers the identifiers to remove
      * @return the packet to remove all the identifiers

@@ -19,7 +19,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static net.minestom.server.MinecraftServer.*;
 
-public class BenchmarkManager {
+/**
+ * Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
+ * <p>
+ * Needs to be enabled with {@link #enable(UpdateOption)}. Memory can then be accessed with {@link #getUsedMemory()}
+ * and the CPUs usage with {@link #getResultMap()} or {@link #getCpuMonitoringMessage()}.
+ */
+public final class BenchmarkManager {
 
     public static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
     private static List<String> threads = new ArrayList<>();
@@ -40,7 +46,7 @@ public class BenchmarkManager {
     private final Long2LongMap lastWaitedMap = new Long2LongOpenHashMap();
     private final Long2LongMap lastBlockedMap = new Long2LongOpenHashMap();
 
-    private Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
+    private final Map<String, ThreadResult> resultMap = new ConcurrentHashMap<>();
 
     private boolean enabled = false;
     private volatile boolean stop = false;
@@ -115,7 +121,7 @@ public class BenchmarkManager {
     private void refreshData() {
         ThreadInfo[] threadInfo = threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds());
         for (ThreadInfo threadInfo2 : threadInfo) {
-            String name = threadInfo2.getThreadName();
+            final String name = threadInfo2.getThreadName();
             boolean shouldBenchmark = false;
             for (String thread : threads) {
                 if (name.startsWith(thread)) {
@@ -126,32 +132,32 @@ public class BenchmarkManager {
             if (!shouldBenchmark)
                 continue;
 
-            long id = threadInfo2.getThreadId();
+            final long id = threadInfo2.getThreadId();
 
-            long lastCpuTime = lastCpuTimeMap.getOrDefault(id, 0L);
-            long lastUserTime = lastUserTimeMap.getOrDefault(id, 0L);
-            long lastWaitedTime = lastWaitedMap.getOrDefault(id, 0L);
-            long lastBlockedTime = lastBlockedMap.getOrDefault(id, 0L);
+            final long lastCpuTime = lastCpuTimeMap.getOrDefault(id, 0L);
+            final long lastUserTime = lastUserTimeMap.getOrDefault(id, 0L);
+            final long lastWaitedTime = lastWaitedMap.getOrDefault(id, 0L);
+            final long lastBlockedTime = lastBlockedMap.getOrDefault(id, 0L);
 
-            long blockedTime = threadInfo2.getBlockedTime();
-            long waitedTime = threadInfo2.getWaitedTime();
-            long cpuTime = threadMXBean.getThreadCpuTime(id);
-            long userTime = threadMXBean.getThreadUserTime(id);
+            final long blockedTime = threadInfo2.getBlockedTime();
+            final long waitedTime = threadInfo2.getWaitedTime();
+            final long cpuTime = threadMXBean.getThreadCpuTime(id);
+            final long userTime = threadMXBean.getThreadUserTime(id);
 
             lastCpuTimeMap.put(id, cpuTime);
             lastUserTimeMap.put(id, userTime);
             lastWaitedMap.put(id, waitedTime);
             lastBlockedMap.put(id, blockedTime);
 
-            double totalCpuTime = (double) (cpuTime - lastCpuTime) / 1000000D;
-            double totalUserTime = (double) (userTime - lastUserTime) / 1000000D;
-            long totalBlocked = blockedTime - lastBlockedTime;
-            long totalWaited = waitedTime - lastWaitedTime;
+            final double totalCpuTime = (double) (cpuTime - lastCpuTime) / 1000000D;
+            final double totalUserTime = (double) (userTime - lastUserTime) / 1000000D;
+            final long totalBlocked = blockedTime - lastBlockedTime;
+            final long totalWaited = waitedTime - lastWaitedTime;
 
-            double cpuPercentage = totalCpuTime / (double) time * 100L;
-            double userPercentage = totalUserTime / (double) time * 100L;
-            double waitedPercentage = totalWaited / (double) time * 100L;
-            double blockedPercentage = totalBlocked / (double) time * 100L;
+            final double cpuPercentage = totalCpuTime / (double) time * 100L;
+            final double userPercentage = totalUserTime / (double) time * 100L;
+            final double waitedPercentage = totalWaited / (double) time * 100L;
+            final double blockedPercentage = totalBlocked / (double) time * 100L;
 
             ThreadResult threadResult = new ThreadResult(cpuPercentage, userPercentage, waitedPercentage, blockedPercentage);
             resultMap.put(name, threadResult);

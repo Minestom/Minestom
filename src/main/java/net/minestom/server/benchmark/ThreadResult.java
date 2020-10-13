@@ -2,7 +2,7 @@ package net.minestom.server.benchmark;
 
 public class ThreadResult {
 
-    private double cpuPercentage, userPercentage, waitedPercentage, blockedPercentage;
+    private final double cpuPercentage, userPercentage, waitedPercentage, blockedPercentage;
 
     protected ThreadResult(double cpuPercentage, double userPercentage, double waitedPercentage, double blockedPercentage) {
         this.cpuPercentage = cpuPercentage;

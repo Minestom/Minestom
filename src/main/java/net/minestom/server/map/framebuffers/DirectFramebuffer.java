@@ -3,14 +3,15 @@ package net.minestom.server.map.framebuffers;
 import net.minestom.server.map.Framebuffer;
 
 /**
- * Framebuffer with direct access to the colors array
+ * {@link Framebuffer} with direct access to the colors array
  */
 public class DirectFramebuffer implements Framebuffer {
 
-    private final byte[] colors = new byte[WIDTH*HEIGHT];
+    private final byte[] colors = new byte[WIDTH * HEIGHT];
 
     /**
      * Mutable colors array
+     *
      * @return
      */
     public byte[] getColors() {

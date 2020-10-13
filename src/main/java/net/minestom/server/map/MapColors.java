@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public enum MapColors {
-    NONE(0,0,0),
+    NONE(0, 0, 0),
     GRASS(127, 178, 56),
     SAND(247, 233, 163),
     WOOL(199, 199, 199),
@@ -65,8 +65,7 @@ public enum MapColors {
     WARPED_NYLIUM(22, 126, 134),
     WARPED_STEM(58, 142, 140),
     WARPED_HYPHAE(86, 44, 62),
-    WARPED_WART_BLOCK(20, 180, 133),
-    ;
+    WARPED_WART_BLOCK(20, 180, 133);
 
     private final int red;
     private final int green;
@@ -85,13 +84,13 @@ public enum MapColors {
     static {
         ColorMappingStrategy strategy;
         String strategyStr = System.getProperty(MAPPING_ARGUMENT);
-        if(strategyStr == null) {
+        if (strategyStr == null) {
             strategy = ColorMappingStrategy.LAZY;
         } else {
             try {
                 strategy = ColorMappingStrategy.valueOf(strategyStr.toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("Unknown color mapping strategy: "+strategyStr);
+                System.err.println("Unknown color mapping strategy: " + strategyStr);
                 System.err.println("Defaulting to LAZY.");
                 strategy = ColorMappingStrategy.LAZY;
             }
@@ -100,16 +99,16 @@ public enum MapColors {
 
         int reduction = 10;
         String reductionStr = System.getProperty(REDUCTION_ARGUMENT);
-        if(reductionStr != null) {
+        if (reductionStr != null) {
             try {
                 reduction = Integer.parseInt(reductionStr);
             } catch (NumberFormatException e) {
-                System.err.println("Invalid integer in reduction argument: "+reductionStr);
+                System.err.println("Invalid integer in reduction argument: " + reductionStr);
                 e.printStackTrace();
             }
 
-            if(reduction < 0 || reduction >= 255) {
-                System.err.println("Reduction was found to be invalid: "+reduction+". Must in 0-255, defaulting to 10.");
+            if (reduction < 0 || reduction >= 255) {
+                System.err.println("Reduction was found to be invalid: " + reduction + ". Must in 0-255, defaulting to 10.");
                 reduction = 10;
             }
         }
@@ -133,14 +132,14 @@ public enum MapColors {
      * Returns the color index with RGB multiplied by 0.53, to use on a map
      */
     public byte multiply53() {
-        return (byte) ((ordinal() << 2) +3);
+        return (byte) ((ordinal() << 2) + 3);
     }
 
     /**
      * Returns the color index with RGB multiplied by 0.86, to use on a map
      */
     public byte multiply86() {
-        return (byte) ((ordinal() << 2) +1);
+        return (byte) ((ordinal() << 2) + 1);
     }
 
     /**
@@ -154,7 +153,7 @@ public enum MapColors {
      * Returns the color index to use on a map
      */
     public byte baseColor() {
-        return (byte) ((ordinal() << 2) +2);
+        return (byte) ((ordinal() << 2) + 2);
     }
 
     public int red() {
@@ -170,14 +169,14 @@ public enum MapColors {
     }
 
     private static void fillRGBMap() {
-        for(MapColors base : values()) {
-            if(base == NONE)
+        for (MapColors base : values()) {
+            if (base == NONE)
                 continue;
-            for(Multiplier m : Multiplier.values()) {
+            for (Multiplier m : Multiplier.values()) {
                 PreciseMapColor preciseMapColor = new PreciseMapColor(base, m);
                 int rgb = preciseMapColor.toRGB();
 
-                if(mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
+                if (mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
                     rgb = reduceColor(rgb);
                 }
                 rgbMap.put(rgb, preciseMapColor);
@@ -186,7 +185,7 @@ public enum MapColors {
     }
 
     private static void fillRGBArray() {
-        rgbArray = new PreciseMapColor[0xFFFFFF+1];
+        rgbArray = new PreciseMapColor[0xFFFFFF + 1];
         MinestomThread threads = new MinestomThread(Runtime.getRuntime().availableProcessors(), "RGBMapping", true);
         for (int rgb = 0; rgb <= 0xFFFFFF; rgb++) {
             int finalRgb = rgb;
@@ -204,23 +203,23 @@ public enum MapColors {
     public static PreciseMapColor closestColor(int argb) {
         int noAlpha = argb & 0xFFFFFF;
         if (mappingStrategy == ColorMappingStrategy.PRECISE) {
-            if(rgbArray == null) {
+            if (rgbArray == null) {
                 synchronized (MapColors.class) {
-                    if(rgbArray == null) {
+                    if (rgbArray == null) {
                         fillRGBArray();
                     }
                 }
             }
             return rgbArray[noAlpha];
         }
-        if(rgbMap.isEmpty()) {
+        if (rgbMap.isEmpty()) {
             synchronized (rgbMap) {
-                if(rgbMap.isEmpty()) {
+                if (rgbMap.isEmpty()) {
                     fillRGBMap();
                 }
             }
         }
-        if(mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
+        if (mappingStrategy == ColorMappingStrategy.APPROXIMATE) {
             noAlpha = reduceColor(noAlpha);
         }
         return rgbMap.computeIfAbsent(noAlpha, MapColors::mapColor);
@@ -231,32 +230,32 @@ public enum MapColors {
         int green = (rgb >> 8) & 0xFF;
         int blue = rgb & 0xFF;
 
-        red = red/colorReduction;
-        green = green/colorReduction;
-        blue = blue/colorReduction;
+        red = red / colorReduction;
+        green = green / colorReduction;
+        blue = blue / colorReduction;
         return (red << 16) | (green << 8) | blue;
     }
 
     private static PreciseMapColor mapColor(int rgb) {
         PreciseMapColor closest = null;
         int closestDistance = Integer.MAX_VALUE;
-        for(MapColors base : values()) {
+        for (MapColors base : values()) {
             if (base == NONE)
                 continue;
             for (Multiplier m : Multiplier.values()) {
-                int rgbKey = PreciseMapColor.toRGB(base, m);
-                int redKey = (rgbKey >> 16) & 0xFF;
-                int greenKey = (rgbKey >> 8) & 0xFF;
-                int blueKey = rgbKey & 0xFF;
+                final int rgbKey = PreciseMapColor.toRGB(base, m);
+                final int redKey = (rgbKey >> 16) & 0xFF;
+                final int greenKey = (rgbKey >> 8) & 0xFF;
+                final int blueKey = rgbKey & 0xFF;
 
-                int red = (rgb >> 16) & 0xFF;
-                int green = (rgb >> 8) & 0xFF;
-                int blue = rgb & 0xFF;
+                final int red = (rgb >> 16) & 0xFF;
+                final int green = (rgb >> 8) & 0xFF;
+                final int blue = rgb & 0xFF;
 
-                int dr = redKey - red;
-                int dg = greenKey - green;
-                int db = blueKey - blue;
-                int dist = (dr * dr + dg * dg + db * db);
+                final int dr = redKey - red;
+                final int dg = greenKey - green;
+                final int db = blueKey - blue;
+                final int dist = (dr * dr + dg * dg + db * db);
                 if (dist < closestDistance) {
                     closest = new PreciseMapColor(base, m);
                     closestDistance = dist;
@@ -267,8 +266,8 @@ public enum MapColors {
     }
 
     public static class PreciseMapColor {
-        private MapColors baseColor;
-        private Multiplier multiplier;
+        private final MapColors baseColor;
+        private final Multiplier multiplier;
 
         PreciseMapColor(MapColors base, Multiplier multiplier) {
             this.baseColor = base;
@@ -300,9 +299,9 @@ public enum MapColors {
             g *= multiplier.multiplier();
             b *= multiplier.multiplier();
 
-            int red = (int) r;
-            int green = (int) g;
-            int blue = (int) b;
+            final int red = (int) r;
+            final int green = (int) g;
+            final int blue = (int) b;
             return (red << 16) | (green << 8) | blue;
         }
     }
@@ -311,8 +310,7 @@ public enum MapColors {
         x1_00(MapColors::baseColor, 1.00),
         x0_53(MapColors::multiply53, 0.53),
         x0_71(MapColors::multiply71, 0.71),
-        x0_86(MapColors::multiply86, 0.86),
-        ;
+        x0_86(MapColors::multiply86, 0.86);
 
         private final Function<MapColors, Byte> indexGetter;
         private final double multiplier;

@@ -9,11 +9,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 /**
- * LargeFramebuffer that embeds a BufferedImage, allowing for rendering directly via Graphics2D or its pixel array
+ * {@link LargeFramebuffer} that embeds a {@link BufferedImage},
+ * allowing for rendering directly via {@link Graphics2D} or its pixel array.
  */
 public class LargeGraphics2DFramebuffer implements LargeFramebuffer {
 
-    private final byte[] colors;
     private final BufferedImage backingImage;
     private final Graphics2D renderer;
     private final int[] pixels;
@@ -23,10 +23,9 @@ public class LargeGraphics2DFramebuffer implements LargeFramebuffer {
     public LargeGraphics2DFramebuffer(int width, int height) {
         this.width = width;
         this.height = height;
-        colors = new byte[width*height];
         backingImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         renderer = backingImage.createGraphics();
-        pixels = ((DataBufferInt)backingImage.getRaster().getDataBuffer()).getData();
+        pixels = ((DataBufferInt) backingImage.getRaster().getDataBuffer()).getData();
     }
 
     public Graphics2D getRenderer() {
@@ -38,11 +37,11 @@ public class LargeGraphics2DFramebuffer implements LargeFramebuffer {
     }
 
     public int get(int x, int z) {
-        return pixels[x+z*width]; // stride is always the width of the image
+        return pixels[x + z * width]; // stride is always the width of the image
     }
 
     public LargeGraphics2DFramebuffer set(int x, int z, int rgb) {
-        pixels[x+z*width] = rgb;
+        pixels[x + z * width] = rgb;
         return this;
     }
 
