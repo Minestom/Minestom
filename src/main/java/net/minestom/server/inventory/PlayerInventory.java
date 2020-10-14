@@ -212,7 +212,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      *
      * @param slot the slot to refresh
      */
-    public void refreshSlot(int slot) {
+    public void refreshSlot(short slot) {
         sendSlotRefresh((short) convertToPacketSlot(slot), getItemStack(slot));
     }
 

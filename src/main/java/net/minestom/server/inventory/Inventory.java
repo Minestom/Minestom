@@ -223,6 +223,15 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         playerConnection.sendPacket(createNewWindowItemsPacket());
     }
 
+    /**
+     * Refresh only a specific slot with the updated item stack data
+     *
+     * @param slot the slot to refresh
+     */
+    public void refreshSlot(short slot) {
+        sendSlotRefresh(slot, getItemStack(slot));
+    }
+
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);

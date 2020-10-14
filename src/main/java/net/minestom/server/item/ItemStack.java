@@ -3,11 +3,15 @@ package net.minestom.server.item;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.*;
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
@@ -18,11 +22,19 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 
 // TODO should we cache a ByteBuf of this item for faster packet write
+
+/**
+ * Represents an item in an inventory ({@link PlayerInventory}, {@link Inventory}) or on the ground ({@link ItemEntity}).
+ * <p>
+ * WARNING: all setters will not update the item automatically, it will need to be refreshed manually.
+ * Here a non-exhaustive list of what you can do to update the item:
+ * {@link PlayerInventory#refreshSlot(short)}, {@link Inventory#refreshSlot(short)} or a raw {@link SetSlotPacket}.
+ */
 public class ItemStack implements DataContainer {
 
     private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(127);
 
-    private final Material material;
+    private Material material;
 
     private static StackingRule defaultStackingRule;
     private ItemMeta itemMeta;
@@ -68,7 +80,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get a new air item
+     * Get a new {@link ItemStack} with the material sets to {@link Material#AIR}.
      *
      * @return an air item
      */
@@ -77,7 +89,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the default stacking rule for newly created ItemStack
+     * Get the default {@link StackingRule} for newly created {@link ItemStack}.
      *
      * @return the default stacking rule
      */
@@ -96,6 +108,12 @@ public class ItemStack implements DataContainer {
         ItemStack.defaultStackingRule = defaultStackingRule;
     }
 
+    /**
+     * Load an {@link ItemStack} from nbt.
+     *
+     * @param nbt the nbt compound containing the item
+     * @return the parsed item stack
+     */
     public static ItemStack fromNBT(NBTCompound nbt) {
         if (!nbt.containsKey("id") || !nbt.containsKey("Count"))
             throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
@@ -112,7 +130,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item is air
+     * Get if the item material is {@link Material#AIR}.
      *
      * @return true if the material is air, false otherwise
      */
@@ -122,7 +140,7 @@ public class ItemStack implements DataContainer {
 
     /**
      * Get if two items are similar.
-     * It does not take {@link #getAmount()} and {@link #getStackingRule()} in consideration
+     * It does not take {@link #getAmount()} and {@link #getStackingRule()} in consideration.
      *
      * @param itemStack The ItemStack to compare to
      * @return true if both items are similar
@@ -460,12 +478,21 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item material
+     * Get the item {@link Material}.
      *
      * @return the item material
      */
     public Material getMaterial() {
         return material;
+    }
+
+    /**
+     * Change the item {@link Material}.
+     *
+     * @param material the new material
+     */
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 
     /**
