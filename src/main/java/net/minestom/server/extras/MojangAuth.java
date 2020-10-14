@@ -8,6 +8,9 @@ public class MojangAuth {
     @Getter
     private static boolean usingMojangAuth = false;
 
+    /**
+     * Enable mojang authentication on the server.
+     */
     public static void init() {
         if (MinecraftServer.getNettyServer().getAddress() == null) {
             usingMojangAuth = true;

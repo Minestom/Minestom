@@ -607,7 +607,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Find the item meta based on the material type
+     * Find the {@link ItemMeta} based on the material type
      *
      * @return the item meta
      */
@@ -680,7 +680,7 @@ public class ItemStack implements DataContainer {
     // Callback events
 
     /**
-     * Called when the player right clicks with this item
+     * Called when the player right clicks with this item.
      *
      * @param player the player who used the item
      * @param hand   the hand used
@@ -689,7 +689,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Called when the player left clicks with this item
+     * Called when the player left clicks with this item.
      *
      * @param player the player who used the item
      * @param hand   the hand used
@@ -698,7 +698,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Called when the player right clicks with this item on a block
+     * Called when the player right clicks with this item on a block.
      *
      * @param player    the player who used the item
      * @param hand      the hand used
@@ -711,9 +711,9 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Called when the player click on this item on an inventory
+     * Called when the player click on this item on an inventory.
      * <p>
-     * Executed before any events
+     * Executed before any events.
      *
      * @param player          the player who clicked on the item
      * @param clickType       the click type
