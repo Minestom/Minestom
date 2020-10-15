@@ -6,9 +6,9 @@ import net.minestom.codegen.entitytypes.EntityTypeEnumGenerator;
 import net.minestom.codegen.fluids.FluidEnumGenerator;
 import net.minestom.codegen.items.ItemEnumGenerator;
 import net.minestom.codegen.particles.ParticleEnumGenerator;
+import net.minestom.codegen.potions.PotionEffectEnumGenerator;
 import net.minestom.codegen.potions.PotionEnumGenerator;
 import net.minestom.codegen.sounds.SoundEnumGenerator;
-import net.minestom.codegen.stats.BiomesEnumGenerator;
 import net.minestom.codegen.stats.StatsEnumGenerator;
 
 import java.io.IOException;
@@ -19,6 +19,7 @@ public class AllGenerators {
         BlockEnumGenerator.main(args);
         ItemEnumGenerator.main(args); // must be done after block
         PotionEnumGenerator.main(args);
+        PotionEffectEnumGenerator.main(args);
         EnchantmentEnumGenerator.main(args);
         EntityTypeEnumGenerator.main(args);
         SoundEnumGenerator.main(args);

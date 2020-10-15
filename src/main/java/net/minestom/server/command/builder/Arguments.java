@@ -5,7 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.potion.PotionType;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
@@ -69,8 +69,8 @@ public class Arguments {
         return (Particle) getObject(id);
     }
 
-    public PotionType getPotion(String id) {
-        return (PotionType) getObject(id);
+    public PotionEffect getPotionEffect(String id) {
+        return (PotionEffect) getObject(id);
     }
 
     public EntityType getEntityType(String id) {

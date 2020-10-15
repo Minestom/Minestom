@@ -35,6 +35,7 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
@@ -157,6 +158,7 @@ public class MinecraftServer {
         Block.values();
         Material.values();
         PotionType.values();
+        PotionEffect.values();
         Enchantment.values();
         EntityType.values();
         Sound.values();

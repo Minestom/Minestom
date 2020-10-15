@@ -3,13 +3,13 @@ package net.minestom.server.inventory.type;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.potion.PotionType;
+import net.minestom.server.potion.PotionEffect;
 
 public class BeaconInventory extends Inventory {
 
     private short powerLevel;
-    private PotionType firstPotionEffect;
-    private PotionType secondPotionEffect;
+    private PotionEffect firstPotionEffect;
+    private PotionEffect secondPotionEffect;
 
     public BeaconInventory(String title) {
         super(InventoryType.BEACON, title);
@@ -39,7 +39,7 @@ public class BeaconInventory extends Inventory {
      *
      * @return the first potion effect, can be null
      */
-    public PotionType getFirstPotionEffect() {
+    public PotionEffect getFirstPotionEffect() {
         return firstPotionEffect;
     }
 
@@ -48,7 +48,7 @@ public class BeaconInventory extends Inventory {
      *
      * @param firstPotionEffect the new first potion effect, can be null
      */
-    public void setFirstPotionEffect(PotionType firstPotionEffect) {
+    public void setFirstPotionEffect(PotionEffect firstPotionEffect) {
         this.firstPotionEffect = firstPotionEffect;
         sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.getId());
     }
@@ -58,7 +58,7 @@ public class BeaconInventory extends Inventory {
      *
      * @return the second potion effect, can be null
      */
-    public PotionType getSecondPotionEffect() {
+    public PotionEffect getSecondPotionEffect() {
         return secondPotionEffect;
     }
 
@@ -67,7 +67,7 @@ public class BeaconInventory extends Inventory {
      *
      * @param secondPotionEffect the new second potion effect, can be null
      */
-    public void setSecondPotionEffect(PotionType secondPotionEffect) {
+    public void setSecondPotionEffect(PotionEffect secondPotionEffect) {
         this.secondPotionEffect = secondPotionEffect;
         sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.getId());
     }

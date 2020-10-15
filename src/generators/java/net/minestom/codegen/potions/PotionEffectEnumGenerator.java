@@ -6,7 +6,7 @@ import net.minestom.server.registry.ResourceGatherer;
 import java.io.File;
 import java.io.IOException;
 
-public class PotionEnumGenerator extends BasicEnumGenerator {
+public class PotionEffectEnumGenerator extends BasicEnumGenerator {
     public static void main(String[] args) throws IOException {
         String targetVersion;
         if (args.length < 1) {
@@ -32,16 +32,16 @@ public class PotionEnumGenerator extends BasicEnumGenerator {
             targetFolder.mkdirs();
         }
 
-        new PotionEnumGenerator(targetFolder);
+        new PotionEffectEnumGenerator(targetFolder);
     }
 
-    private PotionEnumGenerator(File targetFolder) throws IOException {
+    private PotionEffectEnumGenerator(File targetFolder) throws IOException {
         super(targetFolder);
     }
 
     @Override
     protected String getCategoryID() {
-        return "minecraft:potion";
+        return "minecraft:mob_effect";
     }
 
     @Override
@@ -51,6 +51,6 @@ public class PotionEnumGenerator extends BasicEnumGenerator {
 
     @Override
     public String getClassName() {
-        return "PotionType";
+        return "PotionEffect";
     }
 }

@@ -38,14 +38,14 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
 
         JsonObject root = gson.fromJson(new FileReader(MC_DATA_REGISTRIES_PATH), JsonObject.class);
         JsonObject category = root.getAsJsonObject(getCategoryID());
-        Objects.requireNonNull(category, "Category "+getCategoryID()+" not found in registries.json!");
-        JsonObject entries = category.getAsJsonObject("entries");
-        if(category.has("default")) {
+        Objects.requireNonNull(category, "Category " + getCategoryID() + " not found in registries.json!");
+        final JsonObject entries = category.getAsJsonObject("entries");
+        if (category.has("default")) {
             defaultEntry = NamespaceID.from(category.get("default").getAsString());
         }
-        for(var entry : entries.entrySet()) {
-            NamespaceID name = NamespaceID.from(entry.getKey());
-            int id = entry.getValue().getAsJsonObject().get("protocol_id").getAsInt();
+        for (var entry : entries.entrySet()) {
+            final NamespaceID name = NamespaceID.from(entry.getKey());
+            final int id = entry.getValue().getAsJsonObject().get("protocol_id").getAsInt();
             items.add(new Container(id, name));
         }
 
@@ -56,21 +56,21 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
 
     @Override
     protected void postWrite(EnumGenerator generator) {
-        if(linear) {
-            generator.addMethod("fromId", "(int id)", "static "+getClassName(),
+        if (linear) {
+            generator.addMethod("fromId", "(int id)", "static " + getClassName(),
                     "if(id >= 0 && id < values().length) {",
                     "\treturn values()[id];",
                     "}",
-                    "return "+(defaultEntry == null ? "null" : identifier(defaultEntry))+";"
+                    "return " + (defaultEntry == null ? "null" : identifier(defaultEntry)) + ";"
             );
         } else {
-            generator.addMethod("fromId", "(int id)", "static "+getClassName(),
-                    "for("+getClassName()+" o : values()) {",
+            generator.addMethod("fromId", "(int id)", "static " + getClassName(),
+                    "for(" + getClassName() + " o : values()) {",
                     "\tif(o.getId() == id) {",
                     "\t\treturn o;",
                     "\t}",
                     "}",
-                    "return "+(defaultEntry == null ? "null" : identifier(defaultEntry))+";"
+                    "return " + (defaultEntry == null ? "null" : identifier(defaultEntry)) + ";"
             );
         }
     }
@@ -80,14 +80,15 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
     }
 
     @Override
-    protected void postGeneration() throws IOException {}
+    protected void postGeneration() throws IOException {
+    }
 
     @Override
     protected void prepare(EnumGenerator generator) {
         generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
         generator.addImport(Registries.class.getCanonicalName());
         generator.addImport(NamespaceID.class.getCanonicalName());
-        if(linear) {
+        if (linear) {
             generator.setParams("String namespaceID");
             generator.addMethod("getId", "()", "int", "return ordinal();");
         } else {
@@ -96,15 +97,15 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         }
         generator.addMethod("getNamespaceID", "()", "String", "return namespaceID;");
 
-        generator.appendToConstructor("Registries."+CodeGenerator.decapitalize(getClassName())+"s.put(NamespaceID.from(namespaceID), this);");
+        generator.appendToConstructor("Registries." + CodeGenerator.decapitalize(getClassName()) + "s.put(NamespaceID.from(namespaceID), this);");
     }
 
     @Override
     protected void writeSingle(EnumGenerator generator, Container item) {
-        if(linear) {
-            generator.addInstance(identifier(item.name), "\""+item.name.toString()+"\"");
+        if (linear) {
+            generator.addInstance(identifier(item.name), "\"" + item.name.toString() + "\"");
         } else {
-            generator.addInstance(identifier(item.name), "\""+item.name.toString()+"\"", item.id);
+            generator.addInstance(identifier(item.name), "\"" + item.name.toString() + "\"", item.id);
         }
     }
 
