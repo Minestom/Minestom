@@ -7,10 +7,13 @@ import net.minestom.server.command.builder.condition.CommandCondition;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * Class responsible for parsing {@link Command}.
+ */
 public class CommandDispatcher {
 
-    private Map<String, Command> commandMap = new HashMap<>();
-    private Set<Command> commands = new HashSet<>();
+    private final Map<String, Command> commandMap = new HashMap<>();
+    private final Set<Command> commands = new HashSet<>();
 
     public void register(Command command) {
         this.commandMap.put(command.getName().toLowerCase(), command);
@@ -62,7 +65,7 @@ public class CommandDispatcher {
      */
     public Command findCommand(String commandName) {
         commandName = commandName.toLowerCase();
-        return commandMap.containsKey(commandName) ? commandMap.get(commandName) : null;
+        return commandMap.getOrDefault(commandName, null);
     }
 
     private CommandResult findCommandResult(Command command, String[] args) {
@@ -144,8 +147,11 @@ public class CommandDispatcher {
                 }
 
                 if (correct) {
+                    // Argument correct, check the next one
                     continue;
                 } else {
+                    // Argument is not correct, add it to the syntax suggestion with the number
+                    // of correct argument(s) and do not check the next syntax argument
                     syntaxCorrect = false;
                     CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
                     suggestionHolder.syntax = syntax;
@@ -156,6 +162,8 @@ public class CommandDispatcher {
                     break;
                 }
             }
+
+            // Add the syntax to the list of valid syntaxes if correct
             if (syntaxCorrect) {
                 if (args.length == argIndex || useRemaining) {
                     validSyntaxes.add(syntax);
@@ -198,7 +206,9 @@ public class CommandDispatcher {
         if (finalSyntax == null) {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
-                final int max = syntaxesSuggestions.firstKey();
+                final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
+
+                // Get the data of the closest syntax
                 final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
                 final CommandSyntax syntax = suggestionHolder.syntax;
                 final String argValue = suggestionHolder.argValue;
@@ -206,11 +216,13 @@ public class CommandDispatcher {
                 final int argIndex = suggestionHolder.argIndex;
 
                 if (argValue.length() > 0) {
+                    // Found the closest syntax with at least 1 correct argument
                     Argument argument = syntax.getArguments()[argIndex];
                     result.callback = argument.getCallback();
                     result.value = argValue;
                     result.error = correctionResult;
                 } else {
+                    // No argument correct, use the default executor
                     result.executor = command.getDefaultExecutor();
                     result.arguments = executorArgs;
                 }
@@ -231,11 +243,10 @@ public class CommandDispatcher {
         private String argValue;
         private int correctionResult;
         private int argIndex;
-
     }
 
     /**
-     * Represents a command ready to be executed (already parsed)
+     * Represents a {@link Command} ready to be executed (already parsed).
      */
     private static class CommandResult {
 
@@ -252,10 +263,10 @@ public class CommandDispatcher {
         private int error;
 
         /**
-         * Execute the command for the given source
+         * Execute the command for the given source.
          * <p>
-         * The command will not be executed if the {@link CommandCondition} of the command
-         * is not validated
+         * The command will not be executed if {@link Command#getCondition()}
+         * is not validated.
          *
          * @param source        the command source
          * @param commandString the command string
