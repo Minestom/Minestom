@@ -38,8 +38,8 @@ public class DynamicChunk extends Chunk {
     protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
 
     // Used to get all blocks with data (no null)
-    // Key is still chunk coord
-    protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>(16 * 16); // Start with the size of a single row
+    // Key is still chunk coordinates (see #getBlockIndex)
+    protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
 
     // Contains CustomBlocks' block index which are updatable
     protected IntSet updatableBlocks = new IntOpenHashSet();

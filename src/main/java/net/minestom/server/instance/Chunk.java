@@ -65,6 +65,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     private boolean shouldGenerate;
 
     // Packet cache
+    private volatile boolean enableCachePacket;
     protected volatile boolean packetUpdated;
     private ByteBuf fullDataPacket;
 
@@ -82,6 +83,9 @@ public abstract class Chunk implements Viewable, DataContainer {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
+
+        // true by default
+        this.enableCachePacket = true;
 
         if (biomes != null && biomes.length == BIOME_COUNT) {
             this.biomes = biomes;
@@ -274,6 +278,30 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
+     * Get if this chunk automatically cache the latest {@link ChunkDataPacket} version.
+     * <p>
+     * Retrieved with {@link #retrieveDataBuffer(Consumer)}.
+     *
+     * @return true if the chunk automatically cache the chunk packet
+     */
+    public boolean enableCachePacket() {
+        return enableCachePacket;
+    }
+
+    /**
+     * Enable or disable the automatic {@link ChunkDataPacket} caching.
+     *
+     * @param enableCachePacket true to enable to chunk packet caching
+     */
+    public synchronized void setEnableCachePacket(boolean enableCachePacket) {
+        this.enableCachePacket = enableCachePacket;
+        if (enableCachePacket && fullDataPacket != null) {
+            this.fullDataPacket.release();
+            this.fullDataPacket = null;
+        }
+    }
+
+    /**
      * Get the cached data packet
      * <p>
      * Use {@link #retrieveDataBuffer(Consumer)} to be sure to get the updated version
@@ -285,7 +313,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set the cached {@link ChunkDataPacket} of this chunk
+     * Set the cached {@link ChunkDataPacket} of this chunk.
      *
      * @param fullDataPacket the new cached chunk packet
      */
@@ -313,7 +341,9 @@ public abstract class Chunk implements Viewable, DataContainer {
         if (data == null || !packetUpdated) {
             // Packet has never been wrote or is outdated, write it
             PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), packet -> {
-                setFullDataPacket(packet);
+                if (enableCachePacket) {
+                    setFullDataPacket(packet);
+                }
                 consumer.accept(packet);
             });
         } else {
@@ -504,7 +534,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * Get the {@link ChunkDataPacket} to update a single chunk section
      *
      * @param section the chunk section to update
-     * @return the {@link ChunkDataPacket} to update a single chunk sectionl
+     * @return the {@link ChunkDataPacket} to update a single chunk section
      */
     protected ChunkDataPacket getChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();

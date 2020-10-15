@@ -4,6 +4,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 
 /**
  * Interface implemented to change the way chunks are loaded/saved.
+ * <p>
  * See {@link MinestomBasicChunkLoader} for the default implementation used in {@link InstanceContainer}.
  */
 public interface IChunkLoader {
