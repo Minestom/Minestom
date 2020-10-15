@@ -25,7 +25,7 @@ public class PlayerSkin {
     }
 
     /**
-     * Get the skin textures value.
+     * Gets the skin textures value.
      *
      * @return the textures value
      */
@@ -34,7 +34,7 @@ public class PlayerSkin {
     }
 
     /**
-     * Get the skin signature.
+     * Gets the skin signature.
      *
      * @return the skin signature
      */
@@ -43,7 +43,7 @@ public class PlayerSkin {
     }
 
     /**
-     * Get a skin from a Mojang UUID.
+     * Gets a skin from a Mojang UUID.
      *
      * @param uuid Mojang UUID
      * @return a player skin based on the UUID, null if not found
@@ -73,7 +73,7 @@ public class PlayerSkin {
     }
 
     /**
-     * Get a skin from a Minecraft username.
+     * Gets a skin from a Minecraft username.
      *
      * @param username the Minecraft username
      * @return a skin based on a Minecraft username, null if not found

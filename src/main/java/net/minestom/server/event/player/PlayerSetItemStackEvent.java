@@ -7,7 +7,7 @@ import net.minestom.server.utils.item.ItemStackUtils;
 
 /**
  * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#setItemStack(int, ItemStack)}
- * and player click in his inventory
+ * and player click in his inventory.
  */
 public class PlayerSetItemStackEvent extends CancellableEvent {
 
@@ -22,7 +22,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who has an item stack set to his inventory
+     * Gets the player who has an item stack set to his inventory.
      *
      * @return the player
      */
@@ -31,7 +31,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Get the slot where the item will be set
+     * Gets the slot where the item will be set.
      *
      * @return the slot
      */
@@ -40,7 +40,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Change the slot where the item will be set
+     * Changes the slot where the item will be set.
      *
      * @param slot the new slot
      */
@@ -49,7 +49,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item stack which will be set
+     * Gets the item stack which will be set.
      *
      * @return the item stack
      */
@@ -58,7 +58,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Change the item stack which will be set
+     * Changes the item stack which will be set.
      *
      * @param itemStack the new item stack
      */

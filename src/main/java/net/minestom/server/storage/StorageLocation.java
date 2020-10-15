@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represent an area which contain data.
+ * Represents an area which contain data.
  * <p>
  * Each {@link StorageLocation} has a {@link StorageSystem} associated to it
  * which is used to save and retrieve data from keys.
@@ -34,7 +34,7 @@ public class StorageLocation {
     }
 
     /**
-     * Get the data associated with a key using {@link StorageSystem#get(String)}.
+     * Gets the data associated with a key using {@link StorageSystem#get(String)}.
      *
      * @param key the key
      * @return the data associated to {@code key}
@@ -45,7 +45,7 @@ public class StorageLocation {
     }
 
     /**
-     * Set a data associated to a key using {@link StorageSystem#set(String, byte[])}.
+     * Sets a data associated to a key using {@link StorageSystem#set(String, byte[])}.
      *
      * @param key  the key of the data
      * @param data the data
@@ -56,7 +56,7 @@ public class StorageLocation {
     }
 
     /**
-     * Delete a key using the associated {@link StorageSystem}.
+     * Deletes a key using the associated {@link StorageSystem}.
      *
      * @param key the key
      * @see StorageSystem#delete(String)
@@ -66,7 +66,7 @@ public class StorageLocation {
     }
 
     /**
-     * Close the {@link StorageLocation} using {@link StorageSystem#close()}.
+     * Closes the {@link StorageLocation} using {@link StorageSystem#close()}.
      *
      * @see StorageSystem#close()
      */
@@ -75,7 +75,7 @@ public class StorageLocation {
     }
 
     /**
-     * Set an object associated to a key.
+     * Sets an object associated to a key.
      * <p>
      * It does use registered {@link DataType} located on {@link DataManager}
      * So you need to register all the types that you use.
@@ -99,7 +99,7 @@ public class StorageLocation {
     }
 
     /**
-     * Retrieve a serialized object associated to a key.
+     * Retrieves a serialized object associated to a key.
      * <p>
      * It does use registered {@link DataType} located on {@link DataManager}.
      * So you need to register all the types that you use.
@@ -129,7 +129,7 @@ public class StorageLocation {
     }
 
     /**
-     * Get an unique {@link SerializableData}
+     * Gets an unique {@link SerializableData}
      * which is cloned if cached or retrieved with the default {@link StorageSystem}.
      *
      * @param key           the key of the data
@@ -153,7 +153,7 @@ public class StorageLocation {
     }
 
     /**
-     * Get a shared {@link SerializableData} if already in memory or retrieve it from the default {@link StorageSystem} and save it in cache
+     * Gets a shared {@link SerializableData} if already in memory or retrieve it from the default {@link StorageSystem} and save it in cache
      * for further request.
      * Those cached data can be saved using {@link #saveCachedData()} or individually with {@link #saveCachedData(String)}
      * It is also possible to save an individual data and remove it directly with {@link #saveAndRemoveCachedData(String)}
@@ -180,7 +180,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save a specified cached {@link SerializableData} and remove it from memory.
+     * Saves a specified cached {@link SerializableData} and remove it from memory.
      *
      * @param key the specified cached data key
      */
@@ -199,7 +199,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save the all the cached {@link SerializableData}.
+     * Saves the all the cached {@link SerializableData}.
      */
     public void saveCachedData() {
         synchronized (cachedData) {
@@ -208,7 +208,7 @@ public class StorageLocation {
     }
 
     /**
-     * Save an unique cached {@link SerializableData}.
+     * Saves an unique cached {@link SerializableData}.
      *
      * @param key the data key
      */
@@ -220,7 +220,7 @@ public class StorageLocation {
     }
 
     /**
-     * Get the location of this storage.
+     * Gets the location of this storage.
      * <p>
      * WARNING: this is not necessary a file or folder path.
      *

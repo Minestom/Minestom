@@ -12,13 +12,13 @@ import net.minestom.server.utils.validate.Check;
 import java.util.*;
 
 /**
- * Represents a tab which can be shared between multiple players
+ * Represents a tab which can be shared between multiple players.
  * <p>
  * Each tab requires a root advancement and all succeeding advancements need to have a parent in the tab.
- * You can create a new advancement using {@link #createAdvancement(String, Advancement, Advancement)}
+ * You can create a new advancement using {@link #createAdvancement(String, Advancement, Advancement)}.
  * <p>
  * Be sure to use {@link #addViewer(Player)} and {@link #removeViewer(Player)} to control which players can see this tab.
- * (all viewers will see the same tab, with the same amount of validated advancements etc... so shared)
+ * (all viewers will see the same tab, with the same amount of validated advancements etc... so shared).
  */
 public class AdvancementTab implements Viewable {
 
@@ -47,7 +47,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Get all the tabs of a viewer
+     * Gets all the tabs of a viewer.
      *
      * @param player the player to get the tabs from
      * @return all the advancement tabs that the player sees
@@ -57,7 +57,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Get the root advancement of this tab
+     * Gets the root advancement of this tab.
      *
      * @return the root advancement
      */
@@ -66,7 +66,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Create and add an advancement into this tab
+     * Creates and add an advancement into this tab.
      *
      * @param identifier  the unique identifier
      * @param advancement the advancement to add
@@ -84,14 +84,14 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Update the packet buffer
+     * Updates the packet buffer.
      */
     protected void updatePacket() {
         this.createBuffer = PacketUtils.writePacket(createPacket());
     }
 
     /**
-     * Build the packet which build the whole advancement tab
+     * Builds the packet which build the whole advancement tab.
      *
      * @return the packet adding this advancement tab and all its advancements
      */
@@ -172,7 +172,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Add the tab to the player set
+     * Adds the tab to the player set.
      *
      * @param player the player
      */
@@ -182,7 +182,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Remove the tab from the player set
+     * Removes the tab from the player set.
      *
      * @param player the player
      */

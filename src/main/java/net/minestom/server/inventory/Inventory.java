@@ -86,7 +86,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Get the inventory type
+     * Gets the inventory type.
      *
      * @return the inventory type
      */
@@ -95,7 +95,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Get the inventory title
+     * Gets the inventory title.
      *
      * @return the inventory title
      */
@@ -104,7 +104,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Change the inventory title
+     * Changes the inventory title.
      *
      * @param title the new inventory title
      */
@@ -124,9 +124,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Get this window id
+     * Gets this window id.
      * <p>
-     * This is the id that the client will send to identify the affected inventory, mostly used by packets
+     * This is the id that the client will send to identify the affected inventory, mostly used by packets.
      *
      * @return the window id
      */
@@ -259,7 +259,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Get the cursor item of a viewer
+     * Gets the cursor item of a viewer.
      *
      * @param player the player to get the cursor item from
      * @return the player cursor item, air item if the player is not a viewer
@@ -269,8 +269,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Change the cursor item of a viewer,
-     * does nothing if <code>player</code> is not a viewer
+     * Changes the cursor item of a viewer,
+     * does nothing if <code>player</code> is not a viewer.
      *
      * @param player     the player to change the cursor item
      * @param cursorItem the new player cursor item
@@ -291,10 +291,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Insert safely an item into the inventory
+     * Inserts safely an item into the inventory.
      * <p>
      * This will update the slot for all viewers and warn the inventory that
-     * the window items packet is not up-to-date
+     * the window items packet is not up-to-date.
      *
      * @param slot      the internal slot id
      * @param itemStack the item to insert
@@ -310,10 +310,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Insert an item into the inventory without notifying viewers
+     * Inserts an item into the inventory without notifying viewers.
      * <p>
      * This will also warn the inventory that the cached window items packet is
-     * not up-to-date
+     * not up-to-date.
      *
      * @param slot      the internal slot
      * @param itemStack the item to insert
@@ -323,7 +323,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Create a complete new {@link WindowItemsPacket}
+     * Creates a complete new {@link WindowItemsPacket}.
      *
      * @return a new {@link WindowItemsPacket} packet
      */
@@ -335,7 +335,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Send a window property to all viewers
+     * Sends a window property to all viewers.
      *
      * @param property the property to send
      * @param value    the value of the property

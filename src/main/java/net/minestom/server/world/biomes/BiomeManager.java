@@ -24,7 +24,7 @@ public class BiomeManager {
     }
 
     /**
-     * Add a new biome. This does NOT send the new list to players.
+     * Adds a new biome. This does NOT send the new list to players.
      *
      * @param biome the biome to add
      */
@@ -42,7 +42,7 @@ public class BiomeManager {
     }
 
     /**
-     * Returns an immutable copy of the biomes already registered
+     * Returns an immutable copy of the biomes already registered.
      *
      * @return an immutable copy of the biomes already registered
      */
@@ -51,7 +51,7 @@ public class BiomeManager {
     }
 
     /**
-     * Get a biome by its id
+     * Gets a biome by its id.
      *
      * @param id the id of the biome
      * @return the {@link Biome} linked to this id

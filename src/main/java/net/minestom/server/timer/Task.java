@@ -29,7 +29,7 @@ public class Task implements Runnable {
     private volatile Thread currentThreadTask;
 
     /**
-     * Creates a task
+     * Creates a task.
      *
      * @param schedulerManager The manager for the task
      * @param runnable         The task to run when scheduled
@@ -47,7 +47,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Executes the task
+     * Executes the task.
      */
     @Override
     public void run() {
@@ -71,7 +71,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Sets up the task for correct execution
+     * Sets up the task for correct execution.
      */
     public void schedule() {
         this.future = this.repeat == 0L ?
@@ -80,7 +80,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Gets the current status of the task
+     * Gets the current status of the task.
      *
      * @return the current stats of the task
      */
@@ -107,7 +107,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Get the id of this task
+     * Gets the id of this task.
      *
      * @return the task id
      */
@@ -116,7 +116,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Removes the task
+     * Removes the task.
      */
     private void finish() {
         if (this.shutdown)

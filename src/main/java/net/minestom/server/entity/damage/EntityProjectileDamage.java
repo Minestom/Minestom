@@ -17,7 +17,7 @@ public class EntityProjectileDamage extends DamageType {
     }
 
     /**
-     * Get the projectile responsible for the damage.
+     * Gets the projectile responsible for the damage.
      *
      * @return the projectile
      */
@@ -26,7 +26,7 @@ public class EntityProjectileDamage extends DamageType {
     }
 
     /**
-     * Get the shooter of the projectile.
+     * Gets the shooter of the projectile.
      *
      * @return the shooter of the projectile, null if not any
      */

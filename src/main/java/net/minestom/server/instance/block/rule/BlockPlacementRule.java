@@ -19,8 +19,8 @@ public abstract class BlockPlacementRule {
     }
 
     /**
-     * Get if the block can be placed in {@code blockPosition}
-     * Can for example, be used for blocks which have to be placed on a solid block
+     * Gets if the block can be placed in {@code blockPosition}.
+     * Can for example, be used for blocks which have to be placed on a solid block.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position where the block is trying to get place
@@ -29,7 +29,7 @@ public abstract class BlockPlacementRule {
     public abstract boolean canPlace(Instance instance, BlockPosition blockPosition);
 
     /**
-     * Called when the block state id can be updated (for instance if a neighbour block changed)
+     * Called when the block state id can be updated (for instance if a neighbour block changed).
      *
      * @param instance       the instance of the block
      * @param blockPosition  the block position
@@ -39,7 +39,7 @@ public abstract class BlockPlacementRule {
     public abstract short blockRefresh(Instance instance, BlockPosition blockPosition, short currentStateID);
 
     /**
-     * Called when the block is placed
+     * Called when the block is placed.
      *
      * @param instance  the instance of the block
      * @param block     the block placed

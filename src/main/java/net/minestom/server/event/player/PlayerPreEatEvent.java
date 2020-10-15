@@ -7,7 +7,7 @@ import net.minestom.server.item.ItemStack;
 /**
  * Called before the PlayerEatEvent and can be used to change the eating time
  * or to cancel its processing, cancelling the event means that the player will
- * continue the animation indefinitely
+ * continue the animation indefinitely.
  */
 public class PlayerPreEatEvent extends CancellableEvent {
 
@@ -22,7 +22,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
     }
 
     /**
-     * The player who is trying to eat
+     * The player who is trying to eat.
      *
      * @return the concerned player
      */
@@ -31,7 +31,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
     }
 
     /**
-     * The food item which will be eaten
+     * The food item which will be eaten.
      *
      * @return the food item
      */
@@ -40,9 +40,9 @@ public class PlayerPreEatEvent extends CancellableEvent {
     }
 
     /**
-     * Get the food eating time
+     * Gets the food eating time.
      * <p>
-     * This is by default {@link Player#getDefaultEatingTime()}
+     * This is by default {@link Player#getDefaultEatingTime()}.
      *
      * @return the eating time
      */
@@ -51,7 +51,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
     }
 
     /**
-     * Change the food eating time
+     * Changes the food eating time.
      *
      * @param eatingTime the new eating time
      */

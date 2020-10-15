@@ -9,7 +9,7 @@ public class PotionMeta implements ItemMeta {
     private PotionType potionType;
 
     /**
-     * Get the potion type
+     * Gets the potion type.
      *
      * @return the potion type
      */
@@ -18,7 +18,7 @@ public class PotionMeta implements ItemMeta {
     }
 
     /**
-     * Change the potion type
+     * Changes the potion type.
      *
      * @param potionType the new potion type
      */

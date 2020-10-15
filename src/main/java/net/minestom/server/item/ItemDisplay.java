@@ -13,7 +13,7 @@ public class ItemDisplay {
     }
 
     /**
-     * Get the item display name
+     * Gets the item display name.
      *
      * @return the item display name
      */
@@ -22,7 +22,7 @@ public class ItemDisplay {
     }
 
     /**
-     * Get the item lore
+     * Gets the item lore.
      *
      * @return the item lore
      */

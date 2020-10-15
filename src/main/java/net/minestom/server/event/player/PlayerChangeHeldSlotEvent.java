@@ -6,7 +6,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 
 /**
- * Called when a player change his held slot (by pressing 1-9 keys)
+ * Called when a player change his held slot (by pressing 1-9 keys).
  */
 public class PlayerChangeHeldSlotEvent extends CancellableEvent {
 
@@ -19,7 +19,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who changed his held slot
+     * Gets the player who changed his held slot.
      *
      * @return the player
      */
@@ -28,7 +28,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
     }
 
     /**
-     * Get the slot which the player will held
+     * Gets the slot which the player will held.
      *
      * @return the held slot
      */
@@ -37,7 +37,7 @@ public class PlayerChangeHeldSlotEvent extends CancellableEvent {
     }
 
     /**
-     * Change the final held slot of the player
+     * Changes the final held slot of the player.
      *
      * @param slot the new held slot
      * @throws IllegalArgumentException if <code>slot</code> is not between 0 and 8

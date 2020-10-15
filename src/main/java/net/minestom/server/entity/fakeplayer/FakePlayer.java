@@ -28,7 +28,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Init a new FakePlayer
+     * Init a new {@link FakePlayer}.
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
@@ -46,7 +46,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Init a new FakePlayer without adding him in cache
+     * Init a new {@link FakePlayer} without adding him in cache.
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
@@ -59,7 +59,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Get the fake player option container
+     * Gets the fake player option container.
      *
      * @return the fake player option
      */

@@ -37,7 +37,7 @@ public class EntitySpider extends EntityCreature implements Monster {
     }
 
     /**
-     * Get if the spider is climbing
+     * Gets if the spider is climbing.
      *
      * @return true if the spider is climbing, false otherwise
      */
@@ -46,7 +46,7 @@ public class EntitySpider extends EntityCreature implements Monster {
     }
 
     /**
-     * Make the spider climbs
+     * Makes the spider climbs.
      *
      * @param climbing true to make the spider climbs, false otherwise
      */

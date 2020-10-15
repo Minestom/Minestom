@@ -32,7 +32,7 @@ public class BossBar implements Viewable {
     private byte flags;
 
     /**
-     * Create a new {@link BossBar}
+     * Creates a new {@link BossBar}.
      *
      * @param title    the boss bar title
      * @param color    the boss bar color
@@ -45,7 +45,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get all the visible boss bars of a {@link Player}
+     * Gets all the visible boss bars of a {@link Player}.
      *
      * @param player the player to check the boss bars
      * @return all the visible boss bars of the player, null if not any
@@ -88,7 +88,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get the bossbar title
+     * Gets the bossbar title.
      *
      * @return the current title of the bossbar
      */
@@ -97,7 +97,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Change the bossbar title
+     * Changes the bossbar title.
      *
      * @param title the new title of the bossbar
      */
@@ -106,7 +106,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get the bossbar progress
+     * Gets the bossbar progress.
      *
      * @return the current progress of the bossbar
      */
@@ -115,7 +115,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Change the bossbar progress
+     * Changes the bossbar progress.
      *
      * @param progress the new progress bar percentage
      * @throws IllegalArgumentException if {@code progress} is not between 0 and 1
@@ -128,7 +128,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get the bossbar color
+     * Gets the bossbar color.
      *
      * @return the current bossbar color
      */
@@ -137,7 +137,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Change the bossbar color
+     * Changes the bossbar color.
      *
      * @param color the new color of the bossbar
      */
@@ -147,7 +147,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get the bossbar division
+     * Gets the bossbar division.
      *
      * @return the current bossbar division
      */
@@ -156,7 +156,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Change the bossbar division
+     * Changes the bossbar division.
      *
      * @param division the new bossbar division count
      */
@@ -166,7 +166,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Get the bossbar flags
+     * Gets the bossbar flags.
      *
      * @return the flags
      */
@@ -175,7 +175,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Set the bossbar flags
+     * Sets the bossbar flags.
      *
      * @param flags the bossbar flags
      * @see <a href="https://wiki.vg/Protocol#Boss_Bar">Boss bar packet</a>
@@ -185,7 +185,7 @@ public class BossBar implements Viewable {
     }
 
     /**
-     * Delete the boss bar and remove all of its viewers
+     * Deletes the boss bar and remove all of its viewers.
      */
     public void delete() {
         BossBarPacket bossBarPacket = new BossBarPacket();

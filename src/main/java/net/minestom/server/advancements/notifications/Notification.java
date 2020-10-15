@@ -7,7 +7,7 @@ import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represent a message which can be send using the {@link NotificationCenter}
+ * Represents a message which can be send using the {@link NotificationCenter}.
  */
 public class Notification {
 
@@ -28,7 +28,7 @@ public class Notification {
     }
 
     /**
-     * Get the title of the notification
+     * Gets the title of the notification.
      *
      * @return the notification title
      */
@@ -38,7 +38,7 @@ public class Notification {
     }
 
     /**
-     * Get the {@link FrameType} of the notification
+     * Gets the {@link FrameType} of the notification.
      *
      * @return the notification frame type
      */
@@ -48,7 +48,7 @@ public class Notification {
     }
 
     /**
-     * Get the icon of the notification
+     * Gets the icon of the notification.
      *
      * @return the notification icon
      */

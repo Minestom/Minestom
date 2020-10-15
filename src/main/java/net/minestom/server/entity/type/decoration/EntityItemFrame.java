@@ -55,7 +55,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     /**
-     * Get the item stack in the frame
+     * Gets the item stack in the frame.
      *
      * @return the item stack in the frame
      */
@@ -64,7 +64,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     /**
-     * Change the item stack in the frame
+     * Changes the item stack in the frame.
      *
      * @param itemStack the new item stack in the frame
      */
@@ -74,7 +74,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     /**
-     * Get the item rotation
+     * Gets the item rotation.
      *
      * @return the item rotation
      */
@@ -83,7 +83,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     /**
-     * Change the item rotation
+     * Changes the item rotation.
      *
      * @param rotation the new item rotation
      */
@@ -93,7 +93,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     /**
-     * Represent the orientation of the frame
+     * Represents the orientation of the frame.
      */
     public enum ItemFrameOrientation {
         DOWN, UP, NORTH, SOUTH, WEST, EAST

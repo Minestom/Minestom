@@ -16,7 +16,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Get the beacon power level
+     * Gets the beacon power level.
      *
      * @return the power level
      */
@@ -25,7 +25,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Change the beacon power level
+     * Changes the beacon power level.
      *
      * @param powerLevel the new beacon power level
      */
@@ -35,7 +35,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Get the first potion effect
+     * Gets the first potion effect.
      *
      * @return the first potion effect, can be null
      */
@@ -44,7 +44,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Change the first potion effect
+     * Changes the first potion effect.
      *
      * @param firstPotionEffect the new first potion effect, can be null
      */
@@ -54,7 +54,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Get the second potion effect
+     * Gets the second potion effect.
      *
      * @return the second potion effect, can be null
      */
@@ -63,7 +63,7 @@ public class BeaconInventory extends Inventory {
     }
 
     /**
-     * Change the second potion effect
+     * Changes the second potion effect.
      *
      * @param secondPotionEffect the new second potion effect, can be null
      */

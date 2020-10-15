@@ -11,19 +11,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 /**
- * Represents an element which can have {@link Event} listeners assigned to it
+ * Represents an element which can have {@link Event} listeners assigned to it.
  */
 public interface EventHandler {
 
     /**
-     * Get a {@link Map} containing all the listeners assigned to a specific {@link Event} type
+     * Gets a {@link Map} containing all the listeners assigned to a specific {@link Event} type.
      *
      * @return a {@link Map} with all the listeners
      */
     Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap();
 
     /**
-     * Add a new event callback for the specified type {@code eventClass}
+     * Adds a new event callback for the specified type {@code eventClass}.
      *
      * @param eventClass    the event class
      * @param eventCallback the event callback
@@ -37,7 +37,7 @@ public interface EventHandler {
     }
 
     /**
-     * Remove an event callback
+     * Removes an event callback.
      *
      * @param eventClass    the event class
      * @param eventCallback the event callback
@@ -51,7 +51,7 @@ public interface EventHandler {
     }
 
     /**
-     * Get the event callbacks of a specific event type
+     * Gets the event callbacks of a specific event type.
      *
      * @param eventClass the event class
      * @param <E>        the event type
@@ -63,7 +63,7 @@ public interface EventHandler {
     }
 
     /**
-     * Get a {@link Stream} containing all the {@link EventCallback}, no matter to which {@link Event} they are linked
+     * Gets a {@link Stream} containing all the {@link EventCallback}, no matter to which {@link Event} they are linked.
      *
      * @return a {@link Stream} containing all the callbacks
      */
@@ -72,7 +72,7 @@ public interface EventHandler {
     }
 
     /**
-     * Call the specified {@link Event} with all the assigned {@link EventCallback}
+     * Calls the specified {@link Event} with all the assigned {@link EventCallback}.
      *
      * @param eventClass the event class
      * @param event      the event object
@@ -87,9 +87,9 @@ public interface EventHandler {
     }
 
     /**
-     * Call a {@link CancellableEvent} and execute {@code successCallback} if the {@link Event} is not cancelled
+     * Calls a {@link CancellableEvent} and execute {@code successCallback} if the {@link Event} is not cancelled.
      * <p>
-     * Does call {@link #callEvent(Class, Event)} internally
+     * Does call {@link #callEvent(Class, Event)} internally.
      *
      * @param eventClass      the event class
      * @param event           the event object

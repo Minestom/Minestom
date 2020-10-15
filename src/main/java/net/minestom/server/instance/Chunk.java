@@ -116,7 +116,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
 
     /**
-     * Execute a chunk tick.
+     * Executes a chunk tick.
      * <p>
      * Should be used to update all the blocks in the chunk.
      * <p>
@@ -128,7 +128,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void tick(long time, Instance instance);
 
     /**
-     * Get the block state id at a position.
+     * Gets the block state id at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -138,7 +138,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract short getBlockStateId(int x, int y, int z);
 
     /**
-     * Get the custom block id at a position.
+     * Gets the custom block id at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -148,7 +148,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract short getCustomBlockId(int x, int y, int z);
 
     /**
-     * Change the block state id and the custom block id at a position.
+     * Changes the block state id and the custom block id at a position.
      *
      * @param x             the block X
      * @param y             the block Y
@@ -159,7 +159,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
 
     /**
-     * Change the block state id at a position (the custom block id stays the same).
+     * Changes the block state id at a position (the custom block id stays the same).
      *
      * @param x            the block X
      * @param y            the block Y
@@ -169,7 +169,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
 
     /**
-     * Get the {@link Data} at a block index.
+     * Gets the {@link Data} at a block index.
      *
      * @param index the block index
      * @return the {@link Data} at the block index, null if none
@@ -177,7 +177,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract Data getBlockData(int index);
 
     /**
-     * Set the {@link Data} at a position.
+     * Sets the {@link Data} at a position.
      *
      * @param x    the block X
      * @param y    the block Y
@@ -187,14 +187,14 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void setBlockData(int x, int y, int z, Data data);
 
     /**
-     * Get all the block entities in this chunk.
+     * Gets all the block entities in this chunk.
      *
      * @return the block entities in this chunk
      */
     public abstract Set<Integer> getBlockEntities();
 
     /**
-     * Serialize the chunk into bytes.
+     * Serializes the chunk into bytes.
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
      * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
@@ -202,7 +202,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract byte[] getSerializedData();
 
     /**
-     * Read the chunk from binary.
+     * Reads the chunk from binary.
      * <p>
      * Used if the chunk is loaded from file.
      *
@@ -221,7 +221,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract ChunkDataPacket getFreshPacket();
 
     /**
-     * Get the {@link CustomBlock} at a position.
+     * Gets the {@link CustomBlock} at a position.
      *
      * @param x the block X
      * @param y the block Y
@@ -234,7 +234,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the {@link CustomBlock} at a block index.
+     * Gets the {@link CustomBlock} at a block index.
      *
      * @param index the block index
      * @return the {@link CustomBlock} at the block index
@@ -251,7 +251,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the chunk X.
+     * Gets the chunk X.
      *
      * @return the chunk X
      */
@@ -260,7 +260,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the chunk Z.
+     * Gets the chunk Z.
      *
      * @return the chunk Z
      */
@@ -269,7 +269,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get if this chunk will or had been loaded with a {@link ChunkGenerator}
+     * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}
      *
      * @return true if this chunk is affected by a {@link ChunkGenerator}
      */
@@ -278,7 +278,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get if this chunk automatically cache the latest {@link ChunkDataPacket} version.
+     * Gets if this chunk automatically cache the latest {@link ChunkDataPacket} version.
      * <p>
      * Retrieved with {@link #retrieveDataBuffer(Consumer)}.
      *
@@ -289,7 +289,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Enable or disable the automatic {@link ChunkDataPacket} caching.
+     * Enables or disable the automatic {@link ChunkDataPacket} caching.
      *
      * @param enableCachePacket true to enable to chunk packet caching
      */
@@ -302,9 +302,9 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the cached data packet
+     * Gets the cached data packet.
      * <p>
-     * Use {@link #retrieveDataBuffer(Consumer)} to be sure to get the updated version
+     * Use {@link #retrieveDataBuffer(Consumer)} to be sure to get the updated version.
      *
      * @return the last cached data packet, can be null or outdated
      */
@@ -313,7 +313,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set the cached {@link ChunkDataPacket} of this chunk.
+     * Sets the cached {@link ChunkDataPacket} of this chunk.
      *
      * @param fullDataPacket the new cached chunk packet
      */
@@ -323,7 +323,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Change this chunk columnar space
+     * Changes this chunk columnar space.
      *
      * @param columnarSpace the new columnar space
      */
@@ -332,7 +332,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Retrieve (and save if needed) the updated data packet.
+     * Retrieves (and save if needed) the updated data packet.
      *
      * @param consumer the consumer called once the packet is sure to be up-to-date
      */
@@ -353,7 +353,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get a {@link ChunkDataPacket} which should contain the full chunk.
+     * Gets a {@link ChunkDataPacket} which should contain the full chunk.
      *
      * @return a fresh full chunk data packet
      */
@@ -364,7 +364,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get a {@link ChunkDataPacket} which should contain the non-full chunk.
+     * Gets a {@link ChunkDataPacket} which should contain the non-full chunk.
      *
      * @return a fresh non-full chunk data packet
      */
@@ -389,8 +389,8 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Send the chunk to {@code player} and add it to the player viewing chunks collection
-     * and send a {@link PlayerChunkLoadEvent}
+     * Sends the chunk to {@code player} and add it to the player viewing chunks collection
+     * and send a {@link PlayerChunkLoadEvent}.
      *
      * @param player the viewer to add
      * @return true if the player has just been added to the viewer collection
@@ -410,8 +410,8 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Remove the chunk to the player viewing chunks collection
-     * and send a {@link PlayerChunkUnloadEvent}
+     * Removes the chunk to the player viewing chunks collection
+     * and send a {@link PlayerChunkUnloadEvent}.
      *
      * @param player the viewer to remove
      * @return true if the player has just been removed to the viewer collection
@@ -444,7 +444,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Send the chunk data to {@code player}
+     * Sends the chunk data to {@code player}.
      *
      * @param player the player
      */
@@ -487,7 +487,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Send a full {@link ChunkDataPacket} to {@code player}
+     * Sends a full {@link ChunkDataPacket} to {@code player}.
      *
      * @param player the player to update the chunk to
      */
@@ -499,7 +499,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Send a full {@link ChunkDataPacket} to all chunk viewers
+     * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
     public void sendChunkUpdate() {
         final Set<Player> chunkViewers = getViewers();
@@ -516,7 +516,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Send a chunk section update packet to {@code player}
+     * Sends a chunk section update packet to {@code player}.
      *
      * @param section the section to update
      * @param player  the player to send the packet to
@@ -531,7 +531,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the {@link ChunkDataPacket} to update a single chunk section
+     * Gets the {@link ChunkDataPacket} to update a single chunk section.
      *
      * @param section the chunk section to update
      * @return the {@link ChunkDataPacket} to update a single chunk section
@@ -546,14 +546,14 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set the chunk as "unloaded".
+     * Sets the chunk as "unloaded".
      */
     protected void unload() {
         this.loaded = false;
     }
 
     /**
-     * Get if a block state id represents a block entity.
+     * Gets if a block state id represents a block entity.
      *
      * @param blockStateId the block state id to check
      * @return true if {@code blockStateId} represents a block entity
@@ -564,7 +564,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Get the index of a position, used to store blocks.
+     * Gets the index of a position, used to store blocks.
      *
      * @param x the block X
      * @param y the block Y

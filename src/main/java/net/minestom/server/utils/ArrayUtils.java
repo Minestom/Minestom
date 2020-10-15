@@ -30,7 +30,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * Get the differences between 2 arrays
+     * Gets the differences between 2 arrays.
      *
      * @param a the first array
      * @param b the second array
@@ -70,7 +70,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * Fill an array by a supplier
+     * Fills an array by a supplier.
      *
      * @param array    the array to fill
      * @param supplier the supplier to fill the array

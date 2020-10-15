@@ -5,7 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
 
 /**
- * Called when a new instance is set for an entity
+ * Called when a new instance is set for an entity.
  */
 public class EntitySpawnEvent extends Event {
 
@@ -18,7 +18,7 @@ public class EntitySpawnEvent extends Event {
     }
 
     /**
-     * Get the entity who spawned in the instance
+     * Gets the entity who spawned in the instance.
      *
      * @return the entity
      */
@@ -27,7 +27,7 @@ public class EntitySpawnEvent extends Event {
     }
 
     /**
-     * Get the entity new instance
+     * Gets the entity new instance.
      *
      * @return the instance
      */

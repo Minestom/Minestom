@@ -57,7 +57,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
     }
 
     /**
-     * Get the boat type
+     * Gets the boat type.
      *
      * @return the boat type
      */
@@ -66,7 +66,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
     }
 
     /**
-     * Change the boat type
+     * Changes the boat type.
      *
      * @param boatType the new boat type
      */

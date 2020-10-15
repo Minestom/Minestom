@@ -14,7 +14,7 @@ public class BoundingBox {
     private float x, y, z;
 
     /**
-     * Create a {@link BoundingBox} linked to an {@link Entity} and with a specific size
+     * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
      *
      * @param entity the linked entity
      * @param x      the width size
@@ -29,7 +29,7 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if two {@link BoundingBox} intersect with each other
+     * Used to know if two {@link BoundingBox} intersect with each other.
      *
      * @param boundingBox the {@link BoundingBox} to check
      * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
@@ -41,7 +41,7 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity
+     * Used to know if this {@link BoundingBox} intersects with the bounding box of an entity.
      *
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
@@ -51,7 +51,7 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects at a {@link BlockPosition}
+     * Used to know if the bounding box intersects at a {@link BlockPosition}.
      *
      * @param blockPosition the position to check
      * @return true if the bounding box intersects with the position, false otherwise
@@ -95,7 +95,7 @@ public class BoundingBox {
     }
 
     /**
-     * Create a new {@link BoundingBox} linked to the same {@link Entity} with expanded size
+     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with expanded size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -107,7 +107,7 @@ public class BoundingBox {
     }
 
     /**
-     * Create a new {@link BoundingBox} linked to the same {@link Entity} with contracted size
+     * Creates a new {@link BoundingBox} linked to the same {@link Entity} with contracted size.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -119,7 +119,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the width of the {@link BoundingBox}
+     * Gets the width of the {@link BoundingBox}.
      *
      * @return the width
      */
@@ -128,7 +128,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the height of the {@link BoundingBox}
+     * Gets the height of the {@link BoundingBox}.
      *
      * @return the height
      */
@@ -137,7 +137,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the depth of the {@link BoundingBox}
+     * Gets the depth of the {@link BoundingBox}.
      *
      * @return the depth
      */
@@ -146,7 +146,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the min X based on {@link #getWidth()} and the {@link Entity} position
+     * Gets the min X based on {@link #getWidth()} and the {@link Entity} position.
      *
      * @return the min X
      */
@@ -155,7 +155,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the max X based on {@link #getWidth()} and the {@link Entity} position
+     * Gets the max X based on {@link #getWidth()} and the {@link Entity} position.
      *
      * @return the max X
      */
@@ -164,7 +164,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the min Y based on the {@link Entity} position
+     * Gets the min Y based on the {@link Entity} position.
      *
      * @return the min Y
      */
@@ -173,7 +173,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the max Y based on {@link #getHeight()} and the {@link Entity} position
+     * Gets the max Y based on {@link #getHeight()} and the {@link Entity} position.
      *
      * @return the max Y
      */
@@ -182,7 +182,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the min Z based on {@link #getDepth()} and the {@link Entity} position
+     * Gets the min Z based on {@link #getDepth()} and the {@link Entity} position.
      *
      * @return the min Z
      */
@@ -191,7 +191,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get the max Z based on {@link #getDepth()} and the {@link Entity} position
+     * Gets the max Z based on {@link #getDepth()} and the {@link Entity} position.
      *
      * @return the max Z
      */
@@ -200,7 +200,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points at the bottom of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points at the bottom of the {@link BoundingBox}.
      *
      * @return the points at the bottom of the {@link BoundingBox}
      */
@@ -214,7 +214,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points at the top of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points at the top of the {@link BoundingBox}.
      *
      * @return the points at the top of the {@link BoundingBox}
      */
@@ -228,7 +228,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points on the left face of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points on the left face of the {@link BoundingBox}.
      *
      * @return the points on the left face of the {@link BoundingBox}
      */
@@ -242,7 +242,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points on the right face of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points on the right face of the {@link BoundingBox}.
      *
      * @return the points on the right face of the {@link BoundingBox}
      */
@@ -256,7 +256,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points at the front of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points at the front of the {@link BoundingBox}.
      *
      * @return the points at the front of the {@link BoundingBox}
      */
@@ -270,7 +270,7 @@ public class BoundingBox {
     }
 
     /**
-     * Get an array of {@link Vector} representing the points at the back of the {@link BoundingBox}
+     * Gets an array of {@link Vector} representing the points at the back of the {@link BoundingBox}.
      *
      * @return the points at the back of the {@link BoundingBox}
      */

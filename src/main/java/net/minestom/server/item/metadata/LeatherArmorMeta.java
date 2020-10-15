@@ -9,7 +9,7 @@ public class LeatherArmorMeta implements ItemMeta {
     private int r, g, b;
 
     /**
-     * Set the color of the leather armor piece
+     * Sets the color of the leather armor piece.
      *
      * @param color the color of the leather armor
      */
@@ -22,7 +22,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     /**
-     * Reset the color to the default leather one
+     * Resets the color to the default leather one.
      */
     public void reset() {
         this.r = 0;
@@ -32,7 +32,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     /**
-     * Get the red component
+     * Gets the red component.
      *
      * @return the red component
      */
@@ -41,7 +41,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     /**
-     * Get the green component
+     * Gets the green component.
      *
      * @return the green component
      */
@@ -50,7 +50,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     /**
-     * Get the blue component
+     * Gets the blue component.
      *
      * @return the blue component
      */
@@ -59,7 +59,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     /**
-     * Get if the color of this armor piece have been changed
+     * Gets if the color of this armor piece have been changed.
      *
      * @return true if the color has been changed, false otherwise
      */

@@ -21,7 +21,7 @@ public class AdvancementTabEvent extends Event {
     }
 
     /**
-     * Get the {@link Player} responsible for the event
+     * Gets the {@link Player} responsible for the event.
      *
      * @return the player
      */
@@ -30,7 +30,7 @@ public class AdvancementTabEvent extends Event {
     }
 
     /**
-     * Get the action
+     * Gets the action.
      *
      * @return the action
      */
@@ -39,9 +39,9 @@ public class AdvancementTabEvent extends Event {
     }
 
     /**
-     * Get the tab id
+     * Gets the tab id.
      * <p>
-     * Not null ony if {@link #getAction()} is equal to {@link AdvancementAction#OPENED_TAB}
+     * Not null ony if {@link #getAction()} is equal to {@link AdvancementAction#OPENED_TAB}.
      *
      * @return the tab id
      */

@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 
 /**
- * Called when the player swings his hand
+ * Called when the player swings his hand.
  */
 public class PlayerHandAnimationEvent extends CancellableEvent {
 
@@ -17,7 +17,7 @@ public class PlayerHandAnimationEvent extends CancellableEvent {
     }
 
     /**
-     * The player who is swinging his arm
+     * The player who is swinging his arm.
      *
      * @return the player
      */
@@ -26,7 +26,7 @@ public class PlayerHandAnimationEvent extends CancellableEvent {
     }
 
     /**
-     * Get the hand used
+     * Gets the hand used.
      *
      * @return the hand
      */

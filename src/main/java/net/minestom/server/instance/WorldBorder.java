@@ -7,7 +7,8 @@ import net.minestom.server.network.packet.server.play.WorldBorderPacket;
 import net.minestom.server.utils.Position;
 
 /**
- * Represents the world border of an {@link Instance}, can be retrieved with {@link Instance#getWorldBorder()}.
+ * Represents the world border of an {@link Instance},
+ * can be retrieved with {@link Instance#getWorldBorder()}.
  */
 public class WorldBorder {
 
@@ -40,7 +41,7 @@ public class WorldBorder {
     }
 
     /**
-     * Change the X and Z position of the center.
+     * Changes the X and Z position of the center.
      *
      * @param centerX the X center
      * @param centerZ the Z center
@@ -52,7 +53,7 @@ public class WorldBorder {
     }
 
     /**
-     * Get the center X of the world border.
+     * Gets the center X of the world border.
      *
      * @return the X center
      */
@@ -61,7 +62,7 @@ public class WorldBorder {
     }
 
     /**
-     * Change the center X of the world border.
+     * Changes the center X of the world border.
      *
      * @param centerX the new center X
      */
@@ -71,7 +72,7 @@ public class WorldBorder {
     }
 
     /**
-     * Get the center Z of the world border.
+     * Gets the center Z of the world border.
      *
      * @return the Z center
      */
@@ -80,7 +81,7 @@ public class WorldBorder {
     }
 
     /**
-     * Change the center Z of the world border.
+     * Changes the center Z of the world border.
      *
      * @param centerZ the new center Z
      */
@@ -120,7 +121,7 @@ public class WorldBorder {
     }
 
     /**
-     * Change the diameter to {@code diameter} in {@code speed} milliseconds (interpolation).
+     * Changes the diameter to {@code diameter} in {@code speed} milliseconds (interpolation).
      *
      * @param diameter the diameter target
      * @param speed    the time it will take to reach {@code diameter} in milliseconds
@@ -142,7 +143,7 @@ public class WorldBorder {
     }
 
     /**
-     * Get the diameter of the world border.
+     * Gets the diameter of the world border.
      * It takes lerp in consideration.
      *
      * @return the current world border diameter
@@ -152,7 +153,7 @@ public class WorldBorder {
     }
 
     /**
-     * Change the diameter of the world border.
+     * Changes the diameter of the world border.
      *
      * @param diameter the new diameter of the world border
      */
@@ -232,7 +233,7 @@ public class WorldBorder {
     }
 
     /**
-     * Send the world border init packet to a player.
+     * Sends the world border init packet to a player.
      *
      * @param player the player to send the packet to
      */
@@ -245,7 +246,7 @@ public class WorldBorder {
     }
 
     /**
-     * Get the {@link Instance} linked to this world border.
+     * Gets the {@link Instance} linked to this world border.
      *
      * @return the {@link Instance} of this world border
      */
@@ -254,7 +255,7 @@ public class WorldBorder {
     }
 
     /**
-     * Send the new world border centers to all instance players
+     * Sends the new world border centers to all instance players.
      */
     private void refreshCenter() {
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
@@ -264,7 +265,7 @@ public class WorldBorder {
     }
 
     /**
-     * Send a {@link WorldBorderPacket} to all the instance players
+     * Sends a {@link WorldBorderPacket} to all the instance players.
      *
      * @param worldBorderPacket the packet to send
      */

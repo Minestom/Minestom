@@ -7,6 +7,9 @@ import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.item.ItemStackUtils;
 
+/**
+ * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
+ */
 public class InventoryPreClickEvent extends CancellableEvent {
 
     private final Player player;
@@ -26,7 +29,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who is trying to click on the inventory
+     * Gets the player who is trying to click on the inventory.
      *
      * @return the player who clicked
      */
@@ -35,7 +38,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Can be null if the clicked inventory is the player one
+     * Can be null if the clicked inventory is the player one.
      *
      * @return the inventory where the click happened, null if this is the player's inventory
      */
@@ -44,7 +47,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Get the clicked slot number
+     * Gets the clicked slot number.
      *
      * @return the clicked slot number
      */
@@ -53,7 +56,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Get the click type
+     * Gets the click type.
      *
      * @return the click type
      */
@@ -62,7 +65,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item who have been clicked
+     * Gets the item who have been clicked.
      *
      * @return the clicked item
      */
@@ -71,7 +74,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Change the clicked item
+     * Changes the clicked item.
      *
      * @param clickedItem the clicked item
      */
@@ -80,7 +83,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item who was in the player cursor
+     * Gets the item who was in the player cursor.
      *
      * @return the cursor item
      */
@@ -89,7 +92,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
     }
 
     /**
-     * Change the cursor item
+     * Changes the cursor item.
      *
      * @param cursorItem the cursor item
      */

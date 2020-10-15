@@ -8,7 +8,7 @@ package net.minestom.server.data;
 public interface DataContainer {
 
     /**
-     * Get the {@link Data} of this container.
+     * Gets the {@link Data} of this container.
      * <p>
      * A {@link DataContainer} data is always optional,
      * meaning that this will be null if no data has been defined.
@@ -18,7 +18,7 @@ public interface DataContainer {
     Data getData();
 
     /**
-     * Set the {@link Data} of this container.
+     * Sets the {@link Data} of this container.
      *
      * @param data the {@link Data} of this container, null to remove it
      */

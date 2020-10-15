@@ -13,8 +13,8 @@ public class EnchantedBookMeta implements ItemMeta {
     private Map<Enchantment, Short> storedEnchantmentMap = new HashMap<>();
 
     /**
-     * Get the stored enchantment map
-     * Stored enchantments are used on enchanted book
+     * Gets the stored enchantment map.
+     * Stored enchantments are used on enchanted book.
      *
      * @return an unmodifiable map containing the item stored enchantments
      */
@@ -23,7 +23,7 @@ public class EnchantedBookMeta implements ItemMeta {
     }
 
     /**
-     * Set a stored enchantment level
+     * Sets a stored enchantment level.
      *
      * @param enchantment the enchantment type
      * @param level       the enchantment level
@@ -38,7 +38,7 @@ public class EnchantedBookMeta implements ItemMeta {
     }
 
     /**
-     * Remove a stored enchantment
+     * Removes a stored enchantment.
      *
      * @param enchantment the enchantment type
      */
@@ -47,7 +47,7 @@ public class EnchantedBookMeta implements ItemMeta {
     }
 
     /**
-     * Get a stored enchantment level
+     * Gets a stored enchantment level.
      *
      * @param enchantment the enchantment type
      * @return the stored enchantment level, 0 if not present

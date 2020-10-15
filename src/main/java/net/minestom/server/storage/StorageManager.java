@@ -24,9 +24,9 @@ public final class StorageManager {
     private final Map<String, StorageLocation> locationMap = new HashMap<>();
 
     /**
-     * Used to get an access to the specified location
+     * Used to get an access to the specified location.
      * WARNING: a {@link StorageLocation} needs to be created with an unique {@link StorageSystem} linked
-     * you cannot open the save location with two or more different {@link StorageSystem} implementation
+     * you cannot open the save location with two or more different {@link StorageSystem} implementation.
      *
      * @param location       the location
      * @param storageOptions the {@link StorageOptions}
@@ -40,8 +40,8 @@ public final class StorageManager {
     }
 
     /**
-     * Used to get an access to the specified location
-     * The default {@link StorageSystem} provider will be used
+     * Used to get an access to the specified location.
+     * The default {@link StorageSystem} provider will be used.
      *
      * @param location       the location
      * @param storageOptions the {@link StorageOptions}
@@ -68,7 +68,7 @@ public final class StorageManager {
     }
 
     /**
-     * Used to know if the specified location already exist or not
+     * Used to know if the specified location already exist or not.
      *
      * @param location      the location
      * @param storageSystem the {@link StorageSystem} to use
@@ -79,7 +79,7 @@ public final class StorageManager {
     }
 
     /**
-     * Call {@link #locationExists(String, StorageSystem)} with the default {@link StorageSystem}
+     * Calls {@link #locationExists(String, StorageSystem)} with the default {@link StorageSystem}.
      *
      * @param location the location
      * @return true if the location exists
@@ -89,8 +89,8 @@ public final class StorageManager {
     }
 
     /**
-     * Get all the {@link StorageLocation} which have been loaded by {@link #getLocation(String)}
-     * or {@link #getLocation(String, StorageOptions, StorageSystem)}
+     * Gets all the {@link StorageLocation} which have been loaded by {@link #getLocation(String)}
+     * or {@link #getLocation(String, StorageOptions, StorageSystem)}.
      *
      * @return an unmodifiable list of all the loaded {@link StorageLocation}
      */
@@ -99,7 +99,7 @@ public final class StorageManager {
     }
 
     /**
-     * Define the default {@link StorageSystem} used for {@link StorageLocation}
+     * Defines the default {@link StorageSystem} used for {@link StorageLocation}.
      *
      * @param storageSystemSupplier the supplier called to get the default {@link StorageSystem}
      */
@@ -111,7 +111,7 @@ public final class StorageManager {
     }
 
     /**
-     * Get if the default {@link StorageSystem} is set
+     * Gets if the default {@link StorageSystem} is set.
      *
      * @return true if a default {@link StorageSystem} is set
      */

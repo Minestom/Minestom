@@ -52,7 +52,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Start the server loop in the update thread
+     * Starts the server loop in the update thread
      */
     protected void start() {
         mainUpdate.execute(() -> {
@@ -120,7 +120,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Get the current thread provider
+     * Gets the current {@link ThreadProvider}.
      *
      * @return the current thread provider
      */
@@ -129,7 +129,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Change the server thread provider
+     * Changes the server {@link ThreadProvider}.
      *
      * @param threadProvider the new thread provider
      * @throws NullPointerException if <code>threadProvider</code> is null
@@ -140,7 +140,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that an instance has been created.
+     * Signals the {@link ThreadProvider} that an instance has been created.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
@@ -153,7 +153,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that an instance has been deleted.
+     * Signals the {@link ThreadProvider} that an instance has been deleted.
      * <p>
      * WARNING: should be automatically done by the {@link InstanceManager}.
      *
@@ -166,7 +166,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that a chunk has been loaded.
+     * Signals the {@link ThreadProvider} that a chunk has been loaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
@@ -181,7 +181,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Signal the {@link ThreadProvider} that a chunk has been unloaded.
+     * Signals the {@link ThreadProvider} that a chunk has been unloaded.
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
@@ -212,7 +212,7 @@ public final class UpdateManager {
     }
 
     /**
-     * Stop the server loop
+     * Stops the server loop
      */
     public void stop() {
         stopRequested = true;

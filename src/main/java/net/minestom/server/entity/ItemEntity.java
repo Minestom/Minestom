@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Represent an item on the ground
+ * Represents an item on the ground.
  */
 public class ItemEntity extends ObjectEntity {
 
@@ -44,7 +44,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get the update option for the merging feature
+     * Gets the update option for the merging feature.
      *
      * @return the merge update option
      */
@@ -53,8 +53,8 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Change the merge update option.
-     * Can be set to null to entirely remove the delay
+     * Changes the merge update option.
+     * Can be set to null to entirely remove the delay.
      *
      * @param mergeUpdateOption the new merge update option
      */
@@ -142,7 +142,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get the item stack on ground
+     * Gets the item stack on ground.
      *
      * @return the item stack
      */
@@ -151,7 +151,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Change the item stack on ground
+     * Changes the item stack on ground.
      *
      * @param itemStack the item stack
      */
@@ -161,10 +161,10 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get if the item is currently pickable
+     * Gets if the item is currently pickable.
      * <p>
      * {@link #setPickable(boolean)} needs to be true and the delay {@link #getPickupDelay()}
-     * to be long gone
+     * to be long gone.
      *
      * @return true if the item is pickable, false otherwise
      */
@@ -173,7 +173,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Make the item pickable
+     * Makes the item pickable.
      *
      * @param pickable true to make the item pickable, false otherwise
      */
@@ -182,7 +182,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get if the item is mergeable
+     * Gets if the item is mergeable.
      *
      * @return true if the entity is mergeable, false otherwise
      */
@@ -192,7 +192,7 @@ public class ItemEntity extends ObjectEntity {
 
     /**
      * When set to true, close {@link ItemEntity} will try to merge together as a single entity
-     * when their {@link #getItemStack()} is similar and allowed to stack together
+     * when their {@link #getItemStack()} is similar and allowed to stack together.
      *
      * @param mergeable should the entity merge with other {@link ItemEntity}
      */
@@ -201,7 +201,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get the merge range
+     * Gets the merge range.
      *
      * @return the merge range
      */
@@ -210,7 +210,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Change the merge range
+     * Changes the merge range.
      *
      * @param mergeRange the merge range
      */
@@ -219,7 +219,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Get the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}
+     * Gets the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}.
      *
      * @return the pickup delay
      */
@@ -228,7 +228,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Set the pickup delay of the ItemEntity
+     * Sets the pickup delay of the ItemEntity.
      *
      * @param delay    the pickup delay
      * @param timeUnit the unit of the delay
@@ -238,7 +238,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     /**
-     * Used to know if the ItemEntity can be pickup
+     * Used to know if the ItemEntity can be pickup.
      *
      * @return the time in milliseconds since this entity has spawn
      */

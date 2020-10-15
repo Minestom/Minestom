@@ -19,7 +19,7 @@ public class ResourcePack {
     }
 
     /**
-     * Get the resource pack URL.
+     * Gets the resource pack URL.
      *
      * @return the resource pack URL
      */
@@ -28,7 +28,7 @@ public class ResourcePack {
     }
 
     /**
-     * Get the resource pack hash.
+     * Gets the resource pack hash.
      * <p>
      * WARNING: if null or empty, the player will probably waste bandwidth by re-downloading
      * the resource pack.

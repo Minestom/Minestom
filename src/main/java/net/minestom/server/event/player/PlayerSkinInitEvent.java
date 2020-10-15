@@ -5,7 +5,7 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.Event;
 
 /**
- * Called at the player connection to initialize his skin
+ * Called at the player connection to initialize his skin.
  */
 public class PlayerSkinInitEvent extends Event {
 
@@ -17,7 +17,7 @@ public class PlayerSkinInitEvent extends Event {
     }
 
     /**
-     * Get the player whose the skin is getting initialized
+     * Gets the player whose the skin is getting initialized.
      *
      * @return the player
      */
@@ -26,7 +26,7 @@ public class PlayerSkinInitEvent extends Event {
     }
 
     /**
-     * Get the spawning skin of the player
+     * Gets the spawning skin of the player.
      *
      * @return the player skin, or null if not any
      */
@@ -35,7 +35,7 @@ public class PlayerSkinInitEvent extends Event {
     }
 
     /**
-     * Set the spawning skin of the player
+     * Sets the spawning skin of the player.
      *
      * @param skin the new player skin
      */

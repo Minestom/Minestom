@@ -138,8 +138,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Schedule a task to be run during the next entity tick
-     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider})
+     * Schedules a task to be run during the next entity tick.
+     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next entity tick
      */
@@ -164,14 +164,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Called each tick
+     * Called each tick.
      *
      * @param time the time of update in milliseconds
      */
     public abstract void update(long time);
 
     /**
-     * Called when a new instance is set
+     * Called when a new instance is set.
      */
     public abstract void spawn();
 
@@ -180,7 +180,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Checks if now is a good time to send a velocity update packet
+     * Checks if now is a good time to send a velocity update packet.
      *
      * @param time the current time in milliseconds
      * @return true if the velocity update packet should be send
@@ -190,7 +190,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Gets the period, in ms, between two velocity update packets
+     * Gets the period, in ms, between two velocity update packets.
      *
      * @return period, in ms, between two velocity update packets
      */
@@ -199,7 +199,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Sets the period, in ms, between two velocity update packets
+     * Sets the period, in ms, between two velocity update packets.
      *
      * @param velocityUpdatePeriod period, in ms, between two velocity update packets
      */
@@ -208,8 +208,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Teleport the entity only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true
+     * Teleports the entity only if the chunk at {@code position} is loaded or if
+     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
      *
      * @param position the teleport position
      * @param callback the callback executed, even if auto chunk is not enabled
@@ -242,7 +242,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the view of the entity
+     * Changes the view of the entity.
      *
      * @param yaw   the new yaw
      * @param pitch the new pitch
@@ -265,8 +265,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the view of the entity
-     * Only the yaw and pitch is used
+     * Changes the view of the entity.
+     * Only the yaw and pitch are used.
      *
      * @param position the new view
      */
@@ -277,11 +277,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * When set to true, the entity will automatically get new viewers when they come too close
      * This can be use to complete control over which player can see it, without having to deal with
-     * raw packets
+     * raw packets.
      * <p>
-     * True by default for all entities
+     * True by default for all entities.
      * When set to false, it is important to mention that the players will not be removed automatically from its viewers
-     * list, you would have to do that manually when being too far
+     * list, you would have to do that manually when being too far.
      *
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
@@ -335,7 +335,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Update the entity, called every tick
+     * Updates the entity, called every tick.
      *
      * @param time the update time in milliseconds
      */
@@ -525,14 +525,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Equivalent to <code>sendPacketsToViewers(getVelocityPacket());</code>
+     * Equivalent to <code>sendPacketsToViewers(getVelocityPacket());</code>.
      */
     public void sendVelocityPacket() {
         sendPacketsToViewers(getVelocityPacket());
     }
 
     /**
-     * Get the number of ticks this entity has been active for
+     * Gets the number of ticks this entity has been active for.
      *
      * @return the number of ticks this entity has been active for
      */
@@ -566,8 +566,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Each entity has an unique id which will change after a restart
-     * All entities can be retrieved by calling {@link Entity#getEntity(int)}
+     * Each entity has an unique id which will change after a restart.
+     * All entities can be retrieved by calling {@link Entity#getEntity(int)}.
      *
      * @return the unique entity id
      */
@@ -576,7 +576,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Return the entity type id, can convert using {@link EntityType#fromId(int)}
+     * Returns the entity type id, can convert using {@link EntityType#fromId(int)}.
      *
      * @return the entity type id
      */
@@ -585,7 +585,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity UUID
+     * Gets the entity UUID.
      *
      * @return the entity UUID
      */
@@ -594,7 +594,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the internal entity UUID, mostly unsafe
+     * Changes the internal entity UUID, mostly unsafe.
      *
      * @param uuid the new entity uuid
      */
@@ -603,7 +603,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Return false just after instantiation, set to true after calling {@link #setInstance(Instance)}
+     * Returns false just after instantiation, set to true after calling {@link #setInstance(Instance)}.
      *
      * @return true if the entity has been linked to an instance, false otherwise
      */
@@ -612,7 +612,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Is used to check collision with coordinates or other blocks/entities
+     * Is used to check collision with coordinates or other blocks/entities.
      *
      * @return the entity bounding box
      */
@@ -621,9 +621,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the internal entity bounding box
+     * Changes the internal entity bounding box.
      * <p>
-     * WARNING: this does not change the entity hit-box which is client-side
+     * WARNING: this does not change the entity hit-box which is client-side.
      *
      * @param x the bounding box X size
      * @param y the bounding box Y size
@@ -643,7 +643,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity current instance
+     * Gets the entity current instance.
      *
      * @return the entity instance
      */
@@ -652,7 +652,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the entity instance
+     * Changes the entity instance.
      *
      * @param instance the new instance of the entity
      * @throws NullPointerException  if {@code instance} is null
@@ -676,7 +676,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity current velocity
+     * Gets the entity current velocity.
      *
      * @return the entity current velocity
      */
@@ -685,9 +685,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the entity velocity and calls {@link EntityVelocityEvent}.
+     * Changes the entity velocity and calls {@link EntityVelocityEvent}.
      * <p>
-     * The final velocity can be cancelled or modified by the event
+     * The final velocity can be cancelled or modified by the event.
      *
      * @param velocity the new entity velocity
      */
@@ -700,7 +700,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity currently has a velocity applied
+     * Gets if the entity currently has a velocity applied.
      *
      * @return true if velocity is not set to 0
      */
@@ -711,7 +711,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the gravity of the entity
+     * Change the gravity of the entity.
      *
      * @param gravityDragPerTick the gravity drag per tick
      */
@@ -720,7 +720,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the distance between two entities
+     * Gets the distance between two entities.
      *
      * @param entity the entity to get the distance from
      * @return the distance between this and {@code entity}
@@ -731,7 +731,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity vehicle or null
+     * Gets the entity vehicle or null.
      *
      * @return the entity vehicle, or null if there is not any
      */
@@ -740,7 +740,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Add a new passenger to this entity
+     * Adds a new passenger to this entity.
      *
      * @param entity the new passenger
      * @throws NullPointerException  if {@code entity} is null
@@ -761,7 +761,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Remove a passenger to this entity
+     * Removes a passenger to this entity.
      *
      * @param entity the passenger to remove
      * @throws NullPointerException  if {@code entity} is null
@@ -778,7 +778,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity has any passenger
+     * Gets if the entity has any passenger.
      *
      * @return true if the entity has any passenger, false otherwise
      */
@@ -787,7 +787,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity passengers
+     * Gets the entity passengers.
      *
      * @return an unmodifiable list containing all the entity passengers
      */
@@ -810,7 +810,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Entity statuses can be find <a href="https://wiki.vg/Entity_statuses">here</a>
+     * Entity statuses can be find <a href="https://wiki.vg/Entity_statuses">here</a>.
      *
      * @param status the status to trigger
      */
@@ -822,7 +822,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity is on fire
+     * Gets if the entity is on fire.
      *
      * @return true if the entity is in fire, false otherwise
      */
@@ -831,10 +831,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Set the entity in fire visually
+     * Sets the entity in fire visually.
      * <p>
      * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TimeUnit)}
+     * see {@link LivingEntity#setFireForDuration(int, TimeUnit)}.
      *
      * @param fire should the entity be set in fire
      */
@@ -844,7 +844,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity is invisible or not
+     * Gets if the entity is invisible or not.
      *
      * @return true if the entity is invisible, false otherwise
      */
@@ -853,8 +853,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the internal invisible value and send a {@link EntityMetaDataPacket}
-     * to make visible or invisible the entity to its viewers
+     * Changes the internal invisible value and send a {@link EntityMetaDataPacket}
+     * to make visible or invisible the entity to its viewers.
      *
      * @param invisible true to set the entity invisible, false otherwise
      */
@@ -864,7 +864,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity is glowing or not
+     * Gets if the entity is glowing or not.
      *
      * @return true if the entity is glowing, false otherwise
      */
@@ -873,7 +873,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Set or remove the entity glowing effect
+     * Sets or remove the entity glowing effect.
      *
      * @param glowing true to make the entity glows, false otherwise
      */
@@ -883,7 +883,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity custom name
+     * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
      */
@@ -892,7 +892,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the entity custom name
+     * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
      */
@@ -902,7 +902,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the custom name visible metadata field
+     * Gets the custom name visible metadata field.
      *
      * @return true if the custom name is visible, false otherwise
      */
@@ -911,8 +911,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the internal custom name visible field and send a {@link EntityMetaDataPacket}
-     * to update the entity state to its viewers
+     * Changes the internal custom name visible field and send a {@link EntityMetaDataPacket}
+     * to update the entity state to its viewers.
      *
      * @param customNameVisible true to make the custom name visible, false otherwise
      */
@@ -931,7 +931,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the noGravity metadata field and change the gravity behaviour accordingly
+     * Changes the noGravity metadata field and change the gravity behaviour accordingly.
      *
      * @param noGravity should the entity ignore gravity
      */
@@ -941,7 +941,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the noGravity metadata field
+     * Gets the noGravity metadata field.
      *
      * @return true if the entity ignore gravity, false otherwise
      */
@@ -1001,7 +1001,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Manage viewable entities automatically if {@link #isAutoViewable()} is enabled.
+     * Manages viewable entities automatically if {@link #isAutoViewable()} is enabled.
      * <p>
      * Called by {@link #refreshPosition(float, float, float)} when the new position is in a different {@link Chunk}.
      *
@@ -1066,9 +1066,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Update the entity view internally
+     * Updates the entity view internally.
      * <p>
-     * Warning: you probably want to use {@link #setView(float, float)}
+     * Warning: you probably want to use {@link #setView(float, float)}.
      *
      * @param yaw   the yaw
      * @param pitch the pitch
@@ -1083,7 +1083,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Make the entity sneak.
+     * Makes the entity sneak.
      * <p>
      * WARNING: this will not work for the client itself.
      *
@@ -1097,7 +1097,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Make the entity sprint.
+     * Makes the entity sprint.
      * <p>
      * WARNING: this will not work on the client itself.
      *
@@ -1109,7 +1109,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity position
+     * Gets the entity position.
      *
      * @return the current position of the entity
      */
@@ -1118,7 +1118,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get the entity eye height
+     * Gets the entity eye height.
      *
      * @return the entity eye height
      */
@@ -1127,7 +1127,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the entity eye height
+     * Changes the entity eye height.
      *
      * @param eyeHeight the entity eye height
      */
@@ -1136,7 +1136,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if this entity is in the same chunk as the specified position
+     * Gets if this entity is in the same chunk as the specified position.
      *
      * @param position the checked position chunk
      * @return true if the entity is in the same chunk as {@code position}
@@ -1154,7 +1154,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity is in the same chunk as another
+     * Gets if the entity is in the same chunk as another.
      *
      * @param entity the entity to check
      * @return true if both entities are in the same chunk, false otherwise
@@ -1164,7 +1164,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Remove the entity from the server immediately.
+     * Removes the entity from the server immediately.
      * <p>
      * WARNING: this do not trigger the {@link EntityDeathEvent} event.
      */
@@ -1177,7 +1177,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if this entity has been removed
+     * Gets if this entity has been removed.
      *
      * @return true if this entity is removed
      */
@@ -1186,7 +1186,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Trigger {@link #remove()} after the specified time
+     * Triggers {@link #remove()} after the specified time.
      *
      * @param delay    the time before removing the entity
      * @param timeUnit the unit of the delay
@@ -1202,7 +1202,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get if the entity removal has been scheduled with {@link #scheduleRemove(long, TimeUnit)}.
+     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(long, TimeUnit)}.
      *
      * @return true if the entity removal has been scheduled
      */
@@ -1221,7 +1221,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Get an {@link EntityMetaDataPacket} sent when adding viewers. Used for synchronization.
+     * Gets an {@link EntityMetaDataPacket} sent when adding viewers. Used for synchronization.
      *
      * @return The {@link EntityMetaDataPacket} related to this entity
      */
@@ -1250,8 +1250,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Send a {@link EntityMetaDataPacket} containing only the specified index
-     * The index is wrote using {@link #fillMetadataIndex(BinaryWriter, int)}
+     * Sends a {@link EntityMetaDataPacket} containing only the specified index
+     * The index is wrote using {@link #fillMetadataIndex(BinaryWriter, int)}.
      *
      * @param index the metadata index
      */
@@ -1264,9 +1264,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Used to fill/write a specific metadata index
-     * The proper use to add a new metadata index is to override this and add your case
-     * Then you can also override {@link #getMetadataConsumer()} and fill your newly added index
+     * Used to fill/write a specific metadata index.
+     * The proper use to add a new metadata index is to override this and add your case.
+     * Then you can also override {@link #getMetadataConsumer()} and fill your newly added index.
      *
      * @param packet the packet writer
      * @param index  the index to fill/write
@@ -1370,7 +1370,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Ask for a synchronization (position) to happen during next entity tick
+     * Asks for a synchronization (position) to happen during next entity tick.
      */
     public void askSynchronization() {
         this.lastSynchronizationTime = 0;

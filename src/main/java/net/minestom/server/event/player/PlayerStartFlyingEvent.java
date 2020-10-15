@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called when a player start flying
+ * Called when a player start flying.
  */
 public class PlayerStartFlyingEvent extends Event {
 
@@ -15,7 +15,7 @@ public class PlayerStartFlyingEvent extends Event {
     }
 
     /**
-     * Get the player who started flying
+     * Gets the player who started flying.
      *
      * @return the player
      */

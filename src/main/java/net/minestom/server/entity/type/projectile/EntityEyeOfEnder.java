@@ -38,7 +38,7 @@ public class EntityEyeOfEnder extends ObjectEntity implements Projectile {
 
 
     /**
-     * Get the eye of ender item
+     * Gets the eye of ender item.
      *
      * @return the item
      */
@@ -47,9 +47,9 @@ public class EntityEyeOfEnder extends ObjectEntity implements Projectile {
     }
 
     /**
-     * Change the eye of ender item
+     * Changes the eye of ender item.
      * <p>
-     * Can be null to make it like {@link Material#ENDER_EYE}
+     * Can be null to make it like {@link Material#ENDER_EYE}.
      *
      * @param itemStack the new item stack
      */

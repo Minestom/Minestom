@@ -200,7 +200,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Refresh the player inventory by sending a {@link WindowItemsPacket} containing all
+     * Refreshes the player inventory by sending a {@link WindowItemsPacket} containing all.
      * the inventory items
      */
     public void update() {
@@ -208,7 +208,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Refresh only a specific slot with the updated item stack data
+     * Refreshes only a specific slot with the updated item stack data.
      *
      * @param slot the slot to refresh
      */
@@ -217,7 +217,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Get the item in player cursor
+     * Gets the item in player cursor.
      *
      * @return the cursor item
      */
@@ -226,7 +226,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Change the player cursor item
+     * Changes the player cursor item.
      *
      * @param cursorItem the new cursor item
      */
@@ -241,7 +241,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Insert an item safely (synchronized) in the appropriate slot
+     * Inserts an item safely (synchronized) in the appropriate slot.
      *
      * @param slot      an internal slot
      * @param itemStack the item to insert at the slot
@@ -300,7 +300,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Set an item from a packet slot
+     * Sets an item from a packet slot.
      *
      * @param slot      a packet slot
      * @param offset    offset (generally 9 to ignore armor and craft slots)
@@ -312,7 +312,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Get the item from a packet slot
+     * Gets the item from a packet slot.
      *
      * @param slot   a packet slot
      * @param offset offset (generally 9 to ignore armor and craft slots)
@@ -324,7 +324,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Refresh an inventory slot
+     * Refreshes an inventory slot.
      *
      * @param slot      the packet slot
      *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
@@ -339,7 +339,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Get a {@link WindowItemsPacket} with all the items in the inventory
+     * Gets a {@link WindowItemsPacket} with all the items in the inventory.
      *
      * @return a {@link WindowItemsPacket} with inventory items
      */

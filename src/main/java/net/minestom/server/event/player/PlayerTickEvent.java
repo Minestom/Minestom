@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called at each player tick
+ * Called at each player tick.
  */
 public class PlayerTickEvent extends Event {
 
@@ -15,7 +15,7 @@ public class PlayerTickEvent extends Event {
     }
 
     /**
-     * Get the player
+     * Gets the player.
      *
      * @return the player
      */

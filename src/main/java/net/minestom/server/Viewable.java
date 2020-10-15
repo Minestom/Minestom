@@ -8,12 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represent something which can be displayed or hidden to players
+ * Represents something which can be displayed or hidden to players.
  */
 public interface Viewable {
 
     /**
-     * Add a viewer
+     * Adds a viewer.
      *
      * @param player the viewer to add
      * @return true if the player has been added, false otherwise (could be because he is already a viewer)
@@ -21,7 +21,7 @@ public interface Viewable {
     boolean addViewer(Player player);
 
     /**
-     * Remove a viewer
+     * Removes a viewer.
      *
      * @param player the viewer to remove
      * @return true if the player has been removed, false otherwise (could be because he was not a viewer)
@@ -29,14 +29,14 @@ public interface Viewable {
     boolean removeViewer(Player player);
 
     /**
-     * Get all the viewers of this viewable element
+     * Gets all the viewers of this viewable element.
      *
      * @return A Set containing all the element's viewers
      */
     Set<Player> getViewers();
 
     /**
-     * Get if a player is seeing this viewable object
+     * Gets if a player is seeing this viewable object
      *
      * @param player the player to check
      * @return true if {@code player} is a viewer, false otherwise
@@ -46,7 +46,7 @@ public interface Viewable {
     }
 
     /**
-     * Send a packet to all viewers
+     * Sends a packet to all viewers
      * <p>
      * It is better than looping through the viewers
      * to send a packet since it is here only serialized once
@@ -58,7 +58,7 @@ public interface Viewable {
     }
 
     /**
-     * Send multiple packets to all viewers
+     * Sends multiple packets to all viewers
      * <p>
      * It is better than looping through the viewers
      * to send a packet since it is here only serialized once
@@ -72,7 +72,7 @@ public interface Viewable {
     }
 
     /**
-     * Send a packet to all viewers and the viewable element if it is a player
+     * Sends a packet to all viewers and the viewable element if it is a player
      * <p>
      * If 'this' isn't a player, then {@link #sendPacketToViewers(ServerPacket)} is called instead
      *
@@ -91,7 +91,7 @@ public interface Viewable {
     }
 
     /**
-     * Send a packet to all the viewers and 'this'
+     * Sends a packet to all the viewers and 'this'
      * <p>
      * Unsafe because of a cast to {@link Player} without any check beforehand
      *

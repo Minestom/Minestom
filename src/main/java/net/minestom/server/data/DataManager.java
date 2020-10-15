@@ -55,7 +55,7 @@ public final class DataManager {
     }
 
     /**
-     * Register a new data type
+     * Registers a new data type.
      *
      * @param clazz    the data class
      * @param dataType the data type associated
@@ -71,7 +71,7 @@ public final class DataManager {
     }
 
     /**
-     * Get the data type associated with a class
+     * Gets the data type associated with a class.
      *
      * @param clazz the data class
      * @param <T>   the data type

@@ -15,14 +15,15 @@ public class MapMeta implements ItemMeta {
     private List<MapDecoration> decorations = new ArrayList<>();
     private ChatColor mapColor = ChatColor.NO_COLOR;
 
-    public MapMeta() {}
+    public MapMeta() {
+    }
 
     public MapMeta(int id) {
         this.mapId = id;
     }
 
     /**
-     * Get the map id
+     * Gets the map id.
      *
      * @return the map id
      */
@@ -31,7 +32,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Change the map id
+     * Changes the map id.
      *
      * @param mapId the new map id
      */
@@ -40,7 +41,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Get the map scale direction
+     * Gets the map scale direction.
      *
      * @return the map scale direction
      */
@@ -49,7 +50,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Change the map scale direction
+     * Changes the map scale direction.
      *
      * @param mapScaleDirection the new map scale direction
      */
@@ -58,7 +59,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Get the map decorations
+     * Gets the map decorations.
      *
      * @return a modifiable list containing all the map decorations
      */
@@ -67,7 +68,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Change the map decorations list
+     * Changes the map decorations list.
      *
      * @param decorations the new map decorations list
      */
@@ -76,7 +77,7 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Get the map color
+     * Gets the map color.
      *
      * @return the map color
      */
@@ -85,9 +86,9 @@ public class MapMeta implements ItemMeta {
     }
 
     /**
-     * Change the map color
+     * Changes the map color.
      * <p>
-     * WARNING: RGB colors are not supported
+     * WARNING: RGB colors are not supported.
      *
      * @param mapColor the new map color
      */
@@ -204,7 +205,7 @@ public class MapMeta implements ItemMeta {
         }
 
         /**
-         * Get the arbitrary decoration id
+         * Gets the arbitrary decoration id.
          *
          * @return the decoration id
          */
@@ -213,7 +214,7 @@ public class MapMeta implements ItemMeta {
         }
 
         /**
-         * Get the decoration type
+         * Gets the decoration type.
          *
          * @return the decoration type
          * @see <a href="https://minecraft.gamepedia.com/Map#Map_icons">Map icons</a>
@@ -223,7 +224,7 @@ public class MapMeta implements ItemMeta {
         }
 
         /**
-         * Get the X position of the decoration
+         * Gets the X position of the decoration.
          *
          * @return the X position
          */
@@ -232,7 +233,7 @@ public class MapMeta implements ItemMeta {
         }
 
         /**
-         * Get the Z position of the decoration
+         * Gets the Z position of the decoration.
          *
          * @return the Z position
          */
@@ -241,7 +242,7 @@ public class MapMeta implements ItemMeta {
         }
 
         /**
-         * Get the rotation of the symbol (0;360)
+         * Gets the rotation of the symbol (0;360).
          *
          * @return the rotation of the symbol
          */

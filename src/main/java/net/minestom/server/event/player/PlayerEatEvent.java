@@ -5,7 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Called when a player is finished eating
+ * Called when a player is finished eating.
  */
 public class PlayerEatEvent extends Event {
 
@@ -18,7 +18,7 @@ public class PlayerEatEvent extends Event {
     }
 
     /**
-     * Get the player who is finished eating
+     * Gets the player who is finished eating.
      *
      * @return the concerned player
      */
@@ -27,7 +27,7 @@ public class PlayerEatEvent extends Event {
     }
 
     /**
-     * Get the food item that has been eaten
+     * Gets the food item that has been eaten.
      *
      * @return the food item
      */

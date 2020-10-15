@@ -11,7 +11,7 @@ import net.minestom.server.utils.validate.Check;
 import java.util.Set;
 
 /**
- * Represent an invisible armor stand showing a colored text
+ * Represents an invisible armor stand showing a {@link ColoredText}.
  */
 public class Hologram implements Viewable {
 
@@ -38,7 +38,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Get the position of the hologram
+     * Gets the position of the hologram.
      *
      * @return the hologram's position
      */
@@ -47,7 +47,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Change the position of the hologram
+     * Changes the position of the hologram.
      *
      * @param position the new hologram's position
      */
@@ -59,7 +59,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Get the hologram text
+     * Gets the hologram text.
      *
      * @return the hologram text
      */
@@ -68,7 +68,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Change the hologram text
+     * Changes the hologram text.
      *
      * @param text the new hologram text
      */
@@ -79,7 +79,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Remove the hologram
+     * Removes the hologram.
      */
     public void remove() {
         this.removed = true;
@@ -87,7 +87,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Check if the hologram is still present
+     * Checks if the hologram is still present.
      *
      * @return true if the hologram is present, false otherwise
      */
@@ -96,7 +96,7 @@ public class Hologram implements Viewable {
     }
 
     /**
-     * Get the hologram entity (armor stand)
+     * Gets the hologram entity (armor stand).
      *
      * @return the hologram entity
      */

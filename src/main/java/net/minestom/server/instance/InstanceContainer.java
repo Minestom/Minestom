@@ -216,7 +216,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace
+     * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
      *
      * @param blockPosition the block position
      * @param blockStateId  the block state id
@@ -241,7 +241,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Call {@link CustomBlock#onDestroy(Instance, BlockPosition, Data)} for {@code previousBlock}
+     * Calls {@link CustomBlock#onDestroy(Instance, BlockPosition, Data)} for {@code previousBlock}.
      * <p>
      * WARNING {@code chunk} needs to be synchronized
      *
@@ -256,7 +256,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Call {@link CustomBlock#onPlace(Instance, BlockPosition, Data)} for the current custom block at the position
+     * Calls {@link CustomBlock#onPlace(Instance, BlockPosition, Data)} for the current custom block at the position.
      * <p>
      * WARNING {@code chunk} needs to be synchronized
      *
@@ -273,7 +273,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Call the {@link BlockPlacementRule} for the specified block state id
+     * Calls the {@link BlockPlacementRule} for the specified block state id.
      *
      * @param blockStateId  the block state id to modify
      * @param blockPosition the block position
@@ -288,9 +288,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Executed when a block is modified, this is used to modify the states of neighbours blocks
+     * Executed when a block is modified, this is used to modify the states of neighbours blocks.
      * <p>
-     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape
+     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape.
      *
      * @param blockPosition the position of the modified block
      */
@@ -435,7 +435,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Save the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage(Runnable)}
+     * Saves the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage(Runnable)}.
      * <p>
      * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
      *
@@ -569,7 +569,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Change which type of {@link Chunk} implementation to use once one needs to be loaded.
+     * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
      * <p>
@@ -586,7 +586,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Get the current {@link ChunkSupplier}.
+     * Gets the current {@link ChunkSupplier}.
      * <p>
      * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
      *
@@ -597,7 +597,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Get all the {@link SharedInstance} linked to this container
+     * Gets all the {@link SharedInstance} linked to this container.
      *
      * @return an unmodifiable {@link List} containing all the {@link SharedInstance} linked to this container
      */
@@ -606,7 +606,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Assign a {@link SharedInstance} to this container.
+     * Assigns a {@link SharedInstance} to this container.
      * <p>
      * Only used by {@link InstanceManager}, mostly unsafe.
      *
@@ -617,7 +617,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Add a {@link Chunk} to the internal instance map
+     * Adds a {@link Chunk} to the internal instance map.
      *
      * @param chunk the chunk to cache
      */
@@ -637,7 +637,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Get all the instance chunks
+     * Gets all the instance chunks.
      *
      * @return the chunks of this instance
      */
@@ -656,7 +656,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Get the {@link IChunkLoader} of this instance
+     * Gets the {@link IChunkLoader} of this instance.
      *
      * @return the {@link IChunkLoader} of this instance
      */
@@ -665,7 +665,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Change the {@link IChunkLoader} of this instance (to change how chunks are retrieved when not already loaded)
+     * Changes the {@link IChunkLoader} of this instance (to change how chunks are retrieved when not already loaded).
      *
      * @param chunkLoader the new {@link IChunkLoader}
      */
@@ -674,9 +674,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Send a {@link BlockChangePacket} at the specified {@link BlockPosition} to set the block as {@code blockStateId}
+     * Sends a {@link BlockChangePacket} at the specified {@link BlockPosition} to set the block as {@code blockStateId}.
      * <p>
-     * WARNING: this does not change the internal block data, this is strictly visual for the players
+     * WARNING: this does not change the internal block data, this is strictly visual for the players.
      *
      * @param chunk         the chunk where the block is
      * @param blockPosition the block position
@@ -722,9 +722,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Unload all waiting chunks
+     * Unloads all waiting chunks.
      * <p>
-     * Unsafe because it has to be done on the same thread as the instance/chunks tick update
+     * Unsafe because it has to be done on the same thread as the instance/chunks tick update.
      */
     protected void UNSAFE_unloadChunks() {
         synchronized (this.scheduledChunksToRemove) {

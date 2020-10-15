@@ -7,27 +7,27 @@ import net.minestom.server.instance.block.Block;
 
 public class PFBlockDescription implements IBlockDescription {
 
-    private static final Short2ObjectMap<PFBlockDescription> BLOCK_DESCRITION_MAP = new Short2ObjectOpenHashMap<>();
+    private static final Short2ObjectMap<PFBlockDescription> BLOCK_DESCRIPTION_MAP = new Short2ObjectOpenHashMap<>();
 
     /**
-     * Get the {@link PFBlockDescription} linked to the block state id
+     * Gets the {@link PFBlockDescription} linked to the block state id.
      * <p>
-     * Cache the result if it is not already
+     * Cache the result if it is not already.
      *
      * @param blockStateId the block state id
      * @return the {@link PFBlockDescription} linked to {@code blockStateId}
      */
     public static PFBlockDescription getBlockDescription(short blockStateId) {
-        if (!BLOCK_DESCRITION_MAP.containsKey(blockStateId)) {
-            synchronized (BLOCK_DESCRITION_MAP) {
+        if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
+            synchronized (BLOCK_DESCRIPTION_MAP) {
                 final Block block = Block.fromStateId(blockStateId);
                 final PFBlockDescription blockDescription = new PFBlockDescription(block);
-                BLOCK_DESCRITION_MAP.put(blockStateId, blockDescription);
+                BLOCK_DESCRIPTION_MAP.put(blockStateId, blockDescription);
                 return blockDescription;
             }
         }
 
-        return BLOCK_DESCRITION_MAP.get(blockStateId);
+        return BLOCK_DESCRIPTION_MAP.get(blockStateId);
     }
 
     private final Block block;

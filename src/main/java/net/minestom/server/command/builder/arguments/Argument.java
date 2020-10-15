@@ -66,8 +66,8 @@ public abstract class Argument<T> {
     public abstract int getConditionResult(T value);
 
     /**
-     * Get the ID of the argument, showed in-game above the chat bar
-     * and used to retrieve the data when the command is parsed
+     * Gets the ID of the argument, showed in-game above the chat bar
+     * and used to retrieve the data when the command is parsed.
      *
      * @return the argument id
      */
@@ -76,7 +76,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Get if the argument can contain space
+     * Gets if the argument can contain space.
      *
      * @return true if the argument allows space, false otherwise
      */
@@ -85,10 +85,10 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Get if the argument always use all the remaining characters
+     * Gets if the argument always use all the remaining characters.
      * <p>
      * ex: /help I am a test - would get you "I am a test"
-     * if the sole argument does use the remaining
+     * if the sole argument does use the remaining.
      *
      * @return true if the argument use all the remaining characters, false otherwise
      */
@@ -97,7 +97,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Get the {@link ArgumentCallback} to check if the argument-specific conditions are validated or not.
+     * Gets the {@link ArgumentCallback} to check if the argument-specific conditions are validated or not.
      *
      * @return the argument callback
      */
@@ -106,7 +106,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Set the {@link ArgumentCallback}.
+     * Sets the {@link ArgumentCallback}.
      *
      * @param callback the argument callback
      */
@@ -115,7 +115,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Get if the argument has any error callback
+     * Gets if the argument has any error callback.
      *
      * @return true if the argument has an error callback, false otherwise
      */

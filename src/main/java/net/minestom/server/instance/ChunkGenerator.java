@@ -26,7 +26,7 @@ public interface ChunkGenerator {
     void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ);
 
     /**
-     * Define all the {@link Biome} in the {@link Chunk}.
+     * Defines all the {@link Biome} in the {@link Chunk}.
      *
      * @param biomes the array of {@link Biome}
      * @param chunkX the chunk X
@@ -35,7 +35,7 @@ public interface ChunkGenerator {
     void fillBiomes(Biome[] biomes, int chunkX, int chunkZ);
 
     /**
-     * Get all the {@link ChunkPopulator} of this generator.
+     * Gets all the {@link ChunkPopulator} of this generator.
      *
      * @return a {@link List} of {@link ChunkPopulator}
      */

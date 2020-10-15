@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Represent a text with one or multiple colors
+ * Represents a text with one or multiple colors.
  * <p>
- * Used when the message can contain colors but not events like in {@link RichMessage}
+ * Used when the message can contain colors but not events like in {@link RichMessage}.
  */
 public class ColoredText extends JsonMessage {
 
@@ -24,7 +24,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Create a {@link ColoredText}
+     * Creates a {@link ColoredText}.
      *
      * @param color   the text color
      * @param message the text message
@@ -35,7 +35,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Create a {@link ColoredText}
+     * Creates a {@link ColoredText}.
      *
      * @param message the text message
      * @return the created {@link ColoredText}
@@ -45,7 +45,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Create a {@link ColoredText} with a legacy text
+     * Creates a {@link ColoredText} with a legacy text.
      *
      * @param message   the text message
      * @param colorChar the char used before the color code
@@ -58,7 +58,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Append the text
+     * Appends the text.
      *
      * @param color   the text color
      * @param message the text message
@@ -71,7 +71,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Append the text
+     * Appends the text.
      *
      * @param message the text message
      * @return this {@link ColoredText}
@@ -81,7 +81,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Add legacy text
+     * Adds legacy text.
      *
      * @param message   the legacy text
      * @param colorChar the char used before the color code
@@ -93,7 +93,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Get the raw  text
+     * Gets the raw text.
      *
      * @return the raw text
      */
@@ -102,9 +102,9 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Get the Json representation of this colored text
+     * Gets the Json representation of this colored text.
      * <p>
-     * Used to send a message
+     * Used to send a message.
      *
      * @return the Json representation of the text
      */
@@ -134,7 +134,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Get the list of objects composing the message
+     * Gets the list of objects composing the message.
      *
      * @return the list of objects composing the message
      */
@@ -255,7 +255,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Get the object representing a message (raw/keybind/translatable)
+     * Gets the object representing a message (raw/keybind/translatable).
      *
      * @param messageType the message type
      * @param message     the message
@@ -295,7 +295,7 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Convert a legacy text to our format which can be used by {@link #of(String)} etc...
+     * Converts a legacy text to our format which can be used by {@link #of(String)} etc...
      * <p>
      * eg: "&fHey" -> "{#white}Hey"
      *
@@ -327,14 +327,14 @@ public class ColoredText extends JsonMessage {
     }
 
     /**
-     * Represents an element which can change based on the client which receive the text
+     * Represents an element which can change based on the client which receive the text.
      */
     private enum MessageType {
         RAW, KEYBIND, TRANSLATABLE
     }
 
     /**
-     * Used to keep a "color" state in the text
+     * Used to keep a "color" state in the text.
      */
     private static class SpecialComponentContainer {
         boolean bold = false;

@@ -42,7 +42,7 @@ public class EntityZombifiedPiglin extends EntityCreature implements Monster {
     }
 
     /**
-     * Get if the pig zombie is a baby
+     * Gets if the pig zombie is a baby.
      *
      * @return true if it is a baby, false otherwise
      */
@@ -51,7 +51,7 @@ public class EntityZombifiedPiglin extends EntityCreature implements Monster {
     }
 
     /**
-     * Set the pig zombie a baby or adult
+     * Sets the pig zombie a baby or adult.
      *
      * @param baby true to make it a baby, false otherwise
      */

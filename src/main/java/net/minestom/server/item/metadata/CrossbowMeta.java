@@ -18,7 +18,7 @@ public class CrossbowMeta implements ItemMeta {
     private boolean charged;
 
     /**
-     * Set the projectile of this crossbow
+     * Sets the projectile of this crossbow.
      *
      * @param projectile the projectile of the crossbow
      */
@@ -29,7 +29,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Set the triple projectiles of this crossbow
+     * Sets the triple projectiles of this crossbow.
      *
      * @param projectile1 the projectile 1
      * @param projectile2 the projectile 2
@@ -47,7 +47,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Get if this crossbow is charged with 3 projectiles
+     * Gets if this crossbow is charged with 3 projectiles.
      *
      * @return true if this crossbow is charged with 3 projectiles, false otherwise
      */
@@ -56,7 +56,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Get the first projectile
+     * Gets the first projectile.
      *
      * @return the first projectile, null if not present
      */
@@ -65,7 +65,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Get the second projectile
+     * Gets the second projectile.
      *
      * @return the second projectile, null if not present
      */
@@ -74,7 +74,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Get the third projectile
+     * Gets the third projectile.
      *
      * @return the third projectile, null if not present
      */
@@ -83,7 +83,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Get if the crossbow is currently charged
+     * Gets if the crossbow is currently charged.
      *
      * @return true if the crossbow is charged, false otherwise
      */
@@ -92,7 +92,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     /**
-     * Make the bow charged or uncharged
+     * Makes the bow charged or uncharged.
      *
      * @param charged true to make the crossbow charged, false otherwise
      */

@@ -42,7 +42,7 @@ public class Command {
     private final List<CommandSyntax> syntaxes;
 
     /**
-     * Create a {@link Command} with a name and one or multiple aliases
+     * Creates a {@link Command} with a name and one or multiple aliases.
      *
      * @param name    the name of the command
      * @param aliases the command aliases
@@ -56,7 +56,7 @@ public class Command {
     }
 
     /**
-     * Create a {@link Command} with a name without any aliases
+     * Creates a {@link Command} with a name without any aliases.
      *
      * @param name the name of the command
      * @see #Command(String, String...)
@@ -66,10 +66,10 @@ public class Command {
     }
 
     /**
-     * Get the {@link CommandCondition}
+     * Gets the {@link CommandCondition}.
      * <p>
      * It is called no matter the syntax used and can be used to check permissions or
-     * the {@link CommandSender} type
+     * the {@link CommandSender} type.
      *
      * @return the command condition
      */
@@ -78,7 +78,7 @@ public class Command {
     }
 
     /**
-     * Set the {@link CommandCondition}
+     * Sets the {@link CommandCondition}.
      *
      * @param commandCondition the new command condition
      */
@@ -87,9 +87,9 @@ public class Command {
     }
 
     /**
-     * Set an {@link ArgumentCallback}
+     * Sets an {@link ArgumentCallback}.
      * <p>
-     * The argument callback is called when there's an error in the argument
+     * The argument callback is called when there's an error in the argument.
      *
      * @param callback the callback for the argument
      * @param argument the argument which get the callback
@@ -99,7 +99,7 @@ public class Command {
     }
 
     /**
-     * Add a new syntax in the command
+     * Adds a new syntax in the command.
      * <p>
      * A syntax is simply a list of arguments
      *
@@ -113,7 +113,7 @@ public class Command {
     }
 
     /**
-     * Get the main command's name
+     * Gets the main command's name.
      *
      * @return the main command's name
      */
@@ -122,9 +122,9 @@ public class Command {
     }
 
     /**
-     * Get the command's aliases
+     * Gets the command's aliases.
      * <p>
-     * Can be null or empty
+     * Can be null or empty.
      *
      * @return the command aliases
      */
@@ -133,8 +133,8 @@ public class Command {
     }
 
     /**
-     * Get the default {@link CommandExecutor} (which is called when there is no argument)
-     * or if no corresponding syntax has been found
+     * Gets the default {@link CommandExecutor} (which is called when there is no argument)
+     * or if no corresponding syntax has been found.
      *
      * @return the default executor
      */
@@ -143,7 +143,7 @@ public class Command {
     }
 
     /**
-     * Set the default {@link CommandExecutor} (which is called when there is no argument)
+     * Sets the default {@link CommandExecutor} (which is called when there is no argument).
      *
      * @param executor the new default executor
      */
@@ -152,7 +152,7 @@ public class Command {
     }
 
     /**
-     * Get all the syntaxes of this command
+     * Gets all the syntaxes of this command.
      *
      * @return a collection containing all this command syntaxes
      */
@@ -161,8 +161,8 @@ public class Command {
     }
 
     /**
-     * Allow for tab auto completion, this is called everytime the player press a key in the chat
-     * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray})
+     * Allows for tab auto completion, this is called everytime the player press a key in the chat
+     * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray}).
      *
      * @param text the whole player's text
      * @return the array containing all the suggestion for the current arg (split " ")

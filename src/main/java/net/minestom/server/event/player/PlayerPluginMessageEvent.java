@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called when a player send {@link net.minestom.server.network.packet.client.play.ClientPluginMessagePacket}
+ * Called when a player send {@link net.minestom.server.network.packet.client.play.ClientPluginMessagePacket}.
  */
 public class PlayerPluginMessageEvent extends Event {
 
@@ -19,7 +19,7 @@ public class PlayerPluginMessageEvent extends Event {
     }
 
     /**
-     * Get the player who sent the message
+     * Gets the player who sent the message.
      *
      * @return the player
      */
@@ -28,7 +28,7 @@ public class PlayerPluginMessageEvent extends Event {
     }
 
     /**
-     * Get the message identifier
+     * Gets the message identifier.
      *
      * @return the identifier
      */
@@ -37,7 +37,7 @@ public class PlayerPluginMessageEvent extends Event {
     }
 
     /**
-     * Get the message data as a byte array
+     * Gets the message data as a byte array.
      *
      * @return the message
      */
@@ -46,7 +46,7 @@ public class PlayerPluginMessageEvent extends Event {
     }
 
     /**
-     * Get the message data as a String
+     * Gets the message data as a String.
      *
      * @return the message
      */

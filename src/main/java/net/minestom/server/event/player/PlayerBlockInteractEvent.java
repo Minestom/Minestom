@@ -6,8 +6,8 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 
 /**
- * Called when a player interacts with a block (right-click)
- * This is also called when a block is placed
+ * Called when a player interacts with a block (right-click).
+ * This is also called when a block is placed.
  */
 public class PlayerBlockInteractEvent extends CancellableEvent {
 
@@ -31,7 +31,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who interacted with the block
+     * Gets the player who interacted with the block.
      *
      * @return the player
      */
@@ -40,7 +40,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     }
 
     /**
-     * Get if the event should block the item use
+     * Gets if the event should block the item use.
      *
      * @return true if the item use is blocked, false otherwise
      */
@@ -53,7 +53,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     }
 
     /**
-     * Get the position of the interacted block
+     * Gets the position of the interacted block.
      *
      * @return the block position
      */
@@ -62,7 +62,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     }
 
     /**
-     * Get the hand used for the interaction
+     * Gets the hand used for the interaction.
      *
      * @return the hand used
      */
@@ -71,7 +71,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     }
 
     /**
-     * Get the block face
+     * Gets the block face.
      *
      * @return the block face
      */

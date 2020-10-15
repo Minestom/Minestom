@@ -7,7 +7,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 
 /**
- * Used when a player is clicking a block with an item (but is not a block in item form)
+ * Used when a player is clicking a block with an item (but is not a block in item form).
  */
 public class PlayerUseItemOnBlockEvent extends Event {
 
@@ -26,7 +26,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
     }
 
     /**
-     * Get the player who used an item while clicking on a block
+     * Gets the player who used an item while clicking on a block.
      *
      * @return the player
      */
@@ -35,7 +35,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
     }
 
     /**
-     * Get the position of the interacted block
+     * Gets the position of the interacted block.
      *
      * @return the block position
      */
@@ -44,7 +44,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
     }
 
     /**
-     * Get which face the player has interacted with
+     * Gets which face the player has interacted with.
      *
      * @return the block face
      */
@@ -53,7 +53,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
     }
 
     /**
-     * Get which hand the player used to interact with the block
+     * Gets which hand the player used to interact with the block.
      *
      * @return the hand
      */
@@ -62,7 +62,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
     }
 
     /**
-     * Get with which item the player has interacted with the block
+     * Gets with which item the player has interacted with the block.
      *
      * @return the item
      */

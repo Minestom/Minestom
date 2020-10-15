@@ -80,7 +80,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get a new {@link ItemStack} with the material sets to {@link Material#AIR}.
+     * Gets a new {@link ItemStack} with the material sets to {@link Material#AIR}.
      *
      * @return an air item
      */
@@ -89,7 +89,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the default {@link StackingRule} for newly created {@link ItemStack}.
+     * Gets the default {@link StackingRule} for newly created {@link ItemStack}.
      *
      * @return the default stacking rule
      */
@@ -98,7 +98,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the default stacking rule for created item stack
+     * Changes the default stacking rule for created item stack.
      *
      * @param defaultStackingRule the default item stack
      * @throws NullPointerException if {@code defaultStackingRule} is null
@@ -109,7 +109,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Load an {@link ItemStack} from nbt.
+     * Loads an {@link ItemStack} from nbt.
      *
      * @param nbt the nbt compound containing the item
      * @return the parsed item stack
@@ -130,7 +130,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item material is {@link Material#AIR}.
+     * Gets if the item material is {@link Material#AIR}.
      *
      * @return true if the material is air, false otherwise
      */
@@ -139,7 +139,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if two items are similar.
+     * Gets if two items are similar.
      * It does not take {@link #getAmount()} and {@link #getStackingRule()} in consideration.
      *
      * @param itemStack The ItemStack to compare to
@@ -171,16 +171,16 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item damage (durability)
+     * Gets the item damage (durability).
      *
-     * @return the item damagel
+     * @return the item damage
      */
     public int getDamage() {
         return damage;
     }
 
     /**
-     * Set the item damage (durability)
+     * Sets the item damage (durability).
      *
      * @param damage the item damage
      */
@@ -189,10 +189,10 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item amount
+     * Gets the item amount.
      * <p>
      * WARNING: for amount computation it would be better to use {@link StackingRule#getAmount(ItemStack)}
-     * to support all stacking implementation
+     * to support all stacking implementation.
      *
      * @return the item amount
      */
@@ -201,10 +201,10 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item amount
+     * Changes the item amount.
      * <p>
      * WARNING: for amount computation it would be better to use {@link StackingRule#getAmount(ItemStack)}
-     * to support all stacking implementation
+     * to support all stacking implementation.
      *
      * @param amount the new item amount
      */
@@ -213,7 +213,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the special meta object for this item
+     * Gets the special meta object for this item.
      * <p>
      * Can be null if not any
      *
@@ -224,10 +224,10 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item meta linked to this item
+     * Changes the item meta linked to this item.
      * <p>
      * WARNING: be sure to have nbt data useful for this item, items should automatically get the appropriate
-     * item meta
+     * item meta.
      *
      * @param itemMeta the new item meta
      */
@@ -236,7 +236,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item display name
+     * Gets the item display name.
      *
      * @return the item display name, can be null if not present
      */
@@ -245,7 +245,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Set the item display name
+     * Sets the item display name.
      *
      * @param displayName the item display name
      */
@@ -254,7 +254,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item has a display name
+     * Gets if the item has a display name.
      *
      * @return the item display name
      */
@@ -263,7 +263,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item lore
+     * Gets the item lore.
      *
      * @return the item lore, can be null if not present
      */
@@ -272,7 +272,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Set the item lore
+     * Sets the item lore.
      *
      * @param lore the item lore, can be null to remove
      */
@@ -281,7 +281,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item has a lore
+     * Gets if the item has a lore.
      *
      * @return true if the item has lore, false otherwise
      */
@@ -290,7 +290,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item enchantment map
+     * Gets the item enchantment map.
      *
      * @return an unmodifiable map containing the item enchantments
      */
@@ -299,7 +299,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Set an enchantment level
+     * Sets an enchantment level.
      *
      * @param enchantment the enchantment type
      * @param level       the enchantment level
@@ -314,7 +314,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Remove an enchantment
+     * Removes an enchantment.
      *
      * @param enchantment the enchantment type
      */
@@ -323,7 +323,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get an enchantment level
+     * Gets an enchantment level.
      *
      * @param enchantment the enchantment type
      * @return the stored enchantment level, 0 if not present
@@ -333,7 +333,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item attributes
+     * Gets the item attributes.
      *
      * @return an unmodifiable {@link List} containing the item attributes
      */
@@ -342,7 +342,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the {@link ItemAttribute} with the specified internal name
+     * Gets the {@link ItemAttribute} with the specified internal name.
      *
      * @param internalName the internal name of the attribute
      * @return the {@link ItemAttribute} with the internal name, null if not found
@@ -356,7 +356,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Add an attribute to the item
+     * Adds an attribute to the item.
      *
      * @param itemAttribute the attribute to add
      */
@@ -365,7 +365,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Remove an attribute to the item
+     * Removes an attribute to the item.
      *
      * @param itemAttribute the attribute to remove
      */
@@ -374,7 +374,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item hide flag
+     * Gets the item hide flag.
      *
      * @return the item hide flag
      */
@@ -383,7 +383,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item hide flag. This is the integer sent when updating the item hide flag
+     * Changes the item hide flag. This is the integer sent when updating the item hide flag.
      *
      * @param hideFlag the new item hide flag
      */
@@ -392,7 +392,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item custom model data
+     * Gets the item custom model data.
      *
      * @return the item custom model data
      */
@@ -401,7 +401,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item custom model data
+     * Changes the item custom model data.
      *
      * @param customModelData the new item custom data model
      */
@@ -410,7 +410,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Add flags to the item
+     * Adds flags to the item.
      *
      * @param flags the flags to add
      */
@@ -421,7 +421,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Remove flags from the item
+     * Removes flags from the item.
      *
      * @param flags the flags to remove
      */
@@ -432,7 +432,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item flags
+     * Gets the item flags.
      *
      * @return an unmodifiable {@link Set} containing the item flags
      */
@@ -449,7 +449,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item has an item flag
+     * Gets if the item has an item flag.
      *
      * @param flag the item flag
      * @return true if the item has the flag {@code flag}, false otherwise
@@ -460,7 +460,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item is unbreakable
+     * Gets if the item is unbreakable.
      *
      * @return true if the item is unbreakable, false otherwise
      */
@@ -469,7 +469,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Make the item unbreakable
+     * Makes the item unbreakable.
      *
      * @param unbreakable true to make the item unbreakable, false otherwise
      */
@@ -478,7 +478,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item {@link Material}.
+     * Gets the item {@link Material}.
      *
      * @return the item material
      */
@@ -487,7 +487,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item {@link Material}.
+     * Changes the item {@link Material}.
      *
      * @param material the new material
      */
@@ -496,7 +496,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get if the item has any nbt tag
+     * Gets if the item has any nbt tag.
      *
      * @return true if the item has nbt tag, false otherwise
      */
@@ -513,7 +513,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Clone this item stack
+     * Clones this item stack.
      *
      * @return a cloned item stack
      */
@@ -550,7 +550,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the nbt consumer called when the item is serialized into a packet
+     * Gets the nbt consumer called when the item is serialized into a packet.
      *
      * @return the item nbt consumer, null if not any
      */
@@ -559,7 +559,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the item nbt consumer
+     * Changes the item nbt consumer.
      *
      * @param nbtConsumer the new item nbt consumer
      */
@@ -568,7 +568,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Get the item stacking rule
+     * Gets the item {@link StackingRule}.
      *
      * @return the item stacking rule
      */
@@ -577,7 +577,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Change the stacking rule of the item
+     * Changes the {@link StackingRule} of the item.
      *
      * @param stackingRule the new item stacking rule
      * @throws NullPointerException if {@code stackingRule} is null
@@ -588,9 +588,9 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Consume this item by a specific amount
+     * Consumes this item by a specific amount.
      * <p>
-     * Will return null if the amount's amount isn't enough
+     * Will return null if the amount's amount isn't enough.
      *
      * @param amount the quantity to consume
      * @return the new item with the updated amount, null if the item cannot be consumed by this much
@@ -607,7 +607,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Find the {@link ItemMeta} based on the material type
+     * Finds the {@link ItemMeta} based on the material type.
      *
      * @return the item meta
      */
@@ -664,10 +664,10 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * WARNING: not implemented yet
+     * WARNING: not implemented yet.
      * <p>
      * This is be called each time an item is serialized to be send to a player,
-     * can be used to customize the display of the item based on player data
+     * can be used to customize the display of the item based on player data.
      *
      * @param player the player
      * @return the custom {@link ItemDisplay} for {@code player},

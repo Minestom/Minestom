@@ -8,7 +8,7 @@ public class FakePlayerOption {
     private boolean inTabList = false;
 
     /**
-     * Get if the player is registered internally as a Player
+     * Gets if the player is registered internally as a Player.
      *
      * @return true if the player is registered in {@link ConnectionManager}, false otherwise
      */
@@ -17,9 +17,9 @@ public class FakePlayerOption {
     }
 
     /**
-     * Set the FakePlayer as registered or not
+     * Sets the FakePlayer as registered or not.
      * <p>
-     * WARNING: this can't be changed halfway
+     * WARNING: this can't be changed halfway.
      *
      * @param registered should the fake player be registered internally
      */
@@ -28,7 +28,7 @@ public class FakePlayerOption {
     }
 
     /**
-     * Get if the player is visible in the tab-list or not
+     * Gets if the player is visible in the tab-list or not.
      *
      * @return true if the player is in the tab-list, false otherwise
      */
@@ -37,9 +37,9 @@ public class FakePlayerOption {
     }
 
     /**
-     * Set the player in the tab-list or not
+     * Sets the player in the tab-list or not.
      * <p>
-     * WARNING: this can't be changed halfway
+     * WARNING: this can't be changed halfway.
      *
      * @param inTabList should the player be in the tab-list
      */

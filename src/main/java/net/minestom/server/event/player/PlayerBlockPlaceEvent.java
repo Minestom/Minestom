@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 
 /**
- * Called when a player tries placing a block
+ * Called when a player tries placing a block.
  */
 public class PlayerBlockPlaceEvent extends CancellableEvent {
 
@@ -32,7 +32,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Set both the blockId and customBlockId
+     * Sets both the blockId and customBlockId.
      *
      * @param customBlock the custom block to place
      */
@@ -42,7 +42,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Set both the blockStateId and customBlockId
+     * Sets both the blockStateId and customBlockId.
      *
      * @param customBlockId the custom block id to place
      */
@@ -52,7 +52,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Set both the blockId and customBlockId
+     * Sets both the blockId and customBlockId.
      *
      * @param customBlockId the custom block id to place
      */
@@ -62,7 +62,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the custom block id
+     * Gets the custom block id.
      *
      * @return the custom block id
      */
@@ -71,10 +71,10 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Set the custom block id to place
+     * Sets the custom block id to place.
      * <p>
      * WARNING: this does not change the visual block id, see {@link #setBlockStateId(short)}
-     * or {@link #setCustomBlock(short)}
+     * or {@link #setCustomBlock(short)}.
      *
      * @param customBlockId the custom block id
      */
@@ -83,7 +83,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the block state id
+     * Gets the block state id.
      *
      * @return the block state id
      */
@@ -92,7 +92,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Change the visual block id
+     * Changes the visual block id.
      *
      * @param blockStateId the new block state id
      */
@@ -101,7 +101,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who is placing the block
+     * Gets the player who is placing the block.
      *
      * @return the player
      */
@@ -110,7 +110,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the block position
+     * Gets the block position.
      *
      * @return the block position
      */
@@ -119,7 +119,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Get the hand with which the player is trying to place
+     * Gets the hand with which the player is trying to place.
      *
      * @return the hand used
      */
@@ -128,7 +128,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Should the block be consumed if not cancelled
+     * Should the block be consumed if not cancelled.
      *
      * @param consumeBlock true if the block should be consumer (-1 amount), false otherwise
      */
@@ -137,7 +137,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Should the block be consumed if not cancelled
+     * Should the block be consumed if not cancelled.
      *
      * @return true if the block will be consumed, false otherwise
      */

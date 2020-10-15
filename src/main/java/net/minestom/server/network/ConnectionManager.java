@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Manage the connected clients.
+ * Manages the connected clients.
  */
 public final class ConnectionManager {
 
@@ -32,7 +32,7 @@ public final class ConnectionManager {
     private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     /**
-     * Get the {@link Player} linked to a {@link PlayerConnection}
+     * Gets the {@link Player} linked to a {@link PlayerConnection}.
      *
      * @param connection the player connection
      * @return the player linked to the connection
@@ -42,7 +42,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Get all online players
+     * Gets all online players.
      *
      * @return an unmodifiable collection containing all the online players
      */
@@ -51,9 +51,9 @@ public final class ConnectionManager {
     }
 
     /**
-     * Get the first player which validate {@link String#equalsIgnoreCase(String)}
+     * Gets the first player which validate {@link String#equalsIgnoreCase(String)}.
      * <p>
-     * This can cause issue if two or more players have the same username
+     * This can cause issue if two or more players have the same username.
      *
      * @param username the player username (ignoreCase)
      * @return the first player who validate the username condition
@@ -67,9 +67,9 @@ public final class ConnectionManager {
     }
 
     /**
-     * Get the first player which validate {@link UUID#equals(Object)}
+     * Gets the first player which validate {@link UUID#equals(Object)}.
      * <p>
-     * This can cause issue if two or more players have the same UUID
+     * This can cause issue if two or more players have the same UUID.
      *
      * @param uuid the player UUID
      * @return the first player who validate the UUID condition
@@ -83,7 +83,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Send a {@link JsonMessage} to all online players who validate the condition {@code condition}.
+     * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
      *
      * @param jsonMessage the message to send
      * @param condition   the condition to receive the message
@@ -98,7 +98,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Send a {@link JsonMessage} to all online players.
+     * Sends a {@link JsonMessage} to all online players.
      *
      * @param jsonMessage the message to send
      */
@@ -131,7 +131,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Get all the listeners which are called for each packet received
+     * Gets all the listeners which are called for each packet received.
      *
      * @return an unmodifiable list of packet's consumers
      */
@@ -140,7 +140,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Add a consumer to call once a packet is received
+     * Adds a consumer to call once a packet is received.
      *
      * @param packetConsumer the packet consumer
      */
@@ -149,7 +149,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Change how {@link UUID} are attributed to players.
+     * Changes how {@link UUID} are attributed to players.
      * <p>
      * Shouldn't be override if already defined.
      *
@@ -161,7 +161,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Compute the UUID of the specified connection
+     * Computes the UUID of the specified connection.
      * Used in {@link net.minestom.server.network.packet.client.login.LoginStartPacket} in order
      * to give the player the right {@link UUID}.
      *
@@ -176,7 +176,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Change the {@link Player} provider, to change which object to link to him
+     * Changes the {@link Player} provider, to change which object to link to him.
      *
      * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
      */
@@ -185,7 +185,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Retrieve the current {@link PlayerProvider}, can be the default one if none is defined
+     * Retrieves the current {@link PlayerProvider}, can be the default one if none is defined.
      *
      * @return the current {@link PlayerProvider}
      */
@@ -194,7 +194,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Those are all the consumers called when a new {@link Player} join
+     * Those are all the consumers called when a new {@link Player} join.
      *
      * @return an unmodifiable list containing all the {@link Player} initialization consumer
      */
@@ -203,8 +203,8 @@ public final class ConnectionManager {
     }
 
     /**
-     * Add a new player initialization consumer. Those are called when a {@link Player} join,
-     * mainly to add event callbacks to the player
+     * Adds a new player initialization consumer. Those are called when a {@link Player} join,
+     * mainly to add event callbacks to the player.
      *
      * @param playerInitialization the {@link Player} initialization consumer
      */
@@ -213,7 +213,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Add a new {@link Player} in the players list
+     * Adds a new {@link Player} in the players list.
      * Is currently used at
      * {@link LoginStartPacket#process(PlayerConnection)}
      * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}
@@ -226,7 +226,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Create a {@link Player} object and register it
+     * Creates a {@link Player} object and register it.
      *
      * @param uuid       the new player uuid
      * @param username   the new player username
@@ -238,7 +238,7 @@ public final class ConnectionManager {
     }
 
     /**
-     * Remove a {@link Player} from the players list,
+     * Removes a {@link Player} from the players list,
      * used during disconnection.
      *
      * @param connection the player connection

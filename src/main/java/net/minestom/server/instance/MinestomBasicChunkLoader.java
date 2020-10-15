@@ -22,7 +22,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     private final InstanceContainer instanceContainer;
 
     /**
-     * Create an {@link IChunkLoader} which use a {@link StorageLocation}.
+     * Creates an {@link IChunkLoader} which use a {@link StorageLocation}.
      * <p>
      * The {@link ChunkSupplier} is used to customize which type of {@link Chunk} this loader should use for loading.
      * <p>
@@ -94,7 +94,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     /**
-     * Get the chunk key used by the {@link StorageLocation}
+     * Gets the chunk key used by the {@link StorageLocation}.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z

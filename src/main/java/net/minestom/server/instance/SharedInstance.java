@@ -147,7 +147,7 @@ public class SharedInstance extends Instance {
     }
 
     /**
-     * Get the {@link InstanceContainer} from where this instance takes its {@link Chunk} from.
+     * Gets the {@link InstanceContainer} from where this instance takes its {@link Chunk} from.
      *
      * @return the associated {@link InstanceContainer}
      */

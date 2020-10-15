@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 /**
- * Class used to write packets
+ * Class used to write packets.
  */
 public final class PacketUtils {
 
@@ -15,7 +15,7 @@ public final class PacketUtils {
     }
 
     /**
-     * Write a {@link ServerPacket} into a {@link ByteBuf}
+     * Writes a {@link ServerPacket} into a {@link ByteBuf}.
      *
      * @param buf    the recipient of {@code packet}
      * @param packet the packet to write into {@code buf}
@@ -28,7 +28,7 @@ public final class PacketUtils {
     }
 
     /**
-     * Write a {@link ServerPacket} into a newly created {@link ByteBuf}
+     * Writes a {@link ServerPacket} into a newly created {@link ByteBuf}.
      *
      * @param packet the packet to write
      * @return a {@link ByteBuf} containing {@code packet}
@@ -46,7 +46,7 @@ public final class PacketUtils {
     }
 
     /**
-     * Write a packet buffer into {@code buf}
+     * Writes a packet buffer into {@code buf}.
      *
      * @param buf          the buffer which will receive the packet id/data
      * @param packetBuffer the buffer containing the raw packet data
@@ -58,7 +58,7 @@ public final class PacketUtils {
     }
 
     /**
-     * Get the buffer representing the raw packet data
+     * Gets the buffer representing the raw packet data.
      *
      * @param packet the packet to write
      * @return the {@link ByteBuf} containing the raw packet data

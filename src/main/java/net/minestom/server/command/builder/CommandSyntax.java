@@ -15,7 +15,7 @@ public class CommandSyntax {
     }
 
     /**
-     * Get all the required {@link Argument} for this sytnax
+     * Gets all the required {@link Argument} for this syntax.
      *
      * @return the required arguments
      */
@@ -24,7 +24,7 @@ public class CommandSyntax {
     }
 
     /**
-     * Get the {@link CommandExecutor} of this syntax, executed once the syntax is properly wrote.
+     * Gets the {@link CommandExecutor} of this syntax, executed once the syntax is properly written.
      *
      * @return the executor of this syntax
      */
@@ -33,7 +33,7 @@ public class CommandSyntax {
     }
 
     /**
-     * Change the {@link CommandExecutor} of this syntax
+     * Changes the {@link CommandExecutor} of this syntax.
      *
      * @param executor the new executor
      */

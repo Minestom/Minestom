@@ -9,7 +9,7 @@ public class CustomBlockUtils {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     /**
-     * Get if a custom block id has an update method
+     * Gets if a custom block id has an update method.
      *
      * @param customBlockId the custom block id
      * @return true if <code>customBlockId</code> has an update method
@@ -20,7 +20,7 @@ public class CustomBlockUtils {
     }
 
     /**
-     * Get if a {@link CustomBlock} has an update method
+     * Gets if a {@link CustomBlock} has an update method.
      *
      * @param customBlock the {@link CustomBlock}
      * @return true if <code>customBlock</code> has an update method

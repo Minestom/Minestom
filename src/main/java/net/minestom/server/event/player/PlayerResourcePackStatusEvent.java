@@ -5,7 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.resourcepack.ResourcePackStatus;
 
 /**
- * Called when a player warns the server of a resource pack status
+ * Called when a player warns the server of a resource pack status.
  */
 public class PlayerResourcePackStatusEvent extends Event {
 
@@ -18,7 +18,7 @@ public class PlayerResourcePackStatusEvent extends Event {
     }
 
     /**
-     * Get the player who send a resource pack status
+     * Gets the player who send a resource pack status.
      *
      * @return the player
      */
@@ -27,7 +27,7 @@ public class PlayerResourcePackStatusEvent extends Event {
     }
 
     /**
-     * Get the resource pack status
+     * Gets the resource pack status.
      *
      * @return the resource pack status
      */

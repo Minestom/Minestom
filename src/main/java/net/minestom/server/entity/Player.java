@@ -817,7 +817,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player additional hearts
+     * Gets the player additional hearts.
      *
      * @return the player additional hearts
      */
@@ -826,7 +826,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Update the internal field and send the appropriate {@link EntityMetaDataPacket}
+     * Updates the internal field and send the appropriate {@link EntityMetaDataPacket}.
      *
      * @param additionalHearts the count of additional hearts
      */
@@ -836,7 +836,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player food
+     * Gets the player food.
      *
      * @return the player food
      */
@@ -845,7 +845,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set and refresh client food bar
+     * Sets and refresh client food bar.
      *
      * @param food the new food value
      */
@@ -860,7 +860,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set and refresh client food saturation
+     * Sets and refresh client food saturation.
      *
      * @param foodSaturation the food saturation
      */
@@ -871,7 +871,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is eating
+     * Gets if the player is eating.
      *
      * @return true if the player is eating, false otherwise
      */
@@ -880,7 +880,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player default eating time
+     * Gets the player default eating time.
      *
      * @return the player default eating time
      */
@@ -889,7 +889,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used to change the default eating time animation
+     * Used to change the default eating time animation.
      *
      * @param defaultEatingTime the default eating time in milliseconds
      */
@@ -898,7 +898,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player display name in the tab-list
+     * Gets the player display name in the tab-list.
      *
      * @return the player display name,
      * null means that {@link #getUsername()} is displayed
@@ -908,9 +908,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the player display name in the tab-list
+     * Changes the player display name in the tab-list.
      * <p>
-     * Set to null to show the player username
+     * Sets to null to show the player username.
      *
      * @param displayName the display name
      */
@@ -923,7 +923,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player skin
+     * Gets the player skin.
      *
      * @return the player skin object,
      * null means that the player has his {@link #getUuid()} default skin
@@ -933,9 +933,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the player skin
+     * Changes the player skin.
      * <p>
-     * This does remove the player for all viewers to spawn it again with the correct new skin
+     * This does remove the player for all viewers to spawn it again with the correct new skin.
      *
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
      */
@@ -972,7 +972,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player has the respawn screen enabled or disabled
+     * Gets if the player has the respawn screen enabled or disabled.
      *
      * @return true if the player has the respawn screen, false if he didn't
      */
@@ -981,7 +981,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Enable or disable the respawn screen
+     * Enables or disable the respawn screen.
      *
      * @param enableRespawnScreen true to enable the respawn screen, false to disable it
      */
@@ -991,7 +991,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player username
+     * Gets the player username.
      *
      * @return the player username
      */
@@ -1000,8 +1000,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the internal player name, used for the {@link PlayerPreLoginEvent}
-     * mostly unsafe outside of it
+     * Changes the internal player name, used for the {@link PlayerPreLoginEvent}
+     * mostly unsafe outside of it.
      *
      * @param username the new player name
      */
@@ -1027,7 +1027,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set the player resource pack
+     * Sets the player resource pack.
      *
      * @param resourcePack the resource pack
      */
@@ -1043,7 +1043,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Rotate the player to face {@code targetPosition}
+     * Rotates the player to face {@code targetPosition}.
      *
      * @param facePoint      the point from where the player should aim
      * @param targetPosition the target position to face
@@ -1053,7 +1053,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Rotate the player to face {@code entity}
+     * Rotates the player to face {@code entity}.
      *
      * @param facePoint   the point from where the player should aim
      * @param entity      the entity to face
@@ -1079,7 +1079,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set the camera at {@code entity} eyes
+     * Sets the camera at {@code entity} eyes.
      *
      * @param entity the entity to spectate
      */
@@ -1090,7 +1090,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Reset the camera at the player
+     * Resets the camera at the player.
      */
     public void stopSpectating() {
         spectate(this);
@@ -1098,7 +1098,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Used to retrieve the default spawn point
-     * can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}
+     * can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
      *
      * @return the default respawn point
      */
@@ -1107,7 +1107,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the default spawn point
+     * Changes the default spawn point.
      *
      * @param respawnPoint the player respawn point
      */
@@ -1117,7 +1117,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Called after the player teleportation to refresh his position
-     * and send data to his new viewers
+     * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
         getInventory().update();
@@ -1157,7 +1157,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the percentage displayed in the experience bar
+     * Gets the percentage displayed in the experience bar.
      *
      * @return the exp percentage 0-1
      */
@@ -1166,8 +1166,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used to change the percentage experience bar
-     * This cannot change the displayed level, see {@link #setLevel(int)}
+     * Used to change the percentage experience bar.
+     * This cannot change the displayed level, see {@link #setLevel(int)}.
      *
      * @param exp a percentage between 0 and 1
      */
@@ -1179,7 +1179,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the level of the player displayed in the experience bar
+     * Gets the level of the player displayed in the experience bar.
      *
      * @return the player level
      */
@@ -1206,10 +1206,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Called when the player changes chunk (move from one to another)
+     * Called when the player changes chunk (move from one to another).
      * <p>
-     * It does remove and add the player from the chunks viewers list when removed or added
-     * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}
+     * It does remove and add the player from the chunks viewers list when removed or added.
+     * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}.
      *
      * @param newChunk the current/new player chunk
      */
@@ -1275,9 +1275,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player connection
+     * Gets the player connection.
      * <p>
-     * Used to send packets and get relatives stuff to the connection
+     * Used to send packets and get relatives stuff to the connection.
      *
      * @return the player connection
      */
@@ -1286,7 +1286,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is online or not
+     * Gets if the player is online or not.
      *
      * @return true if the player is online, false otherwise
      */
@@ -1295,7 +1295,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player settings
+     * Gets the player settings.
      *
      * @return the player settings
      */
@@ -1304,7 +1304,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player dimension
+     * Gets the player dimension.
      *
      * @return the player current dimension
      */
@@ -1318,7 +1318,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Used to get the player latency,
-     * computed by seeing how long it takes the client to answer the {@link KeepAlivePacket} packet
+     * computed by seeing how long it takes the client to answer the {@link KeepAlivePacket} packet.
      *
      * @return the player latency
      */
@@ -1327,7 +1327,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player GameMode
+     * Gets the player GameMode.
      *
      * @return the player current gamemode
      */
@@ -1336,7 +1336,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the player GameMode
+     * Changes the player {@link GameMode}.
      *
      * @param gameMode the new player GameMode
      */
@@ -1351,7 +1351,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if this player is in creative. Used for code readability
+     * Gets if this player is in creative. Used for code readability.
      *
      * @return true if the player is in creative mode
      */
@@ -1360,8 +1360,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the dimension of the player
-     * Mostly unsafe since it requires sending chunks after
+     * Changes the dimension of the player.
+     * Mostly unsafe since it requires sending chunks after.
      *
      * @param dimensionType the new player dimension
      */
@@ -1378,7 +1378,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Kick the player with a reason
+     * Kick the player with a reason.
      *
      * @param text the kick reason
      */
@@ -1391,7 +1391,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Kick the player with a reason
+     * Kick the player with a reason.
      *
      * @param message the kick reason
      */
@@ -1404,7 +1404,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the current held slot for the player
+     * Changes the current held slot for the player.
      *
      * @param slot the slot that the player has to held
      * @throws IllegalArgumentException if {@code slot} is not between 0 and 8
@@ -1419,7 +1419,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player held slot (0-8)
+     * Gets the player held slot (0-8).
      *
      * @return the current held slot for the player
      */
@@ -1434,7 +1434,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the tag below the name
+     * Changes the tag below the name.
      *
      * @param belowNameTag The new below name tag
      */
@@ -1449,9 +1449,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is sneaking
+     * Gets if the player is sneaking.
      * <p>
-     * WARNING: this can be bypassed by hacked client, this is only what the client told the server
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
      *
      * @return true if the player is sneaking
      */
@@ -1460,9 +1460,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is sprinting
+     * Gets if the player is sprinting.
      * <p>
-     * WARNING: this can be bypassed by hacked client, this is only what the client told the server
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
      *
      * @return true if the player is sprinting
      */
@@ -1471,7 +1471,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used to get the {@link CustomBlock} that the player is currently mining
+     * Used to get the {@link CustomBlock} that the player is currently mining.
      *
      * @return the currently mined {@link CustomBlock} by the player, null if there is not
      */
@@ -1480,7 +1480,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player open inventory
+     * Gets the player open inventory.
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
@@ -1489,7 +1489,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Open the specified Inventory, close the previous inventory if existing
+     * Opens the specified Inventory, close the previous inventory if existing.
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
@@ -1521,8 +1521,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Close the current inventory if there is any
-     * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null
+     * Closes the current inventory if there is any.
+     * It closes the player inventory (when opened) if {@link #getOpenInventory()} returns null.
      */
     public void closeInventory() {
         Inventory openInventory = getOpenInventory();
@@ -1558,9 +1558,9 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Used internally to prevent an inventory click to be processed
-     * when the inventory listeners closed the inventory
+     * when the inventory listeners closed the inventory.
      * <p>
-     * Should only be used within an inventory listener (event or condition)
+     * Should only be used within an inventory listener (event or condition).
      *
      * @return true if the inventory has been closed, false otherwise
      */
@@ -1569,9 +1569,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used internally to reset the didCloseInventory field
+     * Used internally to reset the didCloseInventory field.
      * <p>
-     * Shouldn't be used externally without proper understanding of its consequence
+     * Shouldn't be used externally without proper understanding of its consequence.
      *
      * @param didCloseInventory the new didCloseInventory field
      */
@@ -1580,10 +1580,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player viewable chunks
+     * Gets the player viewable chunks.
      * <p>
      * WARNING: adding or removing a chunk there will not load/unload it,
-     * use {@link Chunk#addViewer(Player)} or {@link Chunk#removeViewer(Player)}
+     * use {@link Chunk#addViewer(Player)} or {@link Chunk#removeViewer(Player)}.
      *
      * @return a {@link Set} containing all the chunks that the player sees
      */
@@ -1592,7 +1592,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a {@link UpdateViewPositionPacket}  to the player
+     * Sends a {@link UpdateViewPositionPacket}  to the player.
      *
      * @param chunk the chunk to update the view
      */
@@ -1615,7 +1615,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player permission level
+     * Gets the player permission level.
      *
      * @return the player permission level
      */
@@ -1624,7 +1624,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the player permission level
+     * Changes the player permission level.
      *
      * @param permissionLevel the new player permission level
      */
@@ -1640,7 +1640,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set or remove the reduced debug screen
+     * Sets or remove the reduced debug screen.
      *
      * @param reduced should the player has the reduced debug screen
      */
@@ -1654,7 +1654,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player has the reduced debug screen
+     * Gets if the player has the reduced debug screen.
      *
      * @return true if the player has the reduced debug screen, false otherwise
      */
@@ -1663,7 +1663,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet
+     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet.
      *
      * @return true if the player is invulnerable, false otherwise
      */
@@ -1673,7 +1673,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * This do update the {@code invulnerable} field in the packet {@link PlayerAbilitiesPacket}
-     * and prevent the player from receiving damage
+     * and prevent the player from receiving damage.
      *
      * @param invulnerable should the player be invulnerable
      */
@@ -1683,7 +1683,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is currently flying
+     * Gets if the player is currently flying.
      *
      * @return true if the player if flying, false otherwise
      */
@@ -1692,7 +1692,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Set the player flying
+     * Sets the player flying.
      *
      * @param flying should the player fly
      */
@@ -1702,9 +1702,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Update the internal flying field
+     * Updates the internal flying field.
      * <p>
-     * Mostly unsafe since there is nothing to backup the value, used internally for creative players
+     * Mostly unsafe since there is nothing to backup the value, used internally for creative players.
      *
      * @param flying the new flying field
      * @see #setFlying(boolean) instead
@@ -1714,7 +1714,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get if the player is allowed to fly
+     * Gets if the player is allowed to fly.
      *
      * @return true if the player if allowed to fly, false otherwise
      */
@@ -1723,7 +1723,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Allow or forbid the player to fly
+     * Allows or forbid the player to fly.
      *
      * @param allowFlying should the player be allowed to fly
      */
@@ -1737,10 +1737,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the player ability "Creative Mode"
+     * Changes the player ability "Creative Mode".
      * <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">see</a>
      * <p>
-     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition, byte, Set)}
+     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition, byte, Set)}.
      *
      * @param instantBreak true to allow instant break
      */
@@ -1750,7 +1750,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player flying speed
+     * Gets the player flying speed.
      *
      * @return the flying speed of the player
      */
@@ -1759,7 +1759,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Update the internal field and send a {@link PlayerAbilitiesPacket} with the new flying speed
+     * Updates the internal field and send a {@link PlayerAbilitiesPacket} with the new flying speed.
      *
      * @param flyingSpeed the new flying speed of the player
      */
@@ -1778,8 +1778,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * This is the map used to send the statistic packet
-     * It is possible to add/remove/change statistic value directly into it
+     * This is the map used to send the statistic packet.
+     * It is possible to add/remove/change statistic value directly into it.
      *
      * @return the modifiable statistic map
      */
@@ -1788,7 +1788,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the player vehicle information
+     * Gets the player vehicle information.
      *
      * @return the player vehicle information
      */
@@ -1797,8 +1797,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send to the player a {@link PlayerAbilitiesPacket} with all the updated fields
-     * (walkingSpeed set to 0.1)
+     * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields
+     * (walkingSpeed set to 0.1).
      */
     protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
@@ -1814,8 +1814,8 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * All packets in the queue are executed in the {@link #update(long)} method
-     * It is used internally to add all received packet from the client
-     * Could be used to "simulate" a received packet, but to use at your own risk
+     * It is used internally to add all received packet from the client.
+     * Could be used to "simulate" a received packet, but to use at your own risk.
      *
      * @param packet the packet to add in the queue
      */
@@ -1824,7 +1824,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the storage player latency and update its tab value
+     * Changes the storage player latency and update its tab value.
      *
      * @param latency the new player latency
      */
@@ -1840,9 +1840,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used to change internally the last sent last keep alive id
+     * Used to change internally the last sent last keep alive id.
      * <p>
-     * Warning: could lead to have the player kicked because of a wrong keep alive packet
+     * Warning: could lead to have the player kicked because of a wrong keep alive packet.
      *
      * @param lastKeepAlive the new lastKeepAlive id
      */
@@ -1860,11 +1860,11 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Change the held item for the player viewers
-     * Also cancel eating if {@link #isEating()} was true
+     * Changes the held item for the player viewers
+     * Also cancel eating if {@link #isEating()} was true.
      * <p>
      * Warning: the player will not be noticed by this chance, only his viewers,
-     * see instead: {@link #setHeldItemSlot(byte)}
+     * see instead: {@link #setHeldItemSlot(byte)}.
      *
      * @param slot the new held slot
      */
@@ -1891,7 +1891,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update
+     * It does check which hand to get the item to update.
      *
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
@@ -1920,7 +1920,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Make the player digging a custom block, see {@link #resetTargetBlock()} to rewind
+     * Makes the player digging a custom block, see {@link #resetTargetBlock()} to rewind.
      *
      * @param targetCustomBlock   the custom block to dig
      * @param targetBlockPosition the custom block position
@@ -1934,7 +1934,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Refresh the break delay for the next block break stage
+     * Refreshes the break delay for the next block break stage.
      *
      * @param breakers the list of breakers, can be null if {@code this} is the only breaker
      */
@@ -1953,8 +1953,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Reset data from the current block the player is mining.
-     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen
+     * Resets data from the current block the player is mining.
+     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen.
      */
     public void resetTargetBlock() {
         // Remove effect
@@ -1990,7 +1990,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the last sent keep alive id
+     * Gets the last sent keep alive id.
      *
      * @return the last keep alive id sent to the player
      */
@@ -1999,7 +1999,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the packet to add the player from the tab-list
+     * Gets the packet to add the player from the tab-list.
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
@@ -2025,7 +2025,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Get the packet to remove the player from the tab-list
+     * Gets the packet to remove the player from the tab-list.
      *
      * @return a {@link PlayerInfoPacket} to remove the player
      */
@@ -2040,10 +2040,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send all the related packet to have the player sent to another with related data
-     * (create player, spawn position, velocity, metadata, equipments, passengers, team)
+     * Sends all the related packet to have the player sent to another with related data
+     * (create player, spawn position, velocity, metadata, equipments, passengers, team).
      * <p>
-     * WARNING: this alone does not sync the player, please use {@link #addViewer(Player)}
+     * WARNING: this alone does not sync the player, please use {@link #addViewer(Player)}.
      *
      * @param connection the connection to show the player to
      */
@@ -2137,7 +2137,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Represent the main or off hand of the player
+     * Represents the main or off hand of the player.
      */
     public enum Hand {
         MAIN,
@@ -2152,7 +2152,7 @@ public class Player extends LivingEntity implements CommandSender {
     // Settings enum
 
     /**
-     * Represent where is located the main hand of the player (can be changed in Minecraft option)
+     * Represents where is located the main hand of the player (can be changed in Minecraft option).
      */
     public enum MainHand {
         LEFT,
@@ -2175,7 +2175,7 @@ public class Player extends LivingEntity implements CommandSender {
         private MainHand mainHand;
 
         /**
-         * The player game language
+         * The player game language.
          *
          * @return the player locale
          */
@@ -2184,7 +2184,7 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         /**
-         * Get the player view distance
+         * Gets the player view distance.
          *
          * @return the player view distance
          */
@@ -2193,7 +2193,7 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         /**
-         * Get the player chat mode
+         * Gets the player chat mode.
          *
          * @return the player chat mode
          */
@@ -2202,7 +2202,7 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         /**
-         * Get if the player has chat colors enabled
+         * Gets if the player has chat colors enabled.
          *
          * @return true if chat colors are enabled, false otherwise
          */
@@ -2215,7 +2215,7 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         /**
-         * Get the player main hand
+         * Gets the player main hand.
          *
          * @return the player main hand
          */
@@ -2224,9 +2224,9 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         /**
-         * Change the player settings internally
+         * Changes the player settings internally.
          * <p>
-         * WARNING: the player will not be noticed by this change, probably unsafe
+         * WARNING: the player will not be noticed by this change, probably unsafe.
          *
          * @param locale             the player locale
          * @param viewDistance       the player view distance

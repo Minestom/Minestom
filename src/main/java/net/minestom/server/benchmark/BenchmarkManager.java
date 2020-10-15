@@ -89,7 +89,7 @@ public final class BenchmarkManager {
     }
 
     /**
-     * Get the memory used by the server in bytes
+     * Gets the memory used by the server in bytes.
      *
      * @return the memory used by the server
      */

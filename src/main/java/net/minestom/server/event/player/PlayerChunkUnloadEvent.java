@@ -4,8 +4,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called after a chunk being unload to a certain player
- * could be used to unload the chunk internally in order to save memory
+ * Called after a chunk being unload to a certain player.
+ * Could be used to unload the chunk internally in order to save memory.
  */
 public class PlayerChunkUnloadEvent extends Event {
 
@@ -19,7 +19,7 @@ public class PlayerChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the player
+     * Gets the player.
      *
      * @return the player
      */
@@ -28,7 +28,7 @@ public class PlayerChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the chunk X
+     * Gets the chunk X.
      *
      * @return the chunk X
      */
@@ -37,7 +37,7 @@ public class PlayerChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the chunk Z
+     * Gets the chunk Z.
      *
      * @return the chunk Z
      */

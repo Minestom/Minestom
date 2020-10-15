@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represent a color in a text
+ * Represents a color in a text.
  */
 public class ChatColor {
 
@@ -141,7 +141,7 @@ public class ChatColor {
     }
 
     /**
-     * Create an RGB color
+     * Creates an RGB color.
      *
      * @param r the red component
      * @param g the green component
@@ -157,7 +157,7 @@ public class ChatColor {
     }
 
     /**
-     * Get a color based on its name (eg: white, black, aqua, etc...)
+     * Gets a color based on its name (eg: white, black, aqua, etc...).
      *
      * @param name the color name
      * @return the color associated with the name, {@link #NO_COLOR} if not found
@@ -167,7 +167,7 @@ public class ChatColor {
     }
 
     /**
-     * Get a color based on its numerical id (0;15)
+     * Gets a color based on its numerical id (0;15).
      *
      * @param id the id of the color
      * @return the color associated with the id, {@link #NO_COLOR} if not found
@@ -177,7 +177,7 @@ public class ChatColor {
     }
 
     /**
-     * Get a color based on its legacy color code (eg: 1, 2, 3,... f)
+     * Gets a color based on its legacy color code (eg: 1, 2, 3,... f).
      *
      * @param colorCode the color legacy code
      * @return the color associated with the code
@@ -191,7 +191,7 @@ public class ChatColor {
     }
 
     /**
-     * Get the red component of the color
+     * Gets the red component of the color.
      *
      * @return the red component of the color
      */
@@ -200,7 +200,7 @@ public class ChatColor {
     }
 
     /**
-     * Get the green component of the color
+     * Gets the green component of the color.
      *
      * @return the green component of the color
      */
@@ -209,7 +209,7 @@ public class ChatColor {
     }
 
     /**
-     * Get the blue component of the color
+     * Gets the blue component of the color.
      *
      * @return the blue component of the color
      */
@@ -218,7 +218,7 @@ public class ChatColor {
     }
 
     /**
-     * Get if the color is special (eg: no color, bold, reset, etc...)
+     * Gets if the color is special (eg: no color, bold, reset, etc...).
      *
      * @return true if the color is special, false otherwise
      */
@@ -227,7 +227,7 @@ public class ChatColor {
     }
 
     /**
-     * Get the code name is the color is "special"
+     * Gets the code name is the color is "special".
      *
      * @return the special code name
      */

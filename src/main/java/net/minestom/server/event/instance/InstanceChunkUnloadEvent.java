@@ -4,7 +4,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
 
 /**
- * Called when a chunk in an instance is unloaded
+ * Called when a chunk in an instance is unloaded.
  */
 public class InstanceChunkUnloadEvent extends Event {
 
@@ -18,7 +18,7 @@ public class InstanceChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the instance where the chunk has been unloaded
+     * Gets the instance where the chunk has been unloaded.
      *
      * @return the instance
      */
@@ -27,7 +27,7 @@ public class InstanceChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the chunk X
+     * Gets the chunk X.
      *
      * @return the chunk X
      */
@@ -36,7 +36,7 @@ public class InstanceChunkUnloadEvent extends Event {
     }
 
     /**
-     * Get the chunk Z
+     * Gets the chunk Z.
      *
      * @return the chunk Z
      */

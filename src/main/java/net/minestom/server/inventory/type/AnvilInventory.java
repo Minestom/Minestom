@@ -13,7 +13,7 @@ public class AnvilInventory extends Inventory {
     }
 
     /**
-     * Get the anvil repair cost
+     * Gets the anvil repair cost.
      *
      * @return the repair cost
      */
@@ -22,7 +22,7 @@ public class AnvilInventory extends Inventory {
     }
 
     /**
-     * Set the anvil repair cost
+     * Sets the anvil repair cost.
      *
      * @param cost the new anvil repair cost
      */

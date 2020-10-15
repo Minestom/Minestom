@@ -14,7 +14,7 @@ public class BrewingStandInventory extends Inventory {
     }
 
     /**
-     * Get the brewing stand brew time
+     * Gets the brewing stand brew time.
      *
      * @return the brew time in tick
      */
@@ -23,7 +23,7 @@ public class BrewingStandInventory extends Inventory {
     }
 
     /**
-     * Change the brew time
+     * Changes the brew time.
      *
      * @param brewTime the new brew time in tick
      */
@@ -33,7 +33,7 @@ public class BrewingStandInventory extends Inventory {
     }
 
     /**
-     * Get the brewing stand fuel time
+     * Gets the brewing stand fuel time.
      *
      * @return the fuel time in tick
      */
@@ -42,7 +42,7 @@ public class BrewingStandInventory extends Inventory {
     }
 
     /**
-     * Change the fuel time
+     * Changes the fuel time.
      *
      * @param fuelTime the new fuel time in tick
      */

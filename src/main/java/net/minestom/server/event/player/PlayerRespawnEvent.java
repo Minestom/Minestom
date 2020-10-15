@@ -19,7 +19,7 @@ public class PlayerRespawnEvent extends Event {
     }
 
     /**
-     * Get the player who is respawning
+     * Gets the player who is respawning.
      *
      * @return the player
      */
@@ -28,7 +28,7 @@ public class PlayerRespawnEvent extends Event {
     }
 
     /**
-     * Get the respawn position
+     * Gets the respawn position.
      * <p>
      * Is by default {@link Player#getRespawnPoint()}
      *
@@ -39,7 +39,7 @@ public class PlayerRespawnEvent extends Event {
     }
 
     /**
-     * Change the respawn position
+     * Changes the respawn position.
      *
      * @param respawnPosition the new respawn position
      */

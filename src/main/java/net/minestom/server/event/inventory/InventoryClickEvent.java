@@ -6,6 +6,10 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 
+/**
+ * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
+ * are already moved.
+ */
 public class InventoryClickEvent extends Event {
 
     private final Player player;
@@ -25,7 +29,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Get the player who clicked in the inventory
+     * Gets the player who clicked in the inventory.
      *
      * @return the player who clicked in the inventory
      */
@@ -34,7 +38,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Can be null if the clicked inventory is the player one
+     * Can be null if the clicked inventory is the player one.
      *
      * @return the inventory where the click happened, null if this is the player's inventory
      */
@@ -43,7 +47,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Get the clicked slot number
+     * Gets the clicked slot number.
      *
      * @return the clicked slot number
      */
@@ -52,7 +56,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Get the click type
+     * Gets the click type.
      *
      * @return the click type
      */
@@ -61,7 +65,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Get the clicked item
+     * Gets the clicked item.
      *
      * @return the clicked item
      */
@@ -70,7 +74,7 @@ public class InventoryClickEvent extends Event {
     }
 
     /**
-     * Get the item in the player cursor
+     * Gets the item in the player cursor.
      *
      * @return the cursor item
      */

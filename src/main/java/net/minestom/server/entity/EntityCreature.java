@@ -193,7 +193,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Get the goal selectors of this entity
+     * Gets the goal selectors of this entity.
      *
      * @return a modifiable list containing the entity goal selectors
      */
@@ -202,7 +202,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Get the target selectors of this entity
+     * Gets the target selectors of this entity.
      *
      * @return a modifiable list containing the entity target selectors
      */
@@ -211,7 +211,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Get the entity target
+     * Gets the entity target.
      *
      * @return the entity target
      */
@@ -295,7 +295,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     * Calls a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
      *
      * @param target    the entity target
      * @param swingHand true to swing the entity main hand, false otherwise
@@ -308,9 +308,9 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Call a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
+     * Calls a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
      * <p>
-     * This does not trigger the hand animation
+     * This does not trigger the hand animation.
      *
      * @param target the entity target
      */
@@ -325,12 +325,12 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Retrieve the path to {@code position} and ask the entity to follow the path
+     * Retrieves the path to {@code position} and ask the entity to follow the path.
      * <p>
-     * Can be set to null to reset the pathfinder
+     * Can be set to null to reset the pathfinder.
      * <p>
      * The position is cloned, if you want the entity to continually follow this position object
-     * you need to call this when you want the path to update
+     * you need to call this when you want the path to update.
      *
      * @param position the position to find the path to, null to reset the pathfinder
      * @return true if a path has been found
@@ -379,7 +379,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Get the target pathfinder position
+     * Gets the target pathfinder position.
      *
      * @return the target pathfinder position, null if there is no one
      */
@@ -423,9 +423,9 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Get the pathing entity
+     * Gets the pathing entity.
      * <p>
-     * Used by the pathfinder
+     * Used by the pathfinder.
      *
      * @return the pathing entity
      */

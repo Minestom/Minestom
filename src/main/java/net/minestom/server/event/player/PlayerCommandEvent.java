@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 
 /**
- * Called every time a player send a message starting by '/'
+ * Called every time a player send a message starting by '/'.
  */
 public class PlayerCommandEvent extends CancellableEvent {
 
@@ -17,7 +17,7 @@ public class PlayerCommandEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who sent the command
+     * Gets the player who sent the command.
      *
      * @return the player
      */
@@ -26,7 +26,7 @@ public class PlayerCommandEvent extends CancellableEvent {
     }
 
     /**
-     * Get the command used (command name + arguments)
+     * Gets the command used (command name + arguments).
      *
      * @return the command that the player wants to execute
      */
@@ -35,7 +35,7 @@ public class PlayerCommandEvent extends CancellableEvent {
     }
 
     /**
-     * Change the command to execute
+     * Changes the command to execute.
      *
      * @param command the new command
      */

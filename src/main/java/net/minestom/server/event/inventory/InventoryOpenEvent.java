@@ -4,6 +4,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.inventory.Inventory;
 
+/**
+ * Called when a player open an {@link Inventory}.
+ * <p>
+ * Executed by {@link Player#openInventory(Inventory)}.
+ */
 public class InventoryOpenEvent extends CancellableEvent {
 
     private final Player player;
@@ -15,7 +20,7 @@ public class InventoryOpenEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who opens the inventory
+     * Gets the player who opens the inventory.
      *
      * @return the player who opens the inventory
      */
@@ -24,7 +29,7 @@ public class InventoryOpenEvent extends CancellableEvent {
     }
 
     /**
-     * Get the inventory to open, this could have been change by the {@link #setInventory(Inventory)}
+     * Gets the inventory to open, this could have been change by the {@link #setInventory(Inventory)}.
      *
      * @return the inventory to open
      */
@@ -33,8 +38,9 @@ public class InventoryOpenEvent extends CancellableEvent {
     }
 
     /**
-     * Change the inventory to open.
-     * to do not open any inventory see {@link #setCancelled(boolean)}
+     * Changes the inventory to open.
+     * <p>
+     * To do not open any inventory see {@link #setCancelled(boolean)}.
      *
      * @param inventory the inventory to open
      * @throws NullPointerException if {@code inventory} is null

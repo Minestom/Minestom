@@ -11,14 +11,14 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Used to register {@link Instance}
+ * Used to register {@link Instance}.
  */
 public final class InstanceManager {
 
     private final Set<Instance> instances = new CopyOnWriteArraySet<>();
 
     /**
-     * Register an {@link Instance} internally
+     * Registers an {@link Instance} internally.
      * <p>
      * Note: not necessary if you created your instance using {@link #createInstanceContainer()} or {@link #createSharedInstance(InstanceContainer)}
      * but only if you instantiated your instance object manually
@@ -32,7 +32,8 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified {@link DimensionType} and {@link StorageLocation}
+     * Creates and register an {@link InstanceContainer}
+     * with the specified {@link DimensionType} and {@link StorageLocation}.
      *
      * @param dimensionType   the {@link DimensionType} of the instance
      * @param storageLocation the {@link StorageLocation} of the instance, can be null
@@ -45,7 +46,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified {@link StorageLocation}
+     * Creates and register an {@link InstanceContainer} with the specified {@link StorageLocation}.
      *
      * @param storageLocation the {@link StorageLocation} of the instance, can be null
      * @return the created {@link InstanceContainer}
@@ -55,7 +56,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register an {@link InstanceContainer} with the specified {@link DimensionType}
+     * Creates and register an {@link InstanceContainer} with the specified {@link DimensionType}.
      *
      * @param dimensionType the {@link DimensionType} of the instance
      * @return the created {@link InstanceContainer}
@@ -65,7 +66,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register an {@link InstanceContainer}
+     * Creates and register an {@link InstanceContainer}.
      *
      * @return the created {@link InstanceContainer}
      */
@@ -74,9 +75,9 @@ public final class InstanceManager {
     }
 
     /**
-     * Register a {@link SharedInstance}
+     * Registers a {@link SharedInstance}.
      * <p>
-     * WARNING: the {@link SharedInstance} needs to have an {@link InstanceContainer} assigned to it
+     * WARNING: the {@link SharedInstance} needs to have an {@link InstanceContainer} assigned to it.
      *
      * @param sharedInstance the {@link SharedInstance} to register
      * @return the registered {@link SharedInstance}
@@ -92,7 +93,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Create and register a {@link SharedInstance}
+     * Creates and register a {@link SharedInstance}.
      *
      * @param instanceContainer the container assigned to the shared instance
      * @return the created {@link SharedInstance}
@@ -107,9 +108,9 @@ public final class InstanceManager {
     }
 
     /**
-     * Unregister the {@link Instance} internally
+     * Unregisters the {@link Instance} internally.
      * <p>
-     * If {@code instance} is an {@link InstanceContainer} all chunks are unloaded
+     * If {@code instance} is an {@link InstanceContainer} all chunks are unloaded.
      *
      * @param instance the {@link Instance} to unregister
      */
@@ -131,7 +132,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Get all the registered instances
+     * Gets all the registered instances.
      *
      * @return an unmodifiable {@link Set} containing all the registered instances
      */
@@ -140,9 +141,9 @@ public final class InstanceManager {
     }
 
     /**
-     * Register an {@link Instance} internally
+     * Registers an {@link Instance} internally.
      * <p>
-     * Unsafe because it does not check if {@code instance} is a {@link SharedInstance} to verify its container
+     * Unsafe because it does not check if {@code instance} is a {@link SharedInstance} to verify its container.
      *
      * @param instance the {@link Instance} to register
      */

@@ -6,7 +6,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.item.ItemStackUtils;
 
 /**
- * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#addItemStack(ItemStack)}
+ * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#addItemStack(ItemStack)}.
  */
 public class PlayerAddItemStackEvent extends CancellableEvent {
 
@@ -19,7 +19,7 @@ public class PlayerAddItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who has an item stack added to his inventory
+     * Gets the player who has an item stack added to his inventory.
      *
      * @return the player
      */
@@ -28,7 +28,7 @@ public class PlayerAddItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item stack which will be added
+     * Gets the item stack which will be added.
      *
      * @return the item stack
      */
@@ -37,7 +37,7 @@ public class PlayerAddItemStackEvent extends CancellableEvent {
     }
 
     /**
-     * Change the item stack which will be added
+     * Changes the item stack which will be added.
      *
      * @param itemStack the new item stack
      */

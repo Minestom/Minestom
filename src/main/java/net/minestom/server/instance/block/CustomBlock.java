@@ -28,7 +28,7 @@ import java.util.Set;
  * <p>
  * There should be only one instance of this class for each custom block type,
  * every individual blocks will execute the callbacks present there. Each of which contains the
- * custom block position and the instance concerned
+ * custom block position and the instance concerned.
  */
 public abstract class CustomBlock {
 
@@ -61,7 +61,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Calling delay depends on {@link #getUpdateOption()} which should be overridden
+     * Calling delay depends on {@link #getUpdateOption()} which should be overridden.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -78,7 +78,7 @@ public abstract class CustomBlock {
      * {@link #update(Instance, BlockPosition, Data)} execution.
      * <p>
      * If this is not null, {@link #update(Instance, BlockPosition, Data)}
-     * should be overridden or errors with occurs
+     * should be overridden or errors with occurs.
      *
      * @return the update option of the block
      */
@@ -87,7 +87,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Called when a custom block has been placed
+     * Called when a custom block has been placed.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -96,7 +96,7 @@ public abstract class CustomBlock {
     public abstract void onPlace(Instance instance, BlockPosition blockPosition, Data data);
 
     /**
-     * Called when a custom block has been destroyed or replaced
+     * Called when a custom block has been destroyed or replaced.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -106,7 +106,7 @@ public abstract class CustomBlock {
 
     /**
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
-     * menu, this prevents the player from placing a block when opening it for instance)
+     * menu, this prevents the player from placing a block when opening it for instance).
      *
      * @param player        the player interacting
      * @param hand          the hand used to interact
@@ -150,10 +150,10 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Get if this block breaking time can be reduced by having multiple players
-     * digging it
+     * Gets if this block breaking time can be reduced by having multiple players
+     * digging it.
      * <p>
-     * WARNING: this should be constant, do not change this value halfway
+     * WARNING: this should be constant, do not change this value halfway.
      *
      * @return true to enable the multi-player breaking feature
      */
@@ -162,7 +162,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Get if this {@link CustomBlock} requires any tick update
+     * Gets if this {@link CustomBlock} requires any tick update.
      *
      * @return true if {@link #getUpdateOption()} is not null and the value is positive
      */
@@ -200,7 +200,7 @@ public abstract class CustomBlock {
 
     /**
      * The custom block identifier, used to retrieve the custom block object with
-     * {@link BlockManager#getCustomBlock(String)} and to set custom block in the instance
+     * {@link BlockManager#getCustomBlock(String)} and to set custom block in the instance.
      *
      * @return the custom block identifier
      */
@@ -209,7 +209,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Initialises data for this block
+     * Initialises data for this block.
      *
      * @param blockPosition the position of the targeted block
      * @param data          data given to 'setBlock', can be null
@@ -220,7 +220,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Update this block from a neighbor. By default calls 'update' if directNeighbor is true
+     * Updates this block from a neighbor. By default calls 'update' if directNeighbor is true.
      *
      * @param instance         current instance
      * @param thisPosition     this block's position
@@ -234,7 +234,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Called when a scheduled update on this block happens. By default, calls 'update'
+     * Called when a scheduled update on this block happens. By default, calls 'update'.
      *
      * @param instance  the instance of the block
      * @param position  the position of the block
@@ -245,9 +245,9 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Get the drag of this block
+     * Gets the drag of this block.
      * <p>
-     * It has to be between 0 and 1
+     * It has to be between 0 and 1.
      *
      * @return the drag of this block
      */
@@ -258,7 +258,7 @@ public abstract class CustomBlock {
     /**
      * Allows custom block to write block entity data to a given NBT compound.
      * Used to send block entity data to the client over the network.
-     * Can also be used to save block entity data on disk for compatible chunk savers
+     * Can also be used to save block entity data on disk for compatible chunk savers.
      *
      * @param position  position of the block
      * @param blockData equivalent to <pre>instance.getBlockData(position)</pre>
@@ -279,7 +279,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Return the loot table associated to this block. Return null to use vanilla behavior
+     * Returns the loot table associated to this block. Return null to use vanilla behavior.
      *
      * @param tableManager the loot table manager
      * @return the loot table associated to this block
@@ -292,7 +292,7 @@ public abstract class CustomBlock {
 
     /**
      * Called when a player start digging this custom block,
-     * process all necessary data if {@link #enableMultiPlayerBreaking()} is enabled
+     * process all necessary data if {@link #enableMultiPlayerBreaking()} is enabled.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -329,7 +329,7 @@ public abstract class CustomBlock {
 
     /**
      * Called when a player stop digging a block,
-     * does remove the block break animation if he was the only breaker
+     * does remove the block break animation if he was the only breaker.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -369,7 +369,7 @@ public abstract class CustomBlock {
 
     /**
      * Process one stage on the block, break it if it excess {@link #MAX_STAGE},
-     * only if {@link #enableMultiPlayerBreaking()} is enabled
+     * only if {@link #enableMultiPlayerBreaking()} is enabled.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -420,7 +420,7 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Get all the breakers of a block, only if {@link #enableMultiPlayerBreaking()} is enabled
+     * Gets all the breakers of a block, only if {@link #enableMultiPlayerBreaking()} is enabled.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
@@ -439,7 +439,8 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Get the block break stage at a position, only work if {@link #enableMultiPlayerBreaking()} is enabled
+     * Gets the block break stage at a position,
+     * only work if {@link #enableMultiPlayerBreaking()} is enabled.
      *
      * @param instance      the instance of the custom block
      * @param blockPosition the position of the custom block
@@ -456,8 +457,8 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Class used to store block break stage
-     * Only used if multi player breaking is enabled
+     * Class used to store block break stage.
+     * Only if multi player breaking is enabled.
      */
     private static class InstanceBreakData {
         // Contains all the breakers of a block

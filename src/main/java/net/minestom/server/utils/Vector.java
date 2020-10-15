@@ -105,7 +105,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Get the distance between this vector and another. The value of this
+     * Gets the distance between this vector and another. The value of this
      * method is not cached and uses a costly square-root function, so do not
      * repeatedly call this method to get the vector's magnitude. NaN will be
      * returned if the inner result of the sqrt() function overflows, which
@@ -223,7 +223,7 @@ public class Vector implements Cloneable {
     }
 
     /**
-     * Get a new vector.
+     * Gets a new vector.
      *
      * @return vector
      */

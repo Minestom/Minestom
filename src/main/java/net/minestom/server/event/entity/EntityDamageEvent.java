@@ -5,7 +5,7 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.CancellableEvent;
 
 /**
- * Called with {@link net.minestom.server.entity.LivingEntity#damage(DamageType, float)}
+ * Called with {@link LivingEntity#damage(DamageType, float)}.
  */
 public class EntityDamageEvent extends CancellableEvent {
 
@@ -20,7 +20,7 @@ public class EntityDamageEvent extends CancellableEvent {
     }
 
     /**
-     * Get the damaged entity
+     * Gets the damaged entity.
      *
      * @return the damaged entity
      */
@@ -29,7 +29,7 @@ public class EntityDamageEvent extends CancellableEvent {
     }
 
     /**
-     * Get the damage type
+     * Gets the damage type.
      *
      * @return the damage type
      */
@@ -38,7 +38,7 @@ public class EntityDamageEvent extends CancellableEvent {
     }
 
     /**
-     * Get the damage amount
+     * Gets the damage amount.
      *
      * @return the damage amount
      */
@@ -47,7 +47,7 @@ public class EntityDamageEvent extends CancellableEvent {
     }
 
     /**
-     * Change the damage amount
+     * Changes the damage amount.
      *
      * @param damage the new damage amount
      */

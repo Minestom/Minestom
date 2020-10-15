@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 
 /**
- * Called when a player disconnect
+ * Called when a player disconnect.
  */
 public class PlayerDisconnectEvent extends Event {
 
@@ -15,7 +15,7 @@ public class PlayerDisconnectEvent extends Event {
     }
 
     /**
-     * Get the player who is disconnecting
+     * Gets the player who is disconnecting.
      *
      * @return the player
      */

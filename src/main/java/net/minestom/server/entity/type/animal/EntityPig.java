@@ -36,7 +36,7 @@ public class EntityPig extends EntityCreature implements Animal {
     }
 
     /**
-     * Get if the pig has a saddle
+     * Gets if the pig has a saddle.
      *
      * @return true if the pig has a saddle, false otherwise
      */
@@ -45,7 +45,7 @@ public class EntityPig extends EntityCreature implements Animal {
     }
 
     /**
-     * Set a saddle to the pig
+     * Sets a saddle to the pig.
      *
      * @param saddle true to add a saddle, false to remove it
      */

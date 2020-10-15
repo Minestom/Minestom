@@ -23,7 +23,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     }
 
     /**
-     * Get the {@link Player} who started digging the block
+     * Gets the {@link Player} who started digging the block.
      *
      * @return the {@link Player}
      */
@@ -32,7 +32,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     }
 
     /**
-     * Get the {@link BlockPosition}
+     * Gets the {@link BlockPosition}.
      *
      * @return the {@link BlockPosition}
      */
@@ -41,7 +41,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     }
 
     /**
-     * Get the block state id
+     * Gets the block state id.
      *
      * @return the block state id
      */
@@ -50,7 +50,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     }
 
     /**
-     * Get the custom block id
+     * Gets the custom block id.
      *
      * @return the custom block id
      */

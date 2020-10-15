@@ -7,14 +7,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * Class used to convert JSON string to proper chat message representation
+ * Class used to convert JSON string to proper chat message representation.
  */
 public final class ChatParser {
 
     public static final char COLOR_CHAR = (char) 0xA7; // Represent the character '§'
 
     /**
-     * Convert a simple colored message json (text/color) to a {@link ColoredText}
+     * Converts a simple colored message json (text/color) to a {@link ColoredText}.
      *
      * @param json the json containing the text and color
      * @return a {@link ColoredText} representing the text
@@ -39,7 +39,7 @@ public final class ChatParser {
     }
 
     /**
-     * Get the format representing of a single text component (text + color key)
+     * Gets the format representing of a single text component (text + color key).
      *
      * @param textObject the text component to parse
      * @return the colored text format of the text component

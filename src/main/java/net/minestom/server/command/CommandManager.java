@@ -62,16 +62,16 @@ public final class CommandManager {
     }
 
     /**
-     * Stop the console responsible for the console commands processing
+     * Stops the console responsible for the console commands processing.
      * <p>
-     * WARNING: it cannot be re-run later
+     * WARNING: it cannot be re-run later.
      */
     public void stopConsoleThread() {
         running = false;
     }
 
     /**
-     * Register a {@link Command}
+     * Registers a {@link Command}.
      *
      * @param command the command to register
      */
@@ -80,7 +80,7 @@ public final class CommandManager {
     }
 
     /**
-     * Get the {@link Command} registered by {@link #register(Command)}
+     * Gets the {@link Command} registered by {@link #register(Command)}.
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
@@ -90,7 +90,7 @@ public final class CommandManager {
     }
 
     /**
-     * Register a {@link CommandProcessor}
+     * Registers a {@link CommandProcessor}.
      *
      * @param commandProcessor the command to register
      */
@@ -106,7 +106,7 @@ public final class CommandManager {
     }
 
     /**
-     * Get the {@link CommandProcessor} registered by {@link #register(CommandProcessor)}
+     * Gets the {@link CommandProcessor} registered by {@link #register(CommandProcessor)}.
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
@@ -116,7 +116,7 @@ public final class CommandManager {
     }
 
     /**
-     * Execute a command for a {@link ConsoleSender}
+     * Executes a command for a {@link ConsoleSender}.
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
@@ -161,7 +161,7 @@ public final class CommandManager {
     }
 
     /**
-     * Get the {@link ConsoleSender} (which is used as a {@link CommandSender})
+     * Gets the {@link ConsoleSender} (which is used as a {@link CommandSender}).
      *
      * @return the {@link ConsoleSender}
      */
@@ -170,9 +170,9 @@ public final class CommandManager {
     }
 
     /**
-     * Get the {@link DeclareCommandsPacket} for a specific player
+     * Gets the {@link DeclareCommandsPacket} for a specific player.
      * <p>
-     * Can be used to update the {@link Player} auto-completion list
+     * Can be used to update the {@link Player} auto-completion list.
      *
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
@@ -182,7 +182,7 @@ public final class CommandManager {
     }
 
     /**
-     * Build the {@link DeclareCommandsPacket} for a {@link Player}
+     * Builds the {@link DeclareCommandsPacket} for a {@link Player}.
      *
      * @param player the player to build the packet for
      * @return the commands packet for the specific player
@@ -274,7 +274,7 @@ public final class CommandManager {
     }
 
     /**
-     * Add a command's syntaxes to the nodes list
+     * Adds a command's syntaxes to the nodes list.
      *
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
@@ -356,7 +356,7 @@ public final class CommandManager {
     }
 
     /**
-     * Convert an argument to a node with the correct brigadier parser
+     * Converts an argument to a node with the correct brigadier parser.
      *
      * @param argument   the argument to convert
      * @param executable true if this is the last argument, false otherwise
@@ -527,7 +527,7 @@ public final class CommandManager {
     }
 
     /**
-     * Build an argument nod and add it to the nodes list
+     * Builds an argument nod and add it to the nodes list.
      *
      * @param nodes      the current nodes list
      * @param argument   the argument

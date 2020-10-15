@@ -5,9 +5,9 @@ import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
 
 /**
- * Called at player login, used to define his spawn instance
+ * Called at player login, used to define his spawn instance.
  * <p>
- * WARNING: defining the spawning instance is MANDATORY
+ * WARNING: defining the spawning instance is MANDATORY.
  */
 public class PlayerLoginEvent extends Event {
 
@@ -19,7 +19,7 @@ public class PlayerLoginEvent extends Event {
     }
 
     /**
-     * Get the player who is logging
+     * Gets the player who is logging.
      *
      * @return the player who is logging
      */
@@ -28,9 +28,9 @@ public class PlayerLoginEvent extends Event {
     }
 
     /**
-     * Get the spawning instance of the player
+     * Gets the spawning instance of the player.
      * <p>
-     * WARNING: this must NOT be null, otherwise the player cannot spawn
+     * WARNING: this must NOT be null, otherwise the player cannot spawn.
      *
      * @return the spawning instance
      */
@@ -39,7 +39,7 @@ public class PlayerLoginEvent extends Event {
     }
 
     /**
-     * Change the spawning instance
+     * Changes the spawning instance.
      *
      * @param instance the new spawning instance
      */

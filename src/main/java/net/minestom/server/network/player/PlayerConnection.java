@@ -16,8 +16,8 @@ import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A PlayerConnection is an object needed for all created {@link Player}
- * It can be extended to create a new kind of player (NPC for instance)
+ * A PlayerConnection is an object needed for all created {@link Player}.
+ * It can be extended to create a new kind of player (NPC for instance).
  */
 public abstract class PlayerConnection {
 
@@ -48,7 +48,7 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Update values related to the network connection
+     * Updates values related to the network connection.
      */
     public void updateStats() {
         // Check rate limit
@@ -79,7 +79,7 @@ public abstract class PlayerConnection {
     public abstract void enableCompression(int threshold);
 
     /**
-     * Send a raw {@link ByteBuf} to the client
+     * Sends a raw {@link ByteBuf} to the client.
      *
      * @param buffer The buffer to send.
      * @param copy   Should be true unless your only using the ByteBuf once.
@@ -87,7 +87,7 @@ public abstract class PlayerConnection {
     public abstract void sendPacket(ByteBuf buffer, boolean copy);
 
     /**
-     * Write a raw {@link ByteBuf} to the client
+     * Writes a raw {@link ByteBuf} to the client.
      *
      * @param buffer The buffer to send.
      * @param copy   Should be true unless your only using the ByteBuf once.
@@ -95,31 +95,31 @@ public abstract class PlayerConnection {
     public abstract void writePacket(ByteBuf buffer, boolean copy);
 
     /**
-     * Serialize the packet and send it to the client
+     * Serializes the packet and send it to the client.
      *
      * @param serverPacket the packet to send
      */
     public abstract void sendPacket(ServerPacket serverPacket);
 
     /**
-     * Flush all waiting packets
+     * Flush all waiting packets.
      */
     public abstract void flush();
 
     /**
-     * Get the remote address of the client
+     * Gets the remote address of the client.
      *
      * @return the remote address
      */
     public abstract SocketAddress getRemoteAddress();
 
     /**
-     * Forcing the player to disconnect
+     * Forcing the player to disconnect.
      */
     public abstract void disconnect();
 
     /**
-     * Get the player linked to this connection
+     * Gets the player linked to this connection.
      *
      * @return the player
      */
@@ -128,9 +128,9 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Change the player linked to this connection
+     * Changes the player linked to this connection.
      * <p>
-     * WARNING: unsafe
+     * WARNING: unsafe.
      *
      * @param player the player
      */
@@ -139,7 +139,7 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Get if the client is still connected to the server
+     * Gets if the client is still connected to the server.
      *
      * @return true if the player is online, false otherwise
      */
@@ -156,7 +156,7 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Get the client connection state
+     * Gets the client connection state.
      *
      * @return the client connection state
      */
@@ -165,7 +165,7 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Get the number of packet the client sent over the last second
+     * Gets the number of packet the client sent over the last second.
      *
      * @return the number of packet sent over the last second
      */

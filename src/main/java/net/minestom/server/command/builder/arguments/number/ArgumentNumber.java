@@ -39,7 +39,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Get if the argument has a minimum
+     * Gets if the argument has a minimum.
      *
      * @return true if the argument has a minimum
      */
@@ -48,7 +48,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Get the minimum value for this argument
+     * Gets the minimum value for this argument.
      *
      * @return the minimum of this argument
      */
@@ -57,7 +57,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Get if the argument has a maximum
+     * Gets if the argument has a maximum.
      *
      * @return true if the argument has a maximum
      */
@@ -66,7 +66,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
-     * Get the maximum value for this argument
+     * Gets the maximum value for this argument.
      *
      * @return the maximum of this argument
      */

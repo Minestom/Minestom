@@ -1,7 +1,7 @@
 package net.minestom.server.chat;
 
 /**
- * Represent a translatable component which can be used in {@link ColoredText}
+ * Represents a translatable component which can be used in {@link ColoredText}.
  */
 public class TranslatableText {
 
@@ -14,7 +14,7 @@ public class TranslatableText {
     }
 
     /**
-     * Get the translatable component of the specific code
+     * Gets the translatable component of the specific code.
      *
      * @param code the translatable code
      * @return the translatable component linked to the code
@@ -24,7 +24,7 @@ public class TranslatableText {
     }
 
     /**
-     * Get the translatable component and the specific code with arguments
+     * Gets the translatable component and the specific code with arguments.
      *
      * @param code      the translatable code
      * @param arguments the translatable component arguments in order

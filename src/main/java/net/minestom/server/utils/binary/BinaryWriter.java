@@ -17,8 +17,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * Class used to write to a byte array
- * WARNING: not thread-safe
+ * Class used to write to a byte array.
+ * WARNING: not thread-safe.
  */
 public class BinaryWriter extends OutputStream {
 
@@ -26,7 +26,7 @@ public class BinaryWriter extends OutputStream {
     private final NBTWriter nbtWriter = new NBTWriter(this, false);
 
     /**
-     * Create a {@link BinaryWriter} with a custom initial capacity
+     * Creates a {@link BinaryWriter} with a custom initial capacity.
      *
      * @param initialCapacity the initial capacity of the binary writer
      */
@@ -35,14 +35,14 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Create a {@link BinaryWriter} with a "reasonably small initial capacity"
+     * Creates a {@link BinaryWriter} with a "reasonably small initial capacity".
      */
     public BinaryWriter() {
         this.buffer = Unpooled.buffer();
     }
 
     /**
-     * Write a single boolean to the buffer
+     * Writes a single boolean to the buffer.
      *
      * @param b the boolean to write
      */
@@ -51,7 +51,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single byte to the buffer
+     * Writes a single byte to the buffer.
      *
      * @param b the byte to write
      */
@@ -60,7 +60,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single char to the buffer
+     * Writes a single char to the buffer.
      *
      * @param c the char to write
      */
@@ -69,7 +69,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single short to the buffer
+     * Writes a single short to the buffer.
      *
      * @param s the short to write
      */
@@ -78,7 +78,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single int to the buffer
+     * Writes a single int to the buffer.
      *
      * @param i the int to write
      */
@@ -87,7 +87,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single long to the buffer
+     * Writes a single long to the buffer.
      *
      * @param l the long to write
      */
@@ -96,7 +96,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single float to the buffer
+     * Writes a single float to the buffer.
      *
      * @param f the float to write
      */
@@ -105,7 +105,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single double to the buffer
+     * Writes a single double to the buffer.
      *
      * @param d the double to write
      */
@@ -114,7 +114,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single var-int to the buffer
+     * Writes a single var-int to the buffer.
      *
      * @param i the int to write
      */
@@ -123,7 +123,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a single var-long to the buffer
+     * Writes a single var-long to the buffer.
      *
      * @param l the long to write
      */
@@ -132,9 +132,9 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a string to the buffer
+     * Writes a string to the buffer.
      * <p>
-     * The size is a var-int type
+     * The size is a var-int type.
      *
      * @param string the string to write
      */
@@ -145,9 +145,9 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a string to the buffer
+     * Writes a string to the buffer.
      * <p>
-     * The size is a short type
+     * The size is a short type.
      *
      * @param string the string to write
      */
@@ -158,9 +158,9 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a var-int array to the buffer
+     * Writes a var-int array to the buffer.
      * <p>
-     * It is sized by another var-int at the beginning
+     * It is sized by another var-int at the beginning.
      *
      * @param array the integers to write
      */
@@ -176,7 +176,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a byte array
+     * Writes a byte array.
      *
      * @param bytes the byte array to write
      */
@@ -185,9 +185,9 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write a string to the buffer
+     * Writes a string to the buffer.
      * <p>
-     * The array is sized by a var-int and all strings are wrote using {@link #writeSizedString(String)}
+     * The array is sized by a var-int and all strings are wrote using {@link #writeSizedString(String)}.
      *
      * @param array the string array to write
      */
@@ -213,8 +213,8 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Write an {@link UUID}
-     * It is done by writing both long, the most and least significant bits
+     * Writes an {@link UUID}.
+     * It is done by writing both long, the most and least significant bits.
      *
      * @param uuid the {@link UUID} to write
      */
@@ -245,7 +245,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Convert the internal buffer to a byte array
+     * Converts the internal buffer to a byte array.
      *
      * @return the byte array containing all the {@link BinaryWriter} data
      */
@@ -257,7 +257,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Add a {@link BinaryWriter}'s {@link ByteBuf} at the beginning of this writer
+     * Adds a {@link BinaryWriter}'s {@link ByteBuf} at the beginning of this writer.
      *
      * @param headerWriter the {@link BinaryWriter} to add at the beginning
      */
@@ -271,7 +271,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Add a {@link BinaryWriter}'s {@link ByteBuf} at the end of this writer
+     * Adds a {@link BinaryWriter}'s {@link ByteBuf} at the end of this writer.
      *
      * @param footerWriter the {@link BinaryWriter} to add at the end
      */
@@ -285,7 +285,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Get the raw buffer used by this binary writer
+     * Gets the raw buffer used by this binary writer.
      *
      * @return the raw buffer
      */
@@ -294,7 +294,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Change the buffer used by this binary writer
+     * Changes the buffer used by this binary writer.
      *
      * @param buffer the new buffer used by this binary writer
      */

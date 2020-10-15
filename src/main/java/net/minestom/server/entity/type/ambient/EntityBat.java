@@ -36,7 +36,7 @@ public class EntityBat extends EntityCreature implements Animal {
     }
 
     /**
-     * Get if the bat is hanging
+     * Gets if the bat is hanging.
      *
      * @return true if the bat is hanging, false otherwise
      */
@@ -45,7 +45,7 @@ public class EntityBat extends EntityCreature implements Animal {
     }
 
     /**
-     * Make the bat hanging or cancel
+     * Makes the bat hanging or cancel.
      *
      * @param hanging true to make the bat hanging, false otherwise
      */

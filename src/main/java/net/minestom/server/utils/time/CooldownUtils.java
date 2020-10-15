@@ -7,7 +7,7 @@ public final class CooldownUtils {
     }
 
     /**
-     * Get if something is in cooldown based on the current time
+     * Gets if something is in cooldown based on the current time.
      *
      * @param currentTime the current time in milliseconds
      * @param lastUpdate  the last update in milliseconds
@@ -21,7 +21,7 @@ public final class CooldownUtils {
     }
 
     /**
-     * Get if something is in cooldown based on the current time
+     * Gets if something is in cooldown based on the current time.
      *
      * @param currentTime  the current time in milliseconds
      * @param lastUpdate   the last update in milliseconds
@@ -33,7 +33,7 @@ public final class CooldownUtils {
     }
 
     /**
-     * Get if something is in cooldown based on the current time ({@link System#currentTimeMillis()})
+     * Gets if something is in cooldown based on the current time ({@link System#currentTimeMillis()}).
      *
      * @param lastUpdate the last update in milliseconds
      * @param timeUnit   the time unit of the cooldown

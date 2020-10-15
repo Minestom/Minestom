@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.utils.Position;
 
 /**
- * Called when a player is modifying his position
+ * Called when a player is modifying his position.
  */
 public class PlayerMoveEvent extends CancellableEvent {
 
@@ -18,7 +18,7 @@ public class PlayerMoveEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who is moving
+     * Gets the player who is moving.
      *
      * @return the player
      */
@@ -27,7 +27,7 @@ public class PlayerMoveEvent extends CancellableEvent {
     }
 
     /**
-     * Get the target position
+     * Gets the target position.
      *
      * @return the new position
      */
@@ -36,7 +36,7 @@ public class PlayerMoveEvent extends CancellableEvent {
     }
 
     /**
-     * Change the target position
+     * Changes the target position.
      *
      * @param newPosition the new target position
      */

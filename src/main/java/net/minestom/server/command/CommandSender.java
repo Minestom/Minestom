@@ -13,14 +13,14 @@ import java.util.Collection;
 public interface CommandSender {
 
     /**
-     * Send a raw string message
+     * Sends a raw string message.
      *
      * @param message the message to send
      */
     void sendMessage(String message);
 
     /**
-     * Send multiple raw string messages
+     * Sends multiple raw string messages.
      *
      * @param messages the messages to send
      */
@@ -31,8 +31,8 @@ public interface CommandSender {
     }
 
     /**
-     * Return all permissions associated to this command sender.
-     * The returned collection should be modified only by subclasses
+     * Returns all permissions associated to this command sender.
+     * The returned collection should be modified only by subclasses.
      *
      * @return the permissions of this command sender.
      */
@@ -91,7 +91,7 @@ public interface CommandSender {
     }
 
     /**
-     * Get if the sender is a {@link Player}.
+     * Gets if the sender is a {@link Player}.
      *
      * @return true if 'this' is a player, false otherwise
      */
@@ -100,7 +100,7 @@ public interface CommandSender {
     }
 
     /**
-     * Get if the sender is a {@link ConsoleSender}.
+     * Gets if the sender is a {@link ConsoleSender}.
      *
      * @return true if 'this' is the console, false otherwise
      */

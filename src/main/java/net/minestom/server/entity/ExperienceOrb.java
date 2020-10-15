@@ -44,7 +44,7 @@ public class ExperienceOrb extends Entity {
     }
 
     /**
-     * Get the experience count
+     * Gets the experience count.
      *
      * @return the experience count
      */
@@ -53,7 +53,7 @@ public class ExperienceOrb extends Entity {
     }
 
     /**
-     * Change the experience count
+     * Changes the experience count.
      *
      * @param experienceCount the new experience count
      */

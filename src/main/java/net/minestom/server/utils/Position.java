@@ -3,8 +3,8 @@ package net.minestom.server.utils;
 import java.util.Objects;
 
 /**
- * Represent a position
- * The instance is not contained
+ * Represents a position.
+ * The instance is not contained.
  */
 public class Position {
 
@@ -28,7 +28,7 @@ public class Position {
     }
 
     /**
-     * Add offsets to the current position
+     * Adds offsets to the current position.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -43,7 +43,7 @@ public class Position {
     }
 
     /**
-     * Add a position to the current position
+     * Adds a position to the current position.
      *
      * @param position the position to add to this
      * @return the same object position
@@ -56,7 +56,7 @@ public class Position {
     }
 
     /**
-     * Remove offsets to the current position
+     * Removes offsets to the current position.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -71,7 +71,7 @@ public class Position {
     }
 
     /**
-     * Get the distance between 2 positions
+     * Gets the distance between 2 positions.
      *
      * @param position the second position
      * @return the distance between {@code this} and {@code position}
@@ -139,7 +139,7 @@ public class Position {
     }
 
     /**
-     * Set the x/y/z field of this position to the value of {@code position}
+     * Sets the x/y/z field of this position to the value of {@code position}.
      *
      * @param position the vector to copy the values from
      */
@@ -150,7 +150,7 @@ public class Position {
     }
 
     /**
-     * Set the x/y/z field of this position to the value of {@code position}
+     * Sets the x/y/z field of this position to the value of {@code position}.
      *
      * @param position the position to copy the values from
      */
@@ -163,7 +163,7 @@ public class Position {
     }
 
     /**
-     * Clone this position object with the same values
+     * Clones this position object with the same values.
      *
      * @return a new {@link Position} object with the same coordinates
      */
@@ -172,7 +172,7 @@ public class Position {
     }
 
     /**
-     * Get if the two objects are position and have the same values
+     * Gets if the two objects are position and have the same values.
      *
      * @param o the position to check the equality
      * @return true if the two objects are position with the same values, false otherwise
@@ -190,7 +190,7 @@ public class Position {
     }
 
     /**
-     * Check it two positions are similar (x/y/z)
+     * Checks it two positions are similar (x/y/z).
      *
      * @param position the position to compare
      * @return true if the two positions are similar
@@ -202,7 +202,7 @@ public class Position {
     }
 
     /**
-     * Check if two positions have a similar view (yaw/pitch)
+     * Checks if two positions have a similar view (yaw/pitch).
      *
      * @param position the position to compare
      * @return true if the two positions have the same view
@@ -218,7 +218,7 @@ public class Position {
     }
 
     /**
-     * Get the position X
+     * Gets the position X.
      *
      * @return the position X
      */
@@ -227,7 +227,7 @@ public class Position {
     }
 
     /**
-     * Change the position X
+     * Changes the position X.
      *
      * @param x the new position X
      */
@@ -236,7 +236,7 @@ public class Position {
     }
 
     /**
-     * Get the position Y
+     * Gets the position Y.
      *
      * @return the position Y
      */
@@ -245,7 +245,7 @@ public class Position {
     }
 
     /**
-     * Change the position Y
+     * Changes the position Y.
      *
      * @param y the new position Y
      */
@@ -254,7 +254,7 @@ public class Position {
     }
 
     /**
-     * Get the position Z
+     * Gets the position Z.
      *
      * @return the position Z
      */
@@ -263,7 +263,7 @@ public class Position {
     }
 
     /**
-     * Change the position Z
+     * Changes the position Z.
      *
      * @param z the new position Z
      */
@@ -272,7 +272,7 @@ public class Position {
     }
 
     /**
-     * Get the position yaw
+     * Gets the position yaw.
      *
      * @return the yaw
      */
@@ -281,7 +281,7 @@ public class Position {
     }
 
     /**
-     * Change the position yaw
+     * Changes the position yaw.
      *
      * @param yaw the new yaw
      */
@@ -290,7 +290,7 @@ public class Position {
     }
 
     /**
-     * Get the position pitch
+     * Gets the position pitch.
      *
      * @return the pitch
      */
@@ -299,7 +299,7 @@ public class Position {
     }
 
     /**
-     * Change the position pitch
+     * Changes the position pitch.
      *
      * @param pitch the new pitch
      */
@@ -308,7 +308,7 @@ public class Position {
     }
 
     /**
-     * Convert this position to a {@link BlockPosition}
+     * Converts this position to a {@link BlockPosition}.
      *
      * @return the converted {@link BlockPosition}
      */
@@ -317,7 +317,7 @@ public class Position {
     }
 
     /**
-     * Convert this position to a {@link Vector}
+     * Converts this position to a {@link Vector}.
      *
      * @return the converted {@link Vector}
      */

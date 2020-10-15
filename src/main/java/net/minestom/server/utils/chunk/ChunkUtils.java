@@ -15,7 +15,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get if a chunk is loaded
+     * Gets if a chunk is loaded.
      *
      * @param chunk the chunk to check
      * @return true if the chunk is loaded, false otherwise
@@ -25,7 +25,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get if a chunk is loaded
+     * Gets if a chunk is loaded.
      *
      * @param instance the instance to check
      * @param x        instance X coordinate
@@ -50,7 +50,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get the chunk index of chunk coordinates
+     * Gets the chunk index of chunk coordinates.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -69,7 +69,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a chunk index to its chunk X position
+     * Converts a chunk index to its chunk X position.
      *
      * @param index the chunk index computed by {@link #getChunkIndex(int, int)}
      * @return the chunk X based on the index
@@ -79,7 +79,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a chunk index to its chunk Z position
+     * Converts a chunk index to its chunk Z position.
      *
      * @param index the chunk index computed by {@link #getChunkIndex(int, int)}
      * @return the chunk Z based on the index
@@ -93,7 +93,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get the chunks in range of a position
+     * Gets the chunks in range of a position.
      *
      * @param position the initial position
      * @param range    how far should it retrieves chunk
@@ -116,7 +116,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get all the loaded neighbours of a chunk and itself, no diagonals
+     * Gets all the loaded neighbours of a chunk and itself, no diagonals.
      *
      * @param instance the instance of the chunks
      * @param chunkX   the chunk X
@@ -151,9 +151,9 @@ public final class ChunkUtils {
     }
 
     /**
-     * Get the block index of a position
+     * Gets the block index of a position.
      * <p>
-     * This can be cast as a short as long as you don't mind receiving a negative value (not array-friendly)
+     * This can be cast as a short as long as you don't mind receiving a negative value (not array-friendly).
      *
      * @param x the block X
      * @param y the block Y
@@ -184,7 +184,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block chunk index to its instance position X
+     * Converts a block chunk index to its instance position X.
      *
      * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
      * @param chunkX the chunk X
@@ -197,7 +197,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block chunk index to its instance position Y
+     * Converts a block chunk index to its instance position Y.
      *
      * @param index the block chunk index from {@link #getBlockIndex(int, int, int)}
      * @return the Y coordinate of the block index
@@ -207,7 +207,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block chunk index to its instance position Z
+     * Converts a block chunk index to its instance position Z.
      *
      * @param index  the block chunk index from {@link #getBlockIndex(int, int, int)}
      * @param chunkZ the chunk Z
@@ -220,7 +220,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block index to a chunk position X
+     * Converts a block index to a chunk position X.
      *
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position X (O-15) of the specified index
@@ -230,7 +230,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block index to a chunk position Y
+     * Converts a block index to a chunk position Y.
      *
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position Y (O-255) of the specified index
@@ -240,7 +240,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Convert a block index to a chunk position Z
+     * Converts a block index to a chunk position Z.
      *
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position Z (O-15) of the specified index

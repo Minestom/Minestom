@@ -12,7 +12,7 @@ public abstract class ObjectEntity extends Entity {
     }
 
     /**
-     * Get the data of this object entity
+     * Gets the data of this object entity.
      *
      * @return an object data
      * @see <a href="https://wiki.vg/Object_Data">here</a>

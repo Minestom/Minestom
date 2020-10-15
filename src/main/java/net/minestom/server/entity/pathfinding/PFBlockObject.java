@@ -11,9 +11,9 @@ public class PFBlockObject implements IBlockObject {
     private static final Short2ObjectMap<PFBlockObject> BLOCK_OBJECT_MAP = new Short2ObjectOpenHashMap<>();
 
     /**
-     * Get the {@link PFBlockObject} linked to the block state id
+     * Gets the {@link PFBlockObject} linked to the block state id.
      * <p>
-     * Cache the result if it is not already
+     * Cache the result if it is not already.
      *
      * @param blockStateId the block state id
      * @return the {@link PFBlockObject} linked to {@code blockStateId}

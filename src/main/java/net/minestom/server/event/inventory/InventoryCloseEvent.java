@@ -4,6 +4,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.inventory.Inventory;
 
+/**
+ * Called when an {@link Inventory} is closed by a player.
+ */
 public class InventoryCloseEvent extends Event {
 
     private final Player player;
@@ -16,7 +19,7 @@ public class InventoryCloseEvent extends Event {
     }
 
     /**
-     * Get the player who closed the inventory
+     * Gets the player who closed the inventory.
      *
      * @return the player who closed the inventory
      */
@@ -25,7 +28,7 @@ public class InventoryCloseEvent extends Event {
     }
 
     /**
-     * Get the closed inventory
+     * Gets the closed inventory.
      *
      * @return the closed inventory, null if this is the player inventory
      */
@@ -34,7 +37,7 @@ public class InventoryCloseEvent extends Event {
     }
 
     /**
-     * Get the new inventory to open
+     * Gets the new inventory to open.
      *
      * @return the new inventory to open, null if there isn't any
      */
@@ -43,7 +46,7 @@ public class InventoryCloseEvent extends Event {
     }
 
     /**
-     * Can be used to open a new inventory after closing the previous one
+     * Can be used to open a new inventory after closing the previous one.
      *
      * @param newInventory the inventory to open, null to do not open any
      */

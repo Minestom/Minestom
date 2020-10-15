@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Called when two {@link ItemEntity} are merging their ItemStack together to form a sole entity
+ * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
  */
 public class EntityItemMergeEvent extends CancellableEvent {
 
@@ -21,9 +21,9 @@ public class EntityItemMergeEvent extends CancellableEvent {
     }
 
     /**
-     * Get the entity who is receiving {@link #getMerged()} ItemStack
+     * Gets the {@link ItemEntity} who is receiving {@link #getMerged()}.
      * <p>
-     * This can be used to get the final ItemEntity position
+     * This can be used to get the final ItemEntity position.
      *
      * @return the source ItemEntity
      */
@@ -32,9 +32,9 @@ public class EntityItemMergeEvent extends CancellableEvent {
     }
 
     /**
-     * Get the entity who will be merged
+     * Gets the entity who will be merged.
      * <p>
-     * This entity will be removed after the event
+     * This entity will be removed after the event.
      *
      * @return the merged ItemEntity
      */
@@ -43,7 +43,7 @@ public class EntityItemMergeEvent extends CancellableEvent {
     }
 
     /**
-     * Get the final item stack on the ground
+     * Gets the final item stack on the ground.
      *
      * @return the item stack
      */
@@ -52,7 +52,7 @@ public class EntityItemMergeEvent extends CancellableEvent {
     }
 
     /**
-     * Change the item stack which will appear on the ground
+     * Changes the item stack which will appear on the ground.
      *
      * @param result the new item stack
      */

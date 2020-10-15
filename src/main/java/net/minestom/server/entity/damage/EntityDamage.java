@@ -3,7 +3,7 @@ package net.minestom.server.entity.damage;
 import net.minestom.server.entity.Entity;
 
 /**
- * Represents damage inflicted by an entity
+ * Represents damage inflicted by an entity.
  */
 public class EntityDamage extends DamageType {
 
@@ -15,7 +15,7 @@ public class EntityDamage extends DamageType {
     }
 
     /**
-     * Get the source of the damage
+     * Gets the source of the damage.
      *
      * @return the source
      */

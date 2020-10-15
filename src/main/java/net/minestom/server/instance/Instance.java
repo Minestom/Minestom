@@ -95,7 +95,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     /**
-     * Create a new instance
+     * Creates a new instance
      *
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
@@ -108,7 +108,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Schedule a task to be run during the next instance tick
+     * Schedules a task to be run during the next instance tick
      * It ensures that the task will be executed in the same thread as the instance and its chunks/entities (depending of the {@link ThreadProvider})
      *
      * @param callback the task to execute during the next instance tick
@@ -138,7 +138,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract boolean breakBlock(Player player, BlockPosition blockPosition);
 
     /**
-     * Force the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
+     * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
@@ -148,7 +148,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void loadChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
-     * Load the chunk if the chunk is already loaded or if
+     * Loads the chunk if the chunk is already loaded or if
      * {@link #hasEnabledAutoChunkLoad()} returns true.
      *
      * @param chunkX   the chunk X
@@ -159,7 +159,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
     /**
-     * Schedule the removal of a {@link Chunk}, this method does not promise when it will be done.
+     * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
      * <p>
      * WARNING: during unloading, all entities other than {@link Player} will be removed.
      * <p>
@@ -170,7 +170,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void unloadChunk(Chunk chunk);
 
     /**
-     * Get the loaded {@link Chunk} at a position.
+     * Gets the loaded {@link Chunk} at a position.
      * <p>
      * WARNING: this should only return already-loaded chunk, use {@link #loadChunk(int, int)} or similar to load one instead.
      *
@@ -181,7 +181,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
-     * Save a {@link Chunk} to permanent storage.
+     * Saves a {@link Chunk} to permanent storage.
      *
      * @param chunk    the {@link Chunk} to save
      * @param callback called when the {@link Chunk} is done saving
@@ -189,21 +189,21 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
 
     /**
-     * Save multiple chunks to permanent storage
+     * Saves multiple chunks to permanent storage.
      *
      * @param callback called when the chunks are done saving
      */
     public abstract void saveChunksToStorage(Runnable callback);
 
     /**
-     * Create a new {@link BlockBatch} linked to this instance
+     * Creates a new {@link BlockBatch} linked to this instance.
      *
      * @return a {@link BlockBatch} linked to the instance
      */
     public abstract BlockBatch createBlockBatch();
 
     /**
-     * Create a new {@link Chunk} batch linked to this instance and the specified chunk
+     * Creates a new {@link Chunk} batch linked to this instance and the specified chunk.
      *
      * @param chunk the chunk to modify
      * @return a ChunkBatch linked to {@code chunk}
@@ -212,35 +212,35 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract ChunkBatch createChunkBatch(Chunk chunk);
 
     /**
-     * Get the instance {@link ChunkGenerator}
+     * Gets the instance {@link ChunkGenerator}.
      *
      * @return the {@link ChunkGenerator} of the instance
      */
     public abstract ChunkGenerator getChunkGenerator();
 
     /**
-     * Change the instance {@link ChunkGenerator}
+     * Changes the instance {@link ChunkGenerator}.
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
      */
     public abstract void setChunkGenerator(ChunkGenerator chunkGenerator);
 
     /**
-     * Get all the instance's chunks
+     * Gets all the instance's chunks.
      *
      * @return an unmodifiable containing all the loaded chunks of the instance
      */
     public abstract Collection<Chunk> getChunks();
 
     /**
-     * Get the instance {@link StorageLocation}
+     * Gets the instance {@link StorageLocation}.
      *
      * @return the {@link StorageLocation} of the instance
      */
     public abstract StorageLocation getStorageLocation();
 
     /**
-     * Change the instance {@link StorageLocation}
+     * Changes the instance {@link StorageLocation}.
      *
      * @param storageLocation the new {@link StorageLocation} of the instance
      */
@@ -248,7 +248,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
-     * Could be read from disk, or generated from scratch
+     * Could be read from disk, or generated from scratch.
      * <p>
      * WARNING: it has to retrieve a chunk, this is not optional.
      *
@@ -278,7 +278,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void enableAutoChunkLoad(boolean enable);
 
     /**
-     * Get if the instance should auto load chunks.
+     * Gets if the instance should auto load chunks.
      *
      * @return true if auto chunk load is enabled, false otherwise
      */
@@ -286,7 +286,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Determines whether a position in the void. If true, entities should take damage and die.
-     * Always returning false allow entities to survive in the void
+     * <p>
+     * Always returning false allow entities to survive in the void.
      *
      * @param position the position in the world
      * @return true iif position is inside the void
@@ -294,7 +295,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract boolean isInVoid(Position position);
 
     /**
-     * Get if the instance has been registered in {@link InstanceManager}
+     * Gets if the instance has been registered in {@link InstanceManager}.
      *
      * @return true if the instance has been registered
      */
@@ -303,9 +304,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Change the registered field
+     * Changes the registered field.
      * <p>
-     * WARNING: should only be used by {@link InstanceManager}
+     * WARNING: should only be used by {@link InstanceManager}.
      *
      * @param registered true to mark the instance as registered
      */
@@ -314,7 +315,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the instance {@link DimensionType}
+     * Gets the instance {@link DimensionType}.
      *
      * @return the dimension of the instance
      */
@@ -323,7 +324,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the age of this instance in tick
+     * Gets the age of this instance in tick.
      *
      * @return the age of this instance in tick
      */
@@ -332,7 +333,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the current time in the instance (sun/moon)
+     * Gets the current time in the instance (sun/moon).
      *
      * @return the time in the instance
      */
@@ -341,7 +342,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Change the current time in the instance, from 0 to 24000
+     * Changes the current time in the instance, from 0 to 24000.
      * <p>
      * 0 = sunrise
      * 6000 = noon
@@ -360,7 +361,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the rate of the time passing, it is 1 by default
+     * Gets the rate of the time passing, it is 1 by default
      *
      * @return the time rate of the instance
      */
@@ -382,7 +383,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the rate at which the client is updated with the current instance time
+     * Gets the rate at which the client is updated with the current instance time
      *
      * @return the client update rate for time related packet
      */
@@ -403,7 +404,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get a {@link TimeUpdatePacket} with the current age and time of this instance
+     * Gets a {@link TimeUpdatePacket} with the current age and time of this instance
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
@@ -415,7 +416,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the instance {@link WorldBorder}
+     * Gets the instance {@link WorldBorder};
      *
      * @return the {@link WorldBorder} linked to the instance
      */
@@ -424,7 +425,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the entities in the instance
+     * Gets the entities in the instance;
      *
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
@@ -433,7 +434,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the players in the instance
+     * Gets the players in the instance;
      *
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
@@ -442,7 +443,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the creatures in the instance
+     * Gets the creatures in the instance;
      *
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
@@ -451,7 +452,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the object entities in the instance
+     * Gets the object entities in the instance;
      *
      * @return an unmodifiable {@link Set} containing all the object entities in the instance
      */
@@ -460,7 +461,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the experience orbs in the instance
+     * Gets the experience orbs in the instance.
      *
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
@@ -469,7 +470,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the entities located in the chunk
+     * Gets the entities located in the chunk.
      *
      * @param chunk the chunk to get the entities from
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
@@ -485,9 +486,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Refresh the visual block id at the position
+     * Refreshes the visual block id at the position.
      * <p>
-     * WARNING: the custom block id at the position will not change
+     * WARNING: the custom block id at the position will not change.
      *
      * @param x            the X position
      * @param y            the Y position
@@ -499,9 +500,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Refresh the visual block id at the position
+     * Refreshes the visual block id at the position.
      * <p>
-     * WARNING: the custom block id at the position will not change
+     * WARNING: the custom block id at the position will not change.
      *
      * @param x     the X position
      * @param y     the Y position
@@ -513,9 +514,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Refresh the visual block id at the {@link BlockPosition}
+     * Refreshes the visual block id at the {@link BlockPosition}.
      * <p>
-     * WARNING: the custom block id at the position will not change
+     * WARNING: the custom block id at the position will not change.
      *
      * @param blockPosition the block position
      * @param block         the new visual block
@@ -525,7 +526,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Load the {@link Chunk} at the given position without any callback.
+     * Loads the {@link Chunk} at the given position without any callback.
      * <p>
      * WARNING: this is a non-blocking task.
      *
@@ -537,7 +538,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Load the chunk at the given {@link Position} with a callback
+     * Loads the chunk at the given {@link Position} with a callback.
      *
      * @param position the chunk position
      * @param callback the callback to run when the chunk is loaded
@@ -549,7 +550,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Load a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true) at the given {@link Position} with a callback
+     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
+     * at the given {@link Position} with a callback.
      *
      * @param position the chunk position
      * @param callback the callback executed when the chunk is loaded (or with a null chunk if not)
@@ -561,7 +563,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Unload the chunk at the given position
+     * Unloads the chunk at the given position.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -573,7 +575,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Give the block state id at the given position
+     * Gives the block state id at the given position.
      *
      * @param x the X position
      * @param y the Y position
@@ -587,7 +589,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Give the block state id at the given position
+     * Gives the block state id at the given position.
      *
      * @param x the X position
      * @param y the Y position
@@ -599,7 +601,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Give the block state id at the given {@link BlockPosition}
+     * Gives the block state id at the given {@link BlockPosition}.
      *
      * @param blockPosition the block position
      * @return the block state id at the position
@@ -609,7 +611,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the custom block object at the given position, or null if not any
+     * Gets the custom block object at the given position.
      *
      * @param x the X position
      * @param y the Y position
@@ -623,7 +625,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the custom block object at the given {@link BlockPosition}, or null if not any.
+     * Gets the custom block object at the given {@link BlockPosition}.
      *
      * @param blockPosition the block position
      * @return the custom block object at the position, null if not any
@@ -633,7 +635,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Send a {@link BlockActionPacket} for all the viewers of the specific position
+     * Sends a {@link BlockActionPacket} for all the viewers of the specific position.
      *
      * @param blockPosition the block position
      * @param actionId
@@ -655,7 +657,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the block data at the given position, or null if not any
+     * Gets the block data at the given position.
      *
      * @param x the X position
      * @param y the Y position
@@ -670,7 +672,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the block {@link Data} at the given {@link BlockPosition}, or null if not any
+     * Gets the block {@link Data} at the given {@link BlockPosition}.
      *
      * @param blockPosition the block position
      * @return the block data at the position, null if not any
@@ -680,7 +682,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Set the block {@link Data} at the given {@link BlockPosition}
+     * Sets the block {@link Data} at the given {@link BlockPosition}.
      *
      * @param x    the X position
      * @param y    the Y position
@@ -696,7 +698,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Set the block {@link Data} at the given {@link BlockPosition}
+     * Sets the block {@link Data} at the given {@link BlockPosition}.
      *
      * @param blockPosition the block position
      * @param data          the data to be set, can be null
@@ -706,7 +708,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
+     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
      *
      * @param x the X position
      * @param z the Z position
@@ -719,7 +721,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Check if the {@link Chunk} at the position is loaded
+     * Checks if the {@link Chunk} at the position is loaded.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
@@ -730,7 +732,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
+     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
      *
      * @param blockPosition the chunk position
      * @return the chunk at the given position, null if not loaded
@@ -740,7 +742,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the {@link Chunk} at the given {@link Position}, null if not loaded.
+     * Gets the {@link Chunk} at the given {@link Position}, null if not loaded.
      *
      * @param position the chunk position
      * @return the chunk at the given position, null if not loaded
@@ -750,7 +752,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Save a chunk without any callback
+     * Saves a {@link Chunk} without any callback.
      *
      * @param chunk the chunk to save
      */
@@ -759,14 +761,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Save all {@link Chunk} without any callback.
+     * Saves all {@link Chunk} without any callback.
      */
     public void saveChunksToStorage() {
         saveChunksToStorage(null);
     }
 
     /**
-     * Get the instance unique id
+     * Gets the instance unique id.
      *
      * @return the instance unique id
      */
@@ -859,7 +861,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Add the specified {@link Entity} to the instance entities cache.
+     * Adds the specified {@link Entity} to the instance entities cache.
      * <p>
      * Warning: this is done automatically when the entity move out of his chunk.
      *
@@ -890,7 +892,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Remove the specified {@link Entity} to the instance entities cache.
+     * Removes the specified {@link Entity} to the instance entities cache.
      * <p>
      * Warning: this is done automatically when the entity move out of his chunk.
      *
@@ -928,7 +930,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Schedule a block update at a given {@link BlockPosition}.
+     * Schedules a block update at a given {@link BlockPosition}.
      * Does nothing if no {@link CustomBlock} is present at 'position'.
      * <p>
      * Cancelled if the block changes between this call and the actual update
@@ -1005,7 +1007,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Return the registered {@link ExplosionSupplier}, or null if none was provided
+     * Gets the registered {@link ExplosionSupplier}, or null if none was provided
      *
      * @return the instance explosion supplier, null if none was provided
      */
@@ -1023,7 +1025,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Get the instance space
+     * Gets the instance space
      * <p>
      * Used by the pathfinder for entities
      *

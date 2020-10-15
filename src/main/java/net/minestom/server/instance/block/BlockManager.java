@@ -17,7 +17,7 @@ public class BlockManager {
     private BlockPlacementRule[] placementRules = new BlockPlacementRule[Short.MAX_VALUE];
 
     /**
-     * Register a {@link CustomBlock}
+     * Registers a {@link CustomBlock}.
      *
      * @param customBlock the custom block to register
      * @throws IllegalArgumentException if <code>customBlock</code> block id is not greater than 0
@@ -34,7 +34,7 @@ public class BlockManager {
     }
 
     /**
-     * Register a {@link BlockPlacementRule}
+     * Registers a {@link BlockPlacementRule}.
      *
      * @param blockPlacementRule the block placement rule to register
      * @throws IllegalArgumentException if <code>blockPlacementRule</code> block id is negative
@@ -47,7 +47,7 @@ public class BlockManager {
     }
 
     /**
-     * Get the {@link BlockPlacementRule} of the specific block
+     * Gets the {@link BlockPlacementRule} of the specific block.
      *
      * @param block the block to check
      * @return the block placement rule associated with the block, null if not any
@@ -57,7 +57,7 @@ public class BlockManager {
     }
 
     /**
-     * Get the {@link BlockPlacementRule} of the specific block
+     * Gets the {@link BlockPlacementRule} of the specific block.
      *
      * @param blockStateId the block id to check
      * @return the block placement rule associated with the id, null if not any
@@ -68,7 +68,7 @@ public class BlockManager {
     }
 
     /**
-     * Get the {@link CustomBlock} with the specific identifier {@link CustomBlock#getIdentifier()}
+     * Gets the {@link CustomBlock} with the specific identifier {@link CustomBlock#getIdentifier()}.
      *
      * @param identifier the custom block identifier
      * @return the {@link CustomBlock} associated with the identifier, null if not any
@@ -78,7 +78,7 @@ public class BlockManager {
     }
 
     /**
-     * Get the {@link CustomBlock} with the specific custom block id {@link CustomBlock#getCustomBlockId()}
+     * Gets the {@link CustomBlock} with the specific custom block id {@link CustomBlock#getCustomBlockId()}.
      *
      * @param id the custom block id
      * @return the {@link CustomBlock} associated with the id, null if not any

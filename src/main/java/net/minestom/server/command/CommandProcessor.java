@@ -14,14 +14,14 @@ import net.minestom.server.entity.Player;
 public interface CommandProcessor {
 
     /**
-     * Get the main command's name.
+     * Gets the main command's name.
      *
      * @return the main command's name
      */
     String getCommandName();
 
     /**
-     * Get the command's aliases.
+     * Gets the command's aliases.
      * <p>
      * Can be null or empty.
      *
@@ -43,7 +43,7 @@ public interface CommandProcessor {
      * Called to know if a player has access to the command.
      * <p>
      * Right now it is only used to know if the player should see the command in auto-completion
-     * Conditions still need to be checked in {@link #process(CommandSender, String, String[])}
+     * Conditions still need to be checked in {@link #process(CommandSender, String, String[])}.
      *
      * @param player the player to check the access
      * @return true if the player has access to the command, false otherwise
@@ -51,7 +51,7 @@ public interface CommandProcessor {
     boolean hasAccess(Player player);
 
     /**
-     * Needed to enable {@link #onWrite(String)} callback
+     * Needed to enable {@link #onWrite(String)} callback.
      * <p>
      * Be aware that enabling it can cost some performance because of how often it will be called.
      *
@@ -63,7 +63,7 @@ public interface CommandProcessor {
     }
 
     /**
-     * Allow for tab auto completion, this is called everytime the player press a key in the chat.
+     * Allows for tab auto completion, this is called everytime the player press a key in the chat.
      * <p>
      * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
      *

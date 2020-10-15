@@ -12,9 +12,9 @@ public class WritableBookMeta implements ItemMeta {
     private ArrayList<String> pages = new ArrayList<>();
 
     /**
-     * Get an array list containing the book pages
+     * Gets an array list containing the book pages.
      * <p>
-     * The list is modifiable
+     * The list is modifiable.
      *
      * @return a modifiable {@link ArrayList} containing the book pages
      */
@@ -23,7 +23,7 @@ public class WritableBookMeta implements ItemMeta {
     }
 
     /**
-     * Set the pages list of this book
+     * Sets the pages list of this book.
      *
      * @param pages the pages list
      */

@@ -1,7 +1,7 @@
 package net.minestom.server.item;
 
 /**
- * Represent the stacking rule of an {@link ItemStack}
+ * Represents the stacking rule of an {@link ItemStack}.
  * This can be used to mimic the vanilla one (using the displayed item quantity)
  * or a complete new one which can be stored in lore, name, etc...
  */
@@ -14,7 +14,7 @@ public abstract class StackingRule {
     }
 
     /**
-     * Used to know if two {@link ItemStack} can be stacked together
+     * Used to know if two {@link ItemStack} can be stacked together.
      *
      * @param item1 the first {@link ItemStack}
      * @param item2 the second {@link ItemStack}
@@ -24,7 +24,7 @@ public abstract class StackingRule {
     public abstract boolean canBeStacked(ItemStack item1, ItemStack item2);
 
     /**
-     * Used to know if an {@link ItemStack} can have the size {@code newAmount} applied
+     * Used to know if an {@link ItemStack} can have the size {@code newAmount} applied.
      *
      * @param item      the {@link ItemStack} to check
      * @param newAmount the desired new amount
@@ -33,8 +33,8 @@ public abstract class StackingRule {
     public abstract boolean canApply(ItemStack item, int newAmount);
 
     /**
-     * Change the size of the {@link ItemStack} to {@code newAmount}
-     * At this point we know that the item can have this stack size applied
+     * Changes the size of the {@link ItemStack} to {@code newAmount}.
+     * At this point we know that the item can have this stack size applied.
      *
      * @param item      the {@link ItemStack} to applies the size to
      * @param newAmount the new item size
@@ -43,7 +43,7 @@ public abstract class StackingRule {
     public abstract ItemStack apply(ItemStack item, int newAmount);
 
     /**
-     * Used to determine the current stack size of an {@link ItemStack}
+     * Used to determine the current stack size of an {@link ItemStack}.
      * It is possible to have it stored in its {@link net.minestom.server.data.Data} object, lore, etc...
      *
      * @param itemStack the {@link ItemStack} to check the size
@@ -52,7 +52,7 @@ public abstract class StackingRule {
     public abstract int getAmount(ItemStack itemStack);
 
     /**
-     * Get the max size of a stack
+     * Gets the max size of a stack.
      *
      * @return the max size of a stack
      */

@@ -17,7 +17,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Get the level requirement in a slot
+     * Gets the level requirement in a slot.
      *
      * @param enchantmentSlot the slot to check the level requirement
      * @return the level requirement of the slot
@@ -27,7 +27,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Set the level requirement of a slot
+     * Sets the level requirement of a slot.
      *
      * @param enchantmentSlot the slot
      * @param level           the level
@@ -48,7 +48,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Get the enchantment seed
+     * Gets the enchantment seed.
      *
      * @return the enchantment seed
      */
@@ -57,7 +57,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Set the enchantment seed
+     * Sets the enchantment seed.
      *
      * @param seed the enchantment seed
      */
@@ -67,7 +67,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Get the enchantment shown in a slot
+     * Gets the enchantment shown in a slot.
      *
      * @param enchantmentSlot the enchantment slot
      * @return the enchantment shown in the slot, null if it is hidden
@@ -80,9 +80,9 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Set the enchantment shown in a slot
+     * Sets the enchantment shown in a slot.
      * <p>
-     * Can be set to null to hide it
+     * Can be set to null to hide it.
      *
      * @param enchantmentSlot the enchantment slot
      * @param enchantment     the enchantment
@@ -104,7 +104,7 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Get the enchantment level shown on mouse hover
+     * Gets the enchantment level shown on mouse hover.
      *
      * @param enchantmentSlot the enchantment slot
      * @return the level shown, -1 if no enchant
@@ -114,9 +114,9 @@ public class EnchantmentTableInventory extends Inventory {
     }
 
     /**
-     * Set the enchantment level shown on mouse hover
+     * Sets the enchantment level shown on mouse hover.
      * <p>
-     * Can be set to -1 if no enchant
+     * Can be set to -1 if no enchant.
      *
      * @param enchantmentSlot the enchantment slot
      * @param level           the level shown

@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Called when a player is trying to swap his main and off hand item
+ * Called when a player is trying to swap his main and off hand item.
  */
 public class PlayerSwapItemEvent extends CancellableEvent {
 
@@ -20,7 +20,7 @@ public class PlayerSwapItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who is trying to swap his hands item
+     * Gets the player who is trying to swap his hands item.
      *
      * @return the player
      */
@@ -29,7 +29,7 @@ public class PlayerSwapItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item which will be in player main hand after the event
+     * Gets the item which will be in player main hand after the event.
      *
      * @return the item in main hand
      */
@@ -38,7 +38,7 @@ public class PlayerSwapItemEvent extends CancellableEvent {
     }
 
     /**
-     * Change the item which will be in the player main hand
+     * Changes the item which will be in the player main hand.
      *
      * @param mainHandItem the main hand item
      */
@@ -47,7 +47,7 @@ public class PlayerSwapItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item which will be in player off hand after the event
+     * Gets the item which will be in player off hand after the event.
      *
      * @return the item in off hand
      */
@@ -56,7 +56,7 @@ public class PlayerSwapItemEvent extends CancellableEvent {
     }
 
     /**
-     * Change the item which will be in the player off hand
+     * Changes the item which will be in the player off hand.
      *
      * @param offHandItem the off hand item
      */

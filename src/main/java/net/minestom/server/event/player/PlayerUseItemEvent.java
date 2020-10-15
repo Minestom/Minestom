@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Event when an item is used without clicking a block
+ * Event when an item is used without clicking a block.
  */
 public class PlayerUseItemEvent extends CancellableEvent {
 
@@ -20,7 +20,7 @@ public class PlayerUseItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get the player who used an item
+     * Gets the player who used an item.
      *
      * @return the player
      */
@@ -29,7 +29,7 @@ public class PlayerUseItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get which hand the player used
+     * Gets which hand the player used.
      *
      * @return the hand used
      */
@@ -38,7 +38,7 @@ public class PlayerUseItemEvent extends CancellableEvent {
     }
 
     /**
-     * Get the item which have been used
+     * Gets the item which have been used.
      *
      * @return the item
      */

@@ -26,7 +26,7 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * Change the chat format
+     * Changes the chat format.
      *
      * @param chatFormat the custom chat format
      */
@@ -35,7 +35,7 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * Get the message sender
+     * Gets the message sender.
      *
      * @return the sender
      */
@@ -44,8 +44,9 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * This is all the {@link Player} who will receive the message
-     * It can be modified to add or remove recipient
+     * Those are the players who will receive the message.
+     * <p>
+     * It can be modified to add or remove recipient.
      *
      * @return a modifiable list of message targets
      */
@@ -54,7 +55,7 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * Get the message sent
+     * Gets the message sent.
      *
      * @return the sender's message
      */
@@ -63,7 +64,7 @@ public class PlayerChatEvent extends CancellableEvent {
     }
 
     /**
-     * Used to change the message
+     * Used to change the message.
      *
      * @param message the new message
      */
@@ -73,7 +74,8 @@ public class PlayerChatEvent extends CancellableEvent {
 
     /**
      * Used to retrieve the chat format for this message.
-     * If null, the default format will be used
+     * <p>
+     * If null, the default format will be used.
      *
      * @return the chat format which will be used
      */

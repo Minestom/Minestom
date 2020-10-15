@@ -205,7 +205,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the current server brand name
+     * Gets the current server brand name.
      *
      * @return the server brand name
      */
@@ -214,7 +214,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Change the server brand name, update the name to all connected players
+     * Changes the server brand name, update the name to all connected players.
      *
      * @param brandName the server brand name
      */
@@ -227,7 +227,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the max number of packets a client can send over 1 second
+     * Gets the max number of packets a client can send over 1 second.
      *
      * @return the packet count limit over 1 second
      */
@@ -236,7 +236,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Change the number of packet a client can send over 1 second without being disconnected
+     * Changes the number of packet a client can send over 1 second without being disconnected.
      *
      * @param rateLimit the number of packet, 0 to disable
      */
@@ -245,7 +245,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the server difficulty showed in game option
+     * Gets the server difficulty showed in game option.
      *
      * @return the server difficulty
      */
@@ -254,7 +254,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Change the server difficulty and send the appropriate packet to all connected clients
+     * Changes the server difficulty and send the appropriate packet to all connected clients.
      *
      * @param difficulty the new server difficulty
      */
@@ -270,7 +270,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling all incoming packets
+     * Gets the manager handling all incoming packets
      *
      * @return the packet listener manager
      */
@@ -279,7 +279,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the netty server
+     * Gets the netty server.
      *
      * @return the netty server
      */
@@ -288,7 +288,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling all registered instances
+     * Gets the manager handling all registered instances.
      *
      * @return the instance manager
      */
@@ -297,7 +297,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling {@link CustomBlock} and {@link BlockPlacementRule}
+     * Gets the manager handling {@link CustomBlock} and {@link BlockPlacementRule}.
      *
      * @return the block manager
      */
@@ -306,7 +306,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling waiting players
+     * Gets the manager handling waiting players.
      *
      * @return the entity manager
      */
@@ -315,7 +315,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling commands
+     * Gets the manager handling commands.
      *
      * @return the command manager
      */
@@ -324,7 +324,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling recipes show to the clients
+     * Gets the manager handling recipes show to the clients.
      *
      * @return the recipe manager
      */
@@ -333,7 +333,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling storage
+     * Gets the manager handling storage.
      *
      * @return the storage manager
      */
@@ -342,7 +342,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling {@link DataType} used by {@link SerializableData}
+     * Gets the manager handling {@link DataType} used by {@link SerializableData}.
      *
      * @return the data manager
      */
@@ -351,7 +351,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling teams
+     * Gets the manager handling teams.
      *
      * @return the team manager
      */
@@ -360,7 +360,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling scheduled tasks
+     * Gets the manager handling scheduled tasks.
      *
      * @return the scheduler manager
      */
@@ -369,7 +369,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling server monitoring
+     * Gets the manager handling server monitoring.
      *
      * @return the benchmark manager
      */
@@ -378,7 +378,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling server connections
+     * Gets the manager handling server connections.
      *
      * @return the connection manager
      */
@@ -387,7 +387,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the consumer executed to show server-list data
+     * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
      */
@@ -396,7 +396,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling loot tables
+     * Gets the manager handling loot tables.
      *
      * @return the loot table manager
      */
@@ -405,7 +405,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling dimensions
+     * Gets the manager handling dimensions.
      *
      * @return the dimension manager
      */
@@ -418,7 +418,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling advancements
+     * Gets the manager handling advancements.
      *
      * @return the advancement manager
      */
@@ -427,7 +427,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling tags
+     * Gets the manager handling tags.
      *
      * @return the tag manager
      */
@@ -436,7 +436,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Get the manager handling the server ticks
+     * Gets the manager handling the server ticks.
      *
      * @return the update manager
      */
@@ -445,7 +445,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Start the server
+     * Starts the server.
      *
      * @param address              the server address
      * @param port                 the server port
@@ -468,7 +468,7 @@ public class MinecraftServer {
     }
 
     /**
-     * Start the server
+     * Starts the server.
      *
      * @param address the server address
      * @param port    the server port

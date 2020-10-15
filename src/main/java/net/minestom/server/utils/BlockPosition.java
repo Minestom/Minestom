@@ -12,7 +12,7 @@ public class BlockPosition {
     private int x, y, z;
 
     /**
-     * Create a new {@link BlockPosition}.
+     * Creates a new {@link BlockPosition}.
      *
      * @param x the block X
      * @param y the block Y
@@ -25,7 +25,7 @@ public class BlockPosition {
     }
 
     /**
-     * Create a new {@link BlockPosition}.
+     * Creates a new {@link BlockPosition}.
      * <p>
      * Float positions are converted to block position, notably used by {@link Position#toBlockPosition()}.
      *
@@ -42,7 +42,7 @@ public class BlockPosition {
     }
 
     /**
-     * Create a new {@link BlockPosition} from a {@link Vector}.
+     * Creates a new {@link BlockPosition} from a {@link Vector}.
      *
      * @param position the position vector
      * @see #BlockPosition(float, float, float)
@@ -52,7 +52,7 @@ public class BlockPosition {
     }
 
     /**
-     * Add offsets to this block position
+     * Adds offsets to this block position.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -67,7 +67,7 @@ public class BlockPosition {
     }
 
     /**
-     * Subtract offsets to this block position
+     * Subtracts offsets to this block position.
      *
      * @param x the X offset
      * @param y the Y offset
@@ -82,7 +82,7 @@ public class BlockPosition {
     }
 
     /**
-     * Add offsets to this block position
+     * Adds offsets to this block position.
      *
      * @param pos the pos to add
      * @return the instance of this block position
@@ -95,7 +95,7 @@ public class BlockPosition {
     }
 
     /**
-     * Subtract offsets to this block position
+     * Subtracts offsets to this block position.
      *
      * @param pos the pos to subtract
      * @return the instance of this block position
@@ -108,7 +108,7 @@ public class BlockPosition {
     }
 
     /**
-     * Get the block X
+     * Gets the block X.
      *
      * @return the block X
      */
@@ -117,9 +117,9 @@ public class BlockPosition {
     }
 
     /**
-     * Change the X field
+     * Changes the X field.
      * <p>
-     * WARNING: this will not change the block position
+     * WARNING: this will not change the block position.
      *
      * @param x the new X field
      */
@@ -128,7 +128,7 @@ public class BlockPosition {
     }
 
     /**
-     * Get the block Y
+     * Gets the block Y.
      *
      * @return the block Y
      */
@@ -137,9 +137,9 @@ public class BlockPosition {
     }
 
     /**
-     * Change the Y field
+     * Changes the Y field.
      * <p>
-     * WARNING: this will not change the block position
+     * WARNING: this will not change the block position.
      *
      * @param y the new Y field
      */
@@ -148,7 +148,7 @@ public class BlockPosition {
     }
 
     /**
-     * Get the block Z
+     * Gets the block Z.
      *
      * @return the block Z
      */
@@ -157,9 +157,9 @@ public class BlockPosition {
     }
 
     /**
-     * Change the Z field
+     * Changes the Z field.
      * <p>
-     * WARNING: this will not change the block position
+     * WARNING: this will not change the block position.
      *
      * @param z the new Z field
      */
@@ -168,7 +168,7 @@ public class BlockPosition {
     }
 
     /**
-     * Get the distance to another block position
+     * Gets the distance to another block position.
      *
      * @param blockPosition the block position to check the distance
      * @return the distance between 'this' and {@code blockPosition}
@@ -180,7 +180,7 @@ public class BlockPosition {
     }
 
     /**
-     * Clone this block position
+     * Clones this block position.
      *
      * @return the cloned block position
      */
@@ -189,7 +189,7 @@ public class BlockPosition {
     }
 
     /**
-     * Convert this block position to a {@link Position}
+     * Converts this block position to a {@link Position}.
      *
      * @return the converted {@link Position}
      */

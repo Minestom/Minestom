@@ -12,40 +12,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots
+ * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots.
  */
 public interface EquipmentHandler {
 
     /**
-     * Get the {@link ItemStack} in main hand.
+     * Gets the {@link ItemStack} in main hand.
      *
      * @return the {@link ItemStack} in main hand
      */
     ItemStack getItemInMainHand();
 
     /**
-     * Change the main hand {@link ItemStack}.
+     * Changes the main hand {@link ItemStack}.
      *
      * @param itemStack the main hand {@link ItemStack}
      */
     void setItemInMainHand(ItemStack itemStack);
 
     /**
-     * Get the {@link ItemStack} in off hand.
+     * Gets the {@link ItemStack} in off hand.
      *
      * @return the item in off hand
      */
     ItemStack getItemInOffHand();
 
     /**
-     * Change the off hand {@link ItemStack}.
+     * Changes the off hand {@link ItemStack}.
      *
      * @param itemStack the off hand {@link ItemStack}
      */
     void setItemInOffHand(ItemStack itemStack);
 
     /**
-     * Get the {@link ItemStack} in the specific hand.
+     * Gets the {@link ItemStack} in the specific hand.
      *
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
@@ -64,7 +64,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Change the {@link ItemStack} in the specific hand.
+     * Changes the {@link ItemStack} in the specific hand.
      *
      * @param hand  the hand to set the item to
      * @param stack the {@link ItemStack} to set
@@ -82,63 +82,63 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Get the helmet.
+     * Gets the helmet.
      *
      * @return the helmet
      */
     ItemStack getHelmet();
 
     /**
-     * Change the helmet.
+     * Changes the helmet.
      *
      * @param itemStack the helmet
      */
     void setHelmet(ItemStack itemStack);
 
     /**
-     * Get the chestplate.
+     * Gets the chestplate.
      *
      * @return the chestplate
      */
     ItemStack getChestplate();
 
     /**
-     * Change the chestplate.
+     * Changes the chestplate.
      *
      * @param itemStack the chestplate
      */
     void setChestplate(ItemStack itemStack);
 
     /**
-     * Get the leggings.
+     * Gets the leggings.
      *
      * @return the leggings
      */
     ItemStack getLeggings();
 
     /**
-     * Change the leggings.
+     * Changes the leggings.
      *
      * @param itemStack the leggings
      */
     void setLeggings(ItemStack itemStack);
 
     /**
-     * Get the boots.
+     * Gets the boots.
      *
      * @return the boots
      */
     ItemStack getBoots();
 
     /**
-     * Change the boots.
+     * Changes the boots.
      *
      * @param itemStack the boots
      */
     void setBoots(ItemStack itemStack);
 
     /**
-     * Get the equipment in a specific slot.
+     * Gets the equipment in a specific slot.
      *
      * @param slot the equipment to get the item from
      * @return the equipment {@link ItemStack}
@@ -163,7 +163,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send all the equipments to a {@link PlayerConnection}.
+     * Sends all the equipments to a {@link PlayerConnection}.
      *
      * @param connection the connection to send the equipments to
      */
@@ -175,7 +175,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send all the equipments to all viewers.
+     * Sends all the equipments to all viewers.
      */
     default void syncEquipments() {
         if (!(this instanceof Viewable))
@@ -191,7 +191,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send a specific equipment to viewers.
+     * Sends a specific equipment to viewers.
      *
      * @param slot the slot of the equipment
      */
@@ -213,7 +213,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Get the packet with all the equipments.
+     * Gets the packet with all the equipments.
      *
      * @return the packet with the equipments
      * @throws IllegalStateException if 'this' is not an {@link Entity}

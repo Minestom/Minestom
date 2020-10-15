@@ -18,7 +18,7 @@ public class WrittenBookMeta implements ItemMeta {
     private ArrayList<ColoredText> pages = new ArrayList<>();
 
     /**
-     * Get if the book is resolved
+     * Gets if the book is resolved.
      *
      * @return true if the book is resolved, false otherwise
      */
@@ -27,7 +27,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Set to true when the book (or a book from the stack)
+     * Sets to true when the book (or a book from the stack)
      * is opened for the first time after being created.
      *
      * @param resolved true to make the book resolved, false otherwise
@@ -37,7 +37,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Get the copy tier of the book
+     * Gets the copy tier of the book.
      *
      * @return the copy tier of the book
      */
@@ -46,7 +46,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Set the copy tier of the book
+     * Sets the copy tier of the book.
      *
      * @param generation the copy tier of the book
      */
@@ -55,7 +55,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Get the author of the book
+     * Gets the author of the book.
      *
      * @return the author of the book
      */
@@ -64,7 +64,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Set the author of the book
+     * Sets the author of the book.
      *
      * @param author the author of the book
      */
@@ -73,7 +73,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Get the title of the book
+     * Gets the title of the book.
      *
      * @return the title of the book
      */
@@ -82,7 +82,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Set the title of the book
+     * Sets the title of the book.
      *
      * @param title the title of the book
      */
@@ -91,9 +91,9 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Get an {@link ArrayList} containing all the pages
+     * Gets an {@link ArrayList} containing all the pages.
      * <p>
-     * The list is modifiable
+     * The list is modifiable.
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
@@ -102,7 +102,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     /**
-     * Set the {@link ArrayList} containing the book pages
+     * Sets the {@link ArrayList} containing the book pages.
      *
      * @param pages the array list containing the book pages
      */

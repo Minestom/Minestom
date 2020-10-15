@@ -5,7 +5,7 @@ public class StorageOptions {
     private boolean compression;
 
     /**
-     * Get if compression should be enabled
+     * Gets if compression should be enabled.
      *
      * @return true if compression should be enabled, false otherwise
      */
@@ -14,7 +14,7 @@ public class StorageOptions {
     }
 
     /**
-     * Define if the storage solution should use compression
+     * Defines if the storage solution should use compression.
      *
      * @param compression true to enable compression, false otherwise
      * @return the reference to the current options

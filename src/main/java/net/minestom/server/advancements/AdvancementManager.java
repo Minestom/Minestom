@@ -7,16 +7,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Used to manage all the registered {@link AdvancementTab}
+ * Used to manage all the registered {@link AdvancementTab}.
  * <p>
- * Use {@link #createTab(String, AdvancementRoot)} to create a tab with the appropriate {@link AdvancementRoot}
+ * Use {@link #createTab(String, AdvancementRoot)} to create a tab with the appropriate {@link AdvancementRoot}.
  */
 public class AdvancementManager {
 
     private final Map<String, AdvancementTab> advancementTabMap = new ConcurrentHashMap<>();
 
     /**
-     * Create a new {@link AdvancementTab} with a single {@link AdvancementRoot}
+     * Creates a new {@link AdvancementTab} with a single {@link AdvancementRoot}.
      *
      * @param rootIdentifier the root identifier
      * @param root           the root advancement
@@ -32,17 +32,17 @@ public class AdvancementManager {
     }
 
     /**
-     * Get an advancement tab by its root identifier
+     * Gets an advancement tab by its root identifier.
      *
      * @param rootIdentifier the root identifier of the tab
-     * @return the {@link AdvancementTab} associated with the identifer, null if not any
+     * @return the {@link AdvancementTab} associated with the identifier, null if not any
      */
     public AdvancementTab getTab(String rootIdentifier) {
         return advancementTabMap.get(rootIdentifier);
     }
 
     /**
-     * Get all the created {@link AdvancementTab}
+     * Gets all the created {@link AdvancementTab}.
      *
      * @return the collection containing all created {@link AdvancementTab}
      */

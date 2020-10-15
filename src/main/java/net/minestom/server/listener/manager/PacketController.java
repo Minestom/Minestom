@@ -10,7 +10,7 @@ public class PacketController {
     }
 
     /**
-     * Get if the packet is cancelled
+     * Gets if the packet is cancelled.
      *
      * @return true if the packet will be cancelled, false otherwise
      */
@@ -19,7 +19,7 @@ public class PacketController {
     }
 
     /**
-     * Used to cancel the packet
+     * Used to cancel the packet.
      *
      * @param cancel true if the packet should be cancelled, false otherwise
      */
@@ -28,7 +28,7 @@ public class PacketController {
     }
 
     /**
-     * Get the listener associated with the packet
+     * Gets the listener associated with the packet.
      *
      * @return the packet's listener
      */
@@ -37,9 +37,9 @@ public class PacketController {
     }
 
     /**
-     * Change the packet listener, setting it to null cancel the listener
+     * Changes the packet listener, setting it to null cancel the listener.
      * <p>
-     * WARNING: this will overwrite the default minestom listener
+     * WARNING: this will overwrite the default minestom listener.
      *
      * @param packetListenerConsumer the new packet listener
      */
