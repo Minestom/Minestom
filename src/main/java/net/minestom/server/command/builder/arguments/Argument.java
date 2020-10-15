@@ -7,6 +7,11 @@ import net.minestom.server.command.builder.Command;
  * An argument is meant to be parsed when added into a {@link Command} syntax.
  * <p>
  * You can create your own with your own special conditions.
+ * <p>
+ * Here in order, how is parsed an argument: {@link #getCorrectionResult(String)} to check
+ * if the syntax is correct, {@link #parse(String)} to convert the correct argument
+ * and {@link #getConditionResult(Object)} to verify that the parsed object validate the additional
+ * conditions.
  *
  * @param <T> the type of this parsed argument
  */
@@ -15,9 +20,9 @@ public abstract class Argument<T> {
     public static final int SUCCESS = 0;
     public static final int UNDEFINED_ERROR = -1;
 
-    private String id;
-    private boolean allowSpace;
-    private boolean useRemaining;
+    private final String id;
+    private final boolean allowSpace;
+    private final boolean useRemaining;
 
     private ArgumentCallback callback;
 
@@ -36,7 +41,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Used to provide the appropriate error concerning the args received
+     * Used to provide the appropriate error concerning the received args.
      *
      * @param value The received argument
      * @return The success/error code
@@ -44,7 +49,7 @@ public abstract class Argument<T> {
     public abstract int getCorrectionResult(String value);
 
     /**
-     * The argument syntax is correct, parsed here to the correct type
+     * The argument syntax is correct, parsed here to the correct type.
      *
      * @param value The correct argument
      * @return The parsed argument
@@ -52,8 +57,8 @@ public abstract class Argument<T> {
     public abstract T parse(String value);
 
     /**
-     * Argument is at least partially correct (the syntax is good and the argument has been parsed)
-     * but some other conditions could take place (ex: min/max requirement for numbers)
+     * The argument is at least partially correct (the syntax is good and the argument has been parsed)
+     * but some other conditions could take place (ex: min/max requirement for numbers).
      *
      * @param value The parsed argument
      * @return The success/error code
@@ -92,7 +97,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Get the argument callback to check if the argument-specific conditions are validated or not
+     * Get the {@link ArgumentCallback} to check if the argument-specific conditions are validated or not.
      *
      * @return the argument callback
      */
@@ -101,7 +106,7 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Set the {@link ArgumentCallback}
+     * Set the {@link ArgumentCallback}.
      *
      * @param callback the argument callback
      */

@@ -4,7 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 
 /**
- * Callback executed when an error is found within the {@link Argument}
+ * Callback executed when an error is found within the {@link Argument}.
  */
 @FunctionalInterface
 public interface ArgumentCallback {
