@@ -6,45 +6,46 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represent an {@link Entity} which can have {@link ItemStack} in hands and armor slots
+ * Represents an {@link Entity} which can have {@link ItemStack} in hands and armor slots
  */
 public interface EquipmentHandler {
 
     /**
-     * Get the {@link ItemStack} in main hand
+     * Get the {@link ItemStack} in main hand.
      *
      * @return the {@link ItemStack} in main hand
      */
     ItemStack getItemInMainHand();
 
     /**
-     * Change the main hand {@link ItemStack}
+     * Change the main hand {@link ItemStack}.
      *
      * @param itemStack the main hand {@link ItemStack}
      */
     void setItemInMainHand(ItemStack itemStack);
 
     /**
-     * Get the {@link ItemStack} in off hand
+     * Get the {@link ItemStack} in off hand.
      *
      * @return the item in off hand
      */
     ItemStack getItemInOffHand();
 
     /**
-     * Change the off hand {@link ItemStack}
+     * Change the off hand {@link ItemStack}.
      *
      * @param itemStack the off hand {@link ItemStack}
      */
     void setItemInOffHand(ItemStack itemStack);
 
     /**
-     * Get the {@link ItemStack} in the specific hand
+     * Get the {@link ItemStack} in the specific hand.
      *
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
@@ -63,7 +64,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Change the {@link ItemStack} in the specific hand
+     * Change the {@link ItemStack} in the specific hand.
      *
      * @param hand  the hand to set the item to
      * @param stack the {@link ItemStack} to set
@@ -81,63 +82,63 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Get the helmet
+     * Get the helmet.
      *
      * @return the helmet
      */
     ItemStack getHelmet();
 
     /**
-     * Change the helmet
+     * Change the helmet.
      *
      * @param itemStack the helmet
      */
     void setHelmet(ItemStack itemStack);
 
     /**
-     * Get the chestplate
+     * Get the chestplate.
      *
      * @return the chestplate
      */
     ItemStack getChestplate();
 
     /**
-     * Change the chestplate
+     * Change the chestplate.
      *
      * @param itemStack the chestplate
      */
     void setChestplate(ItemStack itemStack);
 
     /**
-     * Get the leggings
+     * Get the leggings.
      *
      * @return the leggings
      */
     ItemStack getLeggings();
 
     /**
-     * Change the leggings
+     * Change the leggings.
      *
      * @param itemStack the leggings
      */
     void setLeggings(ItemStack itemStack);
 
     /**
-     * Get the boots
+     * Get the boots.
      *
      * @return the boots
      */
     ItemStack getBoots();
 
     /**
-     * Change the boots
+     * Change the boots.
      *
      * @param itemStack the boots
      */
     void setBoots(ItemStack itemStack);
 
     /**
-     * Get the equipment in a specific slot
+     * Get the equipment in a specific slot.
      *
      * @param slot the equipment to get the item from
      * @return the equipment {@link ItemStack}
@@ -162,7 +163,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send all the equipments to a {@link PlayerConnection}
+     * Send all the equipments to a {@link PlayerConnection}.
      *
      * @param connection the connection to send the equipments to
      */
@@ -174,7 +175,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send all the equipments to all viewers
+     * Send all the equipments to all viewers.
      */
     default void syncEquipments() {
         if (!(this instanceof Viewable))
@@ -190,7 +191,7 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Send a specific equipment to viewers
+     * Send a specific equipment to viewers.
      *
      * @param slot the slot of the equipment
      */
@@ -212,13 +213,13 @@ public interface EquipmentHandler {
     }
 
     /**
-     * Get the packet with all the equipments
+     * Get the packet with all the equipments.
      *
      * @return the packet with the equipments
+     * @throws IllegalStateException if 'this' is not an {@link Entity}
      */
     default EntityEquipmentPacket getEquipmentsPacket() {
-        if (!(this instanceof Entity))
-            throw new IllegalStateException("Only accessible for Entity");
+        Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
 

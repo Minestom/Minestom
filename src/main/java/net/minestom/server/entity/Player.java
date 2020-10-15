@@ -62,7 +62,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * Those are the major actors of the server, they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}
+ * Those are the major actors of the server,
+ * they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
@@ -1945,7 +1946,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Get if multi player breaking is enabled
         final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
-        // Get the stage from the custom block object if it is, otherwise use the local fieldl
+        // Get the stage from the custom block object if it is, otherwise use the local field
         final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
         // Retrieve the break delay for the current stage
         this.targetBreakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);

@@ -50,7 +50,7 @@ public class InstanceContainer extends Instance {
     private StorageLocation storageLocation;
 
     // the shared instances assigned to this instance
-    private List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
+    private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
     // the chunk generator used, can be null
     private ChunkGenerator chunkGenerator;
@@ -59,8 +59,8 @@ public class InstanceContainer extends Instance {
     // contains all the chunks to remove during the next instance tick
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
-    private ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
-    private Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+    private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
+    private final Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
@@ -85,7 +85,7 @@ public class InstanceContainer extends Instance {
         this.storageLocation = storageLocation;
 
         // Set the default chunk supplier using DynamicChunk
-        setChunkSupplier((instance, biomes, chunkX, chunkZ) -> new DynamicChunk(instance, biomes, chunkX, chunkZ));
+        setChunkSupplier(DynamicChunk::new);
 
         // Set the default chunk loader which use the instance's StorageLocation and ChunkSupplier to save and load chunks
         setChunkLoader(new MinestomBasicChunkLoader(this));
@@ -136,11 +136,9 @@ public class InstanceContainer extends Instance {
             UNSAFE_setBlock(chunk, x, y, z, blockStateId, customBlock, data);
         } else {
             if (hasEnabledAutoChunkLoad()) {
-                final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
-                final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
-                loadChunk(chunkX, chunkZ, c -> {
-                    UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data);
-                });
+                final int chunkX = ChunkUtils.getChunkCoordinate(x);
+                final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+                loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data));
             } else {
                 throw new IllegalStateException("Tried to set a block to an unloaded chunk with auto chunk load disabled");
             }
@@ -371,9 +369,7 @@ public class InstanceContainer extends Instance {
             ParticlePacket particlePacket = ParticleCreator.createParticlePacket(Particle.BLOCK, false,
                     x + 0.5f, y, z + 0.5f,
                     0.4f, 0.5f, 0.4f,
-                    0.3f, 125, writer -> {
-                        writer.writeVarInt(blockStateId);
-                    });
+                    0.3f, 125, writer -> writer.writeVarInt(blockStateId));
 
             chunk.getViewers().forEach(p -> {
                 // The player who breaks the block already get particles client-side
@@ -478,9 +474,7 @@ public class InstanceContainer extends Instance {
     public void saveChunksToStorage(Runnable callback) {
         if (chunkLoader.supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
-            getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> {
-                saveChunkToStorage(c, null);
-            }));
+            getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> saveChunkToStorage(c, null)));
             try {
                 parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);

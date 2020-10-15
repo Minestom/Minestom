@@ -62,7 +62,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected int chunkX, chunkZ;
 
     // Options
-    private boolean shouldGenerate;
+    private final boolean shouldGenerate;
 
     // Packet cache
     private volatile boolean enableCachePacket;

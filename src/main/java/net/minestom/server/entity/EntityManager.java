@@ -36,10 +36,7 @@ public final class EntityManager {
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
-            {
-                final Player finalWaitingPlayer = waitingPlayer;
-                spawningInstance.scheduleNextTick(instance -> finalWaitingPlayer.setInstance(instance));
-            }
+            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
         }
     }
 

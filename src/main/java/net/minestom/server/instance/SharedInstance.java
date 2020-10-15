@@ -28,7 +28,7 @@ public class SharedInstance extends Instance {
 
     @Override
     public void refreshBlockStateId(BlockPosition blockPosition, short blockStateId) {
-        instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
+        this.instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
     }
 
     @Override
@@ -38,12 +38,12 @@ public class SharedInstance extends Instance {
 
     @Override
     public void loadChunk(int chunkX, int chunkZ, ChunkCallback callback) {
-        instanceContainer.loadChunk(chunkX, chunkZ, callback);
+        this.instanceContainer.loadChunk(chunkX, chunkZ, callback);
     }
 
     @Override
     public void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback) {
-        instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
+        this.instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SharedInstance extends Instance {
 
     @Override
     public void saveChunkToStorage(Chunk chunk, Runnable callback) {
-        instanceContainer.saveChunkToStorage(chunk, callback);
+        this.instanceContainer.saveChunkToStorage(chunk, callback);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SharedInstance extends Instance {
 
     @Override
     public void setChunkGenerator(ChunkGenerator chunkGenerator) {
-        instanceContainer.setChunkGenerator(chunkGenerator);
+        this.instanceContainer.setChunkGenerator(chunkGenerator);
     }
 
     @Override
@@ -98,17 +98,17 @@ public class SharedInstance extends Instance {
 
     @Override
     public void setStorageLocation(StorageLocation storageLocation) {
-        instanceContainer.setStorageLocation(storageLocation);
+        this.instanceContainer.setStorageLocation(storageLocation);
     }
 
     @Override
     public void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
-        instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
+        this.instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
     }
 
     @Override
     protected void createChunk(int chunkX, int chunkZ, ChunkCallback callback) {
-        instanceContainer.createChunk(chunkX, chunkZ, callback);
+        this.instanceContainer.createChunk(chunkX, chunkZ, callback);
     }
 
     @Override
@@ -128,22 +128,22 @@ public class SharedInstance extends Instance {
 
     @Override
     public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
-        instanceContainer.setBlockStateId(x, y, z, blockStateId, data);
+        this.instanceContainer.setBlockStateId(x, y, z, blockStateId, data);
     }
 
     @Override
     public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        instanceContainer.setCustomBlock(x, y, z, customBlockId, data);
+        this.instanceContainer.setCustomBlock(x, y, z, customBlockId, data);
     }
 
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
+        this.instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
     }
 
     @Override
     public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
-        instanceContainer.scheduleUpdate(time, unit, position);
+        this.instanceContainer.scheduleUpdate(time, unit, position);
     }
 
     /**

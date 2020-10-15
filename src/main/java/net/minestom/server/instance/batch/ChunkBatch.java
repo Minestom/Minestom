@@ -86,7 +86,7 @@ public class ChunkBatch implements InstanceBatch {
 
     /**
      * Execute the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
-     * (which means that the callback can be called 50ms after, and in a determinable thread)
+     * (which means that the callback can be called 50ms after, but in a determinable thread)
      *
      * @param callback the callback to execute once the blocks are placed
      */
