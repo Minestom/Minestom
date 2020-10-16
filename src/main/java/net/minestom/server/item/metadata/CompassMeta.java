@@ -83,7 +83,9 @@ public class CompassMeta implements ItemMeta {
     @Override
     public void write(NBTCompound compound) {
         compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
-        compound.setString("LodestoneDimension", lodestoneDimension);
+        if(lodestoneDimension != null) {
+            compound.setString("LodestoneDimension", lodestoneDimension);
+        }
 
         {
             NBTCompound posCompound = new NBTCompound();
