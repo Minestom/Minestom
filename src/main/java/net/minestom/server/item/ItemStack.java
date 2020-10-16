@@ -118,7 +118,7 @@ public class ItemStack implements DataContainer {
         if (!nbt.containsKey("id") || !nbt.containsKey("Count"))
             throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
         final Material material = Registries.getMaterial(nbt.getString("id"));
-        final byte count = nbt.getByte("Count");
+        final byte count = nbt.getAsByte("Count");
 
         ItemStack s = new ItemStack(material, count);
 

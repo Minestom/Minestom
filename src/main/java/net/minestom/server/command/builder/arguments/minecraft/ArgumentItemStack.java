@@ -57,7 +57,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             ItemStack itemStack = new ItemStack(material, (byte) 1);
 
-            final String sNBT = value.substring(nbtIndex);
+            final String sNBT = value.substring(nbtIndex).replace("\\\"", "\"");
+
             final NBTCompound compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
 
             NBTUtils.loadDataIntoItem(itemStack, compound);

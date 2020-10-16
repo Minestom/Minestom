@@ -17,8 +17,6 @@ public final class ChatParser {
      * @return a {@link ColoredText} representing the text
      */
     public static ColoredText toColoredText(String json) {
-        json = json.replace("\\\"", "\"");
-
         StringBuilder builder = new StringBuilder();
 
         try {
@@ -30,7 +28,7 @@ public final class ChatParser {
             } else if (element instanceof JsonArray) {
                 final JsonArray array = element.getAsJsonArray();
                 for (JsonElement e : array) {
-                    JsonObject object = e.getAsJsonObject();
+                    final JsonObject object = e.getAsJsonObject();
                     appendBuilder(builder, object);
                 }
             }
@@ -47,9 +45,9 @@ public final class ChatParser {
 
         final boolean hasExtra = object.has("extra");
         if (hasExtra) {
-            JsonArray extraArray = object.get("extra").getAsJsonArray();
+            final JsonArray extraArray = object.get("extra").getAsJsonArray();
             for (JsonElement extraElement : extraArray) {
-                JsonObject extraObject = extraElement.getAsJsonObject();
+                final JsonObject extraObject = extraElement.getAsJsonObject();
                 builder.append(parseText(extraObject));
             }
         }
@@ -90,7 +88,7 @@ public final class ChatParser {
                 builder.append("{").append(colorString).append("}");
             } else {
                 // Color simple name
-                ChatColor color = ChatColor.fromName(colorString);
+                final ChatColor color = ChatColor.fromName(colorString);
                 builder.append(color);
             }
         }
