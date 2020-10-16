@@ -6,7 +6,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 public class LeatherArmorMeta implements ItemMeta {
 
     private boolean modified;
-    private int r, g, b;
+    private byte red, green, blue;
 
     /**
      * Sets the color of the leather armor piece.
@@ -15,9 +15,9 @@ public class LeatherArmorMeta implements ItemMeta {
      */
     public void setColor(ChatColor color) {
         // TODO using "CHAT color" is pretty weird, maybe that the class should be renamed to "Color"
-        this.r = color.getRed();
-        this.g = color.getGreen();
-        this.b = color.getBlue();
+        this.red = color.getRed();
+        this.green = color.getGreen();
+        this.blue = color.getBlue();
         this.modified = true;
     }
 
@@ -25,9 +25,9 @@ public class LeatherArmorMeta implements ItemMeta {
      * Resets the color to the default leather one.
      */
     public void reset() {
-        this.r = 0;
-        this.g = 0;
-        this.b = 0;
+        this.red = 0;
+        this.green = 0;
+        this.blue = 0;
         this.modified = false;
     }
 
@@ -37,7 +37,7 @@ public class LeatherArmorMeta implements ItemMeta {
      * @return the red component
      */
     public int getRed() {
-        return r;
+        return red;
     }
 
     /**
@@ -46,7 +46,7 @@ public class LeatherArmorMeta implements ItemMeta {
      * @return the green component
      */
     public int getGreen() {
-        return g;
+        return green;
     }
 
     /**
@@ -55,7 +55,7 @@ public class LeatherArmorMeta implements ItemMeta {
      * @return the blue component
      */
     public int getBlue() {
-        return b;
+        return blue;
     }
 
     /**
@@ -78,9 +78,9 @@ public class LeatherArmorMeta implements ItemMeta {
             return false;
         final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
         return leatherArmorMeta.modified == modified &&
-                leatherArmorMeta.r == r &&
-                leatherArmorMeta.g == g &&
-                leatherArmorMeta.b == b;
+                leatherArmorMeta.red == red &&
+                leatherArmorMeta.green == green &&
+                leatherArmorMeta.blue == blue;
     }
 
     @Override
@@ -89,9 +89,9 @@ public class LeatherArmorMeta implements ItemMeta {
             final NBTCompound nbtCompound = compound.getCompound("display");
             if (nbtCompound.containsKey("color")) {
                 final int color = nbtCompound.getInt("color");
-                this.r = (color >> 16) & 0x000000FF;
-                this.g = (color >> 8) & 0x000000FF;
-                this.b = (color) & 0x000000FF;
+                this.red = (byte) ((color >> 16) & 0x000000FF);
+                this.green = (byte) ((color >> 8) & 0x000000FF);
+                this.blue = (byte) ((color) & 0x000000FF);
             }
         }
     }
@@ -105,7 +105,7 @@ public class LeatherArmorMeta implements ItemMeta {
             } else {
                 displayCompound = compound.getCompound("display");
             }
-            final int color = r << 16 + g << 8 + b;
+            final int color = red << 16 + green << 8 + blue;
             displayCompound.setInt("color", color);
         }
     }
@@ -114,9 +114,9 @@ public class LeatherArmorMeta implements ItemMeta {
     public ItemMeta clone() {
         LeatherArmorMeta leatherArmorMeta = new LeatherArmorMeta();
         leatherArmorMeta.modified = modified;
-        leatherArmorMeta.r = r;
-        leatherArmorMeta.g = g;
-        leatherArmorMeta.b = b;
+        leatherArmorMeta.red = red;
+        leatherArmorMeta.green = green;
+        leatherArmorMeta.blue = blue;
 
         return leatherArmorMeta;
     }

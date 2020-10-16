@@ -24,22 +24,22 @@ public class ChatColor {
     public static final ChatColor OBFUSCATED = new ChatColor("obfuscated");
 
     // Color
-    public static final ChatColor BLACK = fromRGB(0, 0, 0, 0, "black");
-    public static final ChatColor DARK_BLUE = fromRGB(0, 0, 170, 1, "dark_blue");
-    public static final ChatColor DARK_GREEN = fromRGB(0, 170, 0, 2, "dark_green");
-    public static final ChatColor DARK_CYAN = fromRGB(0, 170, 170, 3, "dark_cyan");
-    public static final ChatColor DARK_RED = fromRGB(170, 0, 0, 4, "dark_red");
-    public static final ChatColor PURPLE = fromRGB(170, 0, 170, 5, "purple");
-    public static final ChatColor GOLD = fromRGB(255, 170, 0, 6, "gold");
-    public static final ChatColor GRAY = fromRGB(170, 170, 170, 7, "gray");
-    public static final ChatColor DARK_GRAY = fromRGB(85, 85, 85, 8, "dark_gray");
-    public static final ChatColor BLUE = fromRGB(85, 85, 255, 9, "blue");
-    public static final ChatColor BRIGHT_GREEN = fromRGB(85, 255, 85, 10, "green");
-    public static final ChatColor CYAN = fromRGB(85, 255, 255, 11, "cyan");
-    public static final ChatColor RED = fromRGB(255, 85, 85, 12, "red");
-    public static final ChatColor PINK = fromRGB(255, 85, 255, 13, "pink");
-    public static final ChatColor YELLOW = fromRGB(255, 255, 85, 14, "yellow");
-    public static final ChatColor WHITE = fromRGB(255, 255, 255, 15, "white");
+    public static final ChatColor BLACK = fromRGB((byte) 0, (byte) 0, (byte) 0, 0, "black");
+    public static final ChatColor DARK_BLUE = fromRGB((byte) 0, (byte) 0, (byte) 170, 1, "dark_blue");
+    public static final ChatColor DARK_GREEN = fromRGB((byte) 0, (byte) 170, (byte) 0, 2, "dark_green");
+    public static final ChatColor DARK_CYAN = fromRGB((byte) 0, (byte) 170, (byte) 170, 3, "dark_cyan");
+    public static final ChatColor DARK_RED = fromRGB((byte) 170, (byte) 0, (byte) 0, 4, "dark_red");
+    public static final ChatColor PURPLE = fromRGB((byte) 170, (byte) 0, (byte) 170, 5, "purple");
+    public static final ChatColor GOLD = fromRGB((byte) 255, (byte) 170, (byte) 0, 6, "gold");
+    public static final ChatColor GRAY = fromRGB((byte) 170, (byte) 170, (byte) 170, 7, "gray");
+    public static final ChatColor DARK_GRAY = fromRGB((byte) 85, (byte) 85, (byte) 85, 8, "dark_gray");
+    public static final ChatColor BLUE = fromRGB((byte) 85, (byte) 85, (byte) 255, 9, "blue");
+    public static final ChatColor BRIGHT_GREEN = fromRGB((byte) 85, (byte) 255, (byte) 85, 10, "green");
+    public static final ChatColor CYAN = fromRGB((byte) 85, (byte) 255, (byte) 255, 11, "cyan");
+    public static final ChatColor RED = fromRGB((byte) 255, (byte) 85, (byte) 85, 12, "red");
+    public static final ChatColor PINK = fromRGB((byte) 255, (byte) 85, (byte) 255, 13, "pink");
+    public static final ChatColor YELLOW = fromRGB((byte) 255, (byte) 255, (byte) 85, 14, "yellow");
+    public static final ChatColor WHITE = fromRGB((byte) 255, (byte) 255, (byte) 255, 15, "white");
 
     private static final Int2ObjectMap<ChatColor> idColorMap = new Int2ObjectOpenHashMap<>();
     private static final Map<String, ChatColor> colorCode = new HashMap<>();
@@ -114,14 +114,14 @@ public class ChatColor {
     }
 
     private boolean empty;
-    private int red, green, blue;
+    private byte red, green, blue;
     private int id;
 
     private String codeName;
 
     private boolean special;
 
-    private ChatColor(int r, int g, int b, int id, String codeName) {
+    private ChatColor(byte r, byte g, byte b, int id, String codeName) {
         this.empty = false;
         this.red = r;
         this.green = g;
@@ -148,11 +148,11 @@ public class ChatColor {
      * @param b the blue component
      * @return a chat color with the specified RGB color
      */
-    public static ChatColor fromRGB(int r, int g, int b) {
+    public static ChatColor fromRGB(byte r, byte g, byte b) {
         return fromRGB(r, g, b, -1, null);
     }
 
-    private static ChatColor fromRGB(int r, int g, int b, int id, String codeName) {
+    private static ChatColor fromRGB(byte r, byte g, byte b, int id, String codeName) {
         return new ChatColor(r, g, b, id, codeName);
     }
 
@@ -195,7 +195,7 @@ public class ChatColor {
      *
      * @return the red component of the color
      */
-    public int getRed() {
+    public byte getRed() {
         return red;
     }
 
@@ -204,7 +204,7 @@ public class ChatColor {
      *
      * @return the green component of the color
      */
-    public int getGreen() {
+    public byte getGreen() {
         return green;
     }
 
@@ -213,7 +213,7 @@ public class ChatColor {
      *
      * @return the blue component of the color
      */
-    public int getBlue() {
+    public byte getBlue() {
         return blue;
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.chat.ChatColor;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
@@ -21,6 +22,9 @@ public class PotionMeta implements ItemMeta {
 
     private PotionType potionType;
     private List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
+
+    private boolean hasColor;
+    private byte red, green, blue;
 
     /**
      * Gets the potion type.
@@ -49,6 +53,25 @@ public class PotionMeta implements ItemMeta {
         return customPotionEffects;
     }
 
+    /**
+     * Changes the color of the potion.
+     *
+     * @param color the new color of the potion
+     */
+    public void setColor(ChatColor color) {
+        // FIXME: weird usage of ChatColor, should maybe rename
+
+        if (color == null) {
+            this.hasColor = false;
+            return;
+        }
+
+        this.red = color.getRed();
+        this.green = color.getGreen();
+        this.blue = color.getBlue();
+        this.hasColor = true;
+    }
+
     @Override
     public boolean hasNbt() {
         return potionType != null;
@@ -56,7 +79,15 @@ public class PotionMeta implements ItemMeta {
 
     @Override
     public boolean isSimilar(ItemMeta itemMeta) {
-        return itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).potionType == potionType;
+        if (!(itemMeta instanceof PotionMeta))
+            return false;
+        PotionMeta potionMeta = (PotionMeta) itemMeta;
+        return potionMeta.potionType == potionType &&
+                potionMeta.customPotionEffects.equals(customPotionEffects) &&
+                potionMeta.hasColor == hasColor &&
+                potionMeta.red == red &&
+                potionMeta.green == green &&
+                potionMeta.blue == blue;
     }
 
     @Override
@@ -64,6 +95,7 @@ public class PotionMeta implements ItemMeta {
         if (compound.containsKey("Potion")) {
             this.potionType = Registries.getPotionType(compound.getString("Potion"));
         }
+
         if (compound.containsKey("CustomPotionEffects")) {
             NBTList<NBTCompound> customEffectList = compound.getList("CustomPotionEffects");
             for (NBTCompound potionCompound : customEffectList) {
@@ -77,6 +109,13 @@ public class PotionMeta implements ItemMeta {
                 this.customPotionEffects.add(
                         new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
             }
+        }
+
+        if (compound.containsKey("CustomPotionColor")) {
+            final int color = compound.getInt("CustomPotionColor");
+            this.red = (byte) ((color >> 16) & 0x000000FF);
+            this.green = (byte) ((color >> 8) & 0x000000FF);
+            this.blue = (byte) ((color) & 0x000000FF);
         }
     }
 
@@ -102,12 +141,24 @@ public class PotionMeta implements ItemMeta {
 
             compound.set("CustomPotionEffects", potionList);
         }
+
+        if (hasColor) {
+            final int color = red << 16 + green << 8 + blue;
+            compound.setInt("CustomPotionColor", color);
+        }
+
     }
 
     @Override
     public ItemMeta clone() {
         PotionMeta potionMeta = new PotionMeta();
         potionMeta.potionType = potionType;
+        potionMeta.customPotionEffects.addAll(customPotionEffects);
+
+        potionMeta.hasColor = hasColor;
+        potionMeta.red = red;
+        potionMeta.green = green;
+        potionMeta.blue = blue;
 
         return potionMeta;
     }
