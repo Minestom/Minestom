@@ -141,7 +141,13 @@ dependencies {
     api 'com.github.MadMartian:hydrazine-path-finding:1.4.2'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    api 'com.github.jglrxavpok:Hephaistos:v1.0.5'
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}")
+    implementation("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
+    implementation("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
+        capabilities {
+            requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
+        }
+    }
 
     // LWJGL, for map rendering
     lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
