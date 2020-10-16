@@ -1,10 +1,7 @@
 package net.minestom.server.chat;
 
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 /**
  * Class used to convert JSON string to proper chat message representation.
@@ -20,22 +17,42 @@ public final class ChatParser {
      * @return a {@link ColoredText} representing the text
      */
     public static ColoredText toColoredText(String json) {
+        json = json.replace("\\\"", "\"");
+
         StringBuilder builder = new StringBuilder();
 
-        final JsonObject object = JsonParser.parseString(json).getAsJsonObject();
+        try {
+            final JsonElement element = JsonParser.parseString(json);
 
+            if (element instanceof JsonObject) {
+                final JsonObject object = element.getAsJsonObject();
+                appendBuilder(builder, object);
+            } else if (element instanceof JsonArray) {
+                final JsonArray array = element.getAsJsonArray();
+                for (JsonElement e : array) {
+                    JsonObject object = e.getAsJsonObject();
+                    appendBuilder(builder, object);
+                }
+            }
+
+            return ColoredText.of(builder.toString());
+        } catch (JsonSyntaxException e) {
+            // Not a json text
+            return ColoredText.of(json);
+        }
+    }
+
+    private static void appendBuilder(StringBuilder builder, JsonObject object) {
         builder.append(parseText(object));
 
         final boolean hasExtra = object.has("extra");
         if (hasExtra) {
             JsonArray extraArray = object.get("extra").getAsJsonArray();
-            for (JsonElement element : extraArray) {
-                JsonObject extraObject = element.getAsJsonObject();
+            for (JsonElement extraElement : extraArray) {
+                JsonObject extraObject = extraElement.getAsJsonObject();
                 builder.append(parseText(extraObject));
             }
         }
-
-        return ColoredText.of(builder.toString());
     }
 
     /**
@@ -49,13 +66,25 @@ public final class ChatParser {
         if (!hasText)
             return "";
 
-        final boolean hasColor = textObject.has("color");
-
         StringBuilder builder = new StringBuilder();
 
-        // Add color
-        if (hasColor) {
-            String colorString = textObject.get("color").getAsString();
+        appendColor(textObject, builder);
+        appendExtra(textObject, builder, "bold");
+        appendExtra(textObject, builder, "italic");
+        appendExtra(textObject, builder, "underlined");
+        appendExtra(textObject, builder, "strikethrough");
+        appendExtra(textObject, builder, "obfuscated");
+
+        // Add text
+        final String text = textObject.get("text").getAsString();
+        builder.append(text);
+
+        return builder.toString();
+    }
+
+    private static void appendColor(JsonObject textObject, StringBuilder builder) {
+        if (textObject.has("color")) {
+            final String colorString = textObject.get("color").getAsString();
             if (colorString.startsWith("#")) {
                 // RGB format
                 builder.append("{").append(colorString).append("}");
@@ -65,11 +94,14 @@ public final class ChatParser {
                 builder.append(color);
             }
         }
+    }
 
-        // Add text
-        String text = textObject.get("text").getAsString();
-        builder.append(text);
-
-        return builder.toString();
+    private static void appendExtra(JsonObject textObject, StringBuilder builder, String name) {
+        if (textObject.has(name)) {
+            final boolean value = textObject.get(name).getAsBoolean();
+            if (value) {
+                builder.append("{#").append(name).append("}");
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.math.FloatRange;
@@ -87,6 +88,10 @@ public class Arguments {
 
     public List<Entity> getEntities(String id) {
         return (List<Entity>) getObject(id);
+    }
+
+    public ItemStack getItemStack(String id) {
+        return (ItemStack) getObject(id);
     }
 
     public Object getObject(String id) {

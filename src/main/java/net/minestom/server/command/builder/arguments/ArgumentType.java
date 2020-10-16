@@ -94,4 +94,8 @@ public class ArgumentType {
         return new ArgumentEntities(id);
     }
 
+    public static ArgumentItemStack ItemStack(String id) {
+        return new ArgumentItemStack(id);
+    }
+
 }

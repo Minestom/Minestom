@@ -512,6 +512,9 @@ public final class CommandManager {
                 }
                 packetWriter.writeByte(mask);
             };
+        } else if (argument instanceof ArgumentItemStack) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:item_stack";
         }
 
         return nodes;

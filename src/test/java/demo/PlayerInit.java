@@ -7,10 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.benchmark.BenchmarkManager;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
@@ -253,18 +250,6 @@ public class PlayerInit {
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
                 player.teleport(new Position(0, 73f, 0));
-
-                //player.setHeldItemSlot((byte) 5);
-
-                ColoredText coloredText = ColoredText.of(ChatColor.RED + "" + ChatColor.BOLD + " test" + ChatColor.BRIGHT_GREEN + " lol");
-                coloredText.append("test");
-                player.sendMessage(coloredText);
-                System.out.println(coloredText.toString());
-                {
-                    RichMessage richMessage = RichMessage.of(ColoredText.of(ChatColor.RED + " HEY MESSAGE"));
-                    richMessage.setHoverEvent(ChatHoverEvent.showItem(new ItemStack(Material.STONE, (byte) 5)));
-                    //player.sendMessage(richMessage);
-                }
 
                 player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 1));
 

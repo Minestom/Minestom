@@ -121,8 +121,12 @@ public final class NBTUtils {
         if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
         if (nbt.containsKey("display")) {
-            NBTCompound display = nbt.getCompound("display");
-            if (display.containsKey("Name")) item.setDisplayName(ChatParser.toColoredText(display.getString("Name")));
+            final NBTCompound display = nbt.getCompound("display");
+            if (display.containsKey("Name")) {
+                final String rawName = display.getString("Name");
+                final ColoredText displayName = ChatParser.toColoredText(rawName);
+                item.setDisplayName(displayName);
+            }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
                 ArrayList<ColoredText> lore = new ArrayList<>();
@@ -182,7 +186,7 @@ public final class NBTUtils {
 
     public static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
         for (NBTCompound enchantment : enchantments) {
-            final short level = enchantment.getShort("lvl");
+            final short level = enchantment.getAsShort("lvl");
             final String id = enchantment.getString("id");
             final Enchantment enchant = Registries.getEnchantment(id);
             if (enchant != null) {
