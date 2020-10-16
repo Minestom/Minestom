@@ -117,31 +117,42 @@ public class MapMeta implements ItemMeta {
     @Override
     public void read(NBTCompound compound) {
         if (compound.containsKey("map")) {
-            this.mapId = compound.getInt("map");
+            this.mapId = compound.getAsInt("map");
         }
 
         if (compound.containsKey("map_scale_direction")) {
-            this.mapScaleDirection = compound.getInt("map_scale_direction");
+            this.mapScaleDirection = compound.getAsInt("map_scale_direction");
         }
 
         if (compound.containsKey("Decorations")) {
             final NBTList<NBTCompound> decorationsList = compound.getList("Decorations");
             for (NBTCompound decorationCompound : decorationsList) {
                 final String id = decorationCompound.getString("id");
-                final byte type = decorationCompound.getByte("type");
-                final byte x = decorationCompound.getByte("x");
-                final byte z = decorationCompound.getByte("z");
-                final double rotation = decorationCompound.getByte("rot");
+                final byte type = decorationCompound.getAsByte("type");
+                byte x = 0;
+
+                if(decorationCompound.containsKey("x")) {
+                    x = decorationCompound.getAsByte("x");
+                }
+
+                byte z = 0;
+                if(decorationCompound.containsKey("z")) {
+                    z = decorationCompound.getAsByte("z");
+                }
+
+                double rotation = 0.0;
+                if(decorationCompound.containsKey("rot")) {
+                    rotation = decorationCompound.getAsDouble("rot");
+                }
 
                 this.decorations.add(new MapDecoration(id, type, x, z, rotation));
-
             }
         }
 
         if (compound.containsKey("display")) {
             final NBTCompound displayCompound = compound.getCompound("display");
             if (displayCompound.containsKey("MapColor")) {
-                final int color = displayCompound.getInt("MapColor");
+                final int color = displayCompound.getAsInt("MapColor");
                 this.mapColor = ChatColor.fromId(color);
             }
         }
