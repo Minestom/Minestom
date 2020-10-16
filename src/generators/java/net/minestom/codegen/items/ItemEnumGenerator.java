@@ -15,11 +15,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Generates a Material enum containing all data about items
- *
+ * <p>
  * Assumes that Block is available
  */
 public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
@@ -31,7 +34,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
 
     public static void main(String[] args) throws IOException {
         String targetVersion;
-        if(args.length < 1) {
+        if (args.length < 1) {
             System.err.println("Usage: <MC version> [target folder]");
             return;
         }
@@ -45,12 +48,12 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         }
 
         String targetPart = DEFAULT_TARGET_PATH;
-        if(args.length >= 2) {
+        if (args.length >= 2) {
             targetPart = args[1];
         }
 
         File targetFolder = new File(targetPart);
-        if(!targetFolder.exists()) {
+        if (!targetFolder.exists()) {
             targetFolder.mkdirs();
         }
 
@@ -65,18 +68,19 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
 
     /**
      * Extract item information from Burger (submodule of Minestom)
+     *
      * @param gson
      * @param url
      * @return
      * @throws IOException
      */
     private List<BurgerItem> parseItemsFromBurger(Gson gson, String url) throws IOException {
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()))) {
             LOGGER.debug("\tConnection established, reading file");
             JsonObject dictionary = gson.fromJson(bufferedReader, JsonArray.class).get(0).getAsJsonObject();
             JsonObject itemMap = dictionary.getAsJsonObject("items").getAsJsonObject("item");
             List<BurgerItem> items = new LinkedList<>();
-            for(var entry : itemMap.entrySet()) {
+            for (var entry : itemMap.entrySet()) {
                 BurgerItem item = gson.fromJson(entry.getValue(), BurgerItem.class);
                 items.add(item);
             }
@@ -105,23 +109,24 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
 
         PrismarinePaths paths = gson.fromJson(pathsJson, PrismarinePaths.class);
         LOGGER.debug("Loading PrismarineJS blocks data");
-        List<BurgerItem> burgerItems = parseItemsFromBurger(gson, BURGER_URL_BASE_URL+targetVersion+".json");
+        List<BurgerItem> burgerItems = parseItemsFromBurger(gson, BURGER_URL_BASE_URL + targetVersion + ".json");
 
         TreeSet<ItemContainer> items = new TreeSet<>(ItemContainer::compareTo);
-        for(var burgerItem : burgerItems) {
-            items.add(new ItemContainer(burgerItem.numeric_id, NamespaceID.from("minecraft:"+burgerItem.text_id), burgerItem.max_stack_size, getBlock(burgerItem.text_id.toUpperCase())));
+        for (var burgerItem : burgerItems) {
+            items.add(new ItemContainer(burgerItem.numeric_id, NamespaceID.from("minecraft:" + burgerItem.text_id), burgerItem.max_stack_size, getBlock(burgerItem.text_id.toUpperCase())));
         }
         return items;
     }
 
     /**
      * Returns a block with the given name. Returns null if none
+     *
      * @param itemName
      * @return
      */
     private Block getBlock(String itemName) {
         // special cases
-        if(itemName.equals("REDSTONE"))
+        if (itemName.equals("REDSTONE"))
             return Block.REDSTONE_WIRE;
         // end of special cases
 
@@ -148,7 +153,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         generator.addMethod("isBlock", "()", "boolean", "return correspondingBlock != null && this != AIR;");
         generator.addMethod("getBlock", "()", "Block", "return correspondingBlock;");
 
-        generator.addMethod("fromId", "(short id)", "static "+className,
+        generator.addMethod("fromId", "(short id)", "static " + className,
                 "if(id >= 0 && id < values().length) {",
                 "\treturn values()[id];",
                 "}",
@@ -199,6 +204,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
                 "            case BEETROOT_SOUP:\n" +
                 "            case SWEET_BERRIES:\n" +
                 "            case HONEY_BOTTLE:\n" +
+                "            case CHORUS_FRUIT:\n" +
                 "                return true;\n" +
                 "            default:\n" +
                 "                return false;\n" +
@@ -218,15 +224,17 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     protected void writeSingle(EnumGenerator generator, ItemContainer item) {
         String instanceName = item.getName().getPath().toUpperCase();
         generator.addInstance(instanceName,
-                "\""+item.getName().toString()+"\"",
+                "\"" + item.getName().toString() + "\"",
                 item.getStackSize(),
-                item.getBlock() == null? "null" : ("Block."+item.getBlock().name())
+                item.getBlock() == null ? "null" : ("Block." + item.getBlock().name())
         );
     }
 
     @Override
-    protected void postGeneration() throws IOException {}
+    protected void postGeneration() throws IOException {
+    }
 
     @Override
-    protected void postWrite(EnumGenerator generator) {}
+    protected void postWrite(EnumGenerator generator) {
+    }
 }

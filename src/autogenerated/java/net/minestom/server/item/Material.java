@@ -1082,6 +1082,7 @@ public enum Material {
             case BEETROOT_SOUP:
             case SWEET_BERRIES:
             case HONEY_BOTTLE:
+			case CHORUS_FRUIT:
                 return true;
             default:
                 return false;
