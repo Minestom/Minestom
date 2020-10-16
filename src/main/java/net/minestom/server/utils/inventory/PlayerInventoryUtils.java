@@ -21,7 +21,7 @@ public final class PlayerInventoryUtils {
     }
 
     /**
-     * Convert a packet slot to an internal one
+     * Converts a packet slot to an internal one.
      *
      * @param slot   the packet slot
      * @param offset the slot count separating the up part of the inventory to the bottom part (armor/craft in PlayerInventory, inventory slots in others)

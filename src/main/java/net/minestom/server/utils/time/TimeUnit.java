@@ -7,7 +7,7 @@ public enum TimeUnit {
     TICK, DAY, HOUR, MINUTE, SECOND, MILLISECOND;
 
     /**
-     * Convert a value and its unit to milliseconds
+     * Converts a value and its unit to milliseconds.
      *
      * @param value the time value
      * @return the converted milliseconds based on the time value and the unit

@@ -350,7 +350,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Change the internal player's cursor item
+     * Changes the internal player's cursor item
      * <p>
      * WARNING: the player will not be notified by the change
      *

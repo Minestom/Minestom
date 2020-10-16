@@ -27,7 +27,7 @@ public class FakePlayerController {
     }
 
     /**
-     * Make the player write a message
+     * Makes the player write a message
      *
      * @param message the message to write
      */
@@ -142,7 +142,7 @@ public class FakePlayerController {
     }
 
     /**
-     * Make the player receives a packet
+     * Makes the player receives a packet
      * WARNING: pretty much unsafe, used internally to redirect packets here,
      * you should instead use {@link net.minestom.server.network.player.PlayerConnection#sendPacket(ServerPacket)}
      *

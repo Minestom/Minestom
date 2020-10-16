@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
 /**
- * A builder which represents a fluent Object to built teams
+ * A builder which represents a fluent Object to built teams.
  */
 public class TeamBuilder {
 
@@ -24,7 +24,7 @@ public class TeamBuilder {
     private boolean updateTeam;
 
     /**
-     * Creates an team builder
+     * Creates an team builder.
      *
      * @param name        The name of the new team
      * @param teamManager The manager for the team
@@ -34,7 +34,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Creates an team builder
+     * Creates an team builder.
      *
      * @param team        The new team
      * @param teamManager The manager for the team
@@ -46,7 +46,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the prefix of the {@link Team}
+     * Updates the prefix of the {@link Team}.
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
@@ -56,7 +56,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the prefix of the {@link Team}
+     * Updates the prefix of the {@link Team}.
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
@@ -67,7 +67,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the color of the {@link Team}
+     * Updates the color of the {@link Team}.
      *
      * @param color The new color
      * @return this builder, for chaining
@@ -78,7 +78,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the suffix of the {@link Team}
+     * Updates the suffix of the {@link Team}.
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
@@ -88,7 +88,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the suffix of the {@link Team}
+     * Updates the suffix of the {@link Team}.
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
@@ -99,7 +99,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the display name of the {@link Team}
+     * Updates the display name of the {@link Team}.
      *
      * @param displayName The new display name
      * @return this builder, for chaining
@@ -109,7 +109,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the display name of the {@link Team}
+     * Updates the display name of the {@link Team}.
      *
      * @param displayName The new display name
      * @return this builder, for chaining
@@ -120,7 +120,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the {@link CollisionRule} of the {@link Team}
+     * Updates the {@link CollisionRule} of the {@link Team}.
      *
      * @param rule The new rule
      * @return this builder, for chaining
@@ -131,7 +131,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the {@link NameTagVisibility} of the {@link Team}
+     * Updates the {@link NameTagVisibility} of the {@link Team}.
      *
      * @param visibility The new tag visibility
      * @return this builder, for chaining
@@ -142,7 +142,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the friendly flags of the {@link Team}
+     * Updates the friendly flags of the {@link Team}.
      *
      * @param flag The new friendly flag
      * @return this builder, for chaining
@@ -153,7 +153,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the friendly flags for allow friendly fire
+     * Updates the friendly flags for allow friendly fire.
      *
      * @return this builder, for chaining
      */
@@ -162,7 +162,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Updates the friendly flags to sees invisible players of own team
+     * Updates the friendly flags to sees invisible players of own team.
      *
      * @return this builder, for chaining
      */
@@ -171,9 +171,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the prefix of the {@link Team} without an update packet
+     * Changes the prefix of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
@@ -183,9 +183,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the prefix of the {@link Team} without an update packet
+     * Changes the prefix of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
@@ -196,9 +196,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the suffix of the {@link Team} without an update packet
+     * Changes the suffix of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
@@ -209,9 +209,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the suffix of the {@link Team} without an update packet
+     * Changes the suffix of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
@@ -222,9 +222,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the color of the {@link Team} without an update packet
+     * Changes the color of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param color The new team color
      * @return this builder, for chaining
@@ -235,9 +235,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the display name of the {@link Team} without an update packet
+     * Changes the display name of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param displayName The new display name
      * @return this builder, for chaining
@@ -247,9 +247,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the display name of the {@link Team} without an update packet
+     * Changes the display name of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param displayName The new display name
      * @return this builder, for chaining
@@ -260,9 +260,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the {@link CollisionRule} of the {@link Team} without an update packet
+     * Changes the {@link CollisionRule} of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param rule The new rule
      * @return this builder, for chaining
@@ -273,9 +273,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the {@link NameTagVisibility} of the {@link Team} without an update packet
+     * Changes the {@link NameTagVisibility} of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param visibility The new tag visibility
      * @return this builder, for chaining
@@ -286,9 +286,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the friendly flags of the {@link Team} without an update packet
+     * Changes the friendly flags of the {@link Team} without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @param flag The new flag
      * @return this builder, for chaining
@@ -299,9 +299,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the friendly flags for allow friendly fire without an update packet
+     * Changes the friendly flags for allow friendly fire without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @return this builder, for chaining
      */
@@ -310,9 +310,9 @@ public class TeamBuilder {
     }
 
     /**
-     * Change the friendly flags to sees invisible players of own team without an update packet
+     * Changes the friendly flags to sees invisible players of own team without an update packet.
      * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>
+     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
      * @return this builder, for chaining
      */
@@ -321,7 +321,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Allows to send an update packet when the team is built
+     * Allows to send an update packet when the team is built.
      *
      * @return this builder, for chaining
      */
@@ -331,7 +331,7 @@ public class TeamBuilder {
     }
 
     /**
-     * Built a team
+     * Built a team.
      *
      * @return the built team
      */

@@ -711,7 +711,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Change the gravity of the entity.
+     * Changes the gravity of the entity.
      *
      * @param gravityDragPerTick the gravity drag per tick
      */

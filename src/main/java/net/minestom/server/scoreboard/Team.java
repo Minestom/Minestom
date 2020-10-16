@@ -76,7 +76,7 @@ public class Team {
     private String[] entities;
 
     /**
-     * Default constructor to creates a team
+     * Default constructor to creates a team.
      *
      * @param teamName The registry name for the team
      */
@@ -113,9 +113,9 @@ public class Team {
     }
 
     /**
-     * Adds a member to the {@link Team}
+     * Adds a member to the {@link Team}.
      * <br>
-     * This member can be a {@link Player} or an {@link LivingEntity}
+     * This member can be a {@link Player} or an {@link LivingEntity}.
      *
      * @param member The member to be added
      */
@@ -139,7 +139,7 @@ public class Team {
     }
 
     /**
-     * Removes a member from the {@link Team}
+     * Removes a member from the {@link Team}.
      *
      * @param member The member to be removed
      */
@@ -165,9 +165,9 @@ public class Team {
     }
 
     /**
-     * Change the display name of the team
+     * Changes the display name of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param teamDisplayName The new display name
      */
@@ -177,7 +177,7 @@ public class Team {
     }
 
     /**
-     * Change the display name of the team and sends an update packet
+     * Changes the display name of the team and sends an update packet.
      *
      * @param teamDisplayName The new display name
      */
@@ -187,9 +187,9 @@ public class Team {
     }
 
     /**
-     * Change the {@link NameTagVisibility} of the team
+     * Changes the {@link NameTagVisibility} of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param visibility The new tag visibility
      */
@@ -199,7 +199,7 @@ public class Team {
     }
 
     /**
-     * Change the {@link NameTagVisibility} of the team and sends an update packet
+     * Changes the {@link NameTagVisibility} of the team and sends an update packet.
      *
      * @param nameTagVisibility The new tag visibility
      */
@@ -209,9 +209,9 @@ public class Team {
     }
 
     /**
-     * Change the {@link CollisionRule} of the team
+     * Changes the {@link CollisionRule} of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param rule The new rule
      */
@@ -221,7 +221,7 @@ public class Team {
     }
 
     /**
-     * Change the collision rule of the team and sends an update packet
+     * Changes the collision rule of the team and sends an update packet.
      *
      * @param collisionRule The new collision rule
      */
@@ -231,9 +231,9 @@ public class Team {
     }
 
     /**
-     * Change the color of the team
+     * Changes the color of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param color The new team color
      */
@@ -243,7 +243,7 @@ public class Team {
     }
 
     /**
-     * Change the color of the team and sends an update packet
+     * Changes the color of the team and sends an update packet.
      *
      * @param teamColor The new team color
      */
@@ -253,9 +253,9 @@ public class Team {
     }
 
     /**
-     * Change the prefix of the team
+     * Changes the prefix of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param prefix The new prefix
      */
@@ -265,7 +265,7 @@ public class Team {
     }
 
     /**
-     * Change the prefix of the team and sends an update packet
+     * Changes the prefix of the team and sends an update packet.
      *
      * @param prefix The new prefix
      */
@@ -275,9 +275,9 @@ public class Team {
     }
 
     /**
-     * Change the suffix of the team
+     * Changes the suffix of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param suffix The new suffix
      */
@@ -287,7 +287,7 @@ public class Team {
     }
 
     /**
-     * Change the suffix of the team and sends an update packet
+     * Changes the suffix of the team and sends an update packet.
      *
      * @param suffix The new suffix
      */
@@ -297,9 +297,9 @@ public class Team {
     }
 
     /**
-     * Change the friendly flags of the team
+     * Changes the friendly flags of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param flag The new friendly flag
      */
@@ -309,7 +309,7 @@ public class Team {
     }
 
     /**
-     * Change the friendly flags of the team and sends an update packet
+     * Changes the friendly flags of the team and sends an update packet.
      *
      * @param flag The new friendly flag
      */
@@ -319,7 +319,7 @@ public class Team {
     }
 
     /**
-     * Gets the registry name of the team
+     * Gets the registry name of the team.
      *
      * @return the registry name
      */
@@ -328,7 +328,7 @@ public class Team {
     }
 
     /**
-     * Gets the creation packet to add a team
+     * Gets the creation packet to add a team.
      *
      * @return the packet to add the team
      */
@@ -341,7 +341,7 @@ public class Team {
     }
 
     /**
-     * Creates an destruction packet to remove the team
+     * Creates an destruction packet to remove the team.
      *
      * @return the packet to remove the team
      */
@@ -353,7 +353,7 @@ public class Team {
     }
 
     /**
-     * Obtains an unmodifiable {@link Set} of registered players who are on the team
+     * Obtains an unmodifiable {@link Set} of registered players who are on the team.
      *
      * @return an unmodifiable {@link Set} of registered players
      */
@@ -362,7 +362,7 @@ public class Team {
     }
 
     /**
-     * Gets the display name of the team
+     * Gets the display name of the team.
      *
      * @return the display name
      */
@@ -371,7 +371,7 @@ public class Team {
     }
 
     /**
-     * Gets the friendly flags of the team
+     * Gets the friendly flags of the team.
      *
      * @return the friendly flags
      */
@@ -380,7 +380,7 @@ public class Team {
     }
 
     /**
-     * Gets the tag visibility of the team
+     * Gets the tag visibility of the team.
      *
      * @return the tag visibility
      */
@@ -389,7 +389,7 @@ public class Team {
     }
 
     /**
-     * Gets the collision rule of the team
+     * Gets the collision rule of the team.
      *
      * @return the collision rule
      */
@@ -398,7 +398,7 @@ public class Team {
     }
 
     /**
-     * Gets the color of the team
+     * Gets the color of the team.
      *
      * @return the team color
      */
@@ -407,7 +407,7 @@ public class Team {
     }
 
     /**
-     * Gets the prefix of the team
+     * Gets the prefix of the team.
      *
      * @return the team prefix
      */
@@ -416,7 +416,7 @@ public class Team {
     }
 
     /**
-     * Gets the suffix of the team
+     * Gets the suffix of the team.
      *
      * @return the suffix team
      */
@@ -429,7 +429,7 @@ public class Team {
     }
 
     /**
-     * Sends an {@link TeamsPacket.Action#UPDATE_TEAM_INFO} packet
+     * Sends an {@link TeamsPacket.Action#UPDATE_TEAM_INFO} packet.
      */
     public void sendUpdatePacket() {
         final TeamsPacket updatePacket = new TeamsPacket();

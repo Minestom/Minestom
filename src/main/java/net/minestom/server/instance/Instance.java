@@ -370,7 +370,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Change the time rate of the instance
+     * Changes the time rate of the instance
      * <p>
      * 1 is the default value and can be set to 0 to be completely disabled (constant time)
      *
@@ -392,7 +392,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Change the rate at which the client is updated about the time
+     * Changes the rate at which the client is updated about the time
      * <p>
      * Setting it to null means that the client will never know about time change
      * (but will still change server-side)

@@ -44,7 +44,7 @@ public class PFPathingEntity implements IPathingEntity {
     }
 
     /**
-     * Change the search range of the entity
+     * Changes the search range of the entity
      *
      * @param searchRange the new entity's search range
      */

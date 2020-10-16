@@ -238,8 +238,9 @@ public final class ConnectionManager {
     }
 
     /**
-     * Removes a {@link Player} from the players list,
-     * used during disconnection.
+     * Removes a {@link Player} from the players list.
+     * <p>
+     * Used during disconnection, you shouldn't have to do it manually.
      *
      * @param connection the player connection
      */

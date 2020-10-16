@@ -80,7 +80,15 @@ public class PlayerDiggingListener {
                         ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
                 break;
             case FINISHED_DIGGING:
-                breakBlock(instance, player, blockPosition, blockStateId);
+                final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+                if (customBlock != null && customBlock.enableCustomBreakDelay()) {
+                    // Is not supposed to happen, probably a bug
+                    sendAcknowledgePacket(player, blockPosition, blockStateId,
+                            ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, false);
+                } else {
+                    // Vanilla block
+                    breakBlock(instance, player, blockPosition, blockStateId);
+                }
                 break;
             case DROP_ITEM_STACK:
                 final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();

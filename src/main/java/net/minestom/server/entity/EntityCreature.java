@@ -220,7 +220,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Change the entity target
+     * Changes the entity target
      *
      * @param target the new entity target
      */
