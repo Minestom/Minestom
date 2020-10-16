@@ -30,6 +30,7 @@ import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -705,6 +706,17 @@ public class Player extends LivingEntity implements CommandSender {
         ChatMessagePacket chatMessagePacket =
                 new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT);
         playerConnection.sendPacket(chatMessagePacket);
+    }
+
+    /**
+     * Makes the player send a message (can be used for commands).
+     *
+     * @param message the message that the player will send
+     */
+    public void chat(String message) {
+        ClientChatMessagePacket chatMessagePacket = new ClientChatMessagePacket();
+        chatMessagePacket.message = message;
+        addPacketToQueue(chatMessagePacket);
     }
 
     public void playSound(Sound sound, SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {

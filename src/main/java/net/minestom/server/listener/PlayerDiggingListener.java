@@ -46,6 +46,7 @@ public class PlayerDiggingListener {
                         Block.fromStateId(blockStateId).breaksInstantaneously();
 
                 if (instantBreak) {
+                    // No need to check custom block
                     breakBlock(instance, player, blockPosition, blockStateId);
                 } else {
                     final CustomBlock customBlock = instance.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
@@ -166,6 +167,14 @@ public class PlayerDiggingListener {
         }
     }
 
+    /**
+     * Adds the effect {@link PotionEffect#MINING_FATIGUE} to the player.
+     * <p>
+     * Used for {@link CustomBlock} break delay or when the {@link PlayerStartDiggingEvent} is cancelled
+     * to remove the player break animation.
+     *
+     * @param player the player to add the effect to
+     */
     private static void addEffect(Player player) {
         playersEffect.add(player);
 
@@ -178,6 +187,13 @@ public class PlayerDiggingListener {
         player.getPlayerConnection().sendPacket(entityEffectPacket);
     }
 
+    /**
+     * Used to remove the affect from {@link #addEffect(Player)}.
+     * <p>
+     * Called when the player cancelled or finished digging the {@link CustomBlock}.
+     *
+     * @param player the player to remove the effect to
+     */
     public static void removeEffect(Player player) {
         if (playersEffect.contains(player)) {
             playersEffect.remove(player);
@@ -189,6 +205,15 @@ public class PlayerDiggingListener {
         }
     }
 
+    /**
+     * Sends an {@link AcknowledgePlayerDiggingPacket} to a connection.
+     *
+     * @param player        the player
+     * @param blockPosition the block position
+     * @param blockStateId  the block state id
+     * @param status        the status of the digging
+     * @param success       true to notify of a success, false otherwise
+     */
     private static void sendAcknowledgePacket(Player player, BlockPosition blockPosition, int blockStateId,
                                               ClientPlayerDiggingPacket.Status status, boolean success) {
         AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();

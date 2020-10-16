@@ -15,19 +15,19 @@ import java.util.List;
  * use a {@link BlockBatch} instead otherwise.
  * Can be created using {@link Instance#createChunkBatch(Chunk)}.
  * <p>
- * Use chunk coordinate (0-15) instead of world's
+ * Use chunk coordinate (0-15) instead of world's.
  *
  * @see InstanceBatch
  */
 public class ChunkBatch implements InstanceBatch {
 
+    private static final int INITIAL_SIZE = (Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z) / 2;
+
     private final InstanceContainer instance;
     private final Chunk chunk;
 
     // Give it the max capacity by default (avoid resizing)
-    private final List<BlockData> dataList =
-            Collections.synchronizedList(new ArrayList<>(
-                    Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z));
+    private final List<BlockData> dataList = Collections.synchronizedList(new ArrayList<>(INITIAL_SIZE));
 
     public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
@@ -85,8 +85,8 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     /**
-     * Execute the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
-     * (which means that the callback can be called 50ms after, but in a determinable thread)
+     * Executes the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
+     * (which means that the callback can be called 50ms after, but in a determinable thread).
      *
      * @param callback the callback to execute once the blocks are placed
      */
@@ -95,7 +95,9 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     /**
-     * Execute the batch in the dedicated pool and run the callback once blocks are placed (in the block batch pool)
+     * Executes the batch in the dedicated pool and run the callback once blocks are placed (in the block batch pool).
+     * <p>
+     * So the callback is executed in an unexpected thread, but you are sure that it will be called immediately.
      *
      * @param callback the callback to execute once the blocks are placed
      */
@@ -108,7 +110,7 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     /**
-     * Execute the batch in the current thread
+     * Executes the batch in the current thread.
      *
      * @param callback     the callback to execute once the blocks are placed
      * @param safeCallback true to run the callback in the instance update thread, otherwise run in the current one

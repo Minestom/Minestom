@@ -26,17 +26,6 @@ public class FakePlayerController {
         this.fakePlayer = fakePlayer;
     }
 
-    /**
-     * Makes the player write a message
-     *
-     * @param message the message to write
-     */
-    public void sendChatMessage(String message) {
-        ClientChatMessagePacket chatMessagePacket = new ClientChatMessagePacket();
-        chatMessagePacket.message = message;
-        addToQueue(chatMessagePacket);
-    }
-
     public void clickWindow(boolean playerInventory, short slot, byte button, short action, int mode) {
         Inventory inventory = playerInventory ? null : fakePlayer.getOpenInventory();
         InventoryModifier inventoryModifier = inventory == null ? fakePlayer.getInventory() : inventory;

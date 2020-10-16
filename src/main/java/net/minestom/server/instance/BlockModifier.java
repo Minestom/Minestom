@@ -20,7 +20,7 @@ public interface BlockModifier {
     BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     /**
-     * Set a block at a position.
+     * Sets a block at a position.
      * <p>
      * You can use {@link #setBlock(int, int, int, Block)} if you want it to be more explicit.
      *
@@ -33,7 +33,7 @@ public interface BlockModifier {
     void setBlockStateId(int x, int y, int z, short blockStateId, Data data);
 
     /**
-     * Set a {@link CustomBlock} at a position.
+     * Sets a {@link CustomBlock} at a position.
      * <p>
      * The custom block id should be the one returned by {@link CustomBlock#getCustomBlockId()}.
      *
@@ -46,7 +46,7 @@ public interface BlockModifier {
     void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
 
     /**
-     * Set a {@link CustomBlock} at a position with a custom state id.
+     * Sets a {@link CustomBlock} at a position with a custom state id.
      * <p>
      * The custom block id should be the one returned by {@link CustomBlock#getCustomBlockId()},
      * and the block state id can be anything you want, state id can be retrieved using {@link Block#getBlockId()}.

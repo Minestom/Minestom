@@ -7,7 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.benchmark.BenchmarkManager;
-import net.minestom.server.benchmark.ThreadResult;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ChatHoverEvent;
 import net.minestom.server.chat.ColoredText;
@@ -37,14 +36,14 @@ import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.scoreboard.Sidebar;
+import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
-import java.util.Map;
 import java.util.UUID;
 
 public class PlayerInit {
@@ -53,12 +52,11 @@ public class PlayerInit {
     private static volatile Inventory inventory;
 
     static {
-        //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
+        StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        //instanceContainer.setChunkDecider((x,y) -> (pos) -> pos.getY()>40?(short)0:(short)1);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
@@ -66,7 +64,7 @@ public class PlayerInit {
         final int loopEnd = 3;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
-                instanceContainer.loadChunk(x, z);
+                //instanceContainer.loadChunk(x, z);
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
@@ -75,7 +73,7 @@ public class PlayerInit {
             System.out.println("slot inv: " + slot);
             inventoryConditionResult.setCancel(false);
         });
-        //inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
+        inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
     }
 
     public static void init() {
@@ -86,22 +84,9 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
-            String benchmarkMessage = "";
-            for (Map.Entry<String, ThreadResult> resultEntry : benchmarkManager.getResultMap().entrySet()) {
-                String name = resultEntry.getKey();
-                ThreadResult result = resultEntry.getValue();
-                benchmarkMessage += ChatColor.GRAY + name;
-                benchmarkMessage += ": ";
-                benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
-                benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
-                benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
-                benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
-                benchmarkMessage += "\n";
-            }
-
             for (Player player : connectionManager.getOnlinePlayers()) {
                 ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
-                ColoredText footer = ColoredText.of(benchmarkMessage);
+                ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
                 player.sendHeaderFooter(header, footer);
             }
         }).repeat(10, TimeUnit.TICK).schedule();
