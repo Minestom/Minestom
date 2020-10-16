@@ -142,8 +142,8 @@ dependencies {
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}")
-    implementation("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
-    implementation("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
         capabilities {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
         }
