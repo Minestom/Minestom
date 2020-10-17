@@ -3,6 +3,7 @@ package net.minestom.server.extensions;
 import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
@@ -20,17 +21,24 @@ import java.util.zip.ZipFile;
 
 @Slf4j
 public class ExtensionManager {
+
     private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
     private final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
+
     private final Map<String, URLClassLoader> extensionLoaders = new HashMap<>();
     private final Map<String, Extension> extensions = new HashMap<>();
     private final File extensionFolder = new File("extensions");
+    private boolean loaded;
 
     public ExtensionManager() {
     }
 
     public void loadExtensions() {
+        Check.stateCondition(loaded, "Extensions are already loaded!");
+
+        this.loaded = true;
+
         if (!extensionFolder.exists()) {
             if (!extensionFolder.mkdirs()) {
                 log.error("Could not find or create the extension folder, extensions will not be loaded!");
@@ -38,7 +46,7 @@ public class ExtensionManager {
             }
         }
 
-        List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+        final List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
         setupCodeModifiers(discoveredExtensions);
 
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
@@ -58,7 +66,7 @@ public class ExtensionManager {
                 StringBuilder urlsString = new StringBuilder();
                 for (int i = 0; i < urls.length; i++) {
                     URL url = urls[i];
-                    if(i != 0) {
+                    if (i != 0) {
                         urlsString.append(" ; ");
                     }
                     urlsString.append("'").append(url.toString()).append("'");
@@ -175,8 +183,8 @@ public class ExtensionManager {
             if (!file.getName().endsWith(".jar")) {
                 continue;
             }
-            try(ZipFile f = new ZipFile(file);
-                    InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
+            try (ZipFile f = new ZipFile(file);
+                 InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
 
                 DiscoveredExtension extension = new DiscoveredExtension();
                 extension.files = new File[]{file};
@@ -188,13 +196,13 @@ public class ExtensionManager {
         }
 
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
-        if(System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
+        if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
             log.info("Found indev folders for extension. Adding to list of discovered extensions.");
             String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
             String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
-            try(InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
                 DiscoveredExtension extension = new DiscoveredExtension();
-                extension.files = new File[] { new File(extensionClasses), new File(extensionResources) };
+                extension.files = new File[]{new File(extensionClasses), new File(extensionResources)};
                 extension.description = GSON.fromJson(reader, JsonObject.class);
                 extensions.add(extension);
             } catch (IOException e) {
@@ -235,7 +243,7 @@ public class ExtensionManager {
     }
 
     /**
-     * Extensions are allowed to apply Mixin transformers, the magic happens here
+     * Extensions are allowed to apply Mixin transformers, the magic happens here.
      */
     private void setupCodeModifiers(List<DiscoveredExtension> extensions) {
         ClassLoader cl = getClass().getClassLoader();

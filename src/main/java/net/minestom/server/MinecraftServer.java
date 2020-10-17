@@ -139,11 +139,11 @@ public class MinecraftServer {
 
     //Mojang Auth
     @Getter
-    private static KeyPair keyPair = MojangCrypt.generateKeyPair();
+    private static final KeyPair keyPair = MojangCrypt.generateKeyPair();
     @Getter
-    private static AuthenticationService authService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
+    private static final AuthenticationService authService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
     @Getter
-    private static MinecraftSessionService sessionService = authService.createMinecraftSessionService();
+    private static final MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
@@ -424,6 +424,15 @@ public class MinecraftServer {
      */
     public static AdvancementManager getAdvancementManager() {
         return advancementManager;
+    }
+
+    /**
+     * Get the manager handling {@link Extension}.
+     *
+     * @return the extension manager
+     */
+    public static ExtensionManager getExtensionManager() {
+        return extensionManager;
     }
 
     /**

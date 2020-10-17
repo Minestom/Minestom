@@ -844,7 +844,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param fadeIn  ticks to spend fading in
      * @param stay    ticks to keep the title displayed
-     * @param fadeOut ticks th spend out, not when to start fading out
+     * @param fadeOut ticks to spend out, not when to start fading out
      */
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
         TitlePacket titlePacket = new TitlePacket();
@@ -856,7 +856,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Hide all titles currently displayed.
+     * Hides the previous title.
      */
     public void hideTitle() {
         TitlePacket titlePacket = new TitlePacket();
@@ -865,7 +865,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Reset all titles currently displayed.
+     * Resets the previous title.
      */
     public void resetTitle() {
         TitlePacket titlePacket = new TitlePacket();

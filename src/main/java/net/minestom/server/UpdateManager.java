@@ -31,14 +31,13 @@ public final class UpdateManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
 
-    private ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
+    private final ExecutorService mainUpdate = new MinestomThread(1, MinecraftServer.THREAD_NAME_MAIN_UPDATE);
     private boolean stopRequested;
 
     private ThreadProvider threadProvider;
 
-    private ArrayList<Runnable> tickStartCallbacks = new ArrayList<>();
-
-    private ArrayList<Consumer<Double>> tickEndCallbacks = new ArrayList<>();
+    private final ArrayList<Runnable> tickStartCallbacks = new ArrayList<>();
+    private final ArrayList<Consumer<Double>> tickEndCallbacks = new ArrayList<>();
 
     {
         //threadProvider = new PerInstanceThreadProvider();
