@@ -98,4 +98,12 @@ public class ArgumentType {
         return new ArgumentItemStack(id);
     }
 
+    public static ArgumentNbtCompoundTag NbtCompound(String id) {
+        return new ArgumentNbtCompoundTag(id);
+    }
+
+    public static ArgumentNbtTag NBT(String id) {
+        return new ArgumentNbtTag(id);
+    }
+
 }

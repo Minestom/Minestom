@@ -7,6 +7,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
 import java.io.StringReader;
@@ -37,7 +38,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             try {
                 NBT nbt = new SNBTParser(new StringReader(sNBT)).parse();
                 return nbt instanceof NBTCompound ? SUCCESS : INVALID_NBT;
-            } catch (Exception e) {
+            } catch (NBTException e) {
                 return INVALID_NBT;
             }
         }
@@ -59,7 +60,12 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             final String sNBT = value.substring(nbtIndex).replace("\\\"", "\"");
 
-            final NBTCompound compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
+            NBTCompound compound = null;
+            try {
+                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
+            } catch (NBTException e) {
+                e.printStackTrace();
+            }
 
             NBTUtils.loadDataIntoItem(itemStack, compound);
 

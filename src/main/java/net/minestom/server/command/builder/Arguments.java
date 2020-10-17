@@ -10,6 +10,8 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
+import org.jglrxavpok.hephaistos.nbt.NBT;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
 import java.util.List;
@@ -92,6 +94,14 @@ public class Arguments {
 
     public ItemStack getItemStack(String id) {
         return (ItemStack) getObject(id);
+    }
+
+    public NBTCompound getNbtCompound(String id) {
+        return (NBTCompound) getObject(id);
+    }
+
+    public NBT getNBT(String id) {
+        return (NBT) getObject(id);
     }
 
     public Object getObject(String id) {

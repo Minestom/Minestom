@@ -515,6 +515,12 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentItemStack) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:item_stack";
+        } else if (argument instanceof ArgumentNbtCompoundTag) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:nbt_compound_tag";
+        } else if (argument instanceof ArgumentNbtTag) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:nbt_tag";
         }
 
         return nodes;

@@ -193,6 +193,7 @@ public class CommandDispatcher {
                 if (conditionResult == Argument.SUCCESS) {
                     executorArgs.setArg(argument.getId(), parsedValue);
                 } else {
+                    // Condition of an argument not correct, use the argument callback
                     result.callback = argument.getCallback();
                     result.value = argValue;
                     result.error = conditionResult;
@@ -208,14 +209,15 @@ public class CommandDispatcher {
             if (!syntaxesSuggestions.isEmpty()) {
                 final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
 
-                // Get the data of the closest syntax
-                final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-                final CommandSyntax syntax = suggestionHolder.syntax;
-                final String argValue = suggestionHolder.argValue;
-                final int correctionResult = suggestionHolder.correctionResult;
-                final int argIndex = suggestionHolder.argIndex;
+                // Check if at least 1 argument of the syntax is correct
+                if (max > 0) {
+                    // Get the data of the closest syntax
+                    final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
+                    final CommandSyntax syntax = suggestionHolder.syntax;
+                    final String argValue = suggestionHolder.argValue;
+                    final int correctionResult = suggestionHolder.correctionResult;
+                    final int argIndex = suggestionHolder.argIndex;
 
-                if (argValue.length() > 0) {
                     // Found the closest syntax with at least 1 correct argument
                     Argument argument = syntax.getArguments()[argIndex];
                     result.callback = argument.getCallback();
