@@ -57,6 +57,12 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
 
+/**
+ * The main server class used to start the server and retrieve all the managers.
+ * <p>
+ * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
+ * You should register all of your dimensions, biomes, commands, events, etc... in-between.
+ */
 public class MinecraftServer {
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
@@ -87,8 +93,6 @@ public class MinecraftServer {
     public static final int CHUNK_VIEW_DISTANCE = 10;
     public static final int ENTITY_VIEW_DISTANCE = 5;
     public static final int COMPRESSION_THRESHOLD = 256;
-    // TODO
-    public static final int MAX_PACKET_SIZE = 300_000;
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = 20;
     private static final int MS_TO_SEC = 1000;
@@ -105,6 +109,8 @@ public class MinecraftServer {
 
     //Rate Limiting
     private static int rateLimit = 0;
+    // TODO
+    public static final int MAX_PACKET_SIZE = 300_000;
 
     private static PacketListenerManager packetListenerManager;
     private static NettyServer nettyServer;
@@ -413,6 +419,11 @@ public class MinecraftServer {
         return dimensionTypeManager;
     }
 
+    /**
+     * Gets the manager handling biomes.
+     *
+     * @return the biome manager
+     */
     public static BiomeManager getBiomeManager() {
         return biomeManager;
     }

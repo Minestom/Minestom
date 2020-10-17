@@ -36,7 +36,6 @@ public class ExtensionManager {
 
     public void loadExtensions() {
         Check.stateCondition(loaded, "Extensions are already loaded!");
-
         this.loaded = true;
 
         if (!extensionFolder.exists()) {
@@ -61,7 +60,7 @@ public class ExtensionManager {
                 log.error("Failed to get URL.", e);
                 return;
             }
-            InputStream extensionInputStream = loader.getResourceAsStream("extension.json");
+            final InputStream extensionInputStream = loader.getResourceAsStream("extension.json");
             if (extensionInputStream == null) {
                 StringBuilder urlsString = new StringBuilder();
                 for (int i = 0; i < urls.length; i++) {
@@ -76,8 +75,8 @@ public class ExtensionManager {
             }
             JsonObject extensionDescriptionJson = JsonParser.parseReader(new InputStreamReader(extensionInputStream)).getAsJsonObject();
 
-            String mainClass = extensionDescriptionJson.get("entrypoint").getAsString();
-            String extensionName = extensionDescriptionJson.get("name").getAsString();
+            final String mainClass = extensionDescriptionJson.get("entrypoint").getAsString();
+            final String extensionName = extensionDescriptionJson.get("name").getAsString();
 
             // Get ExtensionDescription (authors, version etc.)
             Extension.ExtensionDescription extensionDescription;
@@ -166,6 +165,7 @@ public class ExtensionManager {
                 descriptionField.set(extension, LoggerFactory.getLogger(extensionClass));
             } catch (IllegalAccessException e) {
                 // We made it accessible, should not occur
+                e.printStackTrace();
             } catch (NoSuchFieldException e) {
                 log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
             }
@@ -198,8 +198,8 @@ public class ExtensionManager {
         // this allows developers to have their extension discovered while working on it, without having to build a jar and put in the extension folder
         if (System.getProperty(INDEV_CLASSES_FOLDER) != null && System.getProperty(INDEV_RESOURCES_FOLDER) != null) {
             log.info("Found indev folders for extension. Adding to list of discovered extensions.");
-            String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
-            String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
+            final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
+            final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
                 DiscoveredExtension extension = new DiscoveredExtension();
                 extension.files = new File[]{new File(extensionClasses), new File(extensionResources)};
@@ -246,7 +246,7 @@ public class ExtensionManager {
      * Extensions are allowed to apply Mixin transformers, the magic happens here.
      */
     private void setupCodeModifiers(List<DiscoveredExtension> extensions) {
-        ClassLoader cl = getClass().getClassLoader();
+        final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof MinestomOverwriteClassLoader)) {
             log.warn("Current class loader is not a MinestomOverwriteClassLoader, but " + cl + ". This disables code modifiers (Mixin support is therefore disabled)");
             return;
@@ -256,13 +256,13 @@ public class ExtensionManager {
         for (DiscoveredExtension extension : extensions) {
             try {
                 if (extension.description.has("codeModifiers")) {
-                    JsonArray codeModifierClasses = extension.description.getAsJsonArray("codeModifiers");
+                    final JsonArray codeModifierClasses = extension.description.getAsJsonArray("codeModifiers");
                     for (JsonElement elem : codeModifierClasses) {
                         modifiableClassLoader.loadModifier(extension.files, elem.getAsString());
                     }
                 }
                 if (extension.description.has("mixinConfig")) {
-                    String mixinConfigFile = extension.description.get("mixinConfig").getAsString();
+                    final String mixinConfigFile = extension.description.get("mixinConfig").getAsString();
                     Mixins.addConfiguration(mixinConfigFile);
                     log.info("Found mixin in extension " + extension.description.get("name").getAsString() + ": " + mixinConfigFile);
                 }

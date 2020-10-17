@@ -14,7 +14,7 @@ public class ChatClickEvent {
     }
 
     /**
-     * Open an URL when clicked
+     * Opens an URL when clicked.
      *
      * @param url the URL to open
      * @return the chat click event
@@ -24,7 +24,7 @@ public class ChatClickEvent {
     }
 
     /**
-     * Run a command when clicked
+     * Runs a command when clicked.
      *
      * @param command the command to run
      * @return the chat click event
@@ -34,7 +34,7 @@ public class ChatClickEvent {
     }
 
     /**
-     * Write a string in the player's chat when clicked
+     * Writes a string in the player's chat when clicked.
      *
      * @param command the command to suggest
      * @return the chat click event

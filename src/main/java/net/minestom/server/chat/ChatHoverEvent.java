@@ -44,7 +44,7 @@ public class ChatHoverEvent {
     }
 
     /**
-     * Show a {@link ColoredText} when hovered
+     * Shows a {@link ColoredText} when hovered.
      *
      * @param text the text to show
      * @return the chat hover event
@@ -54,7 +54,7 @@ public class ChatHoverEvent {
     }
 
     /**
-     * Show a raw text when hovered
+     * Shows a raw text when hovered.
      *
      * @param text the text to show
      * @return the chat hover event
@@ -64,7 +64,7 @@ public class ChatHoverEvent {
     }
 
     /**
-     * Show an item when hovered
+     * Shows an item when hovered.
      *
      * @param itemStack the item to show
      * @return the chat hover event
@@ -75,7 +75,7 @@ public class ChatHoverEvent {
     }
 
     /**
-     * Show an entity when hovered
+     * Shows an entity when hovered.
      *
      * @param entity the entity to show
      * @return the chat hover event
