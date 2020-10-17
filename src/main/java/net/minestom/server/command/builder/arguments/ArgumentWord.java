@@ -1,5 +1,12 @@
 package net.minestom.server.command.builder.arguments;
 
+/**
+ * Represents a single word in the command.
+ * <p>
+ * You can specify the only correct words with {@link #from(String...)}.
+ * <p>
+ * Example: hey
+ */
 public class ArgumentWord extends Argument<String> {
 
     public static final int SPACE_ERROR = 1;

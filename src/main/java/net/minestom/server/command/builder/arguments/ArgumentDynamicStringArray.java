@@ -2,6 +2,10 @@ package net.minestom.server.command.builder.arguments;
 
 import java.util.regex.Pattern;
 
+/**
+ * Same as {@link ArgumentStringArray} with the exception
+ * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(String)}.
+ */
 public class ArgumentDynamicStringArray extends Argument<String[]> {
 
     public ArgumentDynamicStringArray(String id) {

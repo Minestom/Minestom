@@ -12,6 +12,13 @@ import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
 import java.io.StringReader;
 
+/**
+ * Argument which can be used to retrieve an {@link ItemStack} from its material and with NBT data.
+ * <p>
+ * It is the same type as the one used in the /give command.
+ * <p>
+ * Example: diamond_sword{display:{Name:"{\"text\":\"Sword of Power\"}"}}
+ */
 public class ArgumentItemStack extends Argument<ItemStack> {
 
     public static final int NO_MATERIAL = 1;

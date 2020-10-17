@@ -1,5 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
+/**
+ * Argument which will take a quoted string.
+ * <p>
+ * Example: "Hey I am a string"
+ */
 public class ArgumentString extends Argument<String> {
 
     public static final int QUOTE_ERROR = 1;

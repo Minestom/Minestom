@@ -5,8 +5,9 @@ import net.minestom.server.utils.math.IntRange;
 import java.util.regex.Pattern;
 
 /**
- * Represent an argument which will give you an {@link IntRange}
- * Chat format: ..3, 3.., 5..10, 15
+ * Represents an argument which will give you an {@link IntRange}.
+ * <p>
+ * Example: ..3, 3.., 5..10, 15
  */
 public class ArgumentIntRange extends ArgumentRange<IntRange> {
 

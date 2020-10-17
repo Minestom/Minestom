@@ -165,15 +165,14 @@ public class Command {
      * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray}).
      *
      * @param text the whole player's text
-     * @return the array containing all the suggestion for the current arg (split " ")
+     * @return the array containing all the suggestion for the current arg (split " "), can be null
      */
     public String[] onDynamicWrite(String text) {
         return null;
     }
 
     /**
-     * Called when a {@link CommandSender} executes this command.
-     * Executed before any syntax callback.
+     * Called when a {@link CommandSender} executes this command before any syntax callback.
      * <p>
      * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
      * this is called every time a {@link CommandSender} send a command which start by {@link #getName()} or {@link #getAliases()}.

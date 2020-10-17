@@ -12,7 +12,7 @@ import java.util.List;
 // TODO
 
 /**
- * Represent the target selector argument
+ * Represents the target selector argument.
  * https://minecraft.gamepedia.com/Commands#Target_selectors
  */
 public class ArgumentEntities extends Argument<ArrayList<Entity>> {

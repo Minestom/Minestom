@@ -4,7 +4,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.Registries;
 
 /**
- * Represent an argument giving a potion type
+ * Represents an argument giving a {@link PotionEffect}.
  */
 public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
 

@@ -1,5 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
+/**
+ * Represents a boolean value.
+ * <p>
+ * Example: true
+ */
 public class ArgumentBoolean extends Argument<Boolean> {
 
     public static final int NOT_BOOLEAN_ERROR = 1;

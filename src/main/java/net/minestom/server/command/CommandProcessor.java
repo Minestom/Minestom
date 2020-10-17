@@ -68,7 +68,7 @@ public interface CommandProcessor {
      * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
      *
      * @param text the whole player text
-     * @return the array containing all the suggestion for the current arg (split " ")
+     * @return the array containing all the suggestion for the current arg (split " "), can be null
      * @see #enableWritingTracking()
      */
     default String[] onWrite(String text) {

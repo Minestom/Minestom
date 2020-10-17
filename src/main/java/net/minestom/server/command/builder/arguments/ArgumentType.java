@@ -11,7 +11,9 @@ import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 
 /**
- * Convenient class listing all the basic {@link Argument}
+ * Convenient class listing all the basics {@link Argument}.
+ * <p>
+ * Please see the specific class documentation for further info.
  */
 public class ArgumentType {
 

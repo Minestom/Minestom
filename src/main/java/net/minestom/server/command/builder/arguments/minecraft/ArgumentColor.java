@@ -4,8 +4,9 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.arguments.Argument;
 
 /**
- * Represent an argument which will give you a {@link ChatColor}
- * Chat format: red, white, reset, etc...
+ * Represents an argument which will give you a {@link ChatColor}.
+ * <p>
+ * Example: red, white, reset
  */
 public class ArgumentColor extends Argument<ChatColor> {
 

@@ -7,6 +7,12 @@ import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
 import java.io.StringReader;
 
+/**
+ * Argument used to retrieve a {@link NBT} based object, can be a
+ * {@link org.jglrxavpok.hephaistos.nbt.NBTCompound} or {@link org.jglrxavpok.hephaistos.nbt.NBTList}
+ * <p>
+ * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}} or [{display:{Name:"{\"text\":\"Sword of Power\"}"}}]
+ */
 public class ArgumentNbtTag extends Argument<NBT> {
 
     public static final int INVALID_NBT = 1;

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Responsible for the {@link Chunk} generation, can be set using {@link Instance#setChunkGenerator(ChunkGenerator)}.
  * <p>
- * Called if {@link IChunkLoader} hasn't been able to load it.
+ * Called if the instance {@link IChunkLoader} hasn't been able to load the chunk.
  */
 public interface ChunkGenerator {
 

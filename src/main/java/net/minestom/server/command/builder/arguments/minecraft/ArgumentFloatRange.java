@@ -5,8 +5,9 @@ import net.minestom.server.utils.math.FloatRange;
 import java.util.regex.Pattern;
 
 /**
- * Represent an argument which will give you an {@link FloatRange}
- * Chat format: ..3, 3.., 5..10, 15
+ * Represents an argument which will give you an {@link FloatRange}.
+ * <p>
+ * Example: ..3, 3.., 5..10, 15
  */
 public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
 

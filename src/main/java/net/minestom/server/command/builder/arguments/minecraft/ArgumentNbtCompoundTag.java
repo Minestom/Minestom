@@ -8,6 +8,11 @@ import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
 import java.io.StringReader;
 
+/**
+ * Argument used to retrieve a {@link NBTCompound} if you need key-value data.
+ * <p>
+ * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}}
+ */
 public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
     public static final int INVALID_NBT = 1;
