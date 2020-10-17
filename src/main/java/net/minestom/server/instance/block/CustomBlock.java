@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Represent the handler of a custom block type.
+ * Represents the handler of a custom block type.
  * <p>
  * There should be only one instance of this class for each custom block type,
  * every individual blocks will execute the callbacks present there. Each of which contains the

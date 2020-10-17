@@ -18,7 +18,7 @@ public class ArgumentColor extends Argument<ChatColor> {
 
     @Override
     public int getCorrectionResult(String value) {
-        ChatColor color = ChatColor.fromName(value);
+        final ChatColor color = ChatColor.fromName(value);
         return color == ChatColor.NO_COLOR ? UNDEFINED_COLOR : SUCCESS;
     }
 

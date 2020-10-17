@@ -4,7 +4,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.registry.Registries;
 
 /**
- * Represent an argument giving an entity type
+ * Represents an argument giving an {@link EntityType}.
  */
 public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 

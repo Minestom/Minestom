@@ -8,23 +8,25 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Represent the data sent to the player when refreshing his server list
+ * Represents the data sent to the player when refreshing the server list.
+ * <p>
+ * Filled by {@link ResponseDataConsumer} and specified in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}.
  */
 public class ResponseData {
 
-    private JsonObject jsonObject = new JsonObject();
+    private final JsonObject jsonObject = new JsonObject();
 
-    private JsonObject versionObject = new JsonObject();
-    private JsonObject playersObject = new JsonObject();
-    private JsonArray sampleArray = new JsonArray();
-    private JsonObject descriptionObject = new JsonObject();
+    private final JsonObject versionObject = new JsonObject();
+    private final JsonObject playersObject = new JsonObject();
+    private final JsonArray sampleArray = new JsonArray();
+    private final JsonObject descriptionObject = new JsonObject();
 
     private String name;
     private int protocol;
 
     private int maxPlayer;
     private int online;
-    private List<PingPlayer> pingPlayers = new ArrayList<>();
+    private final List<PingPlayer> pingPlayers = new ArrayList<>();
 
     private String description;
 
@@ -61,6 +63,11 @@ public class ResponseData {
         this.favicon = favicon;
     }
 
+    /**
+     * Converts the response data into a {@link JsonObject}.
+     *
+     * @return the converted json data
+     */
     public JsonObject build() {
         versionObject.addProperty("name", name);
         versionObject.addProperty("protocol", protocol);
@@ -85,6 +92,9 @@ public class ResponseData {
         return jsonObject;
     }
 
+    /**
+     * Represents a player line in the server list hover.
+     */
     private static class PingPlayer {
         private String name;
         private UUID uuid;

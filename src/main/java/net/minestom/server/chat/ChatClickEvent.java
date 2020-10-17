@@ -1,12 +1,12 @@
 package net.minestom.server.chat;
 
 /**
- * Represent a click event for a specific portion of the message
+ * Represents a click event for a specific portion of the message.
  */
 public class ChatClickEvent {
 
-    private String action;
-    private String value;
+    private final String action;
+    private final String value;
 
     private ChatClickEvent(String action, String value) {
         this.action = action;

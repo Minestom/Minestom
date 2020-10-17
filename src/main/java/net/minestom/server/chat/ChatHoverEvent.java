@@ -2,12 +2,11 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
- * Represent a hover event for a specific portion of the message
+ * Represents a hover event for a specific portion of the message.
  */
 public class ChatHoverEvent {
 

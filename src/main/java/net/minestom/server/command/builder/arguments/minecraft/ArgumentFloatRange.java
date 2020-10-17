@@ -47,29 +47,29 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
     public FloatRange parse(String value) {
         if (value.contains("..")) {
             final int index = value.indexOf('.');
-            String[] split = value.split(Pattern.quote(".."));
+            final String[] split = value.split(Pattern.quote(".."));
 
             final float min;
             final float max;
             if (index == 0) {
                 // Format ..NUMBER
                 min = Float.MIN_VALUE;
-                max = Float.valueOf(split[0]);
+                max = Float.parseFloat(split[0]);
             } else {
                 if (split.length == 2) {
                     // Format NUMBER..NUMBER
-                    min = Float.valueOf(split[0]);
-                    max = Float.valueOf(split[1]);
+                    min = Float.parseFloat(split[0]);
+                    max = Float.parseFloat(split[1]);
                 } else {
                     // Format NUMBER..
-                    min = Float.valueOf(split[0]);
+                    min = Float.parseFloat(split[0]);
                     max = Float.MAX_VALUE;
                 }
             }
 
             return new FloatRange(min, max);
         } else {
-            final float number = Float.valueOf(value);
+            final float number = Float.parseFloat(value);
             return new FloatRange(number);
         }
     }

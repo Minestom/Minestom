@@ -74,6 +74,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 e.printStackTrace();
             }
 
+            assert compound != null;
+
             NBTUtils.loadDataIntoItem(itemStack, compound);
 
             return itemStack;

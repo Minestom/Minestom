@@ -6,10 +6,10 @@ import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Represent an inventory which can receive click input
- * all methods returning boolean returns true if the action is successful, false otherwise
+ * Represents an inventory which can receive click input.
+ * All methods returning boolean returns true if the action is successful, false otherwise.
  * <p>
- * See https://wiki.vg/Protocol#Click_Window for more information
+ * See https://wiki.vg/Protocol#Click_Window for more information.
  */
 public interface InventoryClickHandler {
 

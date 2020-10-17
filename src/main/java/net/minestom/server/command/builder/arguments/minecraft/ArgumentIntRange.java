@@ -47,29 +47,29 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
     public IntRange parse(String value) {
         if (value.contains("..")) {
             final int index = value.indexOf('.');
-            String[] split = value.split(Pattern.quote(".."));
+            final String[] split = value.split(Pattern.quote(".."));
 
             final int min;
             final int max;
             if (index == 0) {
                 // Format ..NUMBER
                 min = Integer.MIN_VALUE;
-                max = Integer.valueOf(split[0]);
+                max = Integer.parseInt(split[0]);
             } else {
                 if (split.length == 2) {
                     // Format NUMBER..NUMBER
-                    min = Integer.valueOf(split[0]);
-                    max = Integer.valueOf(split[1]);
+                    min = Integer.parseInt(split[0]);
+                    max = Integer.parseInt(split[1]);
                 } else {
                     // Format NUMBER..
-                    min = Integer.valueOf(split[0]);
+                    min = Integer.parseInt(split[0]);
                     max = Integer.MAX_VALUE;
                 }
             }
 
             return new IntRange(min, max);
         } else {
-            final int number = Integer.valueOf(value);
+            final int number = Integer.parseInt(value);
             return new IntRange(number);
         }
     }

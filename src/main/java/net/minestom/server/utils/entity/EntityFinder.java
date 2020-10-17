@@ -6,9 +6,11 @@ import net.minestom.server.utils.math.IntRange;
 
 import java.util.ArrayList;
 
+// TODO
+
 /**
- * Represent a query which can be call to find one or multiple entities
- * It is based on the target selectors used in commands
+ * Represents a query which can be call to find one or multiple entities.
+ * It is based on the target selectors used in commands.
  */
 public class EntityFinder {
 

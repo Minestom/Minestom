@@ -16,16 +16,16 @@ public class ArgumentString extends Argument<String> {
     @Override
     public int getCorrectionResult(String value) {
         // Check if value start and end with quote
-        char first = value.charAt(0);
-        char last = value.charAt(value.length() - 1);
-        boolean quote = first == '\"' && last == '\"';
+        final char first = value.charAt(0);
+        final char last = value.charAt(value.length() - 1);
+        final boolean quote = first == '\"' && last == '\"';
         if (!quote)
             return QUOTE_ERROR;
 
         for (int i = 1; i < value.length(); i++) {
-            char c = value.charAt(i);
+            final char c = value.charAt(i);
             if (c == '\"') {
-                char lastChar = value.charAt(i - 1);
+                final char lastChar = value.charAt(i - 1);
                 if (lastChar == '\\') {
                     continue;
                 } else if (i == value.length() - 1) {

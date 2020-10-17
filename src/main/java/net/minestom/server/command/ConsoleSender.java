@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Represent the console when sending a command to the server
+ * Represents the console when sending a command to the server.
  */
 public class ConsoleSender implements CommandSender {
 

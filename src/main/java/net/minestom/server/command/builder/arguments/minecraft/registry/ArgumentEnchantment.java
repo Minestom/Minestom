@@ -4,7 +4,7 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.registry.Registries;
 
 /**
- * Represent an argument giving an item enchantment
+ * Represents an argument giving an {@link Enchantment}.
  */
 public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
 

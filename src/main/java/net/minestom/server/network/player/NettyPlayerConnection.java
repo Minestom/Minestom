@@ -15,8 +15,9 @@ import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 
 /**
- * Represent a networking connection with Netty
- * It is the implementation used for all server connection client
+ * Represents a networking connection with Netty.
+ * <p>
+ * It is the implementation used for all network client.
  */
 public class NettyPlayerConnection extends PlayerConnection {
 

@@ -4,7 +4,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.Registries;
 
 /**
- * Represent an argument giving a particle type
+ * Represents an argument giving a {@link Particle}.
  */
 public class ArgumentParticle extends ArgumentRegistry<Particle> {
 

@@ -10,7 +10,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 public interface ArgumentCallback {
 
     /**
-     * Executed when an error is found
+     * Executed when an error is found.
      *
      * @param source the sender which executed the command
      * @param value  the raw string argument which is responsible for the error

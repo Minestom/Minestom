@@ -21,7 +21,7 @@ public class ArgumentBoolean extends Argument<Boolean> {
 
     @Override
     public Boolean parse(String value) {
-        return Boolean.valueOf(value);
+        return Boolean.parseBoolean(value);
     }
 
     @Override

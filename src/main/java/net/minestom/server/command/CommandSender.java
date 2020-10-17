@@ -6,9 +6,9 @@ import net.minestom.server.permission.Permission;
 import java.util.Collection;
 
 /**
- * Represent something which can send commands to the server
+ * Represents something which can send commands to the server.
  * <p>
- * Main implementations are {@link Player} and {@link ConsoleSender}
+ * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
 public interface CommandSender {
 

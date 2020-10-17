@@ -10,10 +10,10 @@ import java.util.List;
 // TODO format retention
 
 /**
- * Represent multiple {@link ColoredText} batched together with the possibility to add
- * click and hover events
+ * Represents multiple {@link ColoredText} batched together with the possibility to add
+ * click and hover events.
  * <p>
- * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText})
+ * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText}).
  */
 public class RichMessage extends JsonMessage {
 
@@ -200,7 +200,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Represent a colored text with a click and hover event (can be null)
+     * Represents a colored text with a click and hover event (can be null).
      */
     private static class RichComponent {
 

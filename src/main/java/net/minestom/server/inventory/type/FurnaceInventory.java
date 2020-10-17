@@ -16,7 +16,7 @@ public class FurnaceInventory extends Inventory {
     }
 
     /**
-     * Represent the amount of tick until the fire icon come empty
+     * Represents the amount of tick until the fire icon come empty.
      *
      * @return the amount of tick until the fire icon come empty
      */
@@ -25,7 +25,7 @@ public class FurnaceInventory extends Inventory {
     }
 
     /**
-     * Represent the amount of tick until the fire icon come empty
+     * Represents the amount of tick until the fire icon come empty.
      *
      * @param remainingFuelTick
      */
