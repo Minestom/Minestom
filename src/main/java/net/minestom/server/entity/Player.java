@@ -769,6 +769,13 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(playerListHeaderAndFooterPacket);
     }
 
+    /**
+     * Common method to send a title.
+     *
+     * @param text   the text of the title
+     * @param action the action of the title (where to show it)
+     * @see #sendTitleTime(int, int, int) to specify the display time
+     */
     private void sendTitle(ColoredText text, TitlePacket.Action action) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = action;
@@ -790,21 +797,80 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(titlePacket);
     }
 
+    /**
+     * Send a title and subtitle message.
+     *
+     * @param title    the title message
+     * @param subtitle the subtitle message
+     * @see #sendTitleTime(int, int, int) to specify the display time
+     */
     public void sendTitleSubtitleMessage(ColoredText title, ColoredText subtitle) {
         sendTitle(title, TitlePacket.Action.SET_TITLE);
         sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
     }
 
+    /**
+     * Send a title message.
+     *
+     * @param title the title message
+     * @see #sendTitleTime(int, int, int) to specify the display time
+     */
     public void sendTitleMessage(ColoredText title) {
         sendTitle(title, TitlePacket.Action.SET_TITLE);
     }
 
+    /**
+     * Send a subtitle message.
+     *
+     * @param subtitle the subtitle message
+     * @see #sendTitleTime(int, int, int) to specify the display time
+     */
     public void sendSubtitleMessage(ColoredText subtitle) {
         sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
     }
 
+    /**
+     * Send an action bar message.
+     *
+     * @param actionBar the action bar message
+     * @see #sendTitleTime(int, int, int) to specify the display time
+     */
     public void sendActionBarMessage(ColoredText actionBar) {
         sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
+    }
+
+    /**
+     * Specifies the display time of a title.
+     *
+     * @param fadeIn  ticks to spend fading in
+     * @param stay    ticks to keep the title displayed
+     * @param fadeOut ticks th spend out, not when to start fading out
+     */
+    public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
+        TitlePacket titlePacket = new TitlePacket();
+        titlePacket.action = TitlePacket.Action.SET_TIMES_AND_DISPLAY;
+        titlePacket.fadeIn = fadeIn;
+        titlePacket.stay = stay;
+        titlePacket.fadeOut = fadeOut;
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    /**
+     * Hide all titles currently displayed.
+     */
+    public void hideTitle() {
+        TitlePacket titlePacket = new TitlePacket();
+        titlePacket.action = TitlePacket.Action.HIDE;
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    /**
+     * Reset all titles currently displayed.
+     */
+    public void resetTitle() {
+        TitlePacket titlePacket = new TitlePacket();
+        titlePacket.action = TitlePacket.Action.RESET;
+        playerConnection.sendPacket(titlePacket);
     }
 
     @Override

@@ -10,14 +10,15 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
  */
 public class ChatHoverEvent {
 
-    private String action;
+    private final String action;
     private String value;
     private JsonObject valueObject;
-    private boolean isJson;
+    private final boolean isJson;
 
     private ChatHoverEvent(String action, String value) {
         this.action = action;
         this.value = value;
+        this.isJson = false;
     }
 
     private ChatHoverEvent(String action, JsonObject valueObject) {
