@@ -35,6 +35,15 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
+     * Creates a {@link BinaryWriter} from multiple buffers.
+     *
+     * @param buffers the buffers making this
+     */
+    public BinaryWriter(ByteBuf... buffers) {
+        this.buffer = Unpooled.wrappedBuffer(buffers);
+    }
+
+    /**
      * Creates a {@link BinaryWriter} with a "reasonably small initial capacity".
      */
     public BinaryWriter() {
