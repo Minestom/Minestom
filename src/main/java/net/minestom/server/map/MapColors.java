@@ -197,7 +197,6 @@ public enum MapColors {
         } catch (Throwable t) {
             t.printStackTrace();
         }
-        System.out.println("done mapping."); // todo: remove, debug only
     }
 
     public static PreciseMapColor closestColor(int argb) {
