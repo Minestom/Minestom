@@ -1,17 +1,18 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * Represents a namespaced ID
  * https://minecraft.gamepedia.com/Namespaced_ID
- * <p>
- * TODO: Implement validity conditions
  */
 public class NamespaceID implements CharSequence {
     private static final Int2ObjectOpenHashMap<NamespaceID> cache = new Int2ObjectOpenHashMap<>();
+    private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
 
     private final String domain;
     private final String path;
@@ -28,6 +29,7 @@ public class NamespaceID implements CharSequence {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return "minecraft";
+        assert namespaceID.indexOf(':', index+1) == -1: "Namespace ID can only have at most one colon ':' ("+namespaceID+")";
         return namespaceID.substring(0, index);
     }
 
@@ -42,6 +44,7 @@ public class NamespaceID implements CharSequence {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return namespaceID;
+        assert namespaceID.indexOf(':', index+1) == -1: "Namespace ID can only have at most one colon ':' ("+namespaceID+")";
         return namespaceID.substring(index + 1);
     }
 
@@ -68,12 +71,20 @@ public class NamespaceID implements CharSequence {
             this.path = path.substring(index + 1);
         }
         this.full = toString();
+        validate();
     }
 
     private NamespaceID(String domain, String path) {
         this.domain = domain;
         this.path = path;
         this.full = toString();
+        validate();
+    }
+
+    private void validate() {
+        assert !domain.contains(".") && !domain.contains("/") : "Domain cannot contain a dot nor a slash character (" + full+ ")";
+        assert domain.matches(legalLetters) : "Illegal character in domain ("+full+"). Must match "+legalLetters;
+        assert path.matches(legalLetters) : "Illegal character in path ("+full+"). Must match "+legalLetters;
     }
 
     public String getDomain() {
@@ -113,6 +124,7 @@ public class NamespaceID implements CharSequence {
         return full.subSequence(start, end);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return domain + ":" + path;
