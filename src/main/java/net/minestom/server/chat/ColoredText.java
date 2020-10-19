@@ -96,6 +96,7 @@ public class ColoredText extends JsonMessage {
      * Gets the raw text.
      *
      * @return the raw text
+     * @see #toString() for the Json representation
      */
     public String getMessage() {
         return message;
@@ -104,7 +105,7 @@ public class ColoredText extends JsonMessage {
     /**
      * Gets the Json representation of this colored text.
      * <p>
-     * Used to send a message.
+     * Used to "compile" the message, retrieved with {@link #toString()}.
      *
      * @return the Json representation of the text
      */
@@ -128,7 +129,6 @@ public class ColoredText extends JsonMessage {
             }
             mainObject.add("extra", extraArray);
         }
-
 
         return mainObject;
     }

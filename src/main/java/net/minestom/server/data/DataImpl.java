@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * {@link Data} implementation which use a {@link ConcurrentHashMap}
+ * {@link Data} implementation which uses a {@link ConcurrentHashMap}.
  */
 public class DataImpl implements Data {
 

@@ -149,11 +149,11 @@ public class ItemStack implements DataContainer {
         synchronized (ItemStack.class) {
             final ColoredText itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
-                    (displayName != null && itemDisplayName != null && displayName.equals(itemDisplayName));
+                    (displayName != null && displayName.equals(itemDisplayName));
 
             final Data itemData = itemStack.getData();
             final boolean dataCheck = (data == null && itemData == null) ||
-                    (data != null && itemData != null && data.equals(itemData));
+                    (data != null && data.equals(itemData));
 
             final boolean sameMeta = (itemStack.itemMeta == null && itemMeta == null) ||
                     (itemStack.itemMeta != null && itemMeta != null && (itemStack.itemMeta.isSimilar(itemMeta)));
@@ -215,7 +215,7 @@ public class ItemStack implements DataContainer {
     /**
      * Gets the special meta object for this item.
      * <p>
-     * Can be null if not any
+     * Can be null if not any.
      *
      * @return the item meta
      */
@@ -550,7 +550,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Gets the nbt consumer called when the item is serialized into a packet.
+     * Gets the {@link NBTConsumer} called when the item is serialized into a packet.
      *
      * @return the item nbt consumer, null if not any
      */
@@ -559,7 +559,7 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Changes the item nbt consumer.
+     * Changes the item {@link NBTConsumer}.
      *
      * @param nbtConsumer the new item nbt consumer
      */

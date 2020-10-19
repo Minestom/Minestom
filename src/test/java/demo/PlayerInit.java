@@ -1,41 +1,31 @@
 package demo;
 
-import demo.blocks.StoneBlock;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
+import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.attribute.AttributeSlot;
-import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageOptions;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -44,9 +34,10 @@ import net.minestom.server.world.DimensionType;
 import java.util.UUID;
 
 public class PlayerInit {
-    private static volatile InstanceContainer instanceContainer;
 
-    private static volatile Inventory inventory;
+    private static final InstanceContainer instanceContainer;
+
+    private static final Inventory inventory;
 
     static {
         StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
@@ -81,9 +72,9 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
+            final ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
+            final ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
             for (Player player : connectionManager.getOnlinePlayers()) {
-                ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
-                ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
                 player.sendHeaderFooter(header, footer);
             }
         }).repeat(10, TimeUnit.TICK).schedule();
@@ -128,51 +119,12 @@ public class PlayerInit {
                 if (block == Block.TORCH) {
                     event.setCustomBlock((short) 3); // custom torch block
                 }
-                /*for (Player p : player.getInstance().getPlayers()) {
-                    if (p != player)
-                        p.teleport(player.getPosition());
-                }*/
-
-                /*for (int i = 0; i < 100; i++) {
-                    ChickenCreature chickenCreature = new ChickenCreature(player.getPosition());
-                    chickenCreature.setInstance(player.getInstance());
-                }*/
-
-                /*EntityZombie zombie = new EntityZombie(player.getPosition());
-                zombie.setAttribute(Attribute.MOVEMENT_SPEED, 0.25f);
-                zombie.setInstance(player.getInstance());*/
-
-                /*FakePlayer.initPlayer(UUID.randomUUID(), "test", fakePlayer -> {
-                    //fakePlayer.setInstance(player.getInstance());
-                    fakePlayer.teleport(player.getPosition());
-                    fakePlayer.setSkin(PlayerSkin.fromUsername("TheMode911"));
-
-                    fakePlayer.addEventCallback(EntityDeathEvent.class, e -> {
-                        fakePlayer.getController().respawn();
-                    });
-
-                    fakePlayer.setArrowCount(25);
-                    FakePlayerController controller = fakePlayer.getController();
-                    controller.sendChatMessage("I am a bot!");
-                });*/
-                //Hologram hologram = new Hologram(player.getInstance(), player.getPosition(), "Hey guy");
 
             });
 
             player.addEventCallback(PlayerBlockInteractEvent.class, event -> {
                 if (event.getHand() != Player.Hand.MAIN)
                     return;
-
-                final Instance instance = player.getInstance();
-                final BlockPosition blockPosition = event.getBlockPosition();
-
-                final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-                if (customBlock instanceof StoneBlock) {
-                    final Data data = instance.getBlockData(blockPosition);
-                    if (data != null) {
-                        player.sendMessage("test: " + data.get("test"));
-                    }
-                }
 
                 final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
                 final Block block = Block.fromStateId(blockStateId);
@@ -200,9 +152,6 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerLoginEvent.class, event -> {
-                //final String url = "https://download.mc-packs.net/pack/a83a04f5d78061e0890e13519fea925550461c74.zip";
-                //final String hash = "a83a04f5d78061e0890e13519fea925550461c74";
-                //player.setResourcePack(new ResourcePack(url, hash));
 
                 event.setSpawningInstance(instanceContainer);
                 player.setEnableRespawnScreen(false);
@@ -210,18 +159,15 @@ public class PlayerInit {
                 player.setPermissionLevel(4);
 
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-                    player.sendMessage("CLICK PLAYER INVENTORY");
-                    System.out.println("slot player: " + slot);
+                    if (slot == -999)
+                        return;
+                    ItemStack itemStack = p.getInventory().getItemStack(slot);
+                    Data data = itemStack.getData();
+                    if (data != null) {
+                        System.out.println("DATA: " + data.get("test"));
+                    }
+                    System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + (itemStack.getData() != null));
                 });
-
-                /*Sidebar scoreboard = new Sidebar("Scoreboard Title");
-                for (int i = 0; i < 15; i++) {
-                    scoreboard.createLine(new Sidebar.ScoreboardLine("id" + i, "Hey guys " + i, i));
-                }
-                scoreboard.addViewer(player);
-                scoreboard.updateLineContent("id3", "I HAVE BEEN UPDATED");
-
-                scoreboard.setTitle("test");*/
 
                 {
                     /*AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
@@ -248,98 +194,19 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
+                player.setGameMode(GameMode.SURVIVAL);
                 player.teleport(new Position(0, 73f, 0));
 
-                player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 1));
-
-                player.setGlowing(true);
-                ItemStack stone = new ItemStack(Material.DIAMOND_SWORD, (byte) 127);
-                stone.setEnchantment(Enchantment.AQUA_AFFINITY, (short) 1);
-                stone.addAttribute(new ItemAttribute(UUID.randomUUID(),
-                        "test_name",
-                        Attribute.ATTACK_DAMAGE, AttributeOperation.ADDITION, 50, AttributeSlot.MAINHAND));
-                player.getInventory().addItemStack(stone);
-                /*for (int i = 0; i < 9; i++) {
-                    player.getInventory().setItemStack(i, new ItemStack(Material.STONE, (byte) 127));
-                }*/
-
-                {
-                    Sidebar sidebar = new Sidebar("title");
-                    sidebar.createLine(new Sidebar.ScoreboardLine("id1", ColoredText.of("text"), 1));
-                    sidebar.addViewer(player);
-                }
-
-                {
-                    ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
-                    MapMeta mapMeta = (MapMeta) map.getItemMeta();
-                    mapMeta.setMapId(1);
-                    //player.getInventory().setItemStack(0, map);
-
-                }
-
-
-                ItemStack item = new ItemStack(Material.STONE_SWORD, (byte) 1);
-                item.setDisplayName(ColoredText.of("Item name"));
-                item.setDamage(5);
-                //item.getLore().add(ColoredText.of(ChatColor.RED + "a lore line " + ChatColor.BLACK + " BLACK"));
-                //item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                //item.setEnchantment(Enchantment.SHARPNESS, (short) 50);
-                //player.getInventory().addItemStack(item);
-
-                //player.setHelmet(new ItemStack(Material.DIAMOND_HELMET, (byte) 1));
-
-                //inventory.addItemStack(item.clone());
-                //player.openInventory(inventory);
-
-                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 100));
-
-                {
-                    /*EntityItemFrame entityItemFrame = new EntityItemFrame(new Position(-5, 36, 9, 0, 180), EntityItemFrame.ItemFrameOrientation.DOWN);
-                    entityItemFrame.setNoGravity(true);
-                    entityItemFrame.setInstance(player.getInstance());
-                    entityItemFrame.setItemStack(item);*/
-                }
-
-                Instance instance = player.getInstance();
-                WorldBorder worldBorder = instance.getWorldBorder();
-                //worldBorder.setDiameter(30);
-
-                //EntityBoat entityBoat = new EntityBoat(player.getPosition());
-                //entityBoat.setInstance(player.getInstance());
-                //entityBoat.addPassenger(player);
-
-                //player.getInventory().addItemStack(new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1));
-
-            /*TeamManager teamManager = Main.getTeamManager();
-            Team team = teamManager.createTeam(getUsername());
-            team.setTeamDisplayName("display");
-            team.setPrefix("[Test] ");
-            team.setTeamColor(ChatColor.RED);
-            setTeam(team);
-
-            setAttribute(Attribute.MAX_HEALTH, 10);
-            heal();
-
-            BelowNameScoreboard belowNameScoreboard = new BelowNameScoreboard();
-            setBelowNameScoreboard(belowNameScoreboard);
-            belowNameScoreboard.updateScore(this, 50);*/
-
-                //player.sendLegacyMessage("&aIm &bHere", '&');
-                //player.sendMessage(ColoredText.of("{#ff55ff}" + ChatColor.RESET + "test"));
-
+                Data data = new DataImpl();
+                data.set("test", 5, Integer.class);
+                ItemStack itemStack = new ItemStack(Material.NETHERITE_PICKAXE, (byte) 1);
+                itemStack.setEnchantment(Enchantment.EFFICIENCY, (short) 5);
+                itemStack.setData(data);
+                player.getInventory().addItemStack(itemStack);
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {
                 event.setRespawnPosition(new Position(0f, 75f, 0f));
-            });
-
-            player.addEventCallback(PlayerStartDiggingEvent.class, event -> {
-                //event.setCancelled(true);
-            });
-
-            player.addEventCallback(PlayerCommandEvent.class, event -> {
-                System.out.println("COMMAND EVENT");
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
@@ -349,20 +216,6 @@ public class PlayerInit {
             player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
                 player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
                 player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
-            });
-
-            player.addEventCallback(ItemUpdateStateEvent.class, event -> {
-                System.out.println("ITEM UPDATE STATE");
-            });
-
-            player.addEventCallback(PlayerPreEatEvent.class, event -> {
-                ItemStack itemStack = event.getFoodItem();
-                Material material = itemStack.getMaterial();
-                event.setEatingTime(material == Material.PORKCHOP ? 100 : 1000);
-            });
-
-            player.addEventCallback(PlayerEatEvent.class, event -> {
-                System.out.println("PLAYER EAT EVENT");
             });
 
             player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {

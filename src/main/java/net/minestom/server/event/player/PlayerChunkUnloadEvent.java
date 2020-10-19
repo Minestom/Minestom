@@ -5,6 +5,7 @@ import net.minestom.server.event.Event;
 
 /**
  * Called after a chunk being unload to a certain player.
+ * <p>
  * Could be used to unload the chunk internally in order to save memory.
  */
 public class PlayerChunkUnloadEvent extends Event {

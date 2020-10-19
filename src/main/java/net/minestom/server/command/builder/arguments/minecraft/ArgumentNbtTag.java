@@ -8,8 +8,9 @@ import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 import java.io.StringReader;
 
 /**
- * Argument used to retrieve a {@link NBT} based object, can be a
- * {@link org.jglrxavpok.hephaistos.nbt.NBTCompound} or {@link org.jglrxavpok.hephaistos.nbt.NBTList}
+ * Argument used to retrieve a {@link NBT} based object, can be any kind of tag like
+ * {@link org.jglrxavpok.hephaistos.nbt.NBTCompound}, {@link org.jglrxavpok.hephaistos.nbt.NBTList},
+ * {@link org.jglrxavpok.hephaistos.nbt.NBTInt}, etc...
  * <p>
  * Example: {display:{Name:"{\"text\":\"Sword of Power\"}"}} or [{display:{Name:"{\"text\":\"Sword of Power\"}"}}]
  */

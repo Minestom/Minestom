@@ -6,7 +6,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 
 /**
- * A simple shutdown command
+ * A simple shutdown command.
  */
 public class ShutdownCommand implements CommandProcessor {
 
@@ -28,6 +28,6 @@ public class ShutdownCommand implements CommandProcessor {
 
     @Override
     public boolean hasAccess(Player player) {
-        return player.getPermissionLevel() >= 4;
+        return true;
     }
 }

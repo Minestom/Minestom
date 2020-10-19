@@ -33,7 +33,9 @@ public abstract class JsonMessage {
     }
 
     /**
-     * Gets the string json representation.
+     * Gets the Json representation.
+     * <p>
+     * Used to send messages.
      *
      * @return the string json representation
      */

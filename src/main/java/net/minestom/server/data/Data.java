@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Represents an object which contain key/value based data.
+ * Represents an object which contains key/value based data.
  * <p>
  * See {@link DataImpl} for the default implementation.
  */
@@ -47,7 +47,7 @@ public interface Data {
     };
 
     /**
-     * Sets a value to a specific key.
+     * Assigns a value to a specific key.
      *
      * @param key   the key
      * @param value the value object
@@ -86,7 +86,7 @@ public interface Data {
     /**
      * Gets the list of data keys.
      *
-     * @return an unmodifiable {@link Set} containing all keys
+     * @return an unmodifiable {@link Set} containing all the keys
      */
     Set<String> getKeys();
 

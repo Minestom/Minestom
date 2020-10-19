@@ -41,7 +41,7 @@ public abstract class CustomBlock {
     private final Map<Instance, InstanceBreakData> instanceBreakDataMap = new HashMap<>();
 
     public int getBreakEntityId(Player firstBreaker) {
-        return firstBreaker.getEntityId() + 1;
+        return -firstBreaker.getEntityId();
     }
 
     private final short defaultBlockStateId;
