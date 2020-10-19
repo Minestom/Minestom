@@ -115,7 +115,7 @@ public class AdvancementTab implements Viewable {
     }
 
     /**
-     * Cache an advancement
+     * Caches an advancement.
      *
      * @param identifier  the identifier of the advancement
      * @param advancement the advancement

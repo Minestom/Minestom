@@ -70,7 +70,7 @@ public abstract class CustomBlock {
      *                                       is not null but the update method is not overridden
      */
     public void update(Instance instance, BlockPosition blockPosition, Data data) {
-        throw new UnsupportedOperationException("Update method not overridden");
+        throw new UnsupportedOperationException("Update method not overridden, check #getUpdateOption()");
     }
 
     /**

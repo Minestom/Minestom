@@ -20,10 +20,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class BossBar implements Viewable {
 
     private static final int MAX_BOSSBAR = 7;
-    private static Map<Player, Set<BossBar>> playerBossBarMap = new HashMap<>();
+    private static final Map<Player, Set<BossBar>> PLAYER_BOSSBAR_MAP = new HashMap<>();
 
-    private UUID uuid = UUID.randomUUID();
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final UUID uuid = UUID.randomUUID();
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     private ColoredText title;
     private float progress;
@@ -51,7 +51,7 @@ public class BossBar implements Viewable {
      * @return all the visible boss bars of the player, null if not any
      */
     public static Set<BossBar> getBossBars(Player player) {
-        return playerBossBarMap.getOrDefault(player, null);
+        return PLAYER_BOSSBAR_MAP.getOrDefault(player, null);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BossBar implements Viewable {
             return false;
         }
         // Add to the map
-        addPlayer(player);
+        addToPlayer(player);
         return viewers.add(player);
     }
 
@@ -103,6 +103,7 @@ public class BossBar implements Viewable {
      */
     public void setTitle(ColoredText title) {
         this.title = title;
+        updateTitle();
     }
 
     /**
@@ -194,23 +195,47 @@ public class BossBar implements Viewable {
         sendPacketToViewers(bossBarPacket);
     }
 
-    private void addPlayer(Player player) {
-        Set<BossBar> bossBars = playerBossBarMap.computeIfAbsent(player, p -> new HashSet<>());
-        bossBars.add(this);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BossBar bossBar = (BossBar) o;
+        return Objects.equals(uuid, bossBar.uuid);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
+
+    /**
+     * Removes the player from the bossbar map.
+     *
+     * @param player the player to remove from the map
+     */
     private void removePlayer(Player player) {
-        if (!playerBossBarMap.containsKey(player)) {
+        if (!PLAYER_BOSSBAR_MAP.containsKey(player)) {
             return;
         }
-        Set<BossBar> bossBars = playerBossBarMap.get(player);
+        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.get(player);
         bossBars.remove(this);
         if (bossBars.isEmpty()) {
-            playerBossBarMap.remove(player);
+            PLAYER_BOSSBAR_MAP.remove(player);
         }
     }
 
+    /**
+     * Sends a {@link BossBarPacket} to create the bossbar.
+     * <p>
+     * Also add the bossbar to the player viewing list.
+     *
+     * @param player the player to create the bossbar to
+     */
     private void addToPlayer(Player player) {
+        // Add to the map
+        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.computeIfAbsent(player, p -> new HashSet<>());
+        bossBars.add(this);
+
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.ADD;
@@ -222,6 +247,11 @@ public class BossBar implements Viewable {
         player.getPlayerConnection().sendPacket(bossBarPacket);
     }
 
+    /**
+     * Sends a {@link BossBarPacket} to remove the bossbar.
+     *
+     * @param player the player to remove the bossbar to
+     */
     private void removeToPlayer(Player player) {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
