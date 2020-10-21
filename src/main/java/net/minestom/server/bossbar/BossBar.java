@@ -65,7 +65,7 @@ public class BossBar implements Viewable {
         if (playerBossBars != null && playerBossBars.size() >= MAX_BOSSBAR) {
             return false;
         }
-        // Add to the map
+
         addToPlayer(player);
         return viewers.add(player);
     }

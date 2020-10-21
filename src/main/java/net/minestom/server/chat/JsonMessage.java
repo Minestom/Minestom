@@ -22,6 +22,7 @@ public abstract class JsonMessage {
      * Sent directly to the client.
      *
      * @return the json representation of the message
+     * @see #toString()
      */
     public abstract JsonObject getJsonObject();
 
@@ -35,9 +36,12 @@ public abstract class JsonMessage {
     /**
      * Gets the Json representation.
      * <p>
-     * Used to send messages.
+     * Will check of the current cached compiled json is up-to-date in order to prevent
+     * re-parsing the message every time.
      *
      * @return the string json representation
+     * @see #getJsonObject()
+     * @see #refreshUpdate()
      */
     @Override
     public String toString() {
