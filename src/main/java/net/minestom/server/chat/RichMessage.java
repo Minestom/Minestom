@@ -14,11 +14,18 @@ import java.util.List;
  * click and hover events.
  * <p>
  * Used when the message can contain both colored text and event (otherwise, use {@link ColoredText}).
+ * <p>
+ * You will need to call the static method to initialize the message {@link #of(ColoredText)},
+ * events can be assigned with {@link #setClickEvent(ChatClickEvent)} and {@link #setHoverEvent(ChatHoverEvent)}
+ * and new text element can also be appended {@link #append(ColoredText)}.
  */
 public class RichMessage extends JsonMessage {
 
     private List<RichComponent> components = new ArrayList<>();
     private RichComponent currentComponent;
+
+    private RichMessage() {
+    }
 
     /**
      * Create a RichMessage by adding the first rich component

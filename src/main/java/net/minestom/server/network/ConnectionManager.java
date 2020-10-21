@@ -85,7 +85,7 @@ public final class ConnectionManager {
     /**
      * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
      *
-     * @param jsonMessage the message to send
+     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
      */
     public void broadcastMessage(JsonMessage jsonMessage, Function<Player, Boolean> condition) {
@@ -100,7 +100,7 @@ public final class ConnectionManager {
     /**
      * Sends a {@link JsonMessage} to all online players.
      *
-     * @param jsonMessage the message to send
+     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      */
     public void broadcastMessage(JsonMessage jsonMessage) {
         broadcastMessage(jsonMessage, null);

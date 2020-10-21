@@ -672,7 +672,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a message to the player
+     * Sends a message to the player.
      *
      * @param message the message to send,
      *                you can use {@link ColoredText} and/or {@link RichMessage} to create it easily
@@ -682,10 +682,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a legacy message with the specified color char
+     * Sends a legacy message with the specified color char.
      *
      * @param text      the text with the legacy color formatting
-     * @param colorChar the color char
+     * @param colorChar the color charactero
      */
     public void sendLegacyMessage(String text, char colorChar) {
         ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
@@ -693,7 +693,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a legacy message with the default color char {@link ChatParser#COLOR_CHAR}
+     * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
      *
      * @param text the text with the legacy color formatting
      */
@@ -732,7 +732,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Plays a given effect at the given position for this player
+     * Plays a given effect at the given position for this player.
      *
      * @param effect                the effect to play
      * @param x                     x position of the effect
@@ -751,7 +751,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a {@link StopSoundPacket} packet
+     * Sends a {@link StopSoundPacket} packet.
      */
     public void stopSound() {
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
@@ -759,6 +759,12 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(stopSoundPacket);
     }
 
+    /**
+     * Sets the header and footer of a player which will be displayed in his tab window.
+     *
+     * @param header the header text
+     * @param footer the footer text
+     */
     public void sendHeaderFooter(ColoredText header, ColoredText footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
@@ -798,7 +804,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a title and subtitle message.
+     * Sends a title and subtitle message.
      *
      * @param title    the title message
      * @param subtitle the subtitle message
@@ -810,7 +816,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a title message.
+     * Sends a title message.
      *
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
@@ -820,7 +826,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send a subtitle message.
+     * Sends a subtitle message.
      *
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
@@ -830,7 +836,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Send an action bar message.
+     * Sends an action bar message.
      *
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
@@ -1016,6 +1022,7 @@ public class Player extends LivingEntity implements CommandSender {
      * This does remove the player for all viewers to spawn it again with the correct new skin.
      *
      * @param skin the player skin, null to reset it to his {@link #getUuid()} default skin
+     * @see PlayerSkinInitEvent if you want to apply the skin at connection
      */
     public synchronized void setSkin(PlayerSkin skin) {
         this.skin = skin;
@@ -1095,6 +1102,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Calls an {@link ItemDropEvent} with a specified item.
+     *
      * @param item the item to drop
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
@@ -1175,8 +1184,9 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Used to retrieve the default spawn point
-     * can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
+     * Used to retrieve the default spawn point.
+     * <p>
+     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
      *
      * @return the default respawn point
      */
@@ -1219,6 +1229,9 @@ public class Player extends LivingEntity implements CommandSender {
         }
     }
 
+    /**
+     * Sets the player food and health values to their maximum.
+     */
     protected void refreshHealth() {
         this.food = 20;
         this.foodSaturation = 5;
@@ -1226,6 +1239,9 @@ public class Player extends LivingEntity implements CommandSender {
         heal();
     }
 
+    /**
+     * Sends an {@link UpdateHealthPacket} to refresh client-side information about health and food.
+     */
     protected void sendUpdateHealthPacket() {
         UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
         updateHealthPacket.health = getHealth();
@@ -1276,6 +1292,9 @@ public class Player extends LivingEntity implements CommandSender {
         sendExperienceUpdatePacket();
     }
 
+    /**
+     * Sends a {@link SetExperiencePacket} to refresh client-side information about the experience bar.
+     */
     protected void sendExperienceUpdatePacket() {
         SetExperiencePacket setExperiencePacket = new SetExperiencePacket();
         setExperiencePacket.percentage = exp;
@@ -1405,7 +1424,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Gets the player GameMode.
+     * Gets the player {@link GameMode}.
      *
      * @return the player current gamemode
      */
@@ -1456,7 +1475,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Kick the player with a reason.
+     * Kicks the player with a reason.
      *
      * @param text the kick reason
      */
@@ -1469,7 +1488,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Kick the player with a reason.
+     * Kicks the player with a reason.
      *
      * @param message the kick reason
      */
