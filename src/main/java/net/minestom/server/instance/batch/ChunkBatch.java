@@ -1,5 +1,6 @@
 package net.minestom.server.instance.batch;
 
+import kotlin.collections.ArrayDeque;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.CustomBlock;
@@ -7,7 +8,6 @@ import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Used when all the blocks you want to place can be contained within only one {@link Chunk},
@@ -20,11 +20,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ChunkBatch implements InstanceBatch {
 
+    private static final int INITIAL_SIZE = (Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z) / 2;
+
     private final InstanceContainer instance;
     private final Chunk chunk;
 
-    // Using a linked queue because we do not need to access data at a specific index
-    private final ConcurrentLinkedQueue<BlockData> dataList = new ConcurrentLinkedQueue<>();
+    // Need to be synchronized manually
+    private final ArrayDeque<BlockData> dataList = new ArrayDeque<>(INITIAL_SIZE);
 
     public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
@@ -50,7 +52,9 @@ public class ChunkBatch implements InstanceBatch {
     private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, Data data) {
         // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
         final BlockData blockData = new BlockData(x, y, z, blockStateId, customBlockId, data);
-        this.dataList.add(blockData);
+        synchronized (dataList) {
+            this.dataList.add(blockData);
+        }
     }
 
     public void flushChunkGenerator(ChunkGenerator chunkGenerator, ChunkCallback callback) {
@@ -99,7 +103,9 @@ public class ChunkBatch implements InstanceBatch {
      * Resets the chunk batch by removing all the entries.
      */
     public void clearData() {
-        this.dataList.clear();
+        synchronized (dataList) {
+            this.dataList.clear();
+        }
     }
 
     /**
@@ -113,8 +119,10 @@ public class ChunkBatch implements InstanceBatch {
             if (!chunk.isLoaded())
                 return;
 
-            for (BlockData data : dataList) {
-                data.apply(chunk);
+            synchronized (dataList) {
+                for (BlockData data : dataList) {
+                    data.apply(chunk);
+                }
             }
 
             // Refresh chunk for viewers
