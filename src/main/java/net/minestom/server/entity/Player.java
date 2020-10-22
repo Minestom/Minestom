@@ -454,34 +454,43 @@ public class Player extends LivingEntity implements CommandSender {
     @Override
     public void kill() {
         if (!isDead()) {
-            // send death message to player
-            ColoredText deathMessage;
-            if (lastDamageSource != null) {
-                deathMessage = lastDamageSource.buildDeathScreenMessage(this);
-            } else { // may happen if killed by the server without applying damage
-                deathMessage = ColoredText.of("Killed by poor programming.");
+            // send death screen text to the killed player
+            {
+                ColoredText deathText;
+                if (lastDamageSource != null) {
+                    deathText = lastDamageSource.buildDeathScreenText(this);
+                } else { // may happen if killed by the server without applying damage
+                    deathText = ColoredText.of("Killed by poor programming.");
+                }
+
+                // #buildDeathScreenText can return null, check here
+                if (deathText != null) {
+                    CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathText);
+                    playerConnection.sendPacket(deathPacket);
+                }
             }
-            CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathMessage);
-            playerConnection.sendPacket(deathPacket);
 
             // send death message to chat
-            RichMessage chatMessage;
-            if (lastDamageSource != null) {
-                chatMessage = lastDamageSource.buildChatMessage(this);
-            } else { // may happen if killed by the server without applying damage
-                ColoredText coloredChatMessage =
-                        ColoredText.of(getUsername() + " was killed by poor programming.");
-                chatMessage = RichMessage.of(coloredChatMessage);
+            {
+                JsonMessage chatMessage;
+                if (lastDamageSource != null) {
+                    chatMessage = lastDamageSource.buildDeathMessage(this);
+                } else { // may happen if killed by the server without applying damage
+                    chatMessage = ColoredText.of(getUsername() + " was killed by poor programming.");
+                }
+
+                // #buildDeathMessage can return null, check here
+                if (chatMessage != null) {
+                    MinecraftServer.getConnectionManager().broadcastMessage(chatMessage);
+                }
             }
-            MinecraftServer.getConnectionManager().getOnlinePlayers()
-                    .forEach(player -> player.sendMessage(chatMessage));
         }
         super.kill();
     }
 
     /**
-     * Respawn the player by sending a {@link RespawnPacket} to the player and teleporting him
-     * to {@link #getRespawnPoint()}. It also reset fire and his health
+     * Respawns the player by sending a {@link RespawnPacket} to the player and teleporting him
+     * to {@link #getRespawnPoint()}. It also resetso fire and his health
      */
     public void respawn() {
         if (!isDead())

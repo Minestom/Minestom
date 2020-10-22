@@ -567,6 +567,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     /**
      * Each entity has an unique id which will change after a restart.
+     * <p>
      * All entities can be retrieved by calling {@link Entity#getEntity(int)}.
      *
      * @return the unique entity id
@@ -576,18 +577,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Returns the entity type id, can convert using {@link EntityType#fromId(int)}.
+     * Returns the entity type.
      *
-     * @return the entity type id
+     * @return the entity type
      */
     public EntityType getEntityType() {
         return entityType;
     }
 
     /**
-     * Gets the entity UUID.
+     * Gets the entity {@link UUID}.
      *
-     * @return the entity UUID
+     * @return the entity unique id
      */
     public UUID getUuid() {
         return uuid;
@@ -634,7 +635,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Convenience method to get the entity current chunk
+     * Convenient method to get the entity current chunk.
      *
      * @return the entity chunk
      */
@@ -810,7 +811,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Entity statuses can be find <a href="https://wiki.vg/Entity_statuses">here</a>.
+     * Entity statuses can be found <a href="https://wiki.vg/Entity_statuses">here</a>.
      *
      * @param status the status to trigger
      */

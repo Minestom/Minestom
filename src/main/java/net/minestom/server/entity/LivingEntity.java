@@ -20,6 +20,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -228,6 +229,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param duration duration of the effect
      * @param unit     unit used to express the duration
+     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
     public void setFireForDuration(int duration, TimeUnit unit) {
         EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
@@ -235,7 +237,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         // Do not start fire event if the fire needs to be removed (< 0 duration)
         if (duration > 0) {
             callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
-                long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
+                final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
                 fireExtinguishTime = System.currentTimeMillis() + fireTime;
             });
@@ -245,13 +247,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Damage the entity by a value, the type of the damage also has to be specified
+     * Damages the entity by a value, the type of the damage also has to be specified.
      *
      * @param type  the damage type
      * @param value the amount of damage
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(DamageType type, float value) {
+        Check.notNull(type, "The damage type cannot be null!o");
         if (isDead())
             return false;
         if (isInvulnerable() || isImmune(type)) {
@@ -260,7 +263,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
         EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value);
         callCancellableEvent(EntityDamageEvent.class, entityDamageEvent, () -> {
-            float damage = entityDamageEvent.getDamage();
+            // Set the last damage type since the event is not cancelled
+            this.lastDamageSource = entityDamageEvent.getDamageType();
+
+            float remainingDamage = entityDamageEvent.getDamage();
 
             EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
             entityAnimationPacket.entityId = getEntityId();
@@ -272,18 +278,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 final Player player = (Player) this;
                 final float additionalHearts = player.getAdditionalHearts();
                 if (additionalHearts > 0) {
-                    if (damage > additionalHearts) {
-                        damage -= additionalHearts;
+                    if (remainingDamage > additionalHearts) {
+                        remainingDamage -= additionalHearts;
                         player.setAdditionalHearts(0);
                     } else {
-                        player.setAdditionalHearts(additionalHearts - damage);
-                        damage = 0;
+                        player.setAdditionalHearts(additionalHearts - remainingDamage);
+                        remainingDamage = 0;
                     }
                 }
             }
 
             // Set the final entity health
-            setHealth(getHealth() - damage);
+            setHealth(getHealth() - remainingDamage);
 
             // play damage sound
             final Sound sound = type.getSound(this);
@@ -299,9 +305,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 SoundEffectPacket damageSoundPacket = SoundEffectPacket.create(soundCategory, sound, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 1.0f, 1.0f);
                 sendPacketToViewersAndSelf(damageSoundPacket);
             }
-
-            // Set the last damage type since the event is not cancelled
-            this.lastDamageSource = entityDamageEvent.getDamageType();
         });
 
         return !entityDamageEvent.isCancelled();
@@ -508,6 +511,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the time in ms between two fire damage applications.
      *
      * @return the time in ms
+     * @see #setFireDamagePeriod(long, TimeUnit)
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
@@ -552,7 +556,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the {@link Team} of the entity.¬
+     * Gets the {@link Team} of the entity.
      *
      * @return the {@link Team}
      */
