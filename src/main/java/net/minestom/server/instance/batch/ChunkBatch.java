@@ -6,9 +6,8 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Used when all the blocks you want to place can be contained within only one {@link Chunk},
@@ -21,13 +20,11 @@ import java.util.List;
  */
 public class ChunkBatch implements InstanceBatch {
 
-    private static final int INITIAL_SIZE = (Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z) / 2;
-
     private final InstanceContainer instance;
     private final Chunk chunk;
 
-    // Give it the max capacity by default (avoid resizing)
-    private final List<BlockData> dataList = Collections.synchronizedList(new ArrayList<>(INITIAL_SIZE));
+    // Using a linked queue because we do not need to access data at a specific index
+    private final ConcurrentLinkedQueue<BlockData> dataList = new ConcurrentLinkedQueue<>();
 
     public ChunkBatch(InstanceContainer instance, Chunk chunk) {
         this.instance = instance;
@@ -52,14 +49,7 @@ public class ChunkBatch implements InstanceBatch {
 
     private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, Data data) {
         // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
-        BlockData blockData = new BlockData();
-        blockData.x = x;
-        blockData.y = y;
-        blockData.z = z;
-        blockData.blockStateId = blockStateId;
-        blockData.customBlockId = customBlockId;
-        blockData.data = data;
-
+        final BlockData blockData = new BlockData(x, y, z, blockStateId, customBlockId, data);
         this.dataList.add(blockData);
     }
 
@@ -105,8 +95,11 @@ public class ChunkBatch implements InstanceBatch {
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(callback, false));
     }
 
+    /**
+     * Resets the chunk batch by removing all the entries.
+     */
     public void clearData() {
-        dataList.clear();
+        this.dataList.clear();
     }
 
     /**
@@ -116,24 +109,22 @@ public class ChunkBatch implements InstanceBatch {
      * @param safeCallback true to run the callback in the instance update thread, otherwise run in the current one
      */
     private void singleThreadFlush(ChunkCallback callback, boolean safeCallback) {
-        synchronized (dataList) {
-            synchronized (chunk) {
-                if (!chunk.isLoaded())
-                    return;
+        synchronized (chunk) {
+            if (!chunk.isLoaded())
+                return;
 
-                for (BlockData data : dataList) {
-                    data.apply(chunk);
-                }
+            for (BlockData data : dataList) {
+                data.apply(chunk);
+            }
 
-                // Refresh chunk for viewers
-                chunk.sendChunkUpdate();
+            // Refresh chunk for viewers
+            chunk.sendChunkUpdate();
 
-                if (callback != null) {
-                    if (safeCallback) {
-                        instance.scheduleNextTick(inst -> callback.accept(chunk));
-                    } else {
-                        callback.accept(chunk);
-                    }
+            if (callback != null) {
+                if (safeCallback) {
+                    instance.scheduleNextTick(inst -> callback.accept(chunk));
+                } else {
+                    callback.accept(chunk);
                 }
             }
         }
@@ -141,10 +132,19 @@ public class ChunkBatch implements InstanceBatch {
 
     private static class BlockData {
 
-        private int x, y, z;
-        private short blockStateId;
-        private short customBlockId;
-        private Data data;
+        private final int x, y, z;
+        private final short blockStateId;
+        private final short customBlockId;
+        private final Data data;
+
+        private BlockData(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.blockStateId = blockStateId;
+            this.customBlockId = customBlockId;
+            this.data = data;
+        }
 
         public void apply(Chunk chunk) {
             chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
