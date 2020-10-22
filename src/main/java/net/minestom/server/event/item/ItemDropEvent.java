@@ -5,7 +5,7 @@ import net.minestom.server.item.ItemStack;
 
 public class ItemDropEvent extends CancellableEvent {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     public ItemDropEvent(ItemStack itemStack) {
         this.itemStack = itemStack;

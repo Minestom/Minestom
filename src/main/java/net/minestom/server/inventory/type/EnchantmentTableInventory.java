@@ -7,10 +7,10 @@ import net.minestom.server.item.Enchantment;
 
 public class EnchantmentTableInventory extends Inventory {
 
-    private short[] levelRequirements = new short[EnchantmentSlot.values().length];
+    private final short[] levelRequirements = new short[EnchantmentSlot.values().length];
     private short seed;
-    private short[] enchantmentShown = new short[EnchantmentSlot.values().length];
-    private short[] enchantmentLevel = new short[EnchantmentSlot.values().length];
+    private final short[] enchantmentShown = new short[EnchantmentSlot.values().length];
+    private final short[] enchantmentLevel = new short[EnchantmentSlot.values().length];
 
     public EnchantmentTableInventory(String title) {
         super(InventoryType.ENCHANTMENT, title);

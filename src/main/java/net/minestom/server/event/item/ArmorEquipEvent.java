@@ -7,9 +7,9 @@ import net.minestom.server.utils.item.ItemStackUtils;
 
 public class ArmorEquipEvent extends Event {
 
-    private Entity entity;
+    private final Entity entity;
     private ItemStack armorItem;
-    private ArmorSlot armorSlot;
+    private final ArmorSlot armorSlot;
 
     public ArmorEquipEvent(Entity entity, ItemStack armorItem, ArmorSlot armorSlot) {
         this.entity = entity;

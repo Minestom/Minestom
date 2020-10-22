@@ -12,8 +12,8 @@ import net.minestom.server.utils.BlockPosition;
 public class PlayerBlockInteractEvent extends CancellableEvent {
 
     private final Player player;
-    private BlockPosition blockPosition;
-    private Player.Hand hand;
+    private final BlockPosition blockPosition;
+    private final Player.Hand hand;
     private final BlockFace blockFace;
 
     /**

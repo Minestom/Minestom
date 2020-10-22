@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class EnchantedBookMeta implements ItemMeta {
 
-    private Map<Enchantment, Short> storedEnchantmentMap = new HashMap<>();
+    private final Map<Enchantment, Short> storedEnchantmentMap = new HashMap<>();
 
     /**
      * Gets the stored enchantment map.

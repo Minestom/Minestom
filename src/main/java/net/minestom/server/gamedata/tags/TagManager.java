@@ -18,14 +18,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Handles loading and caching of tags
+ * Handles loading and caching of tags.
  */
 public class TagManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagManager.class);
     private final Gson gson;
-    private Map<NamespaceID, Tag> cache = new ConcurrentHashMap<>();
-    private List<RequiredTag> requiredTags = new LinkedList<>();
+    private final Map<NamespaceID, Tag> cache = new ConcurrentHashMap<>();
+    private final List<RequiredTag> requiredTags = new LinkedList<>();
 
     public TagManager() {
         gson = new GsonBuilder()

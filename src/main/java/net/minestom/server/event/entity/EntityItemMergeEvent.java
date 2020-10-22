@@ -9,8 +9,8 @@ import net.minestom.server.item.ItemStack;
  */
 public class EntityItemMergeEvent extends CancellableEvent {
 
-    private ItemEntity source;
-    private ItemEntity merged;
+    private final ItemEntity source;
+    private final ItemEntity merged;
 
     private ItemStack result;
 

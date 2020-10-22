@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PFInstanceSpace implements IInstanceSpace {
 
-    private Instance instance;
-    private Map<Chunk, PFColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
+    private final Instance instance;
+    private final Map<Chunk, PFColumnarSpace> chunkSpaceMap = new ConcurrentHashMap<>();
 
     public PFInstanceSpace(Instance instance) {
         this.instance = instance;

@@ -9,7 +9,7 @@ import net.minestom.server.utils.PacketUtils;
 public class PacketEncoder extends MessageToByteEncoder<ServerPacket> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, ServerPacket packet, ByteBuf buf) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, ServerPacket packet, ByteBuf buf) {
         PacketUtils.writePacket(buf, packet);
     }
 

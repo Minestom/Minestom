@@ -202,10 +202,10 @@ public class MapMeta implements ItemMeta {
     }
 
     public static class MapDecoration {
-        private String id;
-        private byte type;
-        private byte x, z;
-        private double rotation;
+        private final String id;
+        private final byte type;
+        private final byte x, z;
+        private final double rotation;
 
         public MapDecoration(String id, byte type, byte x, byte z, double rotation) {
             this.id = id;

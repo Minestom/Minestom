@@ -46,7 +46,7 @@ public class GlobalPropertyServiceMinestom implements IGlobalPropertyService {
 
     @Override
     public IPropertyKey resolveKey(String name) {
-        return keys.computeIfAbsent(name, k -> new BasicProperty(k));
+        return keys.computeIfAbsent(name, BasicProperty::new);
     }
 
     @Override

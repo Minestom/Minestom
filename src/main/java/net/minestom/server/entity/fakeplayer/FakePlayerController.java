@@ -16,11 +16,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 
 /**
- * This class act as a client controller for {@link FakePlayer}
+ * This class act as a client controller for {@link FakePlayer}.
  */
 public class FakePlayerController {
 
-    private FakePlayer fakePlayer;
+    private final FakePlayer fakePlayer;
 
     public FakePlayerController(FakePlayer fakePlayer) {
         this.fakePlayer = fakePlayer;

@@ -5,8 +5,8 @@ package net.minestom.server.chat;
  */
 public class TranslatableText {
 
-    private String code;
-    private String[] arguments;
+    private final String code;
+    private final String[] arguments;
 
     private TranslatableText(String code, String[] arguments) {
         this.code = code;

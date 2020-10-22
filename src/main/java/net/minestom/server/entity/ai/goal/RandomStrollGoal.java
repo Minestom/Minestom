@@ -12,8 +12,8 @@ public class RandomStrollGoal extends GoalSelector {
 
     private static final long DELAY = 2500;
 
-    private int radius;
-    private List<Position> closePositions;
+    private final int radius;
+    private final List<Position> closePositions;
 
     private long lastStroll;
 

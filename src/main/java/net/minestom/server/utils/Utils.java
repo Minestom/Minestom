@@ -135,8 +135,8 @@ public final class Utils {
         }
         final long[] data = encodeBlocks(blocksData, bitsPerEntry);
         writeVarIntBuf(buffer, data.length);
-        for (int i = 0; i < data.length; i++) {
-            buffer.writeLong(data[i]);
+        for (long datum : data) {
+            buffer.writeLong(datum);
         }
     }
 

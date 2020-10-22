@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 
 public class PickupExperienceEvent extends CancellableEvent {
 
-    private ExperienceOrb experienceOrb;
+    private final ExperienceOrb experienceOrb;
     private short experienceCount;
 
     public PickupExperienceEvent(ExperienceOrb experienceOrb) {

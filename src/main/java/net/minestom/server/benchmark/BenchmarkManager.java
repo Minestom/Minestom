@@ -27,18 +27,18 @@ import static net.minestom.server.MinecraftServer.*;
  */
 public final class BenchmarkManager {
 
-    public static ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-    private static List<String> threads = new ArrayList<>();
+    public static final ThreadMXBean THREAD_MX_BEAN = ManagementFactory.getThreadMXBean();
+    private static final List<String> THREADS = new ArrayList<>();
 
     static {
-        threadMXBean.setThreadContentionMonitoringEnabled(true);
-        threadMXBean.setThreadCpuTimeEnabled(true);
+        THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
+        THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
 
-        threads.add(THREAD_NAME_MAIN_UPDATE);
-        threads.add(THREAD_NAME_PACKET_WRITER);
-        threads.add(THREAD_NAME_BLOCK_BATCH);
-        threads.add(THREAD_NAME_SCHEDULER);
-        threads.add(THREAD_NAME_TICK);
+        THREADS.add(THREAD_NAME_MAIN_UPDATE);
+        THREADS.add(THREAD_NAME_PACKET_WRITER);
+        THREADS.add(THREAD_NAME_BLOCK_BATCH);
+        THREADS.add(THREAD_NAME_SCHEDULER);
+        THREADS.add(THREAD_NAME_TICK);
     }
 
     private final Long2LongMap lastCpuTimeMap = new Long2LongOpenHashMap();
@@ -85,7 +85,7 @@ public final class BenchmarkManager {
     }
 
     public void addThreadMonitor(String threadName) {
-        threads.add(threadName);
+        THREADS.add(threadName);
     }
 
     /**
@@ -119,11 +119,11 @@ public final class BenchmarkManager {
     }
 
     private void refreshData() {
-        ThreadInfo[] threadInfo = threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds());
+        ThreadInfo[] threadInfo = THREAD_MX_BEAN.getThreadInfo(THREAD_MX_BEAN.getAllThreadIds());
         for (ThreadInfo threadInfo2 : threadInfo) {
             final String name = threadInfo2.getThreadName();
             boolean shouldBenchmark = false;
-            for (String thread : threads) {
+            for (String thread : THREADS) {
                 if (name.startsWith(thread)) {
                     shouldBenchmark = true;
                     break;
@@ -141,8 +141,8 @@ public final class BenchmarkManager {
 
             final long blockedTime = threadInfo2.getBlockedTime();
             final long waitedTime = threadInfo2.getWaitedTime();
-            final long cpuTime = threadMXBean.getThreadCpuTime(id);
-            final long userTime = threadMXBean.getThreadUserTime(id);
+            final long cpuTime = THREAD_MX_BEAN.getThreadCpuTime(id);
+            final long userTime = THREAD_MX_BEAN.getThreadUserTime(id);
 
             lastCpuTimeMap.put(id, cpuTime);
             lastUserTimeMap.put(id, userTime);

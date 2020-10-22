@@ -11,7 +11,7 @@ import java.util.List;
 public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) {
         if (buf.readableBytes() > 0) {
             list.add(new InboundPacket(Utils.readVarInt(buf), buf));
         }

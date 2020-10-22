@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 
 public abstract class GoalSelector {
 
-    protected EntityCreature entityCreature;
+    protected final EntityCreature entityCreature;
 
     public GoalSelector(EntityCreature entityCreature) {
         this.entityCreature = entityCreature;

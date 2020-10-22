@@ -10,8 +10,8 @@ public class DoNothingGoal extends GoalSelector {
 
     private static final Random RANDOM = new Random();
 
-    private long time;
-    private float chance;
+    private final long time;
+    private final float chance;
     private long startTime;
 
     /**

@@ -7,10 +7,7 @@ import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
@@ -78,7 +75,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         }
 
         // The size of the final list, used as the initial capacity
-        final int size = neighboursGroups.stream().mapToInt(value -> value.size()).sum() + 1;
+        final int size = neighboursGroups.stream().mapToInt(Set::size).sum() + 1;
 
         // Represent the merged group of all the neighbours
         LongSet finalGroup = new LongArraySet(size);
@@ -135,21 +132,18 @@ public class PerGroupChunkProvider extends ThreadProvider {
             }));
 
             // Update all the chunks
-            instanceMap.keySet().forEach(chunksIndexes -> {
+            instanceMap.keySet().forEach(chunksIndexes -> futures.add(pool.submit(() -> {
+                // Wait for the instance to be updated
+                // Needed because the instance tick is used to unload waiting chunks
+                try {
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-                futures.add(pool.submit(() -> {
-                    // Wait for the instance to be updated
-                    // Needed because the instance tick is used to unload waiting chunks
-                    try {
-                        countDownLatch.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Tick all this chunk group
-                    chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-                }));
-            });
+                // Tick all this chunk group
+                chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
+            })));
         });
         return futures;
     }

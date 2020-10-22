@@ -17,8 +17,8 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     private final Player player;
     private short blockStateId;
     private short customBlockId;
-    private BlockPosition blockPosition;
-    private Player.Hand hand;
+    private final BlockPosition blockPosition;
+    private final Player.Hand hand;
 
     private boolean consumeBlock;
 

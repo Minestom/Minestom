@@ -11,7 +11,7 @@ import net.minestom.server.utils.Vector;
 public class BoundingBox {
 
     private final Entity entity;
-    private float x, y, z;
+    private final float x, y, z;
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.

@@ -20,8 +20,7 @@ public class WindowItemsPacket implements ServerPacket {
         }
 
         writer.writeShort((short) items.length);
-        for (int i = 0; i < items.length; i++) {
-            ItemStack item = items[i];
+        for (ItemStack item : items) {
             writer.writeItemStack(item);
         }
     }

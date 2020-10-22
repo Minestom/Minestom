@@ -5,7 +5,7 @@ import net.minestom.server.item.ItemStack;
 
 public class PickupItemEvent extends CancellableEvent {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     public PickupItemEvent(ItemStack itemStack) {
         this.itemStack = itemStack;

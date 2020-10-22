@@ -9,14 +9,14 @@ import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 /**
- * Attack the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
- * which can be targeted with the entity {@link TargetSelector}
+ * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
+ * which can be targeted with the entity {@link TargetSelector}.
  */
 public class MeleeAttackGoal extends GoalSelector {
 
     private long lastHit;
-    private int delay;
-    private TimeUnit timeUnit;
+    private final int delay;
+    private final TimeUnit timeUnit;
 
     private boolean stop;
 

@@ -7,11 +7,11 @@ import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.damage.EntityDamage;
 
 /**
- * Target the last damager of this entity
+ * Targets the last damager of this entity.
  */
 public class LastEntityDamagerTarget extends TargetSelector {
 
-    private float range;
+    private final float range;
 
     public LastEntityDamagerTarget(EntityCreature entityCreature, float range) {
         super(entityCreature);

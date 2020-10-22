@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Represents a namespaced ID
@@ -29,7 +28,7 @@ public class NamespaceID implements CharSequence {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return "minecraft";
-        assert namespaceID.indexOf(':', index+1) == -1: "Namespace ID can only have at most one colon ':' ("+namespaceID+")";
+        assert namespaceID.indexOf(':', index + 1) == -1 : "Namespace ID can only have at most one colon ':' (" + namespaceID + ")";
         return namespaceID.substring(0, index);
     }
 
@@ -44,7 +43,7 @@ public class NamespaceID implements CharSequence {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return namespaceID;
-        assert namespaceID.indexOf(':', index+1) == -1: "Namespace ID can only have at most one colon ':' ("+namespaceID+")";
+        assert namespaceID.indexOf(':', index + 1) == -1 : "Namespace ID can only have at most one colon ':' (" + namespaceID + ")";
         return namespaceID.substring(index + 1);
     }
 
@@ -82,9 +81,9 @@ public class NamespaceID implements CharSequence {
     }
 
     private void validate() {
-        assert !domain.contains(".") && !domain.contains("/") : "Domain cannot contain a dot nor a slash character (" + full+ ")";
-        assert domain.matches(legalLetters) : "Illegal character in domain ("+full+"). Must match "+legalLetters;
-        assert path.matches(legalLetters) : "Illegal character in path ("+full+"). Must match "+legalLetters;
+        assert !domain.contains(".") && !domain.contains("/") : "Domain cannot contain a dot nor a slash character (" + full + ")";
+        assert domain.matches(legalLetters) : "Illegal character in domain (" + full + "). Must match " + legalLetters;
+        assert path.matches(legalLetters) : "Illegal character in path (" + full + "). Must match " + legalLetters;
     }
 
     public String getDomain() {

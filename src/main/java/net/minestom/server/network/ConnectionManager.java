@@ -19,17 +19,17 @@ import java.util.function.Function;
  */
 public final class ConnectionManager {
 
-    private Set<Player> players = new CopyOnWriteArraySet<>();
-    private Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
+    private final Set<Player> players = new CopyOnWriteArraySet<>();
+    private final Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     // All the consumers to call once a packet is received
-    private List<PacketConsumer> receivePacketConsumers = new CopyOnWriteArrayList<>();
+    private final List<PacketConsumer> receivePacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
     private UuidProvider uuidProvider;
     // The player provider to have your own Player implementation
     private PlayerProvider playerProvider;
     // The consumers to call once a player connect, mostly used to init events
-    private List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
+    private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.

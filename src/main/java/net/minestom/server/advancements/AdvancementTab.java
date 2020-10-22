@@ -35,7 +35,7 @@ public class AdvancementTab implements Viewable {
     protected ByteBuf createBuffer;
     // the packet used to clear the tab (used to remove it and to update an advancement)
     // will never change (since the root identifier is always the same)
-    protected ByteBuf removeBuffer;
+    protected final ByteBuf removeBuffer;
 
     protected AdvancementTab(String rootIdentifier, AdvancementRoot root) {
         this.root = root;

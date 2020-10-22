@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class RichMessage extends JsonMessage {
 
-    private List<RichComponent> components = new ArrayList<>();
+    private final List<RichComponent> components = new ArrayList<>();
     private RichComponent currentComponent;
 
     /**
@@ -214,8 +214,8 @@ public class RichMessage extends JsonMessage {
      */
     private static class RichComponent {
 
-        private ColoredText text;
-        private FormatRetention formatRetention;
+        private final ColoredText text;
+        private final FormatRetention formatRetention;
         private ChatClickEvent clickEvent;
         private ChatHoverEvent hoverEvent;
         private String insertion;

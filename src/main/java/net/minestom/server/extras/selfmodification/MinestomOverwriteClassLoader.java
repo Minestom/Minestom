@@ -135,7 +135,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         return true;
     }
 
-    private Class<?> define(String name, byte[] bytes, boolean resolve) throws ClassNotFoundException {
+    private Class<?> define(String name, byte[] bytes, boolean resolve) {
         Class<?> defined = defineClass(name, bytes, 0, bytes.length);
         log.trace("Loaded with code modifiers: " + name);
         if (resolve) {

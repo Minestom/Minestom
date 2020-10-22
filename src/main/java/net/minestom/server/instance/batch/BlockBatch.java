@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BlockBatch implements InstanceBatch {
 
-    private InstanceContainer instance;
+    private final InstanceContainer instance;
 
     private final Map<Chunk, List<BlockData>> data = new HashMap<>();
 
@@ -90,9 +90,7 @@ public class BlockBatch implements InstanceBatch {
                         // Execute the callback if this was the last chunk to process
                         if (isLast) {
                             if (callback != null) {
-                                instance.scheduleNextTick(inst -> {
-                                    callback.run();
-                                });
+                                instance.scheduleNextTick(inst -> callback.run());
                             }
                         }
 

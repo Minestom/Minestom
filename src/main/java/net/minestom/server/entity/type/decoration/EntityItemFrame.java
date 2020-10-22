@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 // "You have to set both Orientation and Yaw/Pitch accordingly, otherwise it will not work."
 public class EntityItemFrame extends ObjectEntity {
 
-    private ItemFrameOrientation orientation;
+    private final ItemFrameOrientation orientation;
     private ItemStack itemStack;
     private Rotation rotation;
 

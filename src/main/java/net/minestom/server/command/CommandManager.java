@@ -37,10 +37,10 @@ public final class CommandManager {
 
     private boolean running;
 
-    private ConsoleSender consoleSender = new ConsoleSender();
+    private final ConsoleSender consoleSender = new ConsoleSender();
 
-    private CommandDispatcher dispatcher = new CommandDispatcher();
-    private Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
+    private final CommandDispatcher dispatcher = new CommandDispatcher();
+    private final Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
     public CommandManager() {
         running = true;

@@ -9,10 +9,10 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
 
     private final Player player;
 
-    private BlockPosition blockPosition;
+    private final BlockPosition blockPosition;
 
-    private short blockStateId;
-    private CustomBlock customBlock;
+    private final short blockStateId;
+    private final CustomBlock customBlock;
 
     private short resultBlockStateId;
     private short resultCustomBlockId;

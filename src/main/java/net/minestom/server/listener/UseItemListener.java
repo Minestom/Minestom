@@ -83,9 +83,7 @@ public class UseItemListener {
 
             // Eating code, contains the eating time customisation
             PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, player.getDefaultEatingTime());
-            player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> {
-                player.refreshEating(true, playerPreEatEvent.getEatingTime());
-            });
+            player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> player.refreshEating(true, playerPreEatEvent.getEatingTime()));
         }
 
         if (itemAnimationType != null) {

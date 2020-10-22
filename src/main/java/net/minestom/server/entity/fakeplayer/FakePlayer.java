@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 
 public class FakePlayer extends Player {
 
-    private FakePlayerOption option;
-    private FakePlayerController fakePlayerController;
+    private final FakePlayerOption option;
+    private final FakePlayerController fakePlayerController;
 
     private FakePlayer(UUID uuid, String username, FakePlayerOption option) {
         super(uuid, username, new FakePlayerConnection());
@@ -40,9 +40,7 @@ public class FakePlayer extends Player {
     public static void initPlayer(UUID uuid, String username, FakePlayerOption option, Consumer<FakePlayer> scheduledCallback) {
         final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
 
-        fakePlayer.addEventCallback(PlayerLoginEvent.class, event -> {
-            MinecraftServer.getSchedulerManager().buildTask(() -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule();
-        });
+        fakePlayer.addEventCallback(PlayerLoginEvent.class, event -> MinecraftServer.getSchedulerManager().buildTask(() -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule());
     }
 
     /**

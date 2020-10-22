@@ -47,10 +47,8 @@ public class NotificationCenter {
      * @param players      the collection of players to send the notification to
      */
     public static void send(Notification notification, Collection<Player> players) {
-        // Can't use PacketWriterUtils before we need the packets to come in the correct order
-        players.forEach(player -> {
-            send(notification, player);
-        });
+        // Can't use PacketWriterUtils because we need the packets to come in the correct order
+        players.forEach(player -> send(notification, player));
     }
 
     /**

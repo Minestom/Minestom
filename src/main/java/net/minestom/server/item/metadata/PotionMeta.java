@@ -21,7 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class PotionMeta implements ItemMeta {
 
     private PotionType potionType;
-    private List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
+    private final List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
 
     private boolean hasColor;
     private byte red, green, blue;

@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class PlayerChatEvent extends CancellableEvent {
 
     private final Player sender;
-    private Collection<Player> recipients;
+    private final Collection<Player> recipients;
     private String message;
     private Function<PlayerChatEvent, RichMessage> chatFormat;
 

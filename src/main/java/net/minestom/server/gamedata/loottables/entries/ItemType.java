@@ -5,7 +5,6 @@ import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableEntryType;
 import net.minestom.server.gamedata.loottables.LootTableFunction;
 import net.minestom.server.gamedata.loottables.LootTableManager;
-import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 

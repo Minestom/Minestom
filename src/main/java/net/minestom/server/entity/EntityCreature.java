@@ -36,8 +36,8 @@ public abstract class EntityCreature extends LivingEntity {
     private IPath path;
     private Position pathPosition;
 
-    protected List<GoalSelector> goalSelectors = new ArrayList<>();
-    protected List<TargetSelector> targetSelectors = new ArrayList<>();
+    protected final List<GoalSelector> goalSelectors = new ArrayList<>();
+    protected final List<TargetSelector> targetSelectors = new ArrayList<>();
     private GoalSelector currentGoalSelector;
 
     private Entity target;

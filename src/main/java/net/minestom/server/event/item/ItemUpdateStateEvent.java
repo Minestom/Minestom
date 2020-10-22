@@ -6,7 +6,7 @@ import net.minestom.server.item.ItemStack;
 
 public class ItemUpdateStateEvent extends Event {
 
-    private Player player;
+    private final Player player;
     private final Player.Hand hand;
     private final ItemStack itemStack;
     private boolean handAnimation;

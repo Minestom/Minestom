@@ -43,8 +43,7 @@ public final class ArrayUtils {
         for (int i = 0; i < a.length; i++) {
             final long aValue = a[i];
             boolean contains = false;
-            for (int n = 0; n < b.length; n++) {
-                final long bValue = b[n];
+            for (final long bValue : b) {
                 if (bValue == aValue) {
                     contains = true;
                     break;

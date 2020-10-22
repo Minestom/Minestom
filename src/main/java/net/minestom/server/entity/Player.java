@@ -74,7 +74,7 @@ public class Player extends LivingEntity implements CommandSender {
     private boolean answerKeepAlive;
 
     private String username;
-    protected PlayerConnection playerConnection;
+    protected final PlayerConnection playerConnection;
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
     private int latency;
@@ -490,7 +490,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Respawns the player by sending a {@link RespawnPacket} to the player and teleporting him
-     * to {@link #getRespawnPoint()}. It also resetso fire and his health
+     * to {@link #getRespawnPoint()}. It also resets fire and his health
      */
     public void respawn() {
         if (!isDead())
@@ -694,7 +694,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Sends a legacy message with the specified color char.
      *
      * @param text      the text with the legacy color formatting
-     * @param colorChar the color charactero
+     * @param colorChar the color character
      */
     public void sendLegacyMessage(String text, char colorChar) {
         ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);

@@ -9,12 +9,12 @@ import java.util.Map;
 public class BlockManager {
 
     // custom block id -> custom block
-    private CustomBlock[] customBlocksInternalId = new CustomBlock[Short.MAX_VALUE];
+    private final CustomBlock[] customBlocksInternalId = new CustomBlock[Short.MAX_VALUE];
     // custom block identifier -> custom block
-    private Map<String, CustomBlock> customBlocksId = new HashMap<>();
+    private final Map<String, CustomBlock> customBlocksId = new HashMap<>();
 
     // block id -> block placement rule
-    private BlockPlacementRule[] placementRules = new BlockPlacementRule[Short.MAX_VALUE];
+    private final BlockPlacementRule[] placementRules = new BlockPlacementRule[Short.MAX_VALUE];
 
     /**
      * Registers a {@link CustomBlock}.

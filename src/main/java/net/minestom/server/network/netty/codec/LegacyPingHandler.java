@@ -15,7 +15,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf buf;
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object object) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object object) {
         ByteBuf buf = (ByteBuf) object;
 
         if (this.buf != null) {

@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
- * Separate work between instance (1 instance = 1 thread execution)
+ * Separates work between instance (1 instance = 1 thread execution).
  */
 public class PerInstanceThreadProvider extends ThreadProvider {
 
-    private Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
+    private final Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
 
     @Override
     public void onInstanceCreate(Instance instance) {
@@ -49,15 +49,12 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     public List<Future<?>> update(long time) {
         List<Future<?>> futures = new ArrayList<>();
 
-        instanceChunkMap.forEach((instance, chunkIndexes) -> {
-
-            futures.add(pool.submit(() -> {
-                // Tick instance
-                updateInstance(instance, time);
-                // Tick chunks
-                chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-            }));
-        });
+        instanceChunkMap.forEach((instance, chunkIndexes) -> futures.add(pool.submit(() -> {
+            // Tick instance
+            updateInstance(instance, time);
+            // Tick chunks
+            chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
+        })));
         return futures;
     }
 

@@ -14,7 +14,7 @@ public class PacketListenerManager {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
-    private Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
+    private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager() {
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);

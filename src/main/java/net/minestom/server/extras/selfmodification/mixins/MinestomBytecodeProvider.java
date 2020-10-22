@@ -28,14 +28,14 @@ public class MinestomBytecodeProvider implements IClassBytecodeProvider {
         try {
             reader = new ClassReader(classLoader.loadBytes(name, transform));
         } catch (IOException e) {
-            throw new ClassNotFoundException("Could not load ClassNode with name "+name, e);
+            throw new ClassNotFoundException("Could not load ClassNode with name " + name, e);
         }
         reader.accept(node, 0);
         return node;
     }
 
     @Override
-    public ClassNode getClassNode(String name, boolean runTransformers) throws ClassNotFoundException, IOException {
+    public ClassNode getClassNode(String name, boolean runTransformers) throws ClassNotFoundException {
         return loadNode(name, runTransformers);
     }
 }

@@ -59,7 +59,7 @@ class LootTableContainer {
         }
     }
 
-    private class Entry {
+    private static class Entry {
         private ConditionContainer[] conditions;
         private String type;
         private String name;

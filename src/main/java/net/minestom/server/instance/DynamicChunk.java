@@ -45,15 +45,15 @@ public class DynamicChunk extends Chunk {
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
-    protected Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
 
     // Contains CustomBlocks' block index which are updatable
-    protected IntSet updatableBlocks = new IntOpenHashSet();
+    protected final IntSet updatableBlocks = new IntOpenHashSet();
     // (block index)/(last update in ms)
-    protected Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
+    protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     // Block entities
-    protected Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
+    protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
     public DynamicChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
         super(instance, biomes, chunkX, chunkZ, true);

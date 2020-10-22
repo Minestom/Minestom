@@ -9,8 +9,8 @@ import net.minestom.server.instance.Chunk;
 public class PFColumnarSpace implements IColumnarSpace {
 
     private final ColumnarOcclusionFieldList occlusionFieldList = new ColumnarOcclusionFieldList(this);
-    private PFInstanceSpace instanceSpace;
-    private Chunk chunk;
+    private final PFInstanceSpace instanceSpace;
+    private final Chunk chunk;
 
 
     public PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {

@@ -58,8 +58,8 @@ public abstract class Chunk implements Viewable, DataContainer {
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
     protected final Instance instance;
-    protected Biome[] biomes;
-    protected int chunkX, chunkZ;
+    protected final Biome[] biomes;
+    protected final int chunkX, chunkZ;
 
     // Options
     private final boolean shouldGenerate;
@@ -70,7 +70,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     private ByteBuf fullDataPacket;
 
     protected volatile boolean loaded = true;
-    protected Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     // Path finding
     protected PFColumnarSpace columnarSpace;

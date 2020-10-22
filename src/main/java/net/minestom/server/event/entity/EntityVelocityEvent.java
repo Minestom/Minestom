@@ -6,7 +6,7 @@ import net.minestom.server.utils.Vector;
 
 public class EntityVelocityEvent extends CancellableEvent {
 
-    private Entity entity;
+    private final Entity entity;
     private Vector velocity;
 
     public EntityVelocityEvent(Entity entity, Vector velocity) {

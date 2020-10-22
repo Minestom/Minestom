@@ -8,7 +8,7 @@ import net.minestom.server.utils.BlockPosition;
 
 public abstract class BlockPlacementRule {
 
-    private short blockId;
+    private final short blockId;
 
     public BlockPlacementRule(short blockId) {
         this.blockId = blockId;
