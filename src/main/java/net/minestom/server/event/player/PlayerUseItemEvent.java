@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
 
 /**
- * Event when an item is used without clicking a block.
+ * Event when an item is used without clicking on a block.
  */
 public class PlayerUseItemEvent extends CancellableEvent {
 

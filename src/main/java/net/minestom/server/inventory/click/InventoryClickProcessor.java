@@ -45,22 +45,18 @@ public class InventoryClickProcessor {
         ItemStack resultClicked;
 
         if (cursorRule.canBeStacked(cursor, clicked)) {
-
-            resultCursor = cursor.clone();
-            resultClicked = clicked.clone();
-
             final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
 
-            if (!clickedRule.canApply(resultClicked, totalAmount)) {
-                resultCursor = cursorRule.apply(resultCursor, totalAmount - cursorRule.getMaxSize());
-                resultClicked = clickedRule.apply(resultClicked, clickedRule.getMaxSize());
+            if (!clickedRule.canApply(clicked, totalAmount)) {
+                resultCursor = cursorRule.apply(cursor, totalAmount - cursorRule.getMaxSize());
+                resultClicked = clickedRule.apply(clicked, clickedRule.getMaxSize());
             } else {
-                resultCursor = cursorRule.apply(resultCursor, 0);
-                resultClicked = clickedRule.apply(resultClicked, totalAmount);
+                resultCursor = cursorRule.apply(cursor, 0);
+                resultClicked = clickedRule.apply(clicked, totalAmount);
             }
         } else {
-            resultCursor = clicked.clone();
-            resultClicked = cursor.clone();
+            resultCursor = clicked;
+            resultClicked = cursor;
         }
 
         clickResult.setClicked(resultClicked);
@@ -88,14 +84,12 @@ public class InventoryClickProcessor {
         ItemStack resultClicked;
 
         if (clickedRule.canBeStacked(clicked, cursor)) {
-            resultClicked = clicked.clone();
             final int amount = clicked.getAmount() + 1;
-            if (!clickedRule.canApply(resultClicked, amount)) {
+            if (!clickedRule.canApply(clicked, amount)) {
                 return clickResult;
             } else {
-                resultCursor = cursor.clone();
-                resultCursor = cursorRule.apply(resultCursor, cursorRule.getAmount(resultCursor) - 1);
-                resultClicked = clickedRule.apply(resultClicked, amount);
+                resultCursor = cursorRule.apply(cursor, cursorRule.getAmount(cursor) - 1);
+                resultClicked = clickedRule.apply(clicked, amount);
             }
         } else {
             if (cursor.isAir()) {
@@ -114,8 +108,8 @@ public class InventoryClickProcessor {
                     resultClicked = cursor.clone();
                     resultClicked = clickedRule.apply(resultClicked, 1);
                 } else {
-                    resultCursor = clicked.clone();
-                    resultClicked = cursor.clone();
+                    resultCursor = clicked;
+                    resultClicked = cursor;
                 }
             }
         }
@@ -151,17 +145,17 @@ public class InventoryClickProcessor {
 
         if (clicked.isAir()) {
             // Set held item [key] to slot
-            resultClicked = cursor.clone();
+            resultClicked = cursor;
             resultHeld = ItemStack.getAirItem();
         } else {
             if (cursor.isAir()) {
                 // if held item [key] is air then set clicked to held
                 resultClicked = ItemStack.getAirItem();
-                resultHeld = clicked.clone();
+                resultHeld = clicked;
             } else {
                 // Otherwise replace held item and held
-                resultClicked = cursor.clone();
-                resultHeld = clicked.clone();
+                resultClicked = cursor;
+                resultHeld = clicked;
             }
         }
 
@@ -296,7 +290,7 @@ public class InventoryClickProcessor {
                             slotItem = stackingRule.apply(slotItem, amount);
                             finalCursorAmount -= slotSize;
                         } else {
-                            int removedAmount = amount - maxSize;
+                            final int removedAmount = amount - maxSize;
                             slotItem = stackingRule.apply(slotItem, maxSize);
                             finalCursorAmount -= removedAmount;
                         }

@@ -7,7 +7,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 
 /**
- * Used when a player is clicking a block with an item (but is not a block in item form).
+ * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
 public class PlayerUseItemOnBlockEvent extends Event {
 
