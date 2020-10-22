@@ -21,6 +21,7 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -388,8 +389,7 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
-            if (callback != null)
-                callback.accept(chunk);
+            OptionalCallback.execute(callback, chunk);
         } else {
             // Retrieve chunk from somewhere else (file or create a new one using the ChunkGenerator)
             retrieveChunk(chunkX, chunkZ, callback);
@@ -401,16 +401,14 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
-            if (callback != null)
-                callback.accept(chunk);
+            OptionalCallback.execute(callback, chunk);
         } else {
             if (hasEnabledAutoChunkLoad()) {
                 // Load chunk from StorageLocation or with ChunkGenerator
                 retrieveChunk(chunkX, chunkZ, callback);
             } else {
                 // Chunk not loaded, return null
-                if (callback != null)
-                    callback.accept(null);
+                OptionalCallback.execute(callback, null);
             }
         }
     }
@@ -478,8 +476,7 @@ public class InstanceContainer extends Instance {
             try {
                 parallelSavingThreadPool.shutdown();
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
-                if (callback != null)
-                    callback.run();
+                OptionalCallback.execute(callback);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -512,8 +509,7 @@ public class InstanceContainer extends Instance {
             // Execute callback and event in the instance thread
             scheduleNextTick(instance -> {
                 callChunkLoadEvent(chunkX, chunkZ);
-                if (callback != null)
-                    callback.accept(chunk);
+                OptionalCallback.execute(callback, chunk);
             });
         });
 
@@ -544,8 +540,7 @@ public class InstanceContainer extends Instance {
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         } else {
             // No chunk generator, execute the callback with the empty chunk
-            if (callback != null)
-                callback.accept(chunk);
+            OptionalCallback.execute(callback, chunk);
         }
 
         UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);

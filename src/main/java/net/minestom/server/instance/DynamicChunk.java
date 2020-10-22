@@ -16,6 +16,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
@@ -379,9 +380,7 @@ public class DynamicChunk extends Chunk {
                 }
 
                 // Finished reading
-                if (callback != null) {
-                    callback.accept(this);
-                }
+                OptionalCallback.execute(callback, this);
             }
         }).schedule();
     }

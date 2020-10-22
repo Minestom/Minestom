@@ -26,6 +26,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -226,8 +227,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 refreshView(position.getYaw(), position.getPitch());
             }
             sendSynchronization();
-            if (callback != null)
-                callback.run();
+
+            OptionalCallback.execute(callback);
         };
 
         if (instance.hasEnabledAutoChunkLoad()) {

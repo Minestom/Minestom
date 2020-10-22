@@ -50,6 +50,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -1370,8 +1371,7 @@ public class Player extends LivingEntity implements CommandSender {
     public void teleport(Position position, Runnable callback) {
         super.teleport(position, () -> {
             updatePlayerPosition();
-            if (callback != null)
-                callback.run();
+            OptionalCallback.execute(callback);
         });
     }
 

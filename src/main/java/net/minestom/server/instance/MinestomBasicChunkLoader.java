@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.slf4j.Logger;
@@ -52,16 +53,14 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
         final byte[] data = chunk.getSerializedData();
         if (data == null) {
             // Chunk cannot be serialized (returned null), stop here
-            if (callback != null)
-                callback.run();
+            OptionalCallback.execute(callback);
             return;
         }
 
         // Save the serialized data to the storage location
         storageLocation.set(key, data);
 
-        if (callback != null)
-            callback.run();
+        OptionalCallback.execute(callback);
     }
 
     @Override
