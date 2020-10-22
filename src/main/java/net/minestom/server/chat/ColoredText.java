@@ -21,6 +21,14 @@ public class ColoredText extends JsonMessage {
     // the raw text
     private String message;
 
+    /**
+     * Creates a colored text.
+     * <p>
+     * You need to use one of the static methods instead of the constructor.
+     *
+     * @param message the content of the text
+     * @see #of(String) to create a colored text
+     */
     private ColoredText(String message) {
         this.message = message;
         refreshUpdate();

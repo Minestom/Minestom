@@ -24,11 +24,14 @@ public class RichMessage extends JsonMessage {
     private List<RichComponent> components = new ArrayList<>();
     private RichComponent currentComponent;
 
+    /**
+     * @see #of(ColoredText) to create a rich message
+     */
     private RichMessage() {
     }
 
     /**
-     * Create a RichMessage by adding the first rich component
+     * Creates a {@link RichMessage} by adding the first rich component.
      *
      * @param coloredText the text composing the first rich component
      * @return the created rich message object
@@ -49,7 +52,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Set the click event of the current rich component
+     * Sets the click event of the current rich component.
      *
      * @param clickEvent the click event to set
      * @return the rich message
@@ -62,7 +65,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Set the hover event of the current rich component
+     * Sets the hover event of the current rich component.
      *
      * @param hoverEvent the hover event to set
      * @return the rich message
@@ -75,7 +78,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Set the insertion string of the current rich component
+     * Sets the insertion string of the current rich component.
      *
      * @param insertion the string to insert in the chat box
      * @return the rich message
@@ -88,7 +91,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Add a new rich component to the message
+     * Adds a new rich component to the message.
      *
      * @param coloredText     the text composing the rich component
      * @param formatRetention the format retention of the added component
@@ -102,8 +105,8 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Add a new rich component to the message,
-     * the format retention is set to {@link FormatRetention#ALL}
+     * Adds a new rich component to the message,
+     * the format retention is set to {@link FormatRetention#ALL}.
      *
      * @param coloredText the text composing the rich component
      * @return the rich message
@@ -146,7 +149,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Process the components to add click/hover events
+     * Processes the components to add click/hover events.
      *
      * @param component the rich component to process
      * @return a list of processed components
@@ -207,7 +210,7 @@ public class RichMessage extends JsonMessage {
     }
 
     /**
-     * Represents a colored text with a click and hover event (can be null).
+     * Represents a {@link ColoredText} with a click and hover event (can be null).
      */
     private static class RichComponent {
 
