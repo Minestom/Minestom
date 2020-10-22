@@ -20,6 +20,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 
 import java.util.HashSet;
@@ -301,6 +302,10 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void readChunk(BinaryReader reader, ChunkCallback callback) {
+        // Check the buffer length
+        final int length = reader.available();
+        Check.argCondition(length == 0, "The length of the buffer must be > 0");
+
         // Run in the scheduler thread pool
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             synchronized (this) {
