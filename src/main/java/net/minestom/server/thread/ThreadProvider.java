@@ -99,9 +99,7 @@ public abstract class ThreadProvider {
         this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
     }
 
-    /**
-     * INSTANCE UPDATE
-     */
+    // INSTANCE UPDATE
 
     /**
      * Process a whole tick for a chunk.
@@ -146,9 +144,7 @@ public abstract class ThreadProvider {
         chunk.tick(time, instance);
     }
 
-    /**
-     * ENTITY UPDATE
-     */
+    // ENTITY UPDATE
 
     /**
      * Executes an entity tick (all entities type creatures/objects/players) in an instance's chunk.

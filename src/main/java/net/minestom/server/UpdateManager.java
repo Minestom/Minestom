@@ -13,11 +13,11 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 
 /**
  * Manager responsible for the server ticks.
@@ -36,8 +36,8 @@ public final class UpdateManager {
 
     private ThreadProvider threadProvider;
 
-    private final ArrayList<Runnable> tickStartCallbacks = new ArrayList<>();
-    private final ArrayList<Consumer<Double>> tickEndCallbacks = new ArrayList<>();
+    private final ConcurrentLinkedQueue<Runnable> tickStartCallbacks = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<DoubleConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
 
     {
         //threadProvider = new PerInstanceThreadProvider();
@@ -63,28 +63,33 @@ public final class UpdateManager {
             long currentTime;
             while (!stopRequested) {
                 currentTime = System.nanoTime();
-                final long time = System.currentTimeMillis();
+                final long tickStart = System.currentTimeMillis();
 
-                //Tick Callbacks
-                tickStartCallbacks.forEach(Runnable::run);
+                // Tick start callbacks
+                if (!tickStartCallbacks.isEmpty()) {
+                    Runnable callback;
+                    while ((callback = tickStartCallbacks.poll()) != null) {
+                        callback.run();
+                    }
+                }
 
                 List<Future<?>> futures;
 
                 // Server tick (instance/chunk/entity)
                 // Synchronize with the update manager instance, like the signal for chunk load/unload
                 synchronized (this) {
-                    futures = threadProvider.update(time);
+                    futures = threadProvider.update(tickStart);
                 }
 
                 // Waiting players update (newly connected clients waiting to get into the server)
                 entityManager.updateWaitingPlayers();
 
                 // Keep Alive Handling
-                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(time);
+                final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
                 for (Player player : connectionManager.getOnlinePlayers()) {
-                    final long lastKeepAlive = time - player.getLastKeepAlive();
+                    final long lastKeepAlive = tickStart - player.getLastKeepAlive();
                     if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
-                        player.refreshKeepAlive(time);
+                        player.refreshKeepAlive(tickStart);
                         player.getPlayerConnection().sendPacket(keepAlivePacket);
                     } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
                         player.kick(TIMEOUT_TEXT);
@@ -100,13 +105,17 @@ public final class UpdateManager {
                 }
 
 
-                //Tick Callbacks
-                double tickTime = (System.nanoTime() - currentTime) / 1000000D;
-                tickEndCallbacks.forEach(doubleConsumer -> doubleConsumer.accept(tickTime));
+                // Tick end callbacks
+                if (!tickEndCallbacks.isEmpty()) {
+                    final double tickEnd = (System.nanoTime() - currentTime) / 1000000D;
+                    DoubleConsumer callback;
+                    while ((callback = tickEndCallbacks.poll()) != null) {
+                        callback.accept(tickEnd);
+                    }
+                }
 
                 // Sleep until next tick
-                long sleepTime = (tickDistance - (System.nanoTime() - currentTime)) / 1000000;
-                sleepTime = Math.max(1, sleepTime);
+                final long sleepTime = Math.max(1, (tickDistance - (System.nanoTime() - currentTime)) / 1000000);
 
                 try {
                     Thread.sleep(sleepTime);
@@ -194,20 +203,42 @@ public final class UpdateManager {
         this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
     }
 
+    /**
+     * Adds a callback executed at the start of the next server tick.
+     *
+     * @param callback the tick start callback
+     */
     public void addTickStartCallback(Runnable callback) {
-        tickStartCallbacks.add(callback);
+        this.tickStartCallbacks.add(callback);
     }
 
+    /**
+     * Removes a tick start callback.
+     *
+     * @param callback the callback to remove
+     */
     public void removeTickStartCallback(Runnable callback) {
-        tickStartCallbacks.remove(callback);
+        this.tickStartCallbacks.remove(callback);
     }
 
-    public void addTickEndCallback(Consumer<Double> callback) {
-        tickEndCallbacks.add(callback);
+    /**
+     * Adds a callback executed at the end of the next server tick.
+     * <p>
+     * The double in the consumer represents the duration (in ms) of the tick.
+     *
+     * @param callback the tick end callback
+     */
+    public void addTickEndCallback(DoubleConsumer callback) {
+        this.tickEndCallbacks.add(callback);
     }
 
-    public void removeTickEndCallback(Consumer<Double> callback) {
-        tickEndCallbacks.remove(callback);
+    /**
+     * Removes a tick end callback.
+     *
+     * @param callback the callback to remove
+     */
+    public void removeTickEndCallback(DoubleConsumer callback) {
+        this.tickEndCallbacks.remove(callback);
     }
 
     /**

@@ -9,9 +9,9 @@ public class ClientPacketsHandler {
     // Max packet id
     private static final int SIZE = 0x30;
 
-    private final Supplier<? extends ClientPacket>[] supplierAccesses = new Supplier[SIZE];
+    private final Supplier<ClientPacket>[] supplierAccesses = new Supplier[SIZE];
 
-    public void register(int id, Supplier<? extends ClientPacket> packetSupplier) {
+    public void register(int id, Supplier<ClientPacket> packetSupplier) {
         supplierAccesses[id] = packetSupplier;
     }
 
@@ -19,13 +19,13 @@ public class ClientPacketsHandler {
         if (id > SIZE)
             throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
 
-        Supplier<? extends ClientPacket> supplier = supplierAccesses[id];
+        Supplier<ClientPacket> supplier = supplierAccesses[id];
         if (supplierAccesses[id] == null)
             throw new IllegalStateException("Packet id 0x" + Integer.toHexString(id) + " isn't registered!");
 
-        ClientPacket packet = supplier.get();
+        //ClientPacket packet = supplier.get();
         //System.out.println("RECEIVED PACKET 0x" + Integer.toHexString(id)+" : "+packet.getClass().getSimpleName());
-        return packet;
+        return supplier.get();
     }
 
 }
