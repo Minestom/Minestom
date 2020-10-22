@@ -518,7 +518,6 @@ public class ItemStack implements DataContainer {
      * @return a cloned item stack
      */
     public synchronized ItemStack clone() {
-        System.out.println("clone");
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
