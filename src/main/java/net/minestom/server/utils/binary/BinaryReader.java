@@ -16,8 +16,9 @@ import java.io.InputStream;
 import java.util.UUID;
 
 /**
- * Class used to read from a byte array
- * WARNING: not thread-safe
+ * Class used to read from a byte array.
+ * <p>
+ * WARNING: not thread-safe.
  */
 public class BinaryReader extends InputStream {
 

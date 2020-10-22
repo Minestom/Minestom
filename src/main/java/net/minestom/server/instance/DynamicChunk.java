@@ -309,73 +309,78 @@ public class DynamicChunk extends Chunk {
         // Run in the scheduler thread pool
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             synchronized (this) {
-                try {
 
-                    // VERSION DATA
-                    final int dataFormatVersion = reader.readInteger();
-                    final int dataProtocol = reader.readInteger();
+                // Track changes in the buffer
+                {
+                    final boolean changed = reader.available() != length;
+                    Check.stateCondition(changed,
+                            "The number of readable bytes changed, be sure to do not manipulate the buffer until the end of the reading.");
+                }
 
-                    if (dataFormatVersion != DATA_FORMAT_VERSION) {
-                        throw new UnsupportedOperationException(
-                                "You are parsing an old version of the chunk format, please contact the developer: " + dataFormatVersion);
-                    }
+                // VERSION DATA
+                final int dataFormatVersion = reader.readInteger();
+                final int dataProtocol = reader.readInteger();
 
-                    // INDEX DATA
-                    // Used for blocks data
-                    Object2ShortMap<String> typeToIndexMap = null;
+                if (dataFormatVersion != DATA_FORMAT_VERSION) {
+                    throw new UnsupportedOperationException(
+                            "You are parsing an old version of the chunk format, please contact the developer: " + dataFormatVersion);
+                }
 
-                    // Get if the chunk has data indexes (used for blocks data)
-                    final boolean hasDataIndex = reader.readBoolean();
-                    if (hasDataIndex) {
-                        // Get the data indexes which will be used to read all the individual data
-                        typeToIndexMap = SerializableData.readDataIndexes(reader);
-                    }
+                // INDEX DATA
+                // Used for blocks data
+                Object2ShortMap<String> typeToIndexMap = null;
 
-                    // CHUNK DATA
-                    // Chunk data
-                    final boolean hasChunkData = reader.readBoolean();
-                    if (hasChunkData) {
-                        SerializableData serializableData = new SerializableDataImpl();
-                        serializableData.readSerializedData(reader, typeToIndexMap);
-                    }
+                // Get if the chunk has data indexes (used for blocks data)
+                final boolean hasDataIndex = reader.readBoolean();
+                if (hasDataIndex) {
+                    // Get the data indexes which will be used to read all the individual data
+                    typeToIndexMap = SerializableData.readDataIndexes(reader);
+                }
 
-                    // Biomes
-                    for (int i = 0; i < BIOME_COUNT; i++) {
-                        final byte id = reader.readByte();
-                        this.biomes[i] = BIOME_MANAGER.getById(id);
-                    }
+                // CHUNK DATA
+                // Chunk data
+                final boolean hasChunkData = reader.readBoolean();
+                if (hasChunkData) {
+                    SerializableData serializableData = new SerializableDataImpl();
+                    serializableData.readSerializedData(reader, typeToIndexMap);
+                }
 
-                    // Loop for all blocks in the chunk
-                    while (true) {
-                        // Position
-                        final short index = reader.readShort();
-                        final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
-                        final short y = ChunkUtils.blockIndexToChunkPositionY(index);
-                        final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
+                // Biomes
+                for (int i = 0; i < BIOME_COUNT; i++) {
+                    final byte id = reader.readByte();
+                    this.biomes[i] = BIOME_MANAGER.getById(id);
+                }
 
-                        // Block type
-                        final short blockStateId = reader.readShort();
-                        final short customBlockId = reader.readShort();
+                // Loop for all blocks in the chunk
+                while (reader.available() > 0) {
+                    // Position
+                    final short index = reader.readShort();
+                    final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
+                    final short y = ChunkUtils.blockIndexToChunkPositionY(index);
+                    final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
 
-                        // Data
-                        SerializableData data = null;
-                        {
-                            final boolean hasBlockData = reader.readBoolean();
-                            // Data deserializer
-                            if (hasBlockData) {
-                                // Read the data with the deserialized index map
-                                data = new SerializableDataImpl();
-                                data.readSerializedData(reader, typeToIndexMap);
-                            }
+                    // Block type
+                    final short blockStateId = reader.readShort();
+                    final short customBlockId = reader.readShort();
+
+                    // Data
+                    SerializableData data = null;
+                    {
+                        final boolean hasBlockData = reader.readBoolean();
+                        // Data deserializer
+                        if (hasBlockData) {
+                            // Read the data with the deserialized index map
+                            data = new SerializableDataImpl();
+                            data.readSerializedData(reader, typeToIndexMap);
                         }
+                    }
 
-                        UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
-                    }
-                } catch (IndexOutOfBoundsException e) {
-                    // Finished reading
-                    if (callback != null) {
-                        callback.accept(this);
-                    }
+                    UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+                }
+
+                // Finished reading
+                if (callback != null) {
+                    callback.accept(this);
                 }
             }
         }).schedule();
