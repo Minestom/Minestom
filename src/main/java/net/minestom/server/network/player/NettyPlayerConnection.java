@@ -49,8 +49,14 @@ public class NettyPlayerConnection extends PlayerConnection {
         getChannel().pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
     }
 
-    @Override
+    /**
+     * Enables compression and add a new channel to the pipeline.
+     *
+     * @param threshold the threshold for a packet to be compressible
+     * @throws IllegalStateException if encryption is already enabled for this connection
+     */
     public void enableCompression(int threshold) {
+        Check.stateCondition(compressed, "Compression is already enabled!");
         this.compressed = true;
         sendPacket(new SetCompressionPacket(threshold));
         channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));

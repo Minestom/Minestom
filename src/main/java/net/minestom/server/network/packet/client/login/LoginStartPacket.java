@@ -9,6 +9,7 @@ import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnect;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 
@@ -39,8 +40,8 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
             final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
 
-            if (threshold > 0) {
-                connection.enableCompression(threshold);
+            if (threshold > 0 && connection instanceof NettyPlayerConnection) {
+                ((NettyPlayerConnection) connection).enableCompression(threshold);
             }
 
             LoginSuccessPacket successPacket = new LoginSuccessPacket(playerUuid, username);

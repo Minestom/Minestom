@@ -76,8 +76,6 @@ public abstract class PlayerConnection {
         }
     }
 
-    public abstract void enableCompression(int threshold);
-
     /**
      * Sends a raw {@link ByteBuf} to the client.
      *

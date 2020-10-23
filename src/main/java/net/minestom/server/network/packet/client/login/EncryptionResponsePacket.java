@@ -40,9 +40,10 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                         ((NettyPlayerConnection) connection).setEncryptionKey(getSecretKey());
                         final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
 
-                        if (threshold > 0) {
-                            connection.enableCompression(threshold);
+                        if (threshold > 0 && connection instanceof NettyPlayerConnection) {
+                            ((NettyPlayerConnection) connection).enableCompression(threshold);
                         }
+
                         LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(gameProfile.getId(), gameProfile.getName());
                         connection.sendPacket(loginSuccessPacket);
                         MinecraftServer.getLOGGER().info("UUID of player {} is {}", connection.getLoginUsername(), gameProfile.getId());
