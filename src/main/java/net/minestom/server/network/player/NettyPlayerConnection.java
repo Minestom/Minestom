@@ -10,6 +10,7 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.validate.Check;
 
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
@@ -27,12 +28,22 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Getter
     private boolean compressed = false;
 
+    private String serverAddress;
+    private int serverPort;
+
     public NettyPlayerConnection(SocketChannel channel) {
         super();
         this.channel = channel;
     }
 
+    /**
+     * Sets the encryption key and add the channels to the pipeline.
+     *
+     * @param secretKey the secret key to use in the encryption
+     * @throws IllegalStateException if encryption is already enabled for this connection
+     */
     public void setEncryptionKey(SecretKey secretKey) {
+        Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
         getChannel().pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
         getChannel().pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
@@ -93,4 +104,36 @@ public class NettyPlayerConnection extends PlayerConnection {
         return channel;
     }
 
+    /**
+     * Get the server address that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server address used
+     */
+    public String getServerAddress() {
+        return serverAddress;
+    }
+
+    /**
+     * Get the server port that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server port used
+     */
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    /**
+     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     *
+     * @param serverAddress the server address which the client used
+     * @param serverPort    the server port which the client used
+     */
+    public void refreshServerInformation(String serverAddress, int serverPort) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+    }
 }

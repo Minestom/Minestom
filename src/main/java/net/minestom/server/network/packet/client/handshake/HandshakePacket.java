@@ -6,6 +6,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnect;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 
@@ -36,8 +37,15 @@ public class HandshakePacket implements ClientPreplayPacket {
                 connection.setConnectionState(ConnectionState.STATUS);
                 break;
             case 2:
-                connection.setConnectionState(ConnectionState.LOGIN);
-                if (protocolVersion != MinecraftServer.PROTOCOL_VERSION) {
+                if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
+                    connection.setConnectionState(ConnectionState.LOGIN);
+
+                    if (connection instanceof NettyPlayerConnection) {
+                        // Give to the connection the server info that the client used
+                        ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort);
+                    }
+                } else {
+                    // Incorrect client version
                     connection.sendPacket(new LoginDisconnect(INVALID_VERSION_TEXT.toString()));
                     connection.disconnect();
                 }
