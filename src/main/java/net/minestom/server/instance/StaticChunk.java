@@ -27,6 +27,7 @@ public class StaticChunk extends Chunk {
     public StaticChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
         super(instance, biomes, chunkX, chunkZ, false);
         this.blockProvider = blockProvider;
+        setReadOnly(true);
     }
 
     @Override

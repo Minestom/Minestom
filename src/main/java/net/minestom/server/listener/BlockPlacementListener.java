@@ -80,46 +80,50 @@ public class BlockPlacementListener {
         boolean refreshChunk = false;
 
         if (material.isBlock()) {
-            final Block block = material.getBlock();
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            // Check if the player is trying to place a block in an entity
-            boolean intersect = false;
-            if (block.isSolid()) {
-                for (Entity entity : entities) {
-                    intersect = entity.getBoundingBox().intersect(blockPosition);
-                    if (intersect)
-                        break;
-                }
-            }
-
-            if (!intersect) {
-                // BlockPlacementRule check
-                final BlockManager blockManager = MinecraftServer.getBlockManager();
-                final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
-                final short blockStateId = blockPlacementRule == null ? block.getBlockId() :
-                        blockPlacementRule.blockPlace(instance, block, blockFace, player);
-
-                PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockStateId, (short) 0, blockPosition, packet.hand);
-                playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
-
-                // BlockPlacementRule check
-                final boolean canPlace = blockPlacementRule == null || blockPlacementRule.canPlace(instance, blockPosition);
-
-                player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
-                if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
-                    final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
-                    if (customBlockId != 0) {
-                        instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId(), playerBlockPlaceEvent.getCustomBlockId());
-                    } else {
-                        instance.setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId());
+            if (!chunk.isReadOnly()) {
+                final Block block = material.getBlock();
+                final Set<Entity> entities = instance.getChunkEntities(chunk);
+                // Check if the player is trying to place a block in an entity
+                boolean intersect = false;
+                if (block.isSolid()) {
+                    for (Entity entity : entities) {
+                        intersect = entity.getBoundingBox().intersect(blockPosition);
+                        if (intersect)
+                            break;
                     }
-                    if (playerBlockPlaceEvent.doesConsumeBlock()) {
-                        // Consume the block in the player's hand
-                        final ItemStack newUsedItem = usedItem.consume(1);
+                }
 
-                        if (newUsedItem != null) {
-                            playerInventory.setItemInHand(hand, newUsedItem);
+                if (!intersect) {
+                    // BlockPlacementRule check
+                    final BlockManager blockManager = MinecraftServer.getBlockManager();
+                    final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(block);
+                    final short blockStateId = blockPlacementRule == null ? block.getBlockId() :
+                            blockPlacementRule.blockPlace(instance, block, blockFace, player);
+
+                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, blockStateId, (short) 0, blockPosition, packet.hand);
+                    playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
+
+                    // BlockPlacementRule check
+                    final boolean canPlace = blockPlacementRule == null || blockPlacementRule.canPlace(instance, blockPosition);
+
+                    player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
+                    if (!playerBlockPlaceEvent.isCancelled() && canPlace) {
+                        final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
+                        if (customBlockId != 0) {
+                            instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId(), playerBlockPlaceEvent.getCustomBlockId());
+                        } else {
+                            instance.setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), playerBlockPlaceEvent.getBlockStateId());
                         }
+                        if (playerBlockPlaceEvent.doesConsumeBlock()) {
+                            // Consume the block in the player's hand
+                            final ItemStack newUsedItem = usedItem.consume(1);
+
+                            if (newUsedItem != null) {
+                                playerInventory.setItemInHand(hand, newUsedItem);
+                            }
+                        }
+                    } else {
+                        refreshChunk = true;
                     }
                 } else {
                     refreshChunk = true;

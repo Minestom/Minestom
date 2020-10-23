@@ -160,6 +160,10 @@ public class InstanceContainer extends Instance {
      * @param data         the {@link Data}, null if none
      */
     private void UNSAFE_setBlock(Chunk chunk, int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
+        if (chunk.isReadOnly()) {
+            return;
+        }
+
         synchronized (chunk) {
 
             final boolean isCustomBlock = customBlock != null;
@@ -341,6 +345,11 @@ public class InstanceContainer extends Instance {
         player.resetTargetBlock();
 
         final Chunk chunk = getChunkAt(blockPosition);
+
+        // Cancel if the chunk is read-only
+        if (chunk.isReadOnly()) {
+            return false;
+        }
 
         // Chunk unloaded, stop here
         if (!ChunkUtils.isLoaded(chunk))

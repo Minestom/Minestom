@@ -63,6 +63,7 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     // Options
     private final boolean shouldGenerate;
+    private boolean readOnly;
 
     // Packet cache
     private volatile boolean enableCachePacket;
@@ -275,6 +276,24 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     public boolean shouldGenerate() {
         return shouldGenerate;
+    }
+
+    /**
+     * Gets if this chunk is read-only.
+     *
+     * @return true if the chunk is read-only
+     */
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    /**
+     * Changes the read state of the chunk.
+     *
+     * @param readOnly true to make the chunk read-only, false otherwise
+     */
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     /**
