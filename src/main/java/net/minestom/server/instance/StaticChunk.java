@@ -87,7 +87,7 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    protected ChunkDataPacket getFreshPacket() {
+    protected ChunkDataPacket createFreshPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;

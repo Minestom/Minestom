@@ -217,9 +217,11 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
 
     /**
-     * @return a {@link ChunkDataPacket} containing a copy this chunk data
+     * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.
+     *
+     * @return a new chunk data packet
      */
-    protected abstract ChunkDataPacket getFreshPacket();
+    protected abstract ChunkDataPacket createFreshPacket();
 
     /**
      * Gets the {@link CustomBlock} at a position.
@@ -270,7 +272,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}
+     * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}.
      *
      * @return true if this chunk is affected by a {@link ChunkGenerator}
      */
@@ -280,6 +282,9 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     /**
      * Gets if this chunk is read-only.
+     * <p>
+     * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
+     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
      *
      * @return true if the chunk is read-only
      */
@@ -289,6 +294,9 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     /**
      * Changes the read state of the chunk.
+     * <p>
+     * Being read-only should prevent block placing/breaking and setting block from an {@link Instance}.
+     * It does not affect {@link IChunkLoader} and {@link ChunkGenerator}.
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */
@@ -377,7 +385,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return a fresh full chunk data packet
      */
     public ChunkDataPacket getFreshFullDataPacket() {
-        ChunkDataPacket fullDataPacket = getFreshPacket();
+        ChunkDataPacket fullDataPacket = createFreshPacket();
         fullDataPacket.fullChunk = true;
         return fullDataPacket;
     }
@@ -388,7 +396,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return a fresh non-full chunk data packet
      */
     public ChunkDataPacket getFreshPartialDataPacket() {
-        ChunkDataPacket fullDataPacket = getFreshPacket();
+        ChunkDataPacket fullDataPacket = createFreshPacket();
         fullDataPacket.fullChunk = false;
         return fullDataPacket;
     }
