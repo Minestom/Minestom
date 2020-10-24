@@ -1,5 +1,7 @@
 package net.minestom.server.data;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents an element which can have a {@link Data} attached to it.
  * <p>
@@ -15,6 +17,7 @@ public interface DataContainer {
      *
      * @return the {@link Data} of this container, can be null
      */
+    @Nullable
     Data getData();
 
     /**
@@ -22,6 +25,6 @@ public interface DataContainer {
      *
      * @param data the {@link Data} of this container, null to remove it
      */
-    void setData(Data data);
+    void setData(@Nullable Data data);
 
 }

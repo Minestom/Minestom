@@ -1,5 +1,6 @@
 package net.minestom.server.item.metadata;
 
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public class CompassMeta implements ItemMeta {
@@ -54,7 +55,7 @@ public class CompassMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof CompassMeta))
             return false;
         CompassMeta compassMeta = (CompassMeta) itemMeta;
@@ -64,7 +65,7 @@ public class CompassMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("LodestoneTracked")) {
             this.lodestoneTracked = compound.getByte("LodestoneTracked") == 1;
             // TODO get boolean
@@ -81,7 +82,7 @@ public class CompassMeta implements ItemMeta {
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
         if(lodestoneDimension != null) {
             compound.setString("LodestoneDimension", lodestoneDimension);
@@ -96,6 +97,7 @@ public class CompassMeta implements ItemMeta {
         }
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         CompassMeta compassMeta = new CompassMeta();

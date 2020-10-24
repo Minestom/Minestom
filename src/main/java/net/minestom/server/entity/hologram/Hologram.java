@@ -7,6 +7,7 @@ import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -105,15 +106,16 @@ public class Hologram implements Viewable {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         return entity.addViewer(player);
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         return entity.removeViewer(player);
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return entity.getViewers();

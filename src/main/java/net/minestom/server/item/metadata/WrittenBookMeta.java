@@ -2,6 +2,7 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTString;
@@ -118,7 +119,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof WrittenBookMeta))
             return false;
         final WrittenBookMeta writtenBookMeta = (WrittenBookMeta) itemMeta;
@@ -130,7 +131,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("resolved")) {
             this.resolved = compound.getByte("resolved") == 1;
         }
@@ -154,7 +155,7 @@ public class WrittenBookMeta implements ItemMeta {
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (resolved) {
             compound.setByte("resolved", (byte) 1);
         }
@@ -176,6 +177,7 @@ public class WrittenBookMeta implements ItemMeta {
         }
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         WrittenBookMeta writtenBookMeta = new WrittenBookMeta();

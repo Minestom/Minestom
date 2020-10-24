@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.entity.PlayerSkin;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public class PlayerHeadMeta implements ItemMeta {
@@ -14,7 +15,7 @@ public class PlayerHeadMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof PlayerHeadMeta))
             return false;
         final PlayerHeadMeta playerHeadMeta = (PlayerHeadMeta) itemMeta;
@@ -22,15 +23,16 @@ public class PlayerHeadMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
 
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
 
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         return null;

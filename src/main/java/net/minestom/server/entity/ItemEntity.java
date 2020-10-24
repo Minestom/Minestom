@@ -9,6 +9,8 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -48,6 +50,7 @@ public class ItemEntity extends ObjectEntity {
      *
      * @return the merge update option
      */
+    @Nullable
     public static UpdateOption getMergeUpdateOption() {
         return mergeUpdateOption;
     }
@@ -58,7 +61,7 @@ public class ItemEntity extends ObjectEntity {
      *
      * @param mergeUpdateOption the new merge update option
      */
-    public static void setMergeUpdateOption(UpdateOption mergeUpdateOption) {
+    public static void setMergeUpdateOption(@Nullable UpdateOption mergeUpdateOption) {
         ItemEntity.mergeUpdateOption = mergeUpdateOption;
     }
 
@@ -117,6 +120,7 @@ public class ItemEntity extends ObjectEntity {
         this.spawnTime = System.currentTimeMillis();
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -126,7 +130,7 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);
@@ -233,7 +237,7 @@ public class ItemEntity extends ObjectEntity {
      * @param delay    the pickup delay
      * @param timeUnit the unit of the delay
      */
-    public void setPickupDelay(long delay, TimeUnit timeUnit) {
+    public void setPickupDelay(long delay, @NotNull TimeUnit timeUnit) {
         this.pickupDelay = timeUnit.toMilliseconds(delay);
     }
 

@@ -2,6 +2,7 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.utils.NBTUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class EnchantedBookMeta implements ItemMeta {
      *
      * @return an unmodifiable map containing the item stored enchantments
      */
+    @NotNull
     public Map<Enchantment, Short> getStoredEnchantmentMap() {
         return Collections.unmodifiableMap(storedEnchantmentMap);
     }
@@ -28,7 +30,7 @@ public class EnchantedBookMeta implements ItemMeta {
      * @param enchantment the enchantment type
      * @param level       the enchantment level
      */
-    public void setStoredEnchantment(Enchantment enchantment, short level) {
+    public void setStoredEnchantment(@NotNull Enchantment enchantment, short level) {
         if (level < 1) {
             removeStoredEnchantment(enchantment);
             return;
@@ -42,7 +44,7 @@ public class EnchantedBookMeta implements ItemMeta {
      *
      * @param enchantment the enchantment type
      */
-    public void removeStoredEnchantment(Enchantment enchantment) {
+    public void removeStoredEnchantment(@NotNull Enchantment enchantment) {
         this.storedEnchantmentMap.remove(enchantment);
     }
 
@@ -52,7 +54,7 @@ public class EnchantedBookMeta implements ItemMeta {
      * @param enchantment the enchantment type
      * @return the stored enchantment level, 0 if not present
      */
-    public int getStoredEnchantmentLevel(Enchantment enchantment) {
+    public int getStoredEnchantmentLevel(@NotNull Enchantment enchantment) {
         return this.storedEnchantmentMap.getOrDefault(enchantment, (short) 0);
     }
 
@@ -62,25 +64,26 @@ public class EnchantedBookMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         return itemMeta instanceof EnchantedBookMeta &&
                 ((EnchantedBookMeta) itemMeta).storedEnchantmentMap.equals(storedEnchantmentMap);
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("StoredEnchantments")) {
             NBTUtils.loadEnchantments(compound.getList("StoredEnchantments"), this::setStoredEnchantment);
         }
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (!storedEnchantmentMap.isEmpty()) {
             NBTUtils.writeEnchant(compound, "StoredEnchantments", storedEnchantmentMap);
         }
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         EnchantedBookMeta enchantedBookMeta = new EnchantedBookMeta();

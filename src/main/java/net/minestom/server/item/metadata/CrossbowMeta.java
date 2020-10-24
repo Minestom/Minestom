@@ -6,6 +6,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -106,7 +107,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof CrossbowMeta))
             return false;
 
@@ -125,7 +126,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("ChargedProjectiles")) {
             final NBTList<NBTCompound> projectilesList = compound.getList("ChargedProjectiles");
             int index = 0;
@@ -158,7 +159,7 @@ public class CrossbowMeta implements ItemMeta {
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (projectile1 != null || projectile2 != null || projectile3 != null) {
             NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
             if (projectile1 != null) {
@@ -178,6 +179,7 @@ public class CrossbowMeta implements ItemMeta {
         }
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         CrossbowMeta crossbowMeta = new CrossbowMeta();

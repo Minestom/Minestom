@@ -4,6 +4,7 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -78,7 +79,7 @@ public class PotionMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof PotionMeta))
             return false;
         PotionMeta potionMeta = (PotionMeta) itemMeta;
@@ -91,7 +92,7 @@ public class PotionMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("Potion")) {
             this.potionType = Registries.getPotionType(compound.getString("Potion"));
         }
@@ -120,7 +121,7 @@ public class PotionMeta implements ItemMeta {
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (potionType != null) {
             compound.setString("Potion", potionType.getNamespaceID());
         }
@@ -149,6 +150,7 @@ public class PotionMeta implements ItemMeta {
 
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         PotionMeta potionMeta = new PotionMeta();

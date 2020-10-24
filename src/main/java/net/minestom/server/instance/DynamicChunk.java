@@ -23,6 +23,7 @@ import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -123,7 +124,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void tick(long time, Instance instance) {
+    public void tick(long time, @NotNull Instance instance) {
         if (updatableBlocks.isEmpty())
             return;
 
@@ -202,6 +203,7 @@ public class DynamicChunk extends Chunk {
         }
     }
 
+    @NotNull
     @Override
     public Set<Integer> getBlockEntities() {
         return blockEntities;
@@ -302,7 +304,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void readChunk(BinaryReader reader, ChunkCallback callback) {
+    public void readChunk(@NotNull BinaryReader reader, ChunkCallback callback) {
         // Check the buffer length
         final int length = reader.available();
         Check.argCondition(length == 0, "The length of the buffer must be > 0");
@@ -385,6 +387,7 @@ public class DynamicChunk extends Chunk {
         }).schedule();
     }
 
+    @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();

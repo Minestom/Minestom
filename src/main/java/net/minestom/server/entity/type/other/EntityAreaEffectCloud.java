@@ -5,6 +5,7 @@ import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -26,6 +27,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         });
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -38,7 +40,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);

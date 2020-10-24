@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.utils.PrimitiveConversion;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +40,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * @throws UnsupportedOperationException if {@code type} is not registered in {@link DataManager}
      */
     @Override
-    public <T> void set(String key, T value, Class<T> type) {
+    public <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type) {
         if (DATA_MANAGER.getDataType(type) == null) {
             throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
         }

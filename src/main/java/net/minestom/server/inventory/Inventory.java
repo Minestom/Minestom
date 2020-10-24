@@ -19,6 +19,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -238,20 +239,21 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         sendSlotRefresh(slot, getItemStack(slot));
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
         update(player);
         return result;
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
         this.cursorPlayersItem.remove(player);
         this.clickProcessor.clearCache(player);

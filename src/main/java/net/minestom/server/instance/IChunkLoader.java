@@ -4,6 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.thread.MinestomThread;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +28,7 @@ public interface IChunkLoader {
      *                 never called if the method returns false. Can be null.
      * @return true if the chunk loaded successfully, false otherwise
      */
-    boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback);
+    boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * Saves a {@link Chunk} with an optional callback for when it is done.
@@ -36,7 +38,7 @@ public interface IChunkLoader {
      *                 should be called even if the saving failed (you can throw an exception).
      *                 Can be null.
      */
-    void saveChunk(Chunk chunk, Runnable callback);
+    void saveChunk(@NotNull Chunk chunk, @Nullable Runnable callback);
 
     /**
      * Saves multiple chunks with an optional callback for when it is done.
@@ -48,7 +50,7 @@ public interface IChunkLoader {
      *                 should be called even if the saving failed (you can throw an exception).
      *                 Can be null.
      */
-    default void saveChunks(Collection<Chunk> chunks, Runnable callback) {
+    default void saveChunks(@NotNull Collection<Chunk> chunks, @Nullable Runnable callback) {
         if (supportsParallelSaving()) {
             ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
             chunks.forEach(c -> parallelSavingThreadPool.execute(() -> saveChunk(c, null)));

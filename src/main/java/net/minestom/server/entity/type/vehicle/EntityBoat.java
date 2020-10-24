@@ -6,6 +6,7 @@ import net.minestom.server.entity.type.Vehicle;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -26,6 +27,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
         return 0;
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -39,7 +41,7 @@ public class EntityBoat extends ObjectEntity implements Vehicle {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 10) {
             packet.writeByte((byte) 10);

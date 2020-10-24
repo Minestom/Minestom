@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -38,7 +39,7 @@ public class BossBar implements Viewable {
      * @param color    the boss bar color
      * @param division the boss bar division
      */
-    public BossBar(ColoredText title, BarColor color, BarDivision division) {
+    public BossBar(ColoredText title, @NotNull BarColor color, @NotNull BarDivision division) {
         this.title = title;
         this.color = color;
         this.division = division;
@@ -50,12 +51,12 @@ public class BossBar implements Viewable {
      * @param player the player to check the boss bars
      * @return all the visible boss bars of the player, null if not any
      */
-    public static Set<BossBar> getBossBars(Player player) {
+    public static Set<BossBar> getBossBars(@NotNull Player player) {
         return PLAYER_BOSSBAR_MAP.getOrDefault(player, null);
     }
 
     @Override
-    public synchronized boolean addViewer(Player player) {
+    public synchronized boolean addViewer(@NotNull Player player) {
         // Check already viewer
         if (isViewer(player)) {
             return false;
@@ -71,7 +72,7 @@ public class BossBar implements Viewable {
     }
 
     @Override
-    public synchronized boolean removeViewer(Player player) {
+    public synchronized boolean removeViewer(@NotNull Player player) {
         // Check not viewer
         final boolean result = this.viewers.remove(player);
         if (result) {
@@ -82,6 +83,7 @@ public class BossBar implements Viewable {
         return result;
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
@@ -133,6 +135,7 @@ public class BossBar implements Viewable {
      *
      * @return the current bossbar color
      */
+    @NotNull
     public BarColor getColor() {
         return color;
     }
@@ -142,7 +145,7 @@ public class BossBar implements Viewable {
      *
      * @param color the new color of the bossbar
      */
-    public void setColor(BarColor color) {
+    public void setColor(@NotNull BarColor color) {
         this.color = color;
         updateStyle();
     }
@@ -152,6 +155,7 @@ public class BossBar implements Viewable {
      *
      * @return the current bossbar division
      */
+    @NotNull
     public BarDivision getDivision() {
         return division;
     }
@@ -161,7 +165,7 @@ public class BossBar implements Viewable {
      *
      * @param division the new bossbar division count
      */
-    public void setDivision(BarDivision division) {
+    public void setDivision(@NotNull BarDivision division) {
         this.division = division;
         updateStyle();
     }
@@ -213,7 +217,7 @@ public class BossBar implements Viewable {
      *
      * @param player the player to remove from the map
      */
-    private void removePlayer(Player player) {
+    private void removePlayer(@NotNull Player player) {
         if (!PLAYER_BOSSBAR_MAP.containsKey(player)) {
             return;
         }
@@ -231,7 +235,7 @@ public class BossBar implements Viewable {
      *
      * @param player the player to create the bossbar to
      */
-    private void addToPlayer(Player player) {
+    private void addToPlayer(@NotNull Player player) {
         // Add to the map
         Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.computeIfAbsent(player, p -> new HashSet<>());
         bossBars.add(this);
@@ -252,7 +256,7 @@ public class BossBar implements Viewable {
      *
      * @param player the player to remove the bossbar to
      */
-    private void removeToPlayer(Player player) {
+    private void removeToPlayer(@NotNull Player player) {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.REMOVE;

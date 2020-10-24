@@ -5,9 +5,12 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockProvider;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +39,7 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    public void tick(long time, Instance instance) {
+    public void tick(long time, @NotNull Instance instance) {
         //noop
     }
 
@@ -71,6 +74,7 @@ public class StaticChunk extends Chunk {
         //noop
     }
 
+    @NotNull
     @Override
     public Set<Integer> getBlockEntities() {
         return new HashSet<>();
@@ -82,10 +86,11 @@ public class StaticChunk extends Chunk {
     }
 
     @Override
-    public void readChunk(BinaryReader reader, ChunkCallback callback) {
-        callback.accept(this);
+    public void readChunk(@NotNull BinaryReader reader, @Nullable ChunkCallback callback) {
+        OptionalCallback.execute(callback, this);
     }
 
+    @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket();

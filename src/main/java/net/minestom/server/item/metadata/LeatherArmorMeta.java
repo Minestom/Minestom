@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.chat.ChatColor;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public class LeatherArmorMeta implements ItemMeta {
@@ -73,7 +74,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof LeatherArmorMeta))
             return false;
         final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
@@ -84,7 +85,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("display")) {
             final NBTCompound nbtCompound = compound.getCompound("display");
             if (nbtCompound.containsKey("color")) {
@@ -97,7 +98,7 @@ public class LeatherArmorMeta implements ItemMeta {
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (modified) {
             NBTCompound displayCompound;
             if (!compound.containsKey("display")) {
@@ -110,6 +111,7 @@ public class LeatherArmorMeta implements ItemMeta {
         }
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         LeatherArmorMeta leatherArmorMeta = new LeatherArmorMeta();

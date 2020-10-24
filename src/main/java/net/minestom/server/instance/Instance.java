@@ -30,6 +30,8 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -145,7 +147,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback optional consumer called after the chunk has been generated,
      *                 the returned chunk will never be null
      */
-    public abstract void loadChunk(int chunkX, int chunkZ, ChunkCallback callback);
+    public abstract void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * Loads the chunk if the chunk is already loaded or if
@@ -156,7 +158,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback optional consumer called after the chunk has tried to be loaded,
      *                 contains a chunk if it is successful, null otherwise
      */
-    public abstract void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback);
+    public abstract void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
@@ -167,7 +169,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunk the chunk to unload
      */
-    public abstract void unloadChunk(Chunk chunk);
+    public abstract void unloadChunk(@NotNull Chunk chunk);
 
     /**
      * Gets the loaded {@link Chunk} at a position.
@@ -178,6 +180,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
      */
+    @Nullable
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
     /**
@@ -186,14 +189,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunk    the {@link Chunk} to save
      * @param callback optional callback called when the {@link Chunk} is done saving
      */
-    public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
+    public abstract void saveChunkToStorage(Chunk chunk, @Nullable Runnable callback);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
      * @param callback optional callback called when the chunks are done saving
      */
-    public abstract void saveChunksToStorage(Runnable callback);
+    public abstract void saveChunksToStorage(@Nullable Runnable callback);
 
     /**
      * Creates a new {@link BlockBatch} linked to this instance.
@@ -256,7 +259,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunkZ   the chunk X
      * @param callback the optional callback executed once the {@link Chunk} has been retrieved
      */
-    protected abstract void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback);
+    protected abstract void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * Called to generated a new {@link Chunk} from scratch.
@@ -267,7 +270,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunkZ   the chunk Z
      * @param callback the optional callback executed with the newly created {@link Chunk}
      */
-    protected abstract void createChunk(int chunkX, int chunkZ, ChunkCallback callback);
+    protected abstract void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * When set to true, chunks will load automatically when requested.
@@ -543,7 +546,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @param callback the optional callback to run when the chunk is loaded
      */
-    public void loadChunk(Position position, ChunkCallback callback) {
+    public void loadChunk(Position position, @Nullable ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadChunk(chunkX, chunkZ, callback);
@@ -556,7 +559,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
-    public void loadOptionalChunk(Position position, ChunkCallback callback) {
+    public void loadOptionalChunk(Position position, @Nullable ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);
@@ -606,7 +609,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @return the block state id at the position
      */
-    public short getBlockStateId(BlockPosition blockPosition) {
+    public short getBlockStateId(@NotNull BlockPosition blockPosition) {
         return getBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
@@ -618,6 +621,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z the Z position
      * @return the custom block object at the position, null if not any
      */
+    @Nullable
     public CustomBlock getCustomBlock(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
@@ -630,7 +634,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @return the custom block object at the position, null if not any
      */
-    public CustomBlock getCustomBlock(BlockPosition blockPosition) {
+    @Nullable
+    public CustomBlock getCustomBlock(@NotNull BlockPosition blockPosition) {
         return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
@@ -642,7 +647,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param actionParam
      * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
-    public void sendBlockAction(BlockPosition blockPosition, byte actionId, byte actionParam) {
+    public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {
         final short blockStateId = getBlockStateId(blockPosition);
         final Block block = Block.fromStateId(blockStateId);
 
@@ -677,7 +682,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @return the block data at the position, null if not any
      */
-    public Data getBlockData(BlockPosition blockPosition) {
+    public Data getBlockData(@NotNull BlockPosition blockPosition) {
         return getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
@@ -689,7 +694,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z    the Z position
      * @param data the data to be set, can be null
      */
-    public void setBlockData(int x, int y, int z, Data data) {
+    public void setBlockData(int x, int y, int z, @Nullable Data data) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         synchronized (chunk) {
@@ -703,7 +708,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @param data          the data to be set, can be null
      */
-    public void setBlockData(BlockPosition blockPosition, Data data) {
+    public void setBlockData(@NotNull BlockPosition blockPosition, Data data) {
         setBlockData(blockPosition.getX(), (byte) blockPosition.getY(), blockPosition.getZ(), data);
     }
 
@@ -714,6 +719,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z the Z position
      * @return the chunk at the given position, null if not loaded
      */
+    @Nullable
     public Chunk getChunkAt(float x, float z) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
@@ -737,7 +743,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the chunk position
      * @return the chunk at the given position, null if not loaded
      */
-    public Chunk getChunkAt(BlockPosition blockPosition) {
+    @Nullable
+    public Chunk getChunkAt(@NotNull BlockPosition blockPosition) {
         return getChunkAt(blockPosition.getX(), blockPosition.getZ());
     }
 
@@ -747,7 +754,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @return the chunk at the given position, null if not loaded
      */
-    public Chunk getChunkAt(Position position) {
+    @Nullable
+    public Chunk getChunkAt(@NotNull Position position) {
         return getChunkAt(position.getX(), position.getZ());
     }
 
@@ -756,7 +764,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunk the chunk to save
      */
-    public void saveChunkToStorage(Chunk chunk) {
+    public void saveChunkToStorage(@NotNull Chunk chunk) {
         saveChunkToStorage(chunk, null);
     }
 
@@ -772,6 +780,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the instance unique id
      */
+    @NotNull
     public UUID getUniqueId() {
         return uniqueId;
     }
@@ -782,7 +791,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     @Override
-    public void setData(Data data) {
+    public void setData(@Nullable Data data) {
         this.data = data;
     }
 
@@ -801,7 +810,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to add
      */
-    public void addEntity(Entity entity) {
+    public void addEntity(@NotNull Entity entity) {
         final Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
             lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
@@ -844,7 +853,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to remove
      */
-    public void removeEntity(Entity entity) {
+    public void removeEntity(@NotNull Entity entity) {
         final Instance entityInstance = entity.getInstance();
         if (entityInstance != this)
             return;
@@ -868,7 +877,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to add
      * @param chunk  the chunk where the entity will be added
      */
-    public void addEntityToChunk(Entity entity, Chunk chunk) {
+    public void addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         Check.notNull(chunk,
                 "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
         Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
@@ -899,7 +908,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to remove
      * @param chunk  the chunk where the entity will be removed
      */
-    public void removeEntityFromChunk(Entity entity, Chunk chunk) {
+    public void removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         synchronized (chunkEntities) {
             if (chunk != null) {
                 final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
@@ -925,13 +934,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         }
     }
 
+    @NotNull
     private Set<Entity> getEntitiesInChunk(long index) {
         return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
     }
 
     /**
      * Schedules a block update at a given {@link BlockPosition}.
-     * Does nothing if no {@link CustomBlock} is present at 'position'.
+     * Does nothing if no {@link CustomBlock} is present at {@code position}.
      * <p>
      * Cancelled if the block changes between this call and the actual update.
      *
@@ -939,7 +949,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param unit     in what unit is the time expressed
      * @param position the location of the block to update
      */
-    public abstract void scheduleUpdate(int time, TimeUnit unit, BlockPosition position);
+    public abstract void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position);
 
     /**
      * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.
@@ -999,7 +1009,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param additionalData data to pass to the explosion supplier
      * @throws IllegalStateException If no {@link ExplosionSupplier} was supplied
      */
-    public void explode(float centerX, float centerY, float centerZ, float strength, Data additionalData) {
+    public void explode(float centerX, float centerY, float centerZ, float strength, @Nullable Data additionalData) {
         final ExplosionSupplier explosionSupplier = getExplosionSupplier();
         Check.stateCondition(explosionSupplier == null, "Tried to create an explosion with no explosion supplier");
         final Explosion explosion = explosionSupplier.createExplosion(centerX, centerY, centerZ, strength, additionalData);
@@ -1011,6 +1021,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the instance explosion supplier, null if none was provided
      */
+    @Nullable
     public ExplosionSupplier getExplosionSupplier() {
         return explosionSupplier;
     }
@@ -1020,7 +1031,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param supplier the explosion supplier
      */
-    public void setExplosionSupplier(ExplosionSupplier supplier) {
+    public void setExplosionSupplier(@Nullable ExplosionSupplier supplier) {
         this.explosionSupplier = supplier;
     }
 
@@ -1031,6 +1042,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the instance space
      */
+    @NotNull
     public PFInstanceSpace getInstanceSpace() {
         return instanceSpace;
     }

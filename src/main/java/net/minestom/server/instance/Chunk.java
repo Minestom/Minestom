@@ -27,6 +27,8 @@ import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -79,7 +81,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Data
     protected Data data;
 
-    public Chunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -114,7 +116,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *                      Warning: <code>customBlockId</code> cannot be 0 and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
      */
-    public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable);
+    public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data, boolean updatable);
 
     /**
      * Executes a chunk tick.
@@ -126,7 +128,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param time     the time of the update in milliseconds
      * @param instance the {@link Instance} linked to this chunk
      */
-    public abstract void tick(long time, Instance instance);
+    public abstract void tick(long time, @NotNull Instance instance);
 
     /**
      * Gets the block state id at a position.
@@ -175,6 +177,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param index the block index
      * @return the {@link Data} at the block index, null if none
      */
+    @Nullable
     public abstract Data getBlockData(int index);
 
     /**
@@ -192,6 +195,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @return the block entities in this chunk
      */
+    @NotNull
     public abstract Set<Integer> getBlockEntities();
 
     /**
@@ -210,17 +214,18 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param reader   the data reader
      *                 WARNING: the data will not necessary be read directly in the same thread,
      *                 be sure that the data is only used for this reading.
-     * @param callback the callback to execute once the chunk is done reading
+     * @param callback the optional callback to execute once the chunk is done reading
      *                 WARNING: this need to be called to notify the instance.
      * @see #getSerializedData() which is responsible for the serialized data given
      */
-    public abstract void readChunk(BinaryReader reader, ChunkCallback callback);
+    public abstract void readChunk(@NotNull BinaryReader reader, @Nullable ChunkCallback callback);
 
     /**
      * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.
      *
      * @return a new chunk data packet
      */
+    @NotNull
     protected abstract ChunkDataPacket createFreshPacket();
 
     /**
@@ -395,6 +400,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @return a fresh non-full chunk data packet
      */
+    @NotNull
     public ChunkDataPacket getFreshPartialDataPacket() {
         ChunkDataPacket fullDataPacket = createFreshPacket();
         fullDataPacket.fullChunk = false;
@@ -423,7 +429,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return true if the player has just been added to the viewer collection
      */
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
 
         // Send the chunk data & light packets to the player
@@ -444,7 +450,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return true if the player has just been removed to the viewer collection
      */
     @Override
-    public boolean removeViewer(Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
 
         // Remove from the viewable chunks set
@@ -455,6 +461,7 @@ public abstract class Chunk implements Viewable, DataContainer {
         return result;
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(viewers);
@@ -563,6 +570,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param section the chunk section to update
      * @return the {@link ChunkDataPacket} to update a single chunk section
      */
+    @NotNull
     protected ChunkDataPacket getChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
         chunkDataPacket.fullChunk = false;

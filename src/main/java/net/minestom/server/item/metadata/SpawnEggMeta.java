@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 // TODO for which item
@@ -14,7 +15,7 @@ public class SpawnEggMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         if (!(itemMeta instanceof SpawnEggMeta))
             return false;
         final SpawnEggMeta spawnEggMeta = (SpawnEggMeta) itemMeta;
@@ -22,14 +23,14 @@ public class SpawnEggMeta implements ItemMeta {
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("EntityTag")) {
             // TODO
         }
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
         if (!hasNbt())
             return;
         NBTCompound entityCompound = new NBTCompound();
@@ -39,6 +40,7 @@ public class SpawnEggMeta implements ItemMeta {
 
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         SpawnEggMeta spawnEggMeta = new SpawnEggMeta();

@@ -8,6 +8,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.advancement.AdvancementUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -134,7 +135,7 @@ public class AdvancementTab implements Viewable {
     }
 
     @Override
-    public synchronized boolean addViewer(Player player) {
+    public synchronized boolean addViewer(@NotNull Player player) {
         final boolean result = viewers.add(player);
         if (!result) {
             return false;
@@ -151,7 +152,7 @@ public class AdvancementTab implements Viewable {
     }
 
     @Override
-    public synchronized boolean removeViewer(Player player) {
+    public synchronized boolean removeViewer(@NotNull Player player) {
         if (!isViewer(player)) {
             return false;
         }
@@ -166,6 +167,7 @@ public class AdvancementTab implements Viewable {
         return viewers.remove(player);
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return viewers;

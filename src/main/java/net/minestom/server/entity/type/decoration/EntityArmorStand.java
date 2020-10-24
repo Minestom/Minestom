@@ -11,6 +11,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.item.ItemStackUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -61,7 +62,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         boolean result = super.addViewer(player);
         syncEquipments(player.getPlayerConnection());
         return result;
@@ -72,6 +73,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
         return 0;
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -87,7 +89,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 14) {
             packet.writeByte((byte) 14);

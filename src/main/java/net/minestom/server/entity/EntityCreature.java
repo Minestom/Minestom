@@ -23,6 +23,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +163,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         final boolean result = super.addViewer(player);
 
         final PlayerConnection playerConnection = player.getPlayerConnection();

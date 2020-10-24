@@ -3,6 +3,7 @@ package net.minestom.server.scoreboard;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Set;
@@ -49,7 +50,7 @@ public class TabList implements Scoreboard {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         boolean result = this.viewers.add(player);
         PlayerConnection connection = player.getPlayerConnection();
 
@@ -62,7 +63,7 @@ public class TabList implements Scoreboard {
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         boolean result = this.viewers.remove(player);
         PlayerConnection connection = player.getPlayerConnection();
 
@@ -73,6 +74,7 @@ public class TabList implements Scoreboard {
         return result;
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return Collections.unmodifiableSet(this.viewers);

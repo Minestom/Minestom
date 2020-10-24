@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,7 @@ public interface Viewable {
      * @param player the viewer to add
      * @return true if the player has been added, false otherwise (could be because he is already a viewer)
      */
-    boolean addViewer(Player player);
+    boolean addViewer(@NotNull Player player);
 
     /**
      * Removes a viewer.
@@ -26,13 +27,14 @@ public interface Viewable {
      * @param player the viewer to remove
      * @return true if the player has been removed, false otherwise (could be because he was not a viewer)
      */
-    boolean removeViewer(Player player);
+    boolean removeViewer(@NotNull Player player);
 
     /**
      * Gets all the viewers of this viewable element.
      *
      * @return A Set containing all the element's viewers
      */
+    @NotNull
     Set<Player> getViewers();
 
     /**
@@ -41,7 +43,7 @@ public interface Viewable {
      * @param player the player to check
      * @return true if {@code player} is a viewer, false otherwise
      */
-    default boolean isViewer(Player player) {
+    default boolean isViewer(@NotNull Player player) {
         return getViewers().contains(player);
     }
 
@@ -53,7 +55,7 @@ public interface Viewable {
      *
      * @param packet the packet to send to all viewers
      */
-    default void sendPacketToViewers(ServerPacket packet) {
+    default void sendPacketToViewers(@NotNull ServerPacket packet) {
         PacketWriterUtils.writeAndSend(getViewers(), packet);
     }
 
@@ -65,7 +67,7 @@ public interface Viewable {
      *
      * @param packets the packets to send
      */
-    default void sendPacketsToViewers(ServerPacket... packets) {
+    default void sendPacketsToViewers(@NotNull ServerPacket... packets) {
         for (ServerPacket packet : packets) {
             PacketWriterUtils.writeAndSend(getViewers(), packet);
         }
@@ -78,7 +80,7 @@ public interface Viewable {
      *
      * @param packet the packet to send
      */
-    default void sendPacketToViewersAndSelf(ServerPacket packet) {
+    default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         if (this instanceof Player) {
             if (getViewers().isEmpty()) {
                 ((Player) this).getPlayerConnection().sendPacket(packet);
@@ -97,7 +99,7 @@ public interface Viewable {
      *
      * @param packet the packet to send
      */
-    private void UNSAFE_sendPacketToViewersAndSelf(ServerPacket packet) {
+    private void UNSAFE_sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         Set<Player> recipients = new HashSet<>(getViewers());
         recipients.add((Player) this);
         PacketWriterUtils.writeAndSend(recipients, packet);

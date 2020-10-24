@@ -1,5 +1,6 @@
 package net.minestom.server.item.metadata;
 
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public class FireworkMeta implements ItemMeta {
@@ -19,20 +20,21 @@ public class FireworkMeta implements ItemMeta {
     }
 
     @Override
-    public boolean isSimilar(ItemMeta itemMeta) {
+    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
         return false;
     }
 
     @Override
-    public void read(NBTCompound compound) {
+    public void read(@NotNull NBTCompound compound) {
 
     }
 
     @Override
-    public void write(NBTCompound compound) {
+    public void write(@NotNull NBTCompound compound) {
 
     }
 
+    @NotNull
     @Override
     public ItemMeta clone() {
         return null;

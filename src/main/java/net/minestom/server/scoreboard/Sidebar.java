@@ -10,6 +10,7 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -177,7 +178,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public boolean addViewer(Player player) {
+    public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
 
@@ -195,7 +196,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public boolean removeViewer(Player player) {
+    public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
         PlayerConnection playerConnection = player.getPlayerConnection();
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
@@ -208,6 +209,7 @@ public class Sidebar implements Scoreboard {
         return result;
     }
 
+    @NotNull
     @Override
     public Set<Player> getViewers() {
         return viewers;

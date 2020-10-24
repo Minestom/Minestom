@@ -5,6 +5,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public void saveChunk(Chunk chunk, Runnable callback) {
+    public void saveChunk(@NotNull Chunk chunk, Runnable callback) {
         final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         if (storageLocation == null) {
             callback.run();
@@ -64,7 +65,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
         final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 

@@ -1,5 +1,8 @@
 package net.minestom.server.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.Set;
 
@@ -12,19 +15,20 @@ public interface Data {
 
     Data EMPTY = new Data() {
         @Override
-        public <T> void set(String key, T value, Class<T> type) {
+        public <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type) {
         }
 
         @Override
-        public <T> T get(String key) {
+        public <T> T get(@NotNull String key) {
             return null;
         }
 
         @Override
-        public boolean hasKey(String key) {
+        public boolean hasKey(@NotNull String key) {
             return false;
         }
 
+        @NotNull
         @Override
         public Set<String> getKeys() {
             return Collections.emptySet();
@@ -41,7 +45,7 @@ public interface Data {
         }
 
         @Override
-        public <T> T getOrDefault(String key, T defaultValue) {
+        public <T> T getOrDefault(@NotNull String key, T defaultValue) {
             return defaultValue;
         }
     };
@@ -54,7 +58,7 @@ public interface Data {
      * @param type  the value type
      * @param <T>   the value generic
      */
-    <T> void set(String key, T value, Class<T> type);
+    <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type);
 
     /**
      * Retrieves a value based on its key.
@@ -63,7 +67,8 @@ public interface Data {
      * @param <T> the value type
      * @return the data associated with the key or null
      */
-    <T> T get(String key);
+    @Nullable
+    <T> T get(@NotNull String key);
 
     /**
      * Retrieves a value based on its key, give a default value if not found.
@@ -73,7 +78,8 @@ public interface Data {
      * @param <T>          the value type
      * @return {@link #get(String)} if found, {@code defaultValue} otherwise
      */
-    <T> T getOrDefault(String key, T defaultValue);
+    @Nullable
+    <T> T getOrDefault(@NotNull String key, T defaultValue);
 
     /**
      * Gets if the data has a key.
@@ -81,13 +87,14 @@ public interface Data {
      * @param key the key to check
      * @return true if the data contains the key
      */
-    boolean hasKey(String key);
+    boolean hasKey(@NotNull String key);
 
     /**
      * Gets the list of data keys.
      *
      * @return an unmodifiable {@link Set} containing all the keys
      */
+    @NotNull
     Set<String> getKeys();
 
     /**

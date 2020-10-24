@@ -9,6 +9,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -37,17 +39,17 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    public void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         this.instanceContainer.loadChunk(chunkX, chunkZ, callback);
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    public void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         this.instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
     @Override
-    public void unloadChunk(Chunk chunk) {
+    public void unloadChunk(@NotNull Chunk chunk) {
         instanceContainer.unloadChunk(chunk);
     }
 
@@ -57,12 +59,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveChunkToStorage(Chunk chunk, Runnable callback) {
+    public void saveChunkToStorage(Chunk chunk, @Nullable Runnable callback) {
         this.instanceContainer.saveChunkToStorage(chunk, callback);
     }
 
     @Override
-    public void saveChunksToStorage(Runnable callback) {
+    public void saveChunksToStorage(@Nullable Runnable callback) {
         instanceContainer.saveChunksToStorage(callback);
     }
 
@@ -102,7 +104,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    public void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         this.instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
     }
 
@@ -142,12 +144,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
+    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
         this.instanceContainer.scheduleUpdate(time, unit, position);
     }
 
     /**
-     * Gets the {@link InstanceContainer} from where this instance takes its {@link Chunk} from.
+     * Gets the {@link InstanceContainer} from where this instance takes its chunks from.
      *
      * @return the associated {@link InstanceContainer}
      */

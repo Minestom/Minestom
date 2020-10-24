@@ -6,6 +6,7 @@ import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class ChunkBatch implements InstanceBatch {
         }
     }
 
-    public void flushChunkGenerator(ChunkGenerator chunkGenerator, ChunkCallback callback) {
+    public void flushChunkGenerator(ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
         BLOCK_BATCH_POOL.execute(() -> {
             final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
             final boolean hasPopulator = populators != null && !populators.isEmpty();
@@ -84,7 +85,7 @@ public class ChunkBatch implements InstanceBatch {
      *
      * @param callback the callback to execute once the blocks are placed
      */
-    public void flush(ChunkCallback callback) {
+    public void flush(@Nullable ChunkCallback callback) {
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(callback, true));
     }
 
@@ -95,7 +96,7 @@ public class ChunkBatch implements InstanceBatch {
      *
      * @param callback the callback to execute once the blocks are placed
      */
-    public void unsafeFlush(ChunkCallback callback) {
+    public void unsafeFlush(@Nullable ChunkCallback callback) {
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(callback, false));
     }
 
@@ -114,7 +115,7 @@ public class ChunkBatch implements InstanceBatch {
      * @param callback     the callback to execute once the blocks are placed
      * @param safeCallback true to run the callback in the instance update thread, otherwise run in the current one
      */
-    private void singleThreadFlush(ChunkCallback callback, boolean safeCallback) {
+    private void singleThreadFlush(@Nullable ChunkCallback callback, boolean safeCallback) {
         synchronized (chunk) {
             if (!chunk.isLoaded())
                 return;
@@ -145,7 +146,7 @@ public class ChunkBatch implements InstanceBatch {
         private final short customBlockId;
         private final Data data;
 
-        private BlockData(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+        private BlockData(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
             this.x = x;
             this.y = y;
             this.z = z;

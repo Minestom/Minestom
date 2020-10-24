@@ -29,6 +29,8 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -393,7 +395,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    public void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
@@ -405,7 +407,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    public void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
@@ -422,7 +424,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void unloadChunk(Chunk chunk) {
+    public void unloadChunk(@NotNull Chunk chunk) {
         // Already unloaded chunk
         if (!ChunkUtils.isLoaded(chunk)) {
             return;
@@ -445,9 +447,9 @@ public class InstanceContainer extends Instance {
      * <p>
      * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved.
      *
-     * @param callback the callback once the saving is done. Can be null.
+     * @param callback the optional callback once the saving is done
      */
-    public void saveInstance(Runnable callback) {
+    public void saveInstance(@Nullable Runnable callback) {
         Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
 
         this.storageLocation.set(UUID_KEY, getUniqueId(), UUID.class);
@@ -493,7 +495,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    protected void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    protected void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
             UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
@@ -511,7 +513,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    protected void createChunk(int chunkX, int chunkZ, ChunkCallback callback) {
+    protected void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
@@ -566,7 +568,7 @@ public class InstanceContainer extends Instance {
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
-    public void setChunkSupplier(ChunkSupplier chunkSupplier) {
+    public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         Check.notNull(chunkSupplier, "The chunk supplier cannot be null, you can use a StaticChunk for a lightweight implementation");
         this.chunkSupplier = chunkSupplier;
     }
@@ -676,7 +678,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void scheduleUpdate(int time, TimeUnit unit, BlockPosition position) {
+    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
         final CustomBlock toUpdate = getCustomBlock(position);
         if (toUpdate == null) {
             return;

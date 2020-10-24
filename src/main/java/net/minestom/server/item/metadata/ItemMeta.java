@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
@@ -23,7 +24,7 @@ public interface ItemMeta {
      * @param itemMeta the second item meta to check
      * @return true if the two meta are similar, false otherwise
      */
-    boolean isSimilar(ItemMeta itemMeta);
+    boolean isSimilar(@NotNull ItemMeta itemMeta);
 
     /**
      * Reads nbt data from a compound.
@@ -33,14 +34,14 @@ public interface ItemMeta {
      *
      * @param compound the compound containing the data
      */
-    void read(NBTCompound compound);
+    void read(@NotNull NBTCompound compound);
 
     /**
      * Writes nbt data to a compound.
      *
      * @param compound the compound receiving the item meta data
      */
-    void write(NBTCompound compound);
+    void write(@NotNull NBTCompound compound);
 
     /**
      * Clones this item meta.
@@ -49,6 +50,7 @@ public interface ItemMeta {
      *
      * @return the cloned item meta
      */
+    @NotNull
     ItemMeta clone();
 
 }

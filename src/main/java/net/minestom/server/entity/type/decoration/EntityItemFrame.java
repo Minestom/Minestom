@@ -7,6 +7,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.item.ItemStackUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -26,6 +27,7 @@ public class EntityItemFrame extends ObjectEntity {
         setGravity(0f);
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -36,7 +38,7 @@ public class EntityItemFrame extends ObjectEntity {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
             packet.writeByte((byte) 7);

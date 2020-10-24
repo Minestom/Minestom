@@ -19,6 +19,7 @@ public class EntityMooshroom extends EntityCreature implements Animal {
         setMooshroomType(MooshroomType.RED);
     }
 
+    @NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -28,7 +29,7 @@ public class EntityMooshroom extends EntityCreature implements Animal {
     }
 
     @Override
-    protected void fillMetadataIndex(BinaryWriter packet, int index) {
+    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 16) {
             packet.writeByte((byte) 16);
