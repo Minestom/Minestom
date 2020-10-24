@@ -12,6 +12,7 @@ import java.util.Objects;
 public class NamespaceID implements CharSequence {
     private static final Int2ObjectOpenHashMap<NamespaceID> cache = new Int2ObjectOpenHashMap<>();
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
+    private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";
 
     private final String domain;
     private final String path;
@@ -83,7 +84,7 @@ public class NamespaceID implements CharSequence {
     private void validate() {
         assert !domain.contains(".") && !domain.contains("/") : "Domain cannot contain a dot nor a slash character (" + full + ")";
         assert domain.matches(legalLetters) : "Illegal character in domain (" + full + "). Must match " + legalLetters;
-        assert path.matches(legalLetters) : "Illegal character in path (" + full + "). Must match " + legalLetters;
+        assert path.matches(legalPathLetters) : "Illegal character in path (" + full + "). Must match " + legalPathLetters;
     }
 
     public String getDomain() {
