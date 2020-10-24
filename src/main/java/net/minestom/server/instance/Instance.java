@@ -253,7 +253,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
      * Could be read from disk, or generated from scratch.
      * <p>
-     * WARNING: it has to retrieve a chunk, this is not optional.
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * that this chunk has been loaded.
+     * <p>
+     * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk X
@@ -263,6 +266,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Called to generated a new {@link Chunk} from scratch.
+     * <p>
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * that this chunk has been loaded.
      * <p>
      * This is where you can put your chunk generation code.
      *

@@ -7,6 +7,7 @@ import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -51,6 +52,7 @@ public class BossBar implements Viewable {
      * @param player the player to check the boss bars
      * @return all the visible boss bars of the player, null if not any
      */
+    @Nullable
     public static Set<BossBar> getBossBars(@NotNull Player player) {
         return PLAYER_BOSSBAR_MAP.getOrDefault(player, null);
     }
