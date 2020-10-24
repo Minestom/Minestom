@@ -1,6 +1,10 @@
 package net.minestom.server.extensions;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
 import net.minestom.server.utils.validate.Check;
@@ -9,14 +13,23 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipFile;
 
 @Slf4j
@@ -58,8 +71,9 @@ public class ExtensionManager {
                 loader = newClassLoader(urls);
             } catch (MalformedURLException e) {
                 log.error("Failed to get URL.", e);
-                return;
+                continue;
             }
+            // TODO: Can't we use discoveredExtension.description here? Someone should test that.
             final InputStream extensionInputStream = loader.getResourceAsStream("extension.json");
             if (extensionInputStream == null) {
                 StringBuilder urlsString = new StringBuilder();
@@ -71,12 +85,18 @@ public class ExtensionManager {
                     urlsString.append("'").append(url.toString()).append("'");
                 }
                 log.error("Failed to find extension.json in the urls '{}'.", urlsString);
-                return;
+                continue;
             }
             JsonObject extensionDescriptionJson = JsonParser.parseReader(new InputStreamReader(extensionInputStream)).getAsJsonObject();
 
             final String mainClass = extensionDescriptionJson.get("entrypoint").getAsString();
             final String extensionName = extensionDescriptionJson.get("name").getAsString();
+            // Check the validity of the extension's name.
+            if (!extensionName.matches("[A-Za-z]+")) {
+                log.error("Extension '{}' specified an invalid name.", extensionName);
+                log.error("Extension '{}' will not be loaded.", extensionName);
+                continue;
+            }
 
             // Get ExtensionDescription (authors, version etc.)
             Extension.ExtensionDescription extensionDescription;
@@ -86,22 +106,24 @@ public class ExtensionManager {
                     log.warn("Extension '{}' did not specify a version.", extensionName);
                     log.warn("Extension '{}' will continue to load but should specify a plugin version.", extensionName);
                     version = "Not Specified";
-                } else
+                } else {
                     version = extensionDescriptionJson.get("version").getAsString();
+                }
                 List<String> authors;
                 if (!extensionDescriptionJson.has("authors")) {
                     authors = new ArrayList<>();
-                } else
+                } else {
                     authors = Arrays.asList(new Gson().fromJson(extensionDescriptionJson.get("authors"), String[].class));
+                }
 
                 extensionDescription = new Extension.ExtensionDescription(extensionName, version, authors);
             }
 
-            extensionLoaders.put(extensionName, loader);
+            extensionLoaders.put(extensionName.toLowerCase(), loader);
 
             if (extensions.containsKey(extensionName.toLowerCase())) {
                 log.error("An extension called '{}' has already been registered.", extensionName);
-                return;
+                continue;
             }
 
             Class<?> jarClass;
@@ -109,15 +131,15 @@ public class ExtensionManager {
                 jarClass = Class.forName(mainClass, true, loader);
             } catch (ClassNotFoundException e) {
                 log.error("Could not find main class '{}' in extension '{}'.", mainClass, extensionName, e);
-                return;
+                continue;
             }
 
             Class<? extends Extension> extensionClass;
             try {
                 extensionClass = jarClass.asSubclass(Extension.class);
             } catch (ClassCastException e) {
-                log.error("Main class '{}' in '{}' does not extend the 'extension superclass'.", mainClass, extensionName, e);
-                return;
+                log.error("Main class '{}' in '{}' does not extend the 'Extension' superclass.", mainClass, extensionName, e);
+                continue;
             }
 
             Constructor<? extends Extension> constructor;
@@ -127,15 +149,14 @@ public class ExtensionManager {
                 constructor.setAccessible(true);
             } catch (NoSuchMethodException e) {
                 log.error("Main class '{}' in '{}' does not define a no-args constructor.", mainClass, extensionName, e);
-                return;
+                continue;
             }
             Extension extension = null;
             try {
-                // Is annotated with NotNull
                 extension = constructor.newInstance();
             } catch (InstantiationException e) {
                 log.error("Main class '{}' in '{}' cannot be an abstract class.", mainClass, extensionName, e);
-                return;
+                continue;
             } catch (IllegalAccessException ignored) {
                 // We made it accessible, should not occur
             } catch (InvocationTargetException e) {
@@ -145,9 +166,10 @@ public class ExtensionManager {
                         extensionName,
                         e.getTargetException()
                 );
-                return;
+                continue;
             }
-            // Set description
+
+            // Set extension description
             try {
                 Field descriptionField = extensionClass.getSuperclass().getDeclaredField("description");
                 descriptionField.setAccessible(true);
@@ -156,9 +178,10 @@ public class ExtensionManager {
                 // We made it accessible, should not occur
             } catch (NoSuchFieldException e) {
                 log.error("Main class '{}' in '{}' has no description field.", mainClass, extensionName, e);
-                return;
+                continue;
             }
-            // Set Logger
+
+            // Set logger
             try {
                 Field descriptionField = extensionClass.getSuperclass().getDeclaredField("logger");
                 descriptionField.setAccessible(true);
@@ -167,6 +190,7 @@ public class ExtensionManager {
                 // We made it accessible, should not occur
                 e.printStackTrace();
             } catch (NoSuchFieldException e) {
+                // This should also not occur (unless someone changed the logger in Extension superclass).
                 log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
             }
 
@@ -174,6 +198,7 @@ public class ExtensionManager {
         }
     }
 
+    @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
         for (File file : extensionFolder.listFiles()) {
@@ -245,7 +270,7 @@ public class ExtensionManager {
     /**
      * Extensions are allowed to apply Mixin transformers, the magic happens here.
      */
-    private void setupCodeModifiers(List<DiscoveredExtension> extensions) {
+    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof MinestomOverwriteClassLoader)) {
             log.warn("Current class loader is not a MinestomOverwriteClassLoader, but " + cl + ". This disables code modifiers (Mixin support is therefore disabled)");
