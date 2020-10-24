@@ -4,7 +4,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
-import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -23,8 +22,8 @@ public class CrossbowMeta implements ItemMeta {
      *
      * @param projectile the projectile of the crossbow
      */
-    public void setProjectile(ItemStack projectile) {
-        Check.argCondition(!ItemStackUtils.isVisible(projectile), "the projectile of your crossbow isn't visible (null or air)");
+    public void setProjectile(@NotNull ItemStack projectile) {
+        Check.argCondition(projectile.isAir(), "the projectile of your crossbow isn't visible");
         this.projectile1 = projectile;
         this.triple = false;
     }
@@ -36,10 +35,10 @@ public class CrossbowMeta implements ItemMeta {
      * @param projectile2 the projectile 2
      * @param projectile3 the projectile 3
      */
-    public void setProjectiles(ItemStack projectile1, ItemStack projectile2, ItemStack projectile3) {
-        Check.argCondition(!ItemStackUtils.isVisible(projectile1), "the projectile1 of your crossbow isn't visible (null or air)");
-        Check.argCondition(!ItemStackUtils.isVisible(projectile2), "the projectile2 of your crossbow isn't visible (null or air)");
-        Check.argCondition(!ItemStackUtils.isVisible(projectile3), "the projectile3 of your crossbow isn't visible (null or air)");
+    public void setProjectiles(@NotNull ItemStack projectile1, @NotNull ItemStack projectile2, @NotNull ItemStack projectile3) {
+        Check.argCondition(projectile1.isAir(), "the projectile1 of your crossbow isn't visible");
+        Check.argCondition(projectile2.isAir(), "the projectile2 of your crossbow isn't visible");
+        Check.argCondition(projectile3.isAir(), "the projectile3 of your crossbow isn't visible");
 
         this.projectile1 = projectile1;
         this.projectile2 = projectile2;
@@ -103,7 +102,7 @@ public class CrossbowMeta implements ItemMeta {
 
     @Override
     public boolean hasNbt() {
-        return ItemStackUtils.isVisible(projectile1);
+        return !projectile1.isAir();
     }
 
     @Override
@@ -193,7 +192,8 @@ public class CrossbowMeta implements ItemMeta {
         return crossbowMeta;
     }
 
-    private NBTCompound getItemCompound(ItemStack itemStack) {
+    @NotNull
+    private NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
         NBTCompound compound = new NBTCompound();
 
         compound.setByte("Count", itemStack.getAmount());

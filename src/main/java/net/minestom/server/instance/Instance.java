@@ -708,7 +708,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @param data          the data to be set, can be null
      */
-    public void setBlockData(@NotNull BlockPosition blockPosition, Data data) {
+    public void setBlockData(@NotNull BlockPosition blockPosition, @Nullable Data data) {
         setBlockData(blockPosition.getX(), (byte) blockPosition.getY(), blockPosition.getZ(), data);
     }
 
@@ -795,6 +795,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.data = data;
     }
 
+    @NotNull
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;

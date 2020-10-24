@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.utils.url.URLUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -48,7 +50,8 @@ public class PlayerSkin {
      * @param uuid Mojang UUID
      * @return a player skin based on the UUID, null if not found
      */
-    public static PlayerSkin fromUuid(String uuid) {
+    @Nullable
+    public static PlayerSkin fromUuid(@NotNull String uuid) {
         final String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
 
         try {
@@ -78,7 +81,8 @@ public class PlayerSkin {
      * @param username the Minecraft username
      * @return a skin based on a Minecraft username, null if not found
      */
-    public static PlayerSkin fromUsername(String username) {
+    @Nullable
+    public static PlayerSkin fromUsername(@NotNull String username) {
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
 
         try {

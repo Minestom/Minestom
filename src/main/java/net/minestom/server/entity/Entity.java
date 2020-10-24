@@ -558,13 +558,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         }
     }
 
+    @NotNull
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;
     }
 
     @Override
-    public <E extends Event> void callEvent(Class<E> eventClass, E event) {
+    public <E extends Event> void callEvent(@NotNull Class<E> eventClass, @NotNull E event) {
         EventHandler.super.callEvent(eventClass, event);
 
         // Call the same event for the current entity instance

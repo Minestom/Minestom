@@ -17,7 +17,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.item.ItemStackUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +64,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     // the click processor which process all the clicks in the inventory
     private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
-    public Inventory(InventoryType inventoryType, String title) {
+    public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
         this.id = generateId();
         this.inventoryType = inventoryType;
         this.title = title;
@@ -91,6 +90,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @return the inventory type
      */
+    @NotNull
     public InventoryType getInventoryType() {
         return inventoryType;
     }
@@ -100,6 +100,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @return the inventory title
      */
+    @NotNull
     public String getTitle() {
         return title;
     }
@@ -109,7 +110,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @param title the new inventory title
      */
-    public void setTitle(String title) {
+    public void setTitle(@NotNull String title) {
         this.title = title;
 
         OpenWindowPacket packet = new OpenWindowPacket();
@@ -136,7 +137,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public void setItemStack(int slot, ItemStack itemStack) {
+    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 inventoryType.toString() + " does not have slot " + slot);
 
@@ -144,7 +145,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public synchronized boolean addItemStack(ItemStack itemStack) {
+    public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
         final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < getSize(); i++) {
             ItemStack item = getItemStack(i);
@@ -184,11 +185,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         update();
     }
 
+
+    @NotNull
     @Override
     public ItemStack getItemStack(int slot) {
         return itemStacks[slot];
     }
 
+    @NotNull
     @Override
     public ItemStack[] getItemStacks() {
         return Arrays.copyOf(itemStacks, itemStacks.length);
@@ -199,13 +203,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return size;
     }
 
+    @NotNull
     @Override
     public List<InventoryCondition> getInventoryConditions() {
         return inventoryConditions;
     }
 
     @Override
-    public void addInventoryCondition(InventoryCondition inventoryCondition) {
+    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
         this.inventoryConditions.add(inventoryCondition);
     }
 
@@ -222,7 +227,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @param player the player to update the inventory
      */
-    public void update(Player player) {
+    public void update(@NotNull Player player) {
         if (!getViewers().contains(player))
             return;
 
@@ -266,7 +271,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param player the player to get the cursor item from
      * @return the player cursor item, air item if the player is not a viewer
      */
-    public ItemStack getCursorItem(Player player) {
+    @NotNull
+    public ItemStack getCursorItem(@NotNull Player player) {
         return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
     }
 
@@ -277,11 +283,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param player     the player to change the cursor item
      * @param cursorItem the new player cursor item
      */
-    public void setCursorItem(Player player, ItemStack cursorItem) {
+    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         if (!isViewer(player))
             return;
-
-        cursorItem = ItemStackUtils.notNull(cursorItem);
 
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = -1;
@@ -301,8 +305,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param slot      the internal slot id
      * @param itemStack the item to insert
      */
-    private synchronized void safeItemInsert(int slot, ItemStack itemStack) {
-        itemStack = ItemStackUtils.notNull(itemStack);
+    private synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         setItemStackInternal(slot, itemStack);
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = getWindowId();
@@ -320,7 +323,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param slot      the internal slot
      * @param itemStack the item to insert
      */
-    protected void setItemStackInternal(int slot, ItemStack itemStack) {
+    protected void setItemStackInternal(int slot, @NotNull ItemStack itemStack) {
         itemStacks[slot] = itemStack;
     }
 
@@ -329,6 +332,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      *
      * @return a new {@link WindowItemsPacket} packet
      */
+    @NotNull
     private WindowItemsPacket createNewWindowItemsPacket() {
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
         windowItemsPacket.windowId = getWindowId();
@@ -343,7 +347,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param value    the value of the property
      * @see <a href="https://wiki.vg/Protocol#Window_Property">https://wiki.vg/Protocol#Window_Property</a>
      */
-    protected void sendProperty(InventoryProperty property, short value) {
+    protected void sendProperty(@NotNull InventoryProperty property, short value) {
         WindowPropertyPacket windowPropertyPacket = new WindowPropertyPacket();
         windowPropertyPacket.windowId = getWindowId();
         windowPropertyPacket.property = property.getProperty();
@@ -359,7 +363,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param player    the player to change the cursor item
      * @param itemStack the cursor item
      */
-    private void setCursorPlayerItem(Player player, ItemStack itemStack) {
+    private void setCursorPlayerItem(@NotNull Player player, @NotNull ItemStack itemStack) {
         this.cursorPlayersItem.put(player, itemStack);
     }
 
@@ -368,7 +372,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean leftClick(Player player, int slot) {
+    public boolean leftClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
@@ -395,7 +399,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean rightClick(Player player, int slot) {
+    public boolean rightClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
@@ -421,7 +425,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean shiftClick(Player player, int slot) {
+    public boolean shiftClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
@@ -473,7 +477,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean changeHeld(Player player, int slot, int key) {
+    public boolean changeHeld(@NotNull Player player, int slot, int key) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset);
@@ -502,13 +506,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean middleClick(Player player, int slot) {
+    public boolean middleClick(@NotNull Player player, int slot) {
         // TODO
         return false;
     }
 
     @Override
-    public boolean drop(Player player, int mode, int slot, int button) {
+    public boolean drop(@NotNull Player player, int mode, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final ItemStack clicked = slot == -999 ?
@@ -536,7 +540,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean dragging(Player player, int slot, int button) {
+    public boolean dragging(@NotNull Player player, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         ItemStack clicked = null;
@@ -572,7 +576,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public boolean doubleClick(Player player, int slot) {
+    public boolean doubleClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = getCursorItem(player);
 

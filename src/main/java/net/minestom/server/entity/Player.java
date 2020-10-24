@@ -1936,7 +1936,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param packet the packet to add in the queue
      */
-    public void addPacketToQueue(ClientPlayPacket packet) {
+    public void addPacketToQueue(@NotNull ClientPlayPacket packet) {
         this.packets.add(packet);
     }
 
@@ -2014,6 +2014,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
+    @Nullable
     public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
         final Material mainHandMat = getItemInMainHand().getMaterial();
         final Material offHandMat = getItemInOffHand().getMaterial();
@@ -2043,7 +2044,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param targetBlockPosition the custom block position
      * @param breakers            the breakers of the block, can be null if {@code this} is the only breaker
      */
-    public void setTargetBlock(CustomBlock targetCustomBlock, BlockPosition targetBlockPosition, Set<Player> breakers) {
+    public void setTargetBlock(@NotNull CustomBlock targetCustomBlock, @NotNull BlockPosition targetBlockPosition, @Nullable Set<Player> breakers) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
 
@@ -2055,7 +2056,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param breakers the list of breakers, can be null if {@code this} is the only breaker
      */
-    private void refreshBreakDelay(Set<Player> breakers) {
+    private void refreshBreakDelay(@Nullable Set<Player> breakers) {
         breakers = breakers == null ? targetBreakers : breakers;
 
         // Refresh the last tick update
@@ -2120,6 +2121,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return a {@link PlayerInfoPacket} to add the player
      */
+    @NotNull
     protected PlayerInfoPacket getAddPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
@@ -2146,6 +2148,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return a {@link PlayerInfoPacket} to remove the player
      */
+    @NotNull
     protected PlayerInfoPacket getRemovePlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
 
@@ -2164,7 +2167,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param connection the connection to show the player to
      */
-    protected void showPlayer(PlayerConnection connection) {
+    protected void showPlayer(@NotNull PlayerConnection connection) {
         SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
         spawnPlayerPacket.entityId = getEntityId();
         spawnPlayerPacket.playerUuid = getUuid();
@@ -2193,63 +2196,69 @@ public class Player extends LivingEntity implements CommandSender {
         connection.sendPacket(entityHeadLookPacket);
     }
 
+    @NotNull
     @Override
     public ItemStack getItemInMainHand() {
         return inventory.getItemInMainHand();
     }
 
     @Override
-    public void setItemInMainHand(ItemStack itemStack) {
+    public void setItemInMainHand(@NotNull ItemStack itemStack) {
         inventory.setItemInMainHand(itemStack);
     }
 
+    @NotNull
     @Override
     public ItemStack getItemInOffHand() {
         return inventory.getItemInOffHand();
     }
 
     @Override
-    public void setItemInOffHand(ItemStack itemStack) {
+    public void setItemInOffHand(@NotNull ItemStack itemStack) {
         inventory.setItemInOffHand(itemStack);
     }
 
+    @NotNull
     @Override
     public ItemStack getHelmet() {
         return inventory.getHelmet();
     }
 
     @Override
-    public void setHelmet(ItemStack itemStack) {
+    public void setHelmet(@NotNull ItemStack itemStack) {
         inventory.setHelmet(itemStack);
     }
 
+    @NotNull
     @Override
     public ItemStack getChestplate() {
         return inventory.getChestplate();
     }
 
     @Override
-    public void setChestplate(ItemStack itemStack) {
+    public void setChestplate(@NotNull ItemStack itemStack) {
         inventory.setChestplate(itemStack);
     }
 
+    @NotNull
     @Override
     public ItemStack getLeggings() {
         return inventory.getLeggings();
     }
 
     @Override
-    public void setLeggings(ItemStack itemStack) {
+    public void setLeggings(@NotNull ItemStack itemStack) {
         inventory.setLeggings(itemStack);
     }
 
+    @NotNull
     @Override
     public ItemStack getBoots() {
         return inventory.getBoots();
     }
 
     @Override
-    public void setBoots(ItemStack itemStack) {
+    public void setBoots(@NotNull ItemStack itemStack) {
         inventory.setBoots(itemStack);
     }
 

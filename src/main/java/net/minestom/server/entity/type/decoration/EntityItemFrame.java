@@ -6,7 +6,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.item.ItemStackUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -19,7 +18,7 @@ public class EntityItemFrame extends ObjectEntity {
     private ItemStack itemStack;
     private Rotation rotation;
 
-    public EntityItemFrame(Position spawnPosition, ItemFrameOrientation orientation) {
+    public EntityItemFrame(@NotNull Position spawnPosition, @NotNull ItemFrameOrientation orientation) {
         super(EntityType.ITEM_FRAME, spawnPosition);
         this.orientation = orientation;
         this.rotation = Rotation.NONE;
@@ -43,7 +42,7 @@ public class EntityItemFrame extends ObjectEntity {
         if (index == 7) {
             packet.writeByte((byte) 7);
             packet.writeByte(METADATA_SLOT);
-            packet.writeItemStack(ItemStackUtils.notNull(itemStack));
+            packet.writeItemStack(itemStack == null ? ItemStack.getAirItem() : itemStack);
         } else if (index == 8) {
             packet.writeByte((byte) 8);
             packet.writeByte(METADATA_VARINT);
@@ -80,6 +79,7 @@ public class EntityItemFrame extends ObjectEntity {
      *
      * @return the item rotation
      */
+    @NotNull
     public Rotation getRotation() {
         return rotation;
     }
@@ -89,7 +89,7 @@ public class EntityItemFrame extends ObjectEntity {
      *
      * @param rotation the new item rotation
      */
-    public void setRotation(Rotation rotation) {
+    public void setRotation(@NotNull Rotation rotation) {
         this.rotation = rotation;
         sendMetadataIndex(8);
     }

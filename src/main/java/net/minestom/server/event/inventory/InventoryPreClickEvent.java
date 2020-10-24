@@ -5,7 +5,8 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.item.ItemStackUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
@@ -19,7 +20,9 @@ public class InventoryPreClickEvent extends CancellableEvent {
     private ItemStack clickedItem;
     private ItemStack cursorItem;
 
-    public InventoryPreClickEvent(Player player, Inventory inventory, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
+    public InventoryPreClickEvent(@NotNull Player player, @Nullable Inventory inventory,
+                                  int slot, @NotNull ClickType clickType,
+                                  @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         this.player = player;
         this.inventory = inventory;
         this.slot = slot;
@@ -33,6 +36,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @return the player who clicked
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -42,6 +46,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @return the inventory where the click happened, null if this is the player's inventory
      */
+    @Nullable
     public Inventory getInventory() {
         return inventory;
     }
@@ -60,6 +65,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @return the click type
      */
+    @NotNull
     public ClickType getClickType() {
         return clickType;
     }
@@ -69,6 +75,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @return the clicked item
      */
+    @NotNull
     public ItemStack getClickedItem() {
         return clickedItem;
     }
@@ -78,8 +85,8 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @param clickedItem the clicked item
      */
-    public void setClickedItem(ItemStack clickedItem) {
-        this.clickedItem = ItemStackUtils.notNull(clickedItem);
+    public void setClickedItem(@NotNull ItemStack clickedItem) {
+        this.clickedItem = clickedItem;
     }
 
     /**
@@ -87,6 +94,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @return the cursor item
      */
+    @NotNull
     public ItemStack getCursorItem() {
         return cursorItem;
     }
@@ -96,7 +104,7 @@ public class InventoryPreClickEvent extends CancellableEvent {
      *
      * @param cursorItem the cursor item
      */
-    public void setCursorItem(ItemStack cursorItem) {
-        this.cursorItem = ItemStackUtils.notNull(cursorItem);
+    public void setCursorItem(@NotNull ItemStack cursorItem) {
+        this.cursorItem = cursorItem;
     }
 }

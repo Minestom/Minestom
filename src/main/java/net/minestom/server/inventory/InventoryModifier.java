@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,15 +17,15 @@ public interface InventoryModifier {
      * @param slot      the slot to set the item
      * @param itemStack the item to set
      */
-    void setItemStack(int slot, ItemStack itemStack);
+    void setItemStack(int slot, @NotNull ItemStack itemStack);
 
     /**
      * Adds an {@link ItemStack} to the inventory.
      *
      * @param itemStack the item to add
-     * @return true if the item has been sucessfully fully added, false otherwise
+     * @return true if the item has been successfully fully added, false otherwise
      */
-    boolean addItemStack(ItemStack itemStack);
+    boolean addItemStack(@NotNull ItemStack itemStack);
 
     /**
      * Clears the inventory.
@@ -37,6 +38,7 @@ public interface InventoryModifier {
      * @param slot the slot to check
      * @return the item in the slot {@code slot}
      */
+    @NotNull
     ItemStack getItemStack(int slot);
 
     /**
@@ -44,6 +46,7 @@ public interface InventoryModifier {
      *
      * @return an array containing all the inventory's items
      */
+    @NotNull
     ItemStack[] getItemStacks();
 
     /**
@@ -58,6 +61,7 @@ public interface InventoryModifier {
      *
      * @return the inventory conditions
      */
+    @NotNull
     List<InventoryCondition> getInventoryConditions();
 
     /**
@@ -65,5 +69,5 @@ public interface InventoryModifier {
      *
      * @param inventoryCondition the inventory condition to add
      */
-    void addInventoryCondition(InventoryCondition inventoryCondition);
+    void addInventoryCondition(@NotNull InventoryCondition inventoryCondition);
 }

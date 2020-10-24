@@ -4,6 +4,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
@@ -20,6 +21,7 @@ public interface EventHandler {
      *
      * @return a {@link Map} with all the listeners
      */
+    @NotNull
     Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap();
 
     /**
@@ -29,7 +31,7 @@ public interface EventHandler {
      * @param eventCallback the event callback
      * @param <E>           the event type
      */
-    default <E extends Event> void addEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+    default <E extends Event> void addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Check.notNull(eventClass, "Event class cannot be null");
         Check.notNull(eventCallback, "Event callback cannot be null");
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
@@ -43,7 +45,7 @@ public interface EventHandler {
      * @param eventCallback the event callback
      * @param <E>           the event type
      */
-    default <E extends Event> void removeEventCallback(Class<E> eventClass, EventCallback<E> eventCallback) {
+    default <E extends Event> void removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Check.notNull(eventClass, "Event class cannot be null");
         Check.notNull(eventCallback, "Event callback cannot be null");
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
@@ -57,7 +59,8 @@ public interface EventHandler {
      * @param <E>        the event type
      * @return all event callbacks for the specified type {@code eventClass}
      */
-    default <E extends Event> Collection<EventCallback> getEventCallbacks(Class<E> eventClass) {
+    @NotNull
+    default <E extends Event> Collection<EventCallback> getEventCallbacks(@NotNull Class<E> eventClass) {
         Check.notNull(eventClass, "Event class cannot be null");
         return getEventCallbacksMap().computeIfAbsent(eventClass, clazz -> new CopyOnWriteArrayList<>());
     }
@@ -67,6 +70,7 @@ public interface EventHandler {
      *
      * @return a {@link Stream} containing all the callbacks
      */
+    @NotNull
     default Stream<EventCallback> getEventCallbacks() {
         return getEventCallbacksMap().values().stream().flatMap(Collection::stream);
     }
@@ -78,7 +82,7 @@ public interface EventHandler {
      * @param event      the event object
      * @param <E>        the event type
      */
-    default <E extends Event> void callEvent(Class<E> eventClass, E event) {
+    default <E extends Event> void callEvent(@NotNull Class<E> eventClass, @NotNull E event) {
         // TODO global event
         final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
         for (EventCallback<E> eventCallback : eventCallbacks) {
@@ -97,7 +101,7 @@ public interface EventHandler {
      * @param <E>             the event type
      * @see #callEvent(Class, Event)
      */
-    default <E extends CancellableEvent> void callCancellableEvent(Class<E> eventClass, E event, Runnable successCallback) {
+    default <E extends CancellableEvent> void callCancellableEvent(@NotNull Class<E> eventClass, @NotNull E event, @NotNull Runnable successCallback) {
         callEvent(eventClass, event);
         if (!event.isCancelled()) {
             successCallback.run();

@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an inventory which can receive click input.
@@ -20,7 +21,7 @@ public interface InventoryClickHandler {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean leftClick(Player player, int slot);
+    boolean leftClick(@NotNull Player player, int slot);
 
     /**
      * Called when a {@link Player} right click in the inventory. Can also be to drop the cursor item
@@ -29,7 +30,7 @@ public interface InventoryClickHandler {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean rightClick(Player player, int slot);
+    boolean rightClick(@NotNull Player player, int slot);
 
     /**
      * Called when a {@link Player} shift click in the inventory
@@ -38,7 +39,7 @@ public interface InventoryClickHandler {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean shiftClick(Player player, int slot); // shift + left/right click have the same behavior
+    boolean shiftClick(@NotNull Player player, int slot); // shift + left/right click have the same behavior
 
     /**
      * Called when a {@link Player} held click in the inventory
@@ -48,9 +49,9 @@ public interface InventoryClickHandler {
      * @param key    the held slot (0-8) pressed
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean changeHeld(Player player, int slot, int key);
+    boolean changeHeld(@NotNull Player player, int slot, int key);
 
-    boolean middleClick(Player player, int slot);
+    boolean middleClick(@NotNull Player player, int slot);
 
     /**
      * Called when a {@link Player} press the drop button
@@ -61,9 +62,9 @@ public interface InventoryClickHandler {
      * @param button -999 if clicking outside, normal if he is not
      * @return true if the drop hasn't been cancelled, false otherwise
      */
-    boolean drop(Player player, int mode, int slot, int button);
+    boolean drop(@NotNull Player player, int mode, int slot, int button);
 
-    boolean dragging(Player player, int slot, int button);
+    boolean dragging(@NotNull Player player, int slot, int button);
 
     /**
      * Called when a {@link Player} double click in the inventory
@@ -72,10 +73,10 @@ public interface InventoryClickHandler {
      * @param slot   the slot number
      * @return true if the click hasn't been cancelled, false otherwise
      */
-    boolean doubleClick(Player player, int slot);
+    boolean doubleClick(@NotNull Player player, int slot);
 
-    default void callClickEvent(Player player, Inventory inventory, int slot,
-                                ClickType clickType, ItemStack clicked, ItemStack cursor) {
+    default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
+                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(player, inventory, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
     }

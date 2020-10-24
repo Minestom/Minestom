@@ -17,6 +17,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
@@ -42,7 +44,7 @@ public class ItemStack implements DataContainer {
     private byte amount;
     private int damage;
 
-    public ItemStack(Material material, byte amount, int damage) {
+    public ItemStack(@NotNull Material material, byte amount, int damage) {
         this.material = material;
         this.amount = amount;
         this.damage = damage;
@@ -75,15 +77,17 @@ public class ItemStack implements DataContainer {
         this.stackingRule = defaultStackingRule;
     }
 
-    public ItemStack(Material material, byte amount) {
+    public ItemStack(@NotNull Material material, byte amount) {
         this(material, amount, (short) 0);
     }
 
     /**
+     * o
      * Gets a new {@link ItemStack} with the material sets to {@link Material#AIR}.
      *
      * @return an air item
      */
+    @NotNull
     public static ItemStack getAirItem() {
         return new ItemStack(Material.AIR, (byte) 0);
     }
@@ -93,6 +97,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the default stacking rule
      */
+    @NotNull
     public static StackingRule getDefaultStackingRule() {
         return defaultStackingRule;
     }
@@ -103,7 +108,7 @@ public class ItemStack implements DataContainer {
      * @param defaultStackingRule the default item stack
      * @throws NullPointerException if {@code defaultStackingRule} is null
      */
-    public static void setDefaultStackingRule(StackingRule defaultStackingRule) {
+    public static void setDefaultStackingRule(@NotNull StackingRule defaultStackingRule) {
         Check.notNull(defaultStackingRule, "StackingRule cannot be null!");
         ItemStack.defaultStackingRule = defaultStackingRule;
     }
@@ -114,7 +119,8 @@ public class ItemStack implements DataContainer {
      * @param nbt the nbt compound containing the item
      * @return the parsed item stack
      */
-    public static ItemStack fromNBT(NBTCompound nbt) {
+    @NotNull
+    public static ItemStack fromNBT(@NotNull NBTCompound nbt) {
         if (!nbt.containsKey("id") || !nbt.containsKey("Count"))
             throw new IllegalArgumentException("Invalid item NBT, must at least contain 'id' and 'Count' tags");
         final Material material = Registries.getMaterial(nbt.getString("id"));
@@ -145,7 +151,7 @@ public class ItemStack implements DataContainer {
      * @param itemStack The ItemStack to compare to
      * @return true if both items are similar
      */
-    public boolean isSimilar(ItemStack itemStack) {
+    public boolean isSimilar(@NotNull ItemStack itemStack) {
         synchronized (ItemStack.class) {
             final ColoredText itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
@@ -219,6 +225,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item meta
      */
+    @Nullable
     public ItemMeta getItemMeta() {
         return itemMeta;
     }
@@ -231,7 +238,7 @@ public class ItemStack implements DataContainer {
      *
      * @param itemMeta the new item meta
      */
-    public void setItemMeta(ItemMeta itemMeta) {
+    public void setItemMeta(@Nullable ItemMeta itemMeta) {
         this.itemMeta = itemMeta;
     }
 
@@ -240,6 +247,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item display name, can be null if not present
      */
+    @Nullable
     public ColoredText getDisplayName() {
         return displayName;
     }
@@ -249,7 +257,7 @@ public class ItemStack implements DataContainer {
      *
      * @param displayName the item display name
      */
-    public void setDisplayName(ColoredText displayName) {
+    public void setDisplayName(@Nullable ColoredText displayName) {
         this.displayName = displayName;
     }
 
@@ -265,8 +273,9 @@ public class ItemStack implements DataContainer {
     /**
      * Gets the item lore.
      *
-     * @return the item lore, can be null if not present
+     * @return a modifiable list containing the item lore, can be null if not present
      */
+    @Nullable
     public ArrayList<ColoredText> getLore() {
         return lore;
     }
@@ -276,7 +285,7 @@ public class ItemStack implements DataContainer {
      *
      * @param lore the item lore, can be null to remove
      */
-    public void setLore(ArrayList<ColoredText> lore) {
+    public void setLore(@Nullable ArrayList<ColoredText> lore) {
         this.lore = lore;
     }
 
@@ -294,6 +303,7 @@ public class ItemStack implements DataContainer {
      *
      * @return an unmodifiable map containing the item enchantments
      */
+    @NotNull
     public Map<Enchantment, Short> getEnchantmentMap() {
         return Collections.unmodifiableMap(enchantmentMap);
     }
@@ -304,7 +314,7 @@ public class ItemStack implements DataContainer {
      * @param enchantment the enchantment type
      * @param level       the enchantment level
      */
-    public void setEnchantment(Enchantment enchantment, short level) {
+    public void setEnchantment(@NotNull Enchantment enchantment, short level) {
         if (level < 1) {
             removeEnchantment(enchantment);
             return;
@@ -318,7 +328,7 @@ public class ItemStack implements DataContainer {
      *
      * @param enchantment the enchantment type
      */
-    public void removeEnchantment(Enchantment enchantment) {
+    public void removeEnchantment(@NotNull Enchantment enchantment) {
         this.enchantmentMap.remove(enchantment);
     }
 
@@ -328,7 +338,7 @@ public class ItemStack implements DataContainer {
      * @param enchantment the enchantment type
      * @return the stored enchantment level, 0 if not present
      */
-    public int getEnchantmentLevel(Enchantment enchantment) {
+    public int getEnchantmentLevel(@NotNull Enchantment enchantment) {
         return this.enchantmentMap.getOrDefault(enchantment, (short) 0);
     }
 
@@ -337,6 +347,7 @@ public class ItemStack implements DataContainer {
      *
      * @return an unmodifiable {@link List} containing the item attributes
      */
+    @NotNull
     public List<ItemAttribute> getAttributes() {
         return Collections.unmodifiableList(attributes);
     }
@@ -347,7 +358,7 @@ public class ItemStack implements DataContainer {
      * @param internalName the internal name of the attribute
      * @return the {@link ItemAttribute} with the internal name, null if not found
      */
-    public ItemAttribute getAttribute(String internalName) {
+    public ItemAttribute getAttribute(@NotNull String internalName) {
         for (ItemAttribute itemAttribute : attributes) {
             if (itemAttribute.getInternalName().equals(internalName))
                 return itemAttribute;
@@ -360,7 +371,7 @@ public class ItemStack implements DataContainer {
      *
      * @param itemAttribute the attribute to add
      */
-    public void addAttribute(ItemAttribute itemAttribute) {
+    public void addAttribute(@NotNull ItemAttribute itemAttribute) {
         this.attributes.add(itemAttribute);
     }
 
@@ -369,7 +380,7 @@ public class ItemStack implements DataContainer {
      *
      * @param itemAttribute the attribute to remove
      */
-    public void removeAttribute(ItemAttribute itemAttribute) {
+    public void removeAttribute(@NotNull ItemAttribute itemAttribute) {
         this.attributes.remove(itemAttribute);
     }
 
@@ -414,7 +425,7 @@ public class ItemStack implements DataContainer {
      *
      * @param flags the flags to add
      */
-    public void addItemFlags(ItemFlag... flags) {
+    public void addItemFlags(@NotNull ItemFlag... flags) {
         for (ItemFlag f : flags) {
             this.hideFlag |= getBitModifier(f);
         }
@@ -425,7 +436,7 @@ public class ItemStack implements DataContainer {
      *
      * @param flags the flags to remove
      */
-    public void removeItemFlags(ItemFlag... flags) {
+    public void removeItemFlags(@NotNull ItemFlag... flags) {
         for (ItemFlag f : flags) {
             this.hideFlag &= ~getBitModifier(f);
         }
@@ -436,6 +447,7 @@ public class ItemStack implements DataContainer {
      *
      * @return an unmodifiable {@link Set} containing the item flags
      */
+    @NotNull
     public Set<ItemFlag> getItemFlags() {
         Set<ItemFlag> currentFlags = EnumSet.noneOf(ItemFlag.class);
 
@@ -454,7 +466,7 @@ public class ItemStack implements DataContainer {
      * @param flag the item flag
      * @return true if the item has the flag {@code flag}, false otherwise
      */
-    public boolean hasItemFlag(ItemFlag flag) {
+    public boolean hasItemFlag(@NotNull ItemFlag flag) {
         final int bitModifier = getBitModifier(flag);
         return (this.hideFlag & bitModifier) == bitModifier;
     }
@@ -482,6 +494,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item material
      */
+    @NotNull
     public Material getMaterial() {
         return material;
     }
@@ -491,7 +504,7 @@ public class ItemStack implements DataContainer {
      *
      * @param material the new material
      */
-    public void setMaterial(Material material) {
+    public void setMaterial(@NotNull Material material) {
         this.material = material;
     }
 
@@ -517,12 +530,17 @@ public class ItemStack implements DataContainer {
      *
      * @return a cloned item stack
      */
+    @NotNull
     public synchronized ItemStack clone() {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
-        itemStack.setLore(new ArrayList<>(getLore()));
-        itemStack.setStackingRule(getStackingRule());
+        if (lore != null) {
+            itemStack.setLore(new ArrayList<>(lore));
+        }
+        if (stackingRule != null) {
+            itemStack.setStackingRule(stackingRule);
+        }
 
         itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
         itemStack.attributes = new ArrayList<>(attributes);
@@ -554,6 +572,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item nbt consumer, null if not any
      */
+    @Nullable
     public NBTConsumer getNBTConsumer() {
         return nbtConsumer;
     }
@@ -561,9 +580,9 @@ public class ItemStack implements DataContainer {
     /**
      * Changes the item {@link NBTConsumer}.
      *
-     * @param nbtConsumer the new item nbt consumer
+     * @param nbtConsumer the new item nbt consumer, can be null
      */
-    public void setNBTConsumer(NBTConsumer nbtConsumer) {
+    public void setNBTConsumer(@Nullable NBTConsumer nbtConsumer) {
         this.nbtConsumer = nbtConsumer;
     }
 
@@ -572,6 +591,7 @@ public class ItemStack implements DataContainer {
      *
      * @return the item stacking rule
      */
+    @NotNull
     public StackingRule getStackingRule() {
         return stackingRule;
     }
@@ -582,7 +602,7 @@ public class ItemStack implements DataContainer {
      * @param stackingRule the new item stacking rule
      * @throws NullPointerException if {@code stackingRule} is null
      */
-    public void setStackingRule(StackingRule stackingRule) {
+    public void setStackingRule(@NotNull StackingRule stackingRule) {
         Check.notNull(stackingRule, "The stacking rule cannot be null!");
         this.stackingRule = stackingRule;
     }
@@ -595,6 +615,7 @@ public class ItemStack implements DataContainer {
      * @param amount the quantity to consume
      * @return the new item with the updated amount, null if the item cannot be consumed by this much
      */
+    @Nullable
     public ItemStack consume(int amount) {
         final int currentAmount = stackingRule.getAmount(this);
         if (currentAmount < amount)
@@ -602,15 +623,16 @@ public class ItemStack implements DataContainer {
         return stackingRule.apply(this, currentAmount - amount);
     }
 
-    private byte getBitModifier(ItemFlag hideFlag) {
+    private byte getBitModifier(@NotNull ItemFlag hideFlag) {
         return (byte) (1 << hideFlag.ordinal());
     }
 
     /**
      * Finds the {@link ItemMeta} based on the material type.
      *
-     * @return the item meta
+     * @return the item meta, null if none found
      */
+    @Nullable
     private ItemMeta findMeta() {
         if (material == Material.POTION ||
                 material == Material.LINGERING_POTION ||
@@ -651,6 +673,7 @@ public class ItemStack implements DataContainer {
         return null;
     }
 
+    @NotNull
     public NBTCompound toNBT() {
         NBTCompound compound = new NBTCompound()
                 .setByte("Count", amount)
@@ -685,7 +708,7 @@ public class ItemStack implements DataContainer {
      * @param player the player who used the item
      * @param hand   the hand used
      */
-    public void onRightClick(Player player, Player.Hand hand) {
+    public void onRightClick(@NotNull Player player, @NotNull Player.Hand hand) {
     }
 
     /**
@@ -694,7 +717,7 @@ public class ItemStack implements DataContainer {
      * @param player the player who used the item
      * @param hand   the hand used
      */
-    public void onLeftClick(Player player, Player.Hand hand) {
+    public void onLeftClick(@NotNull Player player, @NotNull Player.Hand hand) {
     }
 
     /**
@@ -706,7 +729,7 @@ public class ItemStack implements DataContainer {
      * @param blockFace the block face
      * @return true if it prevents normal item use (placing blocks for instance)
      */
-    public boolean onUseOnBlock(Player player, Player.Hand hand, BlockPosition position, Direction blockFace) {
+    public boolean onUseOnBlock(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition position, @NotNull Direction blockFace) {
         return false;
     }
 
@@ -720,7 +743,7 @@ public class ItemStack implements DataContainer {
      * @param slot            the slot clicked
      * @param playerInventory true if the click is in the player inventory
      */
-    public void onInventoryClick(Player player, ClickType clickType, int slot, boolean playerInventory) {
+    public void onInventoryClick(@NotNull Player player, @NotNull ClickType clickType, int slot, boolean playerInventory) {
 
     }
 }

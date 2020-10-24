@@ -3,7 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.item.ItemStackUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#setItemStack(int, ItemStack)}
@@ -15,7 +15,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
     private int slot;
     private ItemStack itemStack;
 
-    public PlayerSetItemStackEvent(Player player, int slot, ItemStack itemStack) {
+    public PlayerSetItemStackEvent(@NotNull Player player, int slot, @NotNull ItemStack itemStack) {
         this.player = player;
         this.slot = slot;
         this.itemStack = itemStack;
@@ -26,6 +26,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -53,6 +54,7 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
      *
      * @return the item stack
      */
+    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }
@@ -62,8 +64,8 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
      *
      * @param itemStack the new item stack
      */
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = ItemStackUtils.notNull(itemStack);
+    public void setItemStack(@NotNull ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
 }
