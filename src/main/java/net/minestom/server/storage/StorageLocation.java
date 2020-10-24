@@ -5,6 +5,8 @@ import net.minestom.server.data.*;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +39,11 @@ public class StorageLocation {
      * Gets the data associated with a key using {@link StorageSystem#get(String)}.
      *
      * @param key the key
-     * @return the data associated to {@code key}
+     * @return the data associated to {@code key}, null if not any
      * @see StorageSystem#get(String)
      */
-    public byte[] get(String key) {
+    @Nullable
+    public byte[] get(@NotNull String key) {
         return storageSystem.get(key);
     }
 
@@ -51,7 +54,7 @@ public class StorageLocation {
      * @param data the data
      * @see StorageSystem#set(String, byte[])
      */
-    public void set(String key, byte[] data) {
+    public void set(@NotNull String key, byte[] data) {
         this.storageSystem.set(key, data);
     }
 
@@ -61,7 +64,7 @@ public class StorageLocation {
      * @param key the key
      * @see StorageSystem#delete(String)
      */
-    public void delete(String key) {
+    public void delete(@NotNull String key) {
         this.storageSystem.delete(key);
     }
 
@@ -85,7 +88,7 @@ public class StorageLocation {
      * @param type   the class of the data
      * @param <T>    the type of the data
      */
-    public <T> void set(String key, T object, Class<T> type) {
+    public <T> void set(@NotNull String key, @NotNull T object, @NotNull Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only save registered DataType type!");
 
@@ -109,7 +112,7 @@ public class StorageLocation {
      * @param <T>  the type of the data
      * @return the object associated to the key
      */
-    public <T> T get(String key, Class<T> type) {
+    public <T> T get(@NotNull String key, @NotNull Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
         Check.notNull(dataType, "You can only get registered DataType type!");
 
@@ -123,7 +126,7 @@ public class StorageLocation {
         return dataType.decode(binaryReader);
     }
 
-    public <T> T getOrDefault(String key, Class<T> type, T defaultValue) {
+    public <T> T getOrDefault(@NotNull String key, @NotNull Class<T> type, @Nullable T defaultValue) {
         T value;
         return (value = get(key, type)) != null ? value : defaultValue;
     }
@@ -135,7 +138,7 @@ public class StorageLocation {
      * @param key           the key of the data
      * @param dataContainer the {@link DataContainer} which will contain the new data
      */
-    public void getAndCloneData(String key, DataContainer dataContainer) {
+    public void getAndCloneData(@NotNull String key, @NotNull DataContainer dataContainer) {
         synchronized (cachedData) {
             // Copy data from the cachedMap
             if (cachedData.containsKey(key)) {
@@ -161,7 +164,7 @@ public class StorageLocation {
      * @param key           the key of the data
      * @param dataContainer the {@link DataContainer} which will contain the new data
      */
-    public void getAndCacheData(String key, DataContainer dataContainer) {
+    public void getAndCacheData(@NotNull String key, @NotNull DataContainer dataContainer) {
         synchronized (cachedData) {
             // Give the cached SerializableData if already loaded
             if (cachedData.containsKey(key)) {
@@ -184,7 +187,7 @@ public class StorageLocation {
      *
      * @param key the specified cached data key
      */
-    public void saveAndRemoveCachedData(String key) {
+    public void saveAndRemoveCachedData(@NotNull String key) {
         synchronized (cachedData) {
             final SerializableData serializableData = cachedData.get(key);
             if (serializableData == null)
@@ -212,7 +215,7 @@ public class StorageLocation {
      *
      * @param key the data key
      */
-    public void saveCachedData(String key) {
+    public void saveCachedData(@NotNull String key) {
         synchronized (cachedData) {
             final SerializableData data = cachedData.get(key);
             set(key, data.getIndexedSerializedData());
@@ -226,6 +229,7 @@ public class StorageLocation {
      *
      * @return the location
      */
+    @NotNull
     public String getLocation() {
         return location;
     }

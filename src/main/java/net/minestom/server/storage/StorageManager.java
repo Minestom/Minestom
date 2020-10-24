@@ -1,6 +1,8 @@
 package net.minestom.server.storage;
 
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ public final class StorageManager {
      * @param storageSystem  the {@link StorageSystem} used in the specified location
      * @return the specified {@link StorageLocation}
      */
-    public StorageLocation getLocation(String location, StorageOptions storageOptions, StorageSystem storageSystem) {
+    public StorageLocation getLocation(@NotNull String location, @NotNull StorageOptions storageOptions, @NotNull StorageSystem storageSystem) {
         Check.notNull(storageOptions, "The storage option cannot be null");
         return locationMap.computeIfAbsent(location,
                 s -> new StorageLocation(storageSystem, location, storageOptions));
@@ -48,7 +50,7 @@ public final class StorageManager {
      * @return the {@link StorageLocation} at {@code location} with the default {@link StorageSystem}
      * @throws NullPointerException if no default {@link StorageSystem} is defined with {@link #defineDefaultStorageSystem(Supplier)}
      */
-    public StorageLocation getLocation(String location, StorageOptions storageOptions) {
+    public StorageLocation getLocation(@NotNull String location, @NotNull StorageOptions storageOptions) {
         Check.notNull(defaultStorageSystemSupplier,
                 "You need to either define a default storage system or specify your storage system for this specific location");
         final StorageSystem storageSystem = defaultStorageSystemSupplier.get();
@@ -63,7 +65,8 @@ public final class StorageManager {
      * @return the {@link StorageLocation} at {@code location} with the default {@link StorageSystem}
      * @throws NullPointerException if no default StorageSystem is defined {@link #defineDefaultStorageSystem(Supplier)}
      */
-    public StorageLocation getLocation(String location) {
+    @Nullable
+    public StorageLocation getLocation(@NotNull String location) {
         return getLocation(location, new StorageOptions());
     }
 
@@ -74,7 +77,7 @@ public final class StorageManager {
      * @param storageSystem the {@link StorageSystem} to use
      * @return true if the location exists, false otherwise
      */
-    public boolean locationExists(String location, StorageSystem storageSystem) {
+    public boolean locationExists(@NotNull String location, @NotNull StorageSystem storageSystem) {
         return storageSystem.exists(location);
     }
 
@@ -84,7 +87,7 @@ public final class StorageManager {
      * @param location the location
      * @return true if the location exists
      */
-    public boolean locationExists(String location) {
+    public boolean locationExists(@NotNull String location) {
         return locationExists(location, defaultStorageSystemSupplier.get());
     }
 
@@ -94,6 +97,7 @@ public final class StorageManager {
      *
      * @return an unmodifiable list of all the loaded {@link StorageLocation}
      */
+    @NotNull
     public Collection<StorageLocation> getLoadedLocations() {
         return Collections.unmodifiableCollection(locationMap.values());
     }
@@ -103,7 +107,7 @@ public final class StorageManager {
      *
      * @param storageSystemSupplier the supplier called to get the default {@link StorageSystem}
      */
-    public void defineDefaultStorageSystem(Supplier<StorageSystem> storageSystemSupplier) {
+    public void defineDefaultStorageSystem(@NotNull Supplier<StorageSystem> storageSystemSupplier) {
         if (this.defaultStorageSystemSupplier != null) {
             LOGGER.warn("The default storage-system has been changed. This could lead to issues!");
         }

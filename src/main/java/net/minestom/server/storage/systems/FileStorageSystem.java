@@ -2,6 +2,7 @@ package net.minestom.server.storage.systems;
 
 import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.storage.StorageSystem;
+import org.jetbrains.annotations.NotNull;
 import org.rocksdb.*;
 
 import java.nio.file.Files;
@@ -24,12 +25,12 @@ public class FileStorageSystem implements StorageSystem {
     private RocksDB rocksDB;
 
     @Override
-    public boolean exists(String location) {
+    public boolean exists(@NotNull String location) {
         return Files.isDirectory(Paths.get(location));
     }
 
     @Override
-    public void open(String location, StorageOptions storageOptions) {
+    public void open(@NotNull String location, @NotNull StorageOptions storageOptions) {
         Options options = new Options().setCreateIfMissing(true);
 
         if (storageOptions.hasCompression()) {
@@ -45,7 +46,7 @@ public class FileStorageSystem implements StorageSystem {
     }
 
     @Override
-    public byte[] get(String key) {
+    public byte[] get(@NotNull String key) {
         try {
             return rocksDB.get(getKey(key));
         } catch (RocksDBException e) {
@@ -55,7 +56,7 @@ public class FileStorageSystem implements StorageSystem {
     }
 
     @Override
-    public void set(String key, byte[] data) {
+    public void set(@NotNull String key, byte[] data) {
         try {
             this.rocksDB.put(getKey(key), data);
         } catch (RocksDBException e) {
@@ -64,7 +65,7 @@ public class FileStorageSystem implements StorageSystem {
     }
 
     @Override
-    public void delete(String key) {
+    public void delete(@NotNull String key) {
         try {
             this.rocksDB.delete(getKey(key));
         } catch (RocksDBException e) {
