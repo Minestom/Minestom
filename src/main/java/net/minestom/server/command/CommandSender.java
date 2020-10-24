@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
@@ -17,14 +18,14 @@ public interface CommandSender {
      *
      * @param message the message to send
      */
-    void sendMessage(String message);
+    void sendMessage(@NotNull String message);
 
     /**
      * Sends multiple raw string messages.
      *
      * @param messages the messages to send
      */
-    default void sendMessage(String[] messages) {
+    default void sendMessage(@NotNull String[] messages) {
         for (String message : messages) {
             sendMessage(message);
         }
@@ -36,6 +37,7 @@ public interface CommandSender {
      *
      * @return the permissions of this command sender.
      */
+    @NotNull
     Collection<Permission> getAllPermissions();
 
     /**
@@ -43,7 +45,7 @@ public interface CommandSender {
      *
      * @param permission the permission to add
      */
-    default void addPermission(Permission permission) {
+    default void addPermission(@NotNull Permission permission) {
         getAllPermissions().add(permission);
     }
 
@@ -52,7 +54,7 @@ public interface CommandSender {
      *
      * @param permission the permission to remove
      */
-    default void removePermission(Permission permission) {
+    default void removePermission(@NotNull Permission permission) {
         getAllPermissions().remove(permission);
     }
 
@@ -63,7 +65,7 @@ public interface CommandSender {
      * @param p permission to check against
      * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
      */
-    default boolean hasPermission(Permission p) {
+    default boolean hasPermission(@NotNull Permission p) {
         return getAllPermissions().contains(p) && p.isValidFor(this);
     }
 
@@ -76,7 +78,7 @@ public interface CommandSender {
      * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
      * @see #getAllPermissions()
      */
-    default boolean hasPermission(Class<? extends Permission> permissionClass) {
+    default boolean hasPermission(@NotNull Class<? extends Permission> permissionClass) {
         boolean result = true;
         boolean foundPerm = false;
         for (Permission p : getAllPermissions()) {

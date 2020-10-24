@@ -39,7 +39,7 @@ public class ItemEntity extends ObjectEntity {
     private long spawnTime;
     private long pickupDelay;
 
-    public ItemEntity(ItemStack itemStack, Position spawnPosition) {
+    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
         super(EntityType.ITEM, spawnPosition);
         this.itemStack = itemStack;
         setBoundingBox(0.25f, 0.25f, 0.25f);

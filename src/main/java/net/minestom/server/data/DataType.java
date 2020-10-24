@@ -2,6 +2,7 @@ package net.minestom.server.data;
 
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an object which can be encoded and decoded back.
@@ -14,19 +15,20 @@ import net.minestom.server.utils.binary.BinaryWriter;
 public abstract class DataType<T> {
 
     /**
-     * Encode the data type
+     * Encodes the data type.
      *
      * @param writer the data writer
      * @param value  the value to encode
      */
-    public abstract void encode(BinaryWriter writer, T value);
+    public abstract void encode(@NotNull BinaryWriter writer, @NotNull T value);
 
     /**
-     * Decode the data type
+     * Decodes the data type.
      *
      * @param reader the data reader
      * @return the decoded value
      */
-    public abstract T decode(BinaryReader reader);
+    @NotNull
+    public abstract T decode(@NotNull BinaryReader reader);
 
 }

@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.ConnectionManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class ArgumentEntities extends Argument<ArrayList<Entity>> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         System.out.println("check: " + value);
 
         // Check for raw player name
@@ -112,13 +113,14 @@ public class ArgumentEntities extends Argument<ArrayList<Entity>> {
         return finalIndex;
     }
 
+    @NotNull
     @Override
-    public ArrayList<Entity> parse(String value) {
+    public ArrayList<Entity> parse(@NotNull String value) {
         return null;
     }
 
     @Override
-    public int getConditionResult(ArrayList<Entity> value) {
+    public int getConditionResult(@NotNull ArrayList<Entity> value) {
         return SUCCESS;
     }
 

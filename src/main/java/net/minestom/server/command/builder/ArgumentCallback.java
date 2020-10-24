@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Callback executed when an error is found within the {@link Argument}.
@@ -16,5 +17,5 @@ public interface ArgumentCallback {
      * @param value  the raw string argument which is responsible for the error
      * @param error  the error id (you can check its meaning in the specific argument class or ask the developer about it)
      */
-    void apply(CommandSender source, String value, int error);
+    void apply(@NotNull CommandSender source, @NotNull String value, int error);
 }

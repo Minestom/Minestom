@@ -23,7 +23,7 @@ public enum Attribute {
     private final float defaultValue;
     private final float maxVanillaValue;
 
-    Attribute(String key, float defaultValue, float maxVanillaValue) {
+    Attribute(@NotNull String key, float defaultValue, float maxVanillaValue) {
         this.key = key;
         this.defaultValue = defaultValue;
         this.maxVanillaValue = maxVanillaValue;

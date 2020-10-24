@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.utils.math.IntRange;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
@@ -16,7 +17,7 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         try {
             Integer.valueOf(value);
             return SUCCESS; // Is a single number
@@ -43,8 +44,9 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
         }
     }
 
+    @NotNull
     @Override
-    public IntRange parse(String value) {
+    public IntRange parse(@NotNull String value) {
         if (value.contains("..")) {
             final int index = value.indexOf('.');
             final String[] split = value.split(Pattern.quote(".."));

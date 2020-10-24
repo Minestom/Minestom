@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Argument which will take a quoted string.
  * <p>
@@ -14,7 +16,7 @@ public class ArgumentString extends Argument<String> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         // Check if value start and end with quote
         final char first = value.charAt(0);
         final char last = value.charAt(value.length() - 1);
@@ -38,8 +40,9 @@ public class ArgumentString extends Argument<String> {
         return QUOTE_ERROR;
     }
 
+    @NotNull
     @Override
-    public String parse(String value) {
+    public String parse(@NotNull String value) {
         // Remove first and last characters (quote)
         value = value.substring(1, value.length() - 1);
 
@@ -50,7 +53,7 @@ public class ArgumentString extends Argument<String> {
     }
 
     @Override
-    public int getConditionResult(String value) {
+    public int getConditionResult(@NotNull String value) {
         return SUCCESS;
     }
 }

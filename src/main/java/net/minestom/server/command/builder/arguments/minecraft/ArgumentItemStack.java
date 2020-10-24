@@ -5,6 +5,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -29,7 +30,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         if (value.startsWith("{")) {
             return NO_MATERIAL;
         }
@@ -51,8 +52,9 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         }
     }
 
+    @NotNull
     @Override
-    public ItemStack parse(String value) {
+    public ItemStack parse(@NotNull String value) {
         final int nbtIndex = value.indexOf("{");
 
         if (nbtIndex == -1) {
@@ -83,7 +85,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     @Override
-    public int getConditionResult(ItemStack value) {
+    public int getConditionResult(@NotNull ItemStack value) {
         return SUCCESS;
     }
 }

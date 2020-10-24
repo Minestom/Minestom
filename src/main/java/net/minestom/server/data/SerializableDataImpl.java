@@ -49,6 +49,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
         this.dataType.put(key, type);
     }
 
+    @NotNull
     @Override
     public Data clone() {
         SerializableDataImpl data = new SerializableDataImpl();
@@ -57,8 +58,9 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
         return data;
     }
 
+    @NotNull
     @Override
-    public byte[] getSerializedData(Object2ShortMap<String> typeToIndexMap, boolean indexed) {
+    public byte[] getSerializedData(@NotNull Object2ShortMap<String> typeToIndexMap, boolean indexed) {
         // Get the current max index, it supposes that the index keep being incremented by 1
         short lastIndex = (short) typeToIndexMap.size();
 
@@ -113,7 +115,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
     }
 
     @Override
-    public void readSerializedData(BinaryReader reader, Object2ShortMap<String> typeToIndexMap) {
+    public void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap) {
         // Map used to convert an index to the class name (opposite of typeToIndexMap)
         final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
         {

@@ -7,6 +7,8 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.PrimitiveConversion;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +64,7 @@ public final class DataManager {
      * @param <T>      the data type
      * @throws IllegalStateException if the type {@code clazz} is already registered
      */
-    public <T> void registerType(Class<T> clazz, DataType<T> dataType) {
+    public <T> void registerType(@NotNull Class<T> clazz, @NotNull DataType<T> dataType) {
         clazz = PrimitiveConversion.getObjectClass(clazz);
         Check.stateCondition(dataTypeMap.containsKey(clazz),
                 "Type " + clazz.getName() + " has already been registered");
@@ -78,7 +80,8 @@ public final class DataManager {
      * @return the {@link DataType} associated to the class
      * @throws NullPointerException if none is found
      */
-    public <T> DataType<T> getDataType(Class<T> clazz) {
+    @Nullable
+    public <T> DataType<T> getDataType(@NotNull Class<T> clazz) {
         clazz = PrimitiveConversion.getObjectClass(clazz);
         return dataTypeMap.get(clazz);
     }

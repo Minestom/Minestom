@@ -6,6 +6,8 @@ import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +50,7 @@ public class Command {
      * @param aliases the command aliases
      * @see #Command(String)
      */
-    public Command(String name, String... aliases) {
+    public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
         this.aliases = aliases;
 
@@ -61,7 +63,7 @@ public class Command {
      * @param name the name of the command
      * @see #Command(String, String...)
      */
-    public Command(String name) {
+    public Command(@NotNull String name) {
         this(name, new String[0]);
     }
 
@@ -94,7 +96,7 @@ public class Command {
      * @param callback the callback for the argument
      * @param argument the argument which get the callback
      */
-    public void setArgumentCallback(ArgumentCallback callback, Argument<?> argument) {
+    public void setArgumentCallback(@NotNull ArgumentCallback callback, @NotNull Argument<?> argument) {
         argument.setCallback(callback);
     }
 
@@ -106,9 +108,8 @@ public class Command {
      * @param executor the executor to call when the syntax is successfully received
      * @param args     all the arguments of the syntax
      */
-    public void addSyntax(CommandExecutor executor, Argument<?>... args) {
-        CommandSyntax syntax = new CommandSyntax(args);
-        syntax.setExecutor(executor);
+    public void addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+        final CommandSyntax syntax = new CommandSyntax(executor, args);
         this.syntaxes.add(syntax);
     }
 
@@ -117,6 +118,7 @@ public class Command {
      *
      * @return the main command's name
      */
+    @NotNull
     public String getName() {
         return name;
     }
@@ -128,6 +130,7 @@ public class Command {
      *
      * @return the command aliases
      */
+    @Nullable
     public String[] getAliases() {
         return aliases;
     }
@@ -138,6 +141,7 @@ public class Command {
      *
      * @return the default executor
      */
+    @Nullable
     public CommandExecutor getDefaultExecutor() {
         return defaultExecutor;
     }
@@ -147,7 +151,7 @@ public class Command {
      *
      * @param executor the new default executor
      */
-    public void setDefaultExecutor(CommandExecutor executor) {
+    public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;
     }
 
@@ -156,6 +160,7 @@ public class Command {
      *
      * @return a collection containing all this command syntaxes
      */
+    @NotNull
     public Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
     }
@@ -167,7 +172,8 @@ public class Command {
      * @param text the whole player's text
      * @return the array containing all the suggestion for the current arg (split " "), can be null
      */
-    public String[] onDynamicWrite(String text) {
+    @Nullable
+    public String[] onDynamicWrite(@NotNull String text) {
         return null;
     }
 
@@ -183,7 +189,7 @@ public class Command {
      * @param arguments the UNCHECKED arguments of the command, some can be null even when unexpected
      * @param command   the raw UNCHECKED received command
      */
-    public void globalListener(CommandSender sender, Arguments arguments, String command) {
+    public void globalListener(@NotNull CommandSender sender, @NotNull Arguments arguments, @NotNull String command) {
     }
 
 }

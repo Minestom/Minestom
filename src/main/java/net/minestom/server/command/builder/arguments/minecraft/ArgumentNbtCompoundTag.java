@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -22,7 +23,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         try {
             NBT nbt = new SNBTParser(new StringReader(value)).parse();
             return nbt instanceof NBTCompound ? SUCCESS : INVALID_NBT;
@@ -31,8 +32,9 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
         }
     }
 
+    @NotNull
     @Override
-    public NBTCompound parse(String value) {
+    public NBTCompound parse(@NotNull String value) {
         try {
             NBT nbt = new SNBTParser(new StringReader(value)).parse();
             return (NBTCompound) nbt;
@@ -42,7 +44,7 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
     }
 
     @Override
-    public int getConditionResult(NBTCompound value) {
+    public int getConditionResult(@NotNull NBTCompound value) {
         return SUCCESS;
     }
 }

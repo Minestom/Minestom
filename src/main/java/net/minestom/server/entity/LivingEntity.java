@@ -22,6 +22,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -65,13 +66,13 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     private Team team;
 
-    public LivingEntity(EntityType entityType, Position spawnPosition) {
+    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
         setupAttributes();
         setGravity(0.02f);
     }
 
-    public LivingEntity(EntityType entityType) {
+    public LivingEntity(@NotNull EntityType entityType) {
         this(entityType, new Position());
     }
 
@@ -255,8 +256,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param value the amount of damage
      * @return true if damage has been applied, false if it didn't
      */
-    public boolean damage(DamageType type, float value) {
-        Check.notNull(type, "The damage type cannot be null!o");
+    public boolean damage(@NotNull DamageType type, float value) {
+        Check.notNull(type, "The damage type cannot be null!");
         if (isDead())
             return false;
         if (isInvulnerable() || isImmune(type)) {
@@ -318,7 +319,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(DamageType type) {
+    public boolean isImmune(@NotNull DamageType type) {
         return false;
     }
 
@@ -351,6 +352,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the last damage source, null if not any
      */
+    @Nullable
     public DamageType getLastDamageSource() {
         return lastDamageSource;
     }
@@ -379,7 +381,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute The attribute to change
      * @param value     the new value of the attribute
      */
-    public void setAttribute(Attribute attribute, float value) {
+    public void setAttribute(@NotNull Attribute attribute, float value) {
         this.attributeValues[attribute.ordinal()] = value;
     }
 
@@ -389,7 +391,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute value to get
      * @return the attribute value
      */
-    public float getAttributeValue(Attribute attribute) {
+    public float getAttributeValue(@NotNull Attribute attribute) {
         return this.attributeValues[attribute.ordinal()];
     }
 
@@ -470,6 +472,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return an {@link EntityPropertiesPacket} linked to this entity
      */
+    @NotNull
     protected EntityPropertiesPacket getPropertiesPacket() {
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
@@ -525,7 +528,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param fireDamagePeriod the delay
      * @param timeUnit         the time unit
      */
-    public void setFireDamagePeriod(long fireDamagePeriod, TimeUnit timeUnit) {
+    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TimeUnit timeUnit) {
         fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
         this.fireDamagePeriod = fireDamagePeriod;
     }

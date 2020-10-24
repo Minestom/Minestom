@@ -1,6 +1,8 @@
 package net.minestom.server.command;
 
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a simple command which give you the whole string representation
@@ -18,6 +20,7 @@ public interface CommandProcessor {
      *
      * @return the main command's name
      */
+    @NotNull
     String getCommandName();
 
     /**
@@ -27,6 +30,7 @@ public interface CommandProcessor {
      *
      * @return the command aliases
      */
+    @Nullable
     String[] getAliases();
 
     /**
@@ -37,7 +41,7 @@ public interface CommandProcessor {
      * @param args    an array containing all the args (split by space char)
      * @return true when the command is successful, false otherwise
      */
-    boolean process(CommandSender sender, String command, String[] args);
+    boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args);
 
     /**
      * Called to know if a player has access to the command.
@@ -48,7 +52,7 @@ public interface CommandProcessor {
      * @param player the player to check the access
      * @return true if the player has access to the command, false otherwise
      */
-    boolean hasAccess(Player player);
+    boolean hasAccess(@NotNull Player player);
 
     /**
      * Needed to enable {@link #onWrite(String)} callback.
@@ -71,7 +75,8 @@ public interface CommandProcessor {
      * @return the array containing all the suggestion for the current arg (split " "), can be null
      * @see #enableWritingTracking()
      */
-    default String[] onWrite(String text) {
+    @Nullable
+    default String[] onWrite(@NotNull String text) {
         return null;
     }
 }

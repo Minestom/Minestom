@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ArgumentDouble extends ArgumentNumber<Double> {
 
     public ArgumentDouble(String id) {
@@ -9,7 +11,7 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         try {
             String parsed = parseValue(value);
             int radix = getRadix(value);
@@ -24,8 +26,9 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
         }
     }
 
+    @NotNull
     @Override
-    public Double parse(String value) {
+    public Double parse(@NotNull String value) {
         String parsed = parseValue(value);
         int radix = getRadix(value);
         if (radix != 10) {
@@ -35,7 +38,7 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
     }
 
     @Override
-    public int getConditionResult(Double value) {
+    public int getConditionResult(@NotNull Double value) {
         // Check range
         if (hasMin && value < min) {
             return RANGE_ERROR;

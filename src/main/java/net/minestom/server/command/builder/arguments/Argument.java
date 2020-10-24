@@ -2,6 +2,8 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An argument is meant to be parsed when added into a {@link Command} syntax.
@@ -26,17 +28,17 @@ public abstract class Argument<T> {
 
     private ArgumentCallback callback;
 
-    public Argument(String id, boolean allowSpace, boolean useRemaining) {
+    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
         this.id = id;
         this.allowSpace = allowSpace;
         this.useRemaining = useRemaining;
     }
 
-    public Argument(String id, boolean allowSpace) {
+    public Argument(@NotNull String id, boolean allowSpace) {
         this(id, allowSpace, false);
     }
 
-    public Argument(String id) {
+    public Argument(@NotNull String id) {
         this(id, false, false);
     }
 
@@ -46,7 +48,7 @@ public abstract class Argument<T> {
      * @param value The received argument
      * @return The success/error code
      */
-    public abstract int getCorrectionResult(String value);
+    public abstract int getCorrectionResult(@NotNull String value);
 
     /**
      * The argument syntax is correct, parsed here to the correct type.
@@ -54,7 +56,8 @@ public abstract class Argument<T> {
      * @param value The correct argument
      * @return The parsed argument
      */
-    public abstract T parse(String value);
+    @NotNull
+    public abstract T parse(@NotNull String value);
 
     /**
      * The argument is at least partially correct (the syntax is good and the argument has been parsed)
@@ -63,7 +66,7 @@ public abstract class Argument<T> {
      * @param value The parsed argument
      * @return The success/error code
      */
-    public abstract int getConditionResult(T value);
+    public abstract int getConditionResult(@NotNull T value);
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
@@ -71,6 +74,7 @@ public abstract class Argument<T> {
      *
      * @return the argument id
      */
+    @NotNull
     public String getId() {
         return id;
     }
@@ -101,6 +105,7 @@ public abstract class Argument<T> {
      *
      * @return the argument callback
      */
+    @Nullable
     public ArgumentCallback getCallback() {
         return callback;
     }
@@ -110,7 +115,7 @@ public abstract class Argument<T> {
      *
      * @param callback the argument callback
      */
-    public void setCallback(ArgumentCallback callback) {
+    public void setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;
     }
 

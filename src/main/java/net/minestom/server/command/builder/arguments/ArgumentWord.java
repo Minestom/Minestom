@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a single word in the command.
  * <p>
@@ -24,20 +26,21 @@ public class ArgumentWord extends Argument<String> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         if (value.contains(" "))
             return SPACE_ERROR;
 
         return SUCCESS;
     }
 
+    @NotNull
     @Override
-    public String parse(String value) {
+    public String parse(@NotNull String value) {
         return value;
     }
 
     @Override
-    public int getConditionResult(String value) {
+    public int getConditionResult(@NotNull String value) {
         // Check restrictions
         if (restrictions != null && restrictions.length > 0) {
             for (String r : restrictions) {

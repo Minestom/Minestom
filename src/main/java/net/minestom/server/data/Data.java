@@ -39,6 +39,7 @@ public interface Data {
             return true;
         }
 
+        @NotNull
         @Override
         public Data clone() {
             return this;
@@ -79,7 +80,7 @@ public interface Data {
      * @return {@link #get(String)} if found, {@code defaultValue} otherwise
      */
     @Nullable
-    <T> T getOrDefault(@NotNull String key, T defaultValue);
+    <T> T getOrDefault(@NotNull String key, @Nullable T defaultValue);
 
     /**
      * Gets if the data has a key.
@@ -109,6 +110,7 @@ public interface Data {
      *
      * @return a cloned data object
      */
+    @NotNull
     Data clone();
 
 }

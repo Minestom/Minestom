@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Callback executed once a syntax has been found for a {@link Command}.
@@ -9,5 +10,5 @@ import net.minestom.server.command.CommandSender;
  */
 @FunctionalInterface
 public interface CommandExecutor {
-    void apply(CommandSender source, Arguments args);
+    void apply(@NotNull CommandSender source, @NotNull Arguments args);
 }

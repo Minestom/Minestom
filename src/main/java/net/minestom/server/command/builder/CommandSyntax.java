@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a syntax in {@link Command}.
@@ -10,7 +11,8 @@ public class CommandSyntax {
     private final Argument[] args;
     private CommandExecutor executor;
 
-    protected CommandSyntax(Argument... args) {
+    protected CommandSyntax(@NotNull CommandExecutor commandExecutor, @NotNull Argument... args) {
+        this.executor = commandExecutor;
         this.args = args;
     }
 
@@ -19,6 +21,7 @@ public class CommandSyntax {
      *
      * @return the required arguments
      */
+    @NotNull
     public Argument[] getArguments() {
         return args;
     }
@@ -28,6 +31,7 @@ public class CommandSyntax {
      *
      * @return the executor of this syntax
      */
+    @NotNull
     public CommandExecutor getExecutor() {
         return executor;
     }
@@ -37,7 +41,7 @@ public class CommandSyntax {
      *
      * @param executor the new executor
      */
-    public void setExecutor(CommandExecutor executor) {
+    public void setExecutor(@NotNull CommandExecutor executor) {
         this.executor = executor;
     }
 

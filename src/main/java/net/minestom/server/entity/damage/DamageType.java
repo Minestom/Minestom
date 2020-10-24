@@ -9,6 +9,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.sound.Sound;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a type of damage, required when calling {@link LivingEntity#damage(DamageType, float)}
@@ -24,7 +26,7 @@ public class DamageType implements DataContainer {
     public static final DamageType GRAVITY = new DamageType("attack.fall");
     public static final DamageType ON_FIRE = new DamageType("attack.onFire") {
         @Override
-        protected Sound getPlayerSound(Player player) {
+        protected Sound getPlayerSound(@NotNull Player player) {
             return Sound.ENTITY_PLAYER_HURT_ON_FIRE;
         }
     };
@@ -37,7 +39,7 @@ public class DamageType implements DataContainer {
      * @param identifier the identifier of this damage type,
      *                   does not need to be unique
      */
-    public DamageType(String identifier) {
+    public DamageType(@NotNull String identifier) {
         this.identifier = identifier;
     }
 
@@ -48,6 +50,7 @@ public class DamageType implements DataContainer {
      *
      * @return the damage type identifier
      */
+    @NotNull
     public String getIdentifier() {
         return identifier;
     }
@@ -61,7 +64,8 @@ public class DamageType implements DataContainer {
      * @return the death message, null to do not send anything.
      * Can be for instance, of type {@link ColoredText} or {@link RichMessage}.
      */
-    public JsonMessage buildDeathMessage(Player killed) {
+    @NotNull
+    public JsonMessage buildDeathMessage(@NotNull Player killed) {
         return ColoredText.of("{@death." + identifier + "," + killed.getUsername() + "}");
     }
 
@@ -72,7 +76,8 @@ public class DamageType implements DataContainer {
      * @param projectile the actual projectile
      * @return a new {@link EntityProjectileDamage}
      */
-    public static DamageType fromProjectile(Entity shooter, Entity projectile) {
+    @NotNull
+    public static DamageType fromProjectile(@Nullable Entity shooter, @NotNull Entity projectile) {
         return new EntityProjectileDamage(shooter, projectile);
     }
 
@@ -82,7 +87,8 @@ public class DamageType implements DataContainer {
      * @param player the player damager
      * @return a new {@link EntityDamage}
      */
-    public static EntityDamage fromPlayer(Player player) {
+    @NotNull
+    public static EntityDamage fromPlayer(@NotNull Player player) {
         return new EntityDamage(player);
     }
 
@@ -92,7 +98,8 @@ public class DamageType implements DataContainer {
      * @param entity the entity damager
      * @return a new {@link EntityDamage}
      */
-    public static EntityDamage fromEntity(Entity entity) {
+    @NotNull
+    public static EntityDamage fromEntity(@NotNull Entity entity) {
         return new EntityDamage(entity);
     }
 
@@ -102,7 +109,8 @@ public class DamageType implements DataContainer {
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    public ColoredText buildDeathScreenText(Player killed) {
+    @NotNull
+    public ColoredText buildDeathScreenText(@NotNull Player killed) {
         return ColoredText.of("{@death." + identifier + "}");
     }
 
@@ -112,18 +120,19 @@ public class DamageType implements DataContainer {
      * @param entity the entity hit by this damage
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
-    public Sound getSound(LivingEntity entity) {
+    @Nullable
+    public Sound getSound(@NotNull LivingEntity entity) {
         if (entity instanceof Player) {
             return getPlayerSound((Player) entity);
         }
         return getGenericSound(entity);
     }
 
-    protected Sound getGenericSound(LivingEntity entity) {
+    protected Sound getGenericSound(@NotNull LivingEntity entity) {
         return Sound.ENTITY_GENERIC_HURT;
     }
 
-    protected Sound getPlayerSound(Player player) {
+    protected Sound getPlayerSound(@NotNull Player player) {
         return Sound.ENTITY_PLAYER_HURT;
     }
 

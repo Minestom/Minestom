@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a boolean value.
  * <p>
@@ -14,18 +16,19 @@ public class ArgumentBoolean extends Argument<Boolean> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         return (value.equalsIgnoreCase("true")
                 || value.equalsIgnoreCase("false")) ? SUCCESS : NOT_BOOLEAN_ERROR;
     }
 
+    @NotNull
     @Override
-    public Boolean parse(String value) {
+    public Boolean parse(@NotNull String value) {
         return Boolean.parseBoolean(value);
     }
 
     @Override
-    public int getConditionResult(Boolean value) {
+    public int getConditionResult(@NotNull Boolean value) {
         return SUCCESS;
     }
 

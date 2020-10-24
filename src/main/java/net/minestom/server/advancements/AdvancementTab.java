@@ -9,6 +9,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.advancement.AdvancementUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ public class AdvancementTab implements Viewable {
     // will never change (since the root identifier is always the same)
     protected final ByteBuf removeBuffer;
 
-    protected AdvancementTab(String rootIdentifier, AdvancementRoot root) {
+    protected AdvancementTab(@NotNull String rootIdentifier, @NotNull AdvancementRoot root) {
         this.root = root;
 
         cacheAdvancement(rootIdentifier, root, null);
@@ -53,7 +54,8 @@ public class AdvancementTab implements Viewable {
      * @param player the player to get the tabs from
      * @return all the advancement tabs that the player sees
      */
-    public static Set<AdvancementTab> getTabs(Player player) {
+    @NotNull
+    public static Set<AdvancementTab> getTabs(@NotNull Player player) {
         return PLAYER_TAB_MAP.getOrDefault(player, null);
     }
 
@@ -62,6 +64,7 @@ public class AdvancementTab implements Viewable {
      *
      * @return the root advancement
      */
+    @NotNull
     public AdvancementRoot getRoot() {
         return root;
     }
@@ -73,7 +76,7 @@ public class AdvancementTab implements Viewable {
      * @param advancement the advancement to add
      * @param parent      the parent of this advancement, it cannot be null
      */
-    public void createAdvancement(String identifier, Advancement advancement, Advancement parent) {
+    public void createAdvancement(@NotNull String identifier, @NotNull Advancement advancement, @NotNull Advancement parent) {
         Check.argCondition(identifier == null, "the advancement identifier cannot be null");
         Check.stateCondition(!advancementMap.containsKey(parent),
                 "You tried to set a parent which doesn't exist or isn't registered");
@@ -96,6 +99,7 @@ public class AdvancementTab implements Viewable {
      *
      * @return the packet adding this advancement tab and all its advancements
      */
+    @NotNull
     protected AdvancementsPacket createPacket() {
         AdvancementsPacket advancementsPacket = new AdvancementsPacket();
         advancementsPacket.resetAdvancements = false;
@@ -120,9 +124,9 @@ public class AdvancementTab implements Viewable {
      *
      * @param identifier  the identifier of the advancement
      * @param advancement the advancement
-     * @param parent      the parent of this advancement
+     * @param parent      the parent of this advancement, only null for the root advancement
      */
-    private void cacheAdvancement(String identifier, Advancement advancement, Advancement parent) {
+    private void cacheAdvancement(@NotNull String identifier, @NotNull Advancement advancement, @Nullable Advancement parent) {
         Check.stateCondition(advancement.getTab() != null,
                 "You tried to add an advancement already linked to a tab");
         advancement.setTab(this);
@@ -178,7 +182,7 @@ public class AdvancementTab implements Viewable {
      *
      * @param player the player
      */
-    private void addPlayer(Player player) {
+    private void addPlayer(@NotNull Player player) {
         Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player, p -> new HashSet<>());
         tabs.add(this);
     }
@@ -188,7 +192,7 @@ public class AdvancementTab implements Viewable {
      *
      * @param player the player
      */
-    private void removePlayer(Player player) {
+    private void removePlayer(@NotNull Player player) {
         if (!PLAYER_TAB_MAP.containsKey(player)) {
             return;
         }

@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.chars.CharList;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an argument giving a time (day/second/tick).
@@ -23,7 +24,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     }
 
     @Override
-    public int getCorrectionResult(String value) {
+    public int getCorrectionResult(@NotNull String value) {
         final char lastChar = value.charAt(value.length() - 1);
         if (!SUFFIXES.contains(lastChar))
             return INVALID_TIME_FORMAT;
@@ -39,8 +40,9 @@ public class ArgumentTime extends Argument<UpdateOption> {
         }
     }
 
+    @NotNull
     @Override
-    public UpdateOption parse(String value) {
+    public UpdateOption parse(@NotNull String value) {
         final char lastChar = value.charAt(value.length() - 1);
         TimeUnit timeUnit = null;
         if (lastChar == 'd') {
@@ -57,7 +59,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     }
 
     @Override
-    public int getConditionResult(UpdateOption value) {
+    public int getConditionResult(@NotNull UpdateOption value) {
         return SUCCESS;
     }
 }

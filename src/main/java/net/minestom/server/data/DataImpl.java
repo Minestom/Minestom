@@ -44,6 +44,7 @@ public class DataImpl implements Data {
         return data.isEmpty();
     }
 
+    @NotNull
     @Override
     public Data clone() {
         DataImpl data = new DataImpl();

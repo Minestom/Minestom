@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class ObjectEntity extends Entity {
 
-    public ObjectEntity(EntityType entityType, Position spawnPosition) {
+    public ObjectEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
         setGravity(0.02f);
     }

@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments.number;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.regex.Pattern;
@@ -17,20 +19,23 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
         super(id, false);
     }
 
-    public ArgumentNumber<T> min(T value) {
+    @NotNull
+    public ArgumentNumber<T> min(@NotNull T value) {
         this.min = value;
         this.hasMin = true;
         return this;
     }
 
-    public ArgumentNumber<T> max(T value) {
+    @NotNull
+    public ArgumentNumber<T> max(@NotNull T value) {
         this.max = value;
         this.hasMax = true;
 
         return this;
     }
 
-    public ArgumentNumber<T> between(T min, T max) {
+    @NotNull
+    public ArgumentNumber<T> between(@NotNull T min, @NotNull T max) {
         this.min = min;
         this.max = max;
         this.hasMin = true;
@@ -52,6 +57,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the minimum of this argument
      */
+    @NotNull
     public T getMin() {
         return min;
     }
@@ -70,11 +76,12 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
      *
      * @return the maximum of this argument
      */
+    @NotNull
     public T getMax() {
         return max;
     }
 
-    protected String parseValue(String value) {
+    protected String parseValue(@NotNull String value) {
         if (value.startsWith("0b")) {
             value = value.replaceFirst(Pattern.quote("0b"), "");
         } else if (value.startsWith("0x")) {
@@ -86,7 +93,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
         return value;
     }
 
-    protected int getRadix(String value) {
+    protected int getRadix(@NotNull String value) {
         if (value.startsWith("0b")) {
             return 2;
         } else if (value.startsWith("0x")) {
@@ -95,7 +102,8 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
         return 10;
     }
 
-    protected String removeScientificNotation(String value) {
+    @Nullable
+    protected String removeScientificNotation(@NotNull String value) {
         try {
             return new BigDecimal(value).toPlainString();
         } catch (NumberFormatException e) {

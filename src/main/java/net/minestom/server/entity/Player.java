@@ -280,7 +280,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public float getAttributeValue(Attribute attribute) {
+    public float getAttributeValue(@NotNull Attribute attribute) {
         if (attribute == Attribute.MOVEMENT_SPEED) {
             return walkingSpeed;
         }
@@ -679,6 +679,7 @@ public class Player extends LivingEntity implements CommandSender {
         sendMessage(ColoredText.of(message));
     }
 
+    @NotNull
     @Override
     public Collection<Permission> getAllPermissions() {
         return permissions;
@@ -775,10 +776,10 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Sets the header and footer of a player which will be displayed in his tab window.
      *
-     * @param header the header text
-     * @param footer the footer text
+     * @param header the header text, null to set empty
+     * @param footer the footer text, null to set empty
      */
-    public void sendHeaderFooter(@NotNull ColoredText header, @NotNull ColoredText footer) {
+    public void sendHeaderFooter(@Nullable ColoredText header, @Nullable ColoredText footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
@@ -1624,7 +1625,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
 
-            if(newInventory == null){
+            if (newInventory == null) {
                 // just close the inventory
                 return;
             }

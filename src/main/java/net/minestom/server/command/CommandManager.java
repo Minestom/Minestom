@@ -22,6 +22,8 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -75,7 +77,7 @@ public final class CommandManager {
      *
      * @param command the command to register
      */
-    public void register(Command command) {
+    public void register(@NotNull Command command) {
         this.dispatcher.register(command);
     }
 
@@ -85,7 +87,8 @@ public final class CommandManager {
      * @param commandName the command name
      * @return the command associated with the name, null if not any
      */
-    public Command getCommand(String commandName) {
+    @Nullable
+    public Command getCommand(@NotNull String commandName) {
         return dispatcher.findCommand(commandName);
     }
 
@@ -94,7 +97,7 @@ public final class CommandManager {
      *
      * @param commandProcessor the command to register
      */
-    public void register(CommandProcessor commandProcessor) {
+    public void register(@NotNull CommandProcessor commandProcessor) {
         this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
         // Register aliases
         final String[] aliases = commandProcessor.getAliases();
@@ -111,7 +114,8 @@ public final class CommandManager {
      * @param commandName the command name
      * @return the command associated with the name, null if not any
      */
-    public CommandProcessor getCommandProcessor(String commandName) {
+    @Nullable
+    public CommandProcessor getCommandProcessor(@NotNull String commandName) {
         return commandProcessorMap.get(commandName.toLowerCase());
     }
 
@@ -122,7 +126,7 @@ public final class CommandManager {
      * @param command the raw command string (without the command prefix)
      * @return true if the command hadn't been cancelled and has been successful
      */
-    public boolean execute(CommandSender sender, String command) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String command) {
         Check.notNull(sender, "Source cannot be null");
         Check.notNull(command, "Command string cannot be null");
 
@@ -165,6 +169,7 @@ public final class CommandManager {
      *
      * @return the {@link ConsoleSender}
      */
+    @NotNull
     public ConsoleSender getConsoleSender() {
         return consoleSender;
     }
@@ -177,7 +182,8 @@ public final class CommandManager {
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
-    public DeclareCommandsPacket createDeclareCommandsPacket(Player player) {
+    @NotNull
+    public DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
         return buildPacket(player);
     }
 
@@ -187,7 +193,8 @@ public final class CommandManager {
      * @param player the player to build the packet for
      * @return the commands packet for the specific player
      */
-    private DeclareCommandsPacket buildPacket(Player player) {
+    @NotNull
+    private DeclareCommandsPacket buildPacket(@NotNull Player player) {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
@@ -282,7 +289,11 @@ public final class CommandManager {
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
      */
-    private void createCommand(List<DeclareCommandsPacket.Node> nodes, IntList cmdChildren, String name, Collection<CommandSyntax> syntaxes, IntList rootChildren) {
+    private void createCommand(@NotNull List<DeclareCommandsPacket.Node> nodes,
+                               @NotNull IntList cmdChildren,
+                               @NotNull String name,
+                               @NotNull Collection<CommandSyntax> syntaxes,
+                               @NotNull IntList rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
@@ -347,7 +358,8 @@ public final class CommandManager {
         }
     }
 
-    private DeclareCommandsPacket.Node createMainNode(String name, boolean executable) {
+    @NotNull
+    private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
         literalNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
         literalNode.name = name;
@@ -362,7 +374,8 @@ public final class CommandManager {
      * @param executable true if this is the last argument, false otherwise
      * @return the list of nodes that the argument require
      */
-    private List<DeclareCommandsPacket.Node> toNodes(Argument<?> argument, boolean executable) {
+    @NotNull
+    private List<DeclareCommandsPacket.Node> toNodes(@NotNull Argument<?> argument, boolean executable) {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         // You can uncomment this to test any brigadier parser on the client
@@ -526,7 +539,7 @@ public final class CommandManager {
         return nodes;
     }
 
-    private byte getNumberProperties(ArgumentNumber<? extends Number> argumentNumber) {
+    private byte getNumberProperties(@NotNull ArgumentNumber<? extends Number> argumentNumber) {
         byte result = 0;
         if (argumentNumber.hasMin())
             result += 1;
@@ -543,8 +556,9 @@ public final class CommandManager {
      * @param executable true if this will be the last argument, false otherwise
      * @return the created {@link DeclareCommandsPacket.Node}
      */
-    private DeclareCommandsPacket.Node simpleArgumentNode(List<DeclareCommandsPacket.Node> nodes,
-                                                          Argument<?> argument, boolean executable, boolean suggestion) {
+    @NotNull
+    private DeclareCommandsPacket.Node simpleArgumentNode(@NotNull List<DeclareCommandsPacket.Node> nodes,
+                                                          @NotNull Argument<?> argument, boolean executable, boolean suggestion) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
         nodes.add(argumentNode);
 
@@ -554,7 +568,7 @@ public final class CommandManager {
         return argumentNode;
     }
 
-    private byte getFlag(NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
+    private byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
         byte result = (byte) type.mask;
 
         if (executable) {

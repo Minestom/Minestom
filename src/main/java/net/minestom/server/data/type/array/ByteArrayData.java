@@ -3,15 +3,17 @@ package net.minestom.server.data.type.array;
 import net.minestom.server.data.DataType;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class ByteArrayData extends DataType<byte[]> {
     @Override
-    public void encode(BinaryWriter writer, byte[] value) {
+    public void encode(@NotNull BinaryWriter writer, @NotNull byte[] value) {
         encodeByteArray(writer, value);
     }
 
+    @NotNull
     @Override
-    public byte[] decode(BinaryReader reader) {
+    public byte[] decode(@NotNull BinaryReader reader) {
         return decodeByteArray(reader);
     }
 
