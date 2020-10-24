@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -36,12 +36,12 @@ public class MapDataPacket implements ServerPacket {
             writer.writeVarInt(0);
         }
 
-        writer.writeByte((byte)columns);
+        writer.writeByte((byte) columns);
         if (columns <= 0) {
             return;
         }
 
-        writer.writeByte((byte)rows);
+        writer.writeByte((byte) rows);
         writer.writeByte(x);
         writer.writeByte(z);
         if (data != null && data.length > 0) {
@@ -62,7 +62,7 @@ public class MapDataPacket implements ServerPacket {
         public int type;
         public byte x, z;
         public byte direction;
-        public ColoredText displayName;
+        public JsonMessage displayName; // Only text
 
         private void write(BinaryWriter writer) {
             writer.writeVarInt(type);

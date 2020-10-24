@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -74,7 +74,7 @@ public class PlayerInfoPacket implements ServerPacket {
         public ArrayList<Property> properties;
         public GameMode gameMode;
         public int ping;
-        public ColoredText displayName;
+        public JsonMessage displayName; // Only text
 
         public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
             super(uuid);
@@ -160,9 +160,9 @@ public class PlayerInfoPacket implements ServerPacket {
 
     public static class UpdateDisplayName extends PlayerInfo {
 
-        public ColoredText displayName;
+        public JsonMessage displayName; // Only text
 
-        public UpdateDisplayName(UUID uuid, ColoredText displayName) {
+        public UpdateDisplayName(UUID uuid, JsonMessage displayName) {
             super(uuid);
             this.displayName = displayName;
         }

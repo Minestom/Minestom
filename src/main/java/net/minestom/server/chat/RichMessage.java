@@ -3,6 +3,7 @@ package net.minestom.server.chat;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,7 @@ public class RichMessage extends JsonMessage {
         return append(coloredText, FormatRetention.ALL);
     }
 
+    @NotNull
     @Override
     public JsonObject getJsonObject() {
         List<RichComponent> cacheComponents = new ArrayList<>(components);

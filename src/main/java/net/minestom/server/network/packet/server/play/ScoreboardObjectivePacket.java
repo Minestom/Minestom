@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -20,7 +20,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
     /**
      * The text to be displayed for the score
      */
-    public ColoredText objectiveValue;
+    public JsonMessage objectiveValue; // Only text
     /**
      * The type how the score is displayed
      */

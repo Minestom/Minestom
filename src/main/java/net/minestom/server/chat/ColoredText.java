@@ -2,6 +2,7 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,6 +121,7 @@ public class ColoredText extends JsonMessage {
      *
      * @return the Json representation of the text
      */
+    @NotNull
     @Override
     public JsonObject getJsonObject() {
         final List<JsonObject> components = getComponents();

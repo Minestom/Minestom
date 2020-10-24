@@ -1,6 +1,7 @@
 package net.minestom.server.chat;
 
 import com.google.gson.JsonObject;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a json message which can be send to a player.
@@ -24,6 +25,7 @@ public abstract class JsonMessage {
      * @return the json representation of the message
      * @see #toString()
      */
+    @NotNull
     public abstract JsonObject getJsonObject();
 
     /**
@@ -43,6 +45,7 @@ public abstract class JsonMessage {
      * @see #getJsonObject()
      * @see #refreshUpdate()
      */
+    @NotNull
     @Override
     public String toString() {
         if (!updated) {

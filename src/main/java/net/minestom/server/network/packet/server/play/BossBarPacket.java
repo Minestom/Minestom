@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.bossbar.BarColor;
 import net.minestom.server.bossbar.BarDivision;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -14,7 +14,7 @@ public class BossBarPacket implements ServerPacket {
     public UUID uuid;
     public Action action;
 
-    public ColoredText title;
+    public JsonMessage title; // Only text
     public float health;
     public BarColor color;
     public BarDivision division;

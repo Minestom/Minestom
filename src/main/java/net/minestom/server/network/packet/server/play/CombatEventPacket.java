@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -19,7 +19,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private ColoredText deathMessage;
+    private JsonMessage deathMessage; // Only text
 
     private CombatEventPacket() {
     }
@@ -38,7 +38,7 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
-    public static CombatEventPacket death(Player player, Optional<Entity> killer, ColoredText message) {
+    public static CombatEventPacket death(Player player, Optional<Entity> killer, JsonMessage message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();

@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -80,8 +80,8 @@ public class AdvancementsPacket implements ServerPacket {
     }
 
     public static class DisplayData {
-        public ColoredText title;
-        public ColoredText description;
+        public JsonMessage title; // Only text
+        public JsonMessage description; // Only text
         public ItemStack icon;
         public FrameType frameType;
         public int flags;
