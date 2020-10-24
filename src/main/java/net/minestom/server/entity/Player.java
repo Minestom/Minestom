@@ -1624,6 +1624,11 @@ public class Player extends LivingEntity implements CommandSender {
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
 
+            if(newInventory == null){
+                // just close the inventory
+                return;
+            }
+
             OpenWindowPacket openWindowPacket = new OpenWindowPacket();
             openWindowPacket.windowId = newInventory.getWindowId();
             openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();

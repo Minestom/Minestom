@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called after a chunk being unload to a certain player.
@@ -13,7 +14,7 @@ public class PlayerChunkUnloadEvent extends Event {
     private final Player player;
     private final int chunkX, chunkZ;
 
-    public PlayerChunkUnloadEvent(Player player, int chunkX, int chunkZ) {
+    public PlayerChunkUnloadEvent(@NotNull Player player, int chunkX, int chunkZ) {
         this.player = player;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -24,6 +25,7 @@ public class PlayerChunkUnloadEvent extends Event {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }

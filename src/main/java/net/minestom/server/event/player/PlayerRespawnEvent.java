@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when {@link Player#respawn()} is executed (for custom respawn or as a result of
@@ -13,7 +14,7 @@ public class PlayerRespawnEvent extends Event {
     private final Player player;
     private Position respawnPosition;
 
-    public PlayerRespawnEvent(Player player) {
+    public PlayerRespawnEvent(@NotNull Player player) {
         this.player = player;
         this.respawnPosition = player.getRespawnPoint();
     }
@@ -23,6 +24,7 @@ public class PlayerRespawnEvent extends Event {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -34,6 +36,7 @@ public class PlayerRespawnEvent extends Event {
      *
      * @return the respawn position
      */
+    @NotNull
     public Position getRespawnPosition() {
         return respawnPosition;
     }
@@ -43,7 +46,7 @@ public class PlayerRespawnEvent extends Event {
      *
      * @param respawnPosition the new respawn position
      */
-    public void setRespawnPosition(Position respawnPosition) {
+    public void setRespawnPosition(@NotNull Position respawnPosition) {
         this.respawnPosition = respawnPosition;
     }
 }

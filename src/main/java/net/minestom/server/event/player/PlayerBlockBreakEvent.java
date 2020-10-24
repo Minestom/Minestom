@@ -4,6 +4,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PlayerBlockBreakEvent extends CancellableEvent {
 
@@ -17,8 +19,8 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     private short resultBlockStateId;
     private short resultCustomBlockId;
 
-    public PlayerBlockBreakEvent(Player player, BlockPosition blockPosition,
-                                 short blockStateId, CustomBlock customBlock,
+    public PlayerBlockBreakEvent(@NotNull Player player, @NotNull BlockPosition blockPosition,
+                                 short blockStateId, @Nullable CustomBlock customBlock,
                                  short resultBlockStateId, short resultCustomBlockId) {
         this.player = player;
 
@@ -36,6 +38,7 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -45,6 +48,7 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      *
      * @return the block position
      */
+    @NotNull
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
@@ -64,6 +68,7 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      * @return the custom block,
      * null if not any
      */
+    @Nullable
     public CustomBlock getCustomBlock() {
         return customBlock;
     }

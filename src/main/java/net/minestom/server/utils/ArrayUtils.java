@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -10,7 +11,7 @@ public final class ArrayUtils {
 
     }
 
-    public static byte[] concenateByteArrays(byte[]... arrays) {
+    public static byte[] concatenateByteArrays(@NotNull byte[]... arrays) {
         int totalLength = 0;
         for (byte[] array : arrays) {
             totalLength += array.length;
@@ -25,7 +26,7 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static void removeElement(Object[] arr, int index) {
+    public static void removeElement(@NotNull Object[] arr, int index) {
         System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
     }
 
@@ -36,7 +37,8 @@ public final class ArrayUtils {
      * @param b the second array
      * @return an array containing a's indexes that aren't in b array
      */
-    public static int[] getDifferencesBetweenArray(long[] a, long[] b) {
+    @NotNull
+    public static int[] getDifferencesBetweenArray(@NotNull long[] a, @NotNull long[] b) {
         int counter = 0;
         int[] indexes = new int[Math.max(a.length, b.length)];
 
@@ -60,7 +62,8 @@ public final class ArrayUtils {
         return result;
     }
 
-    public static int[] toArray(IntList list) {
+    @NotNull
+    public static int[] toArray(@NotNull IntList list) {
         int[] array = new int[list.size()];
         for (int i = 0; i < array.length; i++) {
             array[i] = list.getInt(i);
@@ -69,13 +72,14 @@ public final class ArrayUtils {
     }
 
     /**
-     * Fills an array by a supplier.
+     * Fills an array using a supplier.
      *
      * @param array    the array to fill
      * @param supplier the supplier to fill the array
      * @param <T>      the array type
      */
-    public static <T> void fill(T[] array, Supplier<T> supplier) {
+    @NotNull
+    public static <T> void fill(@NotNull T[] array, @NotNull Supplier<T> supplier) {
         for (int i = 0; i < array.length; i++) {
             array[i] = supplier.get();
         }

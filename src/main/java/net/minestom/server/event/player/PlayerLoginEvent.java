@@ -3,6 +3,8 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called at player login, used to define his spawn instance.
@@ -14,7 +16,7 @@ public class PlayerLoginEvent extends Event {
     private final Player player;
     private Instance spawningInstance;
 
-    public PlayerLoginEvent(Player player) {
+    public PlayerLoginEvent(@NotNull Player player) {
         this.player = player;
     }
 
@@ -23,6 +25,7 @@ public class PlayerLoginEvent extends Event {
      *
      * @return the player who is logging
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -34,6 +37,7 @@ public class PlayerLoginEvent extends Event {
      *
      * @return the spawning instance
      */
+    @Nullable
     public Instance getSpawningInstance() {
         return spawningInstance;
     }
@@ -43,7 +47,7 @@ public class PlayerLoginEvent extends Event {
      *
      * @param instance the new spawning instance
      */
-    public void setSpawningInstance(Instance instance) {
+    public void setSpawningInstance(@NotNull Instance instance) {
         this.spawningInstance = instance;
     }
 }

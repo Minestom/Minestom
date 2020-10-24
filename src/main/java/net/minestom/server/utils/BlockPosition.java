@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 // TODO: pool block positions?
@@ -47,7 +49,7 @@ public class BlockPosition {
      * @param position the position vector
      * @see #BlockPosition(float, float, float)
      */
-    public BlockPosition(Vector position) {
+    public BlockPosition(@NotNull Vector position) {
         this(position.getX(), position.getY(), position.getZ());
     }
 
@@ -59,6 +61,7 @@ public class BlockPosition {
      * @param z the Z offset
      * @return the instance of this block position
      */
+    @NotNull
     public BlockPosition add(int x, int y, int z) {
         this.x += x;
         this.y += y;
@@ -74,6 +77,7 @@ public class BlockPosition {
      * @param z the Z offset
      * @return the instance of this block position
      */
+    @NotNull
     public BlockPosition subtract(int x, int y, int z) {
         this.x -= x;
         this.y -= y;
@@ -87,7 +91,8 @@ public class BlockPosition {
      * @param pos the pos to add
      * @return the instance of this block position
      */
-    public BlockPosition add(BlockPosition pos) {
+    @NotNull
+    public BlockPosition add(@NotNull BlockPosition pos) {
         this.x += pos.getX();
         this.y += pos.getY();
         this.z += pos.getZ();
@@ -100,7 +105,8 @@ public class BlockPosition {
      * @param pos the pos to subtract
      * @return the instance of this block position
      */
-    public BlockPosition subtract(BlockPosition pos) {
+    @NotNull
+    public BlockPosition subtract(@NotNull BlockPosition pos) {
         this.x -= pos.getX();
         this.y -= pos.getY();
         this.z -= pos.getZ();
@@ -173,7 +179,7 @@ public class BlockPosition {
      * @param blockPosition the block position to check the distance
      * @return the distance between 'this' and {@code blockPosition}
      */
-    public int getDistance(BlockPosition blockPosition) {
+    public int getDistance(@NotNull BlockPosition blockPosition) {
         return Math.abs(getX() - blockPosition.getX()) +
                 Math.abs(getY() - blockPosition.getY()) +
                 Math.abs(getZ() - blockPosition.getZ());
@@ -184,6 +190,7 @@ public class BlockPosition {
      *
      * @return the cloned block position
      */
+    @NotNull
     public BlockPosition clone() {
         return new BlockPosition(x, y, z);
     }
@@ -193,6 +200,7 @@ public class BlockPosition {
      *
      * @return the converted {@link Position}
      */
+    @NotNull
     public Position toPosition() {
         return new Position(x, y, z);
     }

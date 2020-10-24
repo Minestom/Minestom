@@ -3,6 +3,7 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a new instance is set for an entity.
@@ -12,7 +13,7 @@ public class EntitySpawnEvent extends Event {
     private final Entity entity;
     private final Instance spawnInstance;
 
-    public EntitySpawnEvent(Entity entity, Instance spawnInstance) {
+    public EntitySpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance) {
         this.entity = entity;
         this.spawnInstance = spawnInstance;
     }
@@ -22,6 +23,7 @@ public class EntitySpawnEvent extends Event {
      *
      * @return the entity
      */
+    @NotNull
     public Entity getEntity() {
         return entity;
     }
@@ -31,6 +33,7 @@ public class EntitySpawnEvent extends Event {
      *
      * @return the instance
      */
+    @NotNull
     public Instance getSpawnInstance() {
         return spawnInstance;
     }

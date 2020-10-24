@@ -5,6 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
@@ -17,7 +18,9 @@ public class PlayerUseItemOnBlockEvent extends Event {
     private final BlockPosition position;
     private final Direction blockFace;
 
-    public PlayerUseItemOnBlockEvent(Player player, Player.Hand hand, ItemStack itemStack, BlockPosition position, Direction blockFace) {
+    public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
+                                     @NotNull ItemStack itemStack,
+                                     @NotNull BlockPosition position, @NotNull Direction blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -30,6 +33,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -39,6 +43,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
      *
      * @return the block position
      */
+    @NotNull
     public BlockPosition getPosition() {
         return position;
     }
@@ -48,6 +53,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
      *
      * @return the block face
      */
+    @NotNull
     public Direction getBlockFace() {
         return blockFace;
     }
@@ -57,6 +63,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
      *
      * @return the hand
      */
+    @NotNull
     public Player.Hand getHand() {
         return hand;
     }
@@ -66,6 +73,7 @@ public class PlayerUseItemOnBlockEvent extends Event {
      *
      * @return the item
      */
+    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }

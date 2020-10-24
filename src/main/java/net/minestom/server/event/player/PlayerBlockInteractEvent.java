@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player interacts with a block (right-click).
@@ -22,8 +23,8 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      */
     private boolean blocksItemUse;
 
-    public PlayerBlockInteractEvent(Player player,
-                                    BlockPosition blockPosition, Player.Hand hand, BlockFace blockFace) {
+    public PlayerBlockInteractEvent(@NotNull Player player,
+                                    @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand, @NotNull BlockFace blockFace) {
         this.player = player;
         this.blockPosition = blockPosition;
         this.hand = hand;
@@ -35,6 +36,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -57,6 +59,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      *
      * @return the block position
      */
+    @NotNull
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
@@ -66,6 +69,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      *
      * @return the hand used
      */
+    @NotNull
     public Player.Hand getHand() {
         return hand;
     }
@@ -75,6 +79,7 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      *
      * @return the block face
      */
+    @NotNull
     public BlockFace getBlockFace() {
         return blockFace;
     }

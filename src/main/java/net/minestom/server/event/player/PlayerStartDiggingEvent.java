@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} start digging a block,
@@ -15,7 +16,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
     private final int blockStateId;
     private final int customBlockId;
 
-    public PlayerStartDiggingEvent(Player player, BlockPosition blockPosition, int blockStateId, int customBlockId) {
+    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId, int customBlockId) {
         this.player = player;
         this.blockPosition = blockPosition;
         this.blockStateId = blockStateId;
@@ -27,6 +28,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
      *
      * @return the {@link Player}
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -36,6 +38,7 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
      *
      * @return the {@link BlockPosition}
      */
+    @NotNull
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }

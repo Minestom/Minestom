@@ -3,6 +3,7 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityFireEvent extends CancellableEvent {
 
@@ -15,6 +16,12 @@ public class EntityFireEvent extends CancellableEvent {
         setFireTime(duration, timeUnit);
     }
 
+    /**
+     * Gets the entity who got in fire.
+     *
+     * @return the entity
+     */
+    @NotNull
     public Entity getEntity() {
         return entity;
     }

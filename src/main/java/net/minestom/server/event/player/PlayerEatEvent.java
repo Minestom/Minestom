@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is finished eating.
@@ -12,7 +13,7 @@ public class PlayerEatEvent extends Event {
     private final Player player;
     private final ItemStack foodItem;
 
-    public PlayerEatEvent(Player player, ItemStack foodItem) {
+    public PlayerEatEvent(@NotNull Player player, @NotNull ItemStack foodItem) {
         this.player = player;
         this.foodItem = foodItem;
     }
@@ -22,6 +23,7 @@ public class PlayerEatEvent extends Event {
      *
      * @return the concerned player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -31,6 +33,7 @@ public class PlayerEatEvent extends Event {
      *
      * @return the food item
      */
+    @NotNull
     public ItemStack getFoodItem() {
         return foodItem;
     }

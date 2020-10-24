@@ -6,6 +6,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player tries placing a block.
@@ -22,7 +23,8 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     private boolean consumeBlock;
 
-    public PlayerBlockPlaceEvent(Player player, short blockStateId, short customBlockId, BlockPosition blockPosition, Player.Hand hand) {
+    public PlayerBlockPlaceEvent(@NotNull Player player, short blockStateId, short customBlockId,
+                                 @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
         this.player = player;
         this.blockStateId = blockStateId;
         this.customBlockId = customBlockId;
@@ -36,7 +38,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      *
      * @param customBlock the custom block to place
      */
-    public void setCustomBlock(CustomBlock customBlock) {
+    public void setCustomBlock(@NotNull CustomBlock customBlock) {
         setBlockStateId(customBlock.getDefaultBlockStateId());
         setCustomBlockId(customBlock.getCustomBlockId());
     }
@@ -56,7 +58,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      *
      * @param customBlockId the custom block id to place
      */
-    public void setCustomBlock(String customBlockId) {
+    public void setCustomBlock(@NotNull String customBlockId) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setCustomBlock(customBlock);
     }
@@ -105,6 +107,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -114,6 +117,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      *
      * @return the block position
      */
+    @NotNull
     public BlockPosition getBlockPosition() {
         return blockPosition;
     }
@@ -123,6 +127,7 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      *
      * @return the hand used
      */
+    @NotNull
     public Player.Hand getHand() {
         return hand;
     }

@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class PlayerPreLoginEvent extends Event {
     private String username;
     private UUID playerUuid;
 
-    public PlayerPreLoginEvent(Player player, String username, UUID playerUuid) {
+    public PlayerPreLoginEvent(@NotNull Player player, @NotNull String username, @NotNull UUID playerUuid) {
         this.player = player;
         this.username = username;
         this.playerUuid = playerUuid;
@@ -27,6 +28,7 @@ public class PlayerPreLoginEvent extends Event {
      *
      * @return the player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -36,6 +38,7 @@ public class PlayerPreLoginEvent extends Event {
      *
      * @return the player username
      */
+    @NotNull
     public String getUsername() {
         return username;
     }
@@ -45,7 +48,7 @@ public class PlayerPreLoginEvent extends Event {
      *
      * @param username the new player username
      */
-    public void setUsername(String username) {
+    public void setUsername(@NotNull String username) {
         Check.notNull(username, "The player username cannot be null");
         this.username = username;
     }
@@ -55,6 +58,7 @@ public class PlayerPreLoginEvent extends Event {
      *
      * @return the player uuid
      */
+    @NotNull
     public UUID getPlayerUuid() {
         return playerUuid;
     }
@@ -64,7 +68,7 @@ public class PlayerPreLoginEvent extends Event {
      *
      * @param playerUuid the new player uuid
      */
-    public void setPlayerUuid(UUID playerUuid) {
+    public void setPlayerUuid(@NotNull UUID playerUuid) {
         Check.notNull(playerUuid, "The player uuid cannot be null");
         this.playerUuid = playerUuid;
     }

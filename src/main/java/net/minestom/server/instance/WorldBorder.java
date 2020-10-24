@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.WorldBorderPacket;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents the world border of an {@link Instance},
@@ -175,7 +176,8 @@ public class WorldBorder {
      * @param position the position to check
      * @return the axis where the position collides with the world border
      */
-    public CollisionAxis getCollisionAxis(Position position) {
+    @NotNull
+    public CollisionAxis getCollisionAxis(@NotNull Position position) {
         final double radius = getDiameter() / 2d;
         final boolean checkX = position.getX() <= getCenterX() + radius && position.getX() >= getCenterX() - radius;
         final boolean checkZ = position.getZ() <= getCenterZ() + radius && position.getZ() >= getCenterZ() - radius;
@@ -195,7 +197,7 @@ public class WorldBorder {
      * @param position the position to check
      * @return true if {@code position} is inside the world border, false otherwise
      */
-    public boolean isInside(Position position) {
+    public boolean isInside(@NotNull Position position) {
         return getCollisionAxis(position) == CollisionAxis.NONE;
     }
 
@@ -205,7 +207,7 @@ public class WorldBorder {
      * @param entity the entity to check
      * @return true if {@code entity} is inside the world border, false otherwise
      */
-    public boolean isInside(Entity entity) {
+    public boolean isInside(@NotNull Entity entity) {
         return isInside(entity.getPosition());
     }
 
@@ -237,7 +239,7 @@ public class WorldBorder {
      *
      * @param player the player to send the packet to
      */
-    protected void init(Player player) {
+    protected void init(@NotNull Player player) {
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.INITIALIZE;
         worldBorderPacket.wbAction = new WorldBorderPacket.WBInitialize(centerX, centerZ, oldDiameter, newDiameter, speed,
@@ -250,6 +252,7 @@ public class WorldBorder {
      *
      * @return the {@link Instance} of this world border
      */
+    @NotNull
     public Instance getInstance() {
         return instance;
     }

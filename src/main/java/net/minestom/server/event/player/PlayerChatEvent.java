@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +20,7 @@ public class PlayerChatEvent extends CancellableEvent {
     private String message;
     private Function<PlayerChatEvent, RichMessage> chatFormat;
 
-    public PlayerChatEvent(Player sender, Collection<Player> recipients, String message) {
+    public PlayerChatEvent(@NotNull Player sender, @NotNull Collection<Player> recipients, @NotNull String message) {
         this.sender = sender;
         this.recipients = new ArrayList<>(recipients);
         this.message = message;
@@ -30,7 +31,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @param chatFormat the custom chat format
      */
-    public void setChatFormat(Function<PlayerChatEvent, RichMessage> chatFormat) {
+    public void setChatFormat(@NotNull Function<PlayerChatEvent, RichMessage> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -39,6 +40,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @return the sender
      */
+    @NotNull
     public Player getSender() {
         return sender;
     }
@@ -50,6 +52,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @return a modifiable list of message targets
      */
+    @NotNull
     public Collection<Player> getRecipients() {
         return recipients;
     }
@@ -59,6 +62,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @return the sender's message
      */
+    @NotNull
     public String getMessage() {
         return message;
     }
@@ -68,7 +72,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @param message the new message
      */
-    public void setMessage(String message) {
+    public void setMessage(@NotNull String message) {
         this.message = message;
     }
 
@@ -79,6 +83,7 @@ public class PlayerChatEvent extends CancellableEvent {
      *
      * @return the chat format which will be used
      */
+    @NotNull
     public Function<PlayerChatEvent, RichMessage> getChatFormatFunction() {
         return chatFormat;
     }

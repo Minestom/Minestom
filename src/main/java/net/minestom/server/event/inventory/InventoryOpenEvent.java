@@ -3,6 +3,8 @@ package net.minestom.server.event.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player open an {@link Inventory}.
@@ -14,7 +16,7 @@ public class InventoryOpenEvent extends CancellableEvent {
     private final Player player;
     private Inventory inventory;
 
-    public InventoryOpenEvent(Player player, Inventory inventory) {
+    public InventoryOpenEvent(@NotNull Player player, @Nullable Inventory inventory) {
         this.player = player;
         this.inventory = inventory;
     }
@@ -24,6 +26,7 @@ public class InventoryOpenEvent extends CancellableEvent {
      *
      * @return the player who opens the inventory
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -31,8 +34,9 @@ public class InventoryOpenEvent extends CancellableEvent {
     /**
      * Gets the inventory to open, this could have been change by the {@link #setInventory(Inventory)}.
      *
-     * @return the inventory to open
+     * @return the inventory to open, null to just close the current inventory if any
      */
+    @Nullable
     public Inventory getInventory() {
         return inventory;
     }
@@ -43,9 +47,8 @@ public class InventoryOpenEvent extends CancellableEvent {
      * To do not open any inventory see {@link #setCancelled(boolean)}.
      *
      * @param inventory the inventory to open
-     * @throws NullPointerException if {@code inventory} is null
      */
-    public void setInventory(Inventory inventory) {
+    public void setInventory(@Nullable Inventory inventory) {
         this.inventory = inventory;
     }
 }

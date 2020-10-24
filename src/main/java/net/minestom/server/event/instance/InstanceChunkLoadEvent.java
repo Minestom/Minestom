@@ -2,6 +2,7 @@ package net.minestom.server.event.instance;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a chunk in an instance is loaded.
@@ -11,7 +12,7 @@ public class InstanceChunkLoadEvent extends Event {
     private final Instance instance;
     private final int chunkX, chunkZ;
 
-    public InstanceChunkLoadEvent(Instance instance, int chunkX, int chunkZ) {
+    public InstanceChunkLoadEvent(@NotNull Instance instance, int chunkX, int chunkZ) {
         this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -22,6 +23,7 @@ public class InstanceChunkLoadEvent extends Event {
      *
      * @return the instance
      */
+    @NotNull
     public Instance getInstance() {
         return instance;
     }

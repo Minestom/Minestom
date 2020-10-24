@@ -5,6 +5,8 @@ import net.minestom.server.event.Event;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
@@ -19,7 +21,9 @@ public class InventoryClickEvent extends Event {
     private final ItemStack clickedItem;
     private final ItemStack cursorItem;
 
-    public InventoryClickEvent(Player player, Inventory inventory, int slot, ClickType clickType, ItemStack clicked, ItemStack cursor) {
+    public InventoryClickEvent(@NotNull Player player, Inventory inventory,
+                               int slot, @NotNull ClickType clickType,
+                               @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         this.player = player;
         this.inventory = inventory;
         this.slot = slot;
@@ -33,6 +37,7 @@ public class InventoryClickEvent extends Event {
      *
      * @return the player who clicked in the inventory
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -42,6 +47,7 @@ public class InventoryClickEvent extends Event {
      *
      * @return the inventory where the click happened, null if this is the player's inventory
      */
+    @Nullable
     public Inventory getInventory() {
         return inventory;
     }
@@ -60,6 +66,7 @@ public class InventoryClickEvent extends Event {
      *
      * @return the click type
      */
+    @NotNull
     public ClickType getClickType() {
         return clickType;
     }
@@ -69,6 +76,7 @@ public class InventoryClickEvent extends Event {
      *
      * @return the clicked item
      */
+    @NotNull
     public ItemStack getClickedItem() {
         return clickedItem;
     }
@@ -78,6 +86,7 @@ public class InventoryClickEvent extends Event {
      *
      * @return the cursor item
      */
+    @NotNull
     public ItemStack getCursorItem() {
         return cursorItem;
     }

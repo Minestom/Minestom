@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called before the PlayerEatEvent and can be used to change the eating time
@@ -15,7 +16,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
     private final ItemStack foodItem;
     private long eatingTime;
 
-    public PlayerPreEatEvent(Player player, ItemStack foodItem, long eatingTime) {
+    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, long eatingTime) {
         this.player = player;
         this.foodItem = foodItem;
         this.eatingTime = eatingTime;
@@ -26,6 +27,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
      *
      * @return the concerned player
      */
+    @NotNull
     public Player getPlayer() {
         return player;
     }
@@ -35,6 +37,7 @@ public class PlayerPreEatEvent extends CancellableEvent {
      *
      * @return the food item
      */
+    @NotNull
     public ItemStack getFoodItem() {
         return foodItem;
     }
