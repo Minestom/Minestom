@@ -142,7 +142,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @param callback consumer called after the chunk has been generated,
+     * @param callback optional consumer called after the chunk has been generated,
      *                 the returned chunk will never be null
      */
     public abstract void loadChunk(int chunkX, int chunkZ, ChunkCallback callback);
@@ -153,7 +153,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @param callback consumer called after the chunk has tried to be loaded,
+     * @param callback optional consumer called after the chunk has tried to be loaded,
      *                 contains a chunk if it is successful, null otherwise
      */
     public abstract void loadOptionalChunk(int chunkX, int chunkZ, ChunkCallback callback);
@@ -184,14 +184,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Saves a {@link Chunk} to permanent storage.
      *
      * @param chunk    the {@link Chunk} to save
-     * @param callback called when the {@link Chunk} is done saving
+     * @param callback optional callback called when the {@link Chunk} is done saving
      */
     public abstract void saveChunkToStorage(Chunk chunk, Runnable callback);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
-     * @param callback called when the chunks are done saving
+     * @param callback optional callback called when the chunks are done saving
      */
     public abstract void saveChunksToStorage(Runnable callback);
 
@@ -254,7 +254,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk X
-     * @param callback the callback executed once the {@link Chunk} has been retrieved
+     * @param callback the optional callback executed once the {@link Chunk} has been retrieved
      */
     protected abstract void retrieveChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
@@ -265,7 +265,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @param callback the callback executed with the newly created {@link Chunk}
+     * @param callback the optional callback executed with the newly created {@link Chunk}
      */
     protected abstract void createChunk(int chunkX, int chunkZ, ChunkCallback callback);
 
@@ -541,7 +541,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Loads the chunk at the given {@link Position} with a callback.
      *
      * @param position the chunk position
-     * @param callback the callback to run when the chunk is loaded
+     * @param callback the optional callback to run when the chunk is loaded
      */
     public void loadChunk(Position position, ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
@@ -554,7 +554,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * at the given {@link Position} with a callback.
      *
      * @param position the chunk position
-     * @param callback the callback executed when the chunk is loaded (or with a null chunk if not)
+     * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
     public void loadOptionalChunk(Position position, ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
@@ -933,7 +933,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Schedules a block update at a given {@link BlockPosition}.
      * Does nothing if no {@link CustomBlock} is present at 'position'.
      * <p>
-     * Cancelled if the block changes between this call and the actual update
+     * Cancelled if the block changes between this call and the actual update.
      *
      * @param time     in how long this update must be performed?
      * @param unit     in what unit is the time expressed
@@ -946,7 +946,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * <p>
      * Warning: this does not update chunks and entities.
      *
-     * @param time the current time
+     * @param time the tick time in milliseconds
      */
     public void tick(long time) {
         // scheduled tasks

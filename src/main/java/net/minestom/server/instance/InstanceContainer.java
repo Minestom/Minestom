@@ -25,7 +25,6 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -34,7 +33,6 @@ import net.minestom.server.world.biomes.Biome;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -221,11 +219,12 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Has this block already changed since last update? Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
+     * Has this block already changed since last update?
+     * Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
      *
      * @param blockPosition the block position
      * @param blockStateId  the block state id
-     * @return
+     * @return true if the block changed since the last update
      */
     private boolean isAlreadyChanged(BlockPosition blockPosition, short blockStateId) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
@@ -248,7 +247,7 @@ public class InstanceContainer extends Instance {
     /**
      * Calls {@link CustomBlock#onDestroy(Instance, BlockPosition, Data)} for {@code previousBlock}.
      * <p>
-     * WARNING {@code chunk} needs to be synchronized
+     * WARNING {@code chunk} needs to be synchronized.
      *
      * @param chunk         the chunk where the block is
      * @param index         the index of the block
@@ -263,7 +262,7 @@ public class InstanceContainer extends Instance {
     /**
      * Calls {@link CustomBlock#onPlace(Instance, BlockPosition, Data)} for the current custom block at the position.
      * <p>
-     * WARNING {@code chunk} needs to be synchronized
+     * WARNING {@code chunk} needs to be synchronized.
      *
      * @param chunk         the chunk where the block is
      * @param index         the block index
@@ -444,9 +443,9 @@ public class InstanceContainer extends Instance {
     /**
      * Saves the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage(Runnable)}.
      * <p>
-     * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved
+     * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved.
      *
-     * @param callback the callback once the saving is done
+     * @param callback the callback once the saving is done. Can be null.
      */
     public void saveInstance(Runnable callback) {
         Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
@@ -464,7 +463,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Save the instance without callback
+     * Save the instance without callback.
      *
      * @see #saveInstance(Runnable)
      */
@@ -474,29 +473,12 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunkToStorage(Chunk chunk, Runnable callback) {
-        chunkLoader.saveChunk(chunk, callback);
+        this.chunkLoader.saveChunk(chunk, callback);
     }
 
     @Override
     public void saveChunksToStorage(Runnable callback) {
-        if (chunkLoader.supportsParallelSaving()) {
-            ExecutorService parallelSavingThreadPool = new MinestomThread(MinecraftServer.THREAD_COUNT_PARALLEL_CHUNK_SAVING, MinecraftServer.THREAD_NAME_PARALLEL_CHUNK_SAVING, true);
-            getChunks().forEach(c -> parallelSavingThreadPool.execute(() -> saveChunkToStorage(c, null)));
-            try {
-                parallelSavingThreadPool.shutdown();
-                parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
-                OptionalCallback.execute(callback);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            final Iterator<Chunk> chunkIterator = chunks.values().iterator();
-            while (chunkIterator.hasNext()) {
-                final Chunk chunk = chunkIterator.next();
-                final boolean isLast = !chunkIterator.hasNext();
-                saveChunkToStorage(chunk, isLast ? callback : null);
-            }
-        }
+        this.chunkLoader.saveChunks(chunks.values(), callback);
     }
 
     @Override
@@ -579,7 +561,7 @@ public class InstanceContainer extends Instance {
      * <p>
      * WARNING: if you need to save this instance's chunks later,
      * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int, ChunkCallback)}
-     * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random
+     * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random type.
      *
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
      * @throws NullPointerException if {@code chunkSupplier} is null
