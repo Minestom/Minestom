@@ -2,6 +2,7 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
@@ -16,7 +17,7 @@ public class WrittenBookMeta implements ItemMeta {
     private WrittenBookGeneration generation;
     private String author;
     private String title;
-    private ArrayList<ColoredText> pages = new ArrayList<>();
+    private ArrayList<JsonMessage> pages = new ArrayList<>();
 
     /**
      * Gets if the book is resolved.
@@ -98,7 +99,7 @@ public class WrittenBookMeta implements ItemMeta {
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
-    public ArrayList<ColoredText> getPages() {
+    public ArrayList<JsonMessage> getPages() {
         return pages;
     }
 
@@ -107,7 +108,7 @@ public class WrittenBookMeta implements ItemMeta {
      *
      * @param pages the array list containing the book pages
      */
-    public void setPages(ArrayList<ColoredText> pages) {
+    public void setPages(ArrayList<JsonMessage> pages) {
         this.pages = pages;
     }
 
@@ -170,7 +171,7 @@ public class WrittenBookMeta implements ItemMeta {
         }
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (ColoredText page : pages) {
+            for (JsonMessage page : pages) {
                 list.add(new NBTString(page.toString()));
             }
             compound.set("pages", list);
