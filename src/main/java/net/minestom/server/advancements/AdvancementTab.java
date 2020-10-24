@@ -19,7 +19,7 @@ import java.util.*;
  * Each tab requires a root advancement and all succeeding advancements need to have a parent in the tab.
  * You can create a new advancement using {@link #createAdvancement(String, Advancement, Advancement)}.
  * <p>
- * Be sure to use {@link #addViewer(Player)} and {@link #removeViewer(Player)} to control which players can see this tab.
+ * Be sure to use {@link #addViewer(Player)} and {@link #removeViewer(Player)} to control which players can see the tab.
  * (all viewers will see the same tab, with the same amount of validated advancements etc... so shared).
  */
 public class AdvancementTab implements Viewable {
@@ -52,9 +52,10 @@ public class AdvancementTab implements Viewable {
      * Gets all the tabs of a viewer.
      *
      * @param player the player to get the tabs from
-     * @return all the advancement tabs that the player sees
+     * @return all the advancement tabs that the player sees, can be null
+     * if the player doesn't see anything
      */
-    @NotNull
+    @Nullable
     public static Set<AdvancementTab> getTabs(@NotNull Player player) {
         return PLAYER_TAB_MAP.getOrDefault(player, null);
     }
