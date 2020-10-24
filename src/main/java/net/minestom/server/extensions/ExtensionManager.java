@@ -1,11 +1,9 @@
 package net.minestom.server.extensions;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
+import net.minestom.dependencies.DependencyGetter;
+import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -16,20 +14,15 @@ import org.spongepowered.asm.mixin.Mixins;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipFile;
 
 @Slf4j
@@ -42,6 +35,7 @@ public class ExtensionManager {
     private final Map<String, URLClassLoader> extensionLoaders = new HashMap<>();
     private final Map<String, Extension> extensions = new HashMap<>();
     private final File extensionFolder = new File("extensions");
+    private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
 
     public ExtensionManager() {
@@ -58,7 +52,17 @@ public class ExtensionManager {
             }
         }
 
+        if (!dependenciesFolder.exists()) {
+            if (!dependenciesFolder.mkdirs()) {
+                log.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
+                return;
+            }
+        }
+
         final List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+        loadDependencies(discoveredExtensions);
+        // remove invalid extensions
+        discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
         setupCodeModifiers(discoveredExtensions);
 
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
@@ -73,47 +77,25 @@ public class ExtensionManager {
                 log.error("Failed to get URL.", e);
                 continue;
             }
-            // TODO: Can't we use discoveredExtension.description here? Someone should test that.
-            final InputStream extensionInputStream = loader.getResourceAsStream("extension.json");
-            if (extensionInputStream == null) {
-                StringBuilder urlsString = new StringBuilder();
-                for (int i = 0; i < urls.length; i++) {
-                    URL url = urls[i];
-                    if (i != 0) {
-                        urlsString.append(" ; ");
-                    }
-                    urlsString.append("'").append(url.toString()).append("'");
-                }
-                log.error("Failed to find extension.json in the urls '{}'.", urlsString);
-                continue;
-            }
-            JsonObject extensionDescriptionJson = JsonParser.parseReader(new InputStreamReader(extensionInputStream)).getAsJsonObject();
-
-            final String mainClass = extensionDescriptionJson.get("entrypoint").getAsString();
-            final String extensionName = extensionDescriptionJson.get("name").getAsString();
-            // Check the validity of the extension's name.
-            if (!extensionName.matches("[A-Za-z]+")) {
-                log.error("Extension '{}' specified an invalid name.", extensionName);
-                log.error("Extension '{}' will not be loaded.", extensionName);
-                continue;
-            }
 
             // Get ExtensionDescription (authors, version etc.)
+            String extensionName = discoveredExtension.getName();
+            String mainClass = discoveredExtension.getEntrypoint();
             Extension.ExtensionDescription extensionDescription;
             {
                 String version;
-                if (!extensionDescriptionJson.has("version")) {
+                if (discoveredExtension.getVersion() == null) {
                     log.warn("Extension '{}' did not specify a version.", extensionName);
                     log.warn("Extension '{}' will continue to load but should specify a plugin version.", extensionName);
                     version = "Not Specified";
                 } else {
-                    version = extensionDescriptionJson.get("version").getAsString();
+                    version = discoveredExtension.getVersion();
                 }
                 List<String> authors;
-                if (!extensionDescriptionJson.has("authors")) {
+                if (discoveredExtension.getAuthors() == null) {
                     authors = new ArrayList<>();
                 } else {
-                    authors = Arrays.asList(new Gson().fromJson(extensionDescriptionJson.get("authors"), String[].class));
+                    authors = Arrays.asList(discoveredExtension.getAuthors());
                 }
 
                 extensionDescription = new Extension.ExtensionDescription(extensionName, version, authors);
@@ -198,6 +180,57 @@ public class ExtensionManager {
         }
     }
 
+    private void loadDependencies(List<DiscoveredExtension> extensions) {
+        for(DiscoveredExtension ext : extensions) {
+            try {
+                DependencyGetter getter = new DependencyGetter();
+                DiscoveredExtension.Dependencies dependencies = ext.getDependencies();
+                if(dependencies.repositories == null) {
+                    throw new IllegalStateException("Missing 'repositories' array.");
+                }
+                if(dependencies.artifacts == null) {
+                    throw new IllegalStateException("Missing 'artifacts' array.");
+                }
+                List<MavenRepository> repoList = new LinkedList<>();
+                for(var repository : dependencies.repositories) {
+                    if(repository.name == null) {
+                        throw new IllegalStateException("Missing 'name' element in repository object.");
+                    }
+                    if(repository.url == null) {
+                        throw new IllegalStateException("Missing 'url' element in repository object.");
+                    }
+                    repoList.add(new MavenRepository(repository.name, repository.url));
+                }
+                getter.addMavenResolver(repoList);
+
+                for(var artifact : dependencies.artifacts) {
+                    var resolved = getter.get(artifact, dependenciesFolder);
+                    injectIntoClasspath(resolved.getContentsLocation(), ext);
+                    log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
+                }
+            } catch (Exception e) {
+                ext.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                log.error("Failed to load dependencies for extension {}", ext.getName());
+                log.error("Extension '{}' will not be loaded", ext.getName());
+                log.error("This is the exception", e);
+            }
+        }
+    }
+
+    private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
+        final ClassLoader cl = getClass().getClassLoader();
+        if (!(cl instanceof URLClassLoader)) {
+            throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
+        }
+        try {
+            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            addURL.setAccessible(true);
+            addURL.invoke(cl, dependency);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Failed to inject URL "+dependency+" into classpath. From extension "+extension.getName(), e);
+        }
+    }
+
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
@@ -211,10 +244,12 @@ public class ExtensionManager {
             try (ZipFile f = new ZipFile(file);
                  InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
 
-                DiscoveredExtension extension = new DiscoveredExtension();
+                DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files = new File[]{file};
-                extension.description = GSON.fromJson(reader, JsonObject.class);
-                extensions.add(extension);
+                extension.checkIntegrity();
+                if(extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                    extensions.add(extension);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -226,10 +261,12 @@ public class ExtensionManager {
             final String extensionClasses = System.getProperty(INDEV_CLASSES_FOLDER);
             final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
-                DiscoveredExtension extension = new DiscoveredExtension();
+                DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files = new File[]{new File(extensionClasses), new File(extensionResources)};
-                extension.description = GSON.fromJson(reader, JsonObject.class);
-                extensions.add(extension);
+                extension.checkIntegrity();
+                if(extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                    extensions.add(extension);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -280,16 +317,13 @@ public class ExtensionManager {
         log.info("Start loading code modifiers...");
         for (DiscoveredExtension extension : extensions) {
             try {
-                if (extension.description.has("codeModifiers")) {
-                    final JsonArray codeModifierClasses = extension.description.getAsJsonArray("codeModifiers");
-                    for (JsonElement elem : codeModifierClasses) {
-                        modifiableClassLoader.loadModifier(extension.files, elem.getAsString());
-                    }
+                for (String codeModifierClass : extension.getCodeModifiers()) {
+                    modifiableClassLoader.loadModifier(extension.files, codeModifierClass);
                 }
-                if (extension.description.has("mixinConfig")) {
-                    final String mixinConfigFile = extension.description.get("mixinConfig").getAsString();
+                if (extension.getMixinConfig() != null) {
+                    final String mixinConfigFile = extension.getMixinConfig();
                     Mixins.addConfiguration(mixinConfigFile);
-                    log.info("Found mixin in extension " + extension.description.get("name").getAsString() + ": " + mixinConfigFile);
+                    log.info("Found mixin in extension " + extension.getName() + ": " + mixinConfigFile);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -299,8 +333,5 @@ public class ExtensionManager {
         log.info("Done loading code modifiers.");
     }
 
-    private static class DiscoveredExtension {
-        private File[] files;
-        private JsonObject description;
-    }
+
 }

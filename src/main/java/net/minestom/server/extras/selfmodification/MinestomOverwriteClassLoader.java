@@ -44,6 +44,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
             add("org.apache");
             add("org.spongepowered");
             add("net.minestom.server.extras.selfmodification");
+            add("org.jboss.shrinkwrap.resolver");
         }
     };
     /**
@@ -221,6 +222,11 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         synchronized (modifiers) {
             modifiers.add(modifier);
         }
+    }
+
+    @Override
+    public void addURL(URL url) {
+        super.addURL(url);
     }
 
     public List<CodeModifier> getModifiers() {
