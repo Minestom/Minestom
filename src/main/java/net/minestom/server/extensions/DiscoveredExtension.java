@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j(topic = "minestom-extensions")
 final class DiscoveredExtension {
@@ -16,7 +19,7 @@ final class DiscoveredExtension {
     private String[] codeModifiers;
     private String[] dependencies;
     private ExternalDependencies externalDependencies;
-    transient File[] files = new File[0];
+    transient List<URL> files = new LinkedList<>();
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
 
     @NotNull
@@ -65,8 +68,8 @@ final class DiscoveredExtension {
     static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
         if (extension.name == null) {
             StringBuilder fileList = new StringBuilder();
-            for (File f : extension.files) {
-                fileList.append(f.getAbsolutePath()).append(", ");
+            for (URL f : extension.files) {
+                fileList.append(f.toExternalForm()).append(", ");
             }
             log.error("Extension with no name. (at {}})", fileList);
             log.error("Extension at ({}) will not be loaded.", fileList);

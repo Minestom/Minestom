@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -158,7 +159,11 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         if (name == null)
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
-        byte[] bytes = getResourceAsStream(path).readAllBytes();
+        InputStream input = getResourceAsStream(path);
+        if(input == null) {
+            throw new ClassNotFoundException("Could not find resource "+path);
+        }
+        byte[] bytes = input.readAllBytes();
         if (transform && !isProtected(name)) {
             ClassReader reader = new ClassReader(bytes);
             ClassNode node = new ClassNode();

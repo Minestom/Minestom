@@ -74,16 +74,8 @@ public class ExtensionManager {
 
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
             URLClassLoader loader;
-            URL[] urls = new URL[discoveredExtension.files.length];
-            try {
-                for (int i = 0; i < urls.length; i++) {
-                    urls[i] = discoveredExtension.files[i].toURI().toURL();
-                }
-                loader = newClassLoader(urls);
-            } catch (MalformedURLException e) {
-                log.error("Failed to get URL.", e);
-                continue;
-            }
+            URL[] urls = discoveredExtension.files.toArray(new URL[0]);
+            loader = newClassLoader(urls);
 
             // Create ExtensionDescription (authors, version etc.)
             String extensionName = discoveredExtension.getName();
@@ -187,7 +179,7 @@ public class ExtensionManager {
                  InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
 
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files = new File[]{file};
+                extension.files.add(file.toURI().toURL());
 
                 // Verify integrity and ensure defaults
                 DiscoveredExtension.verifyIntegrity(extension);
@@ -207,7 +199,8 @@ public class ExtensionManager {
             final String extensionResources = System.getProperty(INDEV_RESOURCES_FOLDER);
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files = new File[]{new File(extensionClasses), new File(extensionResources)};
+                extension.files.add(new File(extensionClasses).toURI().toURL());
+                extension.files.add(new File(extensionResources).toURI().toURL());
 
                 // Verify integrity and ensure defaults
                 DiscoveredExtension.verifyIntegrity(extension);
@@ -293,6 +286,7 @@ public class ExtensionManager {
     }
 
     private void loadDependencies(List<DiscoveredExtension> extensions) {
+        ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(extensions);
         for (DiscoveredExtension ext : extensions) {
             try {
                 DependencyGetter getter = new DependencyGetter();
@@ -314,9 +308,16 @@ public class ExtensionManager {
                     repoList.add(new MavenRepository(repository.name, repository.url));
                 }
                 getter.addMavenResolver(repoList);
+                getter.addResolver(extensionDependencyResolver);
 
                 for (var artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
+                    injectIntoClasspath(resolved.getContentsLocation(), ext);
+                    log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
+                }
+
+                for (var dependencyName : ext.getDependencies()) {
+                    var resolved = getter.get(dependencyName, dependenciesFolder);
                     injectIntoClasspath(resolved.getContentsLocation(), ext);
                     log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
@@ -330,17 +331,23 @@ public class ExtensionManager {
     }
 
     private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
-        final ClassLoader cl = getClass().getClassLoader();
+        extension.files.add(dependency);
+        log.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
+        /*final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof URLClassLoader)) {
             throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
         }
-        try {
-            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            addURL.setAccessible(true);
-            addURL.invoke(cl, dependency);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
-        }
+        if(cl instanceof MinestomOverwriteClassLoader) {
+            ((MinestomOverwriteClassLoader) cl).addURL(dependency); // no reflection warnings for us!
+        } else {
+            try {
+                Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+                addURL.setAccessible(true);
+                addURL.invoke(cl, dependency);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
+            }
+        }*/
     }
 
     /**
@@ -387,7 +394,7 @@ public class ExtensionManager {
         for (DiscoveredExtension extension : extensions) {
             try {
                 for (String codeModifierClass : extension.getCodeModifiers()) {
-                    modifiableClassLoader.loadModifier(extension.files, codeModifierClass);
+                    modifiableClassLoader.loadModifier(extension.files.toArray(new File[0]), codeModifierClass);
                 }
                 if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
@@ -396,7 +403,7 @@ public class ExtensionManager {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                log.error("Failed to load code modifier for extension in files: " + Arrays.toString(extension.files), e);
+                log.error("Failed to load code modifier for extension in files: " + extension.files.stream().map(u -> u.toExternalForm()).collect(Collectors.joining(", ")), e);
             }
         }
         log.info("Done loading code modifiers.");
