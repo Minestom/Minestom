@@ -76,7 +76,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         sharedSecret = ByteArrayData.decodeByteArray(reader);
         verifyToken = ByteArrayData.decodeByteArray(reader);
     }

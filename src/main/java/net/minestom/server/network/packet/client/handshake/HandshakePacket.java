@@ -24,7 +24,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     private int nextState;
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.protocolVersion = reader.readVarInt();
         this.serverAddress = reader.readSizedString();
         this.serverPort = reader.readUnsignedShort();

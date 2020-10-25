@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateSignPacket extends ClientPlayPacket {
 
@@ -13,7 +14,7 @@ public class ClientUpdateSignPacket extends ClientPlayPacket {
     public String line4;
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
         this.line1 = reader.readSizedString();
         this.line2 = reader.readSizedString();

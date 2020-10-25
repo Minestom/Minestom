@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
 
@@ -12,7 +13,7 @@ public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
     public byte flags;
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
         this.command = reader.readSizedString();
         this.mode = Mode.values()[reader.readVarInt()];

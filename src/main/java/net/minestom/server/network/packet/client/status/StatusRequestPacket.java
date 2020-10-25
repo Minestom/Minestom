@@ -34,7 +34,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         // Empty
     }
 }

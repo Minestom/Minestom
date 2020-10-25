@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
 
@@ -15,7 +16,7 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
     public boolean insideBlock;
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.hand = Player.Hand.values()[reader.readVarInt()];
         this.blockPosition = reader.readBlockPosition();
         this.blockFace = BlockFace.values()[reader.readVarInt()];

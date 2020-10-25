@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 public class ClientRecipeBookData extends ClientPlayPacket {
 
@@ -19,7 +20,7 @@ public class ClientRecipeBookData extends ClientPlayPacket {
     public boolean smokingRecipeFilterActive;
 
     @Override
-    public void read(BinaryReader reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.type = reader.readVarInt();
 
         switch (type) {
