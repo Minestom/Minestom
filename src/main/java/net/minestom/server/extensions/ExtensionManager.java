@@ -22,10 +22,15 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipFile;
 
-@Slf4j
+@Slf4j(topic = "Minestom-Extensions")
 public class ExtensionManager {
 
     private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
@@ -78,28 +83,14 @@ public class ExtensionManager {
                 continue;
             }
 
-            // Get ExtensionDescription (authors, version etc.)
+            // Create ExtensionDescription (authors, version etc.)
             String extensionName = discoveredExtension.getName();
             String mainClass = discoveredExtension.getEntrypoint();
-            Extension.ExtensionDescription extensionDescription;
-            {
-                String version;
-                if (discoveredExtension.getVersion() == null) {
-                    log.warn("Extension '{}' did not specify a version.", extensionName);
-                    log.warn("Extension '{}' will continue to load but should specify a plugin version.", extensionName);
-                    version = "Not Specified";
-                } else {
-                    version = discoveredExtension.getVersion();
-                }
-                List<String> authors;
-                if (discoveredExtension.getAuthors() == null) {
-                    authors = new ArrayList<>();
-                } else {
-                    authors = Arrays.asList(discoveredExtension.getAuthors());
-                }
-
-                extensionDescription = new Extension.ExtensionDescription(extensionName, version, authors);
-            }
+            Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
+                    extensionName,
+                    discoveredExtension.getVersion(),
+                    Arrays.asList(discoveredExtension.getAuthors())
+            );
 
             extensionLoaders.put(extensionName.toLowerCase(), loader);
 
@@ -165,9 +156,9 @@ public class ExtensionManager {
 
             // Set logger
             try {
-                Field descriptionField = extensionClass.getSuperclass().getDeclaredField("logger");
-                descriptionField.setAccessible(true);
-                descriptionField.set(extension, LoggerFactory.getLogger(extensionClass));
+                Field loggerField = extensionClass.getSuperclass().getDeclaredField("logger");
+                loggerField.setAccessible(true);
+                loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
             } catch (IllegalAccessException e) {
                 // We made it accessible, should not occur
                 e.printStackTrace();
@@ -181,29 +172,29 @@ public class ExtensionManager {
     }
 
     private void loadDependencies(List<DiscoveredExtension> extensions) {
-        for(DiscoveredExtension ext : extensions) {
+        for (DiscoveredExtension ext : extensions) {
             try {
                 DependencyGetter getter = new DependencyGetter();
                 DiscoveredExtension.Dependencies dependencies = ext.getDependencies();
-                if(dependencies.repositories == null) {
-                    throw new IllegalStateException("Missing 'repositories' array.");
-                }
-                if(dependencies.artifacts == null) {
-                    throw new IllegalStateException("Missing 'artifacts' array.");
-                }
                 List<MavenRepository> repoList = new LinkedList<>();
-                for(var repository : dependencies.repositories) {
-                    if(repository.name == null) {
+                for (var repository : dependencies.repositories) {
+                    if (repository.name == null) {
                         throw new IllegalStateException("Missing 'name' element in repository object.");
                     }
-                    if(repository.url == null) {
+                    if (repository.name.isEmpty()) {
+                        throw new IllegalStateException("Invalid 'name' element in repository object.");
+                    }
+                    if (repository.url == null) {
                         throw new IllegalStateException("Missing 'url' element in repository object.");
+                    }
+                    if (repository.url.isEmpty()) {
+                        throw new IllegalStateException("Invalid 'url' element in repository object.");
                     }
                     repoList.add(new MavenRepository(repository.name, repository.url));
                 }
                 getter.addMavenResolver(repoList);
 
-                for(var artifact : dependencies.artifacts) {
+                for (var artifact : dependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
                     injectIntoClasspath(resolved.getContentsLocation(), ext);
                     log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
@@ -227,7 +218,7 @@ public class ExtensionManager {
             addURL.setAccessible(true);
             addURL.invoke(cl, dependency);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Failed to inject URL "+dependency+" into classpath. From extension "+extension.getName(), e);
+            throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
         }
     }
 
@@ -246,8 +237,11 @@ public class ExtensionManager {
 
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files = new File[]{file};
-                extension.checkIntegrity();
-                if(extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+
+                // Verify integrity and ensure defaults
+                DiscoveredExtension.verifyIntegrity(extension);
+
+                if (extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
                     extensions.add(extension);
                 }
             } catch (IOException e) {
@@ -263,8 +257,11 @@ public class ExtensionManager {
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(extensionResources, "extension.json")))) {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files = new File[]{new File(extensionClasses), new File(extensionResources)};
-                extension.checkIntegrity();
-                if(extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+
+                // Verify integrity and ensure defaults
+                DiscoveredExtension.verifyIntegrity(extension);
+
+                if (extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
                     extensions.add(extension);
                 }
             } catch (IOException e) {
@@ -320,7 +317,7 @@ public class ExtensionManager {
                 for (String codeModifierClass : extension.getCodeModifiers()) {
                     modifiableClassLoader.loadModifier(extension.files, codeModifierClass);
                 }
-                if (extension.getMixinConfig() != null) {
+                if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
                     Mixins.addConfiguration(mixinConfigFile);
                     log.info("Found mixin in extension " + extension.getName() + ": " + mixinConfigFile);
