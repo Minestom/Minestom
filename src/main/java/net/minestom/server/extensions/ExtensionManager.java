@@ -19,15 +19,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
@@ -43,6 +37,9 @@ public class ExtensionManager {
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
+
+    // not final to add to it, and then make it immutable
+    private List<Extension> extensionList = new ArrayList<>();
 
     public ExtensionManager() {
     }
@@ -75,6 +72,10 @@ public class ExtensionManager {
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
             URLClassLoader loader;
             URL[] urls = discoveredExtension.files.toArray(new URL[0]);
+            // TODO: Only putting each extension into its own classloader prevents code modifications (via code modifiers or mixins)
+            // TODO: If we want modifications to be possible, we need to add these urls to the current classloader
+            // TODO: Indeed, without adding the urls, the classloader is not able to load the bytecode of extension classes
+            // TODO: Whether we want to allow extensions to modify one-another is our choice now.
             loader = newClassLoader(urls);
 
             // Create ExtensionDescription (authors, version etc.)
@@ -161,8 +162,10 @@ public class ExtensionManager {
                 log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
             }
 
+            extensionList.add(extension); // add to a list, as lists preserve order
             extensions.put(extensionName.toLowerCase(), extension);
         }
+        extensionList = Collections.unmodifiableList(extensionList);
     }
 
     @NotNull
@@ -312,13 +315,13 @@ public class ExtensionManager {
 
                 for (var artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
-                    injectIntoClasspath(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved.getContentsLocation(), ext);
                     log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
 
                 for (var dependencyName : ext.getDependencies()) {
                     var resolved = getter.get(dependencyName, dependenciesFolder);
-                    injectIntoClasspath(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved.getContentsLocation(), ext);
                     log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
             } catch (Exception e) {
@@ -330,10 +333,10 @@ public class ExtensionManager {
         }
     }
 
+    // TODO: remove if extensions cannot modify one-another
+    // TODO: use if they can
     private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
-        extension.files.add(dependency);
-        log.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
-        /*final ClassLoader cl = getClass().getClassLoader();
+        final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof URLClassLoader)) {
             throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
         }
@@ -347,7 +350,12 @@ public class ExtensionManager {
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
             }
-        }*/
+        }
+    }
+
+    private void addDependencyFile(URL dependency, DiscoveredExtension extension) {
+        extension.files.add(dependency);
+        log.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
     }
 
     /**
@@ -367,7 +375,7 @@ public class ExtensionManager {
 
     @NotNull
     public List<Extension> getExtensions() {
-        return new ArrayList<>(extensions.values());
+        return extensionList;
     }
 
     @Nullable
