@@ -216,7 +216,7 @@ public final class ConnectionManager {
      * Adds a new {@link Player} in the players list.
      * Is currently used at
      * {@link LoginStartPacket#process(PlayerConnection)}
-     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}
+     * and in {@link FakePlayer#initPlayer(UUID, String, Consumer)}.
      *
      * @param player the player to add
      */

@@ -824,7 +824,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
-            final long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entity.getPosition(), MinecraftServer.ENTITY_VIEW_DISTANCE);
+            final Position entityPosition = entity.getPosition();
+            final long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entityPosition, MinecraftServer.getEntityViewDistance());
             final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {
@@ -846,7 +847,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 });
             }
 
-            final Position entityPosition = entity.getPosition();
             final Chunk chunk = getChunkAt(entityPosition);
             Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
             addEntityToChunk(entity, chunk);

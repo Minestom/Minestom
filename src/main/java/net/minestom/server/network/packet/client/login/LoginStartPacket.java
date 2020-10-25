@@ -12,6 +12,7 @@ import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
     public String username;
 
     @Override
-    public void process(PlayerConnection connection) {
+    public void process(@NotNull PlayerConnection connection) {
         if (MojangAuth.isUsingMojangAuth()) {
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
                 connection.sendPacket(new LoginDisconnect(ALREADY_CONNECTED_JSON));
@@ -38,7 +39,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         } else {
             final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-            final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
+            final int threshold = MinecraftServer.getCompressionThreshold();
 
             if (threshold > 0 && connection instanceof NettyPlayerConnection) {
                 ((NettyPlayerConnection) connection).enableCompression(threshold);

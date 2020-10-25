@@ -9,6 +9,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnect;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 public class HandshakePacket implements ClientPreplayPacket {
 
@@ -31,7 +32,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void process(PlayerConnection connection) {
+    public void process(@NotNull PlayerConnection connection) {
         switch (nextState) {
             case 1:
                 connection.setConnectionState(ConnectionState.STATUS);

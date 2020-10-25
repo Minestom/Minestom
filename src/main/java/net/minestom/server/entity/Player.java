@@ -195,7 +195,7 @@ public class Player extends LivingEntity implements CommandSender {
         joinGamePacket.dimensionType = dimensionType;
         joinGamePacket.maxPlayers = 0; // Unused
         joinGamePacket.levelType = levelType;
-        joinGamePacket.viewDistance = MinecraftServer.CHUNK_VIEW_DISTANCE;
+        joinGamePacket.viewDistance = MinecraftServer.getChunkViewDistance();
         joinGamePacket.reducedDebugInfo = false;
         playerConnection.sendPacket(joinGamePacket);
 
@@ -2124,11 +2124,11 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * @return the chunk range of the viewers,
-     * which is {@link MinecraftServer#CHUNK_VIEW_DISTANCE} or {@link PlayerSettings#getViewDistance()}
+     * which is {@link MinecraftServer#getChunkViewDistance()} or {@link PlayerSettings#getViewDistance()}
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        final int serverRange = MinecraftServer.CHUNK_VIEW_DISTANCE;
+        final int serverRange = MinecraftServer.getChunkViewDistance();
         final int playerRange = getSettings().viewDistance;
         if (playerRange == 0) {
             return serverRange; // Didn't receive settings packet yet (is the case on login)

@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
@@ -20,28 +21,45 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EncryptionResponsePacket implements ClientPreplayPacket {
 
     private final static String THREAD_NAME = "Mojang Auth Thread";
-    private static AtomicInteger UNIQUE_THREAD_ID = new AtomicInteger(0);
+    private static final AtomicInteger UNIQUE_THREAD_ID = new AtomicInteger(0);
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
     @Override
-    public void process(PlayerConnection connection) {
+    public void process(@NotNull PlayerConnection connection) {
+
+        // Encryption is only support for netty connection
+        if (!(connection instanceof NettyPlayerConnection)) {
+            return;
+        }
+
         new Thread(THREAD_NAME + " #" + UNIQUE_THREAD_ID.incrementAndGet()) {
 
             public void run() {
                 try {
                     if (!Arrays.equals(connection.getNonce(), getNonce())) {
-                        System.out.println(connection.getLoginUsername() + " tried to login with an invalid nonce!");
+                        MinecraftServer.getLOGGER().error(connection.getLoginUsername() + " tried to login with an invalid nonce!");
                         return;
                     }
                     if (!connection.getLoginUsername().isEmpty()) {
-                        final String string3 = new BigInteger(MojangCrypt.digestData("", MinecraftServer.getKeyPair().getPublic(), getSecretKey())).toString(16);
-                        final GameProfile gameProfile = MinecraftServer.getSessionService().hasJoinedServer(new GameProfile(null, connection.getLoginUsername()), string3);
-                        ((NettyPlayerConnection) connection).setEncryptionKey(getSecretKey());
-                        final int threshold = MinecraftServer.COMPRESSION_THRESHOLD;
+                        final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
 
-                        if (threshold > 0 && connection instanceof NettyPlayerConnection) {
-                            ((NettyPlayerConnection) connection).enableCompression(threshold);
+                        final byte[] digestedData = MojangCrypt.digestData("", MinecraftServer.getKeyPair().getPublic(), getSecretKey());
+
+                        if (digestedData == null) {
+                            // Incorrect key, probably because of the client
+                            MinecraftServer.getLOGGER().error("Connection " + nettyConnection.getRemoteAddress() + " failed initializing encryption.");
+                            connection.disconnect();
+                            return;
+                        }
+
+                        final String string3 = new BigInteger(digestedData).toString(16);
+                        final GameProfile gameProfile = MinecraftServer.getSessionService().hasJoinedServer(new GameProfile(null, connection.getLoginUsername()), string3);
+                        nettyConnection.setEncryptionKey(getSecretKey());
+                        final int threshold = MinecraftServer.getCompressionThreshold();
+
+                        if (threshold > 0) {
+                            nettyConnection.enableCompression(threshold);
                         }
 
                         LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(gameProfile.getId(), gameProfile.getName());

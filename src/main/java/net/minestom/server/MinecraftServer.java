@@ -90,9 +90,6 @@ public class MinecraftServer {
     public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
 
     // Config
-    public static final int CHUNK_VIEW_DISTANCE = 10;
-    public static final int ENTITY_VIEW_DISTANCE = 5;
-    public static final int COMPRESSION_THRESHOLD = 256;
     // Can be modified at performance cost when increased
     public static final int TICK_PER_SECOND = 20;
     private static final int MS_TO_SEC = 1000;
@@ -137,6 +134,11 @@ public class MinecraftServer {
     private static MinecraftServer minecraftServer;
 
     // Data
+    private static boolean started;
+
+    private static int chunkViewDistance = 10;
+    private static int entityViewDistance = 5;
+    private static int compressionThreshold = 256;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -393,6 +395,81 @@ public class MinecraftServer {
     }
 
     /**
+     * Gets if the server is up and running.
+     *
+     * @return true if the server is started
+     */
+    public static boolean isStarted() {
+        return started;
+    }
+
+    /**
+     * Gets the chunk view distance of the server.
+     *
+     * @return the chunk view distance
+     */
+    public static int getChunkViewDistance() {
+        return chunkViewDistance;
+    }
+
+    /**
+     * Changes the chunk view distance of the server.
+     * <p>
+     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
+     *
+     * @param chunkViewDistance the new chunk view distance
+     * @throws IllegalStateException if this is called after the server started
+     */
+    public static void setChunkViewDistance(int chunkViewDistance) {
+        Check.stateCondition(started, "The chunk view distance cannot be changed after the server has been started.");
+        MinecraftServer.chunkViewDistance = chunkViewDistance;
+    }
+
+    /**
+     * Gets the entity view distance of the server.
+     *
+     * @return the entity view distance
+     */
+    public static int getEntityViewDistance() {
+        return entityViewDistance;
+    }
+
+    /**
+     * Changes the entity view distance of the server.
+     * <p>
+     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
+     *
+     * @param entityViewDistance the new entity view distance
+     * @throws IllegalStateException if this is called after the server started
+     */
+    public static void setEntityViewDistance(int entityViewDistance) {
+        Check.stateCondition(started, "The entity view distance cannot be changed after the server has been started.");
+        MinecraftServer.entityViewDistance = entityViewDistance;
+    }
+
+    /**
+     * Gets the compression threshold of the server.
+     *
+     * @return the compression threshold, 0 means that compression is disabled
+     */
+    public static int getCompressionThreshold() {
+        return compressionThreshold;
+    }
+
+    /**
+     * Changes the compression threshold of the server.
+     * <p>
+     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
+     *
+     * @param compressionThreshold the new compression threshold, 0 to disable compression
+     * @throws IllegalStateException if this is called after the server started
+     */
+    public static void setCompressionThreshold(int compressionThreshold) {
+        Check.stateCondition(started, "The compression threshold cannot be changed after the server has been started.");
+        MinecraftServer.compressionThreshold = compressionThreshold;
+    }
+
+    /**
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
@@ -485,6 +562,8 @@ public class MinecraftServer {
 
         LOGGER.info("Extensions loaded in " + (t1 + System.nanoTime()) / 1_000_000D + "ms");
         LOGGER.info("Minestom server started successfully.");
+
+        MinecraftServer.started = true;
     }
 
     /**
