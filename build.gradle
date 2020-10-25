@@ -163,6 +163,9 @@ dependencies {
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"
     lwjglRuntimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+
+
+    generatorsImplementation("com.squareup:javapoet:1.13.0")
 }
 
 publishing {
