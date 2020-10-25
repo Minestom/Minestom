@@ -32,6 +32,11 @@ public class ExtensionDependencyResolver implements DependencyResolver {
         if(extensionMap.containsKey(extensionName)) {
             DiscoveredExtension ext = extensionMap.get(extensionName);
             // convert extension URLs to subdependencies
+            // FIXME: this is not a deep conversion, this might create an issue in this scenario with different classloaders:
+            // A depends on an external lib (Ext<-A)
+            // B depends on A (A<-B)
+            // When loading B, with no deep conversion, Ext will not be added to the list of dependencies (because it is not a direct dependency)
+            // But when trying to call/access code from extension A, the parts dependent on Ext won't be inside B's dependencies, triggering a ClassNotFoundException
             List<ResolvedDependency> deps = new LinkedList<>();
             for(URL u : ext.files) {
                 deps.add(new ResolvedDependency(u.toExternalForm(), u.toExternalForm(), "", u, new LinkedList<>()));
