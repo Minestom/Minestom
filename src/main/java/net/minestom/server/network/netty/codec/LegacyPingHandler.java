@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.minestom.server.MinecraftServer;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
@@ -15,7 +16,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf buf;
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object object) {
+    public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object object) {
         ByteBuf buf = (ByteBuf) object;
 
         if (this.buf != null) {
@@ -71,7 +72,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
             return null;
         }
 
-        String result = buf.toString(buf.readerIndex(), size, StandardCharsets.UTF_16BE);
+        final String result = buf.toString(buf.readerIndex(), size, StandardCharsets.UTF_16BE);
         buf.skipBytes(size);
 
         return result;
@@ -93,7 +94,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        String s = readLegacyString(buf);
+        final String s = readLegacyString(buf);
 
         if (s == null) {
             return;
@@ -130,8 +131,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
     }
 
     private String formatResponse(int playerProtocol) {
-        // todo server motd, online and slots
-        final String motd = "Minestom";
+        final String motd = MinecraftServer.getBrandName();
         final String version = MinecraftServer.VERSION_NAME;
         final int online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
         final int max = 0;
@@ -175,7 +175,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
         ByteBuf response = Unpooled.buffer();
         response.writeByte(255);
 
-        char[] chars = s.toCharArray();
+        final char[] chars = s.toCharArray();
 
         response.writeShort(chars.length);
 

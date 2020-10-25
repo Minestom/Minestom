@@ -9,6 +9,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.NotNull;
 
 @Slf4j
 public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
@@ -21,7 +22,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
+    public void channelActive(@NotNull ChannelHandlerContext ctx) {
         //System.out.println("CONNECTION");
     }
 
@@ -34,7 +35,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
             if (availableBytes > 0) {
                 // TODO log4j2
-                System.out.println("Packet 0x" + Integer.toHexString(packet.packetId)
+                System.err.println("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
                         + " not fully read (" + availableBytes + " bytes left)");
 
                 packet.body.skipBytes(availableBytes);
@@ -43,7 +44,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
+    public void channelInactive(@NotNull ChannelHandlerContext ctx) {
         PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
         if (playerConnection != null) {
             // Remove the connection

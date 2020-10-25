@@ -15,6 +15,7 @@ import net.minestom.server.network.netty.codec.LegacyPingHandler;
 import net.minestom.server.network.netty.codec.PacketDecoder;
 import net.minestom.server.network.netty.codec.PacketEncoder;
 import net.minestom.server.network.netty.codec.PacketFramer;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 
@@ -48,7 +49,7 @@ public class NettyServer {
         bootstrap.channel(channel);
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
-            protected void initChannel(SocketChannel ch) {
+            protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
                 config.setOption(ChannelOption.TCP_NODELAY, true);
 
