@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 @Slf4j(topic = "Minestom-Extensions")
@@ -64,7 +65,8 @@ public class ExtensionManager {
             }
         }
 
-        final List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+        List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+        discoveredExtensions = generateLoadOrder(discoveredExtensions);
         loadDependencies(discoveredExtensions);
         // remove invalid extensions
         discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
@@ -171,57 +173,6 @@ public class ExtensionManager {
         }
     }
 
-    private void loadDependencies(List<DiscoveredExtension> extensions) {
-        for (DiscoveredExtension ext : extensions) {
-            try {
-                DependencyGetter getter = new DependencyGetter();
-                DiscoveredExtension.Dependencies dependencies = ext.getDependencies();
-                List<MavenRepository> repoList = new LinkedList<>();
-                for (var repository : dependencies.repositories) {
-                    if (repository.name == null) {
-                        throw new IllegalStateException("Missing 'name' element in repository object.");
-                    }
-                    if (repository.name.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'name' element in repository object.");
-                    }
-                    if (repository.url == null) {
-                        throw new IllegalStateException("Missing 'url' element in repository object.");
-                    }
-                    if (repository.url.isEmpty()) {
-                        throw new IllegalStateException("Invalid 'url' element in repository object.");
-                    }
-                    repoList.add(new MavenRepository(repository.name, repository.url));
-                }
-                getter.addMavenResolver(repoList);
-
-                for (var artifact : dependencies.artifacts) {
-                    var resolved = getter.get(artifact, dependenciesFolder);
-                    injectIntoClasspath(resolved.getContentsLocation(), ext);
-                    log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
-                }
-            } catch (Exception e) {
-                ext.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
-                log.error("Failed to load dependencies for extension {}", ext.getName());
-                log.error("Extension '{}' will not be loaded", ext.getName());
-                log.error("This is the exception", e);
-            }
-        }
-    }
-
-    private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
-        final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof URLClassLoader)) {
-            throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
-        }
-        try {
-            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            addURL.setAccessible(true);
-            addURL.invoke(cl, dependency);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
-        }
-    }
-
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
@@ -269,6 +220,126 @@ public class ExtensionManager {
             }
         }
         return extensions;
+    }
+
+    private List<DiscoveredExtension> generateLoadOrder(List<DiscoveredExtension> discoveredExtensions) {
+        // Do some mapping so we can map strings to extensions.
+        Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
+        Map<DiscoveredExtension, List<DiscoveredExtension>> dependencyMap = new HashMap<>();
+        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+            extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
+        }
+        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+
+            List<DiscoveredExtension> dependencies = Arrays.stream(discoveredExtension.getDependencies())
+                    .map(dependencyName -> {
+                        DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
+                        // Specifies an extension we don't have.
+                        if (dependencyExtension == null) {
+                            log.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
+                            log.error("However the extension {} could not be found.", dependencyName);
+                            log.error("Therefore {} will not be loaded.", dependencyName);
+                        }
+                        // This will return null for an unknown-extension
+                        return extensionMap.get(dependencyName.toLowerCase());
+                    }).collect(Collectors.toList());
+
+            // If the list contains null ignore it.
+            if (!dependencies.contains(null)) {
+                dependencyMap.put(
+                        discoveredExtension,
+                        dependencies
+                );
+            }
+        }
+
+        // List containing the real load order.
+        LinkedList<DiscoveredExtension> sortedList = new LinkedList<>();
+
+        // entries with empty lists
+        List<Map.Entry<DiscoveredExtension, List<DiscoveredExtension>>> loadableExtensions;
+        // While there are entries with no more elements (no more dependencies)
+        while (!(
+                loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> entry.getValue().isEmpty()).collect(Collectors.toList())
+        ).isEmpty()
+        ) {
+            // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
+            for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : loadableExtensions) {
+                // Add to sorted list.
+                sortedList.add(entry.getKey());
+                // Remove to make the next iterations a little bit quicker (hopefully) and to find cyclic dependencies.
+                dependencyMap.remove(entry.getKey());
+                // Remove this dependency from all the lists (if they include it) to make way for next level of extensions.
+                dependencyMap.forEach((key, dependencyList) -> dependencyList.remove(entry.getKey()));
+            }
+        }
+
+        // Check if there are cyclic extensions.
+        if (!dependencyMap.isEmpty()) {
+            log.error("Minestom found " + dependencyMap.size() + " cyclic extensions.");
+            log.error("Cyclic extensions depend on each other and can therefore not be loaded.");
+            for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : dependencyMap.entrySet()) {
+                DiscoveredExtension discoveredExtension = entry.getKey();
+                log.error(discoveredExtension.getName() + " could not be loaded, as it depends on: "
+                        + entry.getValue().stream().map(DiscoveredExtension::getName).collect(Collectors.joining(", "))
+                        + "."
+                );
+            }
+
+        }
+
+        return sortedList;
+    }
+
+    private void loadDependencies(List<DiscoveredExtension> extensions) {
+        for (DiscoveredExtension ext : extensions) {
+            try {
+                DependencyGetter getter = new DependencyGetter();
+                DiscoveredExtension.ExternalDependencies externalDependencies = ext.getExternalDependencies();
+                List<MavenRepository> repoList = new LinkedList<>();
+                for (var repository : externalDependencies.repositories) {
+                    if (repository.name == null) {
+                        throw new IllegalStateException("Missing 'name' element in repository object.");
+                    }
+                    if (repository.name.isEmpty()) {
+                        throw new IllegalStateException("Invalid 'name' element in repository object.");
+                    }
+                    if (repository.url == null) {
+                        throw new IllegalStateException("Missing 'url' element in repository object.");
+                    }
+                    if (repository.url.isEmpty()) {
+                        throw new IllegalStateException("Invalid 'url' element in repository object.");
+                    }
+                    repoList.add(new MavenRepository(repository.name, repository.url));
+                }
+                getter.addMavenResolver(repoList);
+
+                for (var artifact : externalDependencies.artifacts) {
+                    var resolved = getter.get(artifact, dependenciesFolder);
+                    injectIntoClasspath(resolved.getContentsLocation(), ext);
+                    log.trace("Dependency of extension {}: {}", ext.getName(), resolved);
+                }
+            } catch (Exception e) {
+                ext.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                log.error("Failed to load dependencies for extension {}", ext.getName());
+                log.error("Extension '{}' will not be loaded", ext.getName());
+                log.error("This is the exception", e);
+            }
+        }
+    }
+
+    private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
+        final ClassLoader cl = getClass().getClassLoader();
+        if (!(cl instanceof URLClassLoader)) {
+            throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
+        }
+        try {
+            Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            addURL.setAccessible(true);
+            addURL.invoke(cl, dependency);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
+        }
     }
 
     /**
@@ -329,6 +400,4 @@ public class ExtensionManager {
         }
         log.info("Done loading code modifiers.");
     }
-
-
 }

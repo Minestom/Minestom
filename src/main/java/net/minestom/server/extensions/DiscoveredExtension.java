@@ -14,7 +14,8 @@ final class DiscoveredExtension {
     private String mixinConfig;
     private String[] authors;
     private String[] codeModifiers;
-    private Dependencies dependencies;
+    private String[] dependencies;
+    private ExternalDependencies externalDependencies;
     transient File[] files = new File[0];
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
 
@@ -24,11 +25,13 @@ final class DiscoveredExtension {
     }
 
     @NotNull
-    public String[] getCodeModifiers() {
-        if (codeModifiers == null) {
-            codeModifiers = new String[0];
-        }
-        return codeModifiers;
+    public String getEntrypoint() {
+        return entrypoint;
+    }
+
+    @NotNull
+    public String getVersion() {
+        return version;
     }
 
     @NotNull
@@ -42,18 +45,21 @@ final class DiscoveredExtension {
     }
 
     @NotNull
-    public String getVersion() {
-        return version;
+    public String[] getCodeModifiers() {
+        if (codeModifiers == null) {
+            codeModifiers = new String[0];
+        }
+        return codeModifiers;
     }
 
     @NotNull
-    public String getEntrypoint() {
-        return entrypoint;
-    }
-
-    @NotNull
-    public Dependencies getDependencies() {
+    public String[] getDependencies() {
         return dependencies;
+    }
+
+    @NotNull
+    public ExternalDependencies getExternalDependencies() {
+        return externalDependencies;
     }
 
     static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
@@ -106,7 +112,11 @@ final class DiscoveredExtension {
         }
         // No dependencies were specified
         if (extension.dependencies == null) {
-            extension.dependencies = new Dependencies();
+            extension.dependencies = new String[0];
+        }
+        // No external dependencies were specified;
+        if (extension.externalDependencies == null) {
+            extension.externalDependencies = new ExternalDependencies();
         }
 
     }
@@ -130,7 +140,7 @@ final class DiscoveredExtension {
         }
     }
 
-    static final class Dependencies {
+    static final class ExternalDependencies {
         Repository[] repositories = new Repository[0];
         String[] artifacts = new String[0];
 
