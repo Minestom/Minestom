@@ -70,4 +70,14 @@ public class TestNamespaceIDValidity {
     public void numbersAllowed() {
         NamespaceID.from("0xc1:468786471");
     }
+
+    @Test
+    public void dotAllowedInPath() {
+        NamespaceID.from("minecraft:ambient.cave");
+    }
+
+    @Test
+    public void slashAllowedInPath() {
+        NamespaceID.from("minecraft:textures/blocks/dirt.png");
+    }
 }
