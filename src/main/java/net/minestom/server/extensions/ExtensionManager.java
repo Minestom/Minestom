@@ -239,6 +239,7 @@ public class ExtensionManager {
                             log.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
                             log.error("However the extension {} could not be found.", dependencyName);
                             log.error("Therefore {} will not be loaded.", dependencyName);
+                            discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
                         }
                         // This will return null for an unknown-extension
                         return extensionMap.get(dependencyName.toLowerCase());
