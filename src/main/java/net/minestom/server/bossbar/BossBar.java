@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class BossBar implements Viewable {
 
     private static final int MAX_BOSSBAR = 7;
-    private static final Map<Player, Set<BossBar>> PLAYER_BOSSBAR_MAP = new HashMap<>();
+    private static final Map<UUID, Set<BossBar>> PLAYER_BOSSBAR_MAP = new HashMap<>();
 
     private final UUID uuid = UUID.randomUUID();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -54,7 +54,7 @@ public class BossBar implements Viewable {
      */
     @Nullable
     public static Set<BossBar> getBossBars(@NotNull Player player) {
-        return PLAYER_BOSSBAR_MAP.getOrDefault(player, null);
+        return PLAYER_BOSSBAR_MAP.getOrDefault(player.getUuid(), null);
     }
 
     @Override
@@ -220,13 +220,14 @@ public class BossBar implements Viewable {
      * @param player the player to remove from the map
      */
     private void removePlayer(@NotNull Player player) {
-        if (!PLAYER_BOSSBAR_MAP.containsKey(player)) {
+        final UUID uuid = player.getUuid();
+        if (!PLAYER_BOSSBAR_MAP.containsKey(uuid)) {
             return;
         }
-        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.get(player);
+        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.get(uuid);
         bossBars.remove(this);
         if (bossBars.isEmpty()) {
-            PLAYER_BOSSBAR_MAP.remove(player);
+            PLAYER_BOSSBAR_MAP.remove(uuid);
         }
     }
 
@@ -239,7 +240,7 @@ public class BossBar implements Viewable {
      */
     private void addToPlayer(@NotNull Player player) {
         // Add to the map
-        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.computeIfAbsent(player, p -> new HashSet<>());
+        Set<BossBar> bossBars = PLAYER_BOSSBAR_MAP.computeIfAbsent(player.getUuid(), p -> new HashSet<>());
         bossBars.add(this);
 
         BossBarPacket bossBarPacket = new BossBarPacket();
@@ -259,10 +260,12 @@ public class BossBar implements Viewable {
      * @param player the player to remove the bossbar to
      */
     private void removeToPlayer(@NotNull Player player) {
-        BossBarPacket bossBarPacket = new BossBarPacket();
-        bossBarPacket.uuid = uuid;
-        bossBarPacket.action = BossBarPacket.Action.REMOVE;
-        player.getPlayerConnection().sendPacket(bossBarPacket);
+        if (!player.isRemoved()) {
+            BossBarPacket bossBarPacket = new BossBarPacket();
+            bossBarPacket.uuid = uuid;
+            bossBarPacket.action = BossBarPacket.Action.REMOVE;
+            player.getPlayerConnection().sendPacket(bossBarPacket);
+        }
     }
 
     private void updateTitle() {

@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class AdvancementTab implements Viewable {
 
-    private static final Map<Player, Set<AdvancementTab>> PLAYER_TAB_MAP = new HashMap<>();
+    private static final Map<UUID, Set<AdvancementTab>> PLAYER_TAB_MAP = new HashMap<>();
 
     private final Set<Player> viewers = new HashSet<>();
 
@@ -57,7 +57,7 @@ public class AdvancementTab implements Viewable {
      */
     @Nullable
     public static Set<AdvancementTab> getTabs(@NotNull Player player) {
-        return PLAYER_TAB_MAP.getOrDefault(player, null);
+        return PLAYER_TAB_MAP.getOrDefault(player.getUuid(), null);
     }
 
     /**
@@ -165,7 +165,9 @@ public class AdvancementTab implements Viewable {
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
         // Remove the tab
-        playerConnection.sendPacket(removeBuffer, true);
+        if (!player.isRemoved()) {
+            playerConnection.sendPacket(removeBuffer, true);
+        }
 
         removePlayer(player);
 
@@ -184,7 +186,7 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void addPlayer(@NotNull Player player) {
-        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player, p -> new HashSet<>());
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.computeIfAbsent(player.getUuid(), p -> new HashSet<>());
         tabs.add(this);
     }
 
@@ -194,13 +196,14 @@ public class AdvancementTab implements Viewable {
      * @param player the player
      */
     private void removePlayer(@NotNull Player player) {
-        if (!PLAYER_TAB_MAP.containsKey(player)) {
+        final UUID uuid = player.getUuid();
+        if (!PLAYER_TAB_MAP.containsKey(uuid)) {
             return;
         }
-        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.get(player);
+        Set<AdvancementTab> tabs = PLAYER_TAB_MAP.get(uuid);
         tabs.remove(this);
         if (tabs.isEmpty()) {
-            PLAYER_TAB_MAP.remove(player);
+            PLAYER_TAB_MAP.remove(uuid);
         }
     }
 

@@ -215,15 +215,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Refresh the inventory for all viewers
+     * Refreshes the inventory for all viewers.
      */
     public void update() {
         sendPacketToViewers(createNewWindowItemsPacket());
     }
 
     /**
-     * Refresh the inventory for a specific viewer
-     * the player needs to be a viewer, otherwise nothing is sent
+     * Refreshes the inventory for a specific viewer.
+     *
+     * The player needs to be a viewer, otherwise nothing is sent.
      *
      * @param player the player to update the inventory
      */
@@ -236,7 +237,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     /**
-     * Refresh only a specific slot with the updated item stack data
+     * Refreshes only a specific slot with the updated item stack data.
      *
      * @param slot the slot to refresh
      */
@@ -250,6 +251,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return Collections.unmodifiableSet(viewers);
     }
 
+    /**
+     * This will not open the inventory for {@code player}, use {@link Player#openInventory(Inventory)}.
+     *
+     * @param player the viewer to add
+     * @return true if the player has successfully been added
+     */
     @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
@@ -257,6 +264,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         return result;
     }
 
+    /**
+     * This will not close the inventory for {@code player}, use {@link Player#closeInventory()}.
+     *
+     * @param player the viewer to remove
+     * @return true if the player has successfully been removed
+     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);

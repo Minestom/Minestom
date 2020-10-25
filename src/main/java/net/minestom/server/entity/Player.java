@@ -1,7 +1,9 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
@@ -527,10 +529,33 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void remove() {
+        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
+
         super.remove();
         this.packets.clear();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
+
+        // Boss bars cache
+        {
+            Set<BossBar> bossBars = BossBar.getBossBars(this);
+            if (bossBars != null) {
+                for (BossBar bossBar : bossBars) {
+                    bossBar.removeViewer(this);
+                }
+            }
+        }
+
+        // Advancement tabs cache
+        {
+            Set<AdvancementTab> advancementTabs = AdvancementTab.getTabs(this);
+            if (advancementTabs != null) {
+                for (AdvancementTab advancementTab : advancementTabs) {
+                    advancementTab.removeViewer(this);
+                }
+            }
+        }
+
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
@@ -539,7 +564,6 @@ public class Player extends LivingEntity implements CommandSender {
                 chunk.removeViewer(this);
         });
         resetTargetBlock();
-        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
         playerConnection.disconnect();
     }
 
