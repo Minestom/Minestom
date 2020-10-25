@@ -55,4 +55,20 @@ public abstract class JsonMessage {
 
         return compiledJson;
     }
+
+    public static class RawJsonMessage extends JsonMessage {
+
+        private JsonObject jsonObject;
+
+        public RawJsonMessage(JsonObject jsonObject) {
+            this.jsonObject = jsonObject;
+        }
+
+        @NotNull
+        @Override
+        public JsonObject getJsonObject() {
+            return jsonObject;
+        }
+    }
+
 }

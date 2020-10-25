@@ -4,6 +4,7 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class ScoreboardObjectivePacket implements ServerPacket {
 
@@ -27,7 +28,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
     public Type type;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(objectiveName);
         writer.writeByte(mode);
 

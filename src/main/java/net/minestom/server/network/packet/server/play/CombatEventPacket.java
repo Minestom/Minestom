@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class CombatEventPacket implements ServerPacket {
     }
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(type.ordinal());
         switch (type) {
             case ENTER_COMBAT:

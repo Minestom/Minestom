@@ -57,7 +57,6 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.LevelType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -93,7 +92,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     protected boolean onGround;
     private final ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
-    private final LevelType levelType;
+    private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
     private int level;
@@ -170,7 +169,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD;
-        this.levelType = LevelType.FLAT;
+        this.levelFlat = true;
         refreshPosition(0, 0, 0);
 
         // Used to cache the breaker for single custom block breaking
@@ -194,9 +193,9 @@ public class Player extends LivingEntity implements CommandSender {
         joinGamePacket.gameMode = gameMode;
         joinGamePacket.dimensionType = dimensionType;
         joinGamePacket.maxPlayers = 0; // Unused
-        joinGamePacket.levelType = levelType;
         joinGamePacket.viewDistance = MinecraftServer.getChunkViewDistance();
         joinGamePacket.reducedDebugInfo = false;
+        joinGamePacket.isFlat = levelFlat;
         playerConnection.sendPacket(joinGamePacket);
 
         // Server brand name
@@ -507,7 +506,7 @@ public class Player extends LivingEntity implements CommandSender {
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
-        respawnPacket.levelType = getLevelType();
+        respawnPacket.isFlat = levelFlat;
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         callEvent(PlayerRespawnEvent.class, respawnEvent);
@@ -1075,7 +1074,7 @@ public class Player extends LivingEntity implements CommandSender {
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
-        respawnPacket.levelType = getLevelType();
+        respawnPacket.isFlat = levelFlat;
 
         playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
@@ -1513,7 +1512,7 @@ public class Player extends LivingEntity implements CommandSender {
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = dimensionType;
         respawnPacket.gameMode = gameMode;
-        respawnPacket.levelType = levelType;
+        respawnPacket.isFlat = levelFlat;
         playerConnection.sendPacket(respawnPacket);
     }
 
@@ -1537,10 +1536,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void kick(@NotNull String message) {
         kick(ColoredText.of(message));
-    }
-
-    public LevelType getLevelType() {
-        return levelType;
     }
 
     /**

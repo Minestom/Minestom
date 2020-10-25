@@ -58,7 +58,7 @@ public class TeamsPacket implements ServerPacket {
      * @param writer The writer to writes
      */
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(this.teamName);
         writer.writeByte((byte) this.action.ordinal());
 

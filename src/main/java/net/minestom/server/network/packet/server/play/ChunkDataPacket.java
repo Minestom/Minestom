@@ -15,6 +15,7 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Set;
@@ -41,7 +42,7 @@ public class ChunkDataPacket implements ServerPacket {
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
         writer.writeBoolean(fullChunk);

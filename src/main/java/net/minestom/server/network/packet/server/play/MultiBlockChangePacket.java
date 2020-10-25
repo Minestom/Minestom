@@ -5,6 +5,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class MultiBlockChangePacket implements ServerPacket {
 
@@ -16,7 +17,7 @@ public class MultiBlockChangePacket implements ServerPacket {
     public BlockChange[] blockChanges;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(ChunkUtils.getChunkIndexWithSection(chunkX, chunkZ, section));
         writer.writeBoolean(suppressLightUpdates);
         if (blockChanges != null) {

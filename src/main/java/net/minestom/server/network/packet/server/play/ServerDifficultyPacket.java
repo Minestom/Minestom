@@ -4,6 +4,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.Difficulty;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerDifficultyPacket implements ServerPacket {
 
@@ -11,7 +12,7 @@ public class ServerDifficultyPacket implements ServerPacket {
     public boolean locked;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) difficulty.ordinal());
         writer.writeBoolean(locked);
     }

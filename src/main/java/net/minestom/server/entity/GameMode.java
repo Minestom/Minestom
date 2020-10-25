@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents the game mode of a player.
  * <p>
@@ -32,5 +34,15 @@ public enum GameMode {
 
     public boolean canTakeDamage() {
         return canTakeDamage;
+    }
+
+    @Nullable
+    public static GameMode fromId(byte id) {
+        for (GameMode gameMode : values()) {
+            if (gameMode.id == id) {
+                return gameMode;
+            }
+        }
+        return null;
     }
 }

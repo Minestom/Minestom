@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class TagsPacket implements ServerPacket {
     public List<Tag> entityTags = new LinkedList<>();
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writeTags(writer, blockTags, name -> Registries.getBlock(name).ordinal());
         writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
         writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());

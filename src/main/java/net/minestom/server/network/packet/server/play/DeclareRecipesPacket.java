@@ -12,7 +12,7 @@ public class DeclareRecipesPacket implements ServerPacket {
     public DeclaredRecipe[] recipes;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         Check.notNull(recipes, "Recipes cannot be null!");
 
         writer.writeVarInt(recipes.length);

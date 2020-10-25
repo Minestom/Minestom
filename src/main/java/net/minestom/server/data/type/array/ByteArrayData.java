@@ -17,14 +17,14 @@ public class ByteArrayData extends DataType<byte[]> {
         return decodeByteArray(reader);
     }
 
-    public static void encodeByteArray(BinaryWriter binaryWriter, byte[] value) {
+    public static void encodeByteArray(@NotNull BinaryWriter binaryWriter, @NotNull byte[] value) {
         binaryWriter.writeVarInt(value.length);
         for (byte val : value) {
             binaryWriter.writeByte(val);
         }
     }
 
-    public static byte[] decodeByteArray(BinaryReader binaryReader) {
+    public static byte[] decodeByteArray(@NotNull BinaryReader binaryReader) {
         byte[] array = new byte[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
             array[i] = binaryReader.readByte();

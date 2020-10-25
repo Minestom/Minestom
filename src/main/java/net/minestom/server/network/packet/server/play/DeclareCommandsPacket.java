@@ -3,17 +3,18 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public class DeclareCommandsPacket implements ServerPacket {
 
-
     public Node[] nodes;
     public int rootIndex;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(nodes.length);
         for (Node node : nodes) {
             node.write(writer);
@@ -26,7 +27,7 @@ public class DeclareCommandsPacket implements ServerPacket {
         return ServerPacketIdentifier.DECLARE_COMMANDS;
     }
 
-    public static class Node {
+    public static class Node implements Writeable {
 
         public byte flags;
         public int[] children;
@@ -36,7 +37,8 @@ public class DeclareCommandsPacket implements ServerPacket {
         public Consumer<BinaryWriter> properties; // Only for argument
         public String suggestionsType; // Only if flags 0x10
 
-        private void write(BinaryWriter writer) {
+        @Override
+        public void write(BinaryWriter writer) {
             writer.writeByte(flags);
 
             writer.writeVarIntArray(children);

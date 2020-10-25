@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityPositionAndRotationPacket implements ServerPacket {
 
@@ -12,7 +13,7 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
     public boolean onGround;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeShort(deltaX);
         writer.writeShort(deltaY);

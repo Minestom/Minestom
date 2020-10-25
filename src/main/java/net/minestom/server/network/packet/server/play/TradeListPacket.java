@@ -4,6 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class TradeListPacket implements ServerPacket {
 
@@ -15,7 +16,7 @@ public class TradeListPacket implements ServerPacket {
     public boolean canRestock;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(windowId);
         writer.writeByte((byte) trades.length);
         for (Trade trade : trades) {

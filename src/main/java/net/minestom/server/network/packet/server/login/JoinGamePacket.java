@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.LevelType;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 public class JoinGamePacket implements ServerPacket {
@@ -15,14 +15,15 @@ public class JoinGamePacket implements ServerPacket {
     public GameMode gameMode = GameMode.SURVIVAL;
     public DimensionType dimensionType = DimensionType.OVERWORLD;
     public long hashedSeed;
-    public byte maxPlayers = 0; // Unused
-    public LevelType levelType;
+    public int maxPlayers = 0; // Unused
     public int viewDistance;
     public boolean reducedDebugInfo = false;
     public boolean enableRespawnScreen = true;
+    public boolean isDebug = false;
+    public boolean isFlat = false;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(entityId);
         writer.writeBoolean(MinecraftServer.isHardcoreLook());
         writer.writeByte(gameMode.getId());
@@ -49,9 +50,9 @@ public class JoinGamePacket implements ServerPacket {
         writer.writeBoolean(reducedDebugInfo);
         writer.writeBoolean(enableRespawnScreen);
         //debug
-        writer.writeBoolean(false);
+        writer.writeBoolean(isDebug);
         //is flat
-        writer.writeBoolean(levelType == LevelType.FLAT);
+        writer.writeBoolean(isFlat);
     }
 
     @Override

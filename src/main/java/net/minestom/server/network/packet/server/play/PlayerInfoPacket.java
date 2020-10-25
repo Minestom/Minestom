@@ -21,7 +21,7 @@ public class PlayerInfoPacket implements ServerPacket {
     }
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
         writer.writeVarInt(playerInfos.size());
 

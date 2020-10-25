@@ -29,6 +29,10 @@ import java.util.Set;
  * There should be only one instance of this class for each custom block type,
  * every individual blocks will execute the callbacks present there. Each of which contains the
  * custom block position and the instance concerned.
+ * <p>
+ * Each block in a chunk contains 2 id, the block state id (only visual) and a custom block id corresponding to
+ * {@link CustomBlock#getCustomBlockId()}. A custom block is responsible for the blocks tick, the custom break time feature,
+ * and some useful callbacks.
  */
 public abstract class CustomBlock {
 

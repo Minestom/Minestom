@@ -4,6 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class WindowItemsPacket implements ServerPacket {
 
@@ -11,7 +12,7 @@ public class WindowItemsPacket implements ServerPacket {
     public ItemStack[] items;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
 
         if (items == null) {

@@ -4,6 +4,7 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityPropertiesPacket implements ServerPacket {
 
@@ -12,7 +13,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
         writer.writeInt(properties.length);
         for (Property property : properties) {

@@ -4,6 +4,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 public class EntitySoundEffect implements ServerPacket {
 
@@ -14,7 +15,7 @@ public class EntitySoundEffect implements ServerPacket {
     public float pitch;
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(soundId);
         writer.writeVarInt(soundCategory.ordinal());
         writer.writeVarInt(entityId);
