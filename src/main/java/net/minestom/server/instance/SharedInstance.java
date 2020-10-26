@@ -29,12 +29,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void refreshBlockStateId(BlockPosition blockPosition, short blockStateId) {
+    public void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
         this.instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
     }
 
     @Override
-    public boolean breakBlock(Player player, BlockPosition blockPosition) {
+    public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
         return instanceContainer.breakBlock(player, blockPosition);
     }
 
@@ -59,7 +59,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveChunkToStorage(Chunk chunk, @Nullable Runnable callback) {
+    public void saveChunkToStorage(@NotNull Chunk chunk, @Nullable Runnable callback) {
         this.instanceContainer.saveChunkToStorage(chunk, callback);
     }
 
@@ -74,7 +74,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public ChunkBatch createChunkBatch(Chunk chunk) {
+    public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
         return instanceContainer.createChunkBatch(chunk);
     }
 
@@ -88,6 +88,7 @@ public class SharedInstance extends Instance {
         return instanceContainer.getChunkGenerator();
     }
 
+    @NotNull
     @Override
     public Collection<Chunk> getChunks() {
         return instanceContainer.getChunks();
@@ -124,7 +125,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isInVoid(Position position) {
+    public boolean isInVoid(@NotNull Position position) {
         return instanceContainer.isInVoid(position);
     }
 

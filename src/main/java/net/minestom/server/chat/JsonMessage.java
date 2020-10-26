@@ -60,7 +60,7 @@ public abstract class JsonMessage {
 
         private JsonObject jsonObject;
 
-        public RawJsonMessage(JsonObject jsonObject) {
+        public RawJsonMessage(@NotNull JsonObject jsonObject) {
             this.jsonObject = jsonObject;
         }
 

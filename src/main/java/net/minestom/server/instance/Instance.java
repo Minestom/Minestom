@@ -97,12 +97,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     /**
-     * Creates a new instance
+     * Creates a new instance.
      *
      * @param uniqueId      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(UUID uniqueId, DimensionType dimensionType) {
+    public Instance(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
         this.uniqueId = uniqueId;
         this.dimensionType = dimensionType;
 
@@ -110,12 +110,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Schedules a task to be run during the next instance tick
-     * It ensures that the task will be executed in the same thread as the instance and its chunks/entities (depending of the {@link ThreadProvider})
+     * Schedules a task to be run during the next instance tick.
+     * It ensures that the task will be executed in the same thread as the instance and its chunks/entities (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next instance tick
      */
-    public void scheduleNextTick(Consumer<Instance> callback) {
+    public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
         this.nextTick.add(callback);
     }
 
@@ -127,7 +127,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @param blockStateId  the new block state
      */
-    public abstract void refreshBlockStateId(BlockPosition blockPosition, short blockStateId);
+    public abstract void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -137,7 +137,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the {@link BlockPosition} of the broken block
      * @return true if the block has been broken, false if it has been cancelled
      */
-    public abstract boolean breakBlock(Player player, BlockPosition blockPosition);
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
@@ -189,7 +189,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunk    the {@link Chunk} to save
      * @param callback optional callback called when the {@link Chunk} is done saving
      */
-    public abstract void saveChunkToStorage(Chunk chunk, @Nullable Runnable callback);
+    public abstract void saveChunkToStorage(@NotNull Chunk chunk, @Nullable Runnable callback);
 
     /**
      * Saves multiple chunks to permanent storage.
@@ -212,13 +212,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return a ChunkBatch linked to {@code chunk}
      * @throws NullPointerException if {@code chunk} is null
      */
-    public abstract ChunkBatch createChunkBatch(Chunk chunk);
+    public abstract ChunkBatch createChunkBatch(@NotNull Chunk chunk);
 
     /**
      * Gets the instance {@link ChunkGenerator}.
      *
      * @return the {@link ChunkGenerator} of the instance
      */
+    @Nullable
     public abstract ChunkGenerator getChunkGenerator();
 
     /**
@@ -226,13 +227,14 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
      */
-    public abstract void setChunkGenerator(ChunkGenerator chunkGenerator);
+    public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
 
     /**
      * Gets all the instance's chunks.
      *
      * @return an unmodifiable containing all the loaded chunks of the instance
      */
+    @NotNull
     public abstract Collection<Chunk> getChunks();
 
     /**
@@ -240,6 +242,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the {@link StorageLocation} of the instance
      */
+    @Nullable
     public abstract StorageLocation getStorageLocation();
 
     /**
@@ -247,7 +250,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param storageLocation the new {@link StorageLocation} of the instance
      */
-    public abstract void setStorageLocation(StorageLocation storageLocation);
+    public abstract void setStorageLocation(@Nullable StorageLocation storageLocation);
 
     /**
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
@@ -301,7 +304,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the position in the world
      * @return true iif position is inside the void
      */
-    public abstract boolean isInVoid(Position position);
+    public abstract boolean isInVoid(@NotNull Position position);
 
     /**
      * Gets if the instance has been registered in {@link InstanceManager}.
@@ -396,6 +399,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the client update rate for time related packet
      */
+    @Nullable
     public UpdateOption getTimeUpdate() {
         return timeUpdate;
     }
@@ -408,7 +412,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param timeUpdate the new update rate concerning time
      */
-    public void setTimeUpdate(UpdateOption timeUpdate) {
+    public void setTimeUpdate(@Nullable UpdateOption timeUpdate) {
         this.timeUpdate = timeUpdate;
     }
 
@@ -417,6 +421,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
+    @NotNull
     private TimeUpdatePacket getTimePacket() {
         TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
         timeUpdatePacket.worldAge = worldAge;
@@ -429,6 +434,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return the {@link WorldBorder} linked to the instance
      */
+    @NotNull
     public WorldBorder getWorldBorder() {
         return worldBorder;
     }
@@ -438,6 +444,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
+    @NotNull
     public Set<Entity> getEntities() {
         return Collections.unmodifiableSet(entities);
     }
@@ -447,6 +454,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
+    @NotNull
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
     }
@@ -456,6 +464,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
+    @NotNull
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
     }
@@ -465,6 +474,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the object entities in the instance
      */
+    @NotNull
     public Set<ObjectEntity> getObjectEntities() {
         return Collections.unmodifiableSet(objectEntities);
     }
@@ -474,6 +484,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
+    @NotNull
     public Set<ExperienceOrb> getExperienceOrbs() {
         return Collections.unmodifiableSet(experienceOrbs);
     }
@@ -485,6 +496,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
+    @NotNull
     public Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return new HashSet<>();
@@ -518,7 +530,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z     the Z position
      * @param block the new visual block
      */
-    public void refreshBlockId(int x, int y, int z, Block block) {
+    public void refreshBlockId(int x, int y, int z, @NotNull Block block) {
         refreshBlockStateId(x, y, z, block.getBlockId());
     }
 
@@ -530,7 +542,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @param block         the new visual block
      */
-    public void refreshBlockId(BlockPosition blockPosition, Block block) {
+    public void refreshBlockId(@NotNull BlockPosition blockPosition, @NotNull Block block) {
         refreshBlockStateId(blockPosition, block.getBlockId());
     }
 
@@ -552,7 +564,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @param callback the optional callback to run when the chunk is loaded
      */
-    public void loadChunk(Position position, @Nullable ChunkCallback callback) {
+    public void loadChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadChunk(chunkX, chunkZ, callback);
@@ -565,7 +577,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param position the chunk position
      * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
-    public void loadOptionalChunk(Position position, @Nullable ChunkCallback callback) {
+    public void loadOptionalChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);
@@ -675,6 +687,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z the Z position
      * @return the block data at the position, null if not any
      */
+    @Nullable
     public Data getBlockData(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
@@ -688,6 +701,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param blockPosition the block position
      * @return the block data at the position, null if not any
      */
+    @Nullable
     public Data getBlockData(@NotNull BlockPosition blockPosition) {
         return getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }

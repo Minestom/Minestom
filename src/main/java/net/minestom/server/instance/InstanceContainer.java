@@ -236,8 +236,9 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void refreshBlockStateId(BlockPosition blockPosition, short blockStateId) {
+    public void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
         final Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
+        Check.notNull(chunk, "You cannot refresh a block in a null chunk!");
         synchronized (chunk) {
             chunk.refreshBlockStateId(blockPosition.getX(), blockPosition.getY(),
                     blockPosition.getZ(), blockStateId);
@@ -342,10 +343,11 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(Player player, BlockPosition blockPosition) {
+    public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
         player.resetTargetBlock();
 
         final Chunk chunk = getChunkAt(blockPosition);
+        Check.notNull(chunk, "You cannot break blocks in a null chunk!");
 
         // Cancel if the chunk is read-only
         if (chunk.isReadOnly()) {
@@ -474,7 +476,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void saveChunkToStorage(Chunk chunk, Runnable callback) {
+    public void saveChunkToStorage(@NotNull Chunk chunk, Runnable callback) {
         this.chunkLoader.saveChunk(chunk, callback);
     }
 
@@ -489,7 +491,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public ChunkBatch createChunkBatch(Chunk chunk) {
+    public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
         Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
         return new ChunkBatch(this, chunk);
     }
@@ -551,7 +553,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean isInVoid(Position position) {
+    public boolean isInVoid(@NotNull Position position) {
         // TODO: customizable
         return position.getY() < -64;
     }
@@ -629,6 +631,7 @@ public class InstanceContainer extends Instance {
      *
      * @return the chunks of this instance
      */
+    @NotNull
     public Collection<Chunk> getChunks() {
         return Collections.unmodifiableCollection(chunks.values());
     }

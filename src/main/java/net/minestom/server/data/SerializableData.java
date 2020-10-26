@@ -59,7 +59,7 @@ public interface SerializableData extends Data {
 
     /**
      * Reads the index map and the data of a serialized {@link SerializableData}.
-     *
+     * <p>
      * Got from {@link #getIndexedSerializedData()}.
      *
      * @param reader the binary reader
@@ -74,7 +74,7 @@ public interface SerializableData extends Data {
      * <p>
      * Sized by a var-int.
      *
-     * @param typeToIndexMap the data index map
+     * @param typeToIndexMap the filled data index map
      */
     static void writeDataIndexHeader(@NotNull BinaryWriter indexWriter, @NotNull Object2ShortMap<String> typeToIndexMap) {
         // Write the size of the following index list (class name-> class index)

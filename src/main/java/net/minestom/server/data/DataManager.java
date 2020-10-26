@@ -14,6 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Manager used to register types which can be serialized and deserialized back.
+ * <p>
+ * Registering happens with {@link #registerType(Class, DataType)},
+ * you can then retrieve the {@link DataType} with {@link #getDataType(Class)}.
+ * <p>
+ * A lot of types are already registered by default so you do not have to add all of them manually,
+ * you can verify if {@link #getDataType(Class)} returns null for the desired type, if it is then you will need to register it.
+ */
 public final class DataManager {
 
     private final Map<Class, DataType> dataTypeMap = new HashMap<>();

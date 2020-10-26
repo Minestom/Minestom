@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents an element which can have a {@link Data} attached to it.
  * <p>
- * The data will always be optional.
+ * The data will always be optional and can therefore be null.
  */
 public interface DataContainer {
 
@@ -22,6 +22,9 @@ public interface DataContainer {
 
     /**
      * Sets the {@link Data} of this container.
+     * <p>
+     * Default implementations are {@link DataImpl} and {@link SerializableDataImpl} depending
+     * on your use-case.
      *
      * @param data the {@link Data} of this container, null to remove it
      */

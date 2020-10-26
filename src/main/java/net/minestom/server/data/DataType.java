@@ -16,6 +16,8 @@ public abstract class DataType<T> {
 
     /**
      * Encodes the data type.
+     * <p>
+     * Be sure that the encoded value can be decoded back using {@link #decode(BinaryReader)}.
      *
      * @param writer the data writer
      * @param value  the value to encode
