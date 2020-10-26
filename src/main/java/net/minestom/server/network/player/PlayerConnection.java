@@ -11,6 +11,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnect;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -82,7 +83,7 @@ public abstract class PlayerConnection {
      * @param buffer The buffer to send.
      * @param copy   Should be true unless your only using the ByteBuf once.
      */
-    public abstract void sendPacket(ByteBuf buffer, boolean copy);
+    public abstract void sendPacket(@NotNull ByteBuf buffer, boolean copy);
 
     /**
      * Writes a raw {@link ByteBuf} to the client.
@@ -90,14 +91,14 @@ public abstract class PlayerConnection {
      * @param buffer The buffer to send.
      * @param copy   Should be true unless your only using the ByteBuf once.
      */
-    public abstract void writePacket(ByteBuf buffer, boolean copy);
+    public abstract void writePacket(@NotNull ByteBuf buffer, boolean copy);
 
     /**
      * Serializes the packet and send it to the client.
      *
      * @param serverPacket the packet to send
      */
-    public abstract void sendPacket(ServerPacket serverPacket);
+    public abstract void sendPacket(@NotNull ServerPacket serverPacket);
 
     /**
      * Flush all waiting packets.
@@ -109,6 +110,7 @@ public abstract class PlayerConnection {
      *
      * @return the remote address
      */
+    @NotNull
     public abstract SocketAddress getRemoteAddress();
 
     /**
@@ -149,7 +151,7 @@ public abstract class PlayerConnection {
         this.online = online;
     }
 
-    public void setConnectionState(ConnectionState connectionState) {
+    public void setConnectionState(@NotNull ConnectionState connectionState) {
         this.connectionState = connectionState;
     }
 
@@ -158,6 +160,7 @@ public abstract class PlayerConnection {
      *
      * @return the client connection state
      */
+    @NotNull
     public ConnectionState getConnectionState() {
         return connectionState;
     }

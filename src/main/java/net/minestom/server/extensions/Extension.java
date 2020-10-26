@@ -1,13 +1,12 @@
 package net.minestom.server.extensions;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Extension {
+
     private ExtensionDescription description;
     private Logger logger;
 
@@ -44,14 +43,15 @@ public abstract class Extension {
     }
 
     protected static class ExtensionDescription {
+
         private final String name;
         private final String version;
         private final List<String> authors;
 
-        protected ExtensionDescription(@NotNull String name, @NotNull String version, @Nullable List<String> authors) {
+        protected ExtensionDescription(@NotNull String name, @NotNull String version, @NotNull List<String> authors) {
             this.name = name;
             this.version = version;
-            this.authors = authors != null ? authors : new ArrayList<>();
+            this.authors = authors;
         }
 
         @NotNull

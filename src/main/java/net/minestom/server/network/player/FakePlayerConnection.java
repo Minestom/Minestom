@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -13,17 +14,17 @@ import java.net.SocketAddress;
 public class FakePlayerConnection extends PlayerConnection {
 
     @Override
-    public void sendPacket(ByteBuf buffer, boolean copy) {
+    public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
         throw new UnsupportedOperationException("FakePlayer cannot read Bytebuf");
     }
 
     @Override
-    public void writePacket(ByteBuf buffer, boolean copy) {
+    public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
         throw new UnsupportedOperationException("FakePlayer cannot write to Bytebuf");
     }
 
     @Override
-    public void sendPacket(ServerPacket serverPacket) {
+    public void sendPacket(@NotNull ServerPacket serverPacket) {
         getFakePlayer().getController().consumePacket(serverPacket);
     }
 
@@ -32,6 +33,7 @@ public class FakePlayerConnection extends PlayerConnection {
         // Does nothing
     }
 
+    @NotNull
     @Override
     public SocketAddress getRemoteAddress() {
         return new InetSocketAddress(0);

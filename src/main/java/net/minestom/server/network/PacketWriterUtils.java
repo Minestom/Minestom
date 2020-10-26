@@ -8,6 +8,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.thread.MinestomThread;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +31,7 @@ public final class PacketWriterUtils {
      * @param serverPacket the packet to write
      * @param consumer     the consumer called once the packet has been written
      */
-    public static void writeCallbackPacket(ServerPacket serverPacket, Consumer<ByteBuf> consumer) {
+    public static void writeCallbackPacket(@NotNull ServerPacket serverPacket, @NotNull Consumer<ByteBuf> consumer) {
         PACKET_WRITER_POOL.execute(() -> {
             final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
             consumer.accept(buffer);
@@ -45,7 +46,7 @@ public final class PacketWriterUtils {
      * @param players      the players list to send the packet to
      * @param serverPacket the packet to write and send
      */
-    public static void writeAndSend(Collection<Player> players, ServerPacket serverPacket) {
+    public static void writeAndSend(@NotNull Collection<Player> players, @NotNull ServerPacket serverPacket) {
         PACKET_WRITER_POOL.execute(() -> {
             if (players.isEmpty())
                 return;
@@ -71,11 +72,12 @@ public final class PacketWriterUtils {
      * @param playerConnection the connection to send the packet to
      * @param serverPacket     the packet to write and send
      */
-    public static void writeAndSend(PlayerConnection playerConnection, ServerPacket serverPacket) {
+    public static void writeAndSend(@NotNull PlayerConnection playerConnection, @NotNull ServerPacket serverPacket) {
         PACKET_WRITER_POOL.execute(() -> {
             if (PlayerUtils.isNettyClient(playerConnection)) {
                 final ByteBuf buffer = PacketUtils.writePacket(serverPacket);
-                playerConnection.writePacket(buffer, true);
+                buffer.retain();
+                playerConnection.writePacket(buffer, false);
                 buffer.release();
             } else {
                 playerConnection.sendPacket(serverPacket);
@@ -91,7 +93,7 @@ public final class PacketWriterUtils {
      * @param player       the player to send the packet to
      * @param serverPacket the packet to write and send
      */
-    public static void writeAndSend(Player player, ServerPacket serverPacket) {
+    public static void writeAndSend(@NotNull Player player, @NotNull ServerPacket serverPacket) {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         writeAndSend(playerConnection, serverPacket);
     }

@@ -30,7 +30,7 @@ public class ColoredText extends JsonMessage {
      * @param message the content of the text
      * @see #of(String) to create a colored text
      */
-    private ColoredText(String message) {
+    private ColoredText(@NotNull String message) {
         this.message = message;
         refreshUpdate();
     }
@@ -42,7 +42,7 @@ public class ColoredText extends JsonMessage {
      * @param message the text message
      * @return the created {@link ColoredText}
      */
-    public static ColoredText of(ChatColor color, String message) {
+    public static ColoredText of(@NotNull ChatColor color, @NotNull String message) {
         return new ColoredText(color + message);
     }
 
@@ -52,7 +52,8 @@ public class ColoredText extends JsonMessage {
      * @param message the text message
      * @return the created {@link ColoredText}
      */
-    public static ColoredText of(String message) {
+    @NotNull
+    public static ColoredText of(@NotNull String message) {
         return of(ChatColor.WHITE, message);
     }
 
@@ -63,9 +64,9 @@ public class ColoredText extends JsonMessage {
      * @param colorChar the char used before the color code
      * @return the created {@link ColoredText}
      */
-    public static ColoredText ofLegacy(String message, char colorChar) {
-        String legacy = toLegacy(message, colorChar);
-
+    @NotNull
+    public static ColoredText ofLegacy(@NotNull String message, char colorChar) {
+        final String legacy = toLegacy(message, colorChar);
         return of(legacy);
     }
 
@@ -76,7 +77,8 @@ public class ColoredText extends JsonMessage {
      * @param message the text message
      * @return this {@link ColoredText}
      */
-    public ColoredText append(ChatColor color, String message) {
+    @NotNull
+    public ColoredText append(@NotNull ChatColor color, @NotNull String message) {
         this.message += color + message;
         refreshUpdate();
         return this;
@@ -88,7 +90,8 @@ public class ColoredText extends JsonMessage {
      * @param message the text message
      * @return this {@link ColoredText}
      */
-    public ColoredText append(String message) {
+    @NotNull
+    public ColoredText append(@NotNull String message) {
         return append(ChatColor.NO_COLOR, message);
     }
 
@@ -99,7 +102,8 @@ public class ColoredText extends JsonMessage {
      * @param colorChar the char used before the color code
      * @return this {@link ColoredText}
      */
-    public ColoredText appendLegacy(String message, char colorChar) {
+    @NotNull
+    public ColoredText appendLegacy(@NotNull String message, char colorChar) {
         final String legacy = toLegacy(message, colorChar);
         return of(legacy);
     }
@@ -110,6 +114,7 @@ public class ColoredText extends JsonMessage {
      * @return the raw text
      * @see #toString() for the Json representation
      */
+    @NotNull
     public String getMessage() {
         return message;
     }
@@ -151,6 +156,7 @@ public class ColoredText extends JsonMessage {
      *
      * @return the list of objects composing the message
      */
+    @NotNull
     protected List<JsonObject> getComponents() {
         final List<JsonObject> objects = new ArrayList<>();
         // No message, return empty list
@@ -193,8 +199,8 @@ public class ColoredText extends JsonMessage {
                 // Color component
                 if (formatString.startsWith("#")) {
                     // Remove the first # character to get code
-                    String colorCode = formatString.substring(1);
-                    ChatColor color = ChatColor.fromName(colorCode);
+                    final String colorCode = formatString.substring(1);
+                    final ChatColor color = ChatColor.fromName(colorCode);
                     if (color == ChatColor.NO_COLOR) {
                         // Use rgb formatting (#ffffff)
                         currentColor = "#" + colorCode;
@@ -275,8 +281,8 @@ public class ColoredText extends JsonMessage {
      * @param color       the last color
      * @return a json object representing a message
      */
-    private JsonObject getMessagePart(MessageType messageType, String message, String color,
-                                      SpecialComponentContainer specialComponentContainer) {
+    private JsonObject getMessagePart(@NotNull MessageType messageType, @NotNull String message, @NotNull String color,
+                                      @NotNull SpecialComponentContainer specialComponentContainer) {
         JsonObject object = new JsonObject();
         switch (messageType) {
             case RAW:
@@ -303,6 +309,7 @@ public class ColoredText extends JsonMessage {
         return object;
     }
 
+    @NotNull
     private String getBoolean(boolean value) {
         return value ? "true" : "false";
     }
@@ -316,7 +323,7 @@ public class ColoredText extends JsonMessage {
      * @param colorChar the char used before the color code
      * @return the converted legacy text
      */
-    private static String toLegacy(String message, char colorChar) {
+    private static String toLegacy(@NotNull String message, char colorChar) {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < message.length(); i++) {

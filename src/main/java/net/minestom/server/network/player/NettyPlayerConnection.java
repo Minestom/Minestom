@@ -11,6 +11,8 @@ import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
@@ -31,7 +33,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private String serverAddress;
     private int serverPort;
 
-    public NettyPlayerConnection(SocketChannel channel) {
+    public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
     }
@@ -42,7 +44,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      * @param secretKey the secret key to use in the encryption
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
-    public void setEncryptionKey(SecretKey secretKey) {
+    public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
         getChannel().pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
@@ -63,7 +65,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPacket(ByteBuf buffer, boolean copy) {
+    public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
         if ((encrypted || compressed) && copy) {
             buffer = buffer.copy();
             buffer.retain();
@@ -75,7 +77,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     @Override
-    public void writePacket(ByteBuf buffer, boolean copy) {
+    public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
         if ((encrypted || compressed) && copy) {
             buffer = buffer.copy();
             buffer.retain();
@@ -87,7 +89,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPacket(ServerPacket serverPacket) {
+    public void sendPacket(@NotNull ServerPacket serverPacket) {
         channel.writeAndFlush(serverPacket);
     }
 
@@ -96,6 +98,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         getChannel().flush();
     }
 
+    @NotNull
     @Override
     public SocketAddress getRemoteAddress() {
         return getChannel().remoteAddress();
@@ -106,6 +109,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         getChannel().close();
     }
 
+    @NotNull
     public Channel getChannel() {
         return channel;
     }
@@ -117,6 +121,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server address used
      */
+    @Nullable
     public String getServerAddress() {
         return serverAddress;
     }
@@ -138,7 +143,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      * @param serverAddress the server address which the client used
      * @param serverPort    the server port which the client used
      */
-    public void refreshServerInformation(String serverAddress, int serverPort) {
+    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
     }
