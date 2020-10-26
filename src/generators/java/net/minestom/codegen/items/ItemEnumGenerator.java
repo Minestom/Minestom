@@ -3,6 +3,8 @@ package net.minestom.codegen.items;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.JavaFile;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.codegen.PrismarinePaths;
@@ -15,10 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Generates a Material enum containing all data about items
@@ -140,11 +139,8 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     @Override
     protected void prepare(EnumGenerator generator) {
         String className = getClassName();
-        generator.addImport(Block.class.getCanonicalName());
-        generator.addImport(Registries.class.getCanonicalName());
-        generator.addImport(NamespaceID.class.getCanonicalName());
-        generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
-        generator.setParams("String namespaceID", "int maxDefaultStackSize", "Block correspondingBlock");
+        generator.addClassAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "{$S}", "deprecation").build());
+        /*generator.setParams("String namespaceID", "int maxDefaultStackSize", "Block correspondingBlock");
         generator.appendToConstructor("Registries.materials.put(NamespaceID.from(namespaceID), this);");
 
         generator.addMethod("getId", "()", "short", "return (short)ordinal();");
@@ -217,7 +213,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
                 "                return true;\n" +
                 "        }\n" +
                 "\n" +
-                "        return isFood();");
+                "        return isFood();");*/
     }
 
     @Override
@@ -231,10 +227,16 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
     }
 
     @Override
-    protected void postGeneration() throws IOException {
+    protected List<JavaFile> postGeneration(Collection<ItemContainer> items) throws IOException {
+        return Collections.emptyList();
     }
 
     @Override
     protected void postWrite(EnumGenerator generator) {
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOGGER;
     }
 }

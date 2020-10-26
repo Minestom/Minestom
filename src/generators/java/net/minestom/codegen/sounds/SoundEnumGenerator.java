@@ -1,12 +1,18 @@
 package net.minestom.codegen.sounds;
 
 import net.minestom.codegen.BasicEnumGenerator;
+import net.minestom.codegen.stats.StatsEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class SoundEnumGenerator extends BasicEnumGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SoundEnumGenerator.class);
+
     public static void main(String[] args) throws IOException {
         String targetVersion;
         if(args.length < 1) {
@@ -52,5 +58,10 @@ public class SoundEnumGenerator extends BasicEnumGenerator {
     @Override
     public String getClassName() {
         return "Sound";
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOGGER;
     }
 }
