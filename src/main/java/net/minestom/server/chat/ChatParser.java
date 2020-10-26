@@ -2,6 +2,7 @@ package net.minestom.server.chat;
 
 
 import com.google.gson.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class used to convert JSON string to proper chat message representation.
@@ -16,7 +17,8 @@ public final class ChatParser {
      * @param json the json containing the text and color
      * @return a {@link ColoredText} representing the text
      */
-    public static ColoredText toColoredText(String json) {
+    @NotNull
+    public static ColoredText toColoredText(@NotNull String json) {
         StringBuilder builder = new StringBuilder();
 
         try {
@@ -40,7 +42,7 @@ public final class ChatParser {
         }
     }
 
-    private static void appendBuilder(StringBuilder builder, JsonObject object) {
+    private static void appendBuilder(@NotNull StringBuilder builder, @NotNull JsonObject object) {
         builder.append(parseText(object));
 
         final boolean hasExtra = object.has("extra");
@@ -59,7 +61,8 @@ public final class ChatParser {
      * @param textObject the text component to parse
      * @return the colored text format of the text component
      */
-    private static String parseText(JsonObject textObject) {
+    @NotNull
+    private static String parseText(@NotNull JsonObject textObject) {
         final boolean hasText = textObject.has("text");
         if (!hasText)
             return "";
@@ -80,7 +83,7 @@ public final class ChatParser {
         return builder.toString();
     }
 
-    private static void appendColor(JsonObject textObject, StringBuilder builder) {
+    private static void appendColor(@NotNull JsonObject textObject, @NotNull StringBuilder builder) {
         if (textObject.has("color")) {
             final String colorString = textObject.get("color").getAsString();
             if (colorString.startsWith("#")) {
@@ -94,7 +97,8 @@ public final class ChatParser {
         }
     }
 
-    private static void appendExtra(JsonObject textObject, StringBuilder builder, String name) {
+    private static void appendExtra(@NotNull JsonObject textObject, @NotNull StringBuilder builder,
+                                    @NotNull String name) {
         if (textObject.has(name)) {
             final boolean value = textObject.get(name).getAsBoolean();
             if (value) {

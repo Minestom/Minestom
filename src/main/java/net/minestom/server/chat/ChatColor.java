@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -148,6 +150,7 @@ public class ChatColor {
      * @param b the blue component
      * @return a chat color with the specified RGB color
      */
+    @NotNull
     public static ChatColor fromRGB(byte r, byte g, byte b) {
         return fromRGB(r, g, b, -1, null);
     }
@@ -162,6 +165,7 @@ public class ChatColor {
      * @param name the color name
      * @return the color associated with the name, {@link #NO_COLOR} if not found
      */
+    @NotNull
     public static ChatColor fromName(String name) {
         return colorCode.getOrDefault(name.toLowerCase(), NO_COLOR);
     }
@@ -172,6 +176,7 @@ public class ChatColor {
      * @param id the id of the color
      * @return the color associated with the id, {@link #NO_COLOR} if not found
      */
+    @NotNull
     public static ChatColor fromId(int id) {
         return idColorMap.getOrDefault(id, NO_COLOR);
     }
@@ -180,8 +185,9 @@ public class ChatColor {
      * Gets a color based on its legacy color code (eg: 1, 2, 3,... f).
      *
      * @param colorCode the color legacy code
-     * @return the color associated with the code
+     * @return the color associated with the code, {@link #NO_COLOR} if not found
      */
+    @NotNull
     public static ChatColor fromLegacyColorCodes(char colorCode) {
         return legacyColorCodesMap.getOrDefault(colorCode, NO_COLOR);
     }
@@ -227,10 +233,11 @@ public class ChatColor {
     }
 
     /**
-     * Gets the code name is the color is "special".
+     * Gets the code name if the color is "special".
      *
      * @return the special code name
      */
+    @Nullable
     protected String getCodeName() {
         return codeName;
     }
@@ -240,6 +247,7 @@ public class ChatColor {
         return id;
     }
 
+    @NotNull
     @Override
     public String toString() {
         if (empty)

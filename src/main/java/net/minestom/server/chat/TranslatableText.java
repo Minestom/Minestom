@@ -1,5 +1,8 @@
 package net.minestom.server.chat;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a translatable component which can be used in {@link ColoredText}.
  */
@@ -8,7 +11,7 @@ public class TranslatableText {
     private final String code;
     private final String[] arguments;
 
-    private TranslatableText(String code, String[] arguments) {
+    private TranslatableText(@NotNull String code, @Nullable String[] arguments) {
         this.code = code;
         this.arguments = arguments;
     }
@@ -19,7 +22,8 @@ public class TranslatableText {
      * @param code the translatable code
      * @return the translatable component linked to the code
      */
-    public static TranslatableText of(String code) {
+    @NotNull
+    public static TranslatableText of(@NotNull String code) {
         return new TranslatableText(code, null);
     }
 
@@ -30,7 +34,8 @@ public class TranslatableText {
      * @param arguments the translatable component arguments in order
      * @return the translatable component linked to the code and arguments
      */
-    public static TranslatableText of(String code, String... arguments) {
+    @NotNull
+    public static TranslatableText of(@NotNull String code, @NotNull String... arguments) {
         return new TranslatableText(code, arguments);
     }
 
