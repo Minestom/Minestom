@@ -13,7 +13,7 @@ import java.io.*;
 /**
  * Handles loading and configuration of loot tables
  */
-public class LootTableManager {
+public final class LootTableManager {
 
     private NamespaceIDHashMap<JsonDeserializer<? extends Condition>> conditionDeserializers = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableType> tableTypes = new NamespaceIDHashMap<>();

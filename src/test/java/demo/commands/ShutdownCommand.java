@@ -4,12 +4,14 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple shutdown command.
  */
 public class ShutdownCommand implements CommandProcessor {
 
+    @NotNull
     @Override
     public String getCommandName() {
         return "shutdown";
@@ -21,13 +23,13 @@ public class ShutdownCommand implements CommandProcessor {
     }
 
     @Override
-    public boolean process(CommandSender sender, String command, String[] args) {
+    public boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args) {
         MinecraftServer.stopCleanly();
         return true;
     }
 
     @Override
-    public boolean hasAccess(Player player) {
+    public boolean hasAccess(@NotNull Player player) {
         return true;
     }
 }

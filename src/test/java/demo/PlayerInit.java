@@ -19,7 +19,6 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
@@ -43,7 +42,7 @@ public class PlayerInit {
         StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
@@ -113,7 +112,7 @@ public class PlayerInit {
                 final Block block = Block.fromStateId(event.getBlockStateId());
 
                 if (block == Block.STONE) {
-                    event.setCustomBlock((short) 2); // custom stone block
+                    event.setCustomBlock("custom_block");
                     System.out.println("custom stone");
                 }
                 if (block == Block.TORCH) {
@@ -154,9 +153,6 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                player.setEnableRespawnScreen(false);
-
-                player.setPermissionLevel(4);
 
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
@@ -168,29 +164,6 @@ public class PlayerInit {
                     }
                     System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + (itemStack.getData() != null));
                 });
-
-                {
-                    /*AdvancementManager advancementManager = MinecraftServer.getAdvancementManager();
-                    AdvancementRoot root = new AdvancementRoot(ColoredText.of("title"), ColoredText.of(ChatColor.BLUE + "description"),
-                            Material.APPLE, FrameType.TASK, 0, 0,
-                            "minecraft:textures/block/red_wool.png");
-                    root.setAchieved(true);
-                    AdvancementTab tab = advancementManager.createTab("root", root);
-                    Advancement advancement = new Advancement(ColoredText.of("adv"), ColoredText.of("desc"),
-                            Material.WOODEN_AXE, FrameType.CHALLENGE, 1, 0)
-                            .showToast(true).setHidden(false);
-                    tab.createAdvancement("second", advancement, root);
-
-                    tab.addViewer(player);
-
-                    root.setTitle(ColoredText.of("test ttlechange"));
-
-                    Advancement advancement2 = new Advancement(ColoredText.of(ChatColor.BLUE + "Title"),
-                            ColoredText.of("description of the advancement"),
-                            Material.GOLD_BLOCK, FrameType.CHALLENGE, 3, 0)
-                            .showToast(true).setHidden(false);
-                    tab.createAdvancement("second2", advancement2, root);*/
-                }
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
@@ -199,10 +172,10 @@ public class PlayerInit {
 
                 Data data = new DataImpl();
                 data.set("test", 5, Integer.class);
-                ItemStack itemStack = new ItemStack(Material.NETHERITE_PICKAXE, (byte) 1);
-                itemStack.setEnchantment(Enchantment.EFFICIENCY, (short) 5);
+                ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 1);
                 itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));
             });
 
             player.addEventCallback(PlayerRespawnEvent.class, event -> {

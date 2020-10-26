@@ -8,6 +8,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -20,22 +21,22 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
-    public void update(Instance instance, BlockPosition blockPosition, Data data) {
+    public void update(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
         System.out.println("BLOCK UPDATE");
     }
 
     @Override
-    public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
+    public void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
 
     }
 
     @Override
-    public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
+    public void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
 
     }
 
     @Override
-    public boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
+    public boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition blockPosition, Data data) {
         return false;
     }
 
@@ -45,7 +46,7 @@ public class UpdatableBlockDemo extends CustomBlock {
     }
 
     @Override
-    public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
+    public int getBreakDelay(@NotNull Player player, @NotNull BlockPosition position, byte stage, Set<Player> breakers) {
         return 1;
     }
 

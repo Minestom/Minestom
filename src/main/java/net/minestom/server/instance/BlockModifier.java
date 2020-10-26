@@ -9,6 +9,8 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an element which can place blocks at position.
@@ -30,7 +32,7 @@ public interface BlockModifier {
      * @param blockStateId the block state id
      * @param data         the block {@link Data}, can be null
      */
-    void setBlockStateId(int x, int y, int z, short blockStateId, Data data);
+    void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data);
 
     /**
      * Sets a {@link CustomBlock} at a position.
@@ -43,7 +45,7 @@ public interface BlockModifier {
      * @param customBlockId the custom block id
      * @param data          the block {@link Data}, can be null
      */
-    void setCustomBlock(int x, int y, int z, short customBlockId, Data data);
+    void setCustomBlock(int x, int y, int z, short customBlockId, @Nullable Data data);
 
     /**
      * Sets a {@link CustomBlock} at a position with a custom state id.
@@ -58,17 +60,17 @@ public interface BlockModifier {
      * @param customBlockId the custom block id
      * @param data          the block {@link Data}, can be null
      */
-    void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data);
+    void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data);
 
     default void setBlockStateId(int x, int y, int z, short blockStateId) {
         setBlockStateId(x, y, z, blockStateId, null);
     }
 
-    default void setBlock(int x, int y, int z, Block block) {
+    default void setBlock(int x, int y, int z, @NotNull Block block) {
         setBlockStateId(x, y, z, block.getBlockId(), null);
     }
 
-    default void setBlock(BlockPosition blockPosition, Block block) {
+    default void setBlock(@NotNull BlockPosition blockPosition, @NotNull Block block) {
         Check.notNull(blockPosition, "The block position cannot be null");
         Check.notNull(block, "The block cannot be null");
         setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block);
@@ -83,18 +85,18 @@ public interface BlockModifier {
         setCustomBlock(x, y, z, customBlockId, null);
     }
 
-    default void setCustomBlock(int x, int y, int z, String customBlockId, Data data) {
+    default void setCustomBlock(int x, int y, int z, @NotNull String customBlockId, @Nullable Data data) {
         CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         Check.notNull(customBlock, "The CustomBlock " + customBlockId + " is not registered");
 
         setCustomBlock(x, y, z, customBlock.getCustomBlockId(), data);
     }
 
-    default void setCustomBlock(int x, int y, int z, String customBlockId) {
+    default void setCustomBlock(int x, int y, int z, @NotNull String customBlockId) {
         setCustomBlock(x, y, z, customBlockId, null);
     }
 
-    default void setCustomBlock(BlockPosition blockPosition, String customBlockId) {
+    default void setCustomBlock(@NotNull BlockPosition blockPosition, @NotNull String customBlockId) {
         Check.notNull(blockPosition, "The block position cannot be null");
         setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), customBlockId);
     }
@@ -103,7 +105,7 @@ public interface BlockModifier {
         setSeparateBlocks(x, y, z, blockStateId, customBlockId, null);
     }
 
-    default void setSeparateBlocks(BlockPosition blockPosition, short blockStateId, short customBlockId) {
+    default void setSeparateBlocks(@NotNull BlockPosition blockPosition, short blockStateId, short customBlockId) {
         Check.notNull(blockPosition, "The block position cannot be null");
         setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockStateId, customBlockId, null);
     }

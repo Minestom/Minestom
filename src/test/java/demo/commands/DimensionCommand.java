@@ -6,10 +6,12 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public class DimensionCommand implements CommandProcessor {
+    @NotNull
     @Override
     public String getCommandName() {
         return "dimensiontest";
@@ -21,7 +23,7 @@ public class DimensionCommand implements CommandProcessor {
     }
 
     @Override
-    public boolean process(CommandSender sender, String command, String[] args) {
+    public boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args) {
 
         if (!sender.isPlayer())
             return false;
@@ -48,7 +50,7 @@ public class DimensionCommand implements CommandProcessor {
     }
 
     @Override
-    public boolean hasAccess(Player player) {
+    public boolean hasAccess(@NotNull Player player) {
         return true;
     }
 }

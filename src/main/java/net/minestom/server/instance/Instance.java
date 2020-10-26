@@ -886,6 +886,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
             // Remove the entity from cache
             final Chunk chunk = getChunkAt(entity.getPosition());
+            Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
             removeEntityFromChunk(entity, chunk);
         });
     }
@@ -931,15 +932,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         synchronized (chunkEntities) {
-            if (chunk != null) {
-                final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-                Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-                entities.remove(entity);
-                if (entities.isEmpty()) {
-                    this.chunkEntities.remove(chunkIndex);
-                } else {
-                    this.chunkEntities.put(chunkIndex, entities);
-                }
+            final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
+            entities.remove(entity);
+            if (entities.isEmpty()) {
+                this.chunkEntities.remove(chunkIndex);
+            } else {
+                this.chunkEntities.put(chunkIndex, entities);
             }
 
             this.entities.remove(entity);

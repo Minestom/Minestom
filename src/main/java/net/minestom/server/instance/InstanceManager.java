@@ -4,6 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -25,7 +27,7 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to register
      */
-    public void registerInstance(Instance instance) {
+    public void registerInstance(@NotNull Instance instance) {
         Check.stateCondition(instance instanceof SharedInstance,
                 "Please use InstanceManager#registerSharedInstance to register a shared instance");
         UNSAFE_registerInstance(instance);
@@ -39,7 +41,8 @@ public final class InstanceManager {
      * @param storageLocation the {@link StorageLocation} of the instance, can be null
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(DimensionType dimensionType, StorageLocation storageLocation) {
+    @NotNull
+    public InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType, @Nullable StorageLocation storageLocation) {
         final InstanceContainer instanceContainer = new InstanceContainer(UUID.randomUUID(), dimensionType, storageLocation);
         registerInstance(instanceContainer);
         return instanceContainer;
@@ -51,7 +54,8 @@ public final class InstanceManager {
      * @param storageLocation the {@link StorageLocation} of the instance, can be null
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(StorageLocation storageLocation) {
+    @NotNull
+    public InstanceContainer createInstanceContainer(@Nullable StorageLocation storageLocation) {
         return createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
     }
 
@@ -61,7 +65,8 @@ public final class InstanceManager {
      * @param dimensionType the {@link DimensionType} of the instance
      * @return the created {@link InstanceContainer}
      */
-    public InstanceContainer createInstanceContainer(DimensionType dimensionType) {
+    @NotNull
+    public InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
         return createInstanceContainer(dimensionType, null);
     }
 
@@ -70,6 +75,7 @@ public final class InstanceManager {
      *
      * @return the created {@link InstanceContainer}
      */
+    @NotNull
     public InstanceContainer createInstanceContainer() {
         return createInstanceContainer(DimensionType.OVERWORLD);
     }
@@ -83,7 +89,8 @@ public final class InstanceManager {
      * @return the registered {@link SharedInstance}
      * @throws NullPointerException if {@code sharedInstance} doesn't have an {@link InstanceContainer} assigned to it
      */
-    public SharedInstance registerSharedInstance(SharedInstance sharedInstance) {
+    @NotNull
+    public SharedInstance registerSharedInstance(@NotNull SharedInstance sharedInstance) {
         final InstanceContainer instanceContainer = sharedInstance.getInstanceContainer();
         Check.notNull(instanceContainer, "SharedInstance needs to have an InstanceContainer to be created!");
 
@@ -99,7 +106,8 @@ public final class InstanceManager {
      * @return the created {@link SharedInstance}
      * @throws IllegalStateException if {@code instanceContainer} is not registered
      */
-    public SharedInstance createSharedInstance(InstanceContainer instanceContainer) {
+    @NotNull
+    public SharedInstance createSharedInstance(@NotNull InstanceContainer instanceContainer) {
         Check.notNull(instanceContainer, "Instance container cannot be null when creating a SharedInstance!");
         Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
 
@@ -114,8 +122,8 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to unregister
      */
-    public void unregisterInstance(Instance instance) {
-        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players");
+    public void unregisterInstance(@NotNull Instance instance) {
+        Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
 
         synchronized (instance) {
             // Unload all chunks
@@ -136,6 +144,7 @@ public final class InstanceManager {
      *
      * @return an unmodifiable {@link Set} containing all the registered instances
      */
+    @NotNull
     public Set<Instance> getInstances() {
         return Collections.unmodifiableSet(instances);
     }
@@ -147,7 +156,7 @@ public final class InstanceManager {
      *
      * @param instance the {@link Instance} to register
      */
-    private void UNSAFE_registerInstance(Instance instance) {
+    private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
         MinecraftServer.getUpdateManager().signalInstanceCreate(instance);

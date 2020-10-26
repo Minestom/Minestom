@@ -64,7 +64,7 @@ public class DamageType implements DataContainer {
      * @return the death message, null to do not send anything.
      * Can be for instance, of type {@link ColoredText} or {@link RichMessage}.
      */
-    @NotNull
+    @Nullable
     public JsonMessage buildDeathMessage(@NotNull Player killed) {
         return ColoredText.of("{@death." + identifier + "," + killed.getUsername() + "}");
     }
@@ -109,7 +109,7 @@ public class DamageType implements DataContainer {
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    @NotNull
+    @Nullable
     public ColoredText buildDeathScreenText(@NotNull Player killed) {
         return ColoredText.of("{@death." + identifier + "}");
     }

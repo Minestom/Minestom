@@ -338,6 +338,7 @@ public class Player extends LivingEntity implements CommandSender {
                         final Chunk chunk = instance.getChunkAt(targetBlockPosition);
                         final int entityId = targetCustomBlock.getBreakEntityId(this);
                         final BlockBreakAnimationPacket blockBreakAnimationPacket = new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
+                        Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
                         chunk.sendPacketToViewers(blockBreakAnimationPacket);
 
                         refreshBreakDelay(targetBreakers);
@@ -373,6 +374,8 @@ public class Player extends LivingEntity implements CommandSender {
 
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+
+                Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
                 // Refresh hand
                 final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
@@ -780,7 +783,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack)
+     * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
      * @param soundCategory the sound category
@@ -1299,7 +1302,9 @@ public class Player extends LivingEntity implements CommandSender {
         {
             // Send new chunks
             final BlockPosition pos = position.toBlockPosition();
-            onChunkChange(instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4));
+            final Chunk chunk = instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+            Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
+            onChunkChange(chunk);
         }
     }
 

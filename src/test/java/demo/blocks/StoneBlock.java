@@ -6,22 +6,23 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public class StoneBlock extends CustomBlock {
 
     public StoneBlock() {
-        super(Block.STONE, "custom_block");
+        super(Block.GOLD_BLOCK, "custom_block");
     }
 
     @Override
-    public void onPlace(Instance instance, BlockPosition blockPosition, Data data) {
+    public void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
 
     }
 
     @Override
-    public void onDestroy(Instance instance, BlockPosition blockPosition, Data data) {
+    public void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
         BlockPosition above = blockPosition.clone().add(0, 1, 0);
         CustomBlock blockAbove = instance.getCustomBlock(above);
         if (blockAbove == this) {
@@ -31,17 +32,17 @@ public class StoneBlock extends CustomBlock {
     }
 
     @Override
-    public void updateFromNeighbor(Instance instance, BlockPosition thisPosition, BlockPosition neighborPosition, boolean directNeighbor) {
+    public void updateFromNeighbor(@NotNull Instance instance, @NotNull BlockPosition thisPosition, @NotNull BlockPosition neighborPosition, boolean directNeighbor) {
 
     }
 
     @Override
-    public boolean onInteract(Player player, Player.Hand hand, BlockPosition blockPosition, Data data) {
+    public boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition blockPosition, Data data) {
         return false;
     }
 
     @Override
-    public int getBreakDelay(Player player, BlockPosition position, byte stage, Set<Player> breakers) {
+    public int getBreakDelay(@NotNull Player player, @NotNull BlockPosition position, byte stage, Set<Player> breakers) {
         return 2;
     }
 
