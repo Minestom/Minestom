@@ -1,6 +1,7 @@
 package net.minestom.server.data;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -14,8 +15,12 @@ public class DataImpl implements Data {
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
     @Override
-    public <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type) {
-        this.data.put(key, value);
+    public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
+        if (value != null) {
+            this.data.put(key, value);
+        } else {
+            this.data.remove(key);
+        }
     }
 
     @Override

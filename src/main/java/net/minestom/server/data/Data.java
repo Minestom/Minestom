@@ -15,7 +15,7 @@ public interface Data {
 
     Data EMPTY = new Data() {
         @Override
-        public <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type) {
+        public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
         }
 
         @Override
@@ -55,11 +55,11 @@ public interface Data {
      * Assigns a value to a specific key.
      *
      * @param key   the key
-     * @param value the value object
-     * @param type  the value type
+     * @param value the value object, null to remove the key
+     * @param type  the value type, can be null if not in a {@link SerializableData}
      * @param <T>   the value generic
      */
-    <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type);
+    <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type);
 
     /**
      * Retrieves a value based on its key.

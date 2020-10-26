@@ -8,6 +8,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,13 +42,18 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * @throws UnsupportedOperationException if {@code type} is not registered in {@link DataManager}
      */
     @Override
-    public <T> void set(@NotNull String key, @NotNull T value, @NotNull Class<T> type) {
-        if (DATA_MANAGER.getDataType(type) == null) {
-            throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
-        }
+    public <T> void set(@NotNull String key, @Nullable T value, @NotNull Class<T> type) {
+        if (value != null) {
+            if (DATA_MANAGER.getDataType(type) == null) {
+                throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
+            }
 
-        super.set(key, value, type);
-        this.dataType.put(key, type);
+            this.data.put(key, value);
+            this.dataType.put(key, type);
+        } else {
+            this.data.remove(key);
+            this.dataType.remove(key);
+        }
     }
 
     @NotNull

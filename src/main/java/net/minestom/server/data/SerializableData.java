@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a {@link Data} object which can be serialized and read back.
@@ -15,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
 public interface SerializableData extends Data {
 
     DataManager DATA_MANAGER = MinecraftServer.getDataManager();
+
+    @Override
+    <T> void set(@NotNull String key, @Nullable T value, @NotNull Class<T> type);
 
     /**
      * Serializes the data into an array of bytes.
