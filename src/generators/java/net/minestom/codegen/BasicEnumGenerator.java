@@ -60,7 +60,7 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         ParameterSpec[] signature = new ParameterSpec[]{idParam};
         if (linear) {
             generator.addStaticMethod("fromId", signature, className, code -> {
-                code.beginControlFlow("if($N >= 0 && $N < values().length) {", idParam, idParam)
+                code.beginControlFlow("if($N >= 0 && $N < values().length)", idParam, idParam)
                         .addStatement("return values()[$N]", idParam)
                     .endControlFlow()
                     .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
@@ -68,8 +68,8 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
             );
         } else {
             generator.addStaticMethod("fromId", signature, className, code -> {
-                code.beginControlFlow("for($T o : values()) {")
-                        .beginControlFlow("if(o.getId() == id) {")
+                code.beginControlFlow("for($T o : values())")
+                        .beginControlFlow("if(o.getId() == id)")
                             .addStatement("return o")
                         .endControlFlow()
                     .endControlFlow()
@@ -102,7 +102,7 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         generator.addMethod("getNamespaceID", new ParameterSpec[0], ClassName.get(String.class), code -> code.addStatement("return $N", "namespaceID"));
 
         generator.appendToConstructor(code -> {
-            code.addStatement("$T." + CodeGenerator.decapitalize(getClassName()) + "s.put(NamespaceID.from($N), this)", registriesClass, "namespaceID");
+            code.addStatement("$T." + CodeGenerator.decapitalize(getClassName()) + "s.put($T.from($N), this)", registriesClass, NamespaceID.class, "namespaceID");
         });
     }
 
