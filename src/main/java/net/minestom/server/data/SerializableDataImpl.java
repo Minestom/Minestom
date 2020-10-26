@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.utils.PrimitiveConversion;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -149,13 +150,21 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
                         return null;
                     }
                 });
+
+                Check.notNull(type, "The class " + className + " does not exist and can therefore not be loaded.");
             }
 
             // Get the key
             final String name = reader.readSizedString();
 
             // Get the data
-            final Object value = DATA_MANAGER.getDataType(type).decode(reader);
+            final Object value;
+            {
+                final DataType dataType = DATA_MANAGER.getDataType(type);
+                Check.notNull(dataType, "The DataType for " + type + " does not exist or is not registered.");
+
+                value = dataType.decode(reader);
+            }
 
             // Set the data
             set(name, value, type);
