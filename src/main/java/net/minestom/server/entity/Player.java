@@ -756,6 +756,17 @@ public class Player extends LivingEntity implements CommandSender {
         addPacketToQueue(chatMessagePacket);
     }
 
+    /**
+     * Plays a sound from the {@link Sound} enum.
+     *
+     * @param sound         the sound to play
+     * @param soundCategory the sound category
+     * @param x             the effect X
+     * @param y             the effect Y
+     * @param z             the effect Z
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
@@ -766,6 +777,29 @@ public class Player extends LivingEntity implements CommandSender {
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);
+    }
+
+    /**
+     * Plays a sound from an identifier (represents a custom sound in a resource pack)
+     *
+     * @param identifier    the identifier of the sound to play
+     * @param soundCategory the sound category
+     * @param x             the effect X
+     * @param y             the effect Y
+     * @param z             the effect Z
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+        NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
+        namedSoundEffectPacket.soundName = identifier;
+        namedSoundEffectPacket.soundCategory = soundCategory;
+        namedSoundEffectPacket.x = x * 8;
+        namedSoundEffectPacket.y = y * 8;
+        namedSoundEffectPacket.z = z * 8;
+        namedSoundEffectPacket.volume = volume;
+        namedSoundEffectPacket.pitch = pitch;
+        playerConnection.sendPacket(namedSoundEffectPacket);
     }
 
     /**
