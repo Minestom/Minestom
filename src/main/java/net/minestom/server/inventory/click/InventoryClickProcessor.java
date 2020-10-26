@@ -167,7 +167,7 @@ public class InventoryClickProcessor {
 
     public InventoryClickResult shiftClick(Inventory inventory, Player player, int slot,
                                            ItemStack clicked, ItemStack cursor, InventoryClickLoopHandler... loopHandlers) {
-        InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
+        InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.SHIFT_CLICK, clicked, cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;
