@@ -7,6 +7,8 @@ import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -37,7 +39,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @return the player linked to the connection
      */
-    public Player getPlayer(PlayerConnection connection) {
+    public Player getPlayer(@NotNull PlayerConnection connection) {
         return connectionPlayerMap.get(connection);
     }
 
@@ -46,6 +48,7 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable collection containing all the online players
      */
+    @NotNull
     public Collection<Player> getOnlinePlayers() {
         return Collections.unmodifiableCollection(players);
     }
@@ -56,9 +59,10 @@ public final class ConnectionManager {
      * This can cause issue if two or more players have the same username.
      *
      * @param username the player username (ignoreCase)
-     * @return the first player who validate the username condition
+     * @return the first player who validate the username condition, null if none was found
      */
-    public Player getPlayer(String username) {
+    @Nullable
+    public Player getPlayer(@NotNull String username) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
@@ -72,9 +76,10 @@ public final class ConnectionManager {
      * This can cause issue if two or more players have the same UUID.
      *
      * @param uuid the player UUID
-     * @return the first player who validate the UUID condition
+     * @return the first player who validate the UUID condition, null if none was found
      */
-    public Player getPlayer(UUID uuid) {
+    @Nullable
+    public Player getPlayer(@NotNull UUID uuid) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUuid().equals(uuid))
                 return player;
@@ -88,7 +93,7 @@ public final class ConnectionManager {
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
      */
-    public void broadcastMessage(JsonMessage jsonMessage, Function<Player, Boolean> condition) {
+    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable Function<Player, Boolean> condition) {
         final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
@@ -102,17 +107,17 @@ public final class ConnectionManager {
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      */
-    public void broadcastMessage(JsonMessage jsonMessage) {
+    public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
         broadcastMessage(jsonMessage, null);
     }
 
-    private void broadcastJson(String json, Collection<Player> recipients) {
+    private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
         ChatMessagePacket chatMessagePacket =
                 new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
         PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
     }
 
-    private Collection<Player> getRecipients(Function<Player, Boolean> condition) {
+    private Collection<Player> getRecipients(@Nullable Function<Player, Boolean> condition) {
         Collection<Player> recipients;
 
         // Get the recipients
@@ -135,6 +140,7 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable list of packet's consumers
      */
+    @NotNull
     public List<PacketConsumer> getReceivePacketConsumers() {
         return Collections.unmodifiableList(receivePacketConsumers);
     }
@@ -144,7 +150,7 @@ public final class ConnectionManager {
      *
      * @param packetConsumer the packet consumer
      */
-    public void onPacketReceive(PacketConsumer packetConsumer) {
+    public void onPacketReceive(@NotNull PacketConsumer packetConsumer) {
         this.receivePacketConsumers.add(packetConsumer);
     }
 
@@ -153,10 +159,11 @@ public final class ConnectionManager {
      * <p>
      * Shouldn't be override if already defined.
      *
-     * @param uuidProvider the new player connection uuid provider
+     * @param uuidProvider the new player connection uuid provider,
+     *                     setting it to null would apply a random UUID for each player connection
      * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
-    public void setUuidProvider(UuidProvider uuidProvider) {
+    public void setUuidProvider(@Nullable UuidProvider uuidProvider) {
         this.uuidProvider = uuidProvider;
     }
 
@@ -166,10 +173,12 @@ public final class ConnectionManager {
      * to give the player the right {@link UUID}.
      *
      * @param playerConnection the player connection
+     * @param username         the username given by the connection
      * @return the uuid based on {@code playerConnection}
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
-    public UUID getPlayerConnectionUuid(PlayerConnection playerConnection, String username) {
+    @NotNull
+    public UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
         if (uuidProvider == null)
             return UUID.randomUUID();
         return uuidProvider.provide(playerConnection, username);
@@ -180,7 +189,7 @@ public final class ConnectionManager {
      *
      * @param playerProvider the new {@link PlayerProvider}, can be set to null to apply the default provider
      */
-    public void setPlayerProvider(PlayerProvider playerProvider) {
+    public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
         this.playerProvider = playerProvider;
     }
 
@@ -189,6 +198,7 @@ public final class ConnectionManager {
      *
      * @return the current {@link PlayerProvider}
      */
+    @NotNull
     public PlayerProvider getPlayerProvider() {
         return playerProvider == null ? playerProvider = Player::new : playerProvider;
     }
@@ -198,6 +208,7 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable list containing all the {@link Player} initialization consumer
      */
+    @NotNull
     public List<Consumer<Player>> getPlayerInitializations() {
         return Collections.unmodifiableList(playerInitializations);
     }
@@ -208,7 +219,7 @@ public final class ConnectionManager {
      *
      * @param playerInitialization the {@link Player} initialization consumer
      */
-    public void addPlayerInitialization(Consumer<Player> playerInitialization) {
+    public void addPlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
         this.playerInitializations.add(playerInitialization);
     }
 
@@ -220,7 +231,7 @@ public final class ConnectionManager {
      *
      * @param player the player to add
      */
-    public void createPlayer(Player player) {
+    public void createPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
     }
@@ -232,7 +243,7 @@ public final class ConnectionManager {
      * @param username   the new player username
      * @param connection the new player connection
      */
-    public void createPlayer(UUID uuid, String username, PlayerConnection connection) {
+    public void createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         createPlayer(player);
     }
@@ -244,7 +255,7 @@ public final class ConnectionManager {
      *
      * @param connection the player connection
      */
-    public void removePlayer(PlayerConnection connection) {
+    public void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;

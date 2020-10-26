@@ -50,12 +50,14 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
+import java.util.Objects;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -64,6 +66,7 @@ import java.security.KeyPair;
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
 public class MinecraftServer {
+
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
@@ -134,6 +137,7 @@ public class MinecraftServer {
     private static MinecraftServer minecraftServer;
 
     // Data
+    private static boolean initialized;
     private static boolean started;
 
     private static int chunkViewDistance = 10;
@@ -206,6 +210,8 @@ public class MinecraftServer {
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
+
+        initialized = true;
 
         minecraftServer = new MinecraftServer();
 
@@ -283,6 +289,7 @@ public class MinecraftServer {
      * @return the packet listener manager
      */
     public static PacketListenerManager getPacketListenerManager() {
+        checkInitStatus(packetListenerManager);
         return packetListenerManager;
     }
 
@@ -292,6 +299,7 @@ public class MinecraftServer {
      * @return the netty server
      */
     public static NettyServer getNettyServer() {
+        checkInitStatus(nettyServer);
         return nettyServer;
     }
 
@@ -301,6 +309,7 @@ public class MinecraftServer {
      * @return the instance manager
      */
     public static InstanceManager getInstanceManager() {
+        checkInitStatus(instanceManager);
         return instanceManager;
     }
 
@@ -310,6 +319,7 @@ public class MinecraftServer {
      * @return the block manager
      */
     public static BlockManager getBlockManager() {
+        checkInitStatus(blockManager);
         return blockManager;
     }
 
@@ -319,6 +329,7 @@ public class MinecraftServer {
      * @return the entity manager
      */
     public static EntityManager getEntityManager() {
+        checkInitStatus(entityManager);
         return entityManager;
     }
 
@@ -328,6 +339,7 @@ public class MinecraftServer {
      * @return the command manager
      */
     public static CommandManager getCommandManager() {
+        checkInitStatus(commandManager);
         return commandManager;
     }
 
@@ -337,6 +349,7 @@ public class MinecraftServer {
      * @return the recipe manager
      */
     public static RecipeManager getRecipeManager() {
+        checkInitStatus(recipeManager);
         return recipeManager;
     }
 
@@ -346,6 +359,7 @@ public class MinecraftServer {
      * @return the storage manager
      */
     public static StorageManager getStorageManager() {
+        checkInitStatus(storageManager);
         return storageManager;
     }
 
@@ -355,6 +369,7 @@ public class MinecraftServer {
      * @return the data manager
      */
     public static DataManager getDataManager() {
+        checkInitStatus(dataManager);
         return dataManager;
     }
 
@@ -364,6 +379,7 @@ public class MinecraftServer {
      * @return the team manager
      */
     public static TeamManager getTeamManager() {
+        checkInitStatus(teamManager);
         return teamManager;
     }
 
@@ -373,6 +389,7 @@ public class MinecraftServer {
      * @return the scheduler manager
      */
     public static SchedulerManager getSchedulerManager() {
+        checkInitStatus(schedulerManager);
         return schedulerManager;
     }
 
@@ -382,6 +399,7 @@ public class MinecraftServer {
      * @return the benchmark manager
      */
     public static BenchmarkManager getBenchmarkManager() {
+        checkInitStatus(benchmarkManager);
         return benchmarkManager;
     }
 
@@ -391,6 +409,7 @@ public class MinecraftServer {
      * @return the connection manager
      */
     public static ConnectionManager getConnectionManager() {
+        checkInitStatus(connectionManager);
         return connectionManager;
     }
 
@@ -475,6 +494,7 @@ public class MinecraftServer {
      * @return the response data consumer
      */
     public static ResponseDataConsumer getResponseDataConsumer() {
+        checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
     }
 
@@ -484,6 +504,7 @@ public class MinecraftServer {
      * @return the loot table manager
      */
     public static LootTableManager getLootTableManager() {
+        checkInitStatus(lootTableManager);
         return lootTableManager;
     }
 
@@ -493,6 +514,7 @@ public class MinecraftServer {
      * @return the dimension manager
      */
     public static DimensionTypeManager getDimensionTypeManager() {
+        checkInitStatus(dimensionTypeManager);
         return dimensionTypeManager;
     }
 
@@ -502,6 +524,7 @@ public class MinecraftServer {
      * @return the biome manager
      */
     public static BiomeManager getBiomeManager() {
+        checkInitStatus(biomeManager);
         return biomeManager;
     }
 
@@ -511,6 +534,7 @@ public class MinecraftServer {
      * @return the advancement manager
      */
     public static AdvancementManager getAdvancementManager() {
+        checkInitStatus(advancementManager);
         return advancementManager;
     }
 
@@ -520,6 +544,7 @@ public class MinecraftServer {
      * @return the extension manager
      */
     public static ExtensionManager getExtensionManager() {
+        checkInitStatus(extensionManager);
         return extensionManager;
     }
 
@@ -529,6 +554,7 @@ public class MinecraftServer {
      * @return the tag manager
      */
     public static TagManager getTagManager() {
+        checkInitStatus(tagManager);
         return tagManager;
     }
 
@@ -538,6 +564,7 @@ public class MinecraftServer {
      * @return the update manager
      */
     public static UpdateManager getUpdateManager() {
+        checkInitStatus(updateManager);
         return updateManager;
     }
 
@@ -549,6 +576,9 @@ public class MinecraftServer {
      * @param responseDataConsumer the response data consumer, can be null
      */
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+        Check.stateCondition(!initialized, "#start can only be called after #init");
+        Check.stateCondition(started, "The server is already started");
+
         LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
         updateManager.start();
@@ -590,6 +620,12 @@ public class MinecraftServer {
         commandManager.stopConsoleThread();
         MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
+    }
+
+    private static void checkInitStatus(@Nullable Object object) {
+        Check.stateCondition(Objects.isNull(object),
+                "You cannot access the manager before MinecraftServer#init, " +
+                        "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");
     }
 
 }
