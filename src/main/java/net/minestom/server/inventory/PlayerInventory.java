@@ -1,5 +1,7 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.event.player.PlayerAddItemStackEvent;
@@ -19,6 +21,7 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +32,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler {
+public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler, DataContainer {
 
     public static final int INVENTORY_SIZE = 46;
 
@@ -39,6 +42,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
     private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
+
+    private Data data;
 
     public PlayerInventory(Player player) {
         this.player = player;
@@ -523,5 +528,16 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();
+    }
+
+    @Nullable
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(@Nullable Data data) {
+        this.data = data;
     }
 }

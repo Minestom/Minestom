@@ -1,6 +1,8 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.Viewable;
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
@@ -19,6 +21,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable {
+public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable, DataContainer {
 
     // incremented each time an inventory is created (used in the window packets)
     private static final AtomicInteger LAST_INVENTORY_ID = new AtomicInteger();
@@ -63,6 +66,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
     // the click processor which process all the clicks in the inventory
     private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
+
+    private Data data;
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
         this.id = generateId();
@@ -223,7 +228,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     /**
      * Refreshes the inventory for a specific viewer.
-     *
+     * <p>
      * The player needs to be a viewer, otherwise nothing is sent.
      *
      * @param player the player to update the inventory
@@ -650,5 +655,16 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         } else {
             update(player);
         }
+    }
+
+    @Nullable
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(@Nullable Data data) {
+        this.data = data;
     }
 }
