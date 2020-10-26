@@ -2,11 +2,16 @@ package net.minestom.codegen.stats;
 
 import net.minestom.codegen.BasicEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class StatsEnumGenerator extends BasicEnumGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StatsEnumGenerator.class);
+
     public static void main(String[] args) throws IOException {
         String targetVersion;
         if(args.length < 1) {
@@ -52,5 +57,10 @@ public class StatsEnumGenerator extends BasicEnumGenerator {
     @Override
     public String getClassName() {
         return "StatisticType";
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOGGER;
     }
 }

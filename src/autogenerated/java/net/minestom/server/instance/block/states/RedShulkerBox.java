@@ -1,17 +1,29 @@
 package net.minestom.server.instance.block.states;
+
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
-import static net.minestom.server.instance.block.Block.*;
+
 /**
  * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
  */
-@Deprecated(forRemoval = false, since = "forever")
-public class RedShulkerBox {
-	public static void initStates() {
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9366, "facing=north"));
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9367, "facing=east"));
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9368, "facing=south"));
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9369, "facing=west"));
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9370, "facing=up"));
-		RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9371, "facing=down"));
-	}
+@Deprecated(
+        since = "forever",
+        forRemoval = false
+)
+public final class RedShulkerBox {
+    /**
+     * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+     */
+    @Deprecated(
+            since = "forever",
+            forRemoval = false
+    )
+    public static void initStates() {
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9366, "facing=north"));
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9367, "facing=east"));
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9368, "facing=south"));
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9369, "facing=west"));
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9370, "facing=up"));
+        Block.RED_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9371, "facing=down"));
+    }
 }

@@ -1,12 +1,18 @@
 package net.minestom.codegen.potions;
 
 import net.minestom.codegen.BasicEnumGenerator;
+import net.minestom.codegen.stats.StatsEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class PotionEnumGenerator extends BasicEnumGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PotionEnumGenerator.class);
+
     public static void main(String[] args) throws IOException {
         String targetVersion;
         if (args.length < 1) {
@@ -52,5 +58,10 @@ public class PotionEnumGenerator extends BasicEnumGenerator {
     @Override
     public String getClassName() {
         return "PotionType";
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOGGER;
     }
 }

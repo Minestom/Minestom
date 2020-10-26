@@ -1,15 +1,27 @@
 package net.minestom.server.instance.block.states;
+
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
-import static net.minestom.server.instance.block.Block.*;
+
 /**
  * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
  */
-@Deprecated(forRemoval = false, since = "forever")
-public class LightGrayWallBanner {
-	public static void initStates() {
-		LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8189, "facing=north"));
-		LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8190, "facing=south"));
-		LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8191, "facing=west"));
-		LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8192, "facing=east"));
-	}
+@Deprecated(
+        since = "forever",
+        forRemoval = false
+)
+public final class LightGrayWallBanner {
+    /**
+     * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+     */
+    @Deprecated(
+            since = "forever",
+            forRemoval = false
+    )
+    public static void initStates() {
+        Block.LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8189, "facing=north"));
+        Block.LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8190, "facing=south"));
+        Block.LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8191, "facing=west"));
+        Block.LIGHT_GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8192, "facing=east"));
+    }
 }

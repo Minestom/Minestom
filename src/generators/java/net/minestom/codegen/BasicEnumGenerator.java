@@ -2,15 +2,14 @@ package net.minestom.codegen;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.squareup.javapoet.*;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.TreeSet;
+import java.util.*;
 
 public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnumGenerator.Container> {
 
@@ -56,21 +55,26 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
 
     @Override
     protected void postWrite(EnumGenerator generator) {
+        ClassName className = ClassName.get(getPackageName(), getClassName());
+        ParameterSpec idParam = ParameterSpec.builder(TypeName.INT, "id").build();
+        ParameterSpec[] signature = new ParameterSpec[]{idParam};
         if (linear) {
-            generator.addMethod("fromId", "(int id)", "static " + getClassName(),
-                    "if(id >= 0 && id < values().length) {",
-                    "\treturn values()[id];",
-                    "}",
-                    "return " + (defaultEntry == null ? "null" : identifier(defaultEntry)) + ";"
+            generator.addStaticMethod("fromId", signature, className, code -> {
+                code.beginControlFlow("if($N >= 0 && $N < values().length)", idParam, idParam)
+                        .addStatement("return values()[$N]", idParam)
+                    .endControlFlow()
+                    .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
+                    }
             );
         } else {
-            generator.addMethod("fromId", "(int id)", "static " + getClassName(),
-                    "for(" + getClassName() + " o : values()) {",
-                    "\tif(o.getId() == id) {",
-                    "\t\treturn o;",
-                    "\t}",
-                    "}",
-                    "return " + (defaultEntry == null ? "null" : identifier(defaultEntry)) + ";"
+            generator.addStaticMethod("fromId", signature, className, code -> {
+                code.beginControlFlow("for($T o : values())")
+                        .beginControlFlow("if(o.getId() == id)")
+                            .addStatement("return o")
+                        .endControlFlow()
+                    .endControlFlow()
+                    .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
+                    }
             );
         }
     }
@@ -80,24 +84,26 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
     }
 
     @Override
-    protected void postGeneration() throws IOException {
+    protected List<JavaFile> postGeneration(Collection<Container> items) throws IOException {
+        return Collections.emptyList();
     }
 
     @Override
     protected void prepare(EnumGenerator generator) {
-        generator.addClassAnnotation("@SuppressWarnings({\"deprecation\"})");
-        generator.addImport(Registries.class.getCanonicalName());
-        generator.addImport(NamespaceID.class.getCanonicalName());
+        generator.addClassAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "{$S}", "deprecation").build());
+        ClassName registriesClass = ClassName.get(Registries.class);
         if (linear) {
-            generator.setParams("String namespaceID");
-            generator.addMethod("getId", "()", "int", "return ordinal();");
+            generator.setParams(ParameterSpec.builder(ClassName.get(String.class), "namespaceID").build());
+            generator.addMethod("getId", new ParameterSpec[0], TypeName.INT, code -> code.addStatement("return ordinal()"));
         } else {
-            generator.setParams("String namespaceID", "int id");
-            generator.addMethod("getId", "()", "int", "return id;");
+            generator.setParams(ParameterSpec.builder(ClassName.get(String.class), "namespaceID").build(), ParameterSpec.builder(TypeName.INT, "id").build());
+            generator.addMethod("getId", new ParameterSpec[0], TypeName.INT, code -> code.addStatement("return $N", "id"));
         }
-        generator.addMethod("getNamespaceID", "()", "String", "return namespaceID;");
+        generator.addMethod("getNamespaceID", new ParameterSpec[0], ClassName.get(String.class), code -> code.addStatement("return $N", "namespaceID"));
 
-        generator.appendToConstructor("Registries." + CodeGenerator.decapitalize(getClassName()) + "s.put(NamespaceID.from(namespaceID), this);");
+        generator.appendToConstructor(code -> {
+            code.addStatement("$T." + CodeGenerator.decapitalize(getClassName()) + "s.put($T.from($N), this)", registriesClass, NamespaceID.class, "namespaceID");
+        });
     }
 
     @Override

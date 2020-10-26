@@ -1,12 +1,12 @@
 package net.minestom.codegen;
 
-import com.google.gson.Gson;
-import net.minestom.codegen.blocks.BlockEnumGenerator;
+import com.squareup.javapoet.JavaFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,28 +20,6 @@ public abstract class MinestomEnumGenerator<Container> implements CodeGenerator 
     public static final String BURGER_URL_BASE_URL = "https://pokechu22.github.io/Burger/";
 
     /**
-     * Generate the given enum inside the targetFolder. This generator will create subfolders if needed to match the package name.
-     * (consider targetFolder as a root folder for generation)
-     * @param targetFolder
-     */
-    public void generateTo(File targetFolder) throws IOException {
-        String code = generate();
-        String folder = getRelativeFolderPath();
-        File parentFolder = new File(targetFolder, folder);
-        if(!parentFolder.exists()) {
-            parentFolder.mkdirs();
-        }
-
-        LOGGER.debug("Writing enum to file: "+parentFolder+"/"+getClassName()+".java");
-        try(Writer writer = new BufferedWriter(new FileWriter(new File(parentFolder, getClassName()+".java")))) {
-            writer.write(code);
-        }
-
-        LOGGER.debug("Post generation tasks...");
-        postGeneration();
-    }
-
-    /**
      * Package name with '.' replaced by '/'
      * @return
      */
@@ -50,7 +28,7 @@ public abstract class MinestomEnumGenerator<Container> implements CodeGenerator 
     }
 
     @Override
-    public String generate() throws IOException {
+    public List<JavaFile> generate() throws IOException {
         EnumGenerator generator = new EnumGenerator(getPackageName(), getClassName());
         prepare(generator);
         Collection<Container> items = compile();
@@ -59,7 +37,9 @@ public abstract class MinestomEnumGenerator<Container> implements CodeGenerator 
         }
 
         postWrite(generator);
-        return generator.generate();
+        List<JavaFile> list = new LinkedList<>(generator.generate());
+        list.addAll(postGeneration(items));
+        return list;
     }
 
     /**
@@ -70,8 +50,9 @@ public abstract class MinestomEnumGenerator<Container> implements CodeGenerator 
 
     /**
      * Called after code generation (only if generated through a {@link #generateTo(File)} call). Can be used to generate additional files
+     * @param items
      */
-    protected abstract void postGeneration() throws IOException;
+    protected abstract List<JavaFile> postGeneration(Collection<Container> items) throws IOException;
 
     /**
      * Package in which to generate the enum

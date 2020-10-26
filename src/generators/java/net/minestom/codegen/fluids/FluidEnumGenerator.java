@@ -1,12 +1,18 @@
 package net.minestom.codegen.fluids;
 
 import net.minestom.codegen.BasicEnumGenerator;
+import net.minestom.codegen.stats.StatsEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class FluidEnumGenerator extends BasicEnumGenerator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FluidEnumGenerator.class);
+
     public static void main(String[] args) throws IOException {
         String targetVersion;
         if(args.length < 1) {
@@ -52,5 +58,10 @@ public class FluidEnumGenerator extends BasicEnumGenerator {
     @Override
     public String getClassName() {
         return "Fluid";
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOGGER;
     }
 }
