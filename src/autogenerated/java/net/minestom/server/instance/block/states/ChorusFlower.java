@@ -1,17 +1,29 @@
 package net.minestom.server.instance.block.states;
+
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
-import static net.minestom.server.instance.block.Block.*;
+
 /**
  * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
  */
-@Deprecated(forRemoval = false, since = "forever")
-public class ChorusFlower {
-	public static void initStates() {
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9132, "age=0"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9133, "age=1"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9134, "age=2"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9135, "age=3"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9136, "age=4"));
-		CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9137, "age=5"));
-	}
+@Deprecated(
+        since = "forever",
+        forRemoval = false
+)
+public final class ChorusFlower {
+    /**
+     * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+     */
+    @Deprecated(
+            since = "forever",
+            forRemoval = false
+    )
+    public static void initStates() {
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9132, "age=0"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9133, "age=1"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9134, "age=2"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9135, "age=3"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9136, "age=4"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9137, "age=5"));
+    }
 }

@@ -8,6 +8,7 @@ import com.squareup.javapoet.*;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.codegen.PrismarinePaths;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.lang.model.element.Modifier;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -34,7 +36,6 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
     private final File targetFolder;
 
     private CodeBlock.Builder staticBlock = CodeBlock.builder();
-    private Map<String, String> subclassContents = new HashMap<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -251,6 +252,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
 
         generator.setParams(
                 ParameterSpec.builder(String.class, "namespaceID").addAnnotation(NotNull.class).build(),
+                ParameterSpec.builder(TypeName.SHORT, "defaultID").build(),
                 ParameterSpec.builder(TypeName.DOUBLE, "hardness").build(),
                 ParameterSpec.builder(TypeName.DOUBLE, "resistance").build(),
                 ParameterSpec.builder(TypeName.BOOLEAN, "isAir").build(),
@@ -259,7 +261,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
                 ParameterSpec.builder(TypeName.BOOLEAN, "singleState").build()
         );
 
-        generator.addHardcodedField(ParameterizedTypeName.get(List.class, BlockAlternative.class), "alternatives", "new ArrayList<>()");
+        generator.addHardcodedField(ParameterizedTypeName.get(List.class, BlockAlternative.class), "alternatives", "new java.util.ArrayList<>()");
 
         generator.addMethod("getBlockId", new ParameterSpec[0], TypeName.SHORT, code -> code.addStatement("return defaultID"));
         generator.addMethod("getName", new ParameterSpec[0], ClassName.get(String.class), code -> code.addStatement("return namespaceID"));
@@ -287,7 +289,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         generator.addMethod("getAlternatives", new ParameterSpec[0], ParameterizedTypeName.get(List.class, BlockAlternative.class), code -> code.addStatement("return alternatives"));
         generator.addVarargMethod("withProperties", new ParameterSpec[]{ParameterSpec.builder(String[].class, "properties").build()}, TypeName.SHORT, code -> {
             code.beginControlFlow("for($T alt : alternatives)", BlockAlternative.class)
-                    .beginControlFlow("if(Arrays.equals(alt.getProperties(), properties))")
+                    .beginControlFlow("if($T.equals(alt.getProperties(), properties))", Arrays.class)
                         .addStatement("return alt.getId()")
                     .endControlFlow()
                 .endControlFlow()
@@ -316,89 +318,68 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
                 block.getStates().size() == 1 // used to avoid duplicates inside the 'alternatives' field due to both constructor addition and subclasses initStates()
         );
 
-        // do not add alternative for default states. This will be added by default inside the constructor
         if (block.getStates().size() > 1) {
-            StringBuilder subclass = new StringBuilder();
-            // TODO: convert to Javapoet
-            for (BlockContainer.BlockState state : block.getStates()) {
-                if (state == block.getDefaultState())
-                    continue;
-                // generate BlockAlternative instance that will be used to lookup block alternatives
-
-                subclass.append(instanceName).append(".addBlockAlternative(");
-                subclass.append("new BlockAlternative(");
-                subclass.append("(short) ").append(state.getId());
-
-                if (state.getProperties() != null) {
-                    for (var property : state.getProperties().entrySet()) {
-                        subclass.append(", ");
-                        subclass.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
-                    }
-                }
-                subclass.append(")").append(");\n");
-            }
             String blockName = snakeCaseToCapitalizedCamelCase(block.getId().getPath());
             blockName = blockName.replace("_", "");
-            subclassContents.put(blockName, subclass.toString());
             staticBlock.addStatement("$T.initStates()", ClassName.get(getPackageName()+".states", blockName));
         }
     }
 
     @Override
     protected List<JavaFile> postGeneration(Collection<BlockContainer> items) throws IOException {
-        File classFolder = new File(targetFolder, getRelativeFolderPath());
-        if (!classFolder.exists()) {
-            classFolder.mkdirs();
-        }
-        File subclassFolder = new File(classFolder, "states");
-        if (!subclassFolder.exists()) {
-            subclassFolder.mkdirs();
-        }
+        List<JavaFile> additionalFiles = new LinkedList<>();
 
-        StringBuilder blockArrayClass = new StringBuilder();
-        blockArrayClass.append("package " + getPackageName() + ";\n")
-                .append("final class BlockArray {\n")
-                .append("\tstatic final Block[] blocks = new Block[Short.MAX_VALUE];")
-                .append("}\n");
-        LOGGER.debug("Writing BlockArray to file: " + classFolder + "/BlockArray.java\n");
-        try (Writer writer = new BufferedWriter(new FileWriter(new File(classFolder, "BlockArray.java")))) {
-            writer.write(blockArrayClass.toString());
-        }
+        TypeSpec blockArrayClass = TypeSpec.classBuilder("BlockArray")
+                .addModifiers(Modifier.FINAL)
+                .addField(FieldSpec.builder(Block[].class, "blocks").initializer("new Block[Short.MAX_VALUE]").addModifiers(Modifier.STATIC, Modifier.FINAL).build())
+                .build();
+        additionalFiles.add(JavaFile.builder(getPackageName(), blockArrayClass).indent("    ").skipJavaLangImports(true).build());
 
         LOGGER.debug("Writing subclasses for block alternatives...");
-        StringBuilder classContents = new StringBuilder();
-        for (var entry : subclassContents.entrySet()) {
-            classContents.delete(0, classContents.length());
-            String subclass = entry.getKey();
-            LOGGER.debug("\t Writing subclass " + subclass + "... ");
 
-            String contents = entry.getValue();
-            classContents.append("package ").append(getPackageName()).append(".states;\n");
-            classContents.append("import ").append(BlockAlternative.class.getCanonicalName()).append(";\n");
-            classContents.append("import static ").append(getPackageName()).append(".").append(getClassName()).append(".*;\n");
-            classContents.append("/**\n");
-            classContents.append(" * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.\n");
-            classContents.append(" */\n");
-            classContents.append("@Deprecated(forRemoval = false, since = \"forever\")\n");
-            classContents.append("public class ").append(subclass).append(" {\n");
-            classContents.append("\tpublic static void initStates() {\n");
+        final String warningComment = "Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.";
+        final AnnotationSpec internalUseAnnotation = AnnotationSpec.builder(Deprecated.class).addMember("since", "$S", "forever").addMember("forRemoval", "$L", false).build();
+        for(BlockContainer block : items) {
+            // do not add alternative for default states. This will be added by default inside the constructor
+            if (block.getStates().size() > 1) {
+                String blockName = snakeCaseToCapitalizedCamelCase(block.getId().getPath());
+                blockName = blockName.replace("_", "");
+                TypeSpec.Builder subclass = TypeSpec.classBuilder(blockName)
+                        .addAnnotation(internalUseAnnotation)
+                        .addJavadoc(warningComment)
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-            String[] lines = contents.split("\n");
-            for (String line : lines) {
-                classContents.append("\t\t").append(line).append("\n");
+                MethodSpec.Builder initStatesMethod = MethodSpec.methodBuilder("initStates")
+                        .returns(TypeName.VOID)
+                        .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                        .addAnnotation(internalUseAnnotation)
+                        .addJavadoc(warningComment);
+
+                for (BlockContainer.BlockState state : block.getStates()) {
+                    if (state == block.getDefaultState())
+                        continue;
+                    // generate BlockAlternative instance that will be used to lookup block alternatives
+                    StringBuilder propertyList = new StringBuilder();
+                    // add block state properties if applicable
+                    if (state.getProperties() != null) {
+                        for (var property : state.getProperties().entrySet()) {
+                            propertyList.append(", ");
+                            propertyList.append("\"").append(property.getKey()).append("=").append(property.getValue()).append("\"");
+                        }
+                    }
+                    initStatesMethod.addStatement("$T.$N.addBlockAlternative(new $T((short) $L"+propertyList+"))", Block.class, block.getId().getPath().toUpperCase(), BlockAlternative.class, state.getId());
+                }
+                subclass.addMethod(initStatesMethod.build());
+                staticBlock.addStatement("$T.initStates()", ClassName.get(getPackageName()+".states", blockName));
+
+                additionalFiles.add(JavaFile.builder(getPackageName()+".states", subclass.build())
+                        .indent("    ")
+                        .skipJavaLangImports(true)
+                        .build());
             }
-
-            classContents.append("\t}\n");
-            classContents.append("}\n");
-
-/*            try (Writer writer = new BufferedWriter(new FileWriter(new File(subclassFolder, subclass + ".java")))) {
-                writer.write(classContents.toString());
-            }*/
-            LOGGER.debug("\t\t - Done");
         }
 
-        // TODO: subclasses
-        return Collections.emptyList();
+        return additionalFiles;
     }
 
     @Override

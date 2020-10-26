@@ -21,9 +21,8 @@ public interface CodeGenerator {
         List<JavaFile> code = generate();
 
         for(JavaFile file : code) {
-   //         file.writeTo(targetFolder);
-            file.writeTo(System.out);
             getLogger().debug("Writing file: "+file.packageName+"."+file.typeSpec.name);
+            file.writeTo(targetFolder);
         }
     }
 

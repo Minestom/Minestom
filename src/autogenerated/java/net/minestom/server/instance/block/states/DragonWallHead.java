@@ -1,15 +1,27 @@
 package net.minestom.server.instance.block.states;
+
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
-import static net.minestom.server.instance.block.Block.*;
+
 /**
  * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
  */
-@Deprecated(forRemoval = false, since = "forever")
-public class DragonWallHead {
-	public static void initStates() {
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6610, "facing=north"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6611, "facing=south"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6612, "facing=west"));
-		DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6613, "facing=east"));
-	}
+@Deprecated(
+        since = "forever",
+        forRemoval = false
+)
+public final class DragonWallHead {
+    /**
+     * Completely internal. DO NOT USE. IF YOU ARE A USER AND FACE A PROBLEM WHILE USING THIS CODE, THAT'S ON YOU.
+     */
+    @Deprecated(
+            since = "forever",
+            forRemoval = false
+    )
+    public static void initStates() {
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6610, "facing=north"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6611, "facing=south"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6612, "facing=west"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6613, "facing=east"));
+    }
 }

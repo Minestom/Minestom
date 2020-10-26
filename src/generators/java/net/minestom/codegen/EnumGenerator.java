@@ -39,15 +39,15 @@ public class EnumGenerator implements CodeGenerator {
     }
 
     public void addMethod(String name, ParameterSpec[] signature, TypeName returnType, Consumer<CodeBlock.Builder> code) {
-        methods.add(new Method(true, name, signature, returnType, code, false));
+        methods.add(new Method(false, name, signature, returnType, code, false));
     }
 
     public void addVarargMethod(String name, ParameterSpec[] signature, TypeName returnType, Consumer<CodeBlock.Builder> code) {
-        methods.add(new Method(true, name, signature, returnType, code, true));
+        methods.add(new Method(false, name, signature, returnType, code, true));
     }
 
     public void addStaticMethod(String name, ParameterSpec[] signature, TypeName returnType, Consumer<CodeBlock.Builder> code) {
-        methods.add(new Method(false, name, signature, returnType, code, false));
+        methods.add(new Method(true, name, signature, returnType, code, false));
     }
 
     public void addInstance(String name, Object... parameters) {
