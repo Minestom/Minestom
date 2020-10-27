@@ -1061,6 +1061,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @return the player display name,
      * null means that {@link #getUsername()} is displayed
      */
+    @Nullable
     public ColoredText getDisplayName() {
         return displayName;
     }
@@ -1070,9 +1071,9 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * Sets to null to show the player username.
      *
-     * @param displayName the display name
+     * @param displayName the display name, null to display the username
      */
-    public void setDisplayName(ColoredText displayName) {
+    public void setDisplayName(@Nullable ColoredText displayName) {
         this.displayName = displayName;
 
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
