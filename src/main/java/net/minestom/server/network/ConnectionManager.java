@@ -216,6 +216,11 @@ public final class ConnectionManager {
     /**
      * Adds a new player initialization consumer. Those are called when a {@link Player} join,
      * mainly to add event callbacks to the player.
+     * <p>
+     * This callback should be exclusively used to add event listeners since it is called directly after a
+     * player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
+     * You can add your "init" code in {@link net.minestom.server.event.player.PlayerLoginEvent}
+     * or even {@link net.minestom.server.event.player.PlayerPreLoginEvent}.
      *
      * @param playerInitialization the {@link Player} initialization consumer
      */
