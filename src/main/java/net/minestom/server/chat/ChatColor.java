@@ -31,15 +31,15 @@ public class ChatColor {
     public static final ChatColor DARK_GREEN = fromRGB((byte) 0, (byte) 170, (byte) 0, 2, "dark_green");
     public static final ChatColor DARK_CYAN = fromRGB((byte) 0, (byte) 170, (byte) 170, 3, "dark_cyan");
     public static final ChatColor DARK_RED = fromRGB((byte) 170, (byte) 0, (byte) 0, 4, "dark_red");
-    public static final ChatColor PURPLE = fromRGB((byte) 170, (byte) 0, (byte) 170, 5, "purple");
+    public static final ChatColor PURPLE = fromRGB((byte) 170, (byte) 0, (byte) 170, 5, "dark_purple");
     public static final ChatColor GOLD = fromRGB((byte) 255, (byte) 170, (byte) 0, 6, "gold");
     public static final ChatColor GRAY = fromRGB((byte) 170, (byte) 170, (byte) 170, 7, "gray");
     public static final ChatColor DARK_GRAY = fromRGB((byte) 85, (byte) 85, (byte) 85, 8, "dark_gray");
     public static final ChatColor BLUE = fromRGB((byte) 85, (byte) 85, (byte) 255, 9, "blue");
     public static final ChatColor BRIGHT_GREEN = fromRGB((byte) 85, (byte) 255, (byte) 85, 10, "green");
-    public static final ChatColor CYAN = fromRGB((byte) 85, (byte) 255, (byte) 255, 11, "cyan");
+    public static final ChatColor CYAN = fromRGB((byte) 85, (byte) 255, (byte) 255, 11, "aqua");
     public static final ChatColor RED = fromRGB((byte) 255, (byte) 85, (byte) 85, 12, "red");
-    public static final ChatColor PINK = fromRGB((byte) 255, (byte) 85, (byte) 255, 13, "pink");
+    public static final ChatColor PINK = fromRGB((byte) 255, (byte) 85, (byte) 255, 13, "light_purple");
     public static final ChatColor YELLOW = fromRGB((byte) 255, (byte) 255, (byte) 85, 14, "yellow");
     public static final ChatColor WHITE = fromRGB((byte) 255, (byte) 255, (byte) 255, 15, "white");
 
