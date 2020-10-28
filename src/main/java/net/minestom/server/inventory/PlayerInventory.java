@@ -100,16 +100,16 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         itemStack = addItemStackEvent.getItemStack();
 
-        StackingRule stackingRule = itemStack.getStackingRule();
+        final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < items.length - 10; i++) {
             ItemStack item = items[i];
-            StackingRule itemStackingRule = item.getStackingRule();
+            final StackingRule itemStackingRule = item.getStackingRule();
             if (itemStackingRule.canBeStacked(itemStack, item)) {
-                int itemAmount = itemStackingRule.getAmount(item);
+                final int itemAmount = itemStackingRule.getAmount(item);
                 if (itemAmount == stackingRule.getMaxSize())
                     continue;
-                int itemStackAmount = itemStackingRule.getAmount(itemStack);
-                int totalAmount = itemStackAmount + itemAmount;
+                final int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                final int totalAmount = itemStackAmount + itemAmount;
                 if (!stackingRule.canApply(itemStack, totalAmount)) {
                     item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
 

@@ -11,16 +11,17 @@ public final class ArrayUtils {
 
     }
 
-    public static byte[] concatenateByteArrays(@NotNull byte[]... arrays) {
+    public static int[] concatenateIntArrays(@NotNull int[]... arrays) {
         int totalLength = 0;
-        for (byte[] array : arrays) {
+        for (int[] array : arrays) {
             totalLength += array.length;
         }
-        byte[] result = new byte[totalLength];
+        int[] result = new int[totalLength];
 
         int startingPos = 0;
-        for (byte[] array : arrays) {
+        for (int[] array : arrays) {
             System.arraycopy(array, 0, result, startingPos, array.length);
+            startingPos += array.length;
         }
 
         return result;
@@ -69,6 +70,28 @@ public final class ArrayUtils {
             array[i] = list.getInt(i);
         }
         return array;
+    }
+
+    /**
+     * Gets if two arrays share the same start until {@code length}
+     *
+     * @param array1 the first array
+     * @param array2 the second array
+     * @param length the length to check (0-length)
+     * @param <T>    the type of the arrays
+     * @return true if both arrays share the same start
+     */
+    public static <T> boolean sameStart(T[] array1, T[] array2, int length) {
+        for (int i = 0; i < length; i++) {
+            final T value1 = array1[i];
+            for (int j = 0; j < length; j++) {
+                final T value2 = array2[j];
+                if (!value1.equals(value2)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

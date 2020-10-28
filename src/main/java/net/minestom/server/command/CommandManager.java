@@ -201,6 +201,7 @@ public final class CommandManager {
         // Contains the children of the main node (all commands name)
         IntList rootChildren = new IntArrayList();
 
+        // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
             final CommandCondition commandCondition = command.getCondition();
@@ -281,7 +282,7 @@ public final class CommandManager {
     }
 
     /**
-     * Adds a command's syntaxes to the nodes list.
+     * Adds the command's syntaxes to the nodes list.
      *
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
@@ -300,6 +301,11 @@ public final class CommandManager {
         rootChildren.add(nodes.size());
         nodes.add(literalNode);
 
+        // Contains the arguments of the already-parsed syntaxes
+        List<Argument[]> syntaxesArguments = new ArrayList<>();
+        // Contains the nodes of an argument
+        Map<Argument, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
+
         for (CommandSyntax syntax : syntaxes) {
             // Represent the last nodes computed in the last iteration
             List<DeclareCommandsPacket.Node> lastNodes = null;
@@ -313,8 +319,23 @@ public final class CommandManager {
                 final boolean isFirst = i == 0;
                 final boolean isLast = i == arguments.length - 1;
 
+                boolean foundSharedPart = false;
+                for (Argument[] parsedArguments : syntaxesArguments) {
+                    if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
+                        final Argument sharedArgument = parsedArguments[i];
+
+                        argChildren = new IntArrayList();
+                        lastNodes = storedArgumentsNodes.get(sharedArgument);
+                        foundSharedPart = true;
+                    }
+                }
+                if (foundSharedPart) {
+                    continue;
+                }
+
 
                 final List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
+                storedArgumentsNodes.put(argument, argumentNodes);
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
 
@@ -328,7 +349,11 @@ public final class CommandManager {
 
                     if (lastNodes != null) {
                         final int[] children = ArrayUtils.toArray(argChildren);
-                        lastNodes.forEach(n -> n.children = children);
+                        lastNodes.forEach(n -> {
+                            n.children = n.children == null ?
+                                    children :
+                                    ArrayUtils.concatenateIntArrays(n.children, children);
+                        });
                     }
 
                     nodes.add(node);
@@ -348,6 +373,8 @@ public final class CommandManager {
                     lastNodes = argumentNodes;
                 }
             }
+
+            syntaxesArguments.add(arguments);
 
         }
         final int[] children = ArrayUtils.toArray(cmdChildren);

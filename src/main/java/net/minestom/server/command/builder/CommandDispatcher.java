@@ -172,39 +172,60 @@ public class CommandDispatcher {
             }
         }
 
-        // Find the valid syntax with the most of args
-        CommandSyntax finalSyntax = null;
-        for (CommandSyntax syntax : validSyntaxes) {
-            if (finalSyntax == null || finalSyntax.getArguments().length < syntax.getArguments().length) {
-                finalSyntax = syntax;
-            }
-        }
+        if (!validSyntaxes.isEmpty()) {
+            // Search the syntax with all perfect args
+            for (CommandSyntax syntax : validSyntaxes) {
+                boolean fullyCorrect = true;
 
-        // Verify args conditions of finalSyntax
-        if (finalSyntax != null) {
-            final Argument[] arguments = finalSyntax.getArguments();
-            final String[] argsValues = syntaxesValues.get(finalSyntax);
-            for (int i = 0; i < arguments.length; i++) {
-                final Argument argument = arguments[i];
-                final String argValue = argsValues[i];
-                // Finally parse it
-                final Object parsedValue = argument.parse(argValue);
-                final int conditionResult = argument.getConditionResult(parsedValue);
-                if (conditionResult == Argument.SUCCESS) {
-                    executorArgs.setArg(argument.getId(), parsedValue);
-                } else {
-                    // Condition of an argument not correct, use the argument callback
-                    result.callback = argument.getCallback();
-                    result.value = argValue;
-                    result.error = conditionResult;
+                final Argument[] arguments = syntax.getArguments();
+                final String[] argsValues = syntaxesValues.get(syntax);
+                for (int i = 0; i < arguments.length; i++) {
+                    final Argument argument = arguments[i];
+                    final String argValue = argsValues[i];
+                    // Finally parse it
+                    final Object parsedValue = argument.parse(argValue);
+                    final int conditionResult = argument.getConditionResult(parsedValue);
+                    if (conditionResult == Argument.SUCCESS) {
+                        executorArgs.setArg(argument.getId(), parsedValue);
+                    } else {
+                        fullyCorrect = false;
+                    }
+                }
 
+                if (fullyCorrect) {
+                    result.executor = syntax.getExecutor();
+                    result.arguments = executorArgs;
                     return result;
+                } else {
+                    executorArgs.clear();
                 }
             }
+
+            // Search the first syntax with an incorrect argument
+            for (CommandSyntax syntax : validSyntaxes) {
+                final Argument[] arguments = syntax.getArguments();
+                final String[] argsValues = syntaxesValues.get(syntax);
+                for (int i = 0; i < arguments.length; i++) {
+                    final Argument argument = arguments[i];
+                    final String argValue = argsValues[i];
+                    // Finally parse it
+                    final Object parsedValue = argument.parse(argValue);
+                    final int conditionResult = argument.getConditionResult(parsedValue);
+                    if (conditionResult != Argument.SUCCESS) {
+                        // Condition of an argument not correct, use the argument callback
+                        result.callback = argument.getCallback();
+                        result.value = argValue;
+                        result.error = conditionResult;
+
+                        return result;
+                    }
+                }
+            }
+
         }
 
         // If command isn't correct, find the closest
-        if (finalSyntax == null) {
+        {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
                 final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
@@ -233,8 +254,8 @@ public class CommandDispatcher {
             }
         }
 
-        // Use finalSyntax, or default executor if no syntax has been found
-        result.executor = finalSyntax == null ? command.getDefaultExecutor() : finalSyntax.getExecutor();
+        // Use the default executor
+        result.executor = command.getDefaultExecutor();
         result.arguments = executorArgs;
 
         return result;

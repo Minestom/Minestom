@@ -113,4 +113,8 @@ public class Arguments {
         this.args.put(id, value);
     }
 
+    protected void clear() {
+        this.args.clear();
+    }
+
 }
