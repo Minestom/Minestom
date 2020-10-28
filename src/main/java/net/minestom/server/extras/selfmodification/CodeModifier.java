@@ -3,7 +3,7 @@ package net.minestom.server.extras.selfmodification;
 import org.objectweb.asm.tree.ClassNode;
 
 /**
- * Will be called by {@link MinestomOverwriteClassLoader} to transform classes at load-time
+ * Will be called by {@link MinestomRootClassLoader} to transform classes at load-time
  */
 public abstract class CodeModifier {
     /**

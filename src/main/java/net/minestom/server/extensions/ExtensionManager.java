@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.maven.MavenRepository;
-import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +77,7 @@ public class ExtensionManager {
             // TODO: If we want modifications to be possible, we need to add these urls to the current classloader
             // TODO: Indeed, without adding the urls, the classloader is not able to load the bytecode of extension classes
             // TODO: Whether we want to allow extensions to modify one-another is our choice now.
-            loader = newClassLoader(urls);
+            loader = newClassLoader(discoveredExtension, urls);
 
             // Create ExtensionDescription (authors, version etc.)
             String extensionName = discoveredExtension.getName();
@@ -340,8 +341,8 @@ public class ExtensionManager {
         if (!(cl instanceof URLClassLoader)) {
             throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
         }
-        if(cl instanceof MinestomOverwriteClassLoader) {
-            ((MinestomOverwriteClassLoader) cl).addURL(dependency); // no reflection warnings for us!
+        if(cl instanceof MinestomRootClassLoader) {
+            ((MinestomRootClassLoader) cl).addURL(dependency); // no reflection warnings for us!
         } else {
             try {
                 Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -364,8 +365,12 @@ public class ExtensionManager {
      * @param urls {@link URL} (usually a JAR) that should be loaded.
      */
     @NotNull
-    public URLClassLoader newClassLoader(@NotNull URL[] urls) {
-        return URLClassLoader.newInstance(urls, ExtensionManager.class.getClassLoader());
+    public URLClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
+        MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), urls, root);
+        // TODO: tree structure
+        root.addChild(loader);
+        return loader;
     }
 
     @NotNull
@@ -393,11 +398,11 @@ public class ExtensionManager {
      */
     private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof MinestomOverwriteClassLoader)) {
+        if (!(cl instanceof MinestomRootClassLoader)) {
             log.warn("Current class loader is not a MinestomOverwriteClassLoader, but " + cl + ". This disables code modifiers (Mixin support is therefore disabled)");
             return;
         }
-        MinestomOverwriteClassLoader modifiableClassLoader = (MinestomOverwriteClassLoader) cl;
+        MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
         log.info("Start loading code modifiers...");
         for (DiscoveredExtension extension : extensions) {
             try {

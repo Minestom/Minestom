@@ -1,6 +1,6 @@
 package net.minestom.server.extras.selfmodification.mixins;
 
-import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.spongepowered.asm.service.IClassProvider;
 
 import java.net.URL;
@@ -9,9 +9,9 @@ import java.net.URL;
  * Provides classes for Mixin
  */
 public class MinestomClassProvider implements IClassProvider {
-    private final MinestomOverwriteClassLoader classLoader;
+    private final MinestomRootClassLoader classLoader;
 
-    public MinestomClassProvider(MinestomOverwriteClassLoader classLoader) {
+    public MinestomClassProvider(MinestomRootClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 

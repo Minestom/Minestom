@@ -1,6 +1,6 @@
 package net.minestom.server;
 
-import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.extras.selfmodification.mixins.MixinCodeModifier;
 import net.minestom.server.extras.selfmodification.mixins.MixinServiceMinestom;
 import org.spongepowered.asm.launch.MixinBootstrap;
@@ -12,15 +12,15 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * Used to launch Minestom with the {@link MinestomOverwriteClassLoader} to allow for self-modifications
+ * Used to launch Minestom with the {@link MinestomRootClassLoader} to allow for self-modifications
  */
 public final class Bootstrap {
 
     public static void bootstrap(String mainClassFullName, String[] args) {
         try {
-            ClassLoader classLoader = MinestomOverwriteClassLoader.getInstance();
+            ClassLoader classLoader = MinestomRootClassLoader.getInstance();
             startMixin(args);
-            MinestomOverwriteClassLoader.getInstance().addCodeModifier(new MixinCodeModifier());
+            MinestomRootClassLoader.getInstance().addCodeModifier(new MixinCodeModifier());
 
             MixinServiceMinestom.gotoPreinitPhase();
             // ensure extensions are loaded when starting the server
@@ -53,6 +53,6 @@ public final class Bootstrap {
         doInit.invoke(null, CommandLineOptions.ofArgs(Arrays.asList(args)));
 
         MixinBootstrap.getPlatform().inject();
-        Mixins.getConfigs().forEach(c -> MinestomOverwriteClassLoader.getInstance().protectedPackages.add(c.getConfig().getMixinPackage()));
+        Mixins.getConfigs().forEach(c -> MinestomRootClassLoader.getInstance().protectedPackages.add(c.getConfig().getMixinPackage()));
     }
 }

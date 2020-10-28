@@ -1,6 +1,6 @@
 package net.minestom.server.extras.selfmodification.mixins;
 
-import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.spongepowered.asm.launch.platform.container.ContainerHandleVirtual;
 import org.spongepowered.asm.launch.platform.container.IContainerHandle;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -13,7 +13,7 @@ import java.util.Collections;
 
 public class MixinServiceMinestom extends MixinServiceAbstract {
 
-    private final MinestomOverwriteClassLoader classLoader;
+    private final MinestomRootClassLoader classLoader;
     private final MinestomClassProvider classProvider;
     private final MinestomBytecodeProvider bytecodeProvider;
     private final MixinAuditTrailMinestom auditTrail;
@@ -22,7 +22,7 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
 
     public MixinServiceMinestom() {
         INSTANCE = this;
-        this.classLoader = MinestomOverwriteClassLoader.getInstance();
+        this.classLoader = MinestomRootClassLoader.getInstance();
         classProvider = new MinestomClassProvider(classLoader);
         bytecodeProvider = new MinestomBytecodeProvider(classLoader);
         auditTrail = new MixinAuditTrailMinestom();
