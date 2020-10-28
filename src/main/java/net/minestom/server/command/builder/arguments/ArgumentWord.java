@@ -2,6 +2,8 @@ package net.minestom.server.command.builder.arguments;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 /**
  * Represents a single word in the command.
  * <p>
@@ -59,5 +61,18 @@ public class ArgumentWord extends Argument<String> {
 
     public String[] getRestrictions() {
         return restrictions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArgumentWord that = (ArgumentWord) o;
+        return Arrays.equals(restrictions, that.restrictions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(restrictions);
     }
 }
