@@ -11,6 +11,7 @@ import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -25,6 +26,7 @@ public class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
+    @Nullable
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
     }
@@ -45,66 +47,82 @@ public class Arguments {
         return (float) getObject(id);
     }
 
+    @Nullable
     public String getString(@NotNull String id) {
         return (String) getObject(id);
     }
 
+    @Nullable
     public String getWord(@NotNull String id) {
         return getString(id);
     }
 
+    @Nullable
     public String[] getStringArray(@NotNull String id) {
         return (String[]) getObject(id);
     }
 
+    @Nullable
     public ChatColor getColor(@NotNull String id) {
         return (ChatColor) getObject(id);
     }
 
+    @Nullable
     public UpdateOption getTime(@NotNull String id) {
         return (UpdateOption) getObject(id);
     }
 
+    @Nullable
     public Enchantment getEnchantment(@NotNull String id) {
         return (Enchantment) getObject(id);
     }
 
+    @Nullable
     public Particle getParticle(@NotNull String id) {
         return (Particle) getObject(id);
     }
 
+    @Nullable
     public PotionEffect getPotionEffect(@NotNull String id) {
         return (PotionEffect) getObject(id);
     }
 
+    @Nullable
     public EntityType getEntityType(@NotNull String id) {
         return (EntityType) getObject(id);
     }
 
+    @Nullable
     public IntRange getIntRange(@NotNull String id) {
         return (IntRange) getObject(id);
     }
 
+    @Nullable
     public FloatRange getFloatRange(@NotNull String id) {
         return (FloatRange) getObject(id);
     }
 
+    @Nullable
     public List<Entity> getEntities(@NotNull String id) {
         return (List<Entity>) getObject(id);
     }
 
+    @Nullable
     public ItemStack getItemStack(@NotNull String id) {
         return (ItemStack) getObject(id);
     }
 
+    @Nullable
     public NBTCompound getNbtCompound(@NotNull String id) {
         return (NBTCompound) getObject(id);
     }
 
+    @Nullable
     public NBT getNBT(@NotNull String id) {
         return (NBT) getObject(id);
     }
 
+    @Nullable
     public Object getObject(@NotNull String id) {
         return args.getOrDefault(id, null);
     }
