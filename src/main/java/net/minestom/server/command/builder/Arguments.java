@@ -26,7 +26,6 @@ public class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
-    @Nullable
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
     }
