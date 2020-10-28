@@ -3,6 +3,7 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -174,31 +175,11 @@ public class CommandDispatcher {
 
         if (!validSyntaxes.isEmpty()) {
             // Search the syntax with all perfect args
-            for (CommandSyntax syntax : validSyntaxes) {
-                boolean fullyCorrect = true;
-
-                final Argument[] arguments = syntax.getArguments();
-                final String[] argsValues = syntaxesValues.get(syntax);
-                for (int i = 0; i < arguments.length; i++) {
-                    final Argument argument = arguments[i];
-                    final String argValue = argsValues[i];
-                    // Finally parse it
-                    final Object parsedValue = argument.parse(argValue);
-                    final int conditionResult = argument.getConditionResult(parsedValue);
-                    if (conditionResult == Argument.SUCCESS) {
-                        executorArgs.setArg(argument.getId(), parsedValue);
-                    } else {
-                        fullyCorrect = false;
-                    }
-                }
-
-                if (fullyCorrect) {
-                    result.executor = syntax.getExecutor();
-                    result.arguments = executorArgs;
-                    return result;
-                } else {
-                    executorArgs.clear();
-                }
+            final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, syntaxesValues, executorArgs, result);
+            if (finalSyntax != null) {
+                result.executor = finalSyntax.getExecutor();
+                result.arguments = executorArgs;
+                return result;
             }
 
             // Search the first syntax with an incorrect argument
@@ -259,6 +240,42 @@ public class CommandDispatcher {
         result.arguments = executorArgs;
 
         return result;
+    }
+
+    @Nullable
+    private CommandSyntax findMostCorrectSyntax(List<CommandSyntax> validSyntaxes,
+                                                Map<CommandSyntax, String[]> syntaxesValues,
+                                                Arguments executorArgs, CommandResult result) {
+        CommandSyntax finalSyntax = null;
+        int maxArguments = 0;
+        for (CommandSyntax syntax : validSyntaxes) {
+            boolean fullyCorrect = true;
+
+            final Argument[] arguments = syntax.getArguments();
+            final String[] argsValues = syntaxesValues.get(syntax);
+            for (int i = 0; i < arguments.length; i++) {
+                final Argument argument = arguments[i];
+                final String argValue = argsValues[i];
+                // Finally parse it
+                final Object parsedValue = argument.parse(argValue);
+                final int conditionResult = argument.getConditionResult(parsedValue);
+                if (conditionResult == Argument.SUCCESS) {
+                    executorArgs.setArg(argument.getId(), parsedValue);
+                } else {
+                    fullyCorrect = false;
+                }
+            }
+
+            final int argumentLength = arguments.length;
+            if (fullyCorrect && argumentLength > maxArguments) {
+                finalSyntax = syntax;
+                maxArguments = argumentLength;
+            } else {
+                executorArgs.clear();
+            }
+        }
+
+        return finalSyntax;
     }
 
     private static class CommandSuggestionHolder {
