@@ -82,6 +82,10 @@ public final class ArrayUtils {
      * @return true if both arrays share the same start
      */
     public static <T> boolean sameStart(T[] array1, T[] array2, int length) {
+        if (length > array1.length || length > array2.length) {
+            return false;
+        }
+
         for (int i = 0; i < length; i++) {
             final T value1 = array1[i];
             for (int j = 0; j < length; j++) {
