@@ -246,9 +246,13 @@ public class CommandDispatcher {
     private CommandSyntax findMostCorrectSyntax(List<CommandSyntax> validSyntaxes,
                                                 Map<CommandSyntax, String[]> syntaxesValues,
                                                 Arguments executorArgs, CommandResult result) {
+
+        Map<CommandSyntax, Arguments> argumentsValueMap = new HashMap<>();
+
         CommandSyntax finalSyntax = null;
         int maxArguments = 0;
         for (CommandSyntax syntax : validSyntaxes) {
+            Arguments syntaxValues = new Arguments();
             boolean fullyCorrect = true;
 
             final Argument[] arguments = syntax.getArguments();
@@ -260,7 +264,7 @@ public class CommandDispatcher {
                 final Object parsedValue = argument.parse(argValue);
                 final int conditionResult = argument.getConditionResult(parsedValue);
                 if (conditionResult == Argument.SUCCESS) {
-                    executorArgs.setArg(argument.getId(), parsedValue);
+                    syntaxValues.setArg(argument.getId(), parsedValue);
                 } else {
                     fullyCorrect = false;
                 }
@@ -270,9 +274,13 @@ public class CommandDispatcher {
             if (fullyCorrect && argumentLength > maxArguments) {
                 finalSyntax = syntax;
                 maxArguments = argumentLength;
-            } else {
-                executorArgs.clear();
+                argumentsValueMap.put(syntax, syntaxValues);
             }
+        }
+
+        // Get the arguments values
+        if (finalSyntax != null) {
+            executorArgs.copy(argumentsValueMap.get(finalSyntax));
         }
 
         return finalSyntax;

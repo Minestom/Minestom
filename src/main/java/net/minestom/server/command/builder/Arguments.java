@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class Arguments {
 
-    private final Map<String, Object> args = new HashMap<>();
+    private Map<String, Object> args = new HashMap<>();
 
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
@@ -111,6 +111,10 @@ public class Arguments {
 
     protected void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
+    }
+
+    protected void copy(Arguments arguments) {
+        this.args = arguments.args;
     }
 
     protected void clear() {
