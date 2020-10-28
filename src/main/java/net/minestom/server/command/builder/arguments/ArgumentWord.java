@@ -16,7 +16,7 @@ public class ArgumentWord extends Argument<String> {
     public static final int SPACE_ERROR = 1;
     public static final int RESTRICTION_ERROR = 2;
 
-    private String[] restrictions;
+    protected String[] restrictions;
 
     public ArgumentWord(String id) {
         super(id, false);
