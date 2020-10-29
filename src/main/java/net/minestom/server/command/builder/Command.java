@@ -73,8 +73,9 @@ public class Command {
      * It is called no matter the syntax used and can be used to check permissions or
      * the {@link CommandSender} type.
      *
-     * @return the command condition
+     * @return the command condition, null if not any
      */
+    @Nullable
     public CommandCondition getCondition() {
         return condition;
     }
@@ -82,9 +83,9 @@ public class Command {
     /**
      * Sets the {@link CommandCondition}.
      *
-     * @param commandCondition the new command condition
+     * @param commandCondition the new command condition, null to do not call anything
      */
-    public void setCondition(CommandCondition commandCondition) {
+    public void setCondition(@Nullable CommandCondition commandCondition) {
         this.condition = commandCondition;
     }
 

@@ -22,7 +22,7 @@ public class CommandSyntax {
      * @return the required arguments
      */
     @NotNull
-    public Argument[] getArguments() {
+    public Argument<Object>[] getArguments() {
         return args;
     }
 
