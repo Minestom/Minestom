@@ -1,5 +1,6 @@
 package net.minestom.server.timer;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.utils.time.TimeUnit;
 
 /**
@@ -22,9 +23,9 @@ public class TaskBuilder {
     private long repeat;
 
     /**
-     * Creates a task builder
+     * Creates a task builder.
      * <br>
-     * <b>Note:</b> The task builder creates a normal task
+     * <b>Note:</b> The task builder creates a normal task.
      *
      * @param schedulerManager The manager for the tasks
      * @param runnable         The task to run when scheduled
@@ -34,7 +35,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Creates task builder
+     * Creates a task builder.
      *
      * @param schedulerManager The manager for the tasks
      * @param runnable         The task to run when scheduled
@@ -71,7 +72,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Clears the delay interval of the {@link Task}
+     * Clears the delay interval of the {@link Task}.
      *
      * @return this builder, for chaining
      */
@@ -81,7 +82,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Clears the repeat interval of the {@link Task}
+     * Clears the repeat interval of the {@link Task}.
      *
      * @return this builder, for chaining
      */
@@ -91,7 +92,7 @@ public class TaskBuilder {
     }
 
     /**
-     * Schedule this {@link Task} for execution
+     * Schedule this {@link Task} for execution.
      *
      * @return the built {@link Task}
      */
@@ -103,9 +104,15 @@ public class TaskBuilder {
                 this.delay,
                 this.repeat);
         if (this.shutdown) {
-            this.schedulerManager.shutdownTasks.put(task.getId(), task);
+            Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
+            synchronized (shutdownTasks) {
+                shutdownTasks.put(task.getId(), task);
+            }
         } else {
-            this.schedulerManager.tasks.put(task.getId(), task);
+            Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
+            synchronized (tasks) {
+                tasks.put(task.getId(), task);
+            }
             task.schedule();
         }
         return task;

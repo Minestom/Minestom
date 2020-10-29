@@ -267,6 +267,7 @@ public class CommandDispatcher {
                     syntaxValues.setArg(argument.getId(), parsedValue);
                 } else {
                     fullyCorrect = false;
+                    break;
                 }
             }
 

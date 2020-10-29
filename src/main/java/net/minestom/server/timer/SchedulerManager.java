@@ -68,7 +68,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Initializes a new {@link TaskBuilder} for creating a shutdown {@link Task}
+     * Initializes a new {@link TaskBuilder} for creating a shutdown {@link Task}.
      *
      * @param runnable The shutdown {@link Task} to run when scheduled
      * @return the {@link TaskBuilder}
@@ -78,16 +78,18 @@ public class SchedulerManager {
     }
 
     /**
-     * Removes/Forces the end of a {@link Task}
+     * Removes/Forces the end of a {@link Task}.
      *
      * @param task The {@link Task} to remove
      */
     public void removeTask(Task task) {
-        this.tasks.remove(task.getId());
+        synchronized (tasks) {
+            this.tasks.remove(task.getId());
+        }
     }
 
     /**
-     * Removes/Forces the end of a {@link Task}
+     * Removes/Forces the end of a {@link Task}.
      *
      * @param task The {@link Task} to remove
      */
@@ -96,7 +98,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Shutdowns all normal tasks and call the registered shutdown tasks
+     * Shutdowns all normal tasks and call the registered shutdown tasks.
      */
     public void shutdown() {
         MinecraftServer.getLOGGER().info("Executing all shutdown tasks..");
@@ -122,7 +124,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Increments the current shutdown counter value
+     * Increments the current shutdown counter value.
      *
      * @return the updated shutdown counter value
      */
@@ -131,7 +133,9 @@ public class SchedulerManager {
     }
 
     /**
-     * Gets a {@link Collection} with all the registered {@link Task}
+     * Gets a {@link Collection} with all the registered {@link Task}.
+     * <p>
+     * Be aware that the collection is not thread-safe.
      *
      * @return a {@link Collection} with all the registered {@link Task}
      */
@@ -140,7 +144,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Gets a {@link Collection} with all the registered shutdown {@link Task}
+     * Gets a {@link Collection} with all the registered shutdown {@link Task}.
      *
      * @return a {@link Collection} with all the registered shutdown {@link Task}
      */
@@ -149,7 +153,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Gets the execution service for all the registered {@link Task}
+     * Gets the execution service for all the registered {@link Task}.
      *
      * @return the execution service for all the registered {@link Task}
      */
@@ -158,7 +162,7 @@ public class SchedulerManager {
     }
 
     /**
-     * Gets the scheduled execution service for all the registered {@link Task}
+     * Gets the scheduled execution service for all the registered {@link Task}.
      *
      * @return the scheduled execution service for all the registered {@link Task}
      */
