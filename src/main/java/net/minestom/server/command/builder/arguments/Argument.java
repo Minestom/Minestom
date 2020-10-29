@@ -2,11 +2,12 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An argument is meant to be parsed when added into a {@link Command} syntax.
+ * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
  * <p>
  * You can create your own with your own special conditions.
  * <p>
@@ -43,34 +44,42 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Used to provide the appropriate error concerning the received args.
+     * First method called to check the validity of an input.
+     * <p>
+     * If {@link #allowSpace()} is enabled, the value will be incremented by the next word until it returns {@link #SUCCESS},
+     * meaning that you need to be sure to check the inexpensive operations first (eg the number of brackets, the first and last char, etc...).
      *
      * @param value The received argument
-     * @return The success/error code
+     * @return the error code or {@link #SUCCESS}
      */
     public abstract int getCorrectionResult(@NotNull String value);
 
     /**
-     * The argument syntax is correct, parsed here to the correct type.
+     * Called after {@link #getCorrectionResult(String)} returned {@link #SUCCESS}.
+     * <p>
+     * The correction being correct means that {@code value} shouldn't be verified again, you can assume that no exception will occur
+     * when converting it to the correct type.
      *
-     * @param value The correct argument
+     * @param value The correct argument which does not need to be verified again
      * @return The parsed argument
      */
     @NotNull
     public abstract T parse(@NotNull String value);
 
     /**
-     * The argument is at least partially correct (the syntax is good and the argument has been parsed)
-     * but some other conditions could take place (ex: min/max requirement for numbers).
+     * Called after {@link #parse(String)} meaning that {@code value} should already represent a valid representation of the input.
+     * <p>
+     * The condition result has for goal to check the optional conditions that are user configurable (eg min/max values for a number, a specific material
+     * for an item, etc...).
      *
      * @param value The parsed argument
-     * @return The success/error code
+     * @return the error code or {@link #SUCCESS}
      */
     public abstract int getConditionResult(@NotNull T value);
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
-     * and used to retrieve the data when the command is parsed.
+     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.Arguments}.
      *
      * @return the argument id
      */
