@@ -38,7 +38,7 @@ public class DeclareCommandsPacket implements ServerPacket {
         public String suggestionsType; // Only if flags 0x10
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeByte(flags);
 
             writer.writeVarIntArray(children);

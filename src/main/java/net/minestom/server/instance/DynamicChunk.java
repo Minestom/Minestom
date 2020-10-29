@@ -24,6 +24,7 @@ import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
-    public DynamicChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ) {
+    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
         super(instance, biomes, chunkX, chunkZ, true);
     }
 
@@ -136,16 +137,18 @@ public class DynamicChunk extends Chunk {
 
             // Update cooldown
             final UpdateOption updateOption = customBlock.getUpdateOption();
-            final long lastUpdate = updatableBlocksLastUpdate.get(index);
-            final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
-            if (hasCooldown)
-                continue;
+            if (updateOption != null) {
+                final long lastUpdate = updatableBlocksLastUpdate.get(index);
+                final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
+                if (hasCooldown)
+                    continue;
 
-            this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
+                this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
 
-            final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-            final Data data = getBlockData(index);
-            customBlock.update(instance, blockPosition, data);
+                final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                final Data data = getBlockData(index);
+                customBlock.update(instance, blockPosition, data);
+            }
         }
     }
 
@@ -343,7 +346,7 @@ public class DynamicChunk extends Chunk {
                 // CHUNK DATA
                 // Chunk data
                 final boolean hasChunkData = reader.readBoolean();
-                if (hasChunkData) {
+                if (hasDataIndex && hasChunkData) {
                     SerializableData serializableData = new SerializableDataImpl();
                     serializableData.readSerializedData(reader, typeToIndexMap);
                 }
@@ -371,7 +374,7 @@ public class DynamicChunk extends Chunk {
                     {
                         final boolean hasBlockData = reader.readBoolean();
                         // Data deserializer
-                        if (hasBlockData) {
+                        if (hasDataIndex && hasBlockData) {
                             // Read the data with the deserialized index map
                             data = new SerializableDataImpl();
                             data.readSerializedData(reader, typeToIndexMap);

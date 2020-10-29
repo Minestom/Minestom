@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * Shutdown {@link Task} are built with {@link #buildShutdownTask(Runnable)}.
  */
-public class SchedulerManager {
+public final class SchedulerManager {
 
-    private boolean instanced;
+    private static boolean instanced;
     // A counter for all normal tasks
     private final AtomicInteger counter;
     // A counter for all shutdown tasks
@@ -47,7 +47,8 @@ public class SchedulerManager {
             throw new IllegalStateException("You cannot instantiate a SchedulerManager," +
                     " use MinecraftServer.getSchedulerManager()");
         }
-        this.instanced = true;
+        SchedulerManager.instanced = true;
+
         this.counter = new AtomicInteger();
         this.shutdownCounter = new AtomicInteger();
 
@@ -111,6 +112,7 @@ public class SchedulerManager {
         try {
             batchesPool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

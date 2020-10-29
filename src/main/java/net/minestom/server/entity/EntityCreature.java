@@ -144,7 +144,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     @Override
-    public void setInstance(Instance instance) {
+    public void setInstance(@NotNull Instance instance) {
         super.setInstance(instance);
         this.pathFinder = new HydrazinePathFinder(pathingEntity, instance.getInstanceSpace());
     }
@@ -224,7 +224,7 @@ public abstract class EntityCreature extends LivingEntity {
     }
 
     /**
-     * Changes the entity target
+     * Changes the entity target.
      *
      * @param target the new entity target
      */

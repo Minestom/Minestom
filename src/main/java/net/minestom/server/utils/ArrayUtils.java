@@ -105,7 +105,6 @@ public final class ArrayUtils {
      * @param supplier the supplier to fill the array
      * @param <T>      the array type
      */
-    @NotNull
     public static <T> void fill(@NotNull T[] array, @NotNull Supplier<T> supplier) {
         for (int i = 0; i < array.length; i++) {
             array[i] = supplier.get();

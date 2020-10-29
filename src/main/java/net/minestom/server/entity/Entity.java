@@ -648,9 +648,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Convenient method to get the entity current chunk.
      *
-     * @return the entity chunk
+     * @return the entity chunk, can be null even if unlikely
      */
-    @NotNull
+    @Nullable
     public Chunk getChunk() {
         return instance.getChunkAt(lastX, lastZ);
     }

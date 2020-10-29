@@ -37,8 +37,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
     @Override
     public NBT parse(@NotNull String value) {
         try {
-            NBT nbt = new SNBTParser(new StringReader(value)).parse();
-            return nbt;
+            return new SNBTParser(new StringReader(value)).parse();
         } catch (NBTException e) {
             return null;
         }

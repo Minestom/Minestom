@@ -50,7 +50,7 @@ public class Biome {
 	@Builder.Default
 	private final Precipitation precipitation = Precipitation.RAIN;
 	@Builder.Default
-	private TemperatureModifier temperature_modifier = TemperatureModifier.NONE;
+	private final TemperatureModifier temperature_modifier = TemperatureModifier.NONE;
 
 	public NBTCompound toNbt() {
 		NBTCompound nbt = new NBTCompound();

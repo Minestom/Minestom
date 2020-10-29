@@ -60,20 +60,20 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         ParameterSpec[] signature = new ParameterSpec[]{idParam};
         if (linear) {
             generator.addStaticMethod("fromId", signature, className, code -> {
-                code.beginControlFlow("if($N >= 0 && $N < values().length)", idParam, idParam)
-                        .addStatement("return values()[$N]", idParam)
-                    .endControlFlow()
-                    .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
+                        code.beginControlFlow("if($N >= 0 && $N < values().length)", idParam, idParam)
+                                .addStatement("return values()[$N]", idParam)
+                                .endControlFlow()
+                                .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
                     }
             );
         } else {
             generator.addStaticMethod("fromId", signature, className, code -> {
-                code.beginControlFlow("for($T o : values())")
-                        .beginControlFlow("if(o.getId() == id)")
-                            .addStatement("return o")
-                        .endControlFlow()
-                    .endControlFlow()
-                    .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
+                        code.beginControlFlow("for($T o : values())")
+                                .beginControlFlow("if(o.getId() == id)")
+                                .addStatement("return o")
+                                .endControlFlow()
+                                .endControlFlow()
+                                .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
                     }
             );
         }

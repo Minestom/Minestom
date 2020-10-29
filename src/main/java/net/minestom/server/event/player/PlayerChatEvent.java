@@ -4,6 +4,7 @@ import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,9 +30,9 @@ public class PlayerChatEvent extends CancellableEvent {
     /**
      * Changes the chat format.
      *
-     * @param chatFormat the custom chat format
+     * @param chatFormat the custom chat format, null to use the default one
      */
-    public void setChatFormat(@NotNull Function<PlayerChatEvent, RichMessage> chatFormat) {
+    public void setChatFormat(@Nullable Function<PlayerChatEvent, RichMessage> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -81,9 +82,9 @@ public class PlayerChatEvent extends CancellableEvent {
      * <p>
      * If null, the default format will be used.
      *
-     * @return the chat format which will be used
+     * @return the chat format which will be used, null if this is the default one
      */
-    @NotNull
+    @Nullable
     public Function<PlayerChatEvent, RichMessage> getChatFormatFunction() {
         return chatFormat;
     }

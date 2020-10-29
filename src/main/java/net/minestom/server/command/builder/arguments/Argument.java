@@ -112,7 +112,7 @@ public abstract class Argument<T> {
     /**
      * Gets the {@link ArgumentCallback} to check if the argument-specific conditions are validated or not.
      *
-     * @return the argument callback
+     * @return the argument callback, null if not any
      */
     @Nullable
     public ArgumentCallback getCallback() {
@@ -122,7 +122,7 @@ public abstract class Argument<T> {
     /**
      * Sets the {@link ArgumentCallback}.
      *
-     * @param callback the argument callback
+     * @param callback the argument callback, null to do not have one
      */
     public void setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;

@@ -46,7 +46,7 @@ public class AdvancementsPacket implements ServerPacket {
         public Advancement value;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(key);
             value.write(writer);
         }
@@ -60,7 +60,7 @@ public class AdvancementsPacket implements ServerPacket {
         public Requirement[] requirements;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             // hasParent
             writer.writeBoolean(parentIdentifier != null);
             if (parentIdentifier != null) {
@@ -94,7 +94,7 @@ public class AdvancementsPacket implements ServerPacket {
         public float y;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(title.toString());
             writer.writeSizedString(description.toString());
             writer.writeItemStack(icon);
@@ -114,7 +114,7 @@ public class AdvancementsPacket implements ServerPacket {
         public String[] requirements;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeVarInt(requirements.length);
             for (String requirement : requirements) {
                 writer.writeSizedString(requirement);
@@ -127,7 +127,7 @@ public class AdvancementsPacket implements ServerPacket {
         public AdvancementProgress value;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(key);
             value.write(writer);
         }
@@ -137,7 +137,7 @@ public class AdvancementsPacket implements ServerPacket {
         public Criteria[] criteria;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeVarInt(criteria.length);
             for (Criteria criterion : criteria) {
                 criterion.write(writer);
@@ -150,7 +150,7 @@ public class AdvancementsPacket implements ServerPacket {
         public CriterionProgress criterionProgress;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(criterionIdentifier);
             criterionProgress.write(writer);
         }
@@ -162,7 +162,7 @@ public class AdvancementsPacket implements ServerPacket {
         public long dateOfAchieving;
 
         @Override
-        public void write(BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer) {
             writer.writeBoolean(achieved);
             if (dateOfAchieving != 0)
                 writer.writeLong(dateOfAchieving);

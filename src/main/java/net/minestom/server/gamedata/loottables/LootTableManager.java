@@ -31,6 +31,7 @@ public final class LootTableManager {
 
     /**
      * Registers a condition factory to the given namespaceID
+     *
      * @param namespaceID
      * @param factory
      */
@@ -40,6 +41,7 @@ public final class LootTableManager {
 
     /**
      * Registers a loot table type to the given namespaceID
+     *
      * @param namespaceID
      * @param type
      */
@@ -49,6 +51,7 @@ public final class LootTableManager {
 
     /**
      * Registers a loot table entry type to the given namespaceID
+     *
      * @param namespaceID
      * @param type
      */
@@ -58,6 +61,7 @@ public final class LootTableManager {
 
     /**
      * Registers a loot table function to the given namespaceID
+     *
      * @param namespaceID
      * @param function
      */
@@ -66,22 +70,22 @@ public final class LootTableManager {
     }
 
     public LootTable load(NamespaceID name) throws FileNotFoundException {
-        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/"+name.getDomain()+"/loot_tables/"+name.getPath()+".json")));
+        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
     }
 
     /**
      * Loads a loot table with the given name. Loot tables can be cached, so 'reader' is used only on cache misses
-     * @param name the name to cache the loot table with
+     *
+     * @param name   the name to cache the loot table with
      * @param reader the reader to read the loot table from, if none cached. **Will** be closed no matter the results of this call
      * @return
      */
     public LootTable load(NamespaceID name, Reader reader) {
-        try {
+        try (reader) {
             return cache.computeIfAbsent(name, _name -> create(reader));
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -92,28 +96,31 @@ public final class LootTableManager {
 
     /**
      * Returns the registered table type corresponding to the given namespace ID. If none is registered, throws {@link IllegalArgumentException}
+     *
      * @param id
      * @return
      */
     public LootTableType getTableType(NamespaceID id) {
-        if(!tableTypes.containsKey(id))
-            throw new IllegalArgumentException("Unknown table type: "+id);
+        if (!tableTypes.containsKey(id))
+            throw new IllegalArgumentException("Unknown table type: " + id);
         return tableTypes.get(id);
     }
 
     /**
      * Returns the registered entry type corresponding to the given namespace ID. If none is registered, throws {@link IllegalArgumentException}
+     *
      * @param id
      * @return
      */
     public LootTableEntryType getEntryType(NamespaceID id) {
-        if(!entryTypes.containsKey(id))
-            throw new IllegalArgumentException("Unknown entry type: "+id);
+        if (!entryTypes.containsKey(id))
+            throw new IllegalArgumentException("Unknown entry type: " + id);
         return entryTypes.get(id);
     }
 
     /**
      * Returns the registered table type corresponding to the given namespace ID. If none is registered, returns {@link LootTableFunction#IDENTITY}
+     *
      * @param id
      * @return
      */

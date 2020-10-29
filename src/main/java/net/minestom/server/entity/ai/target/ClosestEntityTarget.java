@@ -7,6 +7,7 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +18,11 @@ import java.util.Set;
  */
 public class ClosestEntityTarget extends TargetSelector {
 
-    private float range;
-    private Class<? extends LivingEntity>[] entitiesTarget;
+    private final float range;
+    private final Class<? extends LivingEntity>[] entitiesTarget;
 
-    public ClosestEntityTarget(EntityCreature entityCreature, float range,
-                               Class<? extends LivingEntity>... entitiesTarget) {
+    public ClosestEntityTarget(@NotNull EntityCreature entityCreature, float range,
+                               @NotNull Class<? extends LivingEntity>... entitiesTarget) {
         super(entityCreature);
         this.range = range;
         this.entitiesTarget = entitiesTarget;
@@ -31,6 +32,10 @@ public class ClosestEntityTarget extends TargetSelector {
     public Entity findTarget() {
         final Instance instance = getEntityCreature().getInstance();
         final Chunk currentChunk = instance.getChunkAt(entityCreature.getPosition());
+        if (currentChunk == null) {
+            return null;
+        }
+
         final List<Chunk> chunks = getNeighbours(instance, currentChunk.getChunkX(), currentChunk.getChunkZ());
 
         Entity entity = null;

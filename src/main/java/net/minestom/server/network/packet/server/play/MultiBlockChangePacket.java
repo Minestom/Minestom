@@ -23,8 +23,7 @@ public class MultiBlockChangePacket implements ServerPacket {
         if (blockChanges != null) {
             final int length = blockChanges.length;
             writer.writeVarInt(length);
-            for (int i = 0; i < length; i++) {
-                final BlockChange blockChange = blockChanges[i];
+            for (final BlockChange blockChange : blockChanges) {
                 writer.writeVarLong(blockChange.newBlockId << 12 | getLocalBlockPosAsShort(blockChange.positionX, blockChange.positionY, blockChange.positionZ));
             }
         } else {

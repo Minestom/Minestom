@@ -108,10 +108,12 @@ public class Command {
      *
      * @param executor the executor to call when the syntax is successfully received
      * @param args     all the arguments of the syntax
+     * @return the created {@link CommandSyntax}
      */
-    public void addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public CommandSyntax addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         final CommandSyntax syntax = new CommandSyntax(executor, args);
         this.syntaxes.add(syntax);
+        return syntax;
     }
 
     /**
@@ -126,10 +128,8 @@ public class Command {
 
     /**
      * Gets the command's aliases.
-     * <p>
-     * Can be null or empty.
      *
-     * @return the command aliases
+     * @return the command aliases, can be null or empty
      */
     @Nullable
     public String[] getAliases() {
@@ -137,10 +137,10 @@ public class Command {
     }
 
     /**
-     * Gets the default {@link CommandExecutor} (which is called when there is no argument)
+     * Gets the default {@link CommandExecutor} which is called when there is no argument
      * or if no corresponding syntax has been found.
      *
-     * @return the default executor
+     * @return the default executor, null if not any
      */
     @Nullable
     public CommandExecutor getDefaultExecutor() {
@@ -150,7 +150,7 @@ public class Command {
     /**
      * Sets the default {@link CommandExecutor} (which is called when there is no argument).
      *
-     * @param executor the new default executor
+     * @param executor the new default executor, null to remove it
      */
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;

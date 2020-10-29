@@ -347,6 +347,6 @@ public enum MapColors {
         /**
          * RGB components are divided by 10 before issuing a lookup (as with the PRECISE strategy), but saves on memory usage
          */
-        APPROXIMATE;
+        APPROXIMATE
     }
 }

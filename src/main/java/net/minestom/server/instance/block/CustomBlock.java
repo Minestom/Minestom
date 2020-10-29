@@ -86,7 +86,7 @@ public abstract class CustomBlock {
      * If this is not null, {@link #update(Instance, BlockPosition, Data)}
      * should be overridden or errors with occurs.
      *
-     * @return the update option of the block
+     * @return the update option of the block, null if not any
      */
     @Nullable
     public UpdateOption getUpdateOption() {

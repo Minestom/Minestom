@@ -31,6 +31,6 @@ public class DynamicEntry extends LootTable.Entry {
 
     public enum Type {
         SELF,
-        CONTENTS;
+        CONTENTS
     }
 }

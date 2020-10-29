@@ -106,7 +106,7 @@ public class CommandDispatcher {
         TreeMap<Integer, CommandSuggestionHolder> syntaxesSuggestions = new TreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            final Argument<Object>[] arguments = syntax.getArguments();
+            final Argument<?>[] arguments = syntax.getArguments();
             final String[] argsValues = new String[arguments.length];
 
             boolean syntaxCorrect = true;
@@ -115,7 +115,7 @@ public class CommandDispatcher {
             boolean useRemaining = false;
             // Check the validity of the arguments...
             for (int argCount = 0; argCount < syntax.getArguments().length; argCount++) {
-                final Argument<Object> argument = syntax.getArguments()[argCount];
+                final Argument<?> argument = syntax.getArguments()[argCount];
                 useRemaining = argument.useRemaining();
 
                 // the correction result of the argument
@@ -200,10 +200,10 @@ public class CommandDispatcher {
 
             // Otherwise, search for the first syntax with an incorrect argument
             for (CommandSyntax syntax : validSyntaxes) {
-                final Argument<Object>[] arguments = syntax.getArguments();
+                final Argument[] arguments = syntax.getArguments();
                 final String[] argsValues = syntaxesValues.get(syntax);
                 for (int i = 0; i < arguments.length; i++) {
-                    final Argument<Object> argument = arguments[i];
+                    final Argument argument = arguments[i];
                     final String argValue = argsValues[i];
                     // Finally parse it
                     final Object parsedValue = argument.parse(argValue);
@@ -239,7 +239,7 @@ public class CommandDispatcher {
                     final int argIndex = suggestionHolder.argIndex;
 
                     // Found the closest syntax with at least 1 correct argument
-                    final Argument<Object> argument = syntax.getArguments()[argIndex];
+                    final Argument<?> argument = syntax.getArguments()[argIndex];
                     if (argument.hasErrorCallback()) {
                         result.callback = argument.getCallback();
                         result.value = argValue;
@@ -279,10 +279,10 @@ public class CommandDispatcher {
             Arguments syntaxValues = new Arguments();
             boolean fullyCorrect = true;
 
-            final Argument<Object>[] arguments = syntax.getArguments();
+            final Argument<?>[] arguments = syntax.getArguments();
             final String[] argsValues = syntaxesValues.get(syntax);
             for (int i = 0; i < arguments.length; i++) {
-                final Argument<Object> argument = arguments[i];
+                final Argument argument = arguments[i];
                 final String argValue = argsValues[i];
                 // Finally parse it
                 final Object parsedValue = argument.parse(argValue);

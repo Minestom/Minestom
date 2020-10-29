@@ -56,7 +56,7 @@ public class EntityGuardian extends EntityCreature implements Monster {
         return target;
     }
 
-    public void setTarget(Entity target) {
+    public void setTarget(@NotNull Entity target) {
         this.target = target;
     }
 }

@@ -4,14 +4,15 @@ import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a syntax in {@link Command}.
+ * Represents a syntax in {@link Command}
+ * which is initialized with {@link Command#addSyntax(CommandExecutor, Argument[])}.
  */
 public class CommandSyntax {
 
-    private final Argument[] args;
+    private final Argument<?>[] args;
     private CommandExecutor executor;
 
-    protected CommandSyntax(@NotNull CommandExecutor commandExecutor, @NotNull Argument... args) {
+    protected CommandSyntax(@NotNull CommandExecutor commandExecutor, @NotNull Argument<?>... args) {
         this.executor = commandExecutor;
         this.args = args;
     }
@@ -22,7 +23,7 @@ public class CommandSyntax {
      * @return the required arguments
      */
     @NotNull
-    public Argument<Object>[] getArguments() {
+    public Argument<?>[] getArguments() {
         return args;
     }
 

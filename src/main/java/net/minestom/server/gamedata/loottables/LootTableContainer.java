@@ -28,7 +28,7 @@ class LootTableContainer {
         return new LootTable(type, pools);
     }
 
-    private class Pool {
+    private static class Pool {
         private ConditionContainer[] conditions;
         private FunctionContainer[] functions;
         private RangeContainer rolls;

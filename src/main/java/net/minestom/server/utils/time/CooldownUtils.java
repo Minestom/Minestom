@@ -1,5 +1,7 @@
 package net.minestom.server.utils.time;
 
+import org.jetbrains.annotations.NotNull;
+
 public final class CooldownUtils {
 
     private CooldownUtils() {
@@ -15,7 +17,7 @@ public final class CooldownUtils {
      * @param cooldown    the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long currentTime, long lastUpdate, TimeUnit timeUnit, int cooldown) {
+    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull TimeUnit timeUnit, int cooldown) {
         final long cooldownMs = timeUnit.toMilliseconds(cooldown);
         return currentTime - lastUpdate < cooldownMs;
     }
@@ -28,7 +30,7 @@ public final class CooldownUtils {
      * @param updateOption the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long currentTime, long lastUpdate, UpdateOption updateOption) {
+    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull UpdateOption updateOption) {
         return hasCooldown(currentTime, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
     }
 
@@ -40,7 +42,7 @@ public final class CooldownUtils {
      * @param cooldown   the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long lastUpdate, TimeUnit timeUnit, int cooldown) {
+    public static boolean hasCooldown(long lastUpdate, @NotNull TimeUnit timeUnit, int cooldown) {
         return hasCooldown(System.currentTimeMillis(), lastUpdate, timeUnit, cooldown);
     }
 }

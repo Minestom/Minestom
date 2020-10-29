@@ -59,7 +59,9 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
+    @NotNull
     protected final Instance instance;
+    @NotNull
     protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
 

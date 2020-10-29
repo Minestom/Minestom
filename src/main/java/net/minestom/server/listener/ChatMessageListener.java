@@ -74,12 +74,10 @@ public class ChatMessageListener {
 
         final ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
 
-        final RichMessage richMessage = RichMessage.of(usernameText)
+        return RichMessage.of(usernameText)
                 .setHoverEvent(ChatHoverEvent.showText("Click to send a message to " + username))
                 .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + " "))
                 .append(ColoredText.of(" " + chatEvent.getMessage()));
-
-        return richMessage;
     }
 
 }
