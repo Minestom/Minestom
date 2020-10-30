@@ -100,7 +100,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Set a block at a position.
+     * Sets a block at a position.
      * <p>
      * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
      * <p>
@@ -112,10 +112,10 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param y             the block Y
      * @param z             the block Z
      * @param blockStateId  the block state id
-     * @param customBlockId the custom block id
+     * @param customBlockId the custom block id, 0 if not
      * @param data          the {@link Data} of the block, can be null
      * @param updatable     true if the block has an update method
-     *                      Warning: <code>customBlockId</code> cannot be 0 and needs to be valid since the update delay and method
+     *                      Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
      */
     public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data, boolean updatable);
@@ -366,7 +366,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Retrieves (and save if needed) the updated data packet.
+     * Retrieves (and cache if needed) the updated data packet.
      *
      * @param consumer the consumer called once the packet is sure to be up-to-date
      */
