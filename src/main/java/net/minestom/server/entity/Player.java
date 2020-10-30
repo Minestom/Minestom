@@ -55,6 +55,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
@@ -604,47 +605,68 @@ public class Player extends LivingEntity implements CommandSender {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
         final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
-        // Remove all previous viewable chunks (from the previous instance)
-        for (Chunk viewableChunk : viewableChunks) {
-            viewableChunk.removeViewer(this);
+
+        // true if the chunks need to be send to the client, can be false if the instances share the same chunks (eg SharedInstance)
+        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
+
+        if (needWorldRefresh) {
+            // Remove all previous viewable chunks (from the previous instance)
+            for (Chunk viewableChunk : viewableChunks) {
+                viewableChunk.removeViewer(this);
+            }
+
+            if (this.instance != null) {
+                final DimensionType instanceDimensionType = instance.getDimensionType();
+                if (dimensionType != instanceDimensionType)
+                    sendDimension(instanceDimensionType);
+            }
+
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+            final int length = visibleChunks.length;
+
+            AtomicInteger counter = new AtomicInteger(0);
+            for (long visibleChunk : visibleChunks) {
+                final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
+                final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
+
+                final ChunkCallback callback = (chunk) -> {
+                    if (chunk != null) {
+                        chunk.addViewer(this);
+                        if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))
+                            updateViewPosition(chunk);
+                    }
+                    final boolean isLast = counter.get() == length - 1;
+                    if (isLast) {
+                        // This is the last chunk to be loaded , spawn player
+                        spawnPlayer(instance, firstSpawn);
+                    } else {
+                        // Increment the counter of current loaded chunks
+                        counter.incrementAndGet();
+                    }
+                };
+
+                // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
+                instance.loadOptionalChunk(chunkX, chunkZ, callback);
+            }
+        } else {
+            spawnPlayer(instance, firstSpawn);
         }
+    }
 
-        if (this.instance != null) {
-            final DimensionType instanceDimensionType = instance.getDimensionType();
-            if (dimensionType != instanceDimensionType)
-                sendDimension(instanceDimensionType);
-        }
-
-        final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
-        final int length = visibleChunks.length;
-
-        AtomicInteger counter = new AtomicInteger(0);
-        for (long visibleChunk : visibleChunks) {
-            final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
-
-            final ChunkCallback callback = (chunk) -> {
-                if (chunk != null) {
-                    chunk.addViewer(this);
-                    if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))
-                        updateViewPosition(chunk);
-                }
-                final boolean isLast = counter.get() == length - 1;
-                if (isLast) {
-                    // This is the last chunk to be loaded , spawn player
-                    this.viewableEntities.forEach(entity -> entity.removeViewer(this));
-                    super.setInstance(instance);
-                    PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
-                    callEvent(PlayerSpawnEvent.class, spawnEvent);
-                } else {
-                    // Increment the counter of current loaded chunks
-                    counter.incrementAndGet();
-                }
-            };
-
-            // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(chunkX, chunkZ, callback);
-        }
+    /**
+     * Used to spawn the player once the client has all the required chunks.
+     * <p>
+     * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
+     * <p>
+     * UNSAFE: only called with {@link #setInstance(Instance)}.
+     *
+     * @param firstSpawn true if this is the player first spawn
+     */
+    private void spawnPlayer(Instance instance, boolean firstSpawn) {
+        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        super.setInstance(instance);
+        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
+        callEvent(PlayerSpawnEvent.class, spawnEvent);
     }
 
     @NotNull
