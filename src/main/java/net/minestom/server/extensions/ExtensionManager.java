@@ -1,10 +1,6 @@
 package net.minestom.server.extensions;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
 import net.minestom.server.utils.validate.Check;
@@ -13,27 +9,18 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipFile;
 
 @Slf4j
-public class ExtensionManager {
+public final class ExtensionManager {
 
     private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
     private final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";

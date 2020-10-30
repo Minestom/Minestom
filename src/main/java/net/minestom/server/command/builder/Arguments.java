@@ -11,7 +11,6 @@ import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -20,9 +19,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Class used to retrieve argument data.
+ * Class used to retrieve argument data in a {@link CommandExecutor}.
+ * <p>
+ * All id are the one specified in the {@link net.minestom.server.command.builder.arguments.Argument} constructor.
+ * <p>
+ * All methods are @{@link NotNull} in the sense that you should not have to verify their validity since if the syntax
+ * is called, it means that all of its arguments are correct. Be aware that trying to retrieve an argument not present
+ * in the syntax will result in a {@link NullPointerException}.
  */
-public class Arguments {
+public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
@@ -46,84 +51,87 @@ public class Arguments {
         return (float) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public String getString(@NotNull String id) {
         return (String) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public String getWord(@NotNull String id) {
         return getString(id);
     }
 
-    @Nullable
+    @NotNull
     public String[] getStringArray(@NotNull String id) {
         return (String[]) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public ChatColor getColor(@NotNull String id) {
         return (ChatColor) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public UpdateOption getTime(@NotNull String id) {
         return (UpdateOption) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public Enchantment getEnchantment(@NotNull String id) {
         return (Enchantment) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public Particle getParticle(@NotNull String id) {
         return (Particle) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public PotionEffect getPotionEffect(@NotNull String id) {
         return (PotionEffect) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public EntityType getEntityType(@NotNull String id) {
         return (EntityType) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public IntRange getIntRange(@NotNull String id) {
         return (IntRange) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public FloatRange getFloatRange(@NotNull String id) {
         return (FloatRange) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public List<Entity> getEntities(@NotNull String id) {
         return (List<Entity>) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public ItemStack getItemStack(@NotNull String id) {
         return (ItemStack) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public NBTCompound getNbtCompound(@NotNull String id) {
         return (NBTCompound) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public NBT getNBT(@NotNull String id) {
         return (NBT) getObject(id);
     }
 
-    @Nullable
+    @NotNull
     public Object getObject(@NotNull String id) {
-        return args.getOrDefault(id, null);
+        return args.computeIfAbsent(id, s -> {
+            throw new NullPointerException(
+                    "The argument with the id " + id + " has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
+        });
     }
 
     protected void setArg(@NotNull String id, Object value) {
