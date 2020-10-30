@@ -95,13 +95,13 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
             packet.writeByte(METADATA_BYTE);
             byte dataValue = 0;
             if (isSmall())
-                dataValue += 1;
+                dataValue |= 0x01;
             if (hasArms)
-                dataValue += 2;
+                dataValue |= 0x04;
             if (hasNoBasePlate())
-                dataValue += 4;
+                dataValue |= 0x08;
             if (hasMarker())
-                dataValue += 8;
+                dataValue |= 0x10;
             packet.writeByte(dataValue);
         } else if (index == 15) {
             packet.writeByte((byte) 15);
