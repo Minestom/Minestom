@@ -1,9 +1,7 @@
 package net.minestom.server.network;
 
-import net.minestom.server.entity.Player;
-
 /**
- * Represents the current connection state of a {@link Player}.
+ * Represents the current connection state of a {@link net.minestom.server.network.player.PlayerConnection}.
  */
 public enum ConnectionState {
     UNKNOWN, STATUS, LOGIN, PLAY
