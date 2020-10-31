@@ -2,6 +2,8 @@ package net.minestom.server.entity.ai;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The target selector is called each time the entity receives an "attack" instruction
@@ -11,7 +13,7 @@ public abstract class TargetSelector {
 
     protected final EntityCreature entityCreature;
 
-    public TargetSelector(EntityCreature entityCreature) {
+    public TargetSelector(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
 
@@ -23,6 +25,7 @@ public abstract class TargetSelector {
      *
      * @return the target, null if not any
      */
+    @Nullable
     public abstract Entity findTarget();
 
     /**
@@ -30,6 +33,7 @@ public abstract class TargetSelector {
      *
      * @return the entity
      */
+    @NotNull
     public EntityCreature getEntityCreature() {
         return entityCreature;
     }

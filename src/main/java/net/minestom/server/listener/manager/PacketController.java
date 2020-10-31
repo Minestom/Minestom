@@ -1,11 +1,18 @@
 package net.minestom.server.listener.manager;
 
+import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.client.ClientPlayPacket;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Used to control the output of a packet in {@link PacketConsumer#accept(Player, PacketController, ClientPlayPacket)}.
+ */
 public class PacketController {
 
     private boolean cancel;
     private PacketListenerConsumer packetListenerConsumer;
 
-    protected PacketController(PacketListenerConsumer packetListenerConsumer) {
+    protected PacketController(@Nullable PacketListenerConsumer packetListenerConsumer) {
         this.packetListenerConsumer = packetListenerConsumer;
     }
 
@@ -30,8 +37,9 @@ public class PacketController {
     /**
      * Gets the listener associated with the packet.
      *
-     * @return the packet's listener
+     * @return the packet's listener, null if not present
      */
+    @Nullable
     public PacketListenerConsumer getPacketListenerConsumer() {
         return packetListenerConsumer;
     }
@@ -41,9 +49,9 @@ public class PacketController {
      * <p>
      * WARNING: this will overwrite the default minestom listener.
      *
-     * @param packetListenerConsumer the new packet listener
+     * @param packetListenerConsumer the new packet listener, can be null
      */
-    public void setPacketListenerConsumer(PacketListenerConsumer packetListenerConsumer) {
+    public void setPacketListenerConsumer(@Nullable PacketListenerConsumer packetListenerConsumer) {
         this.packetListenerConsumer = packetListenerConsumer;
     }
 }

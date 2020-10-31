@@ -6,11 +6,12 @@ import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PacketListenerManager {
+public final class PacketListenerManager {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
@@ -48,7 +49,14 @@ public class PacketListenerManager {
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
     }
 
-    public <T extends ClientPlayPacket> void process(T packet, Player player) {
+    /**
+     * Processes a packet by getting its {@link PacketListenerConsumer} and calling all the packet listeners.
+     *
+     * @param packet the received packet
+     * @param player the player who sent the packet
+     * @param <T>    the packet type
+     */
+    public <T extends ClientPlayPacket> void process(@NotNull T packet, @NotNull Player player) {
 
         final Class clazz = packet.getClass();
 
@@ -56,7 +64,7 @@ public class PacketListenerManager {
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            System.err.println("Packet " + clazz + " does not have any default listener!");
+            System.err.println("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
         }
 
 
@@ -79,15 +87,15 @@ public class PacketListenerManager {
     }
 
     /**
-     * Set the listener of a packet
+     * Sets the listener of a packet.
      * <p>
-     * WARNING: this will overwrite the default minestom listener, this is not reversible
+     * WARNING: this will overwrite the default minestom listener, this is not reversible.
      *
      * @param packetClass the class of the packet
      * @param consumer    the new packet's listener
      * @param <T>         the type of the packet
      */
-    public <T extends ClientPlayPacket> void setListener(Class<T> packetClass, PacketListenerConsumer<T> consumer) {
+    public <T extends ClientPlayPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketListenerConsumer<T> consumer) {
         this.listeners.put(packetClass, consumer);
     }
 

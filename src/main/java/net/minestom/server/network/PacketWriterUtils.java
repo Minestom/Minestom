@@ -24,7 +24,7 @@ public final class PacketWriterUtils {
     private static final ExecutorService PACKET_WRITER_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_PACKET_WRITER, MinecraftServer.THREAD_NAME_PACKET_WRITER);
 
     /**
-     * Write the {@link ServerPacket} in the writer thread pool.
+     * Writes the {@link ServerPacket} in the writer thread pool.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -39,7 +39,7 @@ public final class PacketWriterUtils {
     }
 
     /**
-     * Write a {@link ServerPacket} in the writer thread pool and send it to every players in {@code players}.
+     * Writes a {@link ServerPacket} in the writer thread pool and send it to every players in {@code players}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -65,7 +65,7 @@ public final class PacketWriterUtils {
     }
 
     /**
-     * Write a {@link ServerPacket} and send it to a {@link PlayerConnection}.
+     * Writes a {@link ServerPacket} and send it to a {@link PlayerConnection}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *
@@ -86,7 +86,7 @@ public final class PacketWriterUtils {
     }
 
     /**
-     * Write a {@link ServerPacket} and send it to a {@link Player}.
+     * Writes a {@link ServerPacket} and send it to a {@link Player}.
      * <p>
      * WARNING: should not be used if the packet receive order is important
      *

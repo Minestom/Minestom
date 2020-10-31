@@ -4,10 +4,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 public class FollowTargetGoal extends GoalSelector {
 
-    public FollowTargetGoal(EntityCreature entityCreature) {
+    public FollowTargetGoal(@NotNull EntityCreature entityCreature) {
         super(entityCreature);
     }
 

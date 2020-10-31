@@ -2,6 +2,7 @@ package net.minestom.server.entity.ai;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class GoalSelector {
 
@@ -19,7 +20,7 @@ public abstract class GoalSelector {
     public abstract boolean shouldStart();
 
     /**
-     * Start this {@link GoalSelector}
+     * Starts this {@link GoalSelector}.
      */
     public abstract void start();
 
@@ -38,15 +39,16 @@ public abstract class GoalSelector {
     public abstract boolean shouldEnd();
 
     /**
-     * End this {@link GoalSelector}
+     * Ends this {@link GoalSelector}.
      */
     public abstract void end();
 
     /**
-     * Find a target based on the entity {@link TargetSelector}
+     * Finds a target based on the entity {@link TargetSelector}.
      *
      * @return the target entity, null if not found
      */
+    @Nullable
     public Entity findTarget() {
         for (TargetSelector targetSelector : entityCreature.getTargetSelectors()) {
             final Entity entity = targetSelector.findTarget();

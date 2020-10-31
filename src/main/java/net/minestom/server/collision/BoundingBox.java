@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
@@ -21,7 +22,7 @@ public class BoundingBox {
      * @param y      the height size
      * @param z      the depth size
      */
-    public BoundingBox(Entity entity, float x, float y, float z) {
+    public BoundingBox(@NotNull Entity entity, float x, float y, float z) {
         this.entity = entity;
         this.x = x;
         this.y = y;
@@ -34,7 +35,7 @@ public class BoundingBox {
      * @param boundingBox the {@link BoundingBox} to check
      * @return true if the two {@link BoundingBox} intersect with each other, false otherwise
      */
-    public boolean intersect(BoundingBox boundingBox) {
+    public boolean intersect(@NotNull BoundingBox boundingBox) {
         return (getMinX() <= boundingBox.getMaxX() && getMaxX() >= boundingBox.getMinX()) &&
                 (getMinY() <= boundingBox.getMaxY() && getMaxY() >= boundingBox.getMinY()) &&
                 (getMinZ() <= boundingBox.getMaxZ() && getMaxZ() >= boundingBox.getMinZ());
@@ -46,7 +47,7 @@ public class BoundingBox {
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
      */
-    public boolean intersect(Entity entity) {
+    public boolean intersect(@NotNull Entity entity) {
         return intersect(entity.getBoundingBox());
     }
 
@@ -56,7 +57,7 @@ public class BoundingBox {
      * @param blockPosition the position to check
      * @return true if the bounding box intersects with the position, false otherwise
      */
-    public boolean intersect(BlockPosition blockPosition) {
+    public boolean intersect(@NotNull BlockPosition blockPosition) {
 
         final float offsetX = 1;
         final float x = blockPosition.getX();
@@ -90,7 +91,7 @@ public class BoundingBox {
                 (z >= getMinZ() && z <= getMaxZ());
     }
 
-    public boolean intersect(Position position) {
+    public boolean intersect(@NotNull Position position) {
         return intersect(position.getX(), position.getY(), position.getZ());
     }
 
@@ -102,6 +103,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new {@link BoundingBox} expanded
      */
+    @NotNull
     public BoundingBox expand(float x, float y, float z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
@@ -114,6 +116,7 @@ public class BoundingBox {
      * @param z the Z offset
      * @return a new bounding box contracted
      */
+    @NotNull
     public BoundingBox contract(float x, float y, float z) {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
@@ -204,6 +207,7 @@ public class BoundingBox {
      *
      * @return the points at the bottom of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getBottomFace() {
         return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
@@ -218,6 +222,7 @@ public class BoundingBox {
      *
      * @return the points at the top of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getTopFace() {
         return new Vector[]{
                 new Vector(getMinX(), getMaxY(), getMinZ()),
@@ -232,6 +237,7 @@ public class BoundingBox {
      *
      * @return the points on the left face of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getLeftFace() {
         return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
@@ -246,6 +252,7 @@ public class BoundingBox {
      *
      * @return the points on the right face of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getRightFace() {
         return new Vector[]{
                 new Vector(getMaxX(), getMinY(), getMinZ()),
@@ -260,6 +267,7 @@ public class BoundingBox {
      *
      * @return the points at the front of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getFrontFace() {
         return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMinZ()),
@@ -274,6 +282,7 @@ public class BoundingBox {
      *
      * @return the points at the back of the {@link BoundingBox}
      */
+    @NotNull
     public Vector[] getBackFace() {
         return new Vector[]{
                 new Vector(getMinX(), getMinY(), getMaxZ()),

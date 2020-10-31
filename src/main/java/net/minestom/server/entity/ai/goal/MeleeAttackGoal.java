@@ -7,6 +7,9 @@ import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
@@ -25,7 +28,7 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param delay          the delay between each attacks
      * @param timeUnit       the unit of the delay
      */
-    public MeleeAttackGoal(EntityCreature entityCreature, int delay, TimeUnit timeUnit) {
+    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, int delay, @NotNull TimeUnit timeUnit) {
         super(entityCreature);
         this.delay = delay;
         this.timeUnit = timeUnit;
@@ -38,7 +41,9 @@ public class MeleeAttackGoal extends GoalSelector {
 
     @Override
     public void start() {
-        final Position targetPosition = getTarget().getPosition();
+        final Entity target = getTarget();
+        Check.notNull(target, "The target is not expected to be null!");
+        final Position targetPosition = target.getPosition();
         entityCreature.setPathTo(targetPosition);
     }
 
@@ -85,6 +90,7 @@ public class MeleeAttackGoal extends GoalSelector {
      *
      * @return the target of the entity
      */
+    @Nullable
     private Entity getTarget() {
         final Entity target = entityCreature.getTarget();
         return target == null ? findTarget() : target;

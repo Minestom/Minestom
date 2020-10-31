@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Produces a random element from a given set, with weights applied
+ * Produces a random element from a given set, with weights applied.
  *
  * @param <E>
  */
@@ -33,7 +33,7 @@ public class WeightedRandom<E extends WeightedRandomItem> {
     }
 
     /**
-     * Gets a random element from this set
+     * Gets a random element from this set.
      *
      * @param rng Random Number Generator to generate random numbers with
      * @return a random element from this set

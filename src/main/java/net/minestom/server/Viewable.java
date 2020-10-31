@@ -38,7 +38,7 @@ public interface Viewable {
     Set<Player> getViewers();
 
     /**
-     * Gets if a player is seeing this viewable object
+     * Gets if a player is seeing this viewable object.
      *
      * @param player the player to check
      * @return true if {@code player} is a viewer, false otherwise
@@ -48,10 +48,10 @@ public interface Viewable {
     }
 
     /**
-     * Sends a packet to all viewers
+     * Sends a packet to all viewers.
      * <p>
      * It is better than looping through the viewers
-     * to send a packet since it is here only serialized once
+     * to send a packet since it is here only serialized once.
      *
      * @param packet the packet to send to all viewers
      */
@@ -60,10 +60,10 @@ public interface Viewable {
     }
 
     /**
-     * Sends multiple packets to all viewers
+     * Sends multiple packets to all viewers.
      * <p>
      * It is better than looping through the viewers
-     * to send a packet since it is here only serialized once
+     * to send a packet since it is here only serialized once.
      *
      * @param packets the packets to send
      */
@@ -74,16 +74,16 @@ public interface Viewable {
     }
 
     /**
-     * Sends a packet to all viewers and the viewable element if it is a player
+     * Sends a packet to all viewers and the viewable element if it is a player.
      * <p>
-     * If 'this' isn't a player, then {@link #sendPacketToViewers(ServerPacket)} is called instead
+     * If 'this' isn't a player, then {@link #sendPacketToViewers(ServerPacket)} is called instead.
      *
      * @param packet the packet to send
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         if (this instanceof Player) {
             if (getViewers().isEmpty()) {
-                ((Player) this).getPlayerConnection().sendPacket(packet);
+                PacketWriterUtils.writeAndSend((Player) this, packet);
             } else {
                 UNSAFE_sendPacketToViewersAndSelf(packet);
             }
@@ -93,9 +93,9 @@ public interface Viewable {
     }
 
     /**
-     * Sends a packet to all the viewers and 'this'
+     * Sends a packet to all the viewers and 'this'.
      * <p>
-     * Unsafe because of a cast to {@link Player} without any check beforehand
+     * Unsafe because of a cast to {@link Player} without any check beforehand.
      *
      * @param packet the packet to send
      */

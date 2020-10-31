@@ -73,14 +73,14 @@ public class InstanceContainer extends Instance {
     private ChunkSupplier chunkSupplier;
 
     /**
-     * Create an {@link InstanceContainer}
+     * Creates an {@link InstanceContainer}.
      *
      * @param uniqueId        the unique id of the instance
      * @param dimensionType   the dimension type of the instance
      * @param storageLocation the {@link StorageLocation} of the instance,
      *                        can be null if you do not wish to save the instance later on
      */
-    public InstanceContainer(UUID uniqueId, DimensionType dimensionType, StorageLocation storageLocation) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable StorageLocation storageLocation) {
         super(uniqueId, dimensionType);
 
         this.storageLocation = storageLocation;
@@ -102,7 +102,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+    public void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data) {
         setBlock(x, y, z, blockStateId, null, data);
     }
 
@@ -114,7 +114,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         setBlock(x, y, z, blockStateId, customBlock, data);
     }
@@ -132,7 +132,8 @@ public class InstanceContainer extends Instance {
      * @param customBlock  the {@link CustomBlock}, null if none
      * @param data         the {@link Data}, null if none
      */
-    private synchronized void setBlock(int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
+    private synchronized void setBlock(int x, int y, int z, short blockStateId,
+                                       @Nullable CustomBlock customBlock, @Nullable Data data) {
         final Chunk chunk = getChunkAt(x, z);
         if (ChunkUtils.isLoaded(chunk)) {
             UNSAFE_setBlock(chunk, x, y, z, blockStateId, customBlock, data);
@@ -160,6 +161,8 @@ public class InstanceContainer extends Instance {
      */
     private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, short blockStateId,
                                  @Nullable CustomBlock customBlock, @Nullable Data data) {
+
+        // Cannot place block in a read-only chunk
         if (chunk.isReadOnly()) {
             return;
         }
