@@ -32,19 +32,19 @@ public class FakePlayer extends Player {
     /**
      * Inits a new {@link FakePlayer}.
      *
-     * @param uuid              the FakePlayer uuid
-     * @param username          the FakePlayer username
-     * @param scheduledCallback the optional callback called when the fake player first spawn
+     * @param uuid          the FakePlayer uuid
+     * @param username      the FakePlayer username
+     * @param spawnCallback the optional callback called when the fake player first spawn
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username,
-                                  @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> scheduledCallback) {
+                                  @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> spawnCallback) {
         final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
 
-        if (scheduledCallback != null) {
+        if (spawnCallback != null) {
             fakePlayer.addEventCallback(PlayerSpawnEvent.class,
                     event -> {
                         if (event.isFirstSpawn()) {
-                            scheduledCallback.accept(fakePlayer);
+                            spawnCallback.accept(fakePlayer);
                         }
                     });
         }
@@ -53,12 +53,12 @@ public class FakePlayer extends Player {
     /**
      * Inits a new {@link FakePlayer} without adding it in cache.
      *
-     * @param uuid              the FakePlayer uuid
-     * @param username          the FakePlayer username
-     * @param scheduledCallback the optional callback called when the fake player first spawn
+     * @param uuid          the FakePlayer uuid
+     * @param username      the FakePlayer username
+     * @param spawnCallback the optional callback called when the fake player first spawn
      */
-    public static void initPlayer(@NotNull UUID uuid, @NotNull String username, @Nullable Consumer<FakePlayer> scheduledCallback) {
-        initPlayer(uuid, username, new FakePlayerOption(), scheduledCallback);
+    public static void initPlayer(@NotNull UUID uuid, @NotNull String username, @Nullable Consumer<FakePlayer> spawnCallback) {
+        initPlayer(uuid, username, new FakePlayerOption(), spawnCallback);
     }
 
     /**
