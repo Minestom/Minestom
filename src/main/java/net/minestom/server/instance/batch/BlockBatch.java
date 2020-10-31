@@ -89,8 +89,9 @@ public class BlockBatch implements InstanceBatch {
 
                         // Execute the callback if this was the last chunk to process
                         if (isLast) {
+                            this.instance.refreshLastBlockChangeTime();
                             if (callback != null) {
-                                instance.scheduleNextTick(inst -> callback.run());
+                                this.instance.scheduleNextTick(inst -> callback.run());
                             }
                         }
 

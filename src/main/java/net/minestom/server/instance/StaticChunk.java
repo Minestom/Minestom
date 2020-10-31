@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockProvider;
@@ -111,4 +112,16 @@ public class StaticChunk extends Chunk {
         return fullDataPacket;
     }
 
+    @NotNull
+    @Override
+    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+        StaticChunk staticChunk = new StaticChunk(instance, biomes.clone(), chunkX, chunkZ, blockProvider);
+        // Prevent re-writing the whole packet since it is static anyway
+        final ByteBuf packetBuffer = getFullDataPacket();
+        if (packetBuffer != null) {
+            staticChunk.setFullDataPacket(packetBuffer);
+        }
+
+        return staticChunk;
+    }
 }

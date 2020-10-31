@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -29,6 +30,11 @@ public final class ArrayUtils {
 
     public static void removeElement(@NotNull Object[] arr, int index) {
         System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
+    }
+
+    public static void copyToDestination(short[] dest, short[] src) {
+        Check.argCondition(dest.length != src.length, "The two arrays need to have the same length");
+        System.arraycopy(src, 0, dest, 0, src.length);
     }
 
     /**

@@ -72,6 +72,10 @@ public class InstanceContainer extends Instance {
     // used to supply a new chunk object at a position when requested
     private ChunkSupplier chunkSupplier;
 
+    // Fields for instance copy
+    protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
+    private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
+
     /**
      * Creates an {@link InstanceContainer}.
      *
@@ -168,6 +172,9 @@ public class InstanceContainer extends Instance {
         }
 
         synchronized (chunk) {
+
+            // Refresh the last block change time
+            this.lastBlockChangeTime = System.currentTimeMillis();
 
             final boolean isCustomBlock = customBlock != null;
 
@@ -607,6 +614,63 @@ public class InstanceContainer extends Instance {
      */
     protected void addSharedInstance(SharedInstance sharedInstance) {
         this.sharedInstances.add(sharedInstance);
+    }
+
+    /**
+     * Copies all the chunks of this instance and create a new instance container with all of them.
+     * <p>
+     * Chunks are copied with {@link Chunk#copy(Instance, int, int)},
+     * {@link UUID} is randomized, {@link DimensionType} is passed over and the {@link StorageLocation} is null.
+     *
+     * @return an {@link InstanceContainer} with the exact same chunks as 'this'
+     */
+    public synchronized InstanceContainer copy() {
+        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType(), null);
+        copiedInstance.srcInstance = this;
+        copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
+
+        ConcurrentHashMap<Long, Chunk> copiedChunks = copiedInstance.chunks;
+        for (Map.Entry<Long, Chunk> entry : chunks.entrySet()) {
+            final long index = entry.getKey();
+            final Chunk chunk = entry.getValue();
+
+            final Chunk copiedChunk = chunk.copy(copiedInstance, chunk.getChunkX(), chunk.getChunkZ());
+
+            copiedChunks.put(index, copiedChunk);
+            UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunk.getChunkX(), chunk.getChunkZ());
+        }
+
+        return copiedInstance;
+    }
+
+    /**
+     * Gets the instance from which this one has been copied.
+     * <p>
+     * Only present if this instance has been created with {@link InstanceContainer#copy()}.
+     *
+     * @return the instance source, null if not created by a copy
+     */
+    @Nullable
+    public InstanceContainer getSrcInstance() {
+        return srcInstance;
+    }
+
+    /**
+     * Gets the last time at which a block changed.
+     *
+     * @return the time at which the last block changed in milliseconds, 0 if never
+     */
+    public long getLastBlockChangeTime() {
+        return lastBlockChangeTime;
+    }
+
+    /**
+     * Signals the instance that a block changed.
+     * <p>
+     * Useful if you change blocks values directly using a {@link Chunk} object.
+     */
+    public void refreshLastBlockChangeTime() {
+        this.lastBlockChangeTime = System.currentTimeMillis();
     }
 
     /**

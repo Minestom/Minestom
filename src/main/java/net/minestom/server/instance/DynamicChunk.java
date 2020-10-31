@@ -11,6 +11,7 @@ import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -404,4 +405,17 @@ public class DynamicChunk extends Chunk {
         return fullDataPacket;
     }
 
+    @NotNull
+    @Override
+    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+        DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
+        ArrayUtils.copyToDestination(dynamicChunk.blocksStateId, blocksStateId);
+        ArrayUtils.copyToDestination(dynamicChunk.customBlocksId, customBlocksId);
+        dynamicChunk.blocksData.putAll(blocksData);
+        dynamicChunk.updatableBlocks.addAll(updatableBlocks);
+        dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);
+        dynamicChunk.blockEntities.addAll(blockEntities);
+
+        return dynamicChunk;
+    }
 }

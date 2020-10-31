@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,19 +31,19 @@ public class PerGroupChunkProvider extends ThreadProvider {
     private final Map<Instance, Map<LongSet, Instance>> instanceInstanceMap = new ConcurrentHashMap<>();
 
     @Override
-    public void onInstanceCreate(Instance instance) {
-        this.instanceChunksGroupMap.put(instance, new Long2ObjectOpenHashMap<>());
-        this.instanceInstanceMap.put(instance, new HashMap<>());
+    public void onInstanceCreate(@NotNull Instance instance) {
+        this.instanceChunksGroupMap.putIfAbsent(instance, new Long2ObjectOpenHashMap<>());
+        this.instanceInstanceMap.putIfAbsent(instance, new HashMap<>());
     }
 
     @Override
-    public void onInstanceDelete(Instance instance) {
+    public void onInstanceDelete(@NotNull Instance instance) {
         this.instanceChunksGroupMap.remove(instance);
         this.instanceInstanceMap.remove(instance);
     }
 
     @Override
-    public void onChunkLoad(Instance instance, int chunkX, int chunkZ) {
+    public void onChunkLoad(@NotNull Instance instance, int chunkX, int chunkZ) {
         final long loadedChunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
 
         Long2ObjectMap<LongSet> chunksGroupMap = getChunksGroupMap(instance);
@@ -98,7 +99,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     @Override
-    public void onChunkUnload(Instance instance, int chunkX, int chunkZ) {
+    public void onChunkUnload(@NotNull Instance instance, int chunkX, int chunkZ) {
         Long2ObjectMap<LongSet> chunksGroupMap = getChunksGroupMap(instance);
         Map<LongSet, Instance> instanceMap = getInstanceMap(instance);
 
@@ -116,6 +117,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
         }
     }
 
+    @NotNull
     @Override
     public List<Future<?>> update(long time) {
         List<Future<?>> futures = new ArrayList<>();
@@ -149,11 +151,11 @@ public class PerGroupChunkProvider extends ThreadProvider {
     }
 
     private Long2ObjectMap<LongSet> getChunksGroupMap(Instance instance) {
-        return instanceChunksGroupMap.get(instance);
+        return instanceChunksGroupMap.computeIfAbsent(instance, inst -> new Long2ObjectOpenHashMap<>());
     }
 
     private Map<LongSet, Instance> getInstanceMap(Instance instance) {
-        return instanceInstanceMap.get(instance);
+        return instanceInstanceMap.computeIfAbsent(instance, inst -> new HashMap<>());
     }
 
 }

@@ -130,8 +130,10 @@ public class ChunkBatch implements InstanceBatch {
             chunk.sendChunkUpdate();
 
             if (callback != null) {
+                this.instance.refreshLastBlockChangeTime();
+
                 if (safeCallback) {
-                    instance.scheduleNextTick(inst -> callback.accept(chunk));
+                    this.instance.scheduleNextTick(inst -> callback.accept(chunk));
                 } else {
                     callback.accept(chunk);
                 }

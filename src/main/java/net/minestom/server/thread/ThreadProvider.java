@@ -8,6 +8,8 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -39,27 +41,29 @@ public abstract class ThreadProvider {
     }
 
     /**
-     * Called when an {@link Instance} is created.
+     * Called when an {@link Instance} is registered.
      *
      * @param instance the newly create {@link Instance}
      */
-    public abstract void onInstanceCreate(Instance instance);
+    public abstract void onInstanceCreate(@NotNull Instance instance);
 
     /**
-     * Called when an {@link Instance} is deleted.
+     * Called when an {@link Instance} is unregistered.
      *
      * @param instance the deleted {@link Instance}
      */
-    public abstract void onInstanceDelete(Instance instance);
+    public abstract void onInstanceDelete(@NotNull Instance instance);
 
     /**
      * Called when a chunk is loaded.
+     * <p>
+     * Be aware that this is possible for an instance to load chunks before being registered.
      *
      * @param instance the instance of the chunk
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      */
-    public abstract void onChunkLoad(Instance instance, int chunkX, int chunkZ);
+    public abstract void onChunkLoad(@NotNull Instance instance, int chunkX, int chunkZ);
 
     /**
      * Called when a chunk is unloaded.
@@ -68,7 +72,7 @@ public abstract class ThreadProvider {
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      */
-    public abstract void onChunkUnload(Instance instance, int chunkX, int chunkZ);
+    public abstract void onChunkUnload(@NotNull Instance instance, int chunkX, int chunkZ);
 
     /**
      * Performs a server tick for all chunks based on their linked thread.
@@ -76,6 +80,7 @@ public abstract class ThreadProvider {
      * @param time the update time in milliseconds
      * @return the futures to execute to complete the tick
      */
+    @NotNull
     public abstract List<Future<?>> update(long time);
 
     /**
@@ -110,7 +115,7 @@ public abstract class ThreadProvider {
      * @param chunkIndex the index of the chunk {@link ChunkUtils#getChunkIndex(int, int)}
      * @param time       the time of the update in milliseconds
      */
-    protected void processChunkTick(Instance instance, long chunkIndex, long time) {
+    protected void processChunkTick(@NotNull Instance instance, long chunkIndex, long time) {
         final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
@@ -129,7 +134,7 @@ public abstract class ThreadProvider {
      * @param instance the instance
      * @param time     the current time in ms
      */
-    protected void updateInstance(Instance instance, long time) {
+    protected void updateInstance(@NotNull Instance instance, long time) {
         // The instance
         instance.tick(time);
     }
@@ -141,7 +146,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updateChunk(Instance instance, Chunk chunk, long time) {
+    protected void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         chunk.tick(time, instance);
     }
 
@@ -154,7 +159,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updateEntities(Instance instance, Chunk chunk, long time) {
+    protected void updateEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         conditionalEntityUpdate(instance, chunk, time, null);
     }
 
@@ -165,7 +170,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updateObjectEntities(Instance instance, Chunk chunk, long time) {
+    protected void updateObjectEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof ObjectEntity);
     }
 
@@ -176,7 +181,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updateLivingEntities(Instance instance, Chunk chunk, long time) {
+    protected void updateLivingEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof LivingEntity);
     }
 
@@ -187,7 +192,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updateCreatures(Instance instance, Chunk chunk, long time) {
+    protected void updateCreatures(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof EntityCreature);
     }
 
@@ -198,7 +203,7 @@ public abstract class ThreadProvider {
      * @param chunk    the chunk
      * @param time     the current time in ms
      */
-    protected void updatePlayers(Instance instance, Chunk chunk, long time) {
+    protected void updatePlayers(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof Player);
     }
 
@@ -210,7 +215,8 @@ public abstract class ThreadProvider {
      * @param time      the current time in ms
      * @param condition the condition which confirm if the update happens or not
      */
-    protected void conditionalEntityUpdate(Instance instance, Chunk chunk, long time, Function<Entity, Boolean> condition) {
+    protected void conditionalEntityUpdate(@NotNull Instance instance, @NotNull Chunk chunk, long time,
+                                           @Nullable Function<Entity, Boolean> condition) {
         final Set<Entity> entities = instance.getChunkEntities(chunk);
 
         if (!entities.isEmpty()) {
@@ -231,7 +237,7 @@ public abstract class ThreadProvider {
      * @param instance the instance
      * @param callback the callback to run for all the {@link SharedInstance}
      */
-    private void updateSharedInstances(Instance instance, Consumer<SharedInstance> callback) {
+    private void updateSharedInstances(@NotNull Instance instance, @NotNull Consumer<SharedInstance> callback) {
         if (instance instanceof InstanceContainer) {
             final InstanceContainer instanceContainer = (InstanceContainer) instance;
             for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {

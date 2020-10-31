@@ -231,6 +231,19 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected abstract ChunkDataPacket createFreshPacket();
 
     /**
+     * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
+     * <p>
+     * The instance and chunk position (X/Z) can be modified using the given arguments.
+     *
+     * @param instance the instance of the new chunk
+     * @param chunkX   the new chunk X
+     * @param chunkZ   the new chunK Z
+     * @return a copy of this chunk with a potentially new instance and position
+     */
+    @NotNull
+    public abstract Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+
+    /**
      * Gets the {@link CustomBlock} at a position.
      *
      * @param x the block X
