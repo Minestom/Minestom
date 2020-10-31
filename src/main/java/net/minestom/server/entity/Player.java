@@ -1442,6 +1442,7 @@ public class Player extends LivingEntity implements CommandSender {
                 chunk.removeViewer(this);
         }
 
+        // Not sure what it does...
         updateViewPosition(newChunk);
 
         // Load new chunks

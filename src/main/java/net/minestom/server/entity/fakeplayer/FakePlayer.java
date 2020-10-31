@@ -7,6 +7,7 @@ import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -29,7 +30,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Init a new {@link FakePlayer}.
+     * Inits a new {@link FakePlayer}.
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
@@ -39,14 +40,18 @@ public class FakePlayer extends Player {
      *                          {@link net.minestom.server.timer.SchedulerManager} thread pool
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username,
-                                  @NotNull FakePlayerOption option, @NotNull Consumer<FakePlayer> scheduledCallback) {
+                                  @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> scheduledCallback) {
         final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
 
-        fakePlayer.addEventCallback(PlayerLoginEvent.class, event -> MinecraftServer.getSchedulerManager().buildTask(() -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule());
+        if (scheduledCallback != null) {
+            fakePlayer.addEventCallback(PlayerLoginEvent.class,
+                    event -> MinecraftServer.getSchedulerManager().buildTask(
+                            () -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule());
+        }
     }
 
     /**
-     * Init a new {@link FakePlayer} without adding him in cache.
+     * Inits a new {@link FakePlayer} without adding it in cache.
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
@@ -54,7 +59,7 @@ public class FakePlayer extends Player {
      *                          WARNING: it will be called in the
      *                          {@link net.minestom.server.timer.SchedulerManager} thread pool
      */
-    public static void initPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull Consumer<FakePlayer> scheduledCallback) {
+    public static void initPlayer(@NotNull UUID uuid, @NotNull String username, @Nullable Consumer<FakePlayer> scheduledCallback) {
         initPlayer(uuid, username, new FakePlayerOption(), scheduledCallback);
     }
 
