@@ -606,7 +606,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
 
-        // true if the chunks need to be send to the client, can be false if the instances share the same chunks (eg SharedInstance)
+        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
 
         if (needWorldRefresh) {

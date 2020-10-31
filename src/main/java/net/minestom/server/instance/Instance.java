@@ -831,10 +831,10 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to add
      */
-    public void addEntity(@NotNull Entity entity) {
+    public void UNSAFE_addEntity(@NotNull Entity entity) {
         final Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
-            lastInstance.removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
+            lastInstance.UNSAFE_removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
@@ -874,7 +874,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to remove
      */
-    public void removeEntity(@NotNull Entity entity) {
+    public void UNSAFE_removeEntity(@NotNull Entity entity) {
         final Instance entityInstance = entity.getInstance();
         if (entityInstance != this)
             return;

@@ -658,8 +658,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Gets the entity current instance.
      *
-     * @return the entity instance
+     * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
+    @Nullable
     public Instance getInstance() {
         return instance;
     }
@@ -677,12 +678,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
 
         if (this.instance != null) {
-            this.instance.removeEntity(this);
+            this.instance.UNSAFE_removeEntity(this);
         }
 
         this.isActive = true;
         this.instance = instance;
-        instance.addEntity(this);
+        instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
@@ -1191,7 +1192,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.shouldRemove = true;
         entityById.remove(id);
         if (instance != null)
-            instance.removeEntity(this);
+            instance.UNSAFE_removeEntity(this);
     }
 
     /**
