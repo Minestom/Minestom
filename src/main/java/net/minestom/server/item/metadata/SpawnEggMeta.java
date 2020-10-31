@@ -42,7 +42,7 @@ public class SpawnEggMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         SpawnEggMeta spawnEggMeta = new SpawnEggMeta();
         spawnEggMeta.entityType = entityType;
         return spawnEggMeta;

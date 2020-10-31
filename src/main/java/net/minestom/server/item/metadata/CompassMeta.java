@@ -99,7 +99,7 @@ public class CompassMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         CompassMeta compassMeta = new CompassMeta();
         compassMeta.lodestoneTracked = lodestoneTracked;
         compassMeta.lodestoneDimension = lodestoneDimension;

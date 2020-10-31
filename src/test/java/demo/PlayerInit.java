@@ -5,8 +5,6 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -16,6 +14,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -55,12 +54,12 @@ public class PlayerInit {
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
-        inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+        /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
             p.sendMessage("click type inventory: " + clickType);
             System.out.println("slot inv: " + slot);
-            inventoryConditionResult.setCancel(false);
-        });
-        inventory.setItemStack(0, new ItemStack(Material.DIAMOND, (byte) 34));
+            inventoryConditionResult.setCancel(slot == 3);
+        });*/
+        inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
     }
 
     public static void init() {
@@ -91,13 +90,13 @@ public class PlayerInit {
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
                     creature.damage(DamageType.fromPlayer(player), -1);
-                    Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+                    Vector velocity = player.getPosition().copy().getDirection().multiply(6);
                     velocity.setY(4f);
                     entity.setVelocity(velocity);
                     player.sendMessage("You attacked an entity!");
                 } else if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    Vector velocity = player.getPosition().clone().getDirection().multiply(4);
+                    Vector velocity = player.getPosition().copy().getDirection().multiply(4);
                     velocity.setY(3.5f);
                     target.setVelocity(velocity);
                     target.damage(DamageType.fromPlayer(player), 5);
@@ -138,12 +137,20 @@ public class PlayerInit {
             player.addEventCallback(ItemDropEvent.class, event -> {
                 ItemStack droppedItem = event.getItemStack();
 
-                Position position = player.getPosition().clone().add(0, 1.5f, 0);
+                Position position = player.getPosition().copy().add(0, 1.5f, 0);
                 ItemEntity itemEntity = new ItemEntity(droppedItem, position);
                 itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
                 itemEntity.setInstance(player.getInstance());
-                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+                Vector velocity = player.getPosition().copy().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
+
+                Instance instance = player.getInstance();
+                InstanceContainer instanceContainer = instance instanceof InstanceContainer ? (InstanceContainer) instance :
+                        ((SharedInstance) instance).getInstanceContainer();
+                SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(instanceContainer);
+                player.setInstance(sharedInstance);
+                player.sendMessage("New instance");
+
             });
 
             player.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -154,32 +161,25 @@ public class PlayerInit {
 
                 event.setSpawningInstance(instanceContainer);
 
-                player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
                         return;
+                    inventoryConditionResult.setCancel(false);
                     ItemStack itemStack = p.getInventory().getItemStack(slot);
-                    Data data = itemStack.getData();
-                    if (data != null) {
-                        System.out.println("DATA: " + data.get("test"));
-                    }
                     System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + (itemStack.getData() != null));
-                });
+                });*/
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                player.teleport(new Position(0, 73f, 0));
+                if(event.isFirstSpawn()){
+                    player.teleport(new Position(0, 64f, 0));
+                }
 
-                Data data = new DataImpl();
-                data.set("test", 5, Integer.class);
-                ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 1);
-                itemStack.setData(data);
+                ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
                 player.getInventory().addItemStack(itemStack);
-                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));
-            });
 
-            player.addEventCallback(PlayerRespawnEvent.class, event -> {
-                event.setRespawnPosition(new Position(0f, 75f, 0f));
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

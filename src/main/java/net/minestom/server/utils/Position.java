@@ -163,11 +163,11 @@ public class Position {
     }
 
     /**
-     * Clones this position object with the same values.
+     * Copies this position object with the same values.
      *
      * @return a new {@link Position} object with the same coordinates
      */
-    public Position clone() {
+    public Position copy() {
         return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
     }
 

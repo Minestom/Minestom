@@ -20,7 +20,7 @@ public class Structure {
 				return;
 			if (bPos.getZ() + pos.getZ() >= Chunk.CHUNK_SIZE_Z || bPos.getZ() + pos.getZ() < 0)
 				return;
-			batch.setBlock(bPos.clone().add(pos), block);
+			batch.setBlock(bPos.copy().add(pos), block);
 		});
 	}
 

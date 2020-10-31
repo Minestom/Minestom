@@ -68,7 +68,7 @@ public class WritableBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         WritableBookMeta writableBookMeta = new WritableBookMeta();
         writableBookMeta.pages.addAll(pages);
 

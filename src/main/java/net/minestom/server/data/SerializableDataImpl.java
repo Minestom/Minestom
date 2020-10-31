@@ -58,7 +58,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
 
     @NotNull
     @Override
-    public Data clone() {
+    public Data copy() {
         SerializableDataImpl data = new SerializableDataImpl();
         data.data.putAll(this.data);
         data.dataType.putAll(this.dataType);

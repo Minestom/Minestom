@@ -26,7 +26,7 @@ public class Hologram implements Viewable {
     private boolean removed;
 
     public Hologram(Instance instance, Position spawnPosition, ColoredText text, boolean autoViewable) {
-        this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
+        this.entity = new HologramEntity(spawnPosition.copy().add(0, OFFSET_Y, 0));
         this.entity.setInstance(instance);
         this.entity.setAutoViewable(autoViewable);
 

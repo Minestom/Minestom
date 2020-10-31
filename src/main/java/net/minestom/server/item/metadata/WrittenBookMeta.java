@@ -180,7 +180,7 @@ public class WrittenBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         WrittenBookMeta writtenBookMeta = new WrittenBookMeta();
         writtenBookMeta.resolved = resolved;
         writtenBookMeta.generation = generation;

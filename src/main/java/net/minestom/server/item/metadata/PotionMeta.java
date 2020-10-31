@@ -152,7 +152,7 @@ public class PotionMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         PotionMeta potionMeta = new PotionMeta();
         potionMeta.potionType = potionType;
         potionMeta.customPotionEffects.addAll(customPotionEffects);

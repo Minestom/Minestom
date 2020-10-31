@@ -143,7 +143,7 @@ public class StorageLocation {
             // Copy data from the cachedMap
             if (cachedData.containsKey(key)) {
                 SerializableData data = cachedData.get(key);
-                dataContainer.setData(data.clone());
+                dataContainer.setData(data.copy());
                 return;
             }
         }

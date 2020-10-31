@@ -92,12 +92,12 @@ public class PlayerDiggingListener {
                 }
                 break;
             case DROP_ITEM_STACK:
-                final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().clone();
+                final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().copy();
                 dropItem(player, droppedItemStack, ItemStack.getAirItem());
                 break;
             case DROP_ITEM:
-                ItemStack handItem = player.getInventory().getItemInMainHand().clone();
-                ItemStack droppedItemStack2 = handItem.clone();
+                ItemStack handItem = player.getInventory().getItemInMainHand().copy();
+                ItemStack droppedItemStack2 = handItem.copy();
                 final StackingRule handStackingRule = handItem.getStackingRule();
 
                 droppedItemStack2 = handStackingRule.apply(droppedItemStack2, 1);
@@ -119,7 +119,7 @@ public class PlayerDiggingListener {
 
                 break;
             case SWAP_ITEM_HAND:
-                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand.clone(), mainHand.clone());
+                PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand.copy(), mainHand.copy());
                 player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
                     synchronized (playerInventory) {
                         playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());

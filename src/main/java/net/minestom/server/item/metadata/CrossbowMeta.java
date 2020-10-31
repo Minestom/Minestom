@@ -180,12 +180,12 @@ public class CrossbowMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         CrossbowMeta crossbowMeta = new CrossbowMeta();
         crossbowMeta.triple = triple;
-        crossbowMeta.projectile1 = projectile1 == null ? null : projectile1.clone();
-        crossbowMeta.projectile2 = projectile2 == null ? null : projectile2.clone();
-        crossbowMeta.projectile3 = projectile3 == null ? null : projectile3.clone();
+        crossbowMeta.projectile1 = projectile1 == null ? null : projectile1.copy();
+        crossbowMeta.projectile2 = projectile2 == null ? null : projectile2.copy();
+        crossbowMeta.projectile3 = projectile3 == null ? null : projectile3.copy();
 
         crossbowMeta.charged = charged;
 

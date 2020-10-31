@@ -4,7 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentNbtTag;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 
 public class TestCommand extends Command {
 
@@ -17,12 +17,20 @@ public class TestCommand extends Command {
             //addSyntax(this::execute, dynamicWord);
         }
 
-        Argument test = new ArgumentNbtTag("test");
+        Argument test = ArgumentType.Word("test").from("hey");
+        Argument num = ArgumentType.Integer("num");
+
+        setDefaultExecutor((source, args) -> {
+            System.out.println("DEFAULT");
+        });
 
         addSyntax((source, args) -> {
-            System.out.println("arg: "+args.getNBT("test").getClass());
-            System.out.println("SUCCESS");
+            System.out.println(1);
         }, test);
+
+        addSyntax((source, args) -> {
+            System.out.println(2);
+        }, test, num);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

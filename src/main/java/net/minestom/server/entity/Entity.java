@@ -130,7 +130,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
-        this.position = spawnPosition.clone();
+        this.position = spawnPosition.copy();
 
         setBoundingBox(0, 0, 0);
 

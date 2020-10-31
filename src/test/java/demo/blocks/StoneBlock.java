@@ -23,7 +23,7 @@ public class StoneBlock extends CustomBlock {
 
     @Override
     public void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Data data) {
-        BlockPosition above = blockPosition.clone().add(0, 1, 0);
+        BlockPosition above = blockPosition.copy().add(0, 1, 0);
         CustomBlock blockAbove = instance.getCustomBlock(above);
         if (blockAbove == this) {
             instance.setBlock(above, Block.AIR);

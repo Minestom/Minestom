@@ -34,7 +34,7 @@ public class PlayerHeadMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         return null;
     }
 }

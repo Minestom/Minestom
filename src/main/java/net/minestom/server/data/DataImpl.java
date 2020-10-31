@@ -51,7 +51,7 @@ public class DataImpl implements Data {
 
     @NotNull
     @Override
-    public Data clone() {
+    public Data copy() {
         DataImpl data = new DataImpl();
         data.data.putAll(this.data);
         return data;

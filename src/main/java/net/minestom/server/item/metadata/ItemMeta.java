@@ -44,13 +44,13 @@ public interface ItemMeta {
     void write(@NotNull NBTCompound compound);
 
     /**
-     * Clones this item meta.
+     * Copies this item meta.
      * <p>
-     * Used by {@link ItemStack#clone()}.
+     * Used by {@link ItemStack#copy()}.
      *
      * @return the cloned item meta
      */
     @NotNull
-    ItemMeta clone();
+    ItemMeta copy();
 
 }

@@ -529,12 +529,12 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Clones this item stack.
+     * Copies this item stack.
      *
      * @return a cloned item stack
      */
     @NotNull
-    public synchronized ItemStack clone() {
+    public synchronized ItemStack copy() {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
         itemStack.setUnbreakable(unbreakable);
@@ -552,11 +552,11 @@ public class ItemStack implements DataContainer {
         itemStack.customModelData = customModelData;
 
         if (itemMeta != null)
-            itemStack.itemMeta = itemMeta.clone();
+            itemStack.itemMeta = itemMeta.copy();
 
         final Data data = getData();
         if (data != null)
-            itemStack.setData(data.clone());
+            itemStack.setData(data.copy());
         return itemStack;
     }
 

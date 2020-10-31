@@ -85,7 +85,7 @@ public class EnchantedBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         EnchantedBookMeta enchantedBookMeta = new EnchantedBookMeta();
         enchantedBookMeta.storedEnchantmentMap.putAll(storedEnchantmentMap);
 

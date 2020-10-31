@@ -42,7 +42,7 @@ public class ChickenCreature extends EntityChicken {
         addEventCallback(EntityAttackEvent.class, event -> {
             //System.out.println("CALL ATTACK");
             LivingEntity entity = (LivingEntity) event.getTarget();
-            Vector velocity = getPosition().clone().getDirection().multiply(6);
+            Vector velocity = getPosition().copy().getDirection().multiply(6);
             velocity.setY(4f);
             entity.damage(DamageType.fromEntity(this), -1);
             entity.setVelocity(velocity);

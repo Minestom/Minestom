@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-public class Vector implements Cloneable {
+public class Vector {
 
     private static final double epsilon = 0.000001;
 
@@ -227,8 +227,7 @@ public class Vector implements Cloneable {
      *
      * @return vector
      */
-    @Override
-    public Vector clone() {
+    public Vector copy() {
         return new Vector(x, y, z);
     }
 

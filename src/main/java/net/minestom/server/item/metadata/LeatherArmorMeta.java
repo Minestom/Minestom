@@ -113,7 +113,7 @@ public class LeatherArmorMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         LeatherArmorMeta leatherArmorMeta = new LeatherArmorMeta();
         leatherArmorMeta.modified = modified;
         leatherArmorMeta.red = red;

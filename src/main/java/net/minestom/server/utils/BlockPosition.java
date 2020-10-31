@@ -186,12 +186,12 @@ public class BlockPosition {
     }
 
     /**
-     * Clones this block position.
+     * Copies this block position.
      *
      * @return the cloned block position
      */
     @NotNull
-    public BlockPosition clone() {
+    public BlockPosition copy() {
         return new BlockPosition(x, y, z);
     }
 

@@ -194,7 +194,7 @@ public class MapMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         MapMeta mapMeta = new MapMeta();
         mapMeta.setMapId(mapId);
         mapMeta.setMapScaleDirection(mapScaleDirection);

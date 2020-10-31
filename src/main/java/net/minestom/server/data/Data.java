@@ -41,7 +41,7 @@ public interface Data {
 
         @NotNull
         @Override
-        public Data clone() {
+        public Data copy() {
             return this;
         }
 
@@ -106,11 +106,11 @@ public interface Data {
     boolean isEmpty();
 
     /**
-     * Clones this data.
+     * Copies this data.
      *
      * @return a cloned data object
      */
     @NotNull
-    Data clone();
+    Data copy();
 
 }

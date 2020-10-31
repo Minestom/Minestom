@@ -36,7 +36,7 @@ public class FireworkMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta clone() {
+    public ItemMeta copy() {
         return null;
     }
 
