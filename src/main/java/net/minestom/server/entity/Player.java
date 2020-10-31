@@ -1327,7 +1327,7 @@ public class Player extends LivingEntity implements CommandSender {
             final BlockPosition pos = position.toBlockPosition();
             final Chunk chunk = instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
             Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-            onChunkChange(chunk);
+            refreshVisibleChunks(chunk);
         }
     }
 
@@ -1406,13 +1406,14 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Called when the player changes chunk (move from one to another).
+     * Can also be used to refresh the list of chunks that the client should see.
      * <p>
      * It does remove and add the player from the chunks viewers list when removed or added.
      * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}.
      *
      * @param newChunk the current/new player chunk
      */
-    protected void onChunkChange(@NotNull Chunk newChunk) {
+    public void refreshVisibleChunks(@NotNull Chunk newChunk) {
         // Previous chunks indexes
         final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(viewableChunks ->
                 ChunkUtils.getChunkIndex(viewableChunks.getChunkX(), viewableChunks.getChunkZ())
@@ -2389,6 +2390,8 @@ public class Player extends LivingEntity implements CommandSender {
         private byte displayedSkinParts;
         private MainHand mainHand;
 
+        private boolean firstRefresh = true;
+
         /**
          * The player game language.
          *
@@ -2451,6 +2454,9 @@ public class Player extends LivingEntity implements CommandSender {
          * @param mainHand           the player main hand
          */
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
+
+            final boolean viewDistanceChanged = !firstRefresh && this.viewDistance != viewDistance;
+
             this.locale = locale;
             this.viewDistance = viewDistance;
             this.chatMode = chatMode;
@@ -2458,6 +2464,16 @@ public class Player extends LivingEntity implements CommandSender {
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
             sendMetadataIndex(16);
+
+            this.firstRefresh = false;
+
+            // Client changed his view distance in the settings
+            if (viewDistanceChanged) {
+                final Chunk playerChunk = getChunk();
+                if (playerChunk != null) {
+                    refreshVisibleChunks(playerChunk);
+                }
+            }
         }
 
     }

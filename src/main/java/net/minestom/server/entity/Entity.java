@@ -1032,7 +1032,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         final boolean isPlayer = this instanceof Player;
 
         if (isPlayer)
-            ((Player) this).onChunkChange(newChunk); // Refresh loaded chunk
+            ((Player) this).refreshVisibleChunks(newChunk); // Refresh loaded chunk
 
         // Refresh entity viewable list
         final int entityViewDistance = MinecraftServer.getEntityViewDistance();

@@ -13,12 +13,14 @@ import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
@@ -33,6 +35,7 @@ import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
+import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
@@ -45,6 +48,7 @@ import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -57,6 +61,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.Proxy;
 import java.security.KeyPair;
+import java.util.Collection;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -432,15 +437,28 @@ public class MinecraftServer {
 
     /**
      * Changes the chunk view distance of the server.
-     * <p>
-     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
      *
      * @param chunkViewDistance the new chunk view distance
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.stateCondition(started, "The chunk view distance cannot be changed after the server has been started.");
+        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32), "The chunk view distance needs to be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
+        if (started) {
+            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
+            updateViewDistancePacket.viewDistance = chunkViewDistance;
+
+            final Collection<Player> players = connectionManager.getOnlinePlayers();
+
+            PacketWriterUtils.writeAndSend(players, updateViewDistancePacket);
+
+            connectionManager.getOnlinePlayers().forEach(player -> {
+                final Chunk playerChunk = player.getChunk();
+                if (playerChunk != null) {
+                    player.refreshVisibleChunks(playerChunk);
+                }
+            });
+        }
     }
 
     /**
