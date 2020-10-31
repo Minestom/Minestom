@@ -1,18 +1,29 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ExperienceOrb extends Entity {
 
     private short experienceCount;
 
-    public ExperienceOrb(short experienceCount) {
-        super(EntityType.EXPERIENCE_ORB);
+    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition) {
+        super(EntityType.EXPERIENCE_ORB, spawnPosition);
         setGravity(0.02f);
         setBoundingBox(0.5f, 0.5f, 0.5f);
         this.experienceCount = experienceCount;
+    }
+
+    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition, @Nullable Instance instance) {
+        this(experienceCount, spawnPosition);
+
+        if (instance != null) {
+            setInstance(instance);
+        }
     }
 
     @Override

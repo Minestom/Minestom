@@ -6,7 +6,7 @@ import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a new instance is set for a player
+ * Called when a new instance is set for a player.
  */
 public class PlayerSpawnEvent extends EntitySpawnEvent {
 

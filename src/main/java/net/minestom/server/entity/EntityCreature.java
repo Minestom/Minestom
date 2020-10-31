@@ -55,7 +55,7 @@ public abstract class EntityCreature extends LivingEntity {
     private final ReentrantLock pathLock = new ReentrantLock();
 
 
-    public EntityCreature(EntityType entityType, Position spawnPosition) {
+    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
 
         this.mainHandItem = ItemStack.getAirItem();
@@ -67,6 +67,14 @@ public abstract class EntityCreature extends LivingEntity {
         this.boots = ItemStack.getAirItem();
 
         heal();
+    }
+
+    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
+        this(entityType, spawnPosition);
+
+        if (instance != null) {
+            setInstance(instance);
+        }
     }
 
     @Override

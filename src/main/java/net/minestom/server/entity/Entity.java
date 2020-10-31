@@ -344,6 +344,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     /**
      * Updates the entity, called every tick.
+     * <p>
+     * Ignored if {@link #getInstance()} returns null.
      *
      * @param time the update time in milliseconds
      */

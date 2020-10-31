@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.Position;
@@ -43,6 +44,14 @@ public class ItemEntity extends ObjectEntity {
         super(EntityType.ITEM, spawnPosition);
         this.itemStack = itemStack;
         setBoundingBox(0.25f, 0.25f, 0.25f);
+    }
+
+    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
+        this(itemStack, spawnPosition);
+
+        if (instance != null) {
+            setInstance(instance);
+        }
     }
 
     /**
