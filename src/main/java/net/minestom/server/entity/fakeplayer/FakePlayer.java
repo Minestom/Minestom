@@ -2,7 +2,7 @@ package net.minestom.server.entity.fakeplayer;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
@@ -34,19 +34,19 @@ public class FakePlayer extends Player {
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
-     * @param scheduledCallback the callback called when the FakePlayer is finished logging
-     *                          (1 tick after the {@link PlayerLoginEvent})
-     *                          WARNING: it will be called in the
-     *                          {@link net.minestom.server.timer.SchedulerManager} thread pool
+     * @param scheduledCallback the optional callback called when the fake player first spawn
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username,
                                   @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> scheduledCallback) {
         final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
 
         if (scheduledCallback != null) {
-            fakePlayer.addEventCallback(PlayerLoginEvent.class,
-                    event -> MinecraftServer.getSchedulerManager().buildTask(
-                            () -> scheduledCallback.accept(fakePlayer)).delay(1, TimeUnit.TICK).schedule());
+            fakePlayer.addEventCallback(PlayerSpawnEvent.class,
+                    event -> {
+                        if (event.isFirstSpawn()) {
+                            scheduledCallback.accept(fakePlayer);
+                        }
+                    });
         }
     }
 
@@ -55,9 +55,7 @@ public class FakePlayer extends Player {
      *
      * @param uuid              the FakePlayer uuid
      * @param username          the FakePlayer username
-     * @param scheduledCallback the callback called when the FakePlayer is finished logging
-     *                          WARNING: it will be called in the
-     *                          {@link net.minestom.server.timer.SchedulerManager} thread pool
+     * @param scheduledCallback the optional callback called when the fake player first spawn
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username, @Nullable Consumer<FakePlayer> scheduledCallback) {
         initPlayer(uuid, username, new FakePlayerOption(), scheduledCallback);
