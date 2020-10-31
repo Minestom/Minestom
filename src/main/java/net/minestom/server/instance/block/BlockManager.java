@@ -2,6 +2,8 @@ package net.minestom.server.instance.block;
 
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +25,7 @@ public class BlockManager {
      * @throws IllegalArgumentException if <code>customBlock</code> block id is not greater than 0
      * @throws IllegalStateException    if the id of <code>customBlock</code> is already registered
      */
-    public void registerCustomBlock(CustomBlock customBlock) {
+    public void registerCustomBlock(@NotNull CustomBlock customBlock) {
         final short id = customBlock.getCustomBlockId();
         Check.argCondition(id <= 0, "Custom block ID must be greater than 0, got: " + id);
         Check.stateCondition(customBlocksInternalId[id] != null, "a CustomBlock with the id " + id + " already exists");
@@ -39,7 +41,7 @@ public class BlockManager {
      * @param blockPlacementRule the block placement rule to register
      * @throws IllegalArgumentException if <code>blockPlacementRule</code> block id is negative
      */
-    public void registerBlockPlacementRule(BlockPlacementRule blockPlacementRule) {
+    public void registerBlockPlacementRule(@NotNull BlockPlacementRule blockPlacementRule) {
         final short id = blockPlacementRule.getBlockId();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
 
@@ -52,7 +54,8 @@ public class BlockManager {
      * @param block the block to check
      * @return the block placement rule associated with the block, null if not any
      */
-    public BlockPlacementRule getBlockPlacementRule(Block block) {
+    @Nullable
+    public BlockPlacementRule getBlockPlacementRule(@NotNull Block block) {
         return this.placementRules[block.getBlockId()];
     }
 
@@ -62,6 +65,7 @@ public class BlockManager {
      * @param blockStateId the block id to check
      * @return the block placement rule associated with the id, null if not any
      */
+    @Nullable
     public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
         final Block block = Block.fromStateId(blockStateId); // Convert block alternative
         return getBlockPlacementRule(block);
@@ -73,7 +77,8 @@ public class BlockManager {
      * @param identifier the custom block identifier
      * @return the {@link CustomBlock} associated with the identifier, null if not any
      */
-    public CustomBlock getCustomBlock(String identifier) {
+    @Nullable
+    public CustomBlock getCustomBlock(@NotNull String identifier) {
         return customBlocksId.get(identifier);
     }
 
@@ -83,6 +88,7 @@ public class BlockManager {
      * @param id the custom block id
      * @return the {@link CustomBlock} associated with the id, null if not any
      */
+    @Nullable
     public CustomBlock getCustomBlock(short id) {
         return customBlocksInternalId[id];
     }

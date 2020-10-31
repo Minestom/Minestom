@@ -7,6 +7,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class ChunkUtils {
 
@@ -20,7 +22,7 @@ public final class ChunkUtils {
      * @param chunk the chunk to check
      * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isLoaded(Chunk chunk) {
+    public static boolean isLoaded(@Nullable Chunk chunk) {
         return chunk != null && chunk.isLoaded();
     }
 
@@ -32,7 +34,7 @@ public final class ChunkUtils {
      * @param z        instance Z coordinate
      * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isLoaded(Instance instance, float x, float z) {
+    public static boolean isLoaded(@NotNull Instance instance, float x, float z) {
         final int chunkX = getChunkCoordinate((int) x);
         final int chunkZ = getChunkCoordinate((int) z);
 
@@ -99,7 +101,8 @@ public final class ChunkUtils {
      * @param range    how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static long[] getChunksInRange(final Position position, int range) {
+    @NotNull
+    public static long[] getChunksInRange(@NotNull Position position, int range) {
         range = range * 2;
         long[] visibleChunks = new long[MathUtils.square(range + 1)];
         final int startLoop = -(range / 2);
@@ -123,7 +126,8 @@ public final class ChunkUtils {
      * @param chunkZ   the chunk Z
      * @return an array containing all the loaded neighbours chunk index
      */
-    public static long[] getNeighbours(Instance instance, int chunkX, int chunkZ) {
+    @NotNull
+    public static long[] getNeighbours(@NotNull Instance instance, int chunkX, int chunkZ) {
         LongList chunks = new LongArrayList();
         // Constants used to loop through the neighbors
         final int[] posX = {1, 0, -1};
@@ -176,6 +180,7 @@ public final class ChunkUtils {
      * @param chunkZ the chunk Z
      * @return the instance position of the block located in {@code index}
      */
+    @NotNull
     public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToPositionX(index, chunkX);
         final int y = blockIndexToPositionY(index);

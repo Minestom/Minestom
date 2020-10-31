@@ -676,6 +676,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         blockActionPacket.blockId = block.getBlockId();
 
         final Chunk chunk = getChunkAt(blockPosition);
+        Check.notNull(chunk, "The chunk at " + blockPosition + " is not loaded!");
         chunk.sendPacketToViewers(blockActionPacket);
     }
 

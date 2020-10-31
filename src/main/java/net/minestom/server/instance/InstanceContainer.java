@@ -107,8 +107,9 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+    public void setCustomBlock(int x, int y, int z, short customBlockId, @Nullable Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the id " + customBlockId + " does not exist.");
         setBlock(x, y, z, customBlock.getDefaultBlockStateId(), customBlock, data);
     }
 
@@ -136,13 +137,11 @@ public class InstanceContainer extends Instance {
         if (ChunkUtils.isLoaded(chunk)) {
             UNSAFE_setBlock(chunk, x, y, z, blockStateId, customBlock, data);
         } else {
-            if (hasEnabledAutoChunkLoad()) {
-                final int chunkX = ChunkUtils.getChunkCoordinate(x);
-                final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-                loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data));
-            } else {
-                throw new IllegalStateException("Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            }
+            Check.stateCondition(!hasEnabledAutoChunkLoad(),
+                    "Tried to set a block to an unloaded chunk with auto chunk load disabled");
+            final int chunkX = ChunkUtils.getChunkCoordinate(x);
+            final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data));
         }
     }
 
@@ -159,7 +158,8 @@ public class InstanceContainer extends Instance {
      * @param customBlock  the {@link CustomBlock}, null if none
      * @param data         the {@link Data}, null if none
      */
-    private void UNSAFE_setBlock(Chunk chunk, int x, int y, int z, short blockStateId, CustomBlock customBlock, Data data) {
+    private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, short blockStateId,
+                                 @Nullable CustomBlock customBlock, @Nullable Data data) {
         if (chunk.isReadOnly()) {
             return;
         }
@@ -216,7 +216,7 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void setAlreadyChanged(BlockPosition blockPosition, short blockStateId) {
+    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, short blockStateId) {
         currentlyChangingBlocks.put(blockPosition, Block.fromStateId(blockStateId));
     }
 
@@ -228,7 +228,7 @@ public class InstanceContainer extends Instance {
      * @param blockStateId  the block state id
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(BlockPosition blockPosition, short blockStateId) {
+    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, short blockStateId) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
@@ -257,7 +257,7 @@ public class InstanceContainer extends Instance {
      * @param previousBlock the block which has been destroyed
      * @param blockPosition the block position
      */
-    private void callBlockDestroy(Chunk chunk, int index, CustomBlock previousBlock, BlockPosition blockPosition) {
+    private void callBlockDestroy(@NotNull Chunk chunk, int index, @NotNull CustomBlock previousBlock, @NotNull BlockPosition blockPosition) {
         final Data previousData = chunk.getBlockData(index);
         previousBlock.onDestroy(this, blockPosition, previousData);
     }
@@ -271,7 +271,7 @@ public class InstanceContainer extends Instance {
      * @param index         the block index
      * @param blockPosition the block position
      */
-    private void callBlockPlace(Chunk chunk, int index, BlockPosition blockPosition) {
+    private void callBlockPlace(@NotNull Chunk chunk, int index, @NotNull BlockPosition blockPosition) {
         final CustomBlock actualBlock = chunk.getCustomBlock(index);
         if (actualBlock == null)
             return;
@@ -286,7 +286,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the block position
      * @return the modified block state id
      */
-    private short executeBlockPlacementRule(short blockStateId, BlockPosition blockPosition) {
+    private short executeBlockPlacementRule(short blockStateId, @NotNull BlockPosition blockPosition) {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
         if (blockPlacementRule != null) {
             return blockPlacementRule.blockRefresh(this, blockPosition, blockStateId);
