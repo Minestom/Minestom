@@ -623,6 +623,7 @@ public class InstanceContainer extends Instance {
      * {@link UUID} is randomized, {@link DimensionType} is passed over and the {@link StorageLocation} is null.
      *
      * @return an {@link InstanceContainer} with the exact same chunks as 'this'
+     * @see #getSrcInstance() to retrieve the "creation source" of the copied instance
      */
     public synchronized InstanceContainer copy() {
         InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType(), null);
@@ -649,6 +650,7 @@ public class InstanceContainer extends Instance {
      * Only present if this instance has been created with {@link InstanceContainer#copy()}.
      *
      * @return the instance source, null if not created by a copy
+     * @see #copy() to create a copy of this instance with 'this' as the source
      */
     @Nullable
     public InstanceContainer getSrcInstance() {

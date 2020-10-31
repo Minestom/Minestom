@@ -32,8 +32,8 @@ public final class ArrayUtils {
         System.arraycopy(arr, index + 1, arr, index, arr.length - 1 - index);
     }
 
-    public static void copyToDestination(short[] dest, short[] src) {
-        Check.argCondition(dest.length != src.length, "The two arrays need to have the same length");
+    public static void copyToDestination(short[] src, short[] dest) {
+        Check.argCondition(src.length != dest.length, "The two arrays need to have the same length.");
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
@@ -79,7 +79,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * Gets if two arrays share the same start until {@code length}
+     * Gets if two arrays share the same start until {@code length}.
      *
      * @param array1 the first array
      * @param array2 the second array

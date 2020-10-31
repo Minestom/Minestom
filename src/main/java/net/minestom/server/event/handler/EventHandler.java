@@ -77,6 +77,8 @@ public interface EventHandler {
 
     /**
      * Calls the specified {@link Event} with all the assigned {@link EventCallback}.
+     * <p>
+     * Events are always called in the current thread.
      *
      * @param eventClass the event class
      * @param event      the event object

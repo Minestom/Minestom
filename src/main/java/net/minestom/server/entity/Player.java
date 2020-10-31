@@ -1477,7 +1477,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Gets the player connection.
      * <p>
-     * Used to send packets and get relatives stuff to the connection.
+     * Used to send packets and get stuff related to the connection.
      *
      * @return the player connection
      */

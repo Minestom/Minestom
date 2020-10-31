@@ -482,13 +482,14 @@ public abstract class Chunk implements Viewable, DataContainer {
         return Collections.unmodifiableSet(viewers);
     }
 
+    @Nullable
     @Override
     public Data getData() {
         return data;
     }
 
     @Override
-    public void setData(Data data) {
+    public void setData(@Nullable Data data) {
         this.data = data;
     }
 
@@ -497,7 +498,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player
      */
-    protected void sendChunk(Player player) {
+    protected void sendChunk(@NotNull Player player) {
         // Only send loaded chunk
         if (!isLoaded())
             return;
@@ -540,7 +541,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player to update the chunk to
      */
-    public void sendChunkUpdate(Player player) {
+    public void sendChunkUpdate(@NotNull Player player) {
         retrieveDataBuffer(buf -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             playerConnection.sendPacket(buf, true);
@@ -570,7 +571,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param section the section to update
      * @param player  the player to send the packet to
      */
-    public void sendChunkSectionUpdate(int section, Player player) {
+    public void sendChunkSectionUpdate(int section, @NotNull Player player) {
         if (!PlayerUtils.isNettyClient(player))
             return;
         Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),

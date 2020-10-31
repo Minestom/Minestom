@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * using a {@link FakePlayerController} (see {@link #getController()}).
  * <p>
  * You can create one using {@link #initPlayer(UUID, String, Consumer)}. Be aware that this really behave exactly like a player
- * and this is a feature not a bug, you will need to check at some place if the player is a fake one or not if you want to change it.
+ * and this is a feature not a bug, you will need to check at some place if the player is a fake one or not (instanceof) if you want to change it.
  */
 public class FakePlayer extends Player {
 

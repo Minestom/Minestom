@@ -409,8 +409,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
-        ArrayUtils.copyToDestination(dynamicChunk.blocksStateId, blocksStateId);
-        ArrayUtils.copyToDestination(dynamicChunk.customBlocksId, customBlocksId);
+        ArrayUtils.copyToDestination(blocksStateId, dynamicChunk.blocksStateId);
+        ArrayUtils.copyToDestination(customBlocksId, dynamicChunk.customBlocksId);
         dynamicChunk.blocksData.putAll(blocksData);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
         dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);

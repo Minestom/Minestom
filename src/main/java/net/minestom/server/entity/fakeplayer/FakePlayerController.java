@@ -14,15 +14,18 @@ import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * This class act as a client controller for {@link FakePlayer}.
+ * This class acts as a client controller for {@link FakePlayer}.
+ * <p>
+ * The main use is to simulate the receiving of {@link ClientPlayPacket}
  */
 public class FakePlayerController {
 
     private final FakePlayer fakePlayer;
 
-    public FakePlayerController(FakePlayer fakePlayer) {
+    public FakePlayerController(@NotNull FakePlayer fakePlayer) {
         this.fakePlayer = fakePlayer;
     }
 
