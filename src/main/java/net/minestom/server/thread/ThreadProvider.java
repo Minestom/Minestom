@@ -19,6 +19,8 @@ import java.util.function.Function;
 /**
  * Used to link chunks into multiple groups.
  * Then executed into a thread pool.
+ * <p>
+ * You can change the current thread provider by calling {@link net.minestom.server.UpdateManager#setThreadProvider(ThreadProvider)}.
  */
 public abstract class ThreadProvider {
 
@@ -130,7 +132,6 @@ public abstract class ThreadProvider {
     protected void updateInstance(Instance instance, long time) {
         // The instance
         instance.tick(time);
-        updateSharedInstances(instance, sharedInstance -> updateInstance(sharedInstance, time));
     }
 
     /**

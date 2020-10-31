@@ -1987,6 +1987,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return the modifiable statistic map
      */
+    @NotNull
     public Map<PlayerStatistic, Integer> getStatisticValueMap() {
         return statisticValueMap;
     }
@@ -1996,6 +1997,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return the player vehicle information
      */
+    @NotNull
     public PlayerVehicleInformation getVehicleInformation() {
         return vehicleInformation;
     }

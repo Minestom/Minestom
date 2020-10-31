@@ -52,8 +52,8 @@ public abstract class EntityCreature extends LivingEntity {
     private ItemStack leggings;
     private ItemStack boots;
 
+    // TODO all pathfinding requests should be process in another thread
     private final ReentrantLock pathLock = new ReentrantLock();
-
 
     public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
