@@ -28,6 +28,8 @@ import java.util.*;
 /**
  * Represents an item in an inventory ({@link PlayerInventory}, {@link Inventory}) or on the ground ({@link ItemEntity}).
  * <p>
+ * An item stack cannot be null, you can however use {@link #getAirItem()} instead.
+ * <p>
  * WARNING: all setters will not update the item automatically, it will need to be refreshed manually.
  * Here a non-exhaustive list of what you can do to update the item:
  * {@link PlayerInventory#refreshSlot(short)}, {@link Inventory#refreshSlot(short)} or a raw {@link SetSlotPacket}.
@@ -82,8 +84,9 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * o
      * Gets a new {@link ItemStack} with the material sets to {@link Material#AIR}.
+     * <p>
+     * Used when you require a "null item".
      *
      * @return an air item
      */
