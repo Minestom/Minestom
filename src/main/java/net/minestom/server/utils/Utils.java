@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
@@ -115,29 +116,55 @@ public final class Utils {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    public static void writeBlocks(ByteBuf buffer, short[] blocksId, int bitsPerEntry) {
-        short count = 0;
+    public static void writeBlocks(ByteBuf buffer, long[] blocksId, int bitsPerEntry) {
+        /*short count = 0;
         for (short id : blocksId)
             if (id != 0)
-                count++;
+                count++;*/
 
-        buffer.writeShort(count);
+
+        //buffer.writeShort(count);
+        buffer.writeShort(200);
         buffer.writeByte((byte) bitsPerEntry);
-        int[] blocksData = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
-        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                    int sectionIndex = (((y * 16) + x) * 16) + z;
-                    int index = y << 8 | z << 4 | x;
-                    blocksData[index] = blocksId[sectionIndex];
-                }
-            }
-        }
-        final long[] data = encodeBlocks(blocksData, bitsPerEntry);
+
+        final long[] data = blocksId;//encodeBlocksTEST(bitsPerEntry);
         writeVarIntBuf(buffer, data.length);
         for (long datum : data) {
             buffer.writeLong(datum);
         }
+    }
+
+    public synchronized static long[] encodeBlocksTEST(int bitsPerEntry) {
+        //long test = (Block.TORCH.getBlockId() << (64 - 50 - bitsPerEntry + 1));
+        //System.out.println("BINARY: 0b" + Long.toBinaryString(test) + " " + (64 - 50 - bitsPerEntry + 1));
+        final int blockCount = 16 * 16 * 16; // A whole chunk section
+        final int longSize = Long.SIZE; // 64
+        final char valuesPerLong = (char) (longSize / bitsPerEntry);
+        final int arraySize = blockCount / valuesPerLong;
+
+        long[] data = new long[arraySize];
+        //data[0] = 0b000000000000001_000000000000001_000000000000001_000000000000001L;
+        //data[1] = 0b000000000000001_000000000000001_000000000000001_000000000000010L;
+
+        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                    final long blockId = x % 2 == 0 && z % 2 == 0 ? Block.AIR.getBlockId() : Block.LAVA.getBlockId();
+                    int sectionIndex = (((y * 16) + z) * 16) + x;
+
+                    final int index = sectionIndex / valuesPerLong;
+                    final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
+
+                    data[index] |= (blockId << bitIndex);
+                }
+            }
+        }
+
+        return data;
+    }
+
+    private static String binary(long value) {
+        return "0b" + Long.toBinaryString(value);
     }
 
     public static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
@@ -160,4 +187,5 @@ public final class Utils {
 
         return data;
     }
+
 }

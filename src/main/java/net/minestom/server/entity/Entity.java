@@ -42,6 +42,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+/**
+ * Could be a player, a monster, or an object.
+ * <p>
+ * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
+ */
 public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();

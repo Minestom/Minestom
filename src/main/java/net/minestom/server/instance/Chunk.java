@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 
 // TODO light data & API
 
@@ -69,11 +67,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     private final boolean shouldGenerate;
     private boolean readOnly;
 
-    // Packet cache
-    private volatile boolean enableCachePacket;
-    protected volatile boolean packetUpdated;
-    private ByteBuf fullDataPacket;
-
     protected volatile boolean loaded = true;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
@@ -88,9 +81,6 @@ public abstract class Chunk implements Viewable, DataContainer {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-
-        // true by default
-        this.enableCachePacket = true;
 
         if (biomes != null && biomes.length == BIOME_COUNT) {
             this.biomes = biomes;
@@ -325,78 +315,12 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Gets if this chunk automatically cache the latest {@link ChunkDataPacket} version.
-     * <p>
-     * Retrieved with {@link #retrieveDataBuffer(Consumer)}.
-     *
-     * @return true if the chunk automatically cache the chunk packet
-     */
-    public boolean enableCachePacket() {
-        return enableCachePacket;
-    }
-
-    /**
-     * Enables or disable the automatic {@link ChunkDataPacket} caching.
-     *
-     * @param enableCachePacket true to enable to chunk packet caching
-     */
-    public synchronized void setEnableCachePacket(boolean enableCachePacket) {
-        this.enableCachePacket = enableCachePacket;
-        if (enableCachePacket && fullDataPacket != null) {
-            this.fullDataPacket.release();
-            this.fullDataPacket = null;
-        }
-    }
-
-    /**
-     * Gets the cached data packet.
-     * <p>
-     * Use {@link #retrieveDataBuffer(Consumer)} to be sure to get the updated version.
-     *
-     * @return the last cached data packet, can be null or outdated
-     */
-    public ByteBuf getFullDataPacket() {
-        return fullDataPacket;
-    }
-
-    /**
-     * Sets the cached {@link ChunkDataPacket} of this chunk.
-     *
-     * @param fullDataPacket the new cached chunk packet
-     */
-    public void setFullDataPacket(ByteBuf fullDataPacket) {
-        this.fullDataPacket = fullDataPacket;
-        this.packetUpdated = true;
-    }
-
-    /**
      * Changes this chunk columnar space.
      *
      * @param columnarSpace the new columnar space
      */
     public void setColumnarSpace(PFColumnarSpace columnarSpace) {
         this.columnarSpace = columnarSpace;
-    }
-
-    /**
-     * Retrieves (and cache if needed) the updated data packet.
-     *
-     * @param consumer the consumer called once the packet is sure to be up-to-date
-     */
-    public void retrieveDataBuffer(Consumer<ByteBuf> consumer) {
-        final ByteBuf data = getFullDataPacket();
-        if (data == null || !packetUpdated) {
-            // Packet has never been wrote or is outdated, write it
-            PacketWriterUtils.writeCallbackPacket(getFreshFullDataPacket(), packet -> {
-                if (enableCachePacket) {
-                    setFullDataPacket(packet);
-                }
-                consumer.accept(packet);
-            });
-        } else {
-            // Packet is up-to-date
-            consumer.accept(data);
-        }
     }
 
     /**
@@ -509,7 +433,7 @@ public abstract class Chunk implements Viewable, DataContainer {
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
         // Retrieve & send the buffer to the connection
-        retrieveDataBuffer(buf -> playerConnection.sendPacket(buf, true));
+        playerConnection.sendPacket(getFreshFullDataPacket());
 
         // TODO do not hardcode
         if (MinecraftServer.isFixLighting()) {
@@ -542,10 +466,8 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param player the player to update the chunk to
      */
     public void sendChunkUpdate(@NotNull Player player) {
-        retrieveDataBuffer(buf -> {
-            final PlayerConnection playerConnection = player.getPlayerConnection();
-            playerConnection.sendPacket(buf, true);
-        });
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+        playerConnection.sendPacket(getFreshFullDataPacket());
     }
 
     /**
@@ -554,14 +476,10 @@ public abstract class Chunk implements Viewable, DataContainer {
     public void sendChunkUpdate() {
         final Set<Player> chunkViewers = getViewers();
         if (!chunkViewers.isEmpty()) {
-            retrieveDataBuffer(buf -> chunkViewers.forEach(player -> {
+            chunkViewers.forEach(player -> {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
-                if (!PlayerUtils.isNettyClient(playerConnection))
-                    return;
-
-                playerConnection.sendPacket(buf, true);
-            }));
-
+                playerConnection.sendPacket(getFreshFullDataPacket());
+            });
         }
     }
 
