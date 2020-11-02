@@ -36,6 +36,8 @@ public class Main {
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
 
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
+
 
         StorageManager storageManager = MinecraftServer.getStorageManager();
         storageManager.defineDefaultStorageSystem(FileStorageSystem::new);

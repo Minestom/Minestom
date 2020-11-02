@@ -20,6 +20,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,8 @@ public final class CommandManager {
 
     private final CommandDispatcher dispatcher = new CommandDispatcher();
     private final Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
+
+    private CommandCallback unknownCommandCallback;
 
     public CommandManager() {
         running = true;
@@ -153,8 +156,12 @@ public final class CommandManager {
             final String[] splitCommand = command.split(" ");
             final String commandName = splitCommand[0];
             final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
-            if (commandProcessor == null)
+            if (commandProcessor == null) {
+                if (unknownCommandCallback != null) {
+                    this.unknownCommandCallback.apply(sender, command);
+                }
                 return false;
+            }
 
             // Execute the legacy-command
             final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
@@ -162,6 +169,26 @@ public final class CommandManager {
             return commandProcessor.process(sender, commandName, args);
 
         }
+    }
+
+    /**
+     * Gets the callback executed once an unknown command is run.
+     *
+     * @return the unknown command callback, null if not any
+     */
+    @Nullable
+    public CommandCallback getUnknownCommandCallback() {
+        return unknownCommandCallback;
+    }
+
+    /**
+     * Sets the callback executed once an unknown command is run.
+     *
+     * @param unknownCommandCallback the new unknown command callback,
+     *                               setting it to null mean that nothing will be executed
+     */
+    public void setUnknownCommandCallback(@Nullable CommandCallback unknownCommandCallback) {
+        this.unknownCommandCallback = unknownCommandCallback;
     }
 
     /**
