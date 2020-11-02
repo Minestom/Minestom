@@ -6,10 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Representation of a permission granted to a {@link CommandSender}
+ * Representation of a permission granted to a {@link CommandSender}.
+ *
+ * @param <T> the type of data that this permission can handle in {@link #isValidFor(CommandSender, Object)}.
+ *            Used if you want to allow passing additional data to check if the permission is valid in a certain situation,
+ *            you can default it to {@link Object} if you do not need it.
  */
 @FunctionalInterface
-public interface Permission {
+public interface Permission<T> {
 
     /**
      * Does the given {@link CommandSender} have the permission represented by this object?
@@ -18,22 +22,23 @@ public interface Permission {
      * have this permission and validate the condition in this method.
      *
      * @param commandSender the command sender
+     * @param data          the optional data (eg the number of home possible, placing a block at X position)
      * @return true if the commandSender possesses this permission
      */
-    boolean isValidFor(CommandSender commandSender);
+    boolean isValidFor(@NotNull CommandSender commandSender, @Nullable T data);
 
     /**
-     * Writes any required data for this permission inside the given destination
+     * Writes any required data for this permission inside the given destination.
      *
-     * @param destination {@link Data} to write to
+     * @param destination the {@link Data} to write to
      */
     default void write(@NotNull Data destination) {
     }
 
     /**
-     * Reads any required data for this permission from the given destination
+     * Reads any required data for this permission from the given destination.
      *
-     * @param source {@link Data} to read from
+     * @param source the {@link Data} to read from
      * @return this for chaining
      */
     default Permission read(@Nullable Data source) {

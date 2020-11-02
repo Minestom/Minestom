@@ -2,11 +2,9 @@ package permissions;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,8 @@ public class TestPermissions {
         MinecraftServer.init(); // for entity manager
         player = new Player(UUID.randomUUID(), "TestPlayer", null) {
             @Override
-            protected void playerConnectionInit() {}
+            protected void playerConnectionInit() {
+            }
 
             @Override
             public boolean isOnline() {
@@ -40,15 +39,16 @@ public class TestPermissions {
         assertFalse(player.hasPermission(Permission.class));
     }
 
-    class PermTest1 implements Permission {
+    class PermTest1 implements Permission<Object> {
         @Override
-        public boolean isValidFor(CommandSender commandSender) {
+        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
             return true;
         }
     }
-    class PermTest2 implements Permission {
+
+    class PermTest2 implements Permission<Object> {
         @Override
-        public boolean isValidFor(CommandSender commandSender) {
+        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
             return true;
         }
     }
@@ -65,7 +65,7 @@ public class TestPermissions {
         assertTrue(player.hasPermission(PermTest2.class));
     }
 
-    class BooleanPerm implements Permission {
+    class BooleanPerm implements Permission<Object> {
         private final boolean value;
 
         BooleanPerm(boolean v) {
@@ -73,7 +73,7 @@ public class TestPermissions {
         }
 
         @Override
-        public boolean isValidFor(CommandSender commandSender) {
+        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
             return value;
         }
     }
@@ -88,9 +88,9 @@ public class TestPermissions {
 
     @Test
     public void singlePermission() {
-        Permission p = commandSender -> true;
+        Permission p = (commandSender, data) -> true;
         player.addPermission(p);
-        assertTrue(p.isValidFor(player));
+        assertTrue(p.isValidFor(player, null));
         assertTrue(player.hasPermission(p));
         assertTrue(player.hasPermission(Permission.class));
     }

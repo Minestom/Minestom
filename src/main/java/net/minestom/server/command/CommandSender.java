@@ -3,6 +3,7 @@ package net.minestom.server.command;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -63,19 +64,23 @@ public interface CommandSender {
      * Simple shortcut to <pre>getAllPermissions().contains(permission) &amp;&amp; permission.isValidFor(this)</pre> for readability.
      *
      * @param p permission to check against
-     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
+     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender, Object)}
      */
     default boolean hasPermission(@NotNull Permission p) {
-        return getAllPermissions().contains(p) && p.isValidFor(this);
+        return hasPermission(p, null);
+    }
+
+    default <T> boolean hasPermission(@NotNull Permission<T> p, @Nullable T data) {
+        return getAllPermissions().contains(p) && p.isValidFor(this, data);
     }
 
     /**
      * Checks if the given {@link Permission} is possessed by this command sender.
-     * Will call {@link Permission#isValidFor(CommandSender)} on all permissions that are an instance of {@code permissionClass}.
+     * Will call {@link Permission#isValidFor(CommandSender, Object)} on all permissions that are an instance of {@code permissionClass}.
      * If no matching permission is found, this result returns false.
      *
      * @param permissionClass the permission class to check
-     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender)}
+     * @return true if the sender has the permission and validate {@link Permission#isValidFor(CommandSender, Object)}
      * @see #getAllPermissions()
      */
     default boolean hasPermission(@NotNull Class<? extends Permission> permissionClass) {
@@ -84,7 +89,21 @@ public interface CommandSender {
         for (Permission p : getAllPermissions()) {
             if (permissionClass.isInstance(p)) {
                 foundPerm = true;
-                result &= p.isValidFor(this);
+                result &= p.isValidFor(this, null);
+            }
+        }
+        if (!foundPerm)
+            return false;
+        return result;
+    }
+
+    default <T> boolean hasPermission(@NotNull Class<? extends Permission<T>> permissionClass, @Nullable T data) {
+        boolean result = true;
+        boolean foundPerm = false;
+        for (Permission p : getAllPermissions()) {
+            if (permissionClass.isInstance(p)) {
+                foundPerm = true;
+                result &= p.isValidFor(this, data);
             }
         }
         if (!foundPerm)

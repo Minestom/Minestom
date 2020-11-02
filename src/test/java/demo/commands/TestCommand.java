@@ -22,6 +22,7 @@ public class TestCommand extends Command {
 
         setDefaultExecutor((source, args) -> {
             System.out.println("DEFAULT");
+            System.gc();
         });
 
         addSyntax((source, args) -> {
