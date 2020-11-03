@@ -26,7 +26,7 @@ public class MinestomBytecodeProvider implements IClassBytecodeProvider {
         ClassNode node = new ClassNode();
         ClassReader reader;
         try {
-            reader = new ClassReader(classLoader.loadBytes(name, transform));
+            reader = new ClassReader(classLoader.loadBytesWithChildren(name, transform));
         } catch (IOException e) {
             throw new ClassNotFoundException("Could not load ClassNode with name " + name, e);
         }

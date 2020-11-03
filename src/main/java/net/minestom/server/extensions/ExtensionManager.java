@@ -33,7 +33,7 @@ public class ExtensionManager {
     private final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
-    private final Map<String, URLClassLoader> extensionLoaders = new HashMap<>();
+    private final Map<String, MinestomExtensionClassLoader> extensionLoaders = new HashMap<>();
     private final Map<String, Extension> extensions = new HashMap<>();
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
@@ -68,105 +68,130 @@ public class ExtensionManager {
         loadDependencies(discoveredExtensions);
         // remove invalid extensions
         discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
+
+        for(DiscoveredExtension discoveredExtension : discoveredExtensions) {
+            try {
+                setupClassLoader(discoveredExtension);
+            } catch (Exception e) {
+                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
+                e.printStackTrace();
+                log.error("Failed to load extension {}", discoveredExtension.getName());
+                log.error("Failed to load extension", e);
+            }
+        }
+
+        // remove invalid extensions
+        discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
         setupCodeModifiers(discoveredExtensions);
 
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-            URLClassLoader loader;
-            URL[] urls = discoveredExtension.files.toArray(new URL[0]);
-            // TODO: Only putting each extension into its own classloader prevents code modifications (via code modifiers or mixins)
-            // TODO: If we want modifications to be possible, we need to add these urls to the current classloader
-            // TODO: Indeed, without adding the urls, the classloader is not able to load the bytecode of extension classes
-            // TODO: Whether we want to allow extensions to modify one-another is our choice now.
-            loader = newClassLoader(discoveredExtension, urls);
-
-            // Create ExtensionDescription (authors, version etc.)
-            String extensionName = discoveredExtension.getName();
-            String mainClass = discoveredExtension.getEntrypoint();
-            Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
-                    extensionName,
-                    discoveredExtension.getVersion(),
-                    Arrays.asList(discoveredExtension.getAuthors())
-            );
-
-            extensionLoaders.put(extensionName.toLowerCase(), loader);
-
-            if (extensions.containsKey(extensionName.toLowerCase())) {
-                log.error("An extension called '{}' has already been registered.", extensionName);
-                continue;
-            }
-
-            Class<?> jarClass;
             try {
-                jarClass = Class.forName(mainClass, true, loader);
-            } catch (ClassNotFoundException e) {
-                log.error("Could not find main class '{}' in extension '{}'.", mainClass, extensionName, e);
-                continue;
-            }
-
-            Class<? extends Extension> extensionClass;
-            try {
-                extensionClass = jarClass.asSubclass(Extension.class);
-            } catch (ClassCastException e) {
-                log.error("Main class '{}' in '{}' does not extend the 'Extension' superclass.", mainClass, extensionName, e);
-                continue;
-            }
-
-            Constructor<? extends Extension> constructor;
-            try {
-                constructor = extensionClass.getDeclaredConstructor();
-                // Let's just make it accessible, plugin creators don't have to make this public.
-                constructor.setAccessible(true);
-            } catch (NoSuchMethodException e) {
-                log.error("Main class '{}' in '{}' does not define a no-args constructor.", mainClass, extensionName, e);
-                continue;
-            }
-            Extension extension = null;
-            try {
-                extension = constructor.newInstance();
-            } catch (InstantiationException e) {
-                log.error("Main class '{}' in '{}' cannot be an abstract class.", mainClass, extensionName, e);
-                continue;
-            } catch (IllegalAccessException ignored) {
-                // We made it accessible, should not occur
-            } catch (InvocationTargetException e) {
-                log.error(
-                        "While instantiating the main class '{}' in '{}' an exception was thrown.",
-                        mainClass,
-                        extensionName,
-                        e.getTargetException()
-                );
-                continue;
-            }
-
-            // Set extension description
-            try {
-                Field descriptionField = extensionClass.getSuperclass().getDeclaredField("description");
-                descriptionField.setAccessible(true);
-                descriptionField.set(extension, extensionDescription);
-            } catch (IllegalAccessException e) {
-                // We made it accessible, should not occur
-            } catch (NoSuchFieldException e) {
-                log.error("Main class '{}' in '{}' has no description field.", mainClass, extensionName, e);
-                continue;
-            }
-
-            // Set logger
-            try {
-                Field loggerField = extensionClass.getSuperclass().getDeclaredField("logger");
-                loggerField.setAccessible(true);
-                loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
-            } catch (IllegalAccessException e) {
-                // We made it accessible, should not occur
+                attemptSingleLoad(discoveredExtension);
+            } catch (Exception e) {
+                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
                 e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                // This should also not occur (unless someone changed the logger in Extension superclass).
-                log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
+                log.error("Failed to load extension {}", discoveredExtension.getName());
+                log.error("Failed to load extension", e);
             }
-
-            extensionList.add(extension); // add to a list, as lists preserve order
-            extensions.put(extensionName.toLowerCase(), extension);
         }
         extensionList = Collections.unmodifiableList(extensionList);
+    }
+
+    private void setupClassLoader(DiscoveredExtension discoveredExtension) {
+        String extensionName = discoveredExtension.getName();
+        MinestomExtensionClassLoader loader;
+        URL[] urls = discoveredExtension.files.toArray(new URL[0]);
+        loader = newClassLoader(discoveredExtension, urls);
+        extensionLoaders.put(extensionName.toLowerCase(), loader);
+    }
+
+    private void attemptSingleLoad(DiscoveredExtension discoveredExtension) {
+        // Create ExtensionDescription (authors, version etc.)
+        String extensionName = discoveredExtension.getName();
+        String mainClass = discoveredExtension.getEntrypoint();
+        Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
+                extensionName,
+                discoveredExtension.getVersion(),
+                Arrays.asList(discoveredExtension.getAuthors())
+        );
+
+        MinestomExtensionClassLoader loader = extensionLoaders.get(extensionName.toLowerCase());
+
+        if (extensions.containsKey(extensionName.toLowerCase())) {
+            log.error("An extension called '{}' has already been registered.", extensionName);
+            return;
+        }
+
+        Class<?> jarClass;
+        try {
+            jarClass = Class.forName(mainClass, true, loader);
+        } catch (ClassNotFoundException e) {
+            log.error("Could not find main class '{}' in extension '{}'.", mainClass, extensionName, e);
+            return;
+        }
+
+        Class<? extends Extension> extensionClass;
+        try {
+            extensionClass = jarClass.asSubclass(Extension.class);
+        } catch (ClassCastException e) {
+            log.error("Main class '{}' in '{}' does not extend the 'Extension' superclass.", mainClass, extensionName, e);
+            return;
+        }
+
+        Constructor<? extends Extension> constructor;
+        try {
+            constructor = extensionClass.getDeclaredConstructor();
+            // Let's just make it accessible, plugin creators don't have to make this public.
+            constructor.setAccessible(true);
+        } catch (NoSuchMethodException e) {
+            log.error("Main class '{}' in '{}' does not define a no-args constructor.", mainClass, extensionName, e);
+            return;
+        }
+        Extension extension = null;
+        try {
+            extension = constructor.newInstance();
+        } catch (InstantiationException e) {
+            log.error("Main class '{}' in '{}' cannot be an abstract class.", mainClass, extensionName, e);
+            return;
+        } catch (IllegalAccessException ignored) {
+            // We made it accessible, should not occur
+        } catch (InvocationTargetException e) {
+            log.error(
+                    "While instantiating the main class '{}' in '{}' an exception was thrown.",
+                    mainClass,
+                    extensionName,
+                    e.getTargetException()
+            );
+            return;
+        }
+
+        // Set extension description
+        try {
+            Field descriptionField = extensionClass.getSuperclass().getDeclaredField("description");
+            descriptionField.setAccessible(true);
+            descriptionField.set(extension, extensionDescription);
+        } catch (IllegalAccessException e) {
+            // We made it accessible, should not occur
+        } catch (NoSuchFieldException e) {
+            log.error("Main class '{}' in '{}' has no description field.", mainClass, extensionName, e);
+            return;
+        }
+
+        // Set logger
+        try {
+            Field loggerField = extensionClass.getSuperclass().getDeclaredField("logger");
+            loggerField.setAccessible(true);
+            loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
+        } catch (IllegalAccessException e) {
+            // We made it accessible, should not occur
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            // This should also not occur (unless someone changed the logger in Extension superclass).
+            log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
+        }
+
+        extensionList.add(extension); // add to a list, as lists preserve order
+        extensions.put(extensionName.toLowerCase(), extension);
     }
 
     @NotNull
@@ -334,42 +359,41 @@ public class ExtensionManager {
         }
     }
 
-    // TODO: remove if extensions cannot modify one-another
-    // TODO: use if they can
-    private void injectIntoClasspath(URL dependency, DiscoveredExtension extension) {
-        final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof URLClassLoader)) {
-            throw new IllegalStateException("Current class loader is not a URLClassLoader, but " + cl + ". This prevents adding URLs into the classpath at runtime.");
-        }
-        if(cl instanceof MinestomRootClassLoader) {
-            ((MinestomRootClassLoader) cl).addURL(dependency); // no reflection warnings for us!
-        } else {
-            try {
-                Method addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-                addURL.setAccessible(true);
-                addURL.invoke(cl, dependency);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException("Failed to inject URL " + dependency + " into classpath. From extension " + extension.getName(), e);
-            }
-        }
-    }
-
     private void addDependencyFile(URL dependency, DiscoveredExtension extension) {
         extension.files.add(dependency);
         log.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
     }
 
     /**
-     * Loads a URL into the classpath.
+     * Creates a new class loader for the given extension.
+     * Will add the new loader as a child of all its dependencies' loaders.
      *
      * @param urls {@link URL} (usually a JAR) that should be loaded.
      */
     @NotNull
-    public URLClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
+    public MinestomExtensionClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
         MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
         MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), urls, root);
-        // TODO: tree structure
-        root.addChild(loader);
+        if(extension.getDependencies().length == 0) {
+            // orphaned extension, we can insert it directly
+            root.addChild(loader);
+        } else {
+            // we need to keep track that it has actually been inserted
+            // even though it should always be (due to the order in which extensions are loaders), it is an additional layer of """security"""
+            boolean foundOne = false;
+            for(String dependency : extension.getDependencies()) {
+                if(extensionLoaders.containsKey(dependency.toLowerCase())) {
+                    MinestomExtensionClassLoader parentLoader = extensionLoaders.get(dependency.toLowerCase());
+                    parentLoader.addChild(loader);
+                    foundOne = true;
+                }
+            }
+
+            if(!foundOne) {
+                log.error("Could not load extension {}, could not find any parent inside classloader hierarchy.", extension.getName());
+                throw new RuntimeException("Could not load extension "+extension.getName()+", could not find any parent inside classloader hierarchy.");
+            }
+        }
         return loader;
     }
 

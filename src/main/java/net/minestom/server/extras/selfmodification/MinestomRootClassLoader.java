@@ -22,7 +22,7 @@ import java.util.Set;
  * Class Loader that can modify class bytecode when they are loaded
  */
 @Slf4j
-public class MinestomRootClassLoader extends URLClassLoader {
+public class MinestomRootClassLoader extends HierarchyClassLoader {
 
     private static MinestomRootClassLoader INSTANCE;
 
@@ -60,7 +60,6 @@ public class MinestomRootClassLoader extends URLClassLoader {
 
     // TODO: priorities?
     private final List<CodeModifier> modifiers = new LinkedList<>();
-    private final List<MinestomExtensionClassLoader> children = new LinkedList<>();
 
     private MinestomRootClassLoader(ClassLoader parent) {
         super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
@@ -187,6 +186,21 @@ public class MinestomRootClassLoader extends URLClassLoader {
         return originalBytes;
     }
 
+    public byte[] loadBytesWithChildren(String name, boolean transform) throws IOException, ClassNotFoundException {
+        if (name == null)
+            throw new ClassNotFoundException();
+        String path = name.replace(".", "/") + ".class";
+        InputStream input = getResourceAsStreamWithChildren(path);
+        if(input == null) {
+            throw new ClassNotFoundException("Could not find resource "+path);
+        }
+        byte[] originalBytes = input.readAllBytes();
+        if(transform) {
+            return transformBytes(originalBytes, name);
+        }
+        return originalBytes;
+    }
+
     byte[] transformBytes(byte[] classBytecode, String name) {
         if (!isProtected(name)) {
             ClassReader reader = new ClassReader(classBytecode);
@@ -260,9 +274,5 @@ public class MinestomRootClassLoader extends URLClassLoader {
 
     public List<CodeModifier> getModifiers() {
         return modifiers;
-    }
-
-    public void addChild(MinestomExtensionClassLoader loader) {
-        children.add(loader);
     }
 }

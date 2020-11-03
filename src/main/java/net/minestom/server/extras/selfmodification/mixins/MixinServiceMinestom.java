@@ -65,7 +65,7 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
 
     @Override
     public InputStream getResourceAsStream(String name) {
-        return classLoader.getResourceAsStream(name);
+        return classLoader.getResourceAsStreamWithChildren(name);
     }
 
     @Override

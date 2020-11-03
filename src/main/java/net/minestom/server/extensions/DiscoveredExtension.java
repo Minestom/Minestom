@@ -129,6 +129,8 @@ final class DiscoveredExtension {
         MISSING_DEPENDENCIES("Missing dependencies, check your logs."),
         INVALID_NAME("Invalid name."),
         NO_ENTRYPOINT("No entrypoint specified."),
+        FAILED_TO_SETUP_CLASSLOADER("Extension classloader could not be setup."),
+        LOAD_FAILED("Load failed. See logs for more information."),
         ;
 
         private final String message;
