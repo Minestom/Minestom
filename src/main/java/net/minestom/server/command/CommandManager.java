@@ -38,7 +38,7 @@ public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
 
-    private boolean running;
+    private volatile boolean running;
 
     private final ConsoleSender consoleSender = new ConsoleSender();
 
