@@ -102,9 +102,9 @@ public class ChunkDataPacket implements ServerPacket {
             final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
 
             NBTCompound nbt = new NBTCompound()
-                    .setDouble("x", blockPosition.getX())
-                    .setDouble("y", blockPosition.getY())
-                    .setDouble("z", blockPosition.getZ());
+                    .setInt("x", blockPosition.getX())
+                    .setInt("y", blockPosition.getY())
+                    .setInt("z", blockPosition.getZ());
 
             final short customBlockId = customBlocksId[index];
             final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
