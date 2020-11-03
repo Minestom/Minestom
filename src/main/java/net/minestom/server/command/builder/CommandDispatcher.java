@@ -110,6 +110,7 @@ public class CommandDispatcher {
             final String[] argsValues = new String[arguments.length];
 
             boolean syntaxCorrect = true;
+            // The current index in the raw command string arguments
             int argIndex = 0;
 
             boolean useRemaining = false;
@@ -126,20 +127,24 @@ public class CommandDispatcher {
                 StringBuilder argValue = new StringBuilder();
 
                 if (useRemaining) {
-                    // Argument is supposed to take the rest of the command input
-                    for (int i = argIndex; i < args.length; i++) {
-                        final String arg = args[i];
-                        if (argValue.length() > 0)
-                            argValue.append(" ");
-                        argValue.append(arg);
-                    }
+                    final boolean hasArgs = args.length > argIndex;
+                    // Verify if there is any string part available
+                    if (hasArgs) {
+                        // Argument is supposed to take the rest of the command input
+                        for (int i = argIndex; i < args.length; i++) {
+                            final String arg = args[i];
+                            if (argValue.length() > 0)
+                                argValue.append(" ");
+                            argValue.append(arg);
+                        }
 
-                    final String argValueString = argValue.toString();
+                        final String argValueString = argValue.toString();
 
-                    correctionResult = argument.getCorrectionResult(argValueString);
-                    if (correctionResult == Argument.SUCCESS) {
-                        correct = true;
-                        argsValues[argIndex] = argValueString;
+                        correctionResult = argument.getCorrectionResult(argValueString);
+                        if (correctionResult == Argument.SUCCESS) {
+                            correct = true;
+                            argsValues[argIndex] = argValueString;
+                        }
                     }
                 } else {
                     // Argument is either single-word or can accept optional delimited space(s)
