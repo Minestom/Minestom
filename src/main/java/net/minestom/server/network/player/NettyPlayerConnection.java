@@ -115,7 +115,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
-     * Get the server address that the client used to connect.
+     * Gets the server address that the client used to connect.
      * <p>
      * WARNING: it is given by the client, it is possible for it to be wrong.
      *
@@ -127,7 +127,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
-     * Get the server port that the client used to connect.
+     * Gets the server port that the client used to connect.
      * <p>
      * WARNING: it is given by the client, it is possible for it to be wrong.
      *

@@ -442,7 +442,7 @@ public class MinecraftServer {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32), "The chunk view distance needs to be between 2 and 32");
+        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32), "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
             UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
