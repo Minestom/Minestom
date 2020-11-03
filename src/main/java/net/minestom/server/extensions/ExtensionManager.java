@@ -39,8 +39,8 @@ public class ExtensionManager {
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
 
-    // not final to add to it, and then make it immutable
-    private List<Extension> extensionList = new ArrayList<>();
+    private final List<Extension> extensionList = new ArrayList<>();
+    private final List<Extension> immutableExtensionListView = Collections.unmodifiableList(extensionList);
 
     public ExtensionManager() {
     }
@@ -94,7 +94,6 @@ public class ExtensionManager {
                 log.error("Failed to load extension", e);
             }
         }
-        extensionList = Collections.unmodifiableList(extensionList);
     }
 
     private void setupClassLoader(DiscoveredExtension discoveredExtension) {
@@ -105,21 +104,22 @@ public class ExtensionManager {
         extensionLoaders.put(extensionName.toLowerCase(), loader);
     }
 
-    private void attemptSingleLoad(DiscoveredExtension discoveredExtension) {
+    private Extension attemptSingleLoad(DiscoveredExtension discoveredExtension) {
         // Create ExtensionDescription (authors, version etc.)
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
         Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
                 extensionName,
                 discoveredExtension.getVersion(),
-                Arrays.asList(discoveredExtension.getAuthors())
+                Arrays.asList(discoveredExtension.getAuthors()),
+                discoveredExtension
         );
 
         MinestomExtensionClassLoader loader = extensionLoaders.get(extensionName.toLowerCase());
 
         if (extensions.containsKey(extensionName.toLowerCase())) {
             log.error("An extension called '{}' has already been registered.", extensionName);
-            return;
+            return null;
         }
 
         Class<?> jarClass;
@@ -127,7 +127,7 @@ public class ExtensionManager {
             jarClass = Class.forName(mainClass, true, loader);
         } catch (ClassNotFoundException e) {
             log.error("Could not find main class '{}' in extension '{}'.", mainClass, extensionName, e);
-            return;
+            return null;
         }
 
         Class<? extends Extension> extensionClass;
@@ -135,7 +135,7 @@ public class ExtensionManager {
             extensionClass = jarClass.asSubclass(Extension.class);
         } catch (ClassCastException e) {
             log.error("Main class '{}' in '{}' does not extend the 'Extension' superclass.", mainClass, extensionName, e);
-            return;
+            return null;
         }
 
         Constructor<? extends Extension> constructor;
@@ -145,14 +145,14 @@ public class ExtensionManager {
             constructor.setAccessible(true);
         } catch (NoSuchMethodException e) {
             log.error("Main class '{}' in '{}' does not define a no-args constructor.", mainClass, extensionName, e);
-            return;
+            return null;
         }
         Extension extension = null;
         try {
             extension = constructor.newInstance();
         } catch (InstantiationException e) {
             log.error("Main class '{}' in '{}' cannot be an abstract class.", mainClass, extensionName, e);
-            return;
+            return null;
         } catch (IllegalAccessException ignored) {
             // We made it accessible, should not occur
         } catch (InvocationTargetException e) {
@@ -162,7 +162,7 @@ public class ExtensionManager {
                     extensionName,
                     e.getTargetException()
             );
-            return;
+            return null;
         }
 
         // Set extension description
@@ -174,7 +174,7 @@ public class ExtensionManager {
             // We made it accessible, should not occur
         } catch (NoSuchFieldException e) {
             log.error("Main class '{}' in '{}' has no description field.", mainClass, extensionName, e);
-            return;
+            return null;
         }
 
         // Set logger
@@ -190,8 +190,20 @@ public class ExtensionManager {
             log.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
         }
 
+        // add dependents to pre-existing extensions, so that they can easily be found during reloading
+        for(String dependency : discoveredExtension.getDependencies()) {
+            Extension dep = extensions.get(dependency.toLowerCase());
+            if(dep == null) {
+                log.warn("Dependency {} of {} is null? This means the extension has been loaded without its dependency, which could cause issues later.", dependency, discoveredExtension.getName());
+            } else {
+                dep.getDescription().getDependents().add(discoveredExtension.getName());
+            }
+        }
+
         extensionList.add(extension); // add to a list, as lists preserve order
         extensions.put(extensionName.toLowerCase(), extension);
+
+        return extension;
     }
 
     @NotNull
@@ -204,20 +216,9 @@ public class ExtensionManager {
             if (!file.getName().endsWith(".jar")) {
                 continue;
             }
-            try (ZipFile f = new ZipFile(file);
-                 InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
-
-                DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
-                extension.files.add(file.toURI().toURL());
-
-                // Verify integrity and ensure defaults
-                DiscoveredExtension.verifyIntegrity(extension);
-
-                if (extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                    extensions.add(extension);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            DiscoveredExtension extension = discoverFromJar(file);
+            if(extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                extensions.add(extension);
             }
         }
 
@@ -244,6 +245,24 @@ public class ExtensionManager {
         return extensions;
     }
 
+    private DiscoveredExtension discoverFromJar(File file) {
+        try (ZipFile f = new ZipFile(file);
+             InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
+
+            DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
+            extension.setOriginalJar(file);
+            extension.files.add(file.toURI().toURL());
+
+            // Verify integrity and ensure defaults
+            DiscoveredExtension.verifyIntegrity(extension);
+
+            return extension;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private List<DiscoveredExtension> generateLoadOrder(List<DiscoveredExtension> discoveredExtensions) {
         // Do some mapping so we can map strings to extensions.
         Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
@@ -258,10 +277,15 @@ public class ExtensionManager {
                         DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
                         // Specifies an extension we don't have.
                         if (dependencyExtension == null) {
-                            log.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
-                            log.error("However the extension {} could not be found.", dependencyName);
-                            log.error("Therefore {} will not be loaded.", dependencyName);
-                            discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                            // attempt to see if it is not already loaded (happens with dynamic (re)loading)
+                            if(extensions.containsKey(dependencyName.toLowerCase())) {
+                                return extensions.get(dependencyName.toLowerCase()).getDescription().getOrigin();
+                            } else {
+                                log.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
+                                log.error("However the extension {} could not be found.", dependencyName);
+                                log.error("Therefore {} will not be loaded.", discoveredExtension.getName());
+                                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                            }
                         }
                         // This will return null for an unknown-extension
                         return extensionMap.get(dependencyName.toLowerCase());
@@ -283,7 +307,7 @@ public class ExtensionManager {
         List<Map.Entry<DiscoveredExtension, List<DiscoveredExtension>>> loadableExtensions;
         // While there are entries with no more elements (no more dependencies)
         while (!(
-                loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> entry.getValue().isEmpty()).collect(Collectors.toList())
+                loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> areAllDependenciesLoaded(entry.getValue())).collect(Collectors.toList())
         ).isEmpty()
         ) {
             // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
@@ -314,8 +338,14 @@ public class ExtensionManager {
         return sortedList;
     }
 
+    private boolean areAllDependenciesLoaded(List<DiscoveredExtension> dependencies) {
+        return dependencies.isEmpty() || dependencies.stream().allMatch(ext -> extensions.containsKey(ext.getName().toLowerCase()));
+    }
+
     private void loadDependencies(List<DiscoveredExtension> extensions) {
-        ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(extensions);
+        List<DiscoveredExtension> allLoadedExtensions = new LinkedList<>(extensions);
+        extensionList.stream().map(ext -> ext.getDescription().getOrigin()).forEach(allLoadedExtensions::add);
+        ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(allLoadedExtensions);
         for (DiscoveredExtension ext : extensions) {
             try {
                 DependencyGetter getter = new DependencyGetter();
@@ -404,7 +434,7 @@ public class ExtensionManager {
 
     @NotNull
     public List<Extension> getExtensions() {
-        return extensionList;
+        return immutableExtensionListView;
     }
 
     @Nullable
@@ -444,5 +474,103 @@ public class ExtensionManager {
             }
         }
         log.info("Done loading code modifiers.");
+    }
+
+    private void unload(Extension ext) {
+        ext.preTerminate();
+        ext.terminate();
+        ext.postTerminate();
+        ext.unload();
+
+        // remove as dependent of other extensions
+        // this avoids issues where a dependent extension fails to reload, and prevents the base extension to reload too
+        for(Extension e : extensionList) {
+            e.getDescription().getDependents().remove(ext.getDescription().getName());
+        }
+
+        String id = ext.getDescription().getName().toLowerCase();
+        // remove from loaded extensions
+        extensions.remove(id);
+        extensionList.remove(ext);
+
+        // remove class loader, required to reload the classes
+        MinestomExtensionClassLoader classloader = extensionLoaders.remove(id);
+        MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
+    }
+
+    public void reload(String extensionName) {
+        Extension ext = extensions.get(extensionName.toLowerCase());
+        if(ext == null) {
+            throw new IllegalArgumentException("Extension "+extensionName+" is not currently loaded.");
+        }
+
+        File originalJar = ext.getDescription().getOrigin().getOriginalJar();
+        if(originalJar == null) {
+            log.error("Cannot reload extension {} that is not from a .jar file!", extensionName);
+            return;
+        }
+
+        log.info("Reload extension {} from jar file {}", extensionName, originalJar.getAbsolutePath());
+        List<String> dependents = new LinkedList<>(ext.getDescription().getDependents()); // copy dependents list
+        List<File> originalJarsOfDependents = new LinkedList<>();
+
+        for(String dependentID : dependents) {
+            Extension dependentExt = extensions.get(dependentID.toLowerCase());
+            File dependentOriginalJar = dependentExt.getDescription().getOrigin().getOriginalJar();
+            originalJarsOfDependents.add(dependentOriginalJar);
+            if(dependentOriginalJar == null) {
+                log.error("Cannot reload extension {} that is not from a .jar file!", dependentID);
+                return;
+            }
+
+            log.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
+            unload(dependentExt);
+        }
+
+        log.info("Unloading extension {}", extensionName);
+        unload(ext);
+
+        // ext and its dependents should no longer be referenced from now on
+
+        // rediscover extension to reload. We allow dependency changes, so we need to fully reload it
+        List<DiscoveredExtension> extensionsToReload = new LinkedList<>();
+        log.info("Rediscover extension {} from jar {}", extensionName, originalJar.getAbsolutePath());
+        DiscoveredExtension rediscoveredExtension = discoverFromJar(originalJar);
+        extensionsToReload.add(rediscoveredExtension);
+
+        for(File dependentJar : originalJarsOfDependents) {
+            // rediscover dependent extension to reload
+            log.info("Rediscover dependent extension (depends on {}) from jar {}", extensionName, dependentJar.getAbsolutePath());
+            extensionsToReload.add(discoverFromJar(dependentJar));
+        }
+
+        // ensure correct order of dependencies
+        log.debug("Reorder extensions to reload to ensure proper load order");
+        extensionsToReload = generateLoadOrder(extensionsToReload);
+        loadDependencies(extensionsToReload);
+
+        // setup new classloaders for the extensions to reload
+        for(DiscoveredExtension toReload : extensionsToReload) {
+            log.debug("Setting up classloader for extension {}", toReload.getName());
+            setupClassLoader(toReload);
+        }
+
+        // setup code modifiers for these extensions
+        // TODO: it is possible the new modifiers cannot be applied (because the targeted classes are already loaded), should we issue a warning?
+        setupCodeModifiers(extensionsToReload);
+
+        List<Extension> newExtensions = new LinkedList<>();
+        for(DiscoveredExtension toReload : extensionsToReload) {
+            // reload extensions
+            log.info("Actually load extension {}", toReload.getName());
+            Extension loadedExtension = attemptSingleLoad(toReload);
+            newExtensions.add(loadedExtension);
+        }
+
+        log.info("Reload complete, refiring preinit, init and then postinit callbacks");
+        // retrigger preinit, init and postinit
+        newExtensions.forEach(Extension::preInitialize);
+        newExtensions.forEach(Extension::initialize);
+        newExtensions.forEach(Extension::postInitialize);
     }
 }

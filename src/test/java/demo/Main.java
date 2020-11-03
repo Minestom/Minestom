@@ -35,6 +35,7 @@ public class Main {
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
+        commandManager.register(new ReloadExtensionCommand());
 
 
         StorageManager storageManager = MinecraftServer.getStorageManager();

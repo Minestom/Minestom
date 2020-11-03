@@ -33,4 +33,9 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         }
         return null;
     }
+
+    public void removeChildInHierarchy(MinestomExtensionClassLoader child) {
+        children.remove(child);
+        children.forEach(c -> c.removeChildInHierarchy(child));
+    }
 }

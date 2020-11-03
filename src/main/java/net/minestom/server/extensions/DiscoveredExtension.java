@@ -2,6 +2,7 @@ package net.minestom.server.extensions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.net.URL;
@@ -21,6 +22,7 @@ final class DiscoveredExtension {
     private ExternalDependencies externalDependencies;
     transient List<URL> files = new LinkedList<>();
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
+    transient private File originalJar;
 
     @NotNull
     public String getName() {
@@ -63,6 +65,15 @@ final class DiscoveredExtension {
     @NotNull
     public ExternalDependencies getExternalDependencies() {
         return externalDependencies;
+    }
+
+    void setOriginalJar(@Nullable File file) {
+        originalJar = file;
+    }
+
+    @Nullable
+    File getOriginalJar() {
+        return originalJar;
     }
 
     static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
