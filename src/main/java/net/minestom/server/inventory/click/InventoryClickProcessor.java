@@ -205,7 +205,7 @@ public class InventoryClickProcessor {
                     if (!clickedRule.canApply(clicked, amount + 1))
                         continue;
 
-                    int totalAmount = clickedRule.getAmount(resultClicked) + amount;
+                    final int totalAmount = clickedRule.getAmount(resultClicked) + amount;
                     if (!clickedRule.canApply(clicked, totalAmount)) {
                         item = itemRule.apply(item, itemRule.getMaxSize());
                         itemSetter.accept(index, item);
@@ -278,7 +278,7 @@ public class InventoryClickProcessor {
                 int finalCursorAmount = cursorAmount;
 
                 for (Integer s : slots) {
-                    ItemStack draggedItem = cursor.copy();
+                    final ItemStack draggedItem = cursor.copy();
                     ItemStack slotItem = itemGetter.apply(s);
 
                     clickResult = startCondition(clickResult, inventory, player, s, ClickType.DRAGGING, slotItem, cursor);
