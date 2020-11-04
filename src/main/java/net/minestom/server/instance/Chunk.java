@@ -293,6 +293,8 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     /**
      * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}.
+     * <p>
+     * If false, the chunk will be entirely empty when loaded.
      *
      * @return true if this chunk is affected by a {@link ChunkGenerator}
      */

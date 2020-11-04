@@ -66,7 +66,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 
