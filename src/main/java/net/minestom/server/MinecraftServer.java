@@ -473,8 +473,6 @@ public class MinecraftServer {
 
     /**
      * Changes the entity view distance of the server.
-     * <p>
-     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
      *
      * @param entityViewDistance the new entity view distance
      * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
