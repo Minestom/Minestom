@@ -198,6 +198,7 @@ public class CommandDispatcher {
             final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, syntaxesValues, executorArgs);
             if (finalSyntax != null) {
                 // A fully correct syntax has been found, use it
+                result.syntax = finalSyntax;
                 result.executor = finalSyntax.getExecutor();
                 result.arguments = executorArgs;
                 return result;
@@ -333,6 +334,8 @@ public class CommandDispatcher {
         private Command command;
 
         // Command Executor
+        private CommandSyntax syntax;
+
         private CommandExecutor executor;
         private Arguments arguments;
 
@@ -353,17 +356,27 @@ public class CommandDispatcher {
         public void execute(@NotNull CommandSender source, @NotNull String commandString) {
             // Global listener
             command.globalListener(source, arguments, commandString);
-            // Condition check
+            // Command condition check
             final CommandCondition condition = command.getCondition();
             if (condition != null) {
-                final boolean result = condition.apply(source);
+                final boolean result = condition.canUse(source, commandString);
                 if (!result)
                     return;
             }
             // Condition is respected
             if (executor != null) {
                 // An executor has been found
-                executor.apply(source, arguments);
+
+                if (syntax != null) {
+                    // The executor is from a syntax
+                    final CommandCondition commandCondition = syntax.getCommandCondition();
+                    if (commandCondition == null || commandCondition.canUse(source, commandString)) {
+                        executor.apply(source, arguments);
+                    }
+                } else {
+                    // The executor is probably the default one
+                    executor.apply(source, arguments);
+                }
             } else if (callback != null) {
                 // No syntax has been validated but the faulty argument with a callback has been found
                 // Execute the faulty argument callback

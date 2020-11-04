@@ -28,7 +28,7 @@ public class HealthCommand extends Command {
         addSyntax(this::execute, arg0);
     }
 
-    private boolean condition(CommandSender sender) {
+    private boolean condition(CommandSender sender, String commandString) {
         if (!sender.isPlayer()) {
             sender.sendMessage("The command is only available for player");
             return false;

@@ -172,7 +172,7 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                if(event.isFirstSpawn()){
+                if (event.isFirstSpawn()) {
                     player.teleport(new Position(0, 64f, 0));
                 }
 

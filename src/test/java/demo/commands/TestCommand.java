@@ -17,8 +17,9 @@ public class TestCommand extends Command {
             //addSyntax(this::execute, dynamicWord);
         }
 
-        Argument test = ArgumentType.Word("test").from("hey");
-        Argument num = ArgumentType.Integer("num");
+        Argument test = ArgumentType.Word("wordT");
+        Argument testt = ArgumentType.Word("wordTt");
+        Argument test2 = ArgumentType.StringArray("array");
 
         setDefaultExecutor((source, args) -> {
             System.out.println("DEFAULT");
@@ -31,7 +32,7 @@ public class TestCommand extends Command {
 
         addSyntax((source, args) -> {
             System.out.println(2);
-        }, test, num);
+        }, test, test2);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

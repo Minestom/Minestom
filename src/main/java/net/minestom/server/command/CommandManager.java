@@ -204,7 +204,7 @@ public final class CommandManager {
     /**
      * Gets the {@link DeclareCommandsPacket} for a specific player.
      * <p>
-     * Can be used to update the {@link Player} auto-completion list.
+     * Can be used to update a player auto-completion list.
      *
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
@@ -234,7 +234,7 @@ public final class CommandManager {
             final CommandCondition commandCondition = command.getCondition();
             if (commandCondition != null) {
                 // Do not show command if return false
-                if (!commandCondition.apply(player)) {
+                if (!commandCondition.canUse(player, null)) {
                     continue;
                 }
             }
@@ -247,7 +247,7 @@ public final class CommandManager {
             names.add(command.getName());
             names.addAll(Arrays.asList(command.getAliases()));
             for (String name : names) {
-                createCommand(nodes, cmdChildren, name, syntaxes, rootChildren);
+                createCommand(player, nodes, cmdChildren, name, syntaxes, rootChildren);
             }
 
         }
@@ -311,13 +311,15 @@ public final class CommandManager {
     /**
      * Adds the command's syntaxes to the nodes list.
      *
+     * @param sender       the potential sender of the command
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
      * @param name         the name of the command (or the alias)
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
      */
-    private void createCommand(@NotNull List<DeclareCommandsPacket.Node> nodes,
+    private void createCommand(@NotNull CommandSender sender,
+                               @NotNull List<DeclareCommandsPacket.Node> nodes,
                                @NotNull IntList cmdChildren,
                                @NotNull String name,
                                @NotNull Collection<CommandSyntax> syntaxes,
@@ -334,6 +336,13 @@ public final class CommandManager {
         Map<Argument, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
+            final CommandCondition commandCondition = syntax.getCommandCondition();
+            if (commandCondition != null && !commandCondition.canUse(sender, null)) {
+                // Sender does not have the right to use this syntax, ignore it
+                continue;
+            }
+
+
             // Represent the last nodes computed in the last iteration
             List<DeclareCommandsPacket.Node> lastNodes = null;
 

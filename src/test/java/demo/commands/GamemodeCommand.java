@@ -70,7 +70,7 @@ public class GamemodeCommand extends Command {
         sender.sendMessage("'" + gamemode + "' is not a valid gamemode!");
     }
 
-    private boolean isAllowed(CommandSender sender) {
+    private boolean isAllowed(CommandSender sender, String commandString) {
         if (!sender.isPlayer()) {
             sender.sendMessage("The command is only available for player");
             return false;

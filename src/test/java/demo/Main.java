@@ -3,7 +3,7 @@ package demo;
 import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
-import demo.commands.*;
+import demo.commands.TestCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -27,14 +27,14 @@ public class Main {
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
-        commandManager.register(new EntitySelectorCommand());
         commandManager.register(new TestCommand());
+        /*commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
-        commandManager.register(new TeleportCommand());
+        commandManager.register(new TeleportCommand());*/
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 
