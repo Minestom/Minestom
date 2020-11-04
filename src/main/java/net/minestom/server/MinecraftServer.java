@@ -439,10 +439,11 @@ public class MinecraftServer {
      * Changes the chunk view distance of the server.
      *
      * @param chunkViewDistance the new chunk view distance
-     * @throws IllegalStateException if this is called after the server started
+     * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
      */
     public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32), "The chunk view distance must be between 2 and 32");
+        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
+                "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
             UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
@@ -476,11 +477,20 @@ public class MinecraftServer {
      * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
      *
      * @param entityViewDistance the new entity view distance
-     * @throws IllegalStateException if this is called after the server started
+     * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
      */
     public static void setEntityViewDistance(int entityViewDistance) {
-        Check.stateCondition(started, "The entity view distance cannot be changed after the server has been started.");
+        Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
+                "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
+        if (started) {
+            connectionManager.getOnlinePlayers().forEach(player -> {
+                final Chunk playerChunk = player.getChunk();
+                if (playerChunk != null) {
+                    player.refreshVisibleEntities(playerChunk);
+                }
+            });
+        }
     }
 
     /**

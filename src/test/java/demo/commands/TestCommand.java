@@ -1,5 +1,6 @@
 package demo.commands;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
@@ -17,9 +18,7 @@ public class TestCommand extends Command {
             //addSyntax(this::execute, dynamicWord);
         }
 
-        Argument test = ArgumentType.Word("wordT");
-        Argument testt = ArgumentType.Word("wordTt");
-        Argument test2 = ArgumentType.StringArray("array");
+        Argument test = ArgumentType.Integer("number");
 
         setDefaultExecutor((source, args) -> {
             System.out.println("DEFAULT");
@@ -27,12 +26,10 @@ public class TestCommand extends Command {
         });
 
         addSyntax((source, args) -> {
-            System.out.println(1);
+            int number = args.getInteger("number");
+            source.sendMessage("set view to " + number);
+            MinecraftServer.setEntityViewDistance(number);
         }, test);
-
-        addSyntax((source, args) -> {
-            System.out.println(2);
-        }, test, test2);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

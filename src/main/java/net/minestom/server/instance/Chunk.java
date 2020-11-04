@@ -19,6 +19,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -289,6 +290,15 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    /**
+     * Creates a {@link Position} object based on this chunk.
+     *
+     * @return the position of this chunk
+     */
+    public Position toPosition() {
+        return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**

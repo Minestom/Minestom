@@ -21,7 +21,6 @@ import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -84,7 +83,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     private boolean autoViewable;
     private final int id;
     private Data data;
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -1007,7 +1006,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
                     instance.removeEntityFromChunk(this, lastChunk);
                     instance.addEntityToChunk(this, newChunk);
                 }
-                updateView(lastChunk, newChunk);
+                if (this instanceof Player) {
+                    // Refresh player view
+                    final Player player = (Player) this;
+                    player.refreshVisibleChunks(newChunk);
+                    player.refreshVisibleEntities(newChunk);
+                }
             }
         }
     }
@@ -1018,72 +1022,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
      */
     public void refreshPosition(@NotNull Position position) {
         refreshPosition(position.getX(), position.getY(), position.getZ());
-    }
-
-    /**
-     * Manages viewable entities automatically if {@link #isAutoViewable()} is enabled.
-     * <p>
-     * Called by {@link #refreshPosition(float, float, float)} when the new position is in a different {@link Chunk}.
-     *
-     * @param lastChunk the previous {@link Chunk} of this entity
-     * @param newChunk  the new {@link Chunk} of this entity
-     */
-    private void updateView(@NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
-        final boolean isPlayer = this instanceof Player;
-
-        if (isPlayer)
-            ((Player) this).refreshVisibleChunks(newChunk); // Refresh loaded chunk
-
-        // Refresh entity viewable list
-        final int entityViewDistance = MinecraftServer.getEntityViewDistance();
-        final long[] lastVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * lastChunk.getChunkX(), 0, 16 * lastChunk.getChunkZ()), entityViewDistance);
-        final long[] updatedVisibleChunksEntity = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), entityViewDistance);
-
-        // Remove from previous chunks
-        final int[] oldChunksEntity = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunksEntity, updatedVisibleChunksEntity);
-        for (int index : oldChunksEntity) {
-            final long chunkIndex = lastVisibleChunksEntity[index];
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk == null)
-                continue;
-            instance.getChunkEntities(chunk).forEach(ent -> {
-                if (ent instanceof Player) {
-                    final Player player = (Player) ent;
-                    if (isAutoViewable())
-                        removeViewer(player);
-                    if (isPlayer) {
-                        player.removeViewer((Player) this);
-                    }
-                } else if (isPlayer) {
-                    ent.removeViewer((Player) this);
-                }
-            });
-        }
-
-        // Add to new chunks
-        final int[] newChunksEntity = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunksEntity, lastVisibleChunksEntity);
-        for (int index : newChunksEntity) {
-            final long chunkIndex = updatedVisibleChunksEntity[index];
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk == null)
-                continue;
-            instance.getChunkEntities(chunk).forEach(ent -> {
-                if (ent instanceof Player) {
-                    Player player = (Player) ent;
-                    if (isAutoViewable())
-                        addViewer(player);
-                    if (this instanceof Player) {
-                        player.addViewer((Player) this);
-                    }
-                } else if (isPlayer) {
-                    ent.addViewer((Player) this);
-                }
-            });
-        }
     }
 
     /**

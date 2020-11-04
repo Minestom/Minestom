@@ -80,6 +80,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     private String username;
     protected final PlayerConnection playerConnection;
+    // All the entities that this player can see
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
     private int latency;
@@ -1406,12 +1407,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Called when the player changes chunk (move from one to another).
-     * Can also be used to refresh the list of chunks that the client should see.
+     * Can also be used to refresh the list of chunks that the client should see based on {@link #getChunkRange()}.
      * <p>
      * It does remove and add the player from the chunks viewers list when removed or added.
      * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}.
      *
-     * @param newChunk the current/new player chunk
+     * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
         // Previous chunks indexes
@@ -1420,7 +1421,7 @@ public class Player extends LivingEntity implements CommandSender {
         ).toArray();
 
         // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), getChunkRange());
+        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
 
         // Find the difference between the two arrays¬
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
@@ -1459,6 +1460,52 @@ public class Player extends LivingEntity implements CommandSender {
                 chunk.addViewer(this);
             });
         }
+    }
+
+    /**
+     * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
+     * and {@link Entity#isAutoViewable()}.
+     *
+     * @param newChunk the new chunk of the player (can be the current one)
+     */
+    public void refreshVisibleEntities(@NotNull Chunk newChunk) {
+        final int entityViewDistance = MinecraftServer.getEntityViewDistance();
+        final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
+
+        // Manage already viewable entities
+        this.viewableEntities.forEach(entity -> {
+            final float distance = entity.getDistance(this);
+            if (distance > maximalDistance) {
+                // Entity shouldn't be viewable anymore
+                if (isAutoViewable()) {
+                    entity.removeViewer(this);
+                }
+                if (entity instanceof Player && entity.isAutoViewable()) {
+                    removeViewer((Player) entity);
+                }
+            }
+        });
+
+        // Manage entities in unchecked chunks
+        final long[] chunksInRange = ChunkUtils.getChunksInRange(newChunk.toPosition(), entityViewDistance);
+
+        for (long chunkIndex : chunksInRange) {
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+            if (chunk == null)
+                continue;
+            instance.getChunkEntities(chunk).forEach(entity -> {
+                if (isAutoViewable() && !entity.viewers.contains(this)) {
+                    entity.addViewer(this);
+                }
+
+                if (entity instanceof Player && entity.isAutoViewable()) {
+                    addViewer((Player) entity);
+                }
+            });
+        }
+
     }
 
     @Override
