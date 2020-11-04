@@ -119,6 +119,16 @@ public class Vector {
     }
 
     /**
+     * Gets the squared distance between this vector and another.
+     *
+     * @param o The other vector
+     * @return the squared distance
+     */
+    public double distanceSquared(Vector o) {
+        return MathUtils.square(x - o.x) + MathUtils.square(y - o.y) + MathUtils.square(z - o.z);
+    }
+
+    /**
      * Performs scalar multiplication, multiplying all components with a
      * scalar.
      *
