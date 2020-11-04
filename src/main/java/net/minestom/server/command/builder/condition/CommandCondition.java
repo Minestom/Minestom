@@ -15,7 +15,8 @@ public interface CommandCondition {
      * <p>
      * The first time will be during player connection in order to know
      * if the command/syntax should be displayed as tab-completion suggestion,
-     * {@code commandString} will be null in this case.
+     * {@code commandString} will be null in this case. (It is also possible for the command string
+     * to be null if a new command packet is built)
      * <p>
      * Otherwise, {@code commandString} will never be null
      * but will instead be the raw command string given by the sender.
@@ -23,7 +24,7 @@ public interface CommandCondition {
      *
      * @param source        the sender of the command
      * @param commandString the raw command string,
-     *                      null if the method has been called at player login
+     *                      null if this is an access request
      * @return true if the sender has the right to use the command, false otherwise
      */
     boolean canUse(@NotNull CommandSender source, @Nullable String commandString);
