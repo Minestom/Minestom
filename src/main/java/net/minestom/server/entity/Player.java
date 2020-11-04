@@ -1500,7 +1500,7 @@ public class Player extends LivingEntity implements CommandSender {
                     entity.addViewer(this);
                 }
 
-                if (entity instanceof Player && entity.isAutoViewable()) {
+                if (entity instanceof Player && entity.isAutoViewable() && !viewers.contains(entity)) {
                     addViewer((Player) entity);
                 }
             });
