@@ -678,7 +678,8 @@ public class InstanceContainer extends Instance {
     /**
      * Adds a {@link Chunk} to the internal instance map.
      * <p>
-     * WARNING: the chunk will not automatically be sent to players
+     * WARNING: the chunk will not automatically be sent to players and
+     * {@link net.minestom.server.UpdateManager#signalChunkLoad(Instance, int, int)} must be called manually.
      *
      * @param chunk the chunk to cache
      */
