@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Class used to write packets.
@@ -20,7 +21,7 @@ public final class PacketUtils {
      * @param buf    the recipient of {@code packet}
      * @param packet the packet to write into {@code buf}
      */
-    public static void writePacket(ByteBuf buf, ServerPacket packet) {
+    public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
 
         final ByteBuf packetBuffer = getPacketBuffer(packet);
 
@@ -33,7 +34,8 @@ public final class PacketUtils {
      * @param packet the packet to write
      * @return a {@link ByteBuf} containing {@code packet}
      */
-    public static ByteBuf writePacket(ServerPacket packet) {
+    @NotNull
+    public static ByteBuf writePacket(@NotNull ServerPacket packet) {
         final ByteBuf packetBuffer = getPacketBuffer(packet);
 
         // Add 5 for the packet id and for the packet size
@@ -52,7 +54,7 @@ public final class PacketUtils {
      * @param packetBuffer the buffer containing the raw packet data
      * @param packetId     the packet id
      */
-    private static void writePacket(ByteBuf buf, ByteBuf packetBuffer, int packetId) {
+    private static void writePacket(@NotNull ByteBuf buf, @NotNull ByteBuf packetBuffer, int packetId) {
         Utils.writeVarIntBuf(buf, packetId);
         buf.writeBytes(packetBuffer);
     }
@@ -63,7 +65,8 @@ public final class PacketUtils {
      * @param packet the packet to write
      * @return the {@link ByteBuf} containing the raw packet data
      */
-    private static ByteBuf getPacketBuffer(ServerPacket packet) {
+    @NotNull
+    private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet) {
         BinaryWriter writer = new BinaryWriter();
         packet.write(writer);
 
