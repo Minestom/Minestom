@@ -28,14 +28,15 @@ public class StaticChunk extends Chunk {
 
     protected final BlockProvider blockProvider;
 
-    public StaticChunk(Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
+    public StaticChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
+                       @NotNull BlockProvider blockProvider) {
         super(biomes, chunkX, chunkZ, false);
         this.blockProvider = blockProvider;
         setReadOnly(true);
     }
 
     @Override
-    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable) {
+    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data, boolean updatable) {
         //noop
     }
 

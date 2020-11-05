@@ -677,10 +677,12 @@ public class InstanceContainer extends Instance {
 
     /**
      * Adds a {@link Chunk} to the internal instance map.
+     * <p>
+     * WARNING: the chunk will not automatically be sent to players
      *
      * @param chunk the chunk to cache
      */
-    private void cacheChunk(Chunk chunk) {
+    public void cacheChunk(@NotNull Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         this.chunks.put(index, chunk);
     }
