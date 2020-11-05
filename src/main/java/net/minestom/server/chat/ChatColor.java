@@ -262,10 +262,10 @@ public class ChatColor {
             // color or special code (white/red/reset/bold/etc...)
             code = codeName;
         } else {
-            // RGB color
+            // RGB color (special code not set)
             int color = (red & 0xFF) << 16 | (green & 0xFF) << 8 | blue & 0xFF;
 
-            code = "#"+Integer.toHexString(color);
+            code = Integer.toHexString(color);
         }
 
         return header + code + footer;
