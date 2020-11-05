@@ -174,16 +174,40 @@ public class BlockPosition {
     }
 
     /**
-     * Gets the distance to another block position.
+     * Gets the manhattan distance to another block position.
      *
      * @param blockPosition the block position to check the distance
      * @return the distance between 'this' and {@code blockPosition}
      */
-    public int getDistance(@NotNull BlockPosition blockPosition) {
+    public int getManhattanDistance(@NotNull BlockPosition blockPosition) {
         return Math.abs(getX() - blockPosition.getX()) +
                 Math.abs(getY() - blockPosition.getY()) +
                 Math.abs(getZ() - blockPosition.getZ());
     }
+
+    /**
+     * Gets the distance to another block position.
+     * In cases where performance matters, {@link #getDistanceSquared(BlockPosition)} should be used
+     * as it does not perform the expensive Math.sqrt method.
+     *
+     * @param blockPosition the block position to check the distance
+     * @return the distance between 'this' and {@code blockPosition}
+     */
+    public double getDistance(@NotNull BlockPosition blockPosition) {
+        return Math.sqrt(getDistanceSquared(blockPosition));
+    }
+
+    /**
+     * Gets the square distance to another block position.
+    *
+    * @param blockPosition the block position to check the distance
+    * @return the distance between 'this' and {@code blockPosition}
+    */
+   public int getDistanceSquared(@NotNull BlockPosition blockPosition) {
+       return MathUtils.square(getX() - blockPosition.getX()) +
+               MathUtils.square(getY() - blockPosition.getY()) +
+               MathUtils.square(getZ() - blockPosition.getZ());
+   }
 
     /**
      * Copies this block position.

@@ -72,6 +72,8 @@ public class Position {
 
     /**
      * Gets the distance between 2 positions.
+     *   In cases where performance matters, {@link #getDistanceSquared(Position)} should be used
+     *   as it does not perform the expensive Math.sqrt method.
      *
      * @param position the second position
      * @return the distance between {@code this} and {@code position}
@@ -81,6 +83,18 @@ public class Position {
                 MathUtils.square(position.getY() - getY()) +
                 MathUtils.square(position.getZ() - getZ()));
     }
+
+    /**
+     * Gets the square distance to another position.
+    *
+    * @param position the second position
+    * @return the squared distance between {@code this} and {@code position}
+    */
+   public float getDistanceSquared(Position position) {
+       return MathUtils.square(getX() - position.getX()) +
+               MathUtils.square(getY() - position.getY()) +
+               MathUtils.square(getZ() - position.getZ());
+   }
 
     /**
      * Gets a unit-vector pointing in the direction that this Location is
