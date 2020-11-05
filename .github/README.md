@@ -28,11 +28,11 @@ Minestom is similar to Bukkit in the fact that it is not a standlone program, it
 It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
+This mean you need to add Minestom as a dependency, add your code and compile by yourself.
+
 # Usage
 An example of how to use the Minestom library is available [here](/src/test/java/demo).
 Alternatively you can check the official wiki [here](https://wiki.minestom.com/).
-
-This mean you need to add Minestom as a dependency, add your code and compile by yourself.
 
 # Why Minestom?
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
