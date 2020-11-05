@@ -34,7 +34,7 @@ import java.util.*;
  * Here a non-exhaustive list of what you can do to update the item:
  * {@link PlayerInventory#refreshSlot(short)}, {@link Inventory#refreshSlot(short)} or a raw {@link SetSlotPacket}.
  */
-public class ItemStack implements DataContainer {
+public class ItemStack implements DataContainer, Cloneable {
 
     private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(64);
 
@@ -529,11 +529,13 @@ public class ItemStack implements DataContainer {
     }
 
     /**
+     * @deprecated use {@link #clone()} instead.
      * Copies this item stack.
      *
      * @return a cloned item stack
      */
     @NotNull
+    @Deprecated
     public synchronized ItemStack copy() {
         ItemStack itemStack = new ItemStack(material, amount, damage);
         itemStack.setDisplayName(displayName);
@@ -558,6 +560,40 @@ public class ItemStack implements DataContainer {
         if (data != null)
             itemStack.setData(data.copy());
         return itemStack;
+    }
+
+    /**
+     * Clones this item stack.
+     * This copies all metadata to the new Itemstack.
+     *
+     * @return a cloned item stack
+     */
+    @NotNull
+    @Override
+    public synchronized ItemStack clone() {
+        ItemStack clone = new ItemStack(material, amount, damage);
+        clone.setDisplayName(displayName);
+        clone.setUnbreakable(unbreakable);
+        if (lore != null) {
+            clone.setLore(new ArrayList<>(lore));
+        }
+        if (stackingRule != null) {
+            clone.setStackingRule(stackingRule);
+        }
+
+        clone.enchantmentMap = new HashMap<>(enchantmentMap);
+        clone.attributes = new ArrayList<>(attributes);
+
+        clone.hideFlag = hideFlag;
+        clone.customModelData = customModelData;
+
+        if (itemMeta != null)
+            clone.itemMeta = itemMeta.copy();
+
+        final Data data = getData();
+        if (data != null)
+            clone.setData(data.copy());
+        return clone;
     }
 
     @Override

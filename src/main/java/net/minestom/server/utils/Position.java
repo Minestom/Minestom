@@ -2,11 +2,13 @@ package net.minestom.server.utils;
 
 import java.util.Objects;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a position.
  * The instance is not contained.
  */
-public class Position {
+public class Position implements Cloneable {
 
     private float x, y, z;
     private float yaw, pitch;
@@ -177,14 +179,27 @@ public class Position {
     }
 
     /**
+     * @deprecated Use {@link #clone()} instead.
      * Copies this position object with the same values.
      *
      * @return a new {@link Position} object with the same coordinates
      */
+    @Deprecated
     public Position copy() {
         return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
     }
 
+    /**
+     * Clones this position object with the same values.
+     *
+     * @return a new {@link Position} object with the same coordinates and pitch/yaw
+     */
+    @NotNull
+    @Override
+    public Position clone() {
+        return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
+    }
+    
     /**
      * Gets if the two objects are position and have the same values.
      *

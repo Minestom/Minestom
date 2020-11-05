@@ -386,7 +386,7 @@ public abstract class EntityCreature extends LivingEntity {
             return false;
         }
 
-        final Position targetPosition = position.copy();
+        final Position targetPosition = position.clone();
 
         this.path = pathFinder.initiatePathTo(position.getX(), position.getY(), position.getZ());
         this.pathLock.unlock();

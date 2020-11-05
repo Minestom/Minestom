@@ -1,6 +1,6 @@
 package net.minestom.server.utils;
 
-public class Vector {
+public class Vector implements Cloneable {
 
     private static final double epsilon = 0.000001;
 
@@ -79,10 +79,10 @@ public class Vector {
     }
 
     /**
-     * Copies another vector
+     * Copies another vector into the current vector
      *
      * @param vec The other vector
-     * @return the same vector
+     * @return the current vector instance
      */
     public Vector copy(Vector vec) {
         x = vec.x;
@@ -233,11 +233,24 @@ public class Vector {
     }
 
     /**
+     * @deprecated Use {@link #clone()} instead.
      * Gets a new vector.
      *
      * @return vector
      */
+    @Deprecated
     public Vector copy() {
+        return new Vector(x, y, z);
+    }
+
+    /**
+     * Clones the current vector to return a new vector that is similar to the current one.
+     * The new vector has the same properties as the current one
+     *
+     * @return vector The cloned vector
+     */
+    @Override
+    public Vector clone() {
         return new Vector(x, y, z);
     }
 

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Represents the position of a block, so with integers instead of floating numbers.
  */
-public class BlockPosition {
+public class BlockPosition implements Cloneable {
 
     private int x, y, z;
 
@@ -210,12 +210,25 @@ public class BlockPosition {
    }
 
     /**
+     * @deprecated Use {@link #clone()} instead.
      * Copies this block position.
      *
      * @return the cloned block position
      */
     @NotNull
+    @Deprecated
     public BlockPosition copy() {
+        return clone();
+    }
+
+    /**
+     * Clones this block position.
+     * 
+     * @return the cloned block position
+     */
+    @NotNull
+    @Override
+    public BlockPosition clone() {
         return new BlockPosition(x, y, z);
     }
 
