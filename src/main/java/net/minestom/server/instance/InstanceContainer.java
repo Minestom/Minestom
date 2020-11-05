@@ -533,7 +533,7 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        final Chunk chunk = chunkSupplier.getChunk(this, biomes, chunkX, chunkZ);
+        final Chunk chunk = chunkSupplier.getChunk(biomes, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
 
         cacheChunk(chunk);
@@ -619,7 +619,7 @@ public class InstanceContainer extends Instance {
     /**
      * Copies all the chunks of this instance and create a new instance container with all of them.
      * <p>
-     * Chunks are copied with {@link Chunk#copy(Instance, int, int)},
+     * Chunks are copied with {@link Chunk#copy(int, int)},
      * {@link UUID} is randomized, {@link DimensionType} is passed over and the {@link StorageLocation} is null.
      *
      * @return an {@link InstanceContainer} with the exact same chunks as 'this'
@@ -635,7 +635,7 @@ public class InstanceContainer extends Instance {
             final long index = entry.getKey();
             final Chunk chunk = entry.getValue();
 
-            final Chunk copiedChunk = chunk.copy(copiedInstance, chunk.getChunkX(), chunk.getChunkZ());
+            final Chunk copiedChunk = chunk.copy(chunk.getChunkX(), chunk.getChunkZ());
 
             copiedChunks.put(index, copiedChunk);
             UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunk.getChunkX(), chunk.getChunkZ());

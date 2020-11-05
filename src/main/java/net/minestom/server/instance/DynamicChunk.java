@@ -60,8 +60,8 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
-    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        super(instance, biomes, chunkX, chunkZ, true);
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+        super(biomes, chunkX, chunkZ, true);
     }
 
     @Override
@@ -407,8 +407,8 @@ public class DynamicChunk extends Chunk {
 
     @NotNull
     @Override
-    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
+    public Chunk copy(int chunkX, int chunkZ) {
+        DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
         ArrayUtils.copyToDestination(blocksStateId, dynamicChunk.blocksStateId);
         ArrayUtils.copyToDestination(customBlocksId, dynamicChunk.customBlocksId);
         dynamicChunk.blocksData.putAll(blocksData);

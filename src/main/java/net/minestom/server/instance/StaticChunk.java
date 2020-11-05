@@ -28,8 +28,8 @@ public class StaticChunk extends Chunk {
 
     protected final BlockProvider blockProvider;
 
-    public StaticChunk(Instance instance, Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
-        super(instance, biomes, chunkX, chunkZ, false);
+    public StaticChunk(Biome[] biomes, int chunkX, int chunkZ, BlockProvider blockProvider) {
+        super(biomes, chunkX, chunkZ, false);
         this.blockProvider = blockProvider;
         setReadOnly(true);
     }
@@ -114,8 +114,8 @@ public class StaticChunk extends Chunk {
 
     @NotNull
     @Override
-    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        StaticChunk staticChunk = new StaticChunk(instance, biomes.clone(), chunkX, chunkZ, blockProvider);
+    public Chunk copy(int chunkX, int chunkZ) {
+        StaticChunk staticChunk = new StaticChunk(biomes.clone(), chunkX, chunkZ, blockProvider);
         // Prevent re-writing the whole packet since it is static anyway
         final ByteBuf packetBuffer = getFullDataPacket();
         if (packetBuffer != null) {

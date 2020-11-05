@@ -61,8 +61,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
     @NotNull
-    protected final Instance instance;
-    @NotNull
     protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
 
@@ -84,8 +82,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Data
     protected Data data;
 
-    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
-        this.instance = instance;
+    public Chunk(@Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
@@ -236,13 +233,12 @@ public abstract class Chunk implements Viewable, DataContainer {
      * <p>
      * The instance and chunk position (X/Z) can be modified using the given arguments.
      *
-     * @param instance the instance of the new chunk
-     * @param chunkX   the new chunk X
-     * @param chunkZ   the new chunK Z
+     * @param chunkX the new chunk X
+     * @param chunkZ the new chunk Z
      * @return a copy of this chunk with a potentially new instance and position
      */
     @NotNull
-    public abstract Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract Chunk copy(int chunkX, int chunkZ);
 
     /**
      * Gets the {@link CustomBlock} at a position.
