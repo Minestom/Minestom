@@ -263,19 +263,9 @@ public class ChatColor {
             code = codeName;
         } else {
             // RGB color
-            String redH = Integer.toHexString(red);
-            if (redH.length() == 1)
-                redH = "0" + redH;
+            int color = (red & 0xFF) << 16 | (green & 0xFF) << 8 | blue & 0xFF;
 
-            String greenH = Integer.toHexString(green);
-            if (greenH.length() == 1)
-                greenH = "0" + greenH;
-
-            String blueH = Integer.toHexString(blue);
-            if (blueH.length() == 1)
-                blueH = "0" + blueH;
-
-            code = redH + greenH + blueH;
+            code = "#"+Integer.toHexString(color);
         }
 
         return header + code + footer;
