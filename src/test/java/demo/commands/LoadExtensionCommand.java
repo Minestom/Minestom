@@ -38,14 +38,24 @@ public class LoadExtensionCommand extends Command {
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
         Path extensionFolder = extensionManager.getExtensionFolder().toPath().toAbsolutePath();
         Path extensionJar = extensionFolder.resolve(name);
-        if(!extensionJar.toAbsolutePath().startsWith(extensionFolder)) {
-            sender.sendMessage("File name '"+name+"' does not represent a file inside the extensions folder. Will not load");
+        try {
+            if(!extensionJar.toFile().getCanonicalPath().startsWith(extensionFolder.toFile().getCanonicalPath())) {
+                sender.sendMessage("File name '"+name+"' does not represent a file inside the extensions folder. Will not load");
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            sender.sendMessage("Failed to load extension: "+e.getMessage());
             return;
         }
 
         try {
-            extensionManager.loadDynamicExtension(extensionJar.toFile());
-            sender.sendMessage("Extension loaded!");
+            boolean managed = extensionManager.loadDynamicExtension(extensionJar.toFile());
+            if(managed) {
+                sender.sendMessage("Extension loaded!");
+            } else {
+                sender.sendMessage("Failed to load extension, check your logs.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             sender.sendMessage("Failed to load extension: "+e.getMessage());

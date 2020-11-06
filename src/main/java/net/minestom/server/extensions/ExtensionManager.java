@@ -16,7 +16,6 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -553,7 +552,7 @@ public class ExtensionManager {
         loadExtensionList(extensionsToReload);
     }
 
-    public void loadDynamicExtension(File jarFile) throws FileNotFoundException {
+    public boolean loadDynamicExtension(File jarFile) throws FileNotFoundException {
         if(!jarFile.exists()) {
             throw new FileNotFoundException("File '"+jarFile.getAbsolutePath()+"' does not exists. Cannot load extension.");
         }
@@ -561,10 +560,10 @@ public class ExtensionManager {
         log.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
         DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
         List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
-        loadExtensionList(extensionsToLoad);
+        return loadExtensionList(extensionsToLoad);
     }
 
-    private void loadExtensionList(List<DiscoveredExtension> extensionsToLoad) {
+    private boolean loadExtensionList(List<DiscoveredExtension> extensionsToLoad) {
         // ensure correct order of dependencies
         log.debug("Reorder extensions to ensure proper load order");
         extensionsToLoad = generateLoadOrder(extensionsToLoad);
@@ -585,7 +584,14 @@ public class ExtensionManager {
             // reload extensions
             log.info("Actually load extension {}", toReload.getName());
             Extension loadedExtension = attemptSingleLoad(toReload);
-            newExtensions.add(loadedExtension);
+            if(loadedExtension != null) {
+                newExtensions.add(loadedExtension);
+            }
+        }
+
+        if(newExtensions.isEmpty()) {
+            log.error("No extensions to load, skipping callbacks");
+            return false;
         }
 
         log.info("Load complete, firing preinit, init and then postinit callbacks");
@@ -593,6 +599,7 @@ public class ExtensionManager {
         newExtensions.forEach(Extension::preInitialize);
         newExtensions.forEach(Extension::initialize);
         newExtensions.forEach(Extension::postInitialize);
+        return true;
     }
 
     public void unloadExtension(String extensionName) {
