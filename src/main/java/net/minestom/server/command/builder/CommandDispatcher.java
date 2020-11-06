@@ -23,6 +23,14 @@ public class CommandDispatcher {
         this.commands.add(command);
     }
 
+    public void unregister(Command command) {
+        commandMap.remove(command.getName().toLowerCase());
+        for(String alias : command.getAliases()) {
+            this.commandMap.remove(alias.toLowerCase());
+        }
+        commands.remove(command);
+    }
+
     /**
      * Parse the given command
      *

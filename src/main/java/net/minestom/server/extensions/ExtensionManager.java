@@ -12,10 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -495,6 +492,12 @@ public class ExtensionManager {
 
         // remove class loader, required to reload the classes
         MinestomExtensionClassLoader classloader = extensionLoaders.remove(id);
+        try {
+            // close resources
+            classloader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
     }
 
@@ -530,6 +533,8 @@ public class ExtensionManager {
         log.info("Unloading extension {}", extensionName);
         unload(ext);
 
+        System.gc();
+
         // ext and its dependents should no longer be referenced from now on
 
         // rediscover extension to reload. We allow dependency changes, so we need to fully reload it
@@ -545,32 +550,68 @@ public class ExtensionManager {
         }
 
         // ensure correct order of dependencies
-        log.debug("Reorder extensions to reload to ensure proper load order");
-        extensionsToReload = generateLoadOrder(extensionsToReload);
-        loadDependencies(extensionsToReload);
+        loadExtensionList(extensionsToReload);
+    }
+
+    public void loadDynamicExtension(File jarFile) throws FileNotFoundException {
+        if(!jarFile.exists()) {
+            throw new FileNotFoundException("File '"+jarFile.getAbsolutePath()+"' does not exists. Cannot load extension.");
+        }
+
+        log.info("Discover dynamic extension from jar {}", jarFile.getAbsolutePath());
+        DiscoveredExtension discoveredExtension = discoverFromJar(jarFile);
+        List<DiscoveredExtension> extensionsToLoad = Collections.singletonList(discoveredExtension);
+        loadExtensionList(extensionsToLoad);
+    }
+
+    private void loadExtensionList(List<DiscoveredExtension> extensionsToLoad) {
+        // ensure correct order of dependencies
+        log.debug("Reorder extensions to ensure proper load order");
+        extensionsToLoad = generateLoadOrder(extensionsToLoad);
+        loadDependencies(extensionsToLoad);
 
         // setup new classloaders for the extensions to reload
-        for(DiscoveredExtension toReload : extensionsToReload) {
+        for (DiscoveredExtension toReload : extensionsToLoad) {
             log.debug("Setting up classloader for extension {}", toReload.getName());
             setupClassLoader(toReload);
         }
 
         // setup code modifiers for these extensions
         // TODO: it is possible the new modifiers cannot be applied (because the targeted classes are already loaded), should we issue a warning?
-        setupCodeModifiers(extensionsToReload);
+        setupCodeModifiers(extensionsToLoad);
 
         List<Extension> newExtensions = new LinkedList<>();
-        for(DiscoveredExtension toReload : extensionsToReload) {
+        for (DiscoveredExtension toReload : extensionsToLoad) {
             // reload extensions
             log.info("Actually load extension {}", toReload.getName());
             Extension loadedExtension = attemptSingleLoad(toReload);
             newExtensions.add(loadedExtension);
         }
 
-        log.info("Reload complete, refiring preinit, init and then postinit callbacks");
+        log.info("Load complete, firing preinit, init and then postinit callbacks");
         // retrigger preinit, init and postinit
         newExtensions.forEach(Extension::preInitialize);
         newExtensions.forEach(Extension::initialize);
         newExtensions.forEach(Extension::postInitialize);
+    }
+
+    public void unloadExtension(String extensionName) {
+        Extension ext = extensions.get(extensionName.toLowerCase());
+        if(ext == null) {
+            throw new IllegalArgumentException("Extension "+extensionName+" is not currently loaded.");
+        }
+        List<String> dependents = new LinkedList<>(ext.getDescription().getDependents()); // copy dependents list
+
+        for(String dependentID : dependents) {
+            Extension dependentExt = extensions.get(dependentID.toLowerCase());
+            log.info("Unloading dependent extension {} (because it depends on {})", dependentID, extensionName);
+            unload(dependentExt);
+        }
+
+        log.info("Unloading extension {}", extensionName);
+        unload(ext);
+
+        // call GC to try to get rid of classes and classloader
+        System.gc();
     }
 }

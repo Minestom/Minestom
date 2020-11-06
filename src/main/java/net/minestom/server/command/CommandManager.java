@@ -82,6 +82,16 @@ public final class CommandManager {
     }
 
     /**
+     * Removes a command from the currently registered commands.
+     * Does nothing if the command was not registered before
+     *
+     * @param command the command to remove
+     */
+    public void unregister(@NotNull Command command) {
+        this.dispatcher.unregister(command);
+    }
+
+    /**
      * Gets the {@link Command} registered by {@link #register(Command)}.
      *
      * @param commandName the command name
