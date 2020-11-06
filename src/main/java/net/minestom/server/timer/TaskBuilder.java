@@ -2,6 +2,7 @@ package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A builder which represents a fluent Object to schedule tasks.
@@ -30,7 +31,7 @@ public class TaskBuilder {
      * @param schedulerManager The manager for the tasks
      * @param runnable         The task to run when scheduled
      */
-    public TaskBuilder(SchedulerManager schedulerManager, Runnable runnable) {
+    public TaskBuilder(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable) {
         this(schedulerManager, runnable, false);
     }
 
@@ -41,7 +42,7 @@ public class TaskBuilder {
      * @param runnable         The task to run when scheduled
      * @param shutdown         Defines whether the task is a shutdown task
      */
-    public TaskBuilder(SchedulerManager schedulerManager, Runnable runnable, boolean shutdown) {
+    public TaskBuilder(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown) {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
@@ -54,7 +55,8 @@ public class TaskBuilder {
      * @param unit The unit of time for {@code time}
      * @return this builder, for chaining
      */
-    public TaskBuilder delay(long time, TimeUnit unit) {
+    @NotNull
+    public TaskBuilder delay(long time, @NotNull TimeUnit unit) {
         this.delay = unit.toMilliseconds(time);
         return this;
     }
@@ -66,7 +68,8 @@ public class TaskBuilder {
      * @param unit The {@link TimeUnit} for {@code time}
      * @return this builder, for chaining
      */
-    public TaskBuilder repeat(long time, TimeUnit unit) {
+    @NotNull
+    public TaskBuilder repeat(long time, @NotNull TimeUnit unit) {
         this.repeat = unit.toMilliseconds(time);
         return this;
     }
@@ -76,6 +79,7 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
+    @NotNull
     public TaskBuilder clearDelay() {
         this.delay = 0L;
         return this;
@@ -86,16 +90,18 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
+    @NotNull
     public TaskBuilder clearRepeat() {
         this.repeat = 0L;
         return this;
     }
 
     /**
-     * Schedule this {@link Task} for execution.
+     * Schedules this {@link Task} for execution.
      *
      * @return the built {@link Task}
      */
+    @NotNull
     public Task schedule() {
         Task task = new Task(
                 this.schedulerManager,

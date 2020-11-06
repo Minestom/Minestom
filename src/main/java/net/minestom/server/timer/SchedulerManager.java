@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.thread.MinestomThread;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
@@ -64,7 +65,8 @@ public final class SchedulerManager {
      * @param runnable The {@link Task} to run when scheduled
      * @return the {@link TaskBuilder}
      */
-    public TaskBuilder buildTask(Runnable runnable) {
+    @NotNull
+    public TaskBuilder buildTask(@NotNull Runnable runnable) {
         return new TaskBuilder(this, runnable);
     }
 
@@ -74,7 +76,8 @@ public final class SchedulerManager {
      * @param runnable The shutdown {@link Task} to run when scheduled
      * @return the {@link TaskBuilder}
      */
-    public TaskBuilder buildShutdownTask(Runnable runnable) {
+    @NotNull
+    public TaskBuilder buildShutdownTask(@NotNull Runnable runnable) {
         return new TaskBuilder(this, runnable, true);
     }
 
@@ -83,19 +86,8 @@ public final class SchedulerManager {
      *
      * @param task The {@link Task} to remove
      */
-    public void removeTask(Task task) {
-        synchronized (tasks) {
-            this.tasks.remove(task.getId());
-        }
-    }
-
-    /**
-     * Removes/Forces the end of a {@link Task}.
-     *
-     * @param task The {@link Task} to remove
-     */
-    public void removeShutdownTask(Task task) {
-        this.shutdownTasks.remove(task.getId());
+    public void removeTask(@NotNull Task task) {
+        task.cancel();
     }
 
     /**
@@ -141,6 +133,7 @@ public final class SchedulerManager {
      *
      * @return a {@link Collection} with all the registered {@link Task}
      */
+    @NotNull
     public ObjectCollection<Task> getTasks() {
         return tasks.values();
     }
@@ -150,6 +143,7 @@ public final class SchedulerManager {
      *
      * @return a {@link Collection} with all the registered shutdown {@link Task}
      */
+    @NotNull
     public ObjectCollection<Task> getShutdownTasks() {
         return shutdownTasks.values();
     }
@@ -159,6 +153,7 @@ public final class SchedulerManager {
      *
      * @return the execution service for all the registered {@link Task}
      */
+    @NotNull
     public ExecutorService getBatchesPool() {
         return batchesPool;
     }
@@ -168,6 +163,7 @@ public final class SchedulerManager {
      *
      * @return the scheduled execution service for all the registered {@link Task}
      */
+    @NotNull
     public ScheduledExecutorService getTimerExecutionService() {
         return timerExecutionService;
     }
