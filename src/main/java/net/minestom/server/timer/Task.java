@@ -120,7 +120,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * Removes the task.
+     * Removes the task from the {@link SchedulerManager} map.
      */
     private void finish() {
         Int2ObjectMap<Task> taskMap = shutdown ?

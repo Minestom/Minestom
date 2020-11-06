@@ -19,10 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * {@link Task} first need to be built with {@link #buildTask(Runnable)}, you can then specify a delay with as example
  * {@link TaskBuilder#delay(long, net.minestom.server.utils.time.TimeUnit)}
- * or {@link TaskBuilder#repeat(long, net.minestom.server.utils.time.TimeUnit)}
- * and to finally schedule {@link TaskBuilder#schedule()}.
+ * or {@link TaskBuilder#repeat(long, net.minestom.server.utils.time.TimeUnit)},
+ * and to finally schedule: {@link TaskBuilder#schedule()}.
  * <p>
- * Shutdown {@link Task} are built with {@link #buildShutdownTask(Runnable)}.
+ * Shutdown tasks are built with {@link #buildShutdownTask(Runnable)} and are executed, as the name implies, when the server stops.
  */
 public final class SchedulerManager {
 
@@ -83,6 +83,8 @@ public final class SchedulerManager {
 
     /**
      * Removes/Forces the end of a {@link Task}.
+     * <p>
+     * {@link Task#cancel()} can also be used instead.
      *
      * @param task The {@link Task} to remove
      */

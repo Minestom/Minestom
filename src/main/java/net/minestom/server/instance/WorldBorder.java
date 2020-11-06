@@ -29,7 +29,7 @@ public class WorldBorder {
     private int warningTime;
     private int warningBlocks;
 
-    protected WorldBorder(Instance instance) {
+    protected WorldBorder(@NotNull Instance instance) {
         this.instance = instance;
 
         this.oldDiameter = Double.MAX_VALUE;
@@ -272,7 +272,7 @@ public class WorldBorder {
      *
      * @param worldBorderPacket the packet to send
      */
-    private void sendPacket(WorldBorderPacket worldBorderPacket) {
+    private void sendPacket(@NotNull WorldBorderPacket worldBorderPacket) {
         PacketWriterUtils.writeAndSend(instance.getPlayers(), worldBorderPacket);
     }
 
