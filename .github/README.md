@@ -28,7 +28,7 @@ Minestom is similar to Bukkit in the fact that it is not a standlone program, it
 It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
-This mean you need to add Minestom as a dependency, add your code and compile by yourself.
+This means you need to add Minestom as a dependency, add your code and compile by yourself.
 
 # Usage
 An example of how to use the Minestom library is available [here](/src/test/java/demo).
