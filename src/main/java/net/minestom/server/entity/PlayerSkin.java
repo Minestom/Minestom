@@ -86,9 +86,11 @@ public class PlayerSkin {
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
 
         try {
+            // Retrieve the mojang uuid from the name
             final String response = URLUtils.getText(url);
             final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
             final String uuid = jsonObject.get("id").getAsString();
+            // Retrieve the skin data from the mojang uuid
             return fromUuid(uuid);
         } catch (IOException e) {
             e.printStackTrace();

@@ -61,6 +61,7 @@ public final class CommandManager {
                     execute(consoleSender, command);
                 }
             }
+            scanner.close();
         }, "ConsoleCommand-Thread");
         consoleThread.setDaemon(true);
         consoleThread.start();

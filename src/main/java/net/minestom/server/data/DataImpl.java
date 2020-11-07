@@ -21,7 +21,7 @@ public class DataImpl implements Data {
     protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     @Override
-    public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
+    public synchronized <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
         if (value != null) {
             this.data.put(key, value);
             this.dataType.put(key, type);
