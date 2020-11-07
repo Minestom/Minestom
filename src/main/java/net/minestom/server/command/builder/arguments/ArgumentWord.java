@@ -20,7 +20,7 @@ public class ArgumentWord extends Argument<String> {
     protected String[] restrictions;
 
     public ArgumentWord(String id) {
-        super(id, false);
+        super(id);
     }
 
     /**
