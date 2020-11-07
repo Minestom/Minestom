@@ -595,10 +595,13 @@ public class MinecraftServer {
 
     /**
      * Starts the server.
+     * <p>
+     * It should be called after {@link #init()} and probably your own initialization code.
      *
      * @param address              the server address
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
+     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
     public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
@@ -627,6 +630,7 @@ public class MinecraftServer {
      *
      * @param address the server address
      * @param port    the server port
+     * @see #start(String, int, ResponseDataConsumer)
      */
     public void start(String address, int port) {
         start(address, port, null);

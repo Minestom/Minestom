@@ -242,6 +242,14 @@ public class ChatColor {
         return codeName;
     }
 
+    /**
+     * Gets the color id, only present if this color has been retrieved from {@link ChatColor} constants.
+     * <p>
+     * Should only be used for some special packets which require it.
+     *
+     * @return the color id
+     * @throws IllegalStateException if the color is not from the class constants
+     */
     public int getId() {
         Check.stateCondition(id == -1, "Please use one of the ChatColor constant instead");
         return id;
@@ -263,7 +271,7 @@ public class ChatColor {
             code = codeName;
         } else {
             // RGB color (special code not set)
-            int color = (red & 0xFF) << 16 | (green & 0xFF) << 8 | blue & 0xFF;
+            final int color = (red & 0xFF) << 16 | (green & 0xFF) << 8 | blue & 0xFF;
 
             code = Integer.toHexString(color);
         }

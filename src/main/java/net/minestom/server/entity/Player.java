@@ -1029,6 +1029,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food bar.
      *
      * @param food the new food value
+     * @throws IllegalArgumentException if {@code food} is not between 0 and 20
      */
     public void setFood(int food) {
         Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
@@ -1044,6 +1045,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food saturation.
      *
      * @param foodSaturation the food saturation
+     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 5
      */
     public void setFoodSaturation(float foodSaturation) {
         Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 5), "Food saturation has to be between 0 and 5");
@@ -1218,7 +1220,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param resourcePack the resource pack
      */
-    public void setResourcePack(ResourcePack resourcePack) {
+    public void setResourcePack(@NotNull ResourcePack resourcePack) {
         Check.notNull(resourcePack, "The resource pack cannot be null");
         final String url = resourcePack.getUrl();
         final String hash = resourcePack.getHash();
@@ -1367,6 +1369,7 @@ public class Player extends LivingEntity implements CommandSender {
      * This cannot change the displayed level, see {@link #setLevel(int)}.
      *
      * @param exp a percentage between 0 and 1
+     * @throws IllegalArgumentException if {@code exp} is not between 0 and 1
      */
     public void setExp(float exp) {
         Check.argCondition(!MathUtils.isBetween(exp, 0, 1), "Exp should be between 0 and 1");
@@ -1880,6 +1883,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Changes the player permission level.
      *
      * @param permissionLevel the new player permission level
+     * @throws IllegalArgumentException if {@code permissionLevel} is not between 0 and 4
      */
     public void setPermissionLevel(int permissionLevel) {
         Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");

@@ -86,9 +86,12 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
-     * Creates a new {@link ScoreboardLine}
+     * Creates a new {@link ScoreboardLine}.
      *
-     * @param scoreboardLine The new scoreboard line
+     * @param scoreboardLine the new scoreboard line
+     * @throws IllegalStateException    if the sidebar cannot take more line
+     * @throws IllegalArgumentException if the sidebar already contains the line {@code scoreboardLine}
+     *                                  or has a line with the same id
      */
     public void createLine(ScoreboardLine scoreboardLine) {
         synchronized (lines) {
@@ -114,7 +117,7 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
-     * Updates a {@link ScoreboardLine} content through the given identifier
+     * Updates a {@link ScoreboardLine} content through the given identifier.
      *
      * @param id      The identifier of the {@link ScoreboardLine}
      * @param content The new content for the {@link ScoreboardLine}

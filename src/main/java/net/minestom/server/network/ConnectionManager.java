@@ -259,6 +259,7 @@ public final class ConnectionManager {
      * Used during disconnection, you shouldn't have to do it manually.
      *
      * @param connection the player connection
+     * @see PlayerConnection#disconnect() to properly disconnect a player
      */
     public void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
