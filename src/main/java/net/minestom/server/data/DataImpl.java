@@ -14,12 +14,20 @@ public class DataImpl implements Data {
 
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
+    /**
+     * Data key -> Class
+     * Used to know the type of an element of this data object (for serialization purpose)
+     */
+    protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
+
     @Override
     public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
         if (value != null) {
             this.data.put(key, value);
+            this.dataType.put(key, type);
         } else {
             this.data.remove(key);
+            this.dataType.remove(key);
         }
     }
 
@@ -54,6 +62,7 @@ public class DataImpl implements Data {
     public Data copy() {
         DataImpl data = new DataImpl();
         data.data.putAll(this.data);
+        data.dataType.putAll(this.dataType);
         return data;
     }
 
