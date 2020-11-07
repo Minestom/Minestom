@@ -12,7 +12,7 @@ public class ArgumentBoolean extends Argument<Boolean> {
     public static final int NOT_BOOLEAN_ERROR = 1;
 
     public ArgumentBoolean(String id) {
-        super(id, false);
+        super(id);
     }
 
     @Override

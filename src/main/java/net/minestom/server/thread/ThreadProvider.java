@@ -6,6 +6,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
+import net.minestom.server.utils.callback.validator.EntityValidator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Used to link chunks into multiple groups.
@@ -216,12 +216,12 @@ public abstract class ThreadProvider {
      * @param condition the condition which confirm if the update happens or not
      */
     protected void conditionalEntityUpdate(@NotNull Instance instance, @NotNull Chunk chunk, long time,
-                                           @Nullable Function<Entity, Boolean> condition) {
+                                           @Nullable EntityValidator condition) {
         final Set<Entity> entities = instance.getChunkEntities(chunk);
 
         if (!entities.isEmpty()) {
             for (Entity entity : entities) {
-                if (condition != null && !condition.apply(entity))
+                if (condition != null && !condition.isValid(entity))
                     continue;
                 entity.tick(time);
             }
