@@ -84,6 +84,7 @@ It is a field where Minecraft evolved a lot, inventories are now used a lot as c
 Commands are the simplest way of communication between clients and server. Since 1.13 Minecraft has incorporated a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
 
 # Credits
+* The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project
 * [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) -
    protocol and file formats research.
 * [The Minecraft Wiki](https://minecraft.gamepedia.com/Minecraft_Wiki) for all their useful info

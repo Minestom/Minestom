@@ -360,6 +360,14 @@ public final class NBTUtils {
         // End NbtData
     }
 
+    /**
+     * Converts an object into its {@link NBT} equivalent.
+     *
+     * @param value
+     * @param type
+     * @param supportDataType
+     * @return
+     */
     @Nullable
     public static NBT toNBT(@NotNull Object value, @NotNull Class type, boolean supportDataType) {
         type = PrimitiveConversion.getObjectClass(type);
@@ -407,6 +415,15 @@ public final class NBTUtils {
         }
     }
 
+    /**
+     * Converts a nbt object to its raw value.
+     * <p>
+     * Currently support number, string, byte/int/long array.
+     *
+     * @param nbt the nbt tag to convert
+     * @return the value representation of a tag
+     * @throws UnsupportedOperationException if the tag type is not supported
+     */
     public static Object fromNBT(@NotNull NBT nbt) {
         if (nbt instanceof NBTNumber) {
             return ((NBTNumber) nbt).getValue();
