@@ -15,7 +15,7 @@ public class DataImpl implements Data {
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
     /**
-     * Data key -> Class
+     * Data key = Class
      * Used to know the type of an element of this data object (for serialization purpose)
      */
     protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();

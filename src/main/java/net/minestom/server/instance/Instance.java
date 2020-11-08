@@ -165,7 +165,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * <p>
      * WARNING: during unloading, all entities other than {@link Player} will be removed.
      * <p>
-     * For {@link InstanceContainer} it is done during {@link InstanceContainer#tick(long)}
+     * For {@link InstanceContainer} it is done during the next {@link InstanceContainer#tick(long)}.
      *
      * @param chunk the chunk to unload
      */
