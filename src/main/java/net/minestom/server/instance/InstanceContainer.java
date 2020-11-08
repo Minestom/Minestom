@@ -491,7 +491,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void saveChunksToStorage(Runnable callback) {
+    public void saveChunksToStorage(@Nullable Runnable callback) {
         this.chunkLoader.saveChunks(chunks.values(), callback);
     }
 
@@ -630,15 +630,14 @@ public class InstanceContainer extends Instance {
         copiedInstance.srcInstance = this;
         copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
 
-        ConcurrentHashMap<Long, Chunk> copiedChunks = copiedInstance.chunks;
-        for (Map.Entry<Long, Chunk> entry : chunks.entrySet()) {
-            final long index = entry.getKey();
-            final Chunk chunk = entry.getValue();
+        for (Chunk chunk : chunks.values()) {
+            final int chunkX = chunk.getChunkX();
+            final int chunkZ = chunk.getChunkZ();
 
-            final Chunk copiedChunk = chunk.copy(chunk.getChunkX(), chunk.getChunkZ());
+            final Chunk copiedChunk = chunk.copy(chunkX, chunkZ);
 
-            copiedChunks.put(index, copiedChunk);
-            UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunk.getChunkX(), chunk.getChunkZ());
+            copiedInstance.cacheChunk(copiedChunk);
+            UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunkX, chunkZ);
         }
 
         return copiedInstance;
