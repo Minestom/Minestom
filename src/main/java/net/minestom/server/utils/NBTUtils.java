@@ -363,10 +363,10 @@ public final class NBTUtils {
     /**
      * Converts an object into its {@link NBT} equivalent.
      *
-     * @param value
-     * @param type
-     * @param supportDataType
-     * @return
+     * @param value           the value to convert
+     * @param type            the type of the value, used to know which {@link DataType} to use if {@code value} is not a primitive type
+     * @param supportDataType true to allow using a {@link DataType} to encode {@code value} into a byte array if not a primitive type
+     * @return the converted value, null if {@code type} is not a primitive type and {@code supportDataType} is false
      */
     @Nullable
     public static NBT toNBT(@NotNull Object value, @NotNull Class type, boolean supportDataType) {
