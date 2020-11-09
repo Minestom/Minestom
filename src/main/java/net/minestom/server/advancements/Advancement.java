@@ -6,6 +6,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
@@ -39,8 +41,8 @@ public class Advancement {
     // Packet
     private AdvancementsPacket.Criteria criteria;
 
-    public Advancement(ColoredText title, ColoredText description,
-                       ItemStack icon, FrameType frameType,
+    public Advancement(@NotNull ColoredText title, ColoredText description,
+                       @NotNull ItemStack icon, @NotNull FrameType frameType,
                        float x, float y) {
         this.title = title;
         this.description = description;
@@ -50,8 +52,8 @@ public class Advancement {
         this.y = y;
     }
 
-    public Advancement(ColoredText title, ColoredText description,
-                       Material icon, FrameType frameType,
+    public Advancement(@NotNull ColoredText title, @NotNull ColoredText description,
+                       @NotNull Material icon, @NotNull FrameType frameType,
                        float x, float y) {
         this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
     }
@@ -80,13 +82,14 @@ public class Advancement {
     /**
      * Gets the advancement tab linked to this advancement.
      *
-     * @return the {@link AdvancementTab} linked to this advancement
+     * @return the {@link AdvancementTab} linked to this advancement, null if not linked to anything yet
      */
+    @Nullable
     public AdvancementTab getTab() {
         return tab;
     }
 
-    protected void setTab(AdvancementTab tab) {
+    protected void setTab(@NotNull AdvancementTab tab) {
         this.tab = tab;
     }
 
@@ -95,6 +98,7 @@ public class Advancement {
      *
      * @return the advancement title
      */
+    @NotNull
     public ColoredText getTitle() {
         return title;
     }
@@ -104,7 +108,7 @@ public class Advancement {
      *
      * @param title the new title
      */
-    public void setTitle(ColoredText title) {
+    public void setTitle(@NotNull ColoredText title) {
         this.title = title;
         update();
     }
@@ -114,6 +118,7 @@ public class Advancement {
      *
      * @return the description title
      */
+    @NotNull
     public ColoredText getDescription() {
         return description;
     }
@@ -123,7 +128,7 @@ public class Advancement {
      *
      * @param description the new description
      */
-    public void setDescription(ColoredText description) {
+    public void setDescription(@NotNull ColoredText description) {
         this.description = description;
         update();
     }
@@ -133,6 +138,7 @@ public class Advancement {
      *
      * @return the advancement icon
      */
+    @NotNull
     public ItemStack getIcon() {
         return icon;
     }
@@ -142,7 +148,7 @@ public class Advancement {
      *
      * @param icon the new advancement icon
      */
-    public void setIcon(ItemStack icon) {
+    public void setIcon(@NotNull ItemStack icon) {
         this.icon = icon;
         update();
     }
@@ -182,6 +188,7 @@ public class Advancement {
      *
      * @return this advancement frame type
      */
+    @NotNull
     public FrameType getFrameType() {
         return frameType;
     }
@@ -271,6 +278,7 @@ public class Advancement {
      *
      * @return the advancement parent, null for {@link AdvancementRoot}
      */
+    @Nullable
     protected Advancement getParent() {
         return parent;
     }
@@ -279,6 +287,7 @@ public class Advancement {
         this.parent = parent;
     }
 
+    @NotNull
     protected AdvancementsPacket.ProgressMapping toProgressMapping() {
         AdvancementsPacket.ProgressMapping progressMapping = new AdvancementsPacket.ProgressMapping();
         {
@@ -291,6 +300,7 @@ public class Advancement {
         return progressMapping;
     }
 
+    @NotNull
     protected AdvancementsPacket.DisplayData toDisplayData() {
         AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
         displayData.x = x;
@@ -311,6 +321,7 @@ public class Advancement {
      *
      * @return the mapping of this advancement
      */
+    @NotNull
     protected AdvancementsPacket.AdvancementMapping toMapping() {
         AdvancementsPacket.AdvancementMapping mapping = new AdvancementsPacket.AdvancementMapping();
         {
