@@ -362,6 +362,9 @@ public final class NBTUtils {
 
     /**
      * Converts an object into its {@link NBT} equivalent.
+     * <p>
+     * If {@code type} is not a primitive type or primitive array and {@code supportDataType} is true,
+     * the data will be encoded with the appropriate {@link DataType} into a byte array.
      *
      * @param value           the value to convert
      * @param type            the type of the value, used to know which {@link DataType} to use if {@code value} is not a primitive type

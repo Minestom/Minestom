@@ -441,9 +441,8 @@ public final class CommandManager {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         // You can uncomment this to test any brigadier parser on the client
-        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
-        testNode.parser = "minecraft:entity";
-        testNode.properties = packetWriter -> packetWriter.writeByte((byte) 0x0);
+        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
+        testNode.parser = "minecraft:item_predicate";
 
         if (true) {
             return nodes;

@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Represents a single word in the command.
  * <p>
- * You can specify the only correct words with {@link #from(String...)}.
+ * You can specify the valid words with {@link #from(String...)} (do not abuse it or the client will not be able to join).
  * <p>
  * Example: hey
  */
@@ -25,6 +25,8 @@ public class ArgumentWord extends Argument<String> {
 
     /**
      * Used to force the use of a few precise words instead of complete freedom.
+     * <p>
+     * WARNING: having an array too long would result in a packet too big or the client being stuck during login.
      *
      * @param restrictions the accepted words
      * @return 'this'
@@ -73,7 +75,7 @@ public class ArgumentWord extends Argument<String> {
     }
 
     /**
-     * Gets all the word restrictions
+     * Gets all the word restrictions.
      *
      * @return the word restrictions, can be null
      */
