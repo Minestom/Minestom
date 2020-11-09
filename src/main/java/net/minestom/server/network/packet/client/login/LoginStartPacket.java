@@ -43,6 +43,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
                     final int messageId = ThreadLocalRandom.current().nextInt();
                     final String channel = VelocityProxy.PLAYER_INFO_CHANNEL;
 
+                    // Important to retrieve the channel in the response packet
                     nettyPlayerConnection.addPluginRequestEntry(messageId, channel);
 
                     LoginPluginRequestPacket loginPluginRequestPacket = new LoginPluginRequestPacket();

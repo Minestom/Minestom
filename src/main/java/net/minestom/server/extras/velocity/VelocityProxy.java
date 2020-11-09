@@ -9,7 +9,12 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class VelocityProxy {
+/**
+ * Support for <a href="https://velocitypowered.com/">Velocity proxy</a>.
+ * <p>
+ * Can be enabled by simply calling {@link #enable(String)}.
+ */
+public final class VelocityProxy {
 
     public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
 
@@ -37,7 +42,6 @@ public class VelocityProxy {
     }
 
     public static boolean checkIntegrity(@NotNull BinaryReader reader) {
-
         if (!enabled) {
             return false;
         }
@@ -63,16 +67,6 @@ public class VelocityProxy {
         }*/
 
         return true;
-    }
-
-    private static void readProperties(final BinaryReader reader) {
-        final int properties = reader.readVarInt();
-        for (int i1 = 0; i1 < properties; i1++) {
-            final String name = reader.readSizedString();
-            final String value = reader.readSizedString();
-            final String signature = reader.readBoolean() ? reader.readSizedString() : null;
-            System.out.println("test: " + name + " " + value + " " + signature);
-        }
     }
 
 }
