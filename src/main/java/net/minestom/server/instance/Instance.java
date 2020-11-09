@@ -1038,7 +1038,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Gets the registered {@link ExplosionSupplier}, or null if none was provided
+     * Gets the registered {@link ExplosionSupplier}, or null if none was provided.
      *
      * @return the instance explosion supplier, null if none was provided
      */
@@ -1048,7 +1048,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Registers the {@link ExplosionSupplier} to use in this instance
+     * Registers the {@link ExplosionSupplier} to use in this instance.
      *
      * @param supplier the explosion supplier
      */
@@ -1057,9 +1057,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Gets the instance space
+     * Gets the instance space.
      * <p>
-     * Used by the pathfinder for entities
+     * Used by the pathfinder for entities.
      *
      * @return the instance space
      */
