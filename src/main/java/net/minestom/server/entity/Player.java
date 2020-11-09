@@ -34,7 +34,6 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;

@@ -186,6 +186,8 @@ public class BinaryWriter extends OutputStream {
 
     /**
      * Writes a byte array.
+     * <p>
+     * WARNING: it doesn't write the length of {@code bytes}.
      *
      * @param bytes the byte array to write
      */

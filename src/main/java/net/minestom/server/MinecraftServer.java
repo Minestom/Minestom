@@ -54,6 +54,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,15 +228,18 @@ public class MinecraftServer {
      *
      * @return the server brand name
      */
+    @NotNull
     public static String getBrandName() {
         return brandName;
     }
 
     /**
-     * Changes the server brand name, update the name to all connected players.
+     * Changes the server brand name and send the change to all connected players.
      *
      * @param brandName the server brand name
+     * @throws NullPointerException if {@code brandName} is null
      */
+    @NotNull
     public static void setBrandName(String brandName) {
         Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
@@ -267,6 +271,7 @@ public class MinecraftServer {
      *
      * @return the server difficulty
      */
+    @NotNull
     public static Difficulty getDifficulty() {
         return difficulty;
     }
@@ -276,7 +281,9 @@ public class MinecraftServer {
      *
      * @param difficulty the new server difficulty
      */
-    public static void setDifficulty(Difficulty difficulty) {
+    @NotNull
+    public static void setDifficulty(@NotNull Difficulty difficulty) {
+        Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
         // The difficulty packet
@@ -603,7 +610,7 @@ public class MinecraftServer {
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+    public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
@@ -632,7 +639,7 @@ public class MinecraftServer {
      * @param port    the server port
      * @see #start(String, int, ResponseDataConsumer)
      */
-    public void start(String address, int port) {
+    public void start(@NotNull String address, int port) {
         start(address, port, null);
     }
 

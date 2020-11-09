@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AdvancementManager {
 
-    // root identifier TO its advancement tab
+    // root identifier = its advancement tab
     private final Map<String, AdvancementTab> advancementTabMap = new ConcurrentHashMap<>();
 
     /**

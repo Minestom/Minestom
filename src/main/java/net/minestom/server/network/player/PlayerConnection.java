@@ -2,14 +2,13 @@ package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
 import lombok.Getter;
-import lombok.Setter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.login.LoginDisconnect;
+import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,14 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class PlayerConnection {
 
     private Player player;
-    //Could be null. Only used for Mojang Auth
-    @Getter
-    @Setter
-    private String loginUsername;
-    //Could be null. Only used for Mojang Auth
-    @Getter
-    @Setter
-    private byte[] nonce = new byte[4];
     private ConnectionState connectionState;
     private boolean online;
 
@@ -64,7 +55,7 @@ public abstract class PlayerConnection {
                 if (count > MinecraftServer.getRateLimit()) {
                     // Sent too many packets
                     if (connectionState == ConnectionState.LOGIN) {
-                        sendPacket(new LoginDisconnect("Too Many Packets"));
+                        sendPacket(new LoginDisconnectPacket("Too Many Packets"));
                     } else {
                         DisconnectPacket disconnectPacket = new DisconnectPacket();
                         disconnectPacket.message = rateLimitKickMessage;

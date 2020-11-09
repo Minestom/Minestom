@@ -5,9 +5,7 @@ import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
-import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -32,17 +30,18 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         if (!(connection instanceof NettyPlayerConnection)) {
             return;
         }
+        final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
 
         new Thread(THREAD_NAME + " #" + UNIQUE_THREAD_ID.incrementAndGet()) {
 
             public void run() {
                 try {
-                    if (!Arrays.equals(connection.getNonce(), getNonce())) {
-                        MinecraftServer.getLOGGER().error(connection.getLoginUsername() + " tried to login with an invalid nonce!");
+                    final String loginUsername = nettyConnection.getLoginUsername();
+                    if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
+                        MinecraftServer.getLOGGER().error(loginUsername + " tried to login with an invalid nonce!");
                         return;
                     }
-                    if (!connection.getLoginUsername().isEmpty()) {
-                        final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
+                    if (!loginUsername.isEmpty()) {
 
                         final byte[] digestedData = MojangCrypt.digestData("", MinecraftServer.getKeyPair().getPublic(), getSecretKey());
 
@@ -54,7 +53,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                         }
 
                         final String string3 = new BigInteger(digestedData).toString(16);
-                        final GameProfile gameProfile = MinecraftServer.getSessionService().hasJoinedServer(new GameProfile(null, connection.getLoginUsername()), string3);
+                        final GameProfile gameProfile = MinecraftServer.getSessionService().hasJoinedServer(new GameProfile(null, loginUsername), string3);
                         nettyConnection.setEncryptionKey(getSecretKey());
                         final int threshold = MinecraftServer.getCompressionThreshold();
 
@@ -62,11 +61,8 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                             nettyConnection.enableCompression(threshold);
                         }
 
-                        LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(gameProfile.getId(), gameProfile.getName());
-                        connection.sendPacket(loginSuccessPacket);
-                        MinecraftServer.getLOGGER().info("UUID of player {} is {}", connection.getLoginUsername(), gameProfile.getId());
-                        connection.setConnectionState(ConnectionState.PLAY);
-                        CONNECTION_MANAGER.createPlayer(gameProfile.getId(), gameProfile.getName(), connection);
+                        MinecraftServer.getLOGGER().info("UUID of player {} is {}", loginUsername, gameProfile.getId());
+                        CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName());
                     }
                 } catch (AuthenticationUnavailableException e) {
                     e.printStackTrace();

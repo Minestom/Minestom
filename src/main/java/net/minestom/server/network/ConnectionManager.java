@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
@@ -268,5 +269,20 @@ public final class ConnectionManager {
 
         this.players.remove(player);
         this.connectionPlayerMap.remove(connection);
+    }
+
+    /**
+     * Sends a {@link LoginSuccessPacket} and change the connection state to {@link ConnectionState#PLAY}.
+     *
+     * @param connection the player connection
+     * @param uuid       the uuid of the player
+     * @param username   the username of the player
+     */
+    public void startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
+        LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
+        connection.sendPacket(loginSuccessPacket);
+
+        connection.setConnectionState(ConnectionState.PLAY);
+        createPlayer(uuid, username, connection);
     }
 }

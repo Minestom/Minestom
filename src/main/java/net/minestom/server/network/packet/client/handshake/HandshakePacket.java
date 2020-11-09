@@ -5,7 +5,7 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
-import net.minestom.server.network.packet.server.login.LoginDisconnect;
+import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -47,7 +47,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     }
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnect(INVALID_VERSION_TEXT.toString()));
+                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT.toString()));
                     connection.disconnect();
                 }
                 break;

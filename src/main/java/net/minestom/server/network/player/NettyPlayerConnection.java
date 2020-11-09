@@ -4,9 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
+import lombok.Setter;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -16,6 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a networking connection with Netty.
@@ -30,8 +34,18 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Getter
     private boolean compressed = false;
 
+    //Could be null. Only used for Mojang Auth
+    @Getter
+    @Setter
+    private byte[] nonce = new byte[4];
+
+    private String loginUsername;
     private String serverAddress;
     private int serverPort;
+
+    // Used for the login plugin request packet, to retrive the channel from a message id,
+    // cleared once the player enters the play state
+    private Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
@@ -115,6 +129,27 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
+     * Retrieves the username received from the client during connection.
+     * <p>
+     * This value has not been checked and could be anything.
+     *
+     * @return the username given by the client, unchecked
+     */
+    @Nullable
+    public String getLoginUsername() {
+        return loginUsername;
+    }
+
+    /**
+     * Sets the internal login username field
+     *
+     * @param loginUsername the new login username field
+     */
+    public void UNSAFE_setLoginUsername(@NotNull String loginUsername) {
+        this.loginUsername = loginUsername;
+    }
+
+    /**
      * Gets the server address that the client used to connect.
      * <p>
      * WARNING: it is given by the client, it is possible for it to be wrong.
@@ -135,6 +170,45 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     public int getServerPort() {
         return serverPort;
+    }
+
+    /**
+     * Adds an entry to the plugin request map.
+     * <p>
+     * Only working if {@link #getConnectionState()} is {@link net.minestom.server.network.ConnectionState#LOGIN}.
+     *
+     * @param messageId the message id
+     * @param channel   the packet channel
+     * @throws IllegalStateException if a messageId with the value {@code messageId} already exists for this connection
+     */
+    public void addPluginRequestEntry(int messageId, @NotNull String channel) {
+        if (!getConnectionState().equals(ConnectionState.LOGIN)) {
+            return;
+        }
+        Check.stateCondition(pluginRequestMap.containsKey(messageId), "You cannot have two messageId with the same value");
+        this.pluginRequestMap.put(messageId, channel);
+    }
+
+    /**
+     * Gets a request channel from a message id, previously cached using {@link #addPluginRequestEntry(int, String)}.
+     * <p>
+     * Be aware that the internal map is cleared once the player enters the play state.
+     *
+     * @param messageId the message id
+     * @return the channel linked to the message id, null if not found
+     */
+    @Nullable
+    public String getPluginRequestChannel(int messageId) {
+        return pluginRequestMap.get(messageId);
+    }
+
+    @Override
+    public void setConnectionState(@NotNull ConnectionState connectionState) {
+        super.setConnectionState(connectionState);
+        // Clear the plugin request map (since it is not used anymore)
+        if (connectionState.equals(ConnectionState.PLAY)) {
+            this.pluginRequestMap.clear();
+        }
     }
 
     /**
