@@ -61,28 +61,25 @@ public class BoundingBox {
 
         final float offsetX = 1;
         final float x = blockPosition.getX();
-        final float minX = x;
         final float maxX = x + offsetX;
 
-        final boolean checkX = getMinX() < maxX && getMaxX() > minX;
+        final boolean checkX = getMinX() < maxX && getMaxX() > x;
         if (!checkX)
             return false;
 
         final float y = blockPosition.getY();
-        final float minY = y;
         final float maxY = y + 0.99999f;
 
-        final boolean checkY = getMinY() < maxY && getMaxY() > minY;
+        final boolean checkY = getMinY() < maxY && getMaxY() > y;
         if (!checkY)
             return false;
 
         final float offsetZ = 1;
         final float z = blockPosition.getZ();
-        final float minZ = z;
         final float maxZ = z + offsetZ;
 
-        final boolean checkZ = getMinZ() < maxZ && getMaxZ() > minZ;
-        return checkZ;
+        // Z check
+        return getMinZ() < maxZ && getMaxZ() > z;
     }
 
     public boolean intersect(float x, float y, float z) {

@@ -10,7 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Support for <a href="https://velocitypowered.com/">Velocity proxy</a>.
+ * Support for <a href="https://velocitypowered.com/">Velocity</a> modern forwarding.
  * <p>
  * Can be enabled by simply calling {@link #enable(String)}.
  */

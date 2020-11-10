@@ -105,7 +105,7 @@ public class CollisionUtils {
         if (!collisionFound) {
             Vector direction = new Vector();
             direction.copy(axis);
-            collisionFound |= !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
+            collisionFound = !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
         }
 
         // find the corner which moved the least

@@ -163,9 +163,10 @@ public class Command {
     }
 
     /**
-     * Sets the default {@link CommandExecutor} (which is called when there is no argument).
+     * Sets the default {@link CommandExecutor}.
      *
      * @param executor the new default executor, null to remove it
+     * @see #getDefaultExecutor()
      */
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;

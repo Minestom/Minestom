@@ -35,8 +35,7 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
     public int getConditionResult(@NotNull String[] value) {
 
         // true if 'value' is valid based on the dynamic restriction
-        final boolean restrictionCheck = dynamicRestriction != null ?
-                dynamicRestriction.isValid(value) : true;
+        final boolean restrictionCheck = dynamicRestriction == null || dynamicRestriction.isValid(value);
 
         if (!restrictionCheck) {
             return RESTRICTION_ERROR;

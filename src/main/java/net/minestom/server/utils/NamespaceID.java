@@ -22,10 +22,11 @@ public class NamespaceID implements CharSequence {
      * Extracts the domain from the namespace ID. "minecraft:stone" would return "minecraft".
      * If no ':' character is found, "minecraft" is returned.
      *
-     * @param namespaceID
+     * @param namespaceID the namespace id to get the domain from
      * @return the domain of the namespace ID
      */
-    public static String getDomain(String namespaceID) {
+    @NotNull
+    public static String getDomain(@NotNull String namespaceID) {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return "minecraft";
@@ -37,10 +38,10 @@ public class NamespaceID implements CharSequence {
      * Extracts the path from the namespace ID. "minecraft:blocks/stone" would return "blocks/stone".
      * If no ':' character is found, the <pre>namespaceID</pre> is returned.
      *
-     * @param namespaceID
+     * @param namespaceID the namespace id to get the path from
      * @return the path of the namespace ID
      */
-    public static String getPath(String namespaceID) {
+    public static String getPath(@NotNull String namespaceID) {
         final int index = namespaceID.indexOf(':');
         if (index < 0)
             return namespaceID;
@@ -61,7 +62,7 @@ public class NamespaceID implements CharSequence {
         return from(getDomain(id), getPath(id));
     }
 
-    private NamespaceID(String path) {
+    private NamespaceID(@NotNull String path) {
         final int index = path.indexOf(':');
         if (index < 0) {
             this.domain = "minecraft";

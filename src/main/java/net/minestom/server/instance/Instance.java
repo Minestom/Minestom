@@ -661,8 +661,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Sends a {@link BlockActionPacket} for all the viewers of the specific position.
      *
      * @param blockPosition the block position
-     * @param actionId
-     * @param actionParam
+     * @param actionId      the action id, depends on the block
+     * @param actionParam   the action parameter, depends on the block
      * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
     public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {

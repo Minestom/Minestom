@@ -27,7 +27,7 @@ public class FurnaceInventory extends Inventory {
     /**
      * Represents the amount of tick until the fire icon come empty.
      *
-     * @param remainingFuelTick
+     * @param remainingFuelTick the amount of tick until the fire icon is empty
      */
     public void setRemainingFuelTick(short remainingFuelTick) {
         this.remainingFuelTick = remainingFuelTick;
