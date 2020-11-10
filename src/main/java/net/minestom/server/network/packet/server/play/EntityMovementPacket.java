@@ -5,7 +5,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityPacket implements ServerPacket {
+public class EntityMovementPacket implements ServerPacket {
 
     public int entityId;
 
