@@ -4,6 +4,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 
+/**
+ * Represents a relative {@link BlockPosition}.
+ *
+ * @see RelativeLocation
+ */
 public class RelativeBlockPosition extends RelativeLocation<BlockPosition> {
 
     public RelativeBlockPosition(BlockPosition location, boolean relativeX, boolean relativeY, boolean relativeZ) {

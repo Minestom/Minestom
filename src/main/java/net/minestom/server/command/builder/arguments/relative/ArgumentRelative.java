@@ -17,6 +17,11 @@ public abstract class ArgumentRelative<T> extends Argument<T> {
         this.numberCount = numberCount;
     }
 
+    /**
+     * Gets the amount of numbers that this relative location needs.
+     *
+     * @return the amount of coordinate required
+     */
     public int getNumberCount() {
         return numberCount;
     }

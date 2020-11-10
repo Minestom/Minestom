@@ -4,6 +4,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.location.RelativeBlockPosition;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents a {@link BlockPosition} with 3 integer numbers (x;y;z) which can take relative coordinates.
+ * <p>
+ * Example: 5 ~ -3
+ */
 public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBlockPosition> {
 
     public ArgumentRelativeBlockPosition(@NotNull String id) {

@@ -5,6 +5,11 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a relative {@link Vector}.
+ *
+ * @see RelativeLocation
+ */
 public class RelativeVec extends RelativeLocation<Vector> {
 
     public RelativeVec(Vector location, boolean relativeX, boolean relativeY, boolean relativeZ) {

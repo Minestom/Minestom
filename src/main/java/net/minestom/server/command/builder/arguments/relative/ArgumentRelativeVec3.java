@@ -4,6 +4,11 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents a {@link Vector} with 3 floating numbers (x;y;z) which can take relative coordinates.
+ * <p>
+ * Example: -1.2 ~ 5
+ */
 public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
 
     public ArgumentRelativeVec3(@NotNull String id) {
