@@ -70,7 +70,7 @@ import java.util.Collection;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public class MinecraftServer {
+public final class MinecraftServer {
 
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
@@ -289,7 +289,7 @@ public class MinecraftServer {
         // The difficulty packet
         ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
         serverDifficultyPacket.difficulty = difficulty;
-        serverDifficultyPacket.locked = true; // Can only be modified on singleplayer
+        serverDifficultyPacket.locked = true; // Can only be modified on single-player
         // Send the packet to all online players
         PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
     }

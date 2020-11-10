@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.client;
 
-import net.minestom.server.utils.binary.BinaryReader;
-import org.jetbrains.annotations.NotNull;
+import net.minestom.server.utils.binary.Readable;
 
-public interface ClientPacket {
-
-    void read(@NotNull BinaryReader reader);
+/**
+ * Represents a packet received from a client.
+ */
+public interface ClientPacket extends Readable {
 
 }

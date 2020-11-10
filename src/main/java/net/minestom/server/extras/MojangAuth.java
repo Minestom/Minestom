@@ -3,7 +3,7 @@ package net.minestom.server.extras;
 import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 
-public class MojangAuth {
+public final class MojangAuth {
 
     @Getter
     private static boolean usingMojangAuth = false;

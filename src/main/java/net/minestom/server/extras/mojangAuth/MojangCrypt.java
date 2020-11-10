@@ -10,7 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 
-public class MojangCrypt {
+public final class MojangCrypt {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Nullable

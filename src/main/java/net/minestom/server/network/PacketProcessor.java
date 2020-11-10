@@ -14,31 +14,28 @@ import net.minestom.server.network.packet.client.handshake.HandshakePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PacketProcessor {
+public final class PacketProcessor {
 
     private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
-    // Protocols
+    // Protocols state
     private final ClientStatusPacketsHandler statusPacketsHandler;
     private final ClientLoginPacketsHandler loginPacketsHandler;
     private final ClientPlayPacketsHandler playPacketsHandler;
 
     public PacketProcessor() {
-
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
-
     public void process(ChannelHandlerContext channel, InboundPacket packet) {
+        // Create the netty player connection object if not existing
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
         );
@@ -47,10 +44,6 @@ public class PacketProcessor {
             playerConnection.getPacketCounter().incrementAndGet();
 
         final ConnectionState connectionState = playerConnection.getConnectionState();
-
-        //if (!printBlackList.contains(id)) {
-        //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
-        //}
 
         BinaryReader binaryReader = new BinaryReader(packet.body);
 
@@ -84,6 +77,13 @@ public class PacketProcessor {
         }
     }
 
+    /**
+     * Retrieves a player connection from its channel.
+     *
+     * @param channel the connection channel
+     * @return the connection of this channel, null if not found
+     */
+    @Nullable
     public PlayerConnection getPlayerConnection(ChannelHandlerContext channel) {
         return connectionPlayerConnectionMap.get(channel);
     }

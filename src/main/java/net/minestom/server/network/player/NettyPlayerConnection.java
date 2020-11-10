@@ -43,7 +43,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private String serverAddress;
     private int serverPort;
 
-    // Used for the login plugin request packet, to retrive the channel from a message id,
+    // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
     private Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
 
