@@ -45,7 +45,8 @@ public class NbtDataImpl extends DataImpl {
             Check.notNull(nbt,
                     "The type '" + type + "' is not supported within NbtDataImpl, if you wish to use a custom type you can encode the value into a byte array using a DataType");
 
-            nbtCompound.set(KEY_PREFIX + key, nbt);
+            final String finalKey = KEY_PREFIX + key;
+            nbtCompound.set(finalKey, nbt);
         }
     }
 
