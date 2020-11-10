@@ -27,9 +27,16 @@ public class LoginStartPacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
-        // Cache the login username
+        // Cache the login username and start compression if enabled
         if (connection instanceof NettyPlayerConnection) {
-            ((NettyPlayerConnection) connection).UNSAFE_setLoginUsername(username);
+            NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
+            nettyPlayerConnection.UNSAFE_setLoginUsername(username);
+
+            // Compression
+            final int threshold = MinecraftServer.getCompressionThreshold();
+            if (threshold > 0) {
+                nettyPlayerConnection.enableCompression(threshold);
+            }
         }
 
         // Proxy support (only for netty clients)
@@ -74,12 +81,6 @@ public class LoginStartPacket implements ClientPreplayPacket {
         } else {
             // Offline
             final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
-
-            final int threshold = MinecraftServer.getCompressionThreshold();
-
-            if (threshold > 0 && connection instanceof NettyPlayerConnection) {
-                ((NettyPlayerConnection) connection).enableCompression(threshold);
-            }
 
             CONNECTION_MANAGER.startPlayState(connection, playerUuid, username);
         }

@@ -12,6 +12,9 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.UUID;
 
 public class LoginPluginResponsePacket implements ClientPreplayPacket {
@@ -34,16 +37,27 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
             if (channel != null) {
                 boolean success = false;
+                SocketAddress socketAddress = null;
 
                 // Velocity
                 if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
                     if (data != null) {
                         BinaryReader reader = new BinaryReader(data);
                         success = VelocityProxy.checkIntegrity(reader);
+                        if (success) {
+                            // Get the real connection address
+                            final InetAddress address = VelocityProxy.readAddress(reader);
+                            final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
+                            socketAddress = new InetSocketAddress(address, port);
+                        }
                     }
                 }
 
                 if (success) {
+                    if (socketAddress != null) {
+                        nettyPlayerConnection.setRemoteAddress(socketAddress);
+                    }
+
                     // Proxy usage always mean that the server is in offline mode
                     final String username = nettyPlayerConnection.getLoginUsername();
                     final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);

@@ -1,10 +1,13 @@
 package net.minestom.server.extras.velocity;
 
+import com.google.common.net.InetAddresses;
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.InetAddress;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 public final class VelocityProxy {
 
     public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
+    private static final int SUPPORTED_FORWARDING_VERSION = 1;
 
     private static boolean enabled;
     private static byte[] secret;
@@ -48,7 +52,9 @@ public final class VelocityProxy {
 
         final byte[] signature = reader.readBytes(32);
 
-        final byte[] data = reader.getRemainingBytes();
+        ByteBuf buf = reader.getBuffer();
+        final byte[] data = new byte[buf.readableBytes()];
+        buf.getBytes(buf.readerIndex(), data);
 
         try {
             final Mac mac = Mac.getInstance("HmacSHA256");
@@ -61,12 +67,12 @@ public final class VelocityProxy {
             throw new AssertionError(e);
         }
 
-        /*int version = buf.readVarInt();
-        if (version != SUPPORTED_FORWARDING_VERSION) {
-            throw new IllegalStateException("Unsupported forwarding version " + version + ", wanted " + SUPPORTED_FORWARDING_VERSION);
-        }*/
+        final int version = reader.readVarInt();
+        return version == SUPPORTED_FORWARDING_VERSION;
+    }
 
-        return true;
+    public static InetAddress readAddress(@NotNull BinaryReader reader) {
+        return InetAddresses.forString(reader.readSizedString());
     }
 
 }

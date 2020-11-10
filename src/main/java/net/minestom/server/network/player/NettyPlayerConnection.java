@@ -29,6 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NettyPlayerConnection extends PlayerConnection {
 
     private final SocketChannel channel;
+
+    private SocketAddress remoteAddress;
     @Getter
     private boolean encrypted = false;
     @Getter
@@ -50,6 +52,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
+        this.remoteAddress = channel.remoteAddress();
     }
 
     /**
@@ -80,25 +83,25 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
-        if ((encrypted || compressed) && copy) {
+        if (copy) {
             buffer = buffer.copy();
             buffer.retain();
             channel.writeAndFlush(buffer);
             buffer.release();
         } else {
-            getChannel().writeAndFlush(buffer);
+            channel.writeAndFlush(buffer);
         }
     }
 
     @Override
     public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
-        if ((encrypted || compressed) && copy) {
+        if (copy) {
             buffer = buffer.copy();
             buffer.retain();
             channel.write(buffer);
             buffer.release();
         } else {
-            getChannel().write(buffer);
+            channel.write(buffer);
         }
     }
 
@@ -115,7 +118,18 @@ public class NettyPlayerConnection extends PlayerConnection {
     @NotNull
     @Override
     public SocketAddress getRemoteAddress() {
-        return getChannel().remoteAddress();
+        return remoteAddress;
+    }
+
+    /**
+     * Changes the internal remote address field.
+     * <p>
+     * Mostly unsafe, used internally when interacting with a proxy.
+     *
+     * @param remoteAddress the new connection remote address
+     */
+    public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
+        this.remoteAddress = remoteAddress;
     }
 
     @Override
@@ -141,7 +155,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
-     * Sets the internal login username field
+     * Sets the internal login username field.
      *
      * @param loginUsername the new login username field
      */
