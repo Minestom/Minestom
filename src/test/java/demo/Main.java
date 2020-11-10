@@ -7,7 +7,6 @@ import demo.commands.GamemodeCommand;
 import demo.commands.TestCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -52,7 +51,7 @@ public class Main {
         PlayerInit.init();
 
         //VelocityProxy.enable("rBeJJ79W4MVU");
-        BungeeCordProxy.enable();
+        //BungeeCordProxy.enable();
 
        // MojangAuth.init();
 

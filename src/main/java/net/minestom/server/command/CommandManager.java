@@ -15,6 +15,9 @@ import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -442,7 +445,7 @@ public final class CommandManager {
 
         // You can uncomment this to test any brigadier parser on the client
         /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
-        testNode.parser = "minecraft:item_predicate";
+        testNode.parser = "minecraft:vec3";
 
         if (true) {
             return nodes;
@@ -595,6 +598,15 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentNbtTag) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:nbt_tag";
+        } else if (argument instanceof ArgumentRelativeBlockPosition) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:block_pos";
+        } else if (argument instanceof ArgumentRelativeVec3) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:vec3";
+        } else if (argument instanceof ArgumentRelativeVec2) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:vec2";
         }
 
         return nodes;

@@ -98,6 +98,13 @@ public final class PacketProcessor {
         connectionPlayerConnectionMap.remove(channel);
     }
 
+    /**
+     * Calls {@link Readable#read(BinaryReader)} and catch all the exceptions to be printed using the packet processor logger.
+     *
+     * @param connection the connection who sent the packet
+     * @param readable   the readable interface
+     * @param reader     the buffer containing the packet
+     */
     private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
         try {
             readable.read(reader);

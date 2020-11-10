@@ -40,6 +40,7 @@ public final class UpdateManager {
     private final ConcurrentLinkedQueue<DoubleConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
 
     {
+        // DEFAULT THREAD PROVIDER
         //threadProvider = new PerInstanceThreadProvider();
         threadProvider = new PerGroupChunkProvider();
     }
