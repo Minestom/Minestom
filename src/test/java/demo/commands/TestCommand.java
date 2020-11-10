@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.item.ItemStack;
 
 public class TestCommand extends Command {
 
@@ -17,7 +18,7 @@ public class TestCommand extends Command {
             //addSyntax(this::execute, dynamicWord);
         }
 
-        Argument test = ArgumentType.DynamicWord("testArg").fromRestrictions(value -> value.contains("a"));
+        Argument test = ArgumentType.ItemStack("item");
 
         test.setCallback((source, value, error) -> {
             System.out.println("ERROR " + error);
@@ -29,7 +30,8 @@ public class TestCommand extends Command {
         });
 
         addSyntax((source, args) -> {
-            System.out.println("HEY IT WORKS");
+            ItemStack itemStack = args.getItemStack("item");
+            System.out.println("HEY IT WORKS "+itemStack.getMaterial());
         }, test);
     }
 

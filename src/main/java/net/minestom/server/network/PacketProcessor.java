@@ -14,12 +14,18 @@ import net.minestom.server.network.packet.client.handshake.HandshakePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.Readable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PacketProcessor {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
 
     private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
@@ -34,7 +40,7 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(ChannelHandlerContext channel, InboundPacket packet) {
+    public void process(@NotNull ChannelHandlerContext channel, @NotNull InboundPacket packet) {
         // Create the netty player connection object if not existing
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
@@ -51,7 +57,7 @@ public final class PacketProcessor {
             // Should be handshake packet
             if (packet.packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(binaryReader);
+                safeRead(playerConnection, handshakePacket, binaryReader);
                 handshakePacket.process(playerConnection);
             }
             return;
@@ -61,17 +67,17 @@ public final class PacketProcessor {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packet.packetId);
-                playPacket.read(binaryReader);
+                safeRead(playerConnection, playPacket, binaryReader);
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
-                loginPacket.read(binaryReader);
+                safeRead(playerConnection, loginPacket, binaryReader);
                 loginPacket.process(playerConnection);
                 break;
             case STATUS:
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
-                statusPacket.read(binaryReader);
+                safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
                 break;
         }
@@ -90,5 +96,15 @@ public final class PacketProcessor {
 
     public void removePlayerConnection(ChannelHandlerContext channel) {
         connectionPlayerConnectionMap.remove(channel);
+    }
+
+    private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
+        try {
+            readable.read(reader);
+        } catch (Exception e) {
+            final Player player = connection.getPlayer();
+            final String username = player != null ? player.getUsername() : "null";
+            LOGGER.warn("Connection " + connection.getRemoteAddress() + " (" + username + ") sent an unexpected packet.");
+        }
     }
 }
