@@ -1,5 +1,7 @@
 package net.minestom.server.instance.palette;
 
+import net.minestom.server.utils.chunk.ChunkUtils;
+
 import static net.minestom.server.instance.Chunk.*;
 
 public class PaletteStorage {
@@ -7,7 +9,7 @@ public class PaletteStorage {
     private int bitsPerEntry;
     private int valuesPerLong;
 
-    protected long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
+    private long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
 
     public PaletteStorage(int bitsPerEntry) {
         this.bitsPerEntry = bitsPerEntry;
@@ -24,13 +26,12 @@ public class PaletteStorage {
             z = CHUNK_SIZE_Z + z;
         }
 
-        int sectionY = y % CHUNK_SECTION_SIZE;
-        int sectionIndex = (((sectionY * 16) + z) * 16) + x;
+        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
 
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
-        final int section = y / CHUNK_SECTION_SIZE;
+        final int section = ChunkUtils.getSectionAt(y);
 
         if (sectionBlocks[section].length == 0) {
             if (blockId == 0) {
@@ -44,10 +45,8 @@ public class PaletteStorage {
 
         long block = sectionBlock[index];
         {
-            if (blockId != 0) {
-                long shiftCount = (long) bitIndex;
-                long cacheMask = (1L << shiftCount) - 1L;
-                long cache = block & cacheMask;
+            long cacheMask = (1L << bitIndex) - 1L;
+            long cache = block & cacheMask;
 
                 /*System.out.println("blockId "+blockId);
                 System.out.println("bitIndex "+bitIndex);
@@ -55,17 +54,16 @@ public class PaletteStorage {
                 System.out.println("mask "+binary(cacheMask));
                 System.out.println("cache "+binary(cache));*/
 
-                block = block >> shiftCount << shiftCount;
-                //System.out.println("block "+binary(block));
-                block = block | (long) blockId;
-                //System.out.println("block2 "+binary(block));
-                block = (block << shiftCount);
-                //System.out.println("block3 "+binary(block));
-                block = block | cache;
-                //System.out.println("block4 "+binary(block));
+            block = block >> bitIndex << bitIndex;
+            //System.out.println("block "+binary(block));
+            block = block | blockId;
+            //System.out.println("block2 "+binary(block));
+            block = (block << bitIndex);
+            //System.out.println("block3 "+binary(block));
+            block = block | cache;
+            //System.out.println("block4 "+binary(block));
 
-                sectionBlock[index] = block;
-            }
+            sectionBlock[index] = block;
 
         }
     }
@@ -80,13 +78,12 @@ public class PaletteStorage {
             z = CHUNK_SIZE_Z + z;
         }
 
-        int sectionY = y % CHUNK_SECTION_SIZE;
-        int sectionIndex = (((sectionY * 16) + z) * 16) + x;
+        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
 
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
 
-        final int section = y / CHUNK_SECTION_SIZE;
+        final int section = ChunkUtils.getSectionAt(y);
 
         long[] blocks = sectionBlocks[section];
 
@@ -118,7 +115,7 @@ public class PaletteStorage {
         System.out.println("mask " + binary(mask));
         System.out.println("bin " + binary(blocks[index]));
         System.out.println("result " + ((blocks[index] >> bitIndex) & mask));*/
-        return (short) (finalValue);
+        return (short) finalValue;
     }
 
     private int getSize() {
@@ -145,6 +142,10 @@ public class PaletteStorage {
 
     private static String binary(long value) {
         return "0b" + Long.toBinaryString(value);
+    }
+
+    private int getSectionIndex(int x, int y, int z) {
+        return (((y * CHUNK_SECTION_SIZE) + z) * CHUNK_SECTION_SIZE) + x;
     }
 
 }

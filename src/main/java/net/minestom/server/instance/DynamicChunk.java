@@ -76,15 +76,12 @@ public class DynamicChunk extends Chunk {
         final int index = getBlockIndex(x, y, z);
         // True if the block is not complete air without any custom block capabilities
         final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
-        if (hasBlock) {
-            this.blockPalette.setBlockAt(x, y, z, blockStateId);
-            this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
-        } else {
-            // Block has been deleted, clear cache and return
 
-            this.blockPalette.setBlockAt(x, y, z, (short) 0);
-            //this.blocksStateId[index] = 0; // Set to air
-            this.customBlockPalette.setBlockAt(x, y, z, (short) 0); // Remove custom block
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
+        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
+
+        if (!hasBlock) {
+            // Block has been deleted, clear cache and return
 
             this.blocksData.remove(index);
 
