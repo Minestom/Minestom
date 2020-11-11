@@ -47,7 +47,7 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(int xz) {
-        // Assume Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z
+        assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
         return Math.floorDiv(xz, Chunk.CHUNK_SIZE_X);
     }
 

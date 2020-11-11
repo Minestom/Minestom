@@ -116,16 +116,24 @@ public final class Utils {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    public static void writeBlocks(ByteBuf buffer, long[] blocksId, int bitsPerEntry) {
+    public static void writeBlocks(ByteBuf buffer, short[] palette, long[] blocksId, int bitsPerEntry) {
         /*short count = 0;
         for (short id : blocksId)
             if (id != 0)
                 count++;*/
 
-
         //buffer.writeShort(count);
         buffer.writeShort(200);
         buffer.writeByte((byte) bitsPerEntry);
+
+        // Palette
+        if (bitsPerEntry < 9) {
+            // Palette has to exist
+            writeVarIntBuf(buffer, palette.length);
+            for (short paletteValue : palette) {
+                writeVarIntBuf(buffer, paletteValue);
+            }
+        }
 
         final long[] data = blocksId;//encodeBlocksTEST(bitsPerEntry);
         writeVarIntBuf(buffer, data.length);
@@ -143,8 +151,12 @@ public final class Utils {
         final int arraySize = blockCount / valuesPerLong;
 
         long[] data = new long[arraySize];
-        //data[0] = 0b000000000000001_000000000000001_000000000000001_000000000000001L;
-        //data[1] = 0b000000000000001_000000000000001_000000000000001_000000000000010L;
+        data[0] = 0b000000010001L;
+        data[1] = 0b000000010001L;
+
+        if (true) {
+            return data;
+        }
 
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {

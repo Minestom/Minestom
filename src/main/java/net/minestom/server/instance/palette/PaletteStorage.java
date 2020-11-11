@@ -1,5 +1,7 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
 import static net.minestom.server.instance.Chunk.*;
@@ -7,13 +9,36 @@ import static net.minestom.server.instance.Chunk.*;
 public class PaletteStorage {
 
     private int bitsPerEntry;
+
     private int valuesPerLong;
 
     private long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
 
+    // palette index = block id
+    private Short2ShortLinkedOpenHashMap paletteBlockMap = new Short2ShortLinkedOpenHashMap(CHUNK_SECTION_SIZE, 2);
+    // block id = palette index
+    private Short2ShortOpenHashMap blockPaletteMap = new Short2ShortOpenHashMap(CHUNK_SECTION_SIZE, 2);
+
+    {
+        // Default value
+        this.paletteBlockMap.put((short) 0, (short) 0);
+        this.blockPaletteMap.put((short) 0, (short) 0);
+    }
+
     public PaletteStorage(int bitsPerEntry) {
         this.bitsPerEntry = bitsPerEntry;
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
+    }
+
+    private short getPaletteIndex(short blockId) {
+        if (!blockPaletteMap.containsKey(blockId)) {
+            final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
+            this.paletteBlockMap.put(paletteIndex, blockId);
+            this.blockPaletteMap.put(blockId, paletteIndex);
+            return paletteIndex;
+        }
+
+        return blockPaletteMap.get(blockId);
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
@@ -40,6 +65,9 @@ public class PaletteStorage {
 
             sectionBlocks[section] = new long[getSize()];
         }
+
+        // Change to palette value
+        blockId = getPaletteIndex(blockId);
 
         long[] sectionBlock = sectionBlocks[section];
 
@@ -107,6 +135,9 @@ public class PaletteStorage {
             finalValue = value & mask >> bitIndex;
         }
 
+        // Change to palette value
+        final short blockId = paletteBlockMap.get((short) finalValue);
+
         //System.out.println("final " + binary(finalValue));
 
 
@@ -115,18 +146,21 @@ public class PaletteStorage {
         System.out.println("mask " + binary(mask));
         System.out.println("bin " + binary(blocks[index]));
         System.out.println("result " + ((blocks[index] >> bitIndex) & mask));*/
-        return (short) finalValue;
+        return blockId;
     }
 
     private int getSize() {
         final int blockCount = 16 * 16 * 16; // A whole chunk section
         final int arraySize = (blockCount + valuesPerLong - 1) / valuesPerLong;
-        //System.out.println("size " + arraySize);
         return arraySize;
     }
 
     public int getBitsPerEntry() {
         return bitsPerEntry;
+    }
+
+    public short[] getPalette() {
+        return paletteBlockMap.keySet().toShortArray();
     }
 
     public long[][] getSectionBlocks() {
@@ -136,6 +170,8 @@ public class PaletteStorage {
     public PaletteStorage copy() {
         PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry);
         paletteStorage.sectionBlocks = sectionBlocks.clone();
+        paletteStorage.paletteBlockMap.putAll(paletteBlockMap);
+        paletteStorage.blockPaletteMap.putAll(blockPaletteMap);
 
         return paletteStorage;
     }

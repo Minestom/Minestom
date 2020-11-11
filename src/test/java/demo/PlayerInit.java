@@ -17,6 +17,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
@@ -124,8 +125,9 @@ public class PlayerInit {
                     return;
 
                 final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
+                final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
                 final Block block = Block.fromStateId(blockStateId);
-                player.sendMessage("You clicked at the block " + block);
+                player.sendMessage("You clicked at the block " + block + " " + customBlock);
             });
 
             player.addEventCallback(PickupItemEvent.class, event -> {
@@ -165,7 +167,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
                 if (event.isFirstSpawn()) {
                     player.teleport(new Position(0, 64f, 0));
                 }

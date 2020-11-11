@@ -42,8 +42,8 @@ public class DynamicChunk extends Chunk {
     private static final int DATA_FORMAT_VERSION = 1;
 
     // WARNING: not thread-safe
-    protected PaletteStorage blockPalette = new PaletteStorage(15);
-    protected PaletteStorage customBlockPalette = new PaletteStorage(15);
+    protected PaletteStorage blockPalette = new PaletteStorage(4);
+    protected PaletteStorage customBlockPalette = new PaletteStorage(4);
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
