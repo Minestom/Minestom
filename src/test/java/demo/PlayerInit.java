@@ -23,8 +23,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -39,12 +37,12 @@ public class PlayerInit {
     private static final Inventory inventory;
 
     static {
-        StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
+        //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         // Load some chunks beforehand
         final int loopStart = -3;
@@ -174,7 +172,7 @@ public class PlayerInit {
 
                 ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
                 NbtDataImpl data = new NbtDataImpl();
-                data.set("testc",2);
+                data.set("testc", 2);
                 itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
 

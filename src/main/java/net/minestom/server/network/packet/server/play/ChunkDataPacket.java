@@ -7,6 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
@@ -27,8 +28,7 @@ public class ChunkDataPacket implements ServerPacket {
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
-    public int bitsPerEntry;
-    public long[][] sectionBlocks;
+    public PaletteStorage paletteStorage;
     public short[] customBlocksId;
 
     public Set<Integer> blockEntities;
@@ -37,7 +37,7 @@ public class ChunkDataPacket implements ServerPacket {
     public int[] sections;
 
     private static final byte CHUNK_SECTION_COUNT = 16;
-    private static final int MAX_BITS_PER_ENTRY = 15;
+    private static final int MAX_BITS_PER_ENTRY = 16;
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * MAX_BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
     @Override
@@ -50,11 +50,11 @@ public class ChunkDataPacket implements ServerPacket {
         ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
             if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
-                final long[] section = sectionBlocks[i];
+                final long[] section = paletteStorage.getSectionBlocks()[i];
                 if (section.length > 0) { // section contains at least one block
                     //if (true) {
                     mask |= 1 << i;
-                    Utils.writeBlocks(blocks, section, bitsPerEntry);
+                    Utils.writeBlocks(blocks, section, paletteStorage.getBitsPerEntry());
                 } else {
                     mask |= 0;
                 }

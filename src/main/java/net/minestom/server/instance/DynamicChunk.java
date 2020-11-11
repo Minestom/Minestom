@@ -10,6 +10,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
@@ -35,8 +36,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class DynamicChunk extends Chunk {
 
-    private static final int BITS_PER_ENTRY = 15;
-
     /**
      * Represents the version which will be present in the serialized output.
      * Used to define which deserializer to use.
@@ -47,9 +46,8 @@ public class DynamicChunk extends Chunk {
     // WARNING: those arrays are NOT thread-safe
     // and modifying them can cause issue with block data, update, block entity and the cached chunk packet
     //protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    protected PaletteStorage blockPalette = new PaletteStorage(15);
     protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-
-    protected long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
@@ -63,8 +61,8 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
-    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        super(instance, biomes, chunkX, chunkZ, true);
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+        super(biomes, chunkX, chunkZ, true);
     }
 
     @Override
@@ -83,12 +81,12 @@ public class DynamicChunk extends Chunk {
         // True if the block is not complete air without any custom block capabilities
         final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
         if (hasBlock) {
-            setBlockAt(x, y, z, blockStateId);
+            this.blockPalette.setBlockAt(x, y, z, blockStateId);
             this.customBlocksId[index] = customBlockId;
         } else {
             // Block has been deleted, clear cache and return
 
-            setBlockAt(x, y, z, (short) 0);
+            this.blockPalette.setBlockAt(x, y, z, (short) 0);
             //this.blocksStateId[index] = 0; // Set to air
             this.customBlocksId[index] = 0; // Remove custom block
 
@@ -155,8 +153,7 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public short getBlockStateId(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        return getBlockAt(x, y, z);
+        return this.blockPalette.getBlockAt(x, y, z);
     }
 
     @Override
@@ -168,14 +165,13 @@ public class DynamicChunk extends Chunk {
     @Override
     protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
         final int blockIndex = getBlockIndex(x, y, z);
-        setBlockAt(x, y, z, blockStateId);
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
         this.customBlocksId[blockIndex] = customBlockId;
     }
 
     @Override
     protected void refreshBlockStateId(int x, int y, int z, short blockStateId) {
-        final int blockIndex = getBlockIndex(x, y, z);
-        setBlockAt(x, y, z, blockStateId);
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
     }
 
     @Override
@@ -246,7 +242,7 @@ public class DynamicChunk extends Chunk {
                     for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                         final int index = getBlockIndex(x, y, z);
 
-                        final short blockStateId = getBlockAt(x, y, z);
+                        final short blockStateId = blockPalette.getBlockAt(x, y, z);
                         final short customBlockId = customBlocksId[index];
 
                         // No block at the position
@@ -384,8 +380,7 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.bitsPerEntry = BITS_PER_ENTRY;
-        fullDataPacket.sectionBlocks = sectionBlocks.clone();
+        fullDataPacket.paletteStorage = blockPalette.copy();
         fullDataPacket.customBlocksId = customBlocksId.clone();
         fullDataPacket.blockEntities = new HashSet<>(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
@@ -394,9 +389,9 @@ public class DynamicChunk extends Chunk {
 
     @NotNull
     @Override
-    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
-        dynamicChunk.sectionBlocks = sectionBlocks.clone();
+    public Chunk copy(int chunkX, int chunkZ) {
+        DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
+        dynamicChunk.blockPalette = blockPalette.copy();
         ArrayUtils.copyToDestination(customBlocksId, dynamicChunk.customBlocksId);
         dynamicChunk.blocksData.putAll(blocksData);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
@@ -404,83 +399,5 @@ public class DynamicChunk extends Chunk {
         dynamicChunk.blockEntities.addAll(blockEntities);
 
         return dynamicChunk;
-    }
-
-    private void setBlockAt(int x, int y, int z, short blockId) {
-        x %= 16;
-        if (x < 0) {
-            x = CHUNK_SIZE_X + x;
-        }
-        z %= 16;
-        if (z < 0) {
-            z = CHUNK_SIZE_Z + z;
-        }
-
-        final char valuesPerLong = (char) (Long.SIZE / BITS_PER_ENTRY);
-
-        int sectionY = y % CHUNK_SECTION_SIZE;
-        int sectionIndex = (((sectionY * 16) + z) * 16) + x;
-
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = sectionIndex % valuesPerLong * BITS_PER_ENTRY;
-
-        final int section = y / CHUNK_SECTION_SIZE;
-
-        if (sectionBlocks[section].length == 0) {
-            sectionBlocks[section] = new long[getSize()];
-        }
-
-        long[] sectionBlock = sectionBlocks[section];
-
-        //System.out.println("test1 " + binary(sectionBlock[index]));
-        //System.out.println("test2 " + binary(((long) blockId << (bitIndex))));
-        sectionBlock[index] |= ((long) blockId << (bitIndex));
-    }
-
-    private static String binary(long value) {
-        return "0b" + Long.toBinaryString(value);
-    }
-
-    private short getBlockAt(int x, int y, int z) {
-        x %= 16;
-        if (x < 0) {
-            x = CHUNK_SIZE_X + x;
-        }
-        z %= 16;
-        if (z < 0) {
-            z = CHUNK_SIZE_Z + z;
-        }
-
-        final char valuesPerLong = (char) (Long.SIZE / BITS_PER_ENTRY);
-
-        int sectionY = y % CHUNK_SECTION_SIZE;
-        int sectionIndex = (((sectionY * 16) + z) * 16) + x;
-
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = sectionIndex % valuesPerLong * BITS_PER_ENTRY;
-
-        final int section = y / CHUNK_SECTION_SIZE;
-
-        long[] blocks = sectionBlocks[section];
-
-        if (blocks.length == 0) {
-            return 0;
-        }
-
-        long mask = (1 << (bitIndex)) - 1;
-
-        /*System.out.println("data " + index + " " + bitIndex + " " + sectionIndex);
-        System.out.println("POS " + x + " " + y + " " + z);
-        System.out.println("mask " + binary(mask));
-        System.out.println("bin " + binary(blocks[index]));
-        System.out.println("result " + ((blocks[index] >> bitIndex) & mask));*/
-        return (short) (blocks[index] >> bitIndex & mask);
-    }
-
-    private int getSize() {
-        final int blockCount = 16 * 16 * 16; // A whole chunk section
-        final char valuesPerLong = (char) (Long.SIZE / BITS_PER_ENTRY);
-        final int arraySize = blockCount / valuesPerLong;
-        return arraySize;
     }
 }
