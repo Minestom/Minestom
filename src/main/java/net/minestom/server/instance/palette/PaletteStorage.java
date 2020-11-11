@@ -29,9 +29,9 @@ public class PaletteStorage {
     }
 
     public PaletteStorage(int bitsPerEntry) {
-        this.bitsPerEntry = bitsPerEntry;
-        this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= PALETTE_MAXIMUM_BITS;
+        this.bitsPerEntry = hasPalette ? bitsPerEntry : 15;
+        this.valuesPerLong = Long.SIZE / this.bitsPerEntry;
     }
 
     private synchronized short getPaletteIndex(short blockId) {
@@ -81,8 +81,6 @@ public class PaletteStorage {
 
         long block = sectionBlock[index];
         {
-            long cacheMask = (1L << bitIndex) - 1L;
-            long cache = block & cacheMask;
 
                 /*System.out.println("blockId "+blockId);
                 System.out.println("bitIndex "+bitIndex);
@@ -90,14 +88,20 @@ public class PaletteStorage {
                 System.out.println("mask "+binary(cacheMask));
                 System.out.println("cache "+binary(cache));*/
 
-            block = block >> bitIndex << bitIndex;
+            /*block = block >> bitIndex << bitIndex;
             //System.out.println("block "+binary(block));
             block = block | blockId;
             //System.out.println("block2 "+binary(block));
             block = (block << bitIndex);
             //System.out.println("block3 "+binary(block));
             block = block | cache;
-            //System.out.println("block4 "+binary(block));
+            //System.out.println("block4 "+binary(block));*/
+
+            long clear = Integer.MAX_VALUE >> (31 - bitsPerEntry);
+
+            block |= clear << bitIndex;
+            block ^= clear << bitIndex;
+            block |= (long) blockId << bitIndex;
 
             sectionBlock[index] = block;
 
@@ -127,24 +131,15 @@ public class PaletteStorage {
             return 0;
         }
 
-        long value = blocks[index] >> bitIndex;
-        long mask = (1L << ((long) bitIndex + (long) bitsPerEntry)) - 1L;
-
-        long finalValue;
-
+        long mask = Integer.MAX_VALUE >> (31 - bitsPerEntry);
+        long value = blocks[index] >> bitIndex & mask;
         /*System.out.println("index " + index);
         System.out.println("bitIndex " + bitIndex);
         System.out.println("test1 " + binary(value));
         System.out.println("test2 " + binary(mask));*/
 
-        {
-            mask = mask >> bitIndex << bitIndex;
-            //System.out.println("test3 " + binary(mask));
-            finalValue = value & mask >> bitIndex;
-        }
-
         // Change to palette value
-        final short blockId = paletteBlockMap.get((short) finalValue);
+        final short blockId = hasPalette ? paletteBlockMap.get((short) value) : (short) value;
 
         //System.out.println("final " + binary(finalValue));
 
@@ -189,7 +184,8 @@ public class PaletteStorage {
     }
 
     private int getSectionIndex(int x, int y, int z) {
-        return (((y * CHUNK_SECTION_SIZE) + z) * CHUNK_SECTION_SIZE) + x;
+        //return (((y * CHUNK_SECTION_SIZE) + z) * CHUNK_SECTION_SIZE) + x;
+        return y << 8 | z << 4 | x;
     }
 
 }
