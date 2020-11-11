@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.utils.callback.validator.StringValidator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Same as {@link ArgumentWord} with the exception
@@ -8,12 +10,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentDynamicWord extends Argument<String> {
 
+    public static final int SPACE_ERROR = 1;
+    public static final int RESTRICTION_ERROR = 2;
+
+    private StringValidator dynamicRestriction;
+
     public ArgumentDynamicWord(String id) {
         super(id);
     }
 
     @Override
     public int getCorrectionResult(@NotNull String value) {
+        if (value.contains(" "))
+            return SPACE_ERROR;
+
         return SUCCESS;
     }
 
@@ -25,6 +35,27 @@ public class ArgumentDynamicWord extends Argument<String> {
 
     @Override
     public int getConditionResult(@NotNull String value) {
+
+        // true if 'value' is valid based on the dynamic restriction
+        final boolean restrictionCheck = dynamicRestriction == null || dynamicRestriction.isValid(value);
+
+        if (!restrictionCheck) {
+            return RESTRICTION_ERROR;
+        }
+
         return SUCCESS;
+    }
+
+    /**
+     * Sets the dynamic restriction of this dynamic argument.
+     * <p>
+     * Will be called once the argument condition is checked.
+     *
+     * @param dynamicRestriction the dynamic restriction, can be null to disable
+     * @return 'this' for chaining
+     */
+    public ArgumentDynamicWord fromRestrictions(@Nullable StringValidator dynamicRestriction) {
+        this.dynamicRestriction = dynamicRestriction;
+        return this;
     }
 }

@@ -9,6 +9,9 @@ import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentLong;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -107,6 +110,18 @@ public class ArgumentType {
 
     public static ArgumentNbtTag NBT(@NotNull String id) {
         return new ArgumentNbtTag(id);
+    }
+
+    public static ArgumentRelativeBlockPosition RelativeBlockPosition(@NotNull String id) {
+        return new ArgumentRelativeBlockPosition(id);
+    }
+
+    public static ArgumentRelativeVec3 RelativeVec3(@NotNull String id) {
+        return new ArgumentRelativeVec3(id);
+    }
+
+    public static ArgumentRelativeVec2 RelativeVec2(@NotNull String id) {
+        return new ArgumentRelativeVec2(id);
     }
 
 }

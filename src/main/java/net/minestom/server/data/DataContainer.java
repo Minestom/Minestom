@@ -26,7 +26,7 @@ public interface DataContainer {
      * Default implementations are {@link DataImpl} and {@link SerializableDataImpl} depending
      * on your use-case.
      *
-     * @param data the {@link Data} of this container, null to remove it
+     * @param data the new {@link Data} of this container, null to remove it
      */
     void setData(@Nullable Data data);
 

@@ -1,9 +1,13 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataType;
+import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
@@ -15,6 +19,9 @@ import net.minestom.server.item.metadata.ItemMeta;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +47,7 @@ public final class NBTUtils {
      * @param items       the items to save
      * @param destination the inventory destination
      */
-    public static void loadAllItems(NBTList<NBTCompound> items, Inventory destination) {
+    public static void loadAllItems(@NotNull NBTList<NBTCompound> items, @NotNull Inventory destination) {
         destination.clear();
         for (NBTCompound tag : items) {
             Material item = Registries.getMaterial(tag.getString("id"));
@@ -55,7 +62,7 @@ public final class NBTUtils {
         }
     }
 
-    public static void saveAllItems(NBTList<NBTCompound> list, Inventory inventory) {
+    public static void saveAllItems(@NotNull NBTList<NBTCompound> list, @NotNull Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
@@ -72,7 +79,8 @@ public final class NBTUtils {
         }
     }
 
-    public static void writeEnchant(NBTCompound nbt, String listName, Map<Enchantment, Short> enchantmentMap) {
+    public static void writeEnchant(@NotNull NBTCompound nbt, @NotNull String listName,
+                                    @NotNull Map<Enchantment, Short> enchantmentMap) {
         NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
         for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
             final Enchantment enchantment = entry.getKey();
@@ -86,7 +94,8 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    public static ItemStack readItemStack(BinaryReader reader) {
+    @NotNull
+    public static ItemStack readItemStack(@NotNull BinaryReader reader) {
         final boolean present = reader.readBoolean();
 
         if (!present) {
@@ -116,7 +125,7 @@ public final class NBTUtils {
         return item;
     }
 
-    public static void loadDataIntoItem(ItemStack item, NBTCompound nbt) {
+    public static void loadDataIntoItem(@NotNull ItemStack item, @NotNull NBTCompound nbt) {
         if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
         if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
@@ -179,9 +188,24 @@ public final class NBTUtils {
 
         // Meta specific field
         final ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null)
-            return;
-        itemMeta.read(nbt);
+        if (itemMeta != null) {
+            itemMeta.read(nbt);
+        }
+
+        NbtDataImpl customData = null;
+        for (String key : nbt.getKeys()) {
+            if (key.startsWith(NbtDataImpl.KEY_PREFIX)) {
+                if (customData == null) {
+                    customData = new NbtDataImpl();
+                    item.setData(customData);
+                }
+                final NBT keyNbt = nbt.get(key);
+
+                final String dataKey = key.replaceFirst(NbtDataImpl.KEY_PREFIX, "");
+                final Object dataValue = fromNBT(keyNbt);
+                customData.set(dataKey, dataValue);
+            }
+        }
     }
 
     public static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {
@@ -226,7 +250,7 @@ public final class NBTUtils {
         }
     }
 
-    public static void saveDataIntoNBT(ItemStack itemStack, NBTCompound itemNBT) {
+    public static void saveDataIntoNBT(@NotNull ItemStack itemStack, @NotNull NBTCompound itemNBT) {
         // Unbreakable
         if (itemStack.isUnbreakable()) {
             itemNBT.setInt("Unbreakable", 1);
@@ -317,11 +341,106 @@ public final class NBTUtils {
         // End custom model data
 
         // Start custom meta
-        final ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta != null) {
-            itemMeta.write(itemNBT);
+        {
+            final ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                itemMeta.write(itemNBT);
+            }
         }
         // End custom meta
+
+        // Start NbtData data
+        {
+            final Data data = itemStack.getData();
+            if (data instanceof NbtDataImpl) {
+                NbtDataImpl nbtData = (NbtDataImpl) data;
+                nbtData.writeToNbt(itemNBT);
+            }
+        }
+        // End NbtData
+    }
+
+    /**
+     * Converts an object into its {@link NBT} equivalent.
+     * <p>
+     * If {@code type} is not a primitive type or primitive array and {@code supportDataType} is true,
+     * the data will be encoded with the appropriate {@link DataType} into a byte array.
+     *
+     * @param value           the value to convert
+     * @param type            the type of the value, used to know which {@link DataType} to use if {@code value} is not a primitive type
+     * @param supportDataType true to allow using a {@link DataType} to encode {@code value} into a byte array if not a primitive type
+     * @return the converted value, null if {@code type} is not a primitive type and {@code supportDataType} is false
+     */
+    @Nullable
+    public static NBT toNBT(@NotNull Object value, @NotNull Class type, boolean supportDataType) {
+        type = PrimitiveConversion.getObjectClass(type);
+        if (type.equals(Boolean.class)) {
+            // No boolean type in NBT
+            return new NBTByte((byte) (((boolean) value) ? 1 : 0));
+        } else if (type.equals(Byte.class)) {
+            return new NBTByte((byte) value);
+        } else if (type.equals(Character.class)) {
+            // No char type in NBT
+            return new NBTShort((short) value);
+        } else if (type.equals(Short.class)) {
+            return new NBTShort((short) value);
+        } else if (type.equals(Integer.class)) {
+            return new NBTInt((int) value);
+        } else if (type.equals(Long.class)) {
+            return new NBTLong((long) value);
+        } else if (type.equals(Float.class)) {
+            return new NBTFloat((float) value);
+        } else if (type.equals(Double.class)) {
+            return new NBTDouble((double) value);
+        } else if (type.equals(String.class)) {
+            return new NBTString((String) value);
+        } else if (type.equals(Byte[].class)) {
+            return new NBTByteArray((byte[]) value);
+        } else if (type.equals(Integer[].class)) {
+            return new NBTIntArray((int[]) value);
+        } else if (type.equals(Long[].class)) {
+            return new NBTLongArray((long[]) value);
+        } else {
+            if (supportDataType) {
+                // Custom NBT type, try to encode using the data manager
+                DataType dataType = MinecraftServer.getDataManager().getDataType(type);
+                Check.notNull(dataType, "The type '" + type + "' is not registered in DataManager and not a primitive type.");
+
+                BinaryWriter writer = new BinaryWriter();
+                dataType.encode(writer, value);
+
+                final byte[] encodedValue = writer.toByteArray();
+
+                return new NBTByteArray(encodedValue);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Converts a nbt object to its raw value.
+     * <p>
+     * Currently support number, string, byte/int/long array.
+     *
+     * @param nbt the nbt tag to convert
+     * @return the value representation of a tag
+     * @throws UnsupportedOperationException if the tag type is not supported
+     */
+    public static Object fromNBT(@NotNull NBT nbt) {
+        if (nbt instanceof NBTNumber) {
+            return ((NBTNumber) nbt).getValue();
+        } else if (nbt instanceof NBTString) {
+            return ((NBTString) nbt).getValue();
+        } else if (nbt instanceof NBTByteArray) {
+            return ((NBTByteArray) nbt).getValue();
+        } else if (nbt instanceof NBTIntArray) {
+            return ((NBTIntArray) nbt).getValue();
+        } else if (nbt instanceof NBTLongArray) {
+            return ((NBTLongArray) nbt).getValue();
+        }
+
+        throw new UnsupportedOperationException("NBT type " + nbt.getClass() + " is not handled properly.");
     }
 
     @FunctionalInterface

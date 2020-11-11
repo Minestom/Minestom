@@ -104,16 +104,31 @@ public class Command {
     /**
      * Adds a new syntax in the command.
      * <p>
-     * A syntax is simply a list of arguments
+     * A syntax is simply a list of arguments.
+     *
+     * @param commandCondition the condition to use the syntax
+     * @param executor         the executor to call when the syntax is successfully received
+     * @param args             all the arguments of the syntax
+     * @return the created {@link CommandSyntax}
+     */
+    public CommandSyntax addSyntax(@Nullable CommandCondition commandCondition,
+                                   @NotNull CommandExecutor executor,
+                                   @NotNull Argument<?>... args) {
+        final CommandSyntax syntax = new CommandSyntax(commandCondition, executor, args);
+        this.syntaxes.add(syntax);
+        return syntax;
+    }
+
+    /**
+     * Adds a new syntax in the command without any condition.
      *
      * @param executor the executor to call when the syntax is successfully received
      * @param args     all the arguments of the syntax
      * @return the created {@link CommandSyntax}
+     * @see #addSyntax(CommandCondition, CommandExecutor, Argument[])
      */
     public CommandSyntax addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
-        final CommandSyntax syntax = new CommandSyntax(executor, args);
-        this.syntaxes.add(syntax);
-        return syntax;
+        return addSyntax(null, executor, args);
     }
 
     /**
@@ -148,9 +163,10 @@ public class Command {
     }
 
     /**
-     * Sets the default {@link CommandExecutor} (which is called when there is no argument).
+     * Sets the default {@link CommandExecutor}.
      *
      * @param executor the new default executor, null to remove it
+     * @see #getDefaultExecutor()
      */
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;

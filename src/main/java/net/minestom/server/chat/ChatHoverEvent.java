@@ -13,8 +13,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 public class ChatHoverEvent {
 
     private final String action;
-    private String value;
-    private JsonObject valueObject;
+    private final String value;
+    private final JsonObject valueObject;
     private final boolean isJson;
 
     private ChatHoverEvent(@NotNull String action, @NotNull String value) {

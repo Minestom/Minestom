@@ -165,7 +165,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * <p>
      * WARNING: during unloading, all entities other than {@link Player} will be removed.
      * <p>
-     * For {@link InstanceContainer} it is done during {@link InstanceContainer#tick(long)}
+     * For {@link InstanceContainer} it is done during the next {@link InstanceContainer#tick(long)}.
      *
      * @param chunk the chunk to unload
      */
@@ -661,8 +661,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Sends a {@link BlockActionPacket} for all the viewers of the specific position.
      *
      * @param blockPosition the block position
-     * @param actionId
-     * @param actionParam
+     * @param actionId      the action id, depends on the block
+     * @param actionParam   the action parameter, depends on the block
      * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
     public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {
@@ -1038,7 +1038,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Gets the registered {@link ExplosionSupplier}, or null if none was provided
+     * Gets the registered {@link ExplosionSupplier}, or null if none was provided.
      *
      * @return the instance explosion supplier, null if none was provided
      */
@@ -1048,7 +1048,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Registers the {@link ExplosionSupplier} to use in this instance
+     * Registers the {@link ExplosionSupplier} to use in this instance.
      *
      * @param supplier the explosion supplier
      */
@@ -1057,9 +1057,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Gets the instance space
+     * Gets the instance space.
      * <p>
-     * Used by the pathfinder for entities
+     * Used by the pathfinder for entities.
      *
      * @return the instance space
      */

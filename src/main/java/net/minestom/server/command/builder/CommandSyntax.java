@@ -1,7 +1,10 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a syntax in {@link Command}
@@ -9,22 +12,39 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CommandSyntax {
 
-    private final Argument<?>[] args;
+    private CommandCondition commandCondition;
     private CommandExecutor executor;
+    private final Argument<?>[] args;
 
-    protected CommandSyntax(@NotNull CommandExecutor commandExecutor, @NotNull Argument<?>... args) {
+    protected CommandSyntax(@Nullable CommandCondition commandCondition,
+                            @NotNull CommandExecutor commandExecutor,
+                            @NotNull Argument<?>... args) {
+        this.commandCondition = commandCondition;
         this.executor = commandExecutor;
         this.args = args;
     }
 
     /**
-     * Gets all the required {@link Argument} for this syntax.
+     * Gets the condition to use this syntax.
      *
-     * @return the required arguments
+     * @return this command condition, null if none
      */
-    @NotNull
-    public Argument<?>[] getArguments() {
-        return args;
+    @Nullable
+    public CommandCondition getCommandCondition() {
+        return commandCondition;
+    }
+
+    /**
+     * Changes the command condition of this syntax.
+     * <p>
+     * Be aware that changing the command condition will not automatically update players auto-completion.
+     * You can create a new packet containing the changes with
+     * {@link net.minestom.server.command.CommandManager#createDeclareCommandsPacket(Player)}.
+     *
+     * @param commandCondition the new command condition, null to remove it
+     */
+    public void setCommandCondition(@Nullable CommandCondition commandCondition) {
+        this.commandCondition = commandCondition;
     }
 
     /**
@@ -44,6 +64,16 @@ public class CommandSyntax {
      */
     public void setExecutor(@NotNull CommandExecutor executor) {
         this.executor = executor;
+    }
+
+    /**
+     * Gets all the required {@link Argument} for this syntax.
+     *
+     * @return the required arguments
+     */
+    @NotNull
+    public Argument<?>[] getArguments() {
+        return args;
     }
 
 }

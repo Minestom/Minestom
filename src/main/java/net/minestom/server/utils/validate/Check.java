@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Convenient class to check for common exceptions types.
+ * Convenient class to check for common exceptions.
  */
 public final class Check {
 

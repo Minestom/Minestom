@@ -40,7 +40,7 @@ public class BossBar implements Viewable {
      * @param color    the boss bar color
      * @param division the boss bar division
      */
-    public BossBar(ColoredText title, @NotNull BarColor color, @NotNull BarDivision division) {
+    public BossBar(@NotNull ColoredText title, @NotNull BarColor color, @NotNull BarDivision division) {
         this.title = title;
         this.color = color;
         this.division = division;
@@ -96,6 +96,7 @@ public class BossBar implements Viewable {
      *
      * @return the current title of the bossbar
      */
+    @NotNull
     public ColoredText getTitle() {
         return title;
     }
@@ -105,7 +106,7 @@ public class BossBar implements Viewable {
      *
      * @param title the new title of the bossbar
      */
-    public void setTitle(ColoredText title) {
+    public void setTitle(@NotNull ColoredText title) {
         this.title = title;
         updateTitle();
     }

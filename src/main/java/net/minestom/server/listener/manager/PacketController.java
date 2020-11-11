@@ -47,7 +47,7 @@ public class PacketController {
     /**
      * Changes the packet listener, setting it to null cancel the listener.
      * <p>
-     * WARNING: this will overwrite the default minestom listener.
+     * WARNING: this will overwrite the default minestom listener, be sure to know what you are doing.
      *
      * @param packetListenerConsumer the new packet listener, can be null
      */

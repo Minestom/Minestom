@@ -110,6 +110,7 @@ public class CommandDispatcher {
             final String[] argsValues = new String[arguments.length];
 
             boolean syntaxCorrect = true;
+            // The current index in the raw command string arguments
             int argIndex = 0;
 
             boolean useRemaining = false;
@@ -126,20 +127,24 @@ public class CommandDispatcher {
                 StringBuilder argValue = new StringBuilder();
 
                 if (useRemaining) {
-                    // Argument is supposed to take the rest of the command input
-                    for (int i = argIndex; i < args.length; i++) {
-                        final String arg = args[i];
-                        if (argValue.length() > 0)
-                            argValue.append(" ");
-                        argValue.append(arg);
-                    }
+                    final boolean hasArgs = args.length > argIndex;
+                    // Verify if there is any string part available
+                    if (hasArgs) {
+                        // Argument is supposed to take the rest of the command input
+                        for (int i = argIndex; i < args.length; i++) {
+                            final String arg = args[i];
+                            if (argValue.length() > 0)
+                                argValue.append(" ");
+                            argValue.append(arg);
+                        }
 
-                    final String argValueString = argValue.toString();
+                        final String argValueString = argValue.toString();
 
-                    correctionResult = argument.getCorrectionResult(argValueString);
-                    if (correctionResult == Argument.SUCCESS) {
-                        correct = true;
-                        argsValues[argIndex] = argValueString;
+                        correctionResult = argument.getCorrectionResult(argValueString);
+                        if (correctionResult == Argument.SUCCESS) {
+                            correct = true;
+                            argsValues[argIndex] = argValueString;
+                        }
                     }
                 } else {
                     // Argument is either single-word or can accept optional delimited space(s)
@@ -193,6 +198,7 @@ public class CommandDispatcher {
             final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, syntaxesValues, executorArgs);
             if (finalSyntax != null) {
                 // A fully correct syntax has been found, use it
+                result.syntax = finalSyntax;
                 result.executor = finalSyntax.getExecutor();
                 result.arguments = executorArgs;
                 return result;
@@ -328,6 +334,8 @@ public class CommandDispatcher {
         private Command command;
 
         // Command Executor
+        private CommandSyntax syntax;
+
         private CommandExecutor executor;
         private Arguments arguments;
 
@@ -348,17 +356,27 @@ public class CommandDispatcher {
         public void execute(@NotNull CommandSender source, @NotNull String commandString) {
             // Global listener
             command.globalListener(source, arguments, commandString);
-            // Condition check
+            // Command condition check
             final CommandCondition condition = command.getCondition();
             if (condition != null) {
-                final boolean result = condition.apply(source);
+                final boolean result = condition.canUse(source, commandString);
                 if (!result)
                     return;
             }
             // Condition is respected
             if (executor != null) {
                 // An executor has been found
-                executor.apply(source, arguments);
+
+                if (syntax != null) {
+                    // The executor is from a syntax
+                    final CommandCondition commandCondition = syntax.getCommandCondition();
+                    if (commandCondition == null || commandCondition.canUse(source, commandString)) {
+                        executor.apply(source, arguments);
+                    }
+                } else {
+                    // The executor is probably the default one
+                    executor.apply(source, arguments);
+                }
             } else if (callback != null) {
                 // No syntax has been validated but the faulty argument with a callback has been found
                 // Execute the faulty argument callback

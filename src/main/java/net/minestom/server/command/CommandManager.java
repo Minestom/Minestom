@@ -15,11 +15,15 @@ import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
+import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -37,12 +41,14 @@ public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
 
-    private boolean running;
+    private volatile boolean running;
 
     private final ConsoleSender consoleSender = new ConsoleSender();
 
     private final CommandDispatcher dispatcher = new CommandDispatcher();
     private final Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
+
+    private CommandCallback unknownCommandCallback;
 
     public CommandManager() {
         running = true;
@@ -58,6 +64,7 @@ public final class CommandManager {
                     execute(consoleSender, command);
                 }
             }
+            scanner.close();
         }, "ConsoleCommand-Thread");
         consoleThread.setDaemon(true);
         consoleThread.start();
@@ -153,8 +160,12 @@ public final class CommandManager {
             final String[] splitCommand = command.split(" ");
             final String commandName = splitCommand[0];
             final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
-            if (commandProcessor == null)
+            if (commandProcessor == null) {
+                if (unknownCommandCallback != null) {
+                    this.unknownCommandCallback.apply(sender, command);
+                }
                 return false;
+            }
 
             // Execute the legacy-command
             final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
@@ -162,6 +173,26 @@ public final class CommandManager {
             return commandProcessor.process(sender, commandName, args);
 
         }
+    }
+
+    /**
+     * Gets the callback executed once an unknown command is run.
+     *
+     * @return the unknown command callback, null if not any
+     */
+    @Nullable
+    public CommandCallback getUnknownCommandCallback() {
+        return unknownCommandCallback;
+    }
+
+    /**
+     * Sets the callback executed once an unknown command is run.
+     *
+     * @param unknownCommandCallback the new unknown command callback,
+     *                               setting it to null mean that nothing will be executed
+     */
+    public void setUnknownCommandCallback(@Nullable CommandCallback unknownCommandCallback) {
+        this.unknownCommandCallback = unknownCommandCallback;
     }
 
     /**
@@ -177,7 +208,7 @@ public final class CommandManager {
     /**
      * Gets the {@link DeclareCommandsPacket} for a specific player.
      * <p>
-     * Can be used to update the {@link Player} auto-completion list.
+     * Can be used to update a player auto-completion list.
      *
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
@@ -207,7 +238,7 @@ public final class CommandManager {
             final CommandCondition commandCondition = command.getCondition();
             if (commandCondition != null) {
                 // Do not show command if return false
-                if (!commandCondition.apply(player)) {
+                if (!commandCondition.canUse(player, null)) {
                     continue;
                 }
             }
@@ -220,7 +251,7 @@ public final class CommandManager {
             names.add(command.getName());
             names.addAll(Arrays.asList(command.getAliases()));
             for (String name : names) {
-                createCommand(nodes, cmdChildren, name, syntaxes, rootChildren);
+                createCommand(player, nodes, cmdChildren, name, syntaxes, rootChildren);
             }
 
         }
@@ -284,13 +315,15 @@ public final class CommandManager {
     /**
      * Adds the command's syntaxes to the nodes list.
      *
+     * @param sender       the potential sender of the command
      * @param nodes        the nodes of the packet
      * @param cmdChildren  the main root of this command
      * @param name         the name of the command (or the alias)
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
      */
-    private void createCommand(@NotNull List<DeclareCommandsPacket.Node> nodes,
+    private void createCommand(@NotNull CommandSender sender,
+                               @NotNull List<DeclareCommandsPacket.Node> nodes,
                                @NotNull IntList cmdChildren,
                                @NotNull String name,
                                @NotNull Collection<CommandSyntax> syntaxes,
@@ -307,6 +340,13 @@ public final class CommandManager {
         Map<Argument, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
+            final CommandCondition commandCondition = syntax.getCommandCondition();
+            if (commandCondition != null && !commandCondition.canUse(sender, null)) {
+                // Sender does not have the right to use this syntax, ignore it
+                continue;
+            }
+
+
             // Represent the last nodes computed in the last iteration
             List<DeclareCommandsPacket.Node> lastNodes = null;
 
@@ -404,9 +444,8 @@ public final class CommandManager {
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
 
         // You can uncomment this to test any brigadier parser on the client
-        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable);
-        testNode.parser = "minecraft:entity";
-        testNode.properties = packetWriter -> packetWriter.writeByte((byte) 0x0);
+        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
+        testNode.parser = "minecraft:vec3";
 
         if (true) {
             return nodes;
@@ -559,6 +598,15 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentNbtTag) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:nbt_tag";
+        } else if (argument instanceof ArgumentRelativeBlockPosition) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:block_pos";
+        } else if (argument instanceof ArgumentRelativeVec3) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:vec3";
+        } else if (argument instanceof ArgumentRelativeVec2) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:vec2";
         }
 
         return nodes;

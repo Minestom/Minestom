@@ -1,4 +1,4 @@
-package net.minestom.server.network.packet.server.login;
+package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;

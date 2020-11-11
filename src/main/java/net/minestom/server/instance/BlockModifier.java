@@ -76,7 +76,7 @@ public interface BlockModifier {
         setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block);
     }
 
-    default void setBlockStateId(BlockPosition blockPosition, short blockStateId) {
+    default void setBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
         Check.notNull(blockPosition, "The block position cannot be null");
         setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockStateId);
     }

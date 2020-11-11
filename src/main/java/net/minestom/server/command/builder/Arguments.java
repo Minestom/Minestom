@@ -7,6 +7,8 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.utils.location.RelativeBlockPosition;
+import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
@@ -124,6 +126,16 @@ public final class Arguments {
     @NotNull
     public NBT getNBT(@NotNull String id) {
         return (NBT) getObject(id);
+    }
+
+    @NotNull
+    public RelativeBlockPosition getRelativeBlockPosition(@NotNull String id) {
+        return (RelativeBlockPosition) getObject(id);
+    }
+
+    @NotNull
+    public RelativeVec getRelativeVector(@NotNull String id) {
+        return (RelativeVec) getObject(id);
     }
 
     @NotNull

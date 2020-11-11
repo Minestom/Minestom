@@ -29,6 +29,7 @@ public class PluginMessagePacket implements ServerPacket {
      *
      * @return the current brand name packet
      */
+    @NotNull
     public static PluginMessagePacket getBrandPacket() {
         PluginMessagePacket brandMessage = new PluginMessagePacket();
         brandMessage.channel = "minecraft:brand";

@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
@@ -525,7 +526,8 @@ public class ItemStack implements DataContainer {
                 !attributes.isEmpty() ||
                 hideFlag != 0 ||
                 customModelData != 0 ||
-                (itemMeta != null && itemMeta.hasNbt());
+                (itemMeta != null && itemMeta.hasNbt()) ||
+                (data instanceof NbtDataImpl && !data.isEmpty());
     }
 
     /**
@@ -557,16 +559,25 @@ public class ItemStack implements DataContainer {
         final Data data = getData();
         if (data != null)
             itemStack.setData(data.copy());
+
         return itemStack;
     }
 
+    @Nullable
     @Override
     public Data getData() {
         return data;
     }
 
+    /**
+     * Sets the data of this item.
+     * <p>
+     * It is recommended to use {@link NbtDataImpl} if you want the data to be passed to the client.
+     *
+     * @param data the new {@link Data} of this container, null to remove it
+     */
     @Override
-    public void setData(Data data) {
+    public void setData(@Nullable Data data) {
         this.data = data;
     }
 
@@ -676,6 +687,13 @@ public class ItemStack implements DataContainer {
         return null;
     }
 
+    /**
+     * Creates a {@link NBTCompound} containing the data of this item.
+     * <p>
+     * WARNING: modifying the returned nbt will not affect the item.
+     *
+     * @return this item nbt
+     */
     @NotNull
     public NBTCompound toNBT() {
         NBTCompound compound = new NBTCompound()

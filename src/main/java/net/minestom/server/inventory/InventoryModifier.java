@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Represents an inventory where its items can be modified/retrieved.
+ * Represents an inventory where items can be modified/retrieved.
  */
 public interface InventoryModifier {
 
     /**
-     * Sets an {@link ItemStack} at the specified slot.
+     * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
      *
      * @param slot      the slot to set the item
      * @param itemStack the item to set
@@ -20,7 +20,9 @@ public interface InventoryModifier {
     void setItemStack(int slot, @NotNull ItemStack itemStack);
 
     /**
-     * Adds an {@link ItemStack} to the inventory.
+     * Adds an {@link ItemStack} to the inventory and send relevant update to the viewer(s).
+     * <p>
+     * Even the item cannot be fully added, the amount of {@code itemStack} will be updated.
      *
      * @param itemStack the item to add
      * @return true if the item has been successfully fully added, false otherwise
@@ -28,7 +30,7 @@ public interface InventoryModifier {
     boolean addItemStack(@NotNull ItemStack itemStack);
 
     /**
-     * Clears the inventory.
+     * Clears the inventory and send relevant update to the viewer(s).
      */
     void clear();
 
@@ -59,7 +61,7 @@ public interface InventoryModifier {
     /**
      * Gets all the {@link InventoryCondition} of this inventory.
      *
-     * @return the inventory conditions
+     * @return a modifiable {@link List} containing all the inventory conditions
      */
     @NotNull
     List<InventoryCondition> getInventoryConditions();

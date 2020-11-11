@@ -86,8 +86,7 @@ public final class DataManager {
      *
      * @param clazz the data class
      * @param <T>   the data type
-     * @return the {@link DataType} associated to the class
-     * @throws NullPointerException if none is found
+     * @return the {@link DataType} associated to the class, null if not found
      */
     @Nullable
     public <T> DataType<T> getDataType(@NotNull Class<T> clazz) {

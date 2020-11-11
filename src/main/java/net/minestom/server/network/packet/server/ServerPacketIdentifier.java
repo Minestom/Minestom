@@ -2,6 +2,12 @@ package net.minestom.server.network.packet.server;
 
 public class ServerPacketIdentifier {
 
+    public static final int LOGIN_DISCONNECT = 0x00;
+    public static final int LOGIN_ENCRYPTION_REQUEST = 0x01;
+    public static final int LOGIN_SUCCESS = 0x02;
+    public static final int LOGIN_SET_COMPRESSION = 0x03;
+    public static final int LOGIN_PLUGIN_REQUEST = 0x04;
+
     public static final int SPAWN_ENTITY = 0x00;
     public static final int SPAWN_EXPERIENCE_ORB = 0x01;
     public static final int SPAWN_LIVING_ENTITY = 0x02;

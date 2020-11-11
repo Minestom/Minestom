@@ -5,8 +5,10 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.type.monster.EntityZombie;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -14,7 +16,6 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -144,13 +145,8 @@ public class PlayerInit {
                 Vector velocity = player.getPosition().copy().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
 
-                Instance instance = player.getInstance();
-                InstanceContainer instanceContainer = instance instanceof InstanceContainer ? (InstanceContainer) instance :
-                        ((SharedInstance) instance).getInstanceContainer();
-                SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(instanceContainer);
-                player.setInstance(sharedInstance);
-                player.sendMessage("New instance");
-
+                EntityZombie entityZombie = new EntityZombie(player.getPosition());
+                entityZombie.setInstance(player.getInstance());
             });
 
             player.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -172,11 +168,14 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                if(event.isFirstSpawn()){
+                if (event.isFirstSpawn()) {
                     player.teleport(new Position(0, 64f, 0));
                 }
 
                 ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
+                NbtDataImpl data = new NbtDataImpl();
+                data.set("testc",2);
+                itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
 
                 //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));

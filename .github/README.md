@@ -11,7 +11,7 @@ Minestom is an alternative to the popular Minecraft server API called Bukkit.
 The main difference is that our implementation of the Notchian server does not contain any features by default!
 However, we have a complete API which allows you to make anything possible with current spigot plugins.
 
-This is a developer API not meant to be used by the end-users. Replacing Spigot/Paper with this will **not** work since we do not implement the Bukkit API
+This is a developer API not meant to be used by the end-users. Replacing Spigot/Paper with this will **not** work since we do not implement the Bukkit API.
 
 # Table of contents
 - [Install](#install)
@@ -28,9 +28,11 @@ Minestom is similar to Bukkit in the fact that it is not a standlone program, it
 It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
+This means you need to add Minestom as a dependency, add your code and compile by yourself.
+
 # Usage
 An example of how to use the Minestom library is available [here](/src/test/java/demo).
-Alternatively you can check the official wiki [here](https://github.com/Minestom/Minestom/wiki).
+Alternatively you can check the official wiki [here](https://wiki.minestom.com/).
 
 # Why Minestom?
 Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
@@ -82,6 +84,7 @@ It is a field where Minecraft evolved a lot, inventories are now used a lot as c
 Commands are the simplest way of communication between clients and server. Since 1.13 Minecraft has incorporated a new library denominated "Brigadier", we then integrated an API meant to use the full potential of args types.
 
 # Credits
+* The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project
 * [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) -
    protocol and file formats research.
 * [The Minecraft Wiki](https://minecraft.gamepedia.com/Minecraft_Wiki) for all their useful info

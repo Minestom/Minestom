@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -58,8 +59,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
     @NotNull
-    protected final Instance instance;
-    @NotNull
     protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
 
@@ -76,8 +75,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Data
     protected Data data;
 
-    public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
-        this.instance = instance;
+    public Chunk(@Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
@@ -225,13 +223,12 @@ public abstract class Chunk implements Viewable, DataContainer {
      * <p>
      * The instance and chunk position (X/Z) can be modified using the given arguments.
      *
-     * @param instance the instance of the new chunk
-     * @param chunkX   the new chunk X
-     * @param chunkZ   the new chunK Z
+     * @param chunkX the new chunk X
+     * @param chunkZ the new chunk Z
      * @return a copy of this chunk with a potentially new instance and position
      */
     @NotNull
-    public abstract Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract Chunk copy(int chunkX, int chunkZ);
 
     /**
      * Gets the {@link CustomBlock} at a position.
@@ -282,7 +279,18 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
+     * Creates a {@link Position} object based on this chunk.
+     *
+     * @return the position of this chunk
+     */
+    public Position toPosition() {
+        return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+    }
+
+    /**
      * Gets if this chunk will or had been loaded with a {@link ChunkGenerator}.
+     * <p>
+     * If false, the chunk will be entirely empty when loaded.
      *
      * @return true if this chunk is affected by a {@link ChunkGenerator}
      */

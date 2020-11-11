@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +25,6 @@ public class LoginSuccessPacket implements ServerPacket {
 
     @Override
     public int getId() {
-        return 0x02;
+        return ServerPacketIdentifier.LOGIN_SUCCESS;
     }
 }

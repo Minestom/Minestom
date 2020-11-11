@@ -14,31 +14,34 @@ import net.minestom.server.network.packet.client.handshake.HandshakePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.Readable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PacketProcessor {
+public final class PacketProcessor {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
 
     private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
-    // Protocols
+    // Protocols state
     private final ClientStatusPacketsHandler statusPacketsHandler;
     private final ClientLoginPacketsHandler loginPacketsHandler;
     private final ClientPlayPacketsHandler playPacketsHandler;
 
     public PacketProcessor() {
-
         this.statusPacketsHandler = new ClientStatusPacketsHandler();
         this.loginPacketsHandler = new ClientLoginPacketsHandler();
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    private List<Integer> printBlackList = Arrays.asList(17, 18, 19);
-
-    public void process(ChannelHandlerContext channel, InboundPacket packet) {
+    public void process(@NotNull ChannelHandlerContext channel, @NotNull InboundPacket packet) {
+        // Create the netty player connection object if not existing
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
         );
@@ -48,17 +51,13 @@ public class PacketProcessor {
 
         final ConnectionState connectionState = playerConnection.getConnectionState();
 
-        //if (!printBlackList.contains(id)) {
-        //System.out.println("RECEIVED ID: 0x" + Integer.toHexString(id) + " State: " + connectionState);
-        //}
-
         BinaryReader binaryReader = new BinaryReader(packet.body);
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packet.packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                handshakePacket.read(binaryReader);
+                safeRead(playerConnection, handshakePacket, binaryReader);
                 handshakePacket.process(playerConnection);
             }
             return;
@@ -68,27 +67,51 @@ public class PacketProcessor {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packet.packetId);
-                playPacket.read(binaryReader);
+                safeRead(playerConnection, playPacket, binaryReader);
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
-                loginPacket.read(binaryReader);
+                safeRead(playerConnection, loginPacket, binaryReader);
                 loginPacket.process(playerConnection);
                 break;
             case STATUS:
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
-                statusPacket.read(binaryReader);
+                safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
                 break;
         }
     }
 
+    /**
+     * Retrieves a player connection from its channel.
+     *
+     * @param channel the connection channel
+     * @return the connection of this channel, null if not found
+     */
+    @Nullable
     public PlayerConnection getPlayerConnection(ChannelHandlerContext channel) {
         return connectionPlayerConnectionMap.get(channel);
     }
 
     public void removePlayerConnection(ChannelHandlerContext channel) {
         connectionPlayerConnectionMap.remove(channel);
+    }
+
+    /**
+     * Calls {@link Readable#read(BinaryReader)} and catch all the exceptions to be printed using the packet processor logger.
+     *
+     * @param connection the connection who sent the packet
+     * @param readable   the readable interface
+     * @param reader     the buffer containing the packet
+     */
+    private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
+        try {
+            readable.read(reader);
+        } catch (Exception e) {
+            final Player player = connection.getPlayer();
+            final String username = player != null ? player.getUsername() : "null";
+            LOGGER.warn("Connection " + connection.getRemoteAddress() + " (" + username + ") sent an unexpected packet.");
+        }
     }
 }

@@ -7,7 +7,7 @@ import net.minestom.server.instance.block.rule.vanilla.AxisPlacementRule;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
 
-public class PlacementRules {
+public final class PlacementRules {
 
 	public static void init() {
 		BlockManager blockManager = MinecraftServer.getBlockManager();

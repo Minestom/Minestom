@@ -3,6 +3,7 @@ package demo;
 import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
+import demo.commands.GamemodeCommand;
 import demo.commands.TestCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
@@ -27,14 +28,17 @@ public class Main {
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
-        //commandManager.register(new EntitySelectorCommand());
         commandManager.register(new TestCommand());
-        /*commandManager.register(new HealthCommand());
+        commandManager.register(new GamemodeCommand());
+        /*commandManager.register(new EntitySelectorCommand());
+        commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
         commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());*/
+
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 
 
         StorageManager storageManager = MinecraftServer.getStorageManager();
@@ -46,7 +50,10 @@ public class Main {
 
         PlayerInit.init();
 
-        //MojangAuth.init();
+        //VelocityProxy.enable("rBeJJ79W4MVU");
+        //BungeeCordProxy.enable();
+
+       // MojangAuth.init();
 
         minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
     }

@@ -1,5 +1,8 @@
 package net.minestom.server.timer;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +40,7 @@ public class Task implements Runnable {
      * @param delay            The time to delay
      * @param repeat           The time until the repetition
      */
-    public Task(SchedulerManager schedulerManager, Runnable runnable, boolean shutdown, long delay, long repeat) {
+    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat) {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
@@ -84,6 +87,7 @@ public class Task implements Runnable {
      *
      * @return the current stats of the task
      */
+    @NotNull
     public TaskStatus getStatus() {
         if (this.future == null) return TaskStatus.SCHEDULED;
         if (this.future.isCancelled()) return TaskStatus.CANCELLED;
@@ -116,13 +120,16 @@ public class Task implements Runnable {
     }
 
     /**
-     * Removes the task.
+     * Removes the task from the {@link SchedulerManager} map.
      */
     private void finish() {
-        if (this.shutdown)
-            this.schedulerManager.removeShutdownTask(this);
-        else
-            this.schedulerManager.removeTask(this);
+        Int2ObjectMap<Task> taskMap = shutdown ?
+                this.schedulerManager.shutdownTasks :
+                this.schedulerManager.tasks;
+
+        synchronized (taskMap) {
+            taskMap.remove(getId());
+        }
     }
 
     @Override

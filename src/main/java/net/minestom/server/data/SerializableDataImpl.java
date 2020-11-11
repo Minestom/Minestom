@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * {@link SerializableData} implementation based on {@link DataImpl}
+ * {@link SerializableData} implementation based on {@link DataImpl}.
  */
 public class SerializableDataImpl extends DataImpl implements SerializableData {
 
@@ -25,15 +25,9 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
     private static final ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
 
     /**
-     * Data key -> Class
-     * Used to know the type of an element of this data object (for serialization purpose)
-     */
-    private final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
-
-    /**
-     * Set a value to a specific key
+     * Sets a value to a specific key.
      * <p>
-     * WARNING: the type needs to be registered in {@link DataManager}
+     * WARNING: the type needs to be registered in {@link DataManager}.
      *
      * @param key   the key
      * @param value the value object
@@ -42,18 +36,12 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
      * @throws UnsupportedOperationException if {@code type} is not registered in {@link DataManager}
      */
     @Override
-    public <T> void set(@NotNull String key, @Nullable T value, @NotNull Class<T> type) {
-        if (value != null) {
-            if (DATA_MANAGER.getDataType(type) == null) {
-                throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
-            }
-
-            this.data.put(key, value);
-            this.dataType.put(key, type);
-        } else {
-            this.data.remove(key);
-            this.dataType.remove(key);
+    public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
+        if (type != null && DATA_MANAGER.getDataType(type) == null) {
+            throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
         }
+
+        super.set(key, value, type);
     }
 
     @NotNull

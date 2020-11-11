@@ -1,14 +1,15 @@
 package net.minestom.server.permission;
 
 import net.minestom.server.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Basic {@link Permission} implementation that only requires the permission to be given to the {@link CommandSender} to be considered applied
  * (eg. no arguments)
  */
-public class BasicPermission implements Permission {
+public class BasicPermission implements Permission<Object> {
     @Override
-    public boolean isValidFor(CommandSender commandSender) {
+    public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
         return true;
     }
 }

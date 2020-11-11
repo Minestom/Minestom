@@ -1,7 +1,7 @@
 package net.minestom.server.bossbar;
 
 /**
- * Used to define the number of segments on a {@link BossBar}
+ * Used to define the number of segments on a {@link BossBar}.
  */
 public enum BarDivision {
     SOLID,

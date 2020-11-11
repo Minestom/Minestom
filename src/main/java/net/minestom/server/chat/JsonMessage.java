@@ -58,7 +58,7 @@ public abstract class JsonMessage {
 
     public static class RawJsonMessage extends JsonMessage {
 
-        private JsonObject jsonObject;
+        private final JsonObject jsonObject;
 
         public RawJsonMessage(@NotNull JsonObject jsonObject) {
             this.jsonObject = jsonObject;

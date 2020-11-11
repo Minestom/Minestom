@@ -6,6 +6,7 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +38,10 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public void saveChunk(@NotNull Chunk chunk, Runnable callback) {
+    public void saveChunk(@NotNull Chunk chunk, @Nullable Runnable callback) {
         final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         if (storageLocation == null) {
-            callback.run();
+            OptionalCallback.execute(callback);
             LOGGER.warn("No storage location to save chunk!");
             return;
         }
@@ -65,7 +66,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final StorageLocation storageLocation = instanceContainer.getStorageLocation();
         final byte[] bytes = storageLocation == null ? null : storageLocation.get(getChunkKey(chunkX, chunkZ));
 
@@ -76,7 +77,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             // Found, load from result bytes
             BinaryReader reader = new BinaryReader(bytes);
             // Create the chunk object using the instance's ChunkSupplier to support multiple implementations
-            Chunk chunk = instanceContainer.getChunkSupplier().getChunk(instance, null, chunkX, chunkZ);
+            Chunk chunk = instanceContainer.getChunkSupplier().getChunk(null, chunkX, chunkZ);
             // Execute the callback once all blocks are placed (allow for multithreaded implementations)
             chunk.readChunk(reader, callback);
             return true;

@@ -1,25 +1,44 @@
 package net.minestom.server.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PrimitiveConversion {
 
+    private static Map<Class, Class> primitiveToBoxedTypeMap = new HashMap<>();
+
+    static {
+        // Primitive
+        primitiveToBoxedTypeMap.put(boolean.class, Boolean.class);
+        primitiveToBoxedTypeMap.put(byte.class, Byte.class);
+        primitiveToBoxedTypeMap.put(char.class, Character.class);
+        primitiveToBoxedTypeMap.put(short.class, Short.class);
+        primitiveToBoxedTypeMap.put(int.class, Integer.class);
+        primitiveToBoxedTypeMap.put(long.class, Long.class);
+        primitiveToBoxedTypeMap.put(float.class, Float.class);
+        primitiveToBoxedTypeMap.put(double.class, Double.class);
+
+        // Primitive one dimension array
+        primitiveToBoxedTypeMap.put(boolean[].class, Boolean[].class);
+        primitiveToBoxedTypeMap.put(byte[].class, Byte[].class);
+        primitiveToBoxedTypeMap.put(char[].class, Character[].class);
+        primitiveToBoxedTypeMap.put(short[].class, Short[].class);
+        primitiveToBoxedTypeMap.put(int[].class, Integer[].class);
+        primitiveToBoxedTypeMap.put(long[].class, Long[].class);
+        primitiveToBoxedTypeMap.put(float[].class, Float[].class);
+        primitiveToBoxedTypeMap.put(double[].class, Double[].class);
+    }
+
+    /**
+     * Converts primitive types to their boxed version.
+     * <p>
+     * Used to avoid needing to double-check everything
+     *
+     * @param clazz the class to convert
+     * @return the boxed class type of the primitive one, {@code clazz} otherwise
+     */
     public static Class getObjectClass(Class clazz) {
-        if (clazz == boolean.class)
-            return Boolean.class;
-        if (clazz == byte.class)
-            return Byte.class;
-        if (clazz == char.class)
-            return Character.class;
-        if (clazz == short.class)
-            return Short.class;
-        if (clazz == int.class)
-            return Integer.class;
-        if (clazz == long.class)
-            return Long.class;
-        if (clazz == float.class)
-            return Float.class;
-        if (clazz == double.class)
-            return Double.class;
-        return clazz;
+        return primitiveToBoxedTypeMap.getOrDefault(clazz, clazz);
     }
 
     public static String getObjectClassString(String clazz) {

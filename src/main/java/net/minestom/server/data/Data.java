@@ -56,10 +56,24 @@ public interface Data {
      *
      * @param key   the key
      * @param value the value object, null to remove the key
-     * @param type  the value type, can be null if not in a {@link SerializableData}
+     * @param type  the value type, {@link #set(String, Object)} can be used instead.
+     *              null if {@code value} is also null
      * @param <T>   the value generic
      */
     <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type);
+
+    /**
+     * Assigns a value to a specific key.
+     * <p>
+     * Will by default call {@link #set(String, Object, Class)} with the type sets to {@link T#getClass()}.
+     *
+     * @param key   the key
+     * @param value the value object, null to remove the key
+     * @param <T>   the value generic
+     */
+    default <T> void set(@NotNull String key, @Nullable T value) {
+        set(key, value, value != null ? (Class<T>) value.getClass() : null);
+    }
 
     /**
      * Retrieves a value based on its key.

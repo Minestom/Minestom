@@ -54,6 +54,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,13 +70,13 @@ import java.util.Collection;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public class MinecraftServer {
+public final class MinecraftServer {
 
     @Getter
     private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.16.3";
-    public static final int PROTOCOL_VERSION = 753;
+    public static final String VERSION_NAME = "1.16.4";
+    public static final int PROTOCOL_VERSION = 754;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -227,15 +228,18 @@ public class MinecraftServer {
      *
      * @return the server brand name
      */
+    @NotNull
     public static String getBrandName() {
         return brandName;
     }
 
     /**
-     * Changes the server brand name, update the name to all connected players.
+     * Changes the server brand name and send the change to all connected players.
      *
      * @param brandName the server brand name
+     * @throws NullPointerException if {@code brandName} is null
      */
+    @NotNull
     public static void setBrandName(String brandName) {
         Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
@@ -267,6 +271,7 @@ public class MinecraftServer {
      *
      * @return the server difficulty
      */
+    @NotNull
     public static Difficulty getDifficulty() {
         return difficulty;
     }
@@ -276,13 +281,15 @@ public class MinecraftServer {
      *
      * @param difficulty the new server difficulty
      */
-    public static void setDifficulty(Difficulty difficulty) {
+    @NotNull
+    public static void setDifficulty(@NotNull Difficulty difficulty) {
+        Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
         // The difficulty packet
         ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
         serverDifficultyPacket.difficulty = difficulty;
-        serverDifficultyPacket.locked = true; // Can only be modified on singleplayer
+        serverDifficultyPacket.locked = true; // Can only be modified on single-player
         // Send the packet to all online players
         PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
     }
@@ -439,10 +446,11 @@ public class MinecraftServer {
      * Changes the chunk view distance of the server.
      *
      * @param chunkViewDistance the new chunk view distance
-     * @throws IllegalStateException if this is called after the server started
+     * @throws IllegalArgumentException if {@code chunkViewDistance} is not between 2 and 32
      */
     public static void setChunkViewDistance(int chunkViewDistance) {
-        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32), "The chunk view distance needs to be between 2 and 32");
+        Check.argCondition(!MathUtils.isBetween(chunkViewDistance, 2, 32),
+                "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
             UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
@@ -472,15 +480,22 @@ public class MinecraftServer {
 
     /**
      * Changes the entity view distance of the server.
-     * <p>
-     * WARNING: this need to be called before {@link #start(String, int, ResponseDataConsumer)}.
      *
      * @param entityViewDistance the new entity view distance
-     * @throws IllegalStateException if this is called after the server started
+     * @throws IllegalArgumentException if {@code entityViewDistance} is not between 0 and 32
      */
     public static void setEntityViewDistance(int entityViewDistance) {
-        Check.stateCondition(started, "The entity view distance cannot be changed after the server has been started.");
+        Check.argCondition(!MathUtils.isBetween(entityViewDistance, 0, 32),
+                "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
+        if (started) {
+            connectionManager.getOnlinePlayers().forEach(player -> {
+                final Chunk playerChunk = player.getChunk();
+                if (playerChunk != null) {
+                    player.refreshVisibleEntities(playerChunk);
+                }
+            });
+        }
     }
 
     /**
@@ -587,12 +602,15 @@ public class MinecraftServer {
 
     /**
      * Starts the server.
+     * <p>
+     * It should be called after {@link #init()} and probably your own initialization code.
      *
      * @param address              the server address
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
+     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(String address, int port, ResponseDataConsumer responseDataConsumer) {
+    public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
@@ -607,7 +625,8 @@ public class MinecraftServer {
         extensionManager.getExtensions().forEach(Extension::initialize);
         extensionManager.getExtensions().forEach(Extension::postInitialize);
 
-        LOGGER.info("Extensions loaded in " + (t1 + System.nanoTime()) / 1_000_000D + "ms");
+        final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
+        LOGGER.info("Extensions loaded in " + loadTime + "ms");
         LOGGER.info("Minestom server started successfully.");
 
         MinecraftServer.started = true;
@@ -618,8 +637,9 @@ public class MinecraftServer {
      *
      * @param address the server address
      * @param port    the server port
+     * @see #start(String, int, ResponseDataConsumer)
      */
-    public void start(String address, int port) {
+    public void start(@NotNull String address, int port) {
         start(address, port, null);
     }
 

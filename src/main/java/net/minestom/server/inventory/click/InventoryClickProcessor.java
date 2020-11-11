@@ -199,13 +199,13 @@ public class InventoryClickProcessor {
 
                     clickResult = startCondition(clickResult, inventory, player, index, ClickType.SHIFT_CLICK, item, cursor);
                     if (clickResult.isCancel())
-                        continue;
+                        break;
 
                     final int amount = itemRule.getAmount(item);
                     if (!clickedRule.canApply(clicked, amount + 1))
                         continue;
 
-                    int totalAmount = clickedRule.getAmount(resultClicked) + amount;
+                    final int totalAmount = clickedRule.getAmount(resultClicked) + amount;
                     if (!clickedRule.canApply(clicked, totalAmount)) {
                         item = itemRule.apply(item, itemRule.getMaxSize());
                         itemSetter.accept(index, item);
@@ -230,7 +230,7 @@ public class InventoryClickProcessor {
 
                     clickResult = startCondition(clickResult, inventory, player, index, ClickType.SHIFT_CLICK, item, cursor);
                     if (clickResult.isCancel())
-                        continue;
+                        break;
 
                     // Switch
                     itemSetter.accept(index, resultClicked);
@@ -278,12 +278,12 @@ public class InventoryClickProcessor {
                 int finalCursorAmount = cursorAmount;
 
                 for (Integer s : slots) {
-                    ItemStack draggedItem = cursor.copy();
+                    final ItemStack draggedItem = cursor.copy();
                     ItemStack slotItem = itemGetter.apply(s);
 
                     clickResult = startCondition(clickResult, inventory, player, s, ClickType.DRAGGING, slotItem, cursor);
                     if (clickResult.isCancel())
-                        continue;
+                        break;
 
                     final int maxSize = stackingRule.getMaxSize();
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
@@ -323,7 +323,7 @@ public class InventoryClickProcessor {
 
                     clickResult = startCondition(clickResult, inventory, player, s, ClickType.DRAGGING, slotItem, cursor);
                     if (clickResult.isCancel())
-                        continue;
+                        break;
 
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         final int amount = slotItem.getAmount() + 1;
@@ -399,7 +399,7 @@ public class InventoryClickProcessor {
                 if (cursorRule.canBeStacked(cursor, item)) {
                     clickResult = startCondition(clickResult, inventory, player, index, ClickType.DOUBLE_CLICK, item, cursor);
                     if (clickResult.isCancel())
-                        continue;
+                        break;
 
                     final int totalAmount = amount + cursorRule.getAmount(item);
                     if (!cursorRule.canApply(cursor, totalAmount)) {

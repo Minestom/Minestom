@@ -29,16 +29,34 @@ public abstract class Argument<T> {
 
     private ArgumentCallback callback;
 
+    /**
+     * Creates a new argument.
+     *
+     * @param id           the id of the argument, used to retrieve the parsed value
+     * @param allowSpace   true if the argument can/should have spaces in it
+     * @param useRemaining true if the argument will always take the rest of the command arguments
+     */
     public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
         this.id = id;
         this.allowSpace = allowSpace;
         this.useRemaining = useRemaining;
     }
 
+    /**
+     * Creates a new argument with {@code useRemaining} sets to false.
+     *
+     * @param id         the id of the argument, used to retrieve the parsed value
+     * @param allowSpace true if the argument can/should have spaces in it
+     */
     public Argument(@NotNull String id, boolean allowSpace) {
         this(id, allowSpace, false);
     }
 
+    /**
+     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
+     *
+     * @param id the id of the argument, used to retrieve the parsed value
+     */
     public Argument(@NotNull String id) {
         this(id, false, false);
     }
@@ -100,8 +118,8 @@ public abstract class Argument<T> {
     /**
      * Gets if the argument always use all the remaining characters.
      * <p>
-     * ex: /help I am a test - would get you "I am a test"
-     * if the sole argument does use the remaining.
+     * ex: /help I am a test - will always give you "I am a test"
+     * if the first and single argument does use the remaining.
      *
      * @return true if the argument use all the remaining characters, false otherwise
      */

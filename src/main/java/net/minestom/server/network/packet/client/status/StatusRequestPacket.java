@@ -22,7 +22,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
         responseData.setMaxPlayer(0);
         responseData.setOnline(0);
         responseData.setDescription("Minestom Server");
-        responseData.setFavicon("data:image/png;base64,<data>");
+        responseData.setFavicon("");
 
         if (consumer != null)
             consumer.accept(connection, responseData);

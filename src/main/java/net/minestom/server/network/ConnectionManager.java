@@ -5,8 +5,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Manages the connected clients.
@@ -93,7 +94,7 @@ public final class ConnectionManager {
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
      */
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable Function<Player, Boolean> condition) {
+    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
         final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
@@ -117,7 +118,7 @@ public final class ConnectionManager {
         PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
     }
 
-    private Collection<Player> getRecipients(@Nullable Function<Player, Boolean> condition) {
+    private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
         Collection<Player> recipients;
 
         // Get the recipients
@@ -126,7 +127,7 @@ public final class ConnectionManager {
         } else {
             recipients = new ArrayList<>();
             getOnlinePlayers().forEach(player -> {
-                final boolean result = condition.apply(player);
+                final boolean result = condition.isValid(player);
                 if (result)
                     recipients.add(player);
             });
@@ -259,6 +260,7 @@ public final class ConnectionManager {
      * Used during disconnection, you shouldn't have to do it manually.
      *
      * @param connection the player connection
+     * @see PlayerConnection#disconnect() to properly disconnect a player
      */
     public void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
@@ -267,5 +269,20 @@ public final class ConnectionManager {
 
         this.players.remove(player);
         this.connectionPlayerMap.remove(connection);
+    }
+
+    /**
+     * Sends a {@link LoginSuccessPacket} and change the connection state to {@link ConnectionState#PLAY}.
+     *
+     * @param connection the player connection
+     * @param uuid       the uuid of the player
+     * @param username   the username of the player
+     */
+    public void startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
+        LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
+        connection.sendPacket(loginSuccessPacket);
+
+        connection.setConnectionState(ConnectionState.PLAY);
+        createPlayer(uuid, username, connection);
     }
 }

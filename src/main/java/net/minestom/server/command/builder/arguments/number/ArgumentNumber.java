@@ -16,7 +16,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     protected T min, max;
 
     public ArgumentNumber(String id) {
-        super(id, false);
+        super(id);
     }
 
     @NotNull

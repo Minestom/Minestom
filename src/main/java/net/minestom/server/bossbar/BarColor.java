@@ -1,7 +1,7 @@
 package net.minestom.server.bossbar;
 
 /**
- * Represents the displayed color of a {@link BossBar}
+ * Represents the displayed color of a {@link BossBar}.
  */
 public enum BarColor {
     PINK,

@@ -34,7 +34,6 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.login.JoinGamePacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -80,6 +79,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     private String username;
     protected final PlayerConnection playerConnection;
+    // All the entities that this player can see
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
     private int latency;
@@ -398,63 +398,72 @@ public class Player extends LivingEntity implements CommandSender {
         // Multiplayer sync
         final boolean positionChanged = position.getX() != lastX || position.getY() != lastY || position.getZ() != lastZ;
         final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
-        if (!getViewers().isEmpty() && (positionChanged || viewChanged)) {
-            ServerPacket updatePacket;
-            ServerPacket optionalUpdatePacket = null;
-            if (positionChanged && viewChanged) {
-                EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
-                entityPositionAndRotationPacket.entityId = getEntityId();
-                entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-                entityPositionAndRotationPacket.yaw = position.getYaw();
-                entityPositionAndRotationPacket.pitch = position.getPitch();
-                entityPositionAndRotationPacket.onGround = onGround;
+        if (!viewers.isEmpty()) {
+            if (positionChanged || viewChanged) {
+                // Player moved since last time
 
-                lastX = position.getX();
-                lastY = position.getY();
-                lastZ = position.getZ();
-                lastYaw = position.getYaw();
-                lastPitch = position.getPitch();
-                updatePacket = entityPositionAndRotationPacket;
-            } else if (positionChanged) {
-                EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
-                entityPositionPacket.entityId = getEntityId();
-                entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
-                entityPositionPacket.onGround = onGround;
-                lastX = position.getX();
-                lastY = position.getY();
-                lastZ = position.getZ();
-                updatePacket = entityPositionPacket;
+                ServerPacket updatePacket;
+                ServerPacket optionalUpdatePacket = null;
+                if (positionChanged && viewChanged) {
+                    EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
+                    entityPositionAndRotationPacket.entityId = getEntityId();
+                    entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                    entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                    entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                    entityPositionAndRotationPacket.yaw = position.getYaw();
+                    entityPositionAndRotationPacket.pitch = position.getPitch();
+                    entityPositionAndRotationPacket.onGround = onGround;
+
+                    lastX = position.getX();
+                    lastY = position.getY();
+                    lastZ = position.getZ();
+                    lastYaw = position.getYaw();
+                    lastPitch = position.getPitch();
+                    updatePacket = entityPositionAndRotationPacket;
+                } else if (positionChanged) {
+                    EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
+                    entityPositionPacket.entityId = getEntityId();
+                    entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
+                    entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
+                    entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                    entityPositionPacket.onGround = onGround;
+                    lastX = position.getX();
+                    lastY = position.getY();
+                    lastZ = position.getZ();
+                    updatePacket = entityPositionPacket;
+                } else {
+                    // View changed
+                    EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+                    entityRotationPacket.entityId = getEntityId();
+                    entityRotationPacket.yaw = position.getYaw();
+                    entityRotationPacket.pitch = position.getPitch();
+                    entityRotationPacket.onGround = onGround;
+
+                    lastYaw = position.getYaw();
+                    lastPitch = position.getPitch();
+                    updatePacket = entityRotationPacket;
+                }
+
+                if (viewChanged) {
+                    EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+                    entityHeadLookPacket.entityId = getEntityId();
+                    entityHeadLookPacket.yaw = position.getYaw();
+                    optionalUpdatePacket = entityHeadLookPacket;
+                }
+
+                // Send the update packet
+                if (optionalUpdatePacket != null) {
+                    sendPacketsToViewers(updatePacket, optionalUpdatePacket);
+                } else {
+                    sendPacketToViewers(updatePacket);
+                }
+
             } else {
-                // View changed
-                EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
-                entityRotationPacket.entityId = getEntityId();
-                entityRotationPacket.yaw = position.getYaw();
-                entityRotationPacket.pitch = position.getPitch();
-                entityRotationPacket.onGround = onGround;
-
-                lastYaw = position.getYaw();
-                lastPitch = position.getPitch();
-                updatePacket = entityRotationPacket;
+                // Player did not move since last time
+                EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
+                entityMovementPacket.entityId = getEntityId();
+                sendPacketToViewers(entityMovementPacket);
             }
-
-            if (viewChanged) {
-                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                entityHeadLookPacket.entityId = getEntityId();
-                entityHeadLookPacket.yaw = position.getYaw();
-                optionalUpdatePacket = entityHeadLookPacket;
-            }
-
-            // Send the update packet
-            if (optionalUpdatePacket != null) {
-                sendPacketsToViewers(updatePacket, optionalUpdatePacket);
-            } else {
-                sendPacketToViewers(updatePacket);
-            }
-
         }
 
     }
@@ -1028,6 +1037,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food bar.
      *
      * @param food the new food value
+     * @throws IllegalArgumentException if {@code food} is not between 0 and 20
      */
     public void setFood(int food) {
         Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
@@ -1043,6 +1053,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food saturation.
      *
      * @param foodSaturation the food saturation
+     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 5
      */
     public void setFoodSaturation(float foodSaturation) {
         Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 5), "Food saturation has to be between 0 and 5");
@@ -1217,7 +1228,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param resourcePack the resource pack
      */
-    public void setResourcePack(ResourcePack resourcePack) {
+    public void setResourcePack(@NotNull ResourcePack resourcePack) {
         Check.notNull(resourcePack, "The resource pack cannot be null");
         final String url = resourcePack.getUrl();
         final String hash = resourcePack.getHash();
@@ -1366,6 +1377,7 @@ public class Player extends LivingEntity implements CommandSender {
      * This cannot change the displayed level, see {@link #setLevel(int)}.
      *
      * @param exp a percentage between 0 and 1
+     * @throws IllegalArgumentException if {@code exp} is not between 0 and 1
      */
     public void setExp(float exp) {
         Check.argCondition(!MathUtils.isBetween(exp, 0, 1), "Exp should be between 0 and 1");
@@ -1406,12 +1418,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Called when the player changes chunk (move from one to another).
-     * Can also be used to refresh the list of chunks that the client should see.
+     * Can also be used to refresh the list of chunks that the client should see based on {@link #getChunkRange()}.
      * <p>
      * It does remove and add the player from the chunks viewers list when removed or added.
      * It also calls the events {@link PlayerChunkUnloadEvent} and {@link PlayerChunkLoadEvent}.
      *
-     * @param newChunk the current/new player chunk
+     * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
         // Previous chunks indexes
@@ -1420,7 +1432,7 @@ public class Player extends LivingEntity implements CommandSender {
         ).toArray();
 
         // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(new Position(16 * newChunk.getChunkX(), 0, 16 * newChunk.getChunkZ()), getChunkRange());
+        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
 
         // Find the difference between the two arrays¬
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
@@ -1442,7 +1454,7 @@ public class Player extends LivingEntity implements CommandSender {
                 chunk.removeViewer(this);
         }
 
-        // Not sure what it does...
+        // Update client render distance
         updateViewPosition(newChunk);
 
         // Load new chunks
@@ -1459,6 +1471,52 @@ public class Player extends LivingEntity implements CommandSender {
                 chunk.addViewer(this);
             });
         }
+    }
+
+    /**
+     * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
+     * and {@link Entity#isAutoViewable()}.
+     *
+     * @param newChunk the new chunk of the player (can be the current one)
+     */
+    public void refreshVisibleEntities(@NotNull Chunk newChunk) {
+        final int entityViewDistance = MinecraftServer.getEntityViewDistance();
+        final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
+
+        // Manage already viewable entities
+        this.viewableEntities.forEach(entity -> {
+            final float distance = entity.getDistance(this);
+            if (distance > maximalDistance) {
+                // Entity shouldn't be viewable anymore
+                if (isAutoViewable()) {
+                    entity.removeViewer(this);
+                }
+                if (entity instanceof Player && entity.isAutoViewable()) {
+                    removeViewer((Player) entity);
+                }
+            }
+        });
+
+        // Manage entities in unchecked chunks
+        final long[] chunksInRange = ChunkUtils.getChunksInRange(newChunk.toPosition(), entityViewDistance);
+
+        for (long chunkIndex : chunksInRange) {
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+            if (chunk == null)
+                continue;
+            instance.getChunkEntities(chunk).forEach(entity -> {
+                if (isAutoViewable() && !entity.viewers.contains(this)) {
+                    entity.addViewer(this);
+                }
+
+                if (entity instanceof Player && entity.isAutoViewable() && !viewers.contains(entity)) {
+                    addViewer((Player) entity);
+                }
+            });
+        }
+
     }
 
     @Override
@@ -1833,6 +1891,7 @@ public class Player extends LivingEntity implements CommandSender {
      * Changes the player permission level.
      *
      * @param permissionLevel the new player permission level
+     * @throws IllegalArgumentException if {@code permissionLevel} is not between 0 and 4
      */
     public void setPermissionLevel(int permissionLevel) {
         Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");
