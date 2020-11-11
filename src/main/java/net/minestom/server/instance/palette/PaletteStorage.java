@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
@@ -22,7 +24,7 @@ public class PaletteStorage {
     private final static int BLOCK_COUNT = CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE;
 
     private int bitsPerEntry;
-    private int bitsIncrement;
+    private final int bitsIncrement;
 
     private int valuesPerLong;
     private boolean hasPalette;
@@ -41,10 +43,11 @@ public class PaletteStorage {
     }
 
     public PaletteStorage(int bitsPerEntry, int bitsIncrement) {
+        Check.argCondition(bitsPerEntry > MAXIMUM_BITS_PER_ENTRY, "The maximum bits per entry is 15");
         // Change the bitsPerEntry to be valid
         if (bitsPerEntry < 4) {
             bitsPerEntry = 4;
-        } else if (MathUtils.isBetween(bitsPerEntry, 9, 14) || bitsPerEntry > MAXIMUM_BITS_PER_ENTRY) {
+        } else if (MathUtils.isBetween(bitsPerEntry, 9, 14)) {
             bitsPerEntry = MAXIMUM_BITS_PER_ENTRY;
         }
 
@@ -171,7 +174,14 @@ public class PaletteStorage {
         return 1 << bitsPerEntry;
     }
 
-    private static void setBlockAt(PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
+    // Magic values generated with "Integer.MAX_VALUE >> (31 - bitsPerIndex)" for bitsPerIndex between 4 and 15
+    private static final int[] MAGIC_MASKS =
+            {0, 0, 0, 0,
+                    15, 31, 63, 127, 255,
+                    511, 1023, 2047, 4095,
+                    8191, 16383, 32767};
+
+    private static void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
@@ -190,28 +200,29 @@ public class PaletteStorage {
 
         if (paletteStorage.sectionBlocks[section].length == 0) {
             if (blockId == 0) {
+                // Section is empty and method is trying to place an air block, stop unnecessary computation
                 return;
             }
 
+            // Initialize the section
             paletteStorage.sectionBlocks[section] = new long[getSize(valuesPerLong)];
         }
 
-        long[] sectionBlock = paletteStorage.sectionBlocks[section];
+        final long[] sectionBlock = paletteStorage.sectionBlocks[section];
 
         long block = sectionBlock[index];
         {
-            final long clear = Integer.MAX_VALUE >> (31 - bitsPerEntry);
+            final long clear = MAGIC_MASKS[bitsPerEntry];
 
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
             block |= (long) blockId << bitIndex;
 
             sectionBlock[index] = block;
-
         }
     }
 
-    private static short getBlockAt(PaletteStorage paletteStorage, int x, int y, int z) {
+    private static short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
@@ -228,18 +239,16 @@ public class PaletteStorage {
         final long[] blocks = paletteStorage.sectionBlocks[section];
 
         if (blocks.length == 0) {
+            // Section is not loaded, can only be air
             return 0;
         }
 
-        long mask = Integer.MAX_VALUE >> (31 - bitsPerEntry);
-        long value = blocks[index] >> bitIndex & mask;
+        final long value = blocks[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry];
 
-        // Change to palette value
-        final short blockId = paletteStorage.hasPalette ?
+        // Change to palette value and return
+        return paletteStorage.hasPalette ?
                 paletteStorage.paletteBlockMap.get((short) value) :
                 (short) value;
-
-        return blockId;
     }
 
     private static int getSize(int valuesPerLong) {

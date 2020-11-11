@@ -239,8 +239,7 @@ public final class MinecraftServer {
      * @param brandName the server brand name
      * @throws NullPointerException if {@code brandName} is null
      */
-    @NotNull
-    public static void setBrandName(String brandName) {
+    public static void setBrandName(@NotNull String brandName) {
         Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
@@ -281,7 +280,6 @@ public final class MinecraftServer {
      *
      * @param difficulty the new server difficulty
      */
-    @NotNull
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;

@@ -67,11 +67,14 @@ public final class UpdateManager {
                 // Server tick (chunks/entities)
                 serverTick(tickStart);
 
+                // the time that the tick took in nanoseconds
+                final long tickTime = System.nanoTime() - currentTime;
+
                 // Tick end callbacks
-                doTickCallback(tickEndCallbacks, (System.nanoTime() - currentTime) / 1000000);
+                doTickCallback(tickEndCallbacks, tickTime / 1000000);
 
                 // Sleep until next tick
-                final long sleepTime = Math.max(1, (tickDistance - (System.nanoTime() - currentTime)) / 1000000);
+                final long sleepTime = Math.max(1, (tickDistance - tickTime) / 1000000);
 
                 try {
                     Thread.sleep(sleepTime);
