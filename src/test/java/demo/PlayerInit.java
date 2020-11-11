@@ -43,7 +43,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         final int loopStart = -3;

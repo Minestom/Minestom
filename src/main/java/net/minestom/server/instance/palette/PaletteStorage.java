@@ -8,16 +8,19 @@ import static net.minestom.server.instance.Chunk.*;
 
 public class PaletteStorage {
 
+    private final static int PALETTE_MAXIMUM_BITS = 8;
+
     private int bitsPerEntry;
 
     private int valuesPerLong;
+    private boolean hasPalette;
 
     private long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
 
     // palette index = block id
-    private Short2ShortLinkedOpenHashMap paletteBlockMap = new Short2ShortLinkedOpenHashMap(CHUNK_SECTION_SIZE, 2);
+    private Short2ShortLinkedOpenHashMap paletteBlockMap = new Short2ShortLinkedOpenHashMap(CHUNK_SECTION_SIZE);
     // block id = palette index
-    private Short2ShortOpenHashMap blockPaletteMap = new Short2ShortOpenHashMap(CHUNK_SECTION_SIZE, 2);
+    private Short2ShortOpenHashMap blockPaletteMap = new Short2ShortOpenHashMap(CHUNK_SECTION_SIZE);
 
     {
         // Default value
@@ -28,9 +31,14 @@ public class PaletteStorage {
     public PaletteStorage(int bitsPerEntry) {
         this.bitsPerEntry = bitsPerEntry;
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
+        this.hasPalette = bitsPerEntry <= PALETTE_MAXIMUM_BITS;
     }
 
-    private short getPaletteIndex(short blockId) {
+    private synchronized short getPaletteIndex(short blockId) {
+        if (!hasPalette) {
+            return blockId;
+        }
+
         if (!blockPaletteMap.containsKey(blockId)) {
             final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
             this.paletteBlockMap.put(paletteIndex, blockId);
@@ -160,7 +168,7 @@ public class PaletteStorage {
     }
 
     public short[] getPalette() {
-        return paletteBlockMap.keySet().toShortArray();
+        return paletteBlockMap.values().toShortArray();
     }
 
     public long[][] getSectionBlocks() {
