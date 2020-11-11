@@ -9,6 +9,12 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
+/**
+ * Used to efficiently store blocks with an optional palette.
+ * <p>
+ * The format used is the one described in the {@link net.minestom.server.network.packet.server.play.ChunkDataPacket},
+ * the reason is that it allows us to write the packet much faster.
+ */
 public class PaletteStorage {
 
     private final static int MAXIMUM_BITS_PER_ENTRY = 15;
@@ -49,6 +55,90 @@ public class PaletteStorage {
         this.hasPalette = bitsPerEntry <= PALETTE_MAXIMUM_BITS;
     }
 
+    public void setBlockAt(int x, int y, int z, short blockId) {
+        PaletteStorage.setBlockAt(this, x, y, z, blockId);
+    }
+
+    public short getBlockAt(int x, int y, int z) {
+        return PaletteStorage.getBlockAt(this, x, y, z);
+    }
+
+    /**
+     * Gets the number of bits that the palette currently take per block.
+     *
+     * @return the bits per entry
+     */
+    public int getBitsPerEntry() {
+        return bitsPerEntry;
+    }
+
+    /**
+     * Gets the palette with the index and the block id as the value.
+     *
+     * @return the palette
+     */
+    public short[] getPalette() {
+        return paletteBlockMap.values().toShortArray();
+    }
+
+    /**
+     * Gets the sections of this object,
+     * the first array representing the chunk section and the second the block position from {@link #getSectionIndex(int, int, int)}.
+     *
+     * @return the section blocks
+     */
+    public long[][] getSectionBlocks() {
+        return sectionBlocks;
+    }
+
+    public PaletteStorage copy() {
+        PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
+        paletteStorage.sectionBlocks = sectionBlocks.clone();
+
+        paletteStorage.paletteBlockMap.clear();
+        paletteStorage.blockPaletteMap.clear();
+
+        paletteStorage.paletteBlockMap.putAll(paletteBlockMap);
+        paletteStorage.blockPaletteMap.putAll(blockPaletteMap);
+
+        return paletteStorage;
+    }
+
+    /**
+     * Retrieves the palette index for the specified block id.
+     * <p>
+     * Also responsible for resizing the palette when full.
+     *
+     * @param blockId the block id to convert
+     * @return the palette index of {@code blockId}
+     */
+    private short getPaletteIndex(short blockId) {
+        if (!hasPalette) {
+            return blockId;
+        }
+
+        if (!blockPaletteMap.containsKey(blockId)) {
+            // Resize the palette if full
+            if (paletteBlockMap.size() >= getMaxPaletteSize()) {
+                resize(bitsPerEntry + bitsIncrement);
+            }
+
+            final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
+            this.paletteBlockMap.put(paletteIndex, blockId);
+            this.blockPaletteMap.put(blockId, paletteIndex);
+            return paletteIndex;
+        }
+
+        return blockPaletteMap.get(blockId);
+    }
+
+    /**
+     * Resizes the array.
+     * <p>
+     * Will create a new palette storage to set all the current blocks, and the data will be transferred to 'this'.
+     *
+     * @param newBitsPerEntry the new bits per entry count
+     */
     private synchronized void resize(int newBitsPerEntry) {
         PaletteStorage paletteStorageCache = new PaletteStorage(newBitsPerEntry, bitsIncrement);
         paletteStorageCache.paletteBlockMap = paletteBlockMap;
@@ -72,65 +162,11 @@ public class PaletteStorage {
 
     }
 
-    public void setBlockAt(int x, int y, int z, short blockId) {
-        PaletteStorage.setBlockAt(this, x, y, z, blockId);
-    }
-
-    public short getBlockAt(int x, int y, int z) {
-        return PaletteStorage.getBlockAt(this, x, y, z);
-    }
-
-    public int getBitsPerEntry() {
-        return bitsPerEntry;
-    }
-
-    public short[] getPalette() {
-        return paletteBlockMap.values().toShortArray();
-    }
-
-    public long[][] getSectionBlocks() {
-        return sectionBlocks;
-    }
-
-    public PaletteStorage copy() {
-        PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
-        paletteStorage.sectionBlocks = sectionBlocks.clone();
-
-        paletteStorage.paletteBlockMap.clear();
-        paletteStorage.blockPaletteMap.clear();
-
-        paletteStorage.paletteBlockMap.putAll(paletteBlockMap);
-        paletteStorage.blockPaletteMap.putAll(blockPaletteMap);
-
-        return paletteStorage;
-    }
-
-    private short getPaletteIndex(short blockId) {
-        if (!hasPalette) {
-            return blockId;
-        }
-
-        if (!blockPaletteMap.containsKey(blockId)) {
-
-            boolean resize = false;
-            if (paletteBlockMap.size() >= getMaxPaletteSize()) {
-                resize = true;
-                // System.out.println("test " + paletteBlockMap.size() + " " + hashCode());
-                resize(bitsPerEntry + bitsIncrement);
-            }
-
-            if (resize) {
-                // System.out.println("new size " + paletteBlockMap.size() + " " + hashCode());
-            }
-            final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
-            this.paletteBlockMap.put(paletteIndex, blockId);
-            this.blockPaletteMap.put(blockId, paletteIndex);
-            return paletteIndex;
-        }
-
-        return blockPaletteMap.get(blockId);
-    }
-
+    /**
+     * Gets the maximum number of blocks that the current palette (could be the global one) can take.
+     *
+     * @return the number of blocks possible in the palette
+     */
     private int getMaxPaletteSize() {
         return 1 << bitsPerEntry;
     }
@@ -219,7 +255,7 @@ public class PaletteStorage {
         return xz;
     }
 
-    private static int getSectionIndex(int x, int y, int z) {
+    public static int getSectionIndex(int x, int y, int z) {
         return y << 8 | z << 4 | x;
     }
 
