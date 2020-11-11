@@ -172,7 +172,7 @@ public class PlayerInit {
                     player.teleport(new Position(0, 64f, 0));
                 }
 
-                ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
+                ItemStack itemStack = new ItemStack(Material.DIAMOND_BLOCK, (byte) 64);
                 NbtDataImpl data = new NbtDataImpl();
                 data.set("testc", 2);
                 itemStack.setData(data);

@@ -53,7 +53,7 @@ public class Main {
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
 
-       // MojangAuth.init();
+        // MojangAuth.init();
 
         minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
     }

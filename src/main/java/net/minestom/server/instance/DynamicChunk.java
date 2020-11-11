@@ -41,9 +41,9 @@ public class DynamicChunk extends Chunk {
      */
     private static final int DATA_FORMAT_VERSION = 1;
 
-    // WARNING: not thread-safe
-    protected PaletteStorage blockPalette = new PaletteStorage(4);
-    protected PaletteStorage customBlockPalette = new PaletteStorage(4);
+    // WARNING: not thread-safe and should not be changed
+    protected PaletteStorage blockPalette;
+    protected PaletteStorage customBlockPalette;
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
@@ -57,8 +57,17 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
-    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
+                        @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
         super(biomes, chunkX, chunkZ, true);
+        this.blockPalette = blockPalette;
+        this.customBlockPalette = customBlockPalette;
+    }
+
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+        this(biomes, chunkX, chunkZ,
+                new PaletteStorage(6, 2),
+                new PaletteStorage(6, 2));
     }
 
     @Override

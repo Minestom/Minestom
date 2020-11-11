@@ -2,15 +2,21 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 
-import static net.minestom.server.instance.Chunk.*;
+import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
+import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
 public class PaletteStorage {
 
+    private final static int MAXIMUM_BITS_PER_ENTRY = 15;
     private final static int PALETTE_MAXIMUM_BITS = 8;
+    private final static int BLOCK_COUNT = CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE;
 
     private int bitsPerEntry;
+    private int bitsIncrement;
 
     private int valuesPerLong;
     private boolean hasPalette;
@@ -28,134 +34,50 @@ public class PaletteStorage {
         this.blockPaletteMap.put((short) 0, (short) 0);
     }
 
-    public PaletteStorage(int bitsPerEntry) {
+    public PaletteStorage(int bitsPerEntry, int bitsIncrement) {
+        // Change the bitsPerEntry to be valid
+        if (bitsPerEntry < 4) {
+            bitsPerEntry = 4;
+        } else if (MathUtils.isBetween(bitsPerEntry, 9, 14) || bitsPerEntry > MAXIMUM_BITS_PER_ENTRY) {
+            bitsPerEntry = MAXIMUM_BITS_PER_ENTRY;
+        }
+
+        this.bitsPerEntry = bitsPerEntry;
+        this.bitsIncrement = bitsIncrement;
+
+        this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= PALETTE_MAXIMUM_BITS;
-        this.bitsPerEntry = hasPalette ? bitsPerEntry : 15;
-        this.valuesPerLong = Long.SIZE / this.bitsPerEntry;
     }
 
-    private synchronized short getPaletteIndex(short blockId) {
-        if (!hasPalette) {
-            return blockId;
+    private synchronized void resize(int newBitsPerEntry) {
+        PaletteStorage paletteStorageCache = new PaletteStorage(newBitsPerEntry, bitsIncrement);
+        paletteStorageCache.paletteBlockMap = paletteBlockMap;
+        paletteStorageCache.blockPaletteMap = blockPaletteMap;
+
+        for (int y = 0; y < Chunk.CHUNK_SIZE_Y; y++) {
+            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                    final short blockId = getBlockAt(x, y, z);
+                    paletteStorageCache.setBlockAt(x, y, z, blockId);
+                }
+            }
         }
 
-        if (!blockPaletteMap.containsKey(blockId)) {
-            final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
-            this.paletteBlockMap.put(paletteIndex, blockId);
-            this.blockPaletteMap.put(blockId, paletteIndex);
-            return paletteIndex;
-        }
+        this.bitsPerEntry = newBitsPerEntry;
 
-        return blockPaletteMap.get(blockId);
+        this.valuesPerLong = paletteStorageCache.valuesPerLong;
+        this.hasPalette = paletteStorageCache.hasPalette;
+
+        this.sectionBlocks = paletteStorageCache.sectionBlocks;
+
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
-        x %= 16;
-        if (x < 0) {
-            x = CHUNK_SIZE_X + x;
-        }
-        z %= 16;
-        if (z < 0) {
-            z = CHUNK_SIZE_Z + z;
-        }
-
-        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
-
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
-
-        final int section = ChunkUtils.getSectionAt(y);
-
-        if (sectionBlocks[section].length == 0) {
-            if (blockId == 0) {
-                return;
-            }
-
-            sectionBlocks[section] = new long[getSize()];
-        }
-
-        // Change to palette value
-        blockId = getPaletteIndex(blockId);
-
-        long[] sectionBlock = sectionBlocks[section];
-
-        long block = sectionBlock[index];
-        {
-
-                /*System.out.println("blockId "+blockId);
-                System.out.println("bitIndex "+bitIndex);
-                System.out.println("block "+binary(block));
-                System.out.println("mask "+binary(cacheMask));
-                System.out.println("cache "+binary(cache));*/
-
-            /*block = block >> bitIndex << bitIndex;
-            //System.out.println("block "+binary(block));
-            block = block | blockId;
-            //System.out.println("block2 "+binary(block));
-            block = (block << bitIndex);
-            //System.out.println("block3 "+binary(block));
-            block = block | cache;
-            //System.out.println("block4 "+binary(block));*/
-
-            long clear = Integer.MAX_VALUE >> (31 - bitsPerEntry);
-
-            block |= clear << bitIndex;
-            block ^= clear << bitIndex;
-            block |= (long) blockId << bitIndex;
-
-            sectionBlock[index] = block;
-
-        }
+        PaletteStorage.setBlockAt(this, x, y, z, blockId);
     }
 
     public short getBlockAt(int x, int y, int z) {
-        x %= 16;
-        if (x < 0) {
-            x = CHUNK_SIZE_X + x;
-        }
-        z %= 16;
-        if (z < 0) {
-            z = CHUNK_SIZE_Z + z;
-        }
-
-        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
-
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
-
-        final int section = ChunkUtils.getSectionAt(y);
-
-        long[] blocks = sectionBlocks[section];
-
-        if (blocks.length == 0) {
-            return 0;
-        }
-
-        long mask = Integer.MAX_VALUE >> (31 - bitsPerEntry);
-        long value = blocks[index] >> bitIndex & mask;
-        /*System.out.println("index " + index);
-        System.out.println("bitIndex " + bitIndex);
-        System.out.println("test1 " + binary(value));
-        System.out.println("test2 " + binary(mask));*/
-
-        // Change to palette value
-        final short blockId = hasPalette ? paletteBlockMap.get((short) value) : (short) value;
-
-        //System.out.println("final " + binary(finalValue));
-
-
-        /*System.out.println("data " + index + " " + bitIndex + " " + sectionIndex);
-        System.out.println("POS " + x + " " + y + " " + z);
-        System.out.println("mask " + binary(mask));
-        System.out.println("bin " + binary(blocks[index]));
-        System.out.println("result " + ((blocks[index] >> bitIndex) & mask));*/
-        return blockId;
-    }
-
-    private int getSize() {
-        final int blockCount = 16 * 16 * 16; // A whole chunk section
-        final int arraySize = (blockCount + valuesPerLong - 1) / valuesPerLong;
-        return arraySize;
+        return PaletteStorage.getBlockAt(this, x, y, z);
     }
 
     public int getBitsPerEntry() {
@@ -171,20 +93,133 @@ public class PaletteStorage {
     }
 
     public PaletteStorage copy() {
-        PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry);
+        PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
         paletteStorage.sectionBlocks = sectionBlocks.clone();
+
+        paletteStorage.paletteBlockMap.clear();
+        paletteStorage.blockPaletteMap.clear();
+
         paletteStorage.paletteBlockMap.putAll(paletteBlockMap);
         paletteStorage.blockPaletteMap.putAll(blockPaletteMap);
 
         return paletteStorage;
     }
 
-    private static String binary(long value) {
-        return "0b" + Long.toBinaryString(value);
+    private short getPaletteIndex(short blockId) {
+        if (!hasPalette) {
+            return blockId;
+        }
+
+        if (!blockPaletteMap.containsKey(blockId)) {
+
+            boolean resize = false;
+            if (paletteBlockMap.size() >= getMaxPaletteSize()) {
+                resize = true;
+                // System.out.println("test " + paletteBlockMap.size() + " " + hashCode());
+                resize(bitsPerEntry + bitsIncrement);
+            }
+
+            if (resize) {
+                // System.out.println("new size " + paletteBlockMap.size() + " " + hashCode());
+            }
+            final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
+            this.paletteBlockMap.put(paletteIndex, blockId);
+            this.blockPaletteMap.put(blockId, paletteIndex);
+            return paletteIndex;
+        }
+
+        return blockPaletteMap.get(blockId);
     }
 
-    private int getSectionIndex(int x, int y, int z) {
-        //return (((y * CHUNK_SECTION_SIZE) + z) * CHUNK_SECTION_SIZE) + x;
+    private int getMaxPaletteSize() {
+        return 1 << bitsPerEntry;
+    }
+
+    private static void setBlockAt(PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
+        x = toChunkCoordinate(x);
+        z = toChunkCoordinate(z);
+
+        // Change to palette value
+        blockId = paletteStorage.getPaletteIndex(blockId);
+
+        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
+
+        final int valuesPerLong = paletteStorage.valuesPerLong;
+        final int bitsPerEntry = paletteStorage.bitsPerEntry;
+
+        final int index = sectionIndex / valuesPerLong;
+        final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
+
+        final int section = ChunkUtils.getSectionAt(y);
+
+        if (paletteStorage.sectionBlocks[section].length == 0) {
+            if (blockId == 0) {
+                return;
+            }
+
+            paletteStorage.sectionBlocks[section] = new long[getSize(valuesPerLong)];
+        }
+
+        long[] sectionBlock = paletteStorage.sectionBlocks[section];
+
+        long block = sectionBlock[index];
+        {
+            final long clear = Integer.MAX_VALUE >> (31 - bitsPerEntry);
+
+            block |= clear << bitIndex;
+            block ^= clear << bitIndex;
+            block |= (long) blockId << bitIndex;
+
+            sectionBlock[index] = block;
+
+        }
+    }
+
+    private static short getBlockAt(PaletteStorage paletteStorage, int x, int y, int z) {
+        x = toChunkCoordinate(x);
+        z = toChunkCoordinate(z);
+
+        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
+
+        final int valuesPerLong = paletteStorage.valuesPerLong;
+        final int bitsPerEntry = paletteStorage.bitsPerEntry;
+
+        final int index = sectionIndex / valuesPerLong;
+        final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
+
+        final int section = ChunkUtils.getSectionAt(y);
+
+        final long[] blocks = paletteStorage.sectionBlocks[section];
+
+        if (blocks.length == 0) {
+            return 0;
+        }
+
+        long mask = Integer.MAX_VALUE >> (31 - bitsPerEntry);
+        long value = blocks[index] >> bitIndex & mask;
+
+        // Change to palette value
+        final short blockId = paletteStorage.hasPalette ?
+                paletteStorage.paletteBlockMap.get((short) value) :
+                (short) value;
+
+        return blockId;
+    }
+
+    private static int getSize(int valuesPerLong) {
+        return (BLOCK_COUNT + valuesPerLong - 1) / valuesPerLong;
+    }
+
+    private static int toChunkCoordinate(int xz) {
+        xz %= 16;
+        if (xz < 0) {
+            xz += CHUNK_SECTION_SIZE;
+        }
+
+        return xz;
+    }
+
+    private static int getSectionIndex(int x, int y, int z) {
         return y << 8 | z << 4 | x;
     }
 
