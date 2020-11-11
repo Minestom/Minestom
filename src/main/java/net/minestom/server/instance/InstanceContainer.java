@@ -581,7 +581,7 @@ public class InstanceContainer extends Instance {
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
-        Check.notNull(chunkSupplier, "The chunk supplier cannot be null, you can use a StaticChunk for a lightweight implementation");
+        Check.notNull(chunkSupplier, "The chunk supplier cannot be null!");
         this.chunkSupplier = chunkSupplier;
     }
 

@@ -29,7 +29,7 @@ public class ChunkDataPacket implements ServerPacket {
     public int chunkX, chunkZ;
 
     public PaletteStorage paletteStorage;
-    public short[] customBlocksId;
+    public PaletteStorage customBlockPaletteStorage;
 
     public Set<Integer> blockEntities;
     public Int2ObjectMap<Data> blocksData;
@@ -106,11 +106,13 @@ public class ChunkDataPacket implements ServerPacket {
                     .setInt("y", blockPosition.getY())
                     .setInt("z", blockPosition.getZ());
 
-            final short customBlockId = customBlocksId[index];
-            final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-            if (customBlock != null) {
-                final Data data = blocksData.get(index);
-                customBlock.writeBlockEntity(blockPosition, data, nbt);
+            if (customBlockPaletteStorage != null) {
+                final short customBlockId = customBlockPaletteStorage.getBlockAt(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+                final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+                if (customBlock != null) {
+                    final Data data = blocksData.get(index);
+                    customBlock.writeBlockEntity(blockPosition, data, nbt);
+                }
             }
             writer.writeNBT("", nbt);
         }

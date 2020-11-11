@@ -33,6 +33,10 @@ public class PaletteStorage {
         final int section = y / CHUNK_SECTION_SIZE;
 
         if (sectionBlocks[section].length == 0) {
+            if (blockId == 0) {
+                return;
+            }
+
             sectionBlocks[section] = new long[getSize()];
         }
 
@@ -95,18 +99,18 @@ public class PaletteStorage {
 
         long finalValue;
 
-        System.out.println("index " + index);
+        /*System.out.println("index " + index);
         System.out.println("bitIndex " + bitIndex);
         System.out.println("test1 " + binary(value));
-        System.out.println("test2 " + binary(mask));
+        System.out.println("test2 " + binary(mask));*/
 
         {
             mask = mask >> bitIndex << bitIndex;
-            System.out.println("test3 " + binary(mask));
+            //System.out.println("test3 " + binary(mask));
             finalValue = value & mask >> bitIndex;
         }
 
-        System.out.println("final " + binary(finalValue));
+        //System.out.println("final " + binary(finalValue));
 
 
         /*System.out.println("data " + index + " " + bitIndex + " " + sectionIndex);

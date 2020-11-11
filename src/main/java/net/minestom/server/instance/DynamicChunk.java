@@ -12,7 +12,6 @@ import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -42,12 +41,9 @@ public class DynamicChunk extends Chunk {
      */
     private static final int DATA_FORMAT_VERSION = 1;
 
-    // blocks id based on coordinate, see Chunk#getBlockIndex
-    // WARNING: those arrays are NOT thread-safe
-    // and modifying them can cause issue with block data, update, block entity and the cached chunk packet
-    //protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    // WARNING: not thread-safe
     protected PaletteStorage blockPalette = new PaletteStorage(15);
-    protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    protected PaletteStorage customBlockPalette = new PaletteStorage(15);
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
@@ -82,13 +78,13 @@ public class DynamicChunk extends Chunk {
         final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
         if (hasBlock) {
             this.blockPalette.setBlockAt(x, y, z, blockStateId);
-            this.customBlocksId[index] = customBlockId;
+            this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
         } else {
             // Block has been deleted, clear cache and return
 
             this.blockPalette.setBlockAt(x, y, z, (short) 0);
             //this.blocksStateId[index] = 0; // Set to air
-            this.customBlocksId[index] = 0; // Remove custom block
+            this.customBlockPalette.setBlockAt(x, y, z, (short) 0); // Remove custom block
 
             this.blocksData.remove(index);
 
@@ -158,15 +154,13 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public short getCustomBlockId(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        return customBlocksId[index];
+        return customBlockPalette.getBlockAt(x, y, z);
     }
 
     @Override
     protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
-        final int blockIndex = getBlockIndex(x, y, z);
         this.blockPalette.setBlockAt(x, y, z, blockStateId);
-        this.customBlocksId[blockIndex] = customBlockId;
+        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
     }
 
     @Override
@@ -243,7 +237,7 @@ public class DynamicChunk extends Chunk {
                         final int index = getBlockIndex(x, y, z);
 
                         final short blockStateId = blockPalette.getBlockAt(x, y, z);
-                        final short customBlockId = customBlocksId[index];
+                        final short customBlockId = customBlockPalette.getBlockAt(x, y, z);
 
                         // No block at the position
                         if (blockStateId == 0 && customBlockId == 0)
@@ -381,7 +375,7 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
         fullDataPacket.paletteStorage = blockPalette.copy();
-        fullDataPacket.customBlocksId = customBlocksId.clone();
+        fullDataPacket.customBlockPaletteStorage = customBlockPalette.copy();
         fullDataPacket.blockEntities = new HashSet<>(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
@@ -392,7 +386,7 @@ public class DynamicChunk extends Chunk {
     public Chunk copy(int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
         dynamicChunk.blockPalette = blockPalette.copy();
-        ArrayUtils.copyToDestination(customBlocksId, dynamicChunk.customBlocksId);
+        dynamicChunk.customBlockPalette = customBlockPalette.copy();
         dynamicChunk.blocksData.putAll(blocksData);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
         dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);
