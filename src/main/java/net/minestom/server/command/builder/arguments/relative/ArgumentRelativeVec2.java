@@ -26,12 +26,22 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
 
         // Check if each element is correct
         for (String element : split) {
-            if (!element.equals(RELATIVE_CHAR)) {
+            if (!element.startsWith(RELATIVE_CHAR)) {
                 try {
                     // Will throw the exception if not a float
                     Float.parseFloat(element);
                 } catch (NumberFormatException e) {
                     return INVALID_NUMBER_ERROR;
+                }
+            } else {
+                if (element.length() > RELATIVE_CHAR.length()) {
+                    try {
+                        final String potentialNumber = element.substring(1);
+                        // Will throw the exception if not a float
+                        Float.parseFloat(potentialNumber);
+                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                        return INVALID_NUMBER_ERROR;
+                    }
                 }
             }
         }
@@ -50,12 +60,23 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
 
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
-            if (element.equals(RELATIVE_CHAR)) {
+            if (element.startsWith(RELATIVE_CHAR)) {
                 if (i == 0) {
                     relativeX = true;
                 } else if (i == 1) {
                     relativeZ = true;
                 }
+
+                if (element.length() != RELATIVE_CHAR.length()) {
+                    final String potentialNumber = element.substring(1);
+                    final float number = Float.parseFloat(potentialNumber);
+                    if (i == 0) {
+                        vector.setX(number);
+                    } else if (i == 1) {
+                        vector.setZ(number);
+                    }
+                }
+
             } else {
                 final float number = Float.parseFloat(element);
                 if (i == 0) {

@@ -5,6 +5,7 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
@@ -172,6 +173,9 @@ public class PlayerInit {
                 }
 
                 ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
+                NbtDataImpl data = new NbtDataImpl();
+                data.set("testc",2);
+                itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
 
                 //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));
