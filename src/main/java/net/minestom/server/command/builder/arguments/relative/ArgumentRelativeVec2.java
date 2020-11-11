@@ -9,44 +9,10 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Example: -1.2 ~
  */
-public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
+public class ArgumentRelativeVec2 extends ArgumentRelativeVec {
 
     public ArgumentRelativeVec2(@NotNull String id) {
         super(id, 2);
-    }
-
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        final String[] split = value.split(" ");
-
-        // Check if the value has enough element to be correct
-        if (split.length != getNumberCount()) {
-            return INVALID_NUMBER_COUNT_ERROR;
-        }
-
-        // Check if each element is correct
-        for (String element : split) {
-            if (!element.startsWith(RELATIVE_CHAR)) {
-                try {
-                    // Will throw the exception if not a float
-                    Float.parseFloat(element);
-                } catch (NumberFormatException e) {
-                    return INVALID_NUMBER_ERROR;
-                }
-            } else {
-                if (element.length() > RELATIVE_CHAR.length()) {
-                    try {
-                        final String potentialNumber = element.substring(1);
-                        // Will throw the exception if not a float
-                        Float.parseFloat(potentialNumber);
-                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        return INVALID_NUMBER_ERROR;
-                    }
-                }
-            }
-        }
-
-        return SUCCESS;
     }
 
     @NotNull
@@ -90,8 +56,4 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
         return new RelativeVec(vector, relativeX, false, relativeZ);
     }
 
-    @Override
-    public int getConditionResult(@NotNull RelativeVec value) {
-        return SUCCESS;
-    }
 }
