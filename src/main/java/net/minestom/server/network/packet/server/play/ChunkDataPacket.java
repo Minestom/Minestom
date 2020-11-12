@@ -53,7 +53,7 @@ public class ChunkDataPacket implements ServerPacket {
                 final long[] section = paletteStorage.getSectionBlocks()[i];
                 if (section.length > 0) { // section contains at least one block
                     mask |= 1 << i;
-                    Utils.writeBlocks(blocks, paletteStorage.getPalette(), section, paletteStorage.getBitsPerEntry());
+                    Utils.writeBlocks(blocks, paletteStorage.getPalette(i), section, paletteStorage.getBitsPerEntry());
                 } else {
                     mask |= 0;
                 }

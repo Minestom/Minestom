@@ -47,16 +47,10 @@ public class PaletteStorage {
 
     private long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
 
-    // palette index = block id
-    private Short2ShortLinkedOpenHashMap paletteBlockMap = new Short2ShortLinkedOpenHashMap(CHUNK_SECTION_SIZE);
-    // block id = palette index
-    private Short2ShortOpenHashMap blockPaletteMap = new Short2ShortOpenHashMap(CHUNK_SECTION_SIZE);
-
-    {
-        // Default value
-        this.paletteBlockMap.put((short) 0, (short) 0);
-        this.blockPaletteMap.put((short) 0, (short) 0);
-    }
+    // chunk section - palette index = block id
+    private Short2ShortLinkedOpenHashMap[] paletteBlockMaps = new Short2ShortLinkedOpenHashMap[CHUNK_SECTION_COUNT];
+    // chunk section - block id = palette index
+    private Short2ShortOpenHashMap[] blockPaletteMaps = new Short2ShortOpenHashMap[CHUNK_SECTION_COUNT];
 
     /**
      * Creates a new palette storage.
@@ -100,10 +94,12 @@ public class PaletteStorage {
     /**
      * Gets the palette with the index and the block id as the value.
      *
+     * @param section the chunk section to get the palette from
      * @return the palette
      */
-    public short[] getPalette() {
-        return paletteBlockMap.values().toShortArray();
+    public short[] getPalette(int section) {
+        Short2ShortLinkedOpenHashMap paletteBlockMap = paletteBlockMaps[section];
+        return paletteBlockMap != null ? paletteBlockMap.values().toShortArray() : null;
     }
 
     /**
@@ -120,11 +116,8 @@ public class PaletteStorage {
         PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
         paletteStorage.sectionBlocks = sectionBlocks.clone();
 
-        paletteStorage.paletteBlockMap.clear();
-        paletteStorage.blockPaletteMap.clear();
-
-        paletteStorage.paletteBlockMap.putAll(paletteBlockMap);
-        paletteStorage.blockPaletteMap.putAll(blockPaletteMap);
+        paletteStorage.paletteBlockMaps = paletteBlockMaps.clone();
+        paletteStorage.blockPaletteMaps = blockPaletteMaps.clone();
 
         return paletteStorage;
     }
@@ -134,23 +127,36 @@ public class PaletteStorage {
      * <p>
      * Also responsible for resizing the palette when full.
      *
+     * @param section the chunk section
      * @param blockId the block id to convert
      * @return the palette index of {@code blockId}
      */
-    private short getPaletteIndex(short blockId) {
+    private short getPaletteIndex(int section, short blockId) {
         if (!hasPalette) {
             return blockId;
         }
 
+        Short2ShortOpenHashMap blockPaletteMap = blockPaletteMaps[section];
+        if (blockPaletteMap == null) {
+            blockPaletteMap = createBlockPaletteMap();
+            blockPaletteMaps[section] = blockPaletteMap;
+        }
+
         if (!blockPaletteMap.containsKey(blockId)) {
+            Short2ShortLinkedOpenHashMap paletteBlockMap = paletteBlockMaps[section];
+            if (paletteBlockMap == null) {
+                paletteBlockMap = createPaletteBlockMap();
+                paletteBlockMaps[section] = paletteBlockMap;
+            }
+
             // Resize the palette if full
             if (paletteBlockMap.size() >= getMaxPaletteSize()) {
                 resize(bitsPerEntry + bitsIncrement);
             }
 
             final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
-            this.paletteBlockMap.put(paletteIndex, blockId);
-            this.blockPaletteMap.put(blockId, paletteIndex);
+            paletteBlockMap.put(paletteIndex, blockId);
+            blockPaletteMap.put(blockId, paletteIndex);
             return paletteIndex;
         }
 
@@ -166,8 +172,8 @@ public class PaletteStorage {
      */
     private synchronized void resize(int newBitsPerEntry) {
         PaletteStorage paletteStorageCache = new PaletteStorage(newBitsPerEntry, bitsIncrement);
-        paletteStorageCache.paletteBlockMap = paletteBlockMap;
-        paletteStorageCache.blockPaletteMap = blockPaletteMap;
+        paletteStorageCache.paletteBlockMaps = paletteBlockMaps;
+        paletteStorageCache.blockPaletteMaps = blockPaletteMaps;
 
         for (int y = 0; y < Chunk.CHUNK_SIZE_Y; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
@@ -207,8 +213,10 @@ public class PaletteStorage {
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
+        final int section = ChunkUtils.getSectionAt(y);
+
         // Change to palette value
-        blockId = paletteStorage.getPaletteIndex(blockId);
+        blockId = paletteStorage.getPaletteIndex(section, blockId);
 
         final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
 
@@ -217,8 +225,6 @@ public class PaletteStorage {
 
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
-
-        final int section = ChunkUtils.getSectionAt(y);
 
         if (paletteStorage.sectionBlocks[section].length == 0) {
             if (blockId == 0) {
@@ -269,8 +275,22 @@ public class PaletteStorage {
 
         // Change to palette value and return
         return paletteStorage.hasPalette ?
-                paletteStorage.paletteBlockMap.get((short) value) :
+                paletteStorage.paletteBlockMaps[section].get((short) value) :
                 (short) value;
+    }
+
+    private static Short2ShortLinkedOpenHashMap createPaletteBlockMap() {
+        Short2ShortLinkedOpenHashMap map = new Short2ShortLinkedOpenHashMap(CHUNK_SECTION_SIZE);
+        map.put((short) 0, (short) 0);
+
+        return map;
+    }
+
+    private static Short2ShortOpenHashMap createBlockPaletteMap() {
+        Short2ShortOpenHashMap map = new Short2ShortOpenHashMap(CHUNK_SECTION_SIZE);
+        map.put((short) 0, (short) 0);
+
+        return map;
     }
 
     /**
