@@ -9,8 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO format retention
-
 /**
  * Represents multiple {@link ColoredText} batched together with the possibility to add
  * click and hover events.
