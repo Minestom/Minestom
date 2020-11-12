@@ -19,8 +19,24 @@ import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
  */
 public class PaletteStorage {
 
+    /**
+     * The maximum bits per entry value.
+     */
     private final static int MAXIMUM_BITS_PER_ENTRY = 15;
+
+    /**
+     * The minimum bits per entry value.
+     */
+    private final static int MINIMUM_BITS_PER_ENTRY = 4;
+
+    /**
+     * The maximum bits per entry value which allow for a data palette.
+     */
     private final static int PALETTE_MAXIMUM_BITS = 8;
+
+    /**
+     * The number of blocks that should be in one chunk section.
+     */
     private final static int BLOCK_COUNT = CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE * CHUNK_SECTION_SIZE;
 
     private int bitsPerEntry;
@@ -42,11 +58,17 @@ public class PaletteStorage {
         this.blockPaletteMap.put((short) 0, (short) 0);
     }
 
+    /**
+     * Creates a new palette storage.
+     *
+     * @param bitsPerEntry  the number of bits used for one entry (block)
+     * @param bitsIncrement the number of bits to add per-block once the palette array is filled
+     */
     public PaletteStorage(int bitsPerEntry, int bitsIncrement) {
         Check.argCondition(bitsPerEntry > MAXIMUM_BITS_PER_ENTRY, "The maximum bits per entry is 15");
         // Change the bitsPerEntry to be valid
-        if (bitsPerEntry < 4) {
-            bitsPerEntry = 4;
+        if (bitsPerEntry < MINIMUM_BITS_PER_ENTRY) {
+            bitsPerEntry = MINIMUM_BITS_PER_ENTRY;
         } else if (MathUtils.isBetween(bitsPerEntry, 9, 14)) {
             bitsPerEntry = MAXIMUM_BITS_PER_ENTRY;
         }
@@ -251,10 +273,22 @@ public class PaletteStorage {
                 (short) value;
     }
 
+    /**
+     * Gets the array length of one section based on the number of values which can be stored in one long.
+     *
+     * @param valuesPerLong the number of values per long
+     * @return the array length based on {@code valuesPerLong}
+     */
     private static int getSize(int valuesPerLong) {
         return (BLOCK_COUNT + valuesPerLong - 1) / valuesPerLong;
     }
 
+    /**
+     * Converts a world coordinate to a chunk one.
+     *
+     * @param xz the world coordinate
+     * @return the chunk coordinate of {@code xz}
+     */
     private static int toChunkCoordinate(int xz) {
         xz %= 16;
         if (xz < 0) {
@@ -264,6 +298,14 @@ public class PaletteStorage {
         return xz;
     }
 
+    /**
+     * Gets the index of the block on the section array based on the block position.
+     *
+     * @param x the chunk X
+     * @param y the chunk Y
+     * @param z the chunk Z
+     * @return the section index of the position
+     */
     public static int getSectionIndex(int x, int y, int z) {
         return y << 8 | z << 4 | x;
     }
