@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public interface CommandExecutor {
 
     /**
-     * Executes the command callback once the syntax has been called (or the default executor)
+     * Executes the command callback once the syntax has been called (or the default executor).
      *
-     * @param source the sender of the command
+     * @param sender the sender of the command
      * @param args   contains all the parsed arguments,
      *               the id is the one initialized when creating the argument object
      */
-    void apply(@NotNull CommandSender source, @NotNull Arguments args);
+    void apply(@NotNull CommandSender sender, @NotNull Arguments args);
 }
