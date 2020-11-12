@@ -42,16 +42,28 @@ public class RichMessage extends JsonMessage {
         Check.notNull(coloredText, "ColoredText cannot be null");
 
         RichMessage richMessage = new RichMessage();
-        appendText(richMessage, coloredText, FormatRetention.ALL);
+        appendText(richMessage, coloredText);
 
         return richMessage;
     }
 
-    private static void appendText(@NotNull RichMessage richMessage, @NotNull ColoredText coloredText,
-                                   @NotNull FormatRetention formatRetention) {
-        RichComponent component = new RichComponent(coloredText, formatRetention);
+    private static void appendText(@NotNull RichMessage richMessage, @NotNull ColoredText coloredText) {
+        RichComponent component = new RichComponent(coloredText);
         richMessage.components.add(component);
         richMessage.currentComponent = component;
+    }
+
+    /**
+     * Adds a new rich component to the message.
+     *
+     * @param coloredText the text composing the rich component
+     * @return the rich message
+     */
+    public RichMessage append(@NotNull ColoredText coloredText) {
+        Check.notNull(coloredText, "ColoredText cannot be null");
+
+        appendText(this, coloredText);
+        return this;
     }
 
     /**
@@ -87,31 +99,6 @@ public class RichMessage extends JsonMessage {
         return this;
     }
 
-    /**
-     * Adds a new rich component to the message.
-     *
-     * @param coloredText     the text composing the rich component
-     * @param formatRetention the format retention of the added component
-     * @return the rich message
-     */
-    public RichMessage append(@NotNull ColoredText coloredText, @NotNull FormatRetention formatRetention) {
-        Check.notNull(coloredText, "ColoredText cannot be null");
-
-        appendText(this, coloredText, formatRetention);
-        return this;
-    }
-
-    /**
-     * Adds a new rich component to the message,
-     * the format retention is set to {@link FormatRetention#ALL}.
-     *
-     * @param coloredText the text composing the rich component
-     * @return the rich message
-     */
-    public RichMessage append(@NotNull ColoredText coloredText) {
-        return append(coloredText, FormatRetention.ALL);
-    }
-
     @NotNull
     @Override
     public JsonObject getJsonObject() {
@@ -121,18 +108,14 @@ public class RichMessage extends JsonMessage {
         if (cacheComponents.isEmpty())
             return new JsonObject();
 
-        RichComponent firstComponent = cacheComponents.remove(0);
-        List<JsonObject> firstComponentObjects = getComponentObject(firstComponent);
-        JsonObject mainObject = firstComponentObjects.remove(0);
+        // The main object contains the extra array, with an empty text to do not share its state with the others
+        JsonObject mainObject = new JsonObject();
+        mainObject.addProperty("text", "");
 
-        if (cacheComponents.isEmpty() && firstComponentObjects.isEmpty())
-            return mainObject;
-
+        // The extra array contains all the components
         JsonArray extraArray = new JsonArray();
-        for (JsonObject firstComponentObject : firstComponentObjects) {
-            extraArray.add(firstComponentObject);
-        }
 
+        // Add all the components
         for (RichComponent component : cacheComponents) {
             List<JsonObject> componentObjects = getComponentObject(component);
             for (JsonObject componentObject : componentObjects) {
@@ -205,34 +188,23 @@ public class RichMessage extends JsonMessage {
         return eventObject;
     }
 
-    public enum FormatRetention {
-        ALL, CLICK_EVENT, HOVER_EVENT, NONE
-    }
-
     /**
      * Represents a {@link ColoredText} with a click and hover event (can be null).
      */
     private static class RichComponent {
 
         private final ColoredText text;
-        private final FormatRetention formatRetention;
         private ChatClickEvent clickEvent;
         private ChatHoverEvent hoverEvent;
         private String insertion;
 
-        private RichComponent(@NotNull ColoredText text, @NotNull FormatRetention formatRetention) {
+        private RichComponent(@NotNull ColoredText text) {
             this.text = text;
-            this.formatRetention = formatRetention;
         }
 
         @NotNull
         public ColoredText getText() {
             return text;
-        }
-
-        @NotNull
-        public FormatRetention getFormatRetention() {
-            return formatRetention;
         }
 
         @Nullable
