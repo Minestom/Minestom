@@ -67,7 +67,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.TICK);
+    private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
