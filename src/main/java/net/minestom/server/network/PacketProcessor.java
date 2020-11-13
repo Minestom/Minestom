@@ -108,14 +108,35 @@ public final class PacketProcessor {
         connectionPlayerConnectionMap.remove(channel);
     }
 
+    /**
+     * Gets the handler for client status packets.
+     *
+     * @return the status packets handler
+     * @see <a href="https://wiki.vg/Protocol#Status">Status packets</a>
+     */
+    @NotNull
     public ClientStatusPacketsHandler getStatusPacketsHandler() {
         return statusPacketsHandler;
     }
 
+    /**
+     * Gets the handler for client login packets.
+     *
+     * @return the status login handler
+     * @see <a href="https://wiki.vg/Protocol#Login">Login packets</a>
+     */
+    @NotNull
     public ClientLoginPacketsHandler getLoginPacketsHandler() {
         return loginPacketsHandler;
     }
 
+    /**
+     * Gets the handler for client play packets.
+     *
+     * @return the play packets handler
+     * @see <a href="https://wiki.vg/Protocol#Play">Play packets</a>
+     */
+    @NotNull
     public ClientPlayPacketsHandler getPlayPacketsHandler() {
         return playPacketsHandler;
     }
