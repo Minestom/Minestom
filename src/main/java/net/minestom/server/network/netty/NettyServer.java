@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
+import io.netty.channel.kqueue.KQueue;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
+import io.netty.channel.kqueue.KQueueServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
@@ -34,12 +37,17 @@ public class NettyServer {
 
         if (Epoll.isAvailable()) {
             boss = new EpollEventLoopGroup(2);
-            worker = new EpollEventLoopGroup();
+            worker = new EpollEventLoopGroup(); // thread count = core * 2
 
             channel = EpollServerSocketChannel.class;
+        } else if (KQueue.isAvailable()) {
+            boss = new KQueueEventLoopGroup(2);
+            worker = new KQueueEventLoopGroup(); // thread count = core * 2
+
+            channel = KQueueServerSocketChannel.class;
         } else {
             boss = new NioEventLoopGroup(2);
-            worker = new NioEventLoopGroup();
+            worker = new NioEventLoopGroup(); // thread count = core * 2
 
             channel = NioServerSocketChannel.class;
         }

@@ -5,6 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
+import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -75,10 +76,10 @@ public abstract class PlayerConnection {
     /**
      * Serializes the packet and send it to the client.
      * <p>
-     * Also responsible for executing {@link ConnectionManager#getSendPacketConsumers()} consumers.
+     * Also responsible for executing {@link ConnectionManager#onPacketSend(PacketConsumer)} consumers.
      *
      * @param serverPacket the packet to send
-     * @see #shouldSendPacket(ServerPacket) 
+     * @see #shouldSendPacket(ServerPacket)
      */
     public abstract void sendPacket(@NotNull ServerPacket serverPacket);
 

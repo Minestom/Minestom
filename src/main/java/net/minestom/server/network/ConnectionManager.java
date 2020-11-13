@@ -173,6 +173,10 @@ public final class ConnectionManager {
 
     /**
      * Adds a consumer to call once a packet is sent.
+     * <p>
+     * Be aware that it is possible for the same packet instance to be used multiple time,
+     * changing the object fields could lead to issues.
+     * (consider canceling the packet instead and send your own)
      *
      * @param packetConsumer the packet consumer
      */

@@ -85,7 +85,7 @@ public class PlayerInit {
 
         connectionManager.onPacketSend((player, packetController, packet) -> {
             // Listen to all sent packet
-            System.out.println("PACKET: " + packet.getClass().getSimpleName());
+            // System.out.println("PACKET: " + packet.getClass().getSimpleName());
             packetController.setCancel(false);
         });
 
