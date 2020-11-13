@@ -107,15 +107,14 @@ public final class MinecraftServer {
     @Setter
     private static boolean hardcoreLook = false;
 
-    //Extras
+    // Extras
     @Getter
     @Setter
     private static boolean fixLighting = true;
 
-    //Rate Limiting
+    // Rate Limiting
     private static int rateLimit = 0;
-    // TODO
-    public static final int MAX_PACKET_SIZE = 300_000;
+    private static int maxPacketSize = 30_000;
 
     private static PacketListenerManager packetListenerManager;
     private static NettyServer nettyServer;
@@ -250,7 +249,7 @@ public final class MinecraftServer {
     /**
      * Gets the max number of packets a client can send over 1 second.
      *
-     * @return the packet count limit over 1 second
+     * @return the packet count limit over 1 second, 0 if not enabled
      */
     public static int getRateLimit() {
         return rateLimit;
@@ -263,6 +262,24 @@ public final class MinecraftServer {
      */
     public static void setRateLimit(int rateLimit) {
         MinecraftServer.rateLimit = rateLimit;
+    }
+
+    /**
+     * Gets the maximum packet size (in bytes) that a client can send without getting disconnected.
+     *
+     * @return the maximum packet size
+     */
+    public static int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    /**
+     * Changes the maximum packet size (in bytes) that a client can send without getting disconnected.
+     *
+     * @param maxPacketSize the new max packet size
+     */
+    public static void setMaxPacketSize(int maxPacketSize) {
+        MinecraftServer.maxPacketSize = maxPacketSize;
     }
 
     /**

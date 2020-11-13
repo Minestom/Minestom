@@ -29,7 +29,7 @@ public class NettyServer {
     private String address;
     private int port;
 
-    public NettyServer(PacketProcessor packetProcessor) {
+    public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
 
         if (Epoll.isAvailable()) {
@@ -55,10 +55,11 @@ public class NettyServer {
 
                 ChannelPipeline pipeline = ch.pipeline();
 
+                // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 pipeline.addLast("legacy-ping", new LegacyPingHandler());
 
                 // Adds packetLength at start | Reads framed bytebuf
-                pipeline.addLast("framer", new PacketFramer());
+                pipeline.addLast("framer", new PacketFramer(packetProcessor));
 
                 // Reads bytebuf and creating inbound packet
                 pipeline.addLast("decoder", new PacketDecoder());
