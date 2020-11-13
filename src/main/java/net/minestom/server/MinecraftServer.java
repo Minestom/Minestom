@@ -112,10 +112,10 @@ public final class MinecraftServer {
     @Setter
     private static boolean fixLighting = true;
 
-    // Rate Limiting
+    // Network monitoring
     private static int rateLimit = 300;
     private static int maxPacketSize = 30_000;
-
+    // Network
     private static PacketListenerManager packetListenerManager;
     private static NettyServer nettyServer;
 
