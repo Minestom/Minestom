@@ -16,10 +16,10 @@ public class ClientUpdateSignPacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
-        this.line1 = reader.readSizedString();
-        this.line2 = reader.readSizedString();
-        this.line3 = reader.readSizedString();
-        this.line4 = reader.readSizedString();
+        this.line1 = reader.readSizedString(384);
+        this.line2 = reader.readSizedString(384);
+        this.line3 = reader.readSizedString(384);
+        this.line4 = reader.readSizedString(384);
 
     }
 }

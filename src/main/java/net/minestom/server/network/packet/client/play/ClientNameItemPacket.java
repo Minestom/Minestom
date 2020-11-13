@@ -10,6 +10,6 @@ public class ClientNameItemPacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.itemName = reader.readSizedString();
+        this.itemName = reader.readSizedString(Short.MAX_VALUE);
     }
 }

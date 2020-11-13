@@ -10,6 +10,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.validate.Check;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.NBTReader;
@@ -76,8 +77,21 @@ public class BinaryReader extends InputStream {
         return buffer.readDouble();
     }
 
-    public String readSizedString() {
+    /**
+     * Reads a string size by a var-int.
+     * <p>
+     * If the string length is higher than {@code maxLength},
+     * the code throws an exception and the string bytes are not read.
+     *
+     * @param maxLength the max length of the string
+     * @return the string
+     * @throws IllegalStateException if the string length is higher than {@code maxLength}
+     */
+    public String readSizedString(int maxLength) {
         final int length = readVarInt();
+        Check.stateCondition(length >= maxLength,
+                "String length (" + length + ") was higher than the max length of " + maxLength);
+
         final byte[] bytes = readBytes(length);
         return new String(bytes);
     }
@@ -96,11 +110,11 @@ public class BinaryReader extends InputStream {
         return bytes;
     }
 
-    public String[] readSizedStringArray() {
+    public String[] readSizedStringArray(int maxLength) {
         final int size = readVarInt();
         String[] strings = new String[size];
         for (int i = 0; i < size; i++) {
-            strings[i] = readSizedString();
+            strings[i] = readSizedString(maxLength);
         }
         return strings;
     }
@@ -133,8 +147,8 @@ public class BinaryReader extends InputStream {
         return NBTUtils.readItemStack(this);
     }
 
-    public JsonMessage readJsonMessage() {
-        final String string = readSizedString();
+    public JsonMessage readJsonMessage(int maxLength) {
+        final String string = readSizedString(maxLength);
         final JsonObject jsonObject = JsonParser.parseString(string).getAsJsonObject();
         return new JsonMessage.RawJsonMessage(jsonObject);
     }

@@ -109,7 +109,7 @@ public interface SerializableData extends Data {
         {
             final int dataIndexSize = binaryReader.readVarInt();
             for (int i = 0; i < dataIndexSize; i++) {
-                final String className = binaryReader.readSizedString();
+                final String className = binaryReader.readSizedString(Short.MAX_VALUE);
                 final short classIndex = binaryReader.readShort();
                 typeToIndexMap.put(className, classIndex);
             }

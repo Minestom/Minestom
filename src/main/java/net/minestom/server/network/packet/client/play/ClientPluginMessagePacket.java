@@ -11,7 +11,7 @@ public class ClientPluginMessagePacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.channel = reader.readSizedString();
+        this.channel = reader.readSizedString(256);
         this.data = reader.getRemainingBytes();
     }
 }

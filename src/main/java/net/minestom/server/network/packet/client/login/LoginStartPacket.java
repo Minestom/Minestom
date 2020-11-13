@@ -88,7 +88,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.username = reader.readSizedString();
+        this.username = reader.readSizedString(16);
     }
 
 }

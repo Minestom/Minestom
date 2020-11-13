@@ -25,7 +25,7 @@ public class ClientRecipeBookData extends ClientPlayPacket {
 
         switch (type) {
             case 0:
-                this.recipeId = reader.readSizedString();
+                this.recipeId = reader.readSizedString(256);
                 break;
             case 1:
                 this.craftingRecipeBookOpen = reader.readBoolean();

@@ -247,7 +247,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the max number of packets a client can send over 1 second.
+     * Gets the maximum number of packets a client can send over 1 second.
      *
      * @return the packet count limit over 1 second, 0 if not enabled
      */

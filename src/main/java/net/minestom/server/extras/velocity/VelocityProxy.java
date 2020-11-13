@@ -72,7 +72,7 @@ public final class VelocityProxy {
     }
 
     public static InetAddress readAddress(@NotNull BinaryReader reader) {
-        return InetAddresses.forString(reader.readSizedString());
+        return InetAddresses.forString(reader.readSizedString(Integer.MAX_VALUE));
     }
 
 }

@@ -13,7 +13,7 @@ public class ClientUpdateCommandBlockMinecartPacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.entityId = reader.readVarInt();
-        this.command = reader.readSizedString();
+        this.command = reader.readSizedString(Short.MAX_VALUE);
         this.trackOutput = reader.readBoolean();
     }
 }

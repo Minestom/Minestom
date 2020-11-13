@@ -15,7 +15,7 @@ public class ClientAdvancementTabPacket extends ClientPlayPacket {
         this.action = AdvancementAction.values()[reader.readVarInt()];
 
         if (action == AdvancementAction.OPENED_TAB) {
-            this.tabIdentifier = reader.readSizedString();
+            this.tabIdentifier = reader.readSizedString(256);
         }
     }
 

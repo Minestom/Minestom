@@ -149,7 +149,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
             }
 
             // Get the key
-            final String name = reader.readSizedString();
+            final String name = reader.readSizedString(Integer.MAX_VALUE);
 
             // Get the data
             final Object value;
