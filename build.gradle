@@ -135,7 +135,6 @@ dependencies {
     api "org.ow2.asm:asm-analysis:${asmVersion}"
     api "org.ow2.asm:asm-util:${asmVersion}"
     api "org.ow2.asm:asm-commons:${asmVersion}"
-    implementation 'com.google.guava:guava:30.0-jre'
     api "org.spongepowered:mixin:${mixinVersion}"
 
     // Path finding
