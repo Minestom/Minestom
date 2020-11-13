@@ -13,8 +13,9 @@ public class CreativeInventoryActionListener {
         if (player.getGameMode() != GameMode.CREATIVE)
             return;
 
-        final ItemStack item = packet.item;
         short slot = packet.slot;
+        final ItemStack item = packet.item;
+        
         if (slot != -1) {
             // Set item
             slot = (short) PlayerInventoryUtils.convertSlot(slot, PlayerInventoryUtils.OFFSET);

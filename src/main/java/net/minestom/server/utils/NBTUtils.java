@@ -94,7 +94,7 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    @NotNull
+    @Nullable
     public static ItemStack readItemStack(@NotNull BinaryReader reader) {
         final boolean present = reader.readBoolean();
 

@@ -137,8 +137,16 @@ public class BinaryReader extends InputStream {
         return new UUID(most, least);
     }
 
+    /**
+     * Tries to read an {@link ItemStack}.
+     *
+     * @return the read item
+     * @throws NullPointerException if the item could not get read
+     */
     public ItemStack readSlot() {
-        return NBTUtils.readItemStack(this);
+        final ItemStack itemStack = NBTUtils.readItemStack(this);
+        Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
+        return itemStack;
     }
 
     public JsonMessage readJsonMessage(int maxLength) {
