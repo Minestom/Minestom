@@ -92,6 +92,7 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
 
             // Write the data (no length)
             final DataType dataType = DATA_MANAGER.getDataType(type);
+            Check.notNull(dataType, "Tried to encode a type not registered in DataManager: " + type);
             dataType.encode(binaryWriter, value);
         }
 

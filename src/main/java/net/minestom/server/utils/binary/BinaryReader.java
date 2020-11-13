@@ -96,12 +96,6 @@ public class BinaryReader extends InputStream {
         return new String(bytes);
     }
 
-    public String readShortSizedString() {
-        final short length = readShort();
-        final byte[] bytes = readBytes(length);
-        return new String(bytes);
-    }
-
     public byte[] readBytes(int length) {
         ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];

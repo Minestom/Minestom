@@ -18,7 +18,7 @@ public interface SerializableData extends Data {
     DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     @Override
-    <T> void set(@NotNull String key, @Nullable T value, @NotNull Class<T> type);
+    <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type);
 
     /**
      * Serializes the data into an array of bytes.
@@ -109,7 +109,7 @@ public interface SerializableData extends Data {
         {
             final int dataIndexSize = binaryReader.readVarInt();
             for (int i = 0; i < dataIndexSize; i++) {
-                final String className = binaryReader.readSizedString(Short.MAX_VALUE);
+                final String className = binaryReader.readSizedString(Integer.MAX_VALUE);
                 final short classIndex = binaryReader.readShort();
                 typeToIndexMap.put(className, classIndex);
             }
