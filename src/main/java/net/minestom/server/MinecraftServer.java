@@ -114,6 +114,7 @@ public final class MinecraftServer {
     private static int maxPacketSize = 30_000;
     // Network
     private static PacketListenerManager packetListenerManager;
+    private static PacketProcessor packetProcessor;
     private static NettyServer nettyServer;
 
     // In-Game Manager
@@ -181,7 +182,7 @@ public final class MinecraftServer {
 
         connectionManager = new ConnectionManager();
         // Networking
-        final PacketProcessor packetProcessor = new PacketProcessor();
+        packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
 
         instanceManager = new InstanceManager();
@@ -432,6 +433,18 @@ public final class MinecraftServer {
     public static ConnectionManager getConnectionManager() {
         checkInitStatus(connectionManager);
         return connectionManager;
+    }
+
+    /**
+     * Gets the object handling the client packets processing.
+     * <p>
+     * Can be used if you want to convert a buffer to a client packet object.
+     *
+     * @return the packet processor
+     */
+    public static PacketProcessor getPacketProcessor() {
+        checkInitStatus(packetProcessor);
+        return packetProcessor;
     }
 
     /**

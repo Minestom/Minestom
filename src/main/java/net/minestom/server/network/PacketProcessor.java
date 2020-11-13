@@ -23,6 +23,16 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Responsible for processing client packets.
+ * <p>
+ * You can retrieve the different packet handlers per state (status/login/play)
+ * from the {@link net.minestom.server.network.packet.client.handler.ClientPacketsHandler} class.
+ * <p>
+ * Packet handlers are cached here and can be retrieved with {@link #getStatusPacketsHandler()}, {@link #getLoginPacketsHandler()}
+ * and {@link #getPlayPacketsHandler()}. The one to use depend on the type of packet you need to retrieve (the packet id 0 does not have
+ * the same meaning as it is a login or play packet).
+ */
 public final class PacketProcessor {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
@@ -94,8 +104,20 @@ public final class PacketProcessor {
         return connectionPlayerConnectionMap.get(channel);
     }
 
-    public void removePlayerConnection(ChannelHandlerContext channel) {
+    public void removePlayerConnection(@NotNull ChannelHandlerContext channel) {
         connectionPlayerConnectionMap.remove(channel);
+    }
+
+    public ClientStatusPacketsHandler getStatusPacketsHandler() {
+        return statusPacketsHandler;
+    }
+
+    public ClientLoginPacketsHandler getLoginPacketsHandler() {
+        return loginPacketsHandler;
+    }
+
+    public ClientPlayPacketsHandler getPlayPacketsHandler() {
+        return playPacketsHandler;
     }
 
     /**
