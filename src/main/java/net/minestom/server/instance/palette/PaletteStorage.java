@@ -210,7 +210,7 @@ public class PaletteStorage {
                     8191, 16383, 32767};
 
     private static void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
-        if (y < 0) {
+        if (y < 0 || y >= Chunk.CHUNK_SIZE_Y) {
             return;
         }
 
@@ -255,7 +255,7 @@ public class PaletteStorage {
     }
 
     private static short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
-        if (y < 0) {
+        if (y < 0 || y >= Chunk.CHUNK_SIZE_Y) {
             return 0;
         }
 

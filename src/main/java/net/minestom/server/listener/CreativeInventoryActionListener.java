@@ -15,7 +15,7 @@ public class CreativeInventoryActionListener {
 
         short slot = packet.slot;
         final ItemStack item = packet.item;
-        
+
         if (slot != -1) {
             // Set item
             slot = (short) PlayerInventoryUtils.convertSlot(slot, PlayerInventoryUtils.OFFSET);
