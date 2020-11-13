@@ -489,6 +489,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             }
 
             // handle block contacts
+            // TODO do not call every tick (it is pretty expensive)
             final int minX = (int) Math.floor(boundingBox.getMinX());
             final int maxX = (int) Math.ceil(boundingBox.getMaxX());
             final int minY = (int) Math.floor(boundingBox.getMinY());
