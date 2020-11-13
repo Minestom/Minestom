@@ -11,6 +11,7 @@ import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.NBTReader;
@@ -29,7 +30,7 @@ public class BinaryReader extends InputStream {
     private final ByteBuf buffer;
     private final NBTReader nbtReader = new NBTReader(this, false);
 
-    public BinaryReader(ByteBuf buffer) {
+    public BinaryReader(@NotNull ByteBuf buffer) {
         this.buffer = buffer;
     }
 

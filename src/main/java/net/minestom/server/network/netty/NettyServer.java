@@ -52,9 +52,9 @@ public class NettyServer {
             channel = NioServerSocketChannel.class;
         }
 
-        bootstrap = new ServerBootstrap();
-        bootstrap.group(boss, worker);
-        bootstrap.channel(channel);
+        bootstrap = new ServerBootstrap()
+                .group(boss, worker)
+                .channel(channel);
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
