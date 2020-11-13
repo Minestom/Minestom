@@ -1,12 +1,11 @@
 package net.minestom.server.scoreboard;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.PacketWriterUtils;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
@@ -21,18 +20,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class Team {
 
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
     /**
      * A collection of all registered entities who are on the team
      */
     private final Set<String> members;
-    /**
-     * Creation packet for the team to create
-     */
-    private final TeamsPacket teamsCreationPacket;
-    /**
-     * A byte buf to destroy the team
-     */
-    private final ByteBuf teamsDestroyPacket;
 
     /**
      * The registry name of the team
@@ -94,22 +87,6 @@ public class Team {
 
         this.entities = new String[0];
         this.members = new CopyOnWriteArraySet<>();
-
-        // Initializes creation packet
-        this.teamsCreationPacket = new TeamsPacket();
-        this.teamsCreationPacket.teamName = teamName;
-        this.teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        this.teamsCreationPacket.teamDisplayName = this.teamDisplayName.toString();
-        this.teamsCreationPacket.friendlyFlags = this.friendlyFlags;
-        this.teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
-        this.teamsCreationPacket.collisionRule = this.collisionRule;
-        this.teamsCreationPacket.teamColor = this.teamColor.getId();
-        this.teamsCreationPacket.teamPrefix = this.prefix.toString();
-        this.teamsCreationPacket.teamSuffix = this.suffix.toString();
-        this.teamsCreationPacket.entities = this.entities;
-
-        // Directly write packet since it will not change
-        this.teamsDestroyPacket = PacketUtils.writePacket(this.createTeamDestructionPacket());
     }
 
     /**
@@ -124,7 +101,6 @@ public class Team {
         System.arraycopy(this.entities, 0, entitiesCache, 0, this.entities.length);
         entitiesCache[this.entities.length] = member;
         this.entities = entitiesCache;
-        this.teamsCreationPacket.entities = this.entities;
 
         // Adds a new member to the team
         this.members.add(member);
@@ -134,8 +110,9 @@ public class Team {
         addPlayerPacket.teamName = this.teamName;
         addPlayerPacket.action = TeamsPacket.Action.ADD_PLAYERS_TEAM;
         addPlayerPacket.entities = new String[]{member};
+
         // Sends to all online players the add player packet
-        PacketWriterUtils.writeAndSend(MinecraftServer.getConnectionManager().getOnlinePlayers(), addPlayerPacket);
+        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
     }
 
     /**
@@ -150,7 +127,7 @@ public class Team {
         removePlayerPacket.action = TeamsPacket.Action.REMOVE_PLAYERS_TEAM;
         removePlayerPacket.entities = new String[]{member};
         // Sends to all online player teh remove player packet
-        PacketWriterUtils.writeAndSend(MinecraftServer.getConnectionManager().getOnlinePlayers(), removePlayerPacket);
+        PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
 
         // Removes the player from the
         this.members.remove(member);
@@ -161,7 +138,6 @@ public class Team {
             entitiesCache[count++] = teamMember;
         }
         this.entities = entitiesCache;
-        this.teamsCreationPacket.entities = this.entities;
     }
 
     /**
@@ -173,7 +149,6 @@ public class Team {
      */
     public void setTeamDisplayName(ColoredText teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
-        this.teamsCreationPacket.teamDisplayName = teamDisplayName.toString();
     }
 
     /**
@@ -195,7 +170,6 @@ public class Team {
      */
     public void setNameTagVisibility(NameTagVisibility visibility) {
         this.nameTagVisibility = visibility;
-        this.teamsCreationPacket.nameTagVisibility = visibility;
     }
 
     /**
@@ -217,7 +191,6 @@ public class Team {
      */
     public void setCollisionRule(CollisionRule rule) {
         this.collisionRule = rule;
-        this.teamsCreationPacket.collisionRule = rule;
     }
 
     /**
@@ -239,7 +212,6 @@ public class Team {
      */
     public void setTeamColor(ChatColor color) {
         this.teamColor = color;
-        this.teamsCreationPacket.teamColor = color.getId();
     }
 
     /**
@@ -261,7 +233,6 @@ public class Team {
      */
     public void setPrefix(ColoredText prefix) {
         this.prefix = prefix;
-        this.teamsCreationPacket.teamPrefix = prefix.toString();
     }
 
     /**
@@ -283,7 +254,6 @@ public class Team {
      */
     public void setSuffix(ColoredText suffix) {
         this.suffix = suffix;
-        this.teamsCreationPacket.teamSuffix = suffix.toString();
     }
 
     /**
@@ -305,7 +275,6 @@ public class Team {
      */
     public void setFriendlyFlags(byte flag) {
         this.friendlyFlags = flag;
-        this.teamsCreationPacket.friendlyFlags = flag;
     }
 
     /**
@@ -328,16 +297,24 @@ public class Team {
     }
 
     /**
-     * Gets the creation packet to add a team.
+     * Creates the creation packet to add a team.
      *
      * @return the packet to add the team
      */
-    public TeamsPacket getTeamsCreationPacket() {
-        return teamsCreationPacket;
-    }
+    public TeamsPacket createTeamsCreationPacket() {
+        TeamsPacket teamsCreationPacket = new TeamsPacket();
+        teamsCreationPacket.teamName = teamName;
+        teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
+        teamsCreationPacket.teamDisplayName = this.teamDisplayName;
+        teamsCreationPacket.friendlyFlags = this.friendlyFlags;
+        teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
+        teamsCreationPacket.collisionRule = this.collisionRule;
+        teamsCreationPacket.teamColor = this.teamColor.getId();
+        teamsCreationPacket.teamPrefix = this.prefix;
+        teamsCreationPacket.teamSuffix = this.suffix;
+        teamsCreationPacket.entities = this.entities;
 
-    public ByteBuf getTeamsDestroyPacket() {
-        return teamsDestroyPacket;
+        return teamsCreationPacket;
     }
 
     /**
@@ -435,16 +412,14 @@ public class Team {
         final TeamsPacket updatePacket = new TeamsPacket();
         updatePacket.teamName = this.teamName;
         updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = this.teamDisplayName.toString();
+        updatePacket.teamDisplayName = this.teamDisplayName;
         updatePacket.friendlyFlags = this.friendlyFlags;
         updatePacket.nameTagVisibility = this.nameTagVisibility;
         updatePacket.collisionRule = this.collisionRule;
         updatePacket.teamColor = this.teamColor.getId();
-        updatePacket.teamPrefix = this.prefix.toString();
-        updatePacket.teamSuffix = this.suffix.toString();
-        ByteBuf buffer = PacketUtils.writePacket(updatePacket);
-        for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            onlinePlayer.getPlayerConnection().sendPacket(buffer, true);
-        }
+        updatePacket.teamPrefix = this.prefix;
+        updatePacket.teamSuffix = this.suffix;
+
+        PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
     }
 }

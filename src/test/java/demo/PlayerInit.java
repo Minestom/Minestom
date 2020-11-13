@@ -83,6 +83,12 @@ public class PlayerInit {
             packetController.setCancel(false);
         });
 
+        connectionManager.onPacketSend((player, packetController, packet) -> {
+            // Listen to all sent packet
+            System.out.println("PACKET: " + packet.getClass().getSimpleName());
+            packetController.setCancel(false);
+        });
+
         connectionManager.addPlayerInitialization(player -> {
 
             player.addEventCallback(EntityAttackEvent.class, event -> {

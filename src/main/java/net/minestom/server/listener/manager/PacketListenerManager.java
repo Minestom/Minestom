@@ -6,13 +6,17 @@ import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PacketListenerManager {
 
+    public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
@@ -56,7 +60,7 @@ public final class PacketListenerManager {
      * @param player the player who sent the packet
      * @param <T>    the packet type
      */
-    public <T extends ClientPlayPacket> void process(@NotNull T packet, @NotNull Player player) {
+    public <T extends ClientPlayPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
 
         final Class clazz = packet.getClass();
 
@@ -64,26 +68,29 @@ public final class PacketListenerManager {
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            System.err.println("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
+            LOGGER.error("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
+            return;
         }
 
-
-        final PacketController packetController = new PacketController(packetListenerConsumer);
-        for (PacketConsumer packetConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
+        final PacketController packetController = new PacketController();
+        for (PacketConsumer<ClientPlayPacket> packetConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
             packetConsumer.accept(player, packetController, packet);
         }
 
         if (packetController.isCancel())
             return;
 
-        // Get the new listener (or the same) from the packet controller
-        packetListenerConsumer = packetController.getPacketListenerConsumer();
+        // Finally execute the listener
+        packetListenerConsumer.accept(packet, player);
+    }
 
-        // Call the listener if not null
-        // (can be null because no listener is set, or because it has been changed by the controller)
-        if (packetListenerConsumer != null) {
-            packetListenerConsumer.accept(packet, player);
+    public <T extends ServerPacket> boolean processServerPacket(@NotNull T packet, @NotNull Player player) {
+        final PacketController packetController = new PacketController();
+        for (PacketConsumer<ServerPacket> packetConsumer : CONNECTION_MANAGER.getSendPacketConsumers()) {
+            packetConsumer.accept(player, packetController, packet);
         }
+
+        return !packetController.isCancel();
     }
 
     /**

@@ -2,9 +2,12 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * Class used to write packets.
@@ -13,6 +16,12 @@ public final class PacketUtils {
 
     private PacketUtils() {
 
+    }
+
+    public static void sendGroupedPacket(Collection<Player> players, ServerPacket packet) {
+        for (Player player : players) {
+            player.getPlayerConnection().sendPacket(packet);
+        }
     }
 
     /**

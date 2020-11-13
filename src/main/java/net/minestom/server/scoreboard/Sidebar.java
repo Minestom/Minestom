@@ -401,13 +401,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix.toString();
-            teamsPacket.teamSuffix = suffix.toString();
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             teamsPacket.entities = new String[]{entityName};
             return teamsPacket;
         }
@@ -434,13 +434,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix.toString();
-            teamsPacket.teamSuffix = suffix.toString();
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             return teamsPacket;
         }
 

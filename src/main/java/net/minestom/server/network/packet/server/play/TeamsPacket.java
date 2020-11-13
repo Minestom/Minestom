@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -22,7 +23,7 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The display name for the team
      */
-    public String teamDisplayName;
+    public JsonMessage teamDisplayName;
     /**
      * The friendly flags to
      */
@@ -42,11 +43,11 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The prefix of the team
      */
-    public String teamPrefix;
+    public JsonMessage teamPrefix;
     /**
      * The suffix of the team
      */
-    public String teamSuffix;
+    public JsonMessage teamSuffix;
     /**
      * An array with all entities in the team
      */
@@ -65,13 +66,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(this.teamDisplayName);
+                writer.writeSizedString(this.teamDisplayName.toString());
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
                 writer.writeVarInt(this.teamColor);
-                writer.writeSizedString(this.teamPrefix);
-                writer.writeSizedString(this.teamSuffix);
+                writer.writeSizedString(this.teamPrefix.toString());
+                writer.writeSizedString(this.teamSuffix.toString());
                 break;
             case REMOVE_TEAM:
 

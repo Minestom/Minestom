@@ -1,6 +1,5 @@
 package net.minestom.server.network.player;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -14,23 +13,10 @@ import java.net.SocketAddress;
 public class FakePlayerConnection extends PlayerConnection {
 
     @Override
-    public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
-        throw new UnsupportedOperationException("FakePlayer cannot read Bytebuf");
-    }
-
-    @Override
-    public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
-        throw new UnsupportedOperationException("FakePlayer cannot write to Bytebuf");
-    }
-
-    @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
-        getFakePlayer().getController().consumePacket(serverPacket);
-    }
-
-    @Override
-    public void flush() {
-        // Does nothing
+        if (shouldSendPacket(serverPacket)) {
+            getFakePlayer().getController().consumePacket(serverPacket);
+        }
     }
 
     @NotNull

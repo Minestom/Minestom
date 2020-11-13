@@ -16,12 +16,12 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -369,7 +369,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void setTime(long time) {
         this.time = time;
-        PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());
+        PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
     }
 
     /**
@@ -417,12 +417,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
-     * Gets a {@link TimeUpdatePacket} with the current age and time of this instance
+     * Creates a {@link TimeUpdatePacket} with the current age and time of this instance
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
     @NotNull
-    private TimeUpdatePacket getTimePacket() {
+    private TimeUpdatePacket createTimePacket() {
         TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
         timeUpdatePacket.worldAge = worldAge;
         timeUpdatePacket.timeOfDay = time;
@@ -996,7 +996,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
             // time needs to be send to players
             if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
-                PacketWriterUtils.writeAndSend(getPlayers(), getTimePacket());
+                PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }
 

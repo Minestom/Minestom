@@ -1,9 +1,10 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public abstract class Explosion {
      *
      * @param instance instance to perform this explosion in
      */
-    public void apply(Instance instance) {
+    public void apply(@NotNull Instance instance) {
         List<BlockPosition> blocks = prepare(instance);
         ExplosionPacket packet = new ExplosionPacket();
         packet.x = getCenterX();
@@ -80,7 +81,7 @@ public abstract class Explosion {
         postExplosion(instance, blocks, packet);
 
         // TODO send only to close players
-        PacketWriterUtils.writeAndSend(instance.getPlayers(), packet);
+        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
 
         postSend(instance, blocks);
     }

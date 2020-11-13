@@ -1,15 +1,16 @@
 package net.minestom.server.advancements;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Represents an advancement located in an {@link AdvancementTab}.
@@ -373,17 +374,11 @@ public class Advancement {
         updateCriteria();
 
         if (tab != null) {
-            // Update the tab cached packet
-            tab.updatePacket();
+            final Set<Player> viewers = tab.getViewers();
+            AdvancementsPacket createPacket = tab.createPacket();
 
-            final ByteBuf createBuffer = tab.createBuffer;
-            final ByteBuf removeBuffer = tab.removeBuffer;
-            tab.getViewers().forEach(player -> {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
-                // Receive order is important
-                playerConnection.sendPacket(removeBuffer, true);
-                playerConnection.sendPacket(createBuffer, true);
-            });
+            PacketUtils.sendGroupedPacket(viewers, tab.removePacket);
+            PacketUtils.sendGroupedPacket(viewers, createPacket);
         }
     }
 

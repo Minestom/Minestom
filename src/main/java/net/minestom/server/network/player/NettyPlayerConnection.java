@@ -1,6 +1,5 @@
 package net.minestom.server.network.player;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import lombok.Getter;
@@ -82,37 +81,10 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     @Override
-    public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
-        if (copy) {
-            buffer = buffer.copy();
-            buffer.retain();
-            channel.writeAndFlush(buffer);
-            buffer.release();
-        } else {
-            channel.writeAndFlush(buffer);
-        }
-    }
-
-    @Override
-    public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
-        if (copy) {
-            buffer = buffer.copy();
-            buffer.retain();
-            channel.write(buffer);
-            buffer.release();
-        } else {
-            channel.write(buffer);
-        }
-    }
-
-    @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
-        channel.writeAndFlush(serverPacket);
-    }
-
-    @Override
-    public void flush() {
-        getChannel().flush();
+        if (shouldSendPacket(serverPacket)) {
+            channel.writeAndFlush(serverPacket);
+        }
     }
 
     @NotNull

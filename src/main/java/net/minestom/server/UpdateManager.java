@@ -71,10 +71,10 @@ public final class UpdateManager {
                 final long tickTime = System.nanoTime() - currentTime;
 
                 // Tick end callbacks
-                doTickCallback(tickEndCallbacks, tickTime / 1000000);
+                doTickCallback(tickEndCallbacks, tickTime / 1000000L);
 
                 // Sleep until next tick
-                final long sleepTime = Math.max(1, (tickDistance - tickTime) / 1000000);
+                final long sleepTime = Math.max(1, (tickDistance - tickTime) / 1000000L);
 
                 try {
                     Thread.sleep(sleepTime);

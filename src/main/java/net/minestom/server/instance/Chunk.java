@@ -13,7 +13,6 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -464,7 +463,8 @@ public abstract class Chunk implements Viewable, DataContainer {
             }
             updateLightPacket.skyLight = temp;
             updateLightPacket.blockLight = temp2;
-            PacketWriterUtils.writeAndSend(player, updateLightPacket);
+
+            playerConnection.sendPacket(updateLightPacket);
         }
     }
 
@@ -496,6 +496,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param section the section to update
      * @param player  the player to send the packet to
+     * @throws IllegalArgumentException if {@code section} is not a valid section
      */
     public void sendChunkSectionUpdate(int section, @NotNull Player player) {
         if (!PlayerUtils.isNettyClient(player))
@@ -503,7 +504,7 @@ public abstract class Chunk implements Viewable, DataContainer {
         Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),
                 "The chunk section " + section + " does not exist");
 
-        PacketWriterUtils.writeAndSend(player, getChunkSectionUpdatePacket(section));
+        player.getPlayerConnection().sendPacket(createChunkSectionUpdatePacket(section));
     }
 
     /**
@@ -513,7 +514,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return the {@link ChunkDataPacket} to update a single chunk section
      */
     @NotNull
-    protected ChunkDataPacket getChunkSectionUpdatePacket(int section) {
+    protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
         chunkDataPacket.fullChunk = false;
         int[] sections = new int[CHUNK_SECTION_COUNT];

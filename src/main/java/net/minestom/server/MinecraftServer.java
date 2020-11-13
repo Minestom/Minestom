@@ -31,7 +31,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
@@ -49,6 +48,7 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -242,8 +242,7 @@ public final class MinecraftServer {
         Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
-        PluginMessagePacket brandMessage = PluginMessagePacket.getBrandPacket();
-        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), brandMessage);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
     }
 
     /**
@@ -301,12 +300,11 @@ public final class MinecraftServer {
         Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
-        // The difficulty packet
+        // Send the packet to all online players
         ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
         serverDifficultyPacket.difficulty = difficulty;
         serverDifficultyPacket.locked = true; // Can only be modified on single-player
-        // Send the packet to all online players
-        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
     }
 
     /**
@@ -468,14 +466,16 @@ public final class MinecraftServer {
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
-            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
-            updateViewDistancePacket.viewDistance = chunkViewDistance;
 
             final Collection<Player> players = connectionManager.getOnlinePlayers();
 
-            PacketWriterUtils.writeAndSend(players, updateViewDistancePacket);
+            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
+            updateViewDistancePacket.viewDistance = chunkViewDistance;
 
-            connectionManager.getOnlinePlayers().forEach(player -> {
+            // Send packet to all online players
+            PacketUtils.sendGroupedPacket(players, updateViewDistancePacket);
+
+            players.forEach(player -> {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleChunks(playerChunk);

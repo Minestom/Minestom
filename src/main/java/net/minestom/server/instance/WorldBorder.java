@@ -2,8 +2,8 @@ package net.minestom.server.instance;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.WorldBorderPacket;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,6 +100,7 @@ public class WorldBorder {
      */
     public void setWarningTime(int warningTime) {
         this.warningTime = warningTime;
+
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.SET_WARNING_TIME;
         worldBorderPacket.wbAction = new WorldBorderPacket.WBSetWarningTime(warningTime);
@@ -115,6 +116,7 @@ public class WorldBorder {
      */
     public void setWarningBlocks(int warningBlocks) {
         this.warningBlocks = warningBlocks;
+
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.SET_WARNING_BLOCKS;
         worldBorderPacket.wbAction = new WorldBorderPacket.WBSetWarningBlocks(warningBlocks);
@@ -136,6 +138,7 @@ public class WorldBorder {
         this.newDiameter = diameter;
         this.speed = speed;
         this.lerpStartTime = System.currentTimeMillis();
+
 
         WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
         worldBorderPacket.action = WorldBorderPacket.Action.LERP_SIZE;
@@ -270,10 +273,10 @@ public class WorldBorder {
     /**
      * Sends a {@link WorldBorderPacket} to all the instance players.
      *
-     * @param worldBorderPacket the packet to send
+     * @param packet the packet to send
      */
-    private void sendPacket(@NotNull WorldBorderPacket worldBorderPacket) {
-        PacketWriterUtils.writeAndSend(instance.getPlayers(), worldBorderPacket);
+    private void sendPacket(@NotNull WorldBorderPacket packet) {
+        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
     }
 
     public enum CollisionAxis {

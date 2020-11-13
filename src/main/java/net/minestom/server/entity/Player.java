@@ -291,9 +291,6 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void update(long time) {
-        // Flush all pending packets
-        playerConnection.flush();
-
         playerConnection.updateStats();
 
         // Process received packets
@@ -1687,7 +1684,7 @@ public class Player extends LivingEntity implements CommandSender {
     public void setTeam(Team team) {
         super.setTeam(team);
         if (team != null)
-            getPlayerConnection().sendPacket(team.getTeamsCreationPacket());
+            getPlayerConnection().sendPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -2338,7 +2335,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Team
         if (this.getTeam() != null)
-            connection.sendPacket(this.getTeam().getTeamsCreationPacket());
+            connection.sendPacket(this.getTeam().createTeamsCreationPacket());
 
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();
