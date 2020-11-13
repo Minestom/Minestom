@@ -113,7 +113,7 @@ public final class MinecraftServer {
     private static boolean fixLighting = true;
 
     // Rate Limiting
-    private static int rateLimit = 0;
+    private static int rateLimit = 300;
     private static int maxPacketSize = 30_000;
 
     private static PacketListenerManager packetListenerManager;
