@@ -85,9 +85,6 @@ public final class MinecraftServer {
 
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
-    public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
-    public static final int THREAD_COUNT_PACKET_WRITER = 2;
-
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
 

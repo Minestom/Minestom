@@ -38,7 +38,6 @@ public final class BenchmarkManager {
         THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
 
         THREADS.add(THREAD_NAME_MAIN_UPDATE);
-        THREADS.add(THREAD_NAME_PACKET_WRITER);
         THREADS.add(THREAD_NAME_BLOCK_BATCH);
         THREADS.add(THREAD_NAME_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);

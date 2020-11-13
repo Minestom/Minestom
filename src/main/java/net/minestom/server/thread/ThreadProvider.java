@@ -103,6 +103,9 @@ public abstract class ThreadProvider {
     }
 
     private void refreshPool() {
+        if (pool != null) {
+            this.pool.shutdown();
+        }
         this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
     }
 
