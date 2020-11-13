@@ -210,6 +210,10 @@ public class PaletteStorage {
                     8191, 16383, 32767};
 
     private static void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
+        if (y < 0) {
+            return;
+        }
+
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
@@ -251,6 +255,10 @@ public class PaletteStorage {
     }
 
     private static short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
+        if (y < 0) {
+            return 0;
+        }
+
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
