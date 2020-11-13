@@ -214,21 +214,10 @@ public class PaletteStorage {
             return;
         }
 
-        x = toChunkCoordinate(x);
-        z = toChunkCoordinate(z);
-
         final int section = ChunkUtils.getSectionAt(y);
-
-        // Change to palette value
-        blockId = paletteStorage.getPaletteIndex(section, blockId);
-
-        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
 
         final int valuesPerLong = paletteStorage.valuesPerLong;
         final int bitsPerEntry = paletteStorage.bitsPerEntry;
-
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
         if (paletteStorage.sectionBlocks[section].length == 0) {
             if (blockId == 0) {
@@ -239,6 +228,17 @@ public class PaletteStorage {
             // Initialize the section
             paletteStorage.sectionBlocks[section] = new long[getSize(valuesPerLong)];
         }
+
+        x = toChunkCoordinate(x);
+        z = toChunkCoordinate(z);
+
+        // Change to palette value
+        blockId = paletteStorage.getPaletteIndex(section, blockId);
+
+        final int sectionIndex = getSectionIndex(x, y, z);
+
+        final int index = sectionIndex / valuesPerLong;
+        final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
         final long[] sectionBlock = paletteStorage.sectionBlocks[section];
 
@@ -259,25 +259,29 @@ public class PaletteStorage {
             return 0;
         }
 
+        final int section = ChunkUtils.getSectionAt(y);
+        final long[] blocks;
+
+        // Retrieve the longs and check if the section is empty
+        {
+            blocks = paletteStorage.sectionBlocks[section];
+
+            if (blocks.length == 0) {
+                // Section is not loaded, can only be air
+                return 0;
+            }
+        }
+
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
-        final int sectionIndex = getSectionIndex(x, y % CHUNK_SECTION_SIZE, z);
+        final int sectionIndex = getSectionIndex(x, y, z);
 
         final int valuesPerLong = paletteStorage.valuesPerLong;
         final int bitsPerEntry = paletteStorage.bitsPerEntry;
 
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
-
-        final int section = ChunkUtils.getSectionAt(y);
-
-        final long[] blocks = paletteStorage.sectionBlocks[section];
-
-        if (blocks.length == 0) {
-            // Section is not loaded, can only be air
-            return 0;
-        }
 
         final long value = blocks[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry];
 
@@ -335,6 +339,7 @@ public class PaletteStorage {
      * @return the section index of the position
      */
     public static int getSectionIndex(int x, int y, int z) {
+        y %= CHUNK_SECTION_SIZE;
         return y << 8 | z << 4 | x;
     }
 
