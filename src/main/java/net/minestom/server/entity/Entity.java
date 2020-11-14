@@ -379,8 +379,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             return;
         }
 
-        BlockPosition blockPosition = position.toBlockPosition();
-        if (!ChunkUtils.isLoaded(instance, position.getX(), position.getZ()) || !ChunkUtils.isLoaded(instance, blockPosition.getX(), blockPosition.getZ())) {
+        final Chunk currentChunk = getChunk(); // current entity chunk
+
+        if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
         }
@@ -468,8 +469,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 float drag;
                 if (onGround) {
-                    final CustomBlock customBlock =
-                            instance.getCustomBlock(blockPosition);
+                    final BlockPosition blockPosition = position.toBlockPosition();
+                    final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
                     if (customBlock != null) {
                         // Custom drag
                         drag = customBlock.getDrag(instance, blockPosition);

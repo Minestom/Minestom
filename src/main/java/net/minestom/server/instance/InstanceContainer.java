@@ -606,6 +606,15 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets if this instance has {@link SharedInstance} linked to it.
+     *
+     * @return true if {@link #getSharedInstances()} is not empty
+     */
+    public boolean hasSharedInstances() {
+        return !sharedInstances.isEmpty();
+    }
+
+    /**
      * Assigns a {@link SharedInstance} to this container.
      * <p>
      * Only used by {@link InstanceManager}, mostly unsafe.

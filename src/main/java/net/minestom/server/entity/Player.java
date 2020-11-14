@@ -55,6 +55,9 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
@@ -125,6 +128,10 @@ public class Player extends LivingEntity implements CommandSender {
     private long targetBlockBreakCount; // Number of tick since the last stage change
     private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
     private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
+
+    // Experience orb pickup
+    protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
+    protected long lastExperiencePickupTime;
 
     private BelowNameTag belowNameTag;
 
@@ -347,20 +354,24 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Experience orb pickup
-        final Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
-        final Set<Entity> entities = instance.getChunkEntities(chunk);
-        for (Entity entity : entities) {
-            if (entity instanceof ExperienceOrb) {
-                final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
-                final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
-                if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                    if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
-                        continue;
-                    PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
-                    callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
-                        short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                        entity.remove();
-                    });
+        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupTime, experiencePickupCooldown)) {
+            this.lastExperiencePickupTime = time;
+
+            final Chunk chunk = getChunk(); // TODO check surrounding chunks
+            final Set<Entity> entities = instance.getChunkEntities(chunk);
+            for (Entity entity : entities) {
+                if (entity instanceof ExperienceOrb) {
+                    final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
+                    final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
+                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
+                        if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
+                            continue;
+                        PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
+                        callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
+                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                            entity.remove();
+                        });
+                    }
                 }
             }
         }

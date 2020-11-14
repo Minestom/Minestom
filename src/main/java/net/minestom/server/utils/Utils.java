@@ -1,8 +1,6 @@
 package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
@@ -94,6 +92,32 @@ public final class Utils {
         return new UUID(uuidMost, uuidLeast);
     }
 
+    public static void writeBlocks(ByteBuf buffer, short[] palette, long[] blocksId, int bitsPerEntry) {
+        /*short count = 0;
+        for (short id : blocksId)
+            if (id != 0)
+                count++;*/
+
+        //buffer.writeShort(count);
+        buffer.writeShort(200);
+        buffer.writeByte((byte) bitsPerEntry);
+
+        // Palette
+        if (bitsPerEntry < 9) {
+            // Palette has to exist
+            writeVarIntBuf(buffer, palette.length);
+            for (short paletteValue : palette) {
+                writeVarIntBuf(buffer, paletteValue);
+            }
+        }
+
+        final long[] data = blocksId;
+        writeVarIntBuf(buffer, data.length);
+        for (long datum : data) {
+            buffer.writeLong(datum);
+        }
+    }
+
     private static final int[] MAGIC = {
             -1, -1, 0, Integer.MIN_VALUE, 0, 0, 1431655765, 1431655765, 0, Integer.MIN_VALUE,
             0, 1, 858993459, 858993459, 0, 715827882, 715827882, 0, 613566756, 613566756,
@@ -115,69 +139,6 @@ public final class Utils {
             0, 74051160, 74051160, 0, 72796055, 72796055, 0, 71582788, 71582788, 0,
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
-
-    public static void writeBlocks(ByteBuf buffer, short[] palette, long[] blocksId, int bitsPerEntry) {
-        /*short count = 0;
-        for (short id : blocksId)
-            if (id != 0)
-                count++;*/
-
-        //buffer.writeShort(count);
-        buffer.writeShort(200);
-        buffer.writeByte((byte) bitsPerEntry);
-
-        // Palette
-        if (bitsPerEntry < 9) {
-            // Palette has to exist
-            writeVarIntBuf(buffer, palette.length);
-            for (short paletteValue : palette) {
-                writeVarIntBuf(buffer, paletteValue);
-            }
-        }
-
-        final long[] data = blocksId;//encodeBlocksTEST(bitsPerEntry);
-        writeVarIntBuf(buffer, data.length);
-        for (long datum : data) {
-            buffer.writeLong(datum);
-        }
-    }
-
-    public synchronized static long[] encodeBlocksTEST(int bitsPerEntry) {
-        //long test = (Block.TORCH.getBlockId() << (64 - 50 - bitsPerEntry + 1));
-        //System.out.println("BINARY: 0b" + Long.toBinaryString(test) + " " + (64 - 50 - bitsPerEntry + 1));
-        final int blockCount = 16 * 16 * 16; // A whole chunk section
-        final int longSize = Long.SIZE; // 64
-        final char valuesPerLong = (char) (longSize / bitsPerEntry);
-        final int arraySize = blockCount / valuesPerLong;
-
-        long[] data = new long[arraySize];
-        data[0] = 0b000000010001L;
-        data[1] = 0b000000010001L;
-
-        if (true) {
-            return data;
-        }
-
-        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                    final long blockId = x % 2 == 0 && z % 2 == 0 ? Block.AIR.getBlockId() : Block.LAVA.getBlockId();
-                    int sectionIndex = (((y * 16) + z) * 16) + x;
-
-                    final int index = sectionIndex / valuesPerLong;
-                    final int bitIndex = sectionIndex % valuesPerLong * bitsPerEntry;
-
-                    data[index] |= (blockId << bitIndex);
-                }
-            }
-        }
-
-        return data;
-    }
-
-    private static String binary(long value) {
-        return "0b" + Long.toBinaryString(value);
-    }
 
     public static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
         final long maxEntryValue = (1L << bitsPerEntry) - 1;

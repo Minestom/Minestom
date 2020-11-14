@@ -51,6 +51,7 @@ public interface CommandSender extends PermissionHandler {
      * Casts this object to a {@link Player}.
      * No checks are performed, {@link ClassCastException} can very much happen.
      *
+     * @throws ClassCastException if 'this' is not a player
      * @see #isPlayer()
      */
     default Player asPlayer() {
@@ -61,6 +62,7 @@ public interface CommandSender extends PermissionHandler {
      * Casts this object to a {@link ConsoleSender}.
      * No checks are performed, {@link ClassCastException} can very much happen.
      *
+     * @throws ClassCastException if 'this' is not a console sender
      * @see #isConsole()
      */
     default ConsoleSender asConsole() {
