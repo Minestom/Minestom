@@ -650,11 +650,11 @@ public final class MinecraftServer {
         extensionManager.getExtensions().forEach(Extension::initialize);
         extensionManager.getExtensions().forEach(Extension::postInitialize);
 
+        MinecraftServer.started = true;
+
         final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
         LOGGER.info("Extensions loaded in " + loadTime + "ms");
         LOGGER.info("Minestom server started successfully.");
-
-        MinecraftServer.started = true;
     }
 
     /**
