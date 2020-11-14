@@ -3,7 +3,9 @@ package net.minestom.server.network.packet.client.login;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
+import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -27,8 +29,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
+        final boolean isNettyClient = connection instanceof NettyPlayerConnection;
+
         // Cache the login username and start compression if enabled
-        if (connection instanceof NettyPlayerConnection) {
+        if (isNettyClient) {
             NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
             nettyPlayerConnection.UNSAFE_setLoginUsername(username);
 
@@ -40,7 +44,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         }
 
         // Proxy support (only for netty clients)
-        if (connection instanceof NettyPlayerConnection) {
+        if (isNettyClient) {
             final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
 
             {
@@ -65,7 +69,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         }
 
-        if (MojangAuth.isUsingMojangAuth() && connection instanceof NettyPlayerConnection) {
+        if (MojangAuth.isUsingMojangAuth() && isNettyClient) {
             // Mojang auth
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
                 connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED_JSON));
@@ -79,10 +83,16 @@ public class LoginStartPacket implements ClientPreplayPacket {
             EncryptionRequestPacket encryptionRequestPacket = new EncryptionRequestPacket(nettyPlayerConnection);
             nettyPlayerConnection.sendPacket(encryptionRequestPacket);
         } else {
+            final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
-            final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
+            final UUID playerUuid = bungee && isNettyClient ?
+                    ((NettyPlayerConnection) connection).getBungeeUuid() :
+                    CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-            CONNECTION_MANAGER.startPlayState(connection, playerUuid, username);
+            Player player = CONNECTION_MANAGER.startPlayState(connection, playerUuid, username);
+            if (bungee && isNettyClient) {
+                player.setSkin(((NettyPlayerConnection) connection).getBungeeSkin());
+            }
         }
     }
 

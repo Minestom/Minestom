@@ -6,8 +6,8 @@ import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.optifine.OptifineSupport;
-import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -52,8 +52,8 @@ public class Main {
 
         OptifineSupport.enable();
 
-        VelocityProxy.enable("rBeJJ79W4MVU");
-        //BungeeCordProxy.enable();
+        //VelocityProxy.enable("rBeJJ79W4MVU");
+        BungeeCordProxy.enable();
 
         // MojangAuth.init();
 

@@ -149,12 +149,20 @@ public final class PacketProcessor {
      * @param reader     the buffer containing the packet
      */
     private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
+        final int readableBytes = reader.getBuffer().readableBytes();
+
+        // Check if there is anything to read
+        if (readableBytes == 0) {
+            return;
+        }
+
         try {
             readable.read(reader);
         } catch (Exception e) {
             final Player player = connection.getPlayer();
             final String username = player != null ? player.getUsername() : "null";
             LOGGER.warn("Connection " + connection.getRemoteAddress() + " (" + username + ") sent an unexpected packet.");
+            e.printStackTrace();
         }
     }
 }
