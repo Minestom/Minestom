@@ -39,6 +39,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
+        // Bungee support (IP forwarding)
         if (BungeeCordProxy.isEnabled() && connection instanceof NettyPlayerConnection) {
             NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
 

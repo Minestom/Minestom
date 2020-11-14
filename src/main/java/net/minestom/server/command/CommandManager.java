@@ -83,6 +83,7 @@ public final class CommandManager {
      * Registers a {@link Command}.
      *
      * @param command the command to register
+     * @throws IllegalStateException if a command with the same name already exists
      */
     public synchronized void register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
@@ -109,6 +110,7 @@ public final class CommandManager {
      * Registers a {@link CommandProcessor}.
      *
      * @param commandProcessor the command to register
+     * @throws IllegalStateException if a command with the same name already exists
      */
     public synchronized void register(@NotNull CommandProcessor commandProcessor) {
         final String commandName = commandProcessor.getCommandName().toLowerCase();

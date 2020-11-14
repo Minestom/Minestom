@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Tab-completion can be activated by overriding {@link #enableWritingTracking()} and return true, you should then listen to
  * {@link #onWrite(String)} and return the possible completions to suggest.
+ * <p>
+ * Please be sure to check {@link net.minestom.server.command.builder.Command} as it is likely to be better for your use case.
  */
 public interface CommandProcessor {
 
