@@ -188,6 +188,8 @@ public final class ConnectionManager {
      * Changes how {@link UUID} are attributed to players.
      * <p>
      * Shouldn't be override if already defined.
+     * <p>
+     * Be aware that it is possible for an UUID provider to be ignored, for example in the case of a proxy (eg: velocity).
      *
      * @param uuidProvider the new player connection uuid provider,
      *                     setting it to null would apply a random UUID for each player connection
@@ -277,10 +279,13 @@ public final class ConnectionManager {
      * @param uuid       the new player uuid
      * @param username   the new player username
      * @param connection the new player connection
+     * @return the newly created player object
      */
-    public void createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
+    @NotNull
+    public Player createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         createPlayer(player);
+        return player;
     }
 
     /**
@@ -306,12 +311,14 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @param uuid       the uuid of the player
      * @param username   the username of the player
+     * @return the newly created player object
      */
-    public void startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
+    @NotNull
+    public Player startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
         LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
         connection.sendPacket(loginSuccessPacket);
 
         connection.setConnectionState(ConnectionState.PLAY);
-        createPlayer(uuid, username, connection);
+        return createPlayer(uuid, username, connection);
     }
 }

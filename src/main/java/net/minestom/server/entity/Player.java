@@ -220,7 +220,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(spawnPositionPacket);
 
         // Add player to list with spawning skin
-        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this);
+        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
         callEvent(PlayerSkinInitEvent.class, skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         playerConnection.sendPacket(getAddPlayerToList());
@@ -1153,6 +1153,9 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
+
+        if (instance == null)
+            return;
 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
