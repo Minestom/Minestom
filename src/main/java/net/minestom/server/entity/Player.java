@@ -37,7 +37,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -131,7 +130,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Experience orb pickup
     protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
-    protected long lastExperiencePickupTime;
+    private long lastExperiencePickupCheckTime;
 
     private BelowNameTag belowNameTag;
 
@@ -154,8 +153,6 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
-
-    private final List<Permission> permissions = new LinkedList<>();
 
     public Player(UUID uuid, String username, PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
@@ -342,7 +339,8 @@ public class Player extends LivingEntity implements CommandSender {
 
                         final Chunk chunk = instance.getChunkAt(targetBlockPosition);
                         final int entityId = targetCustomBlock.getBreakEntityId(this);
-                        final BlockBreakAnimationPacket blockBreakAnimationPacket = new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
+                        final BlockBreakAnimationPacket blockBreakAnimationPacket =
+                                new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
                         Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
                         chunk.sendPacketToViewers(blockBreakAnimationPacket);
 
@@ -354,8 +352,8 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Experience orb pickup
-        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupTime, experiencePickupCooldown)) {
-            this.lastExperiencePickupTime = time;
+        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupCheckTime, experiencePickupCooldown)) {
+            this.lastExperiencePickupCheckTime = time;
 
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
@@ -453,6 +451,7 @@ public class Player extends LivingEntity implements CommandSender {
                 }
 
                 if (viewChanged) {
+                    // Yaw from the rotation packet seems to be ignored, which is why this is required
                     EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
                     entityHeadLookPacket.entityId = getEntityId();
                     entityHeadLookPacket.yaw = position.getYaw();
@@ -479,6 +478,7 @@ public class Player extends LivingEntity implements CommandSender {
     @Override
     public void kill() {
         if (!isDead()) {
+
             // send death screen text to the killed player
             {
                 ColoredText deathText;
@@ -649,7 +649,8 @@ public class Player extends LivingEntity implements CommandSender {
                 final ChunkCallback callback = (chunk) -> {
                     if (chunk != null) {
                         chunk.addViewer(this);
-                        if (chunk.getChunkX() == Math.floorDiv((int) getPosition().getX(), 16) && chunk.getChunkZ() == Math.floorDiv((int) getPosition().getZ(), 16))
+                        if (chunk.getChunkX() == ChunkUtils.getChunkCoordinate((int) getPosition().getX()) &&
+                                chunk.getChunkZ() == ChunkUtils.getChunkCoordinate((int) getPosition().getZ()))
                             updateViewPosition(chunk);
                     }
                     final boolean isLast = counter.get() == length - 1;
@@ -1262,7 +1263,8 @@ public class Player extends LivingEntity implements CommandSender {
         facePosition(facePoint, entity.getPosition(), entity, targetPoint);
     }
 
-    private void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition, @Nullable Entity entity, @Nullable FacePoint targetPoint) {
+    private void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition,
+                              @Nullable Entity entity, @Nullable FacePoint targetPoint) {
         FacePlayerPacket facePlayerPacket = new FacePlayerPacket();
         facePlayerPacket.entityFacePosition = facePoint == FacePoint.EYE ?
                 FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
@@ -2196,7 +2198,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param targetBlockPosition the custom block position
      * @param breakers            the breakers of the block, can be null if {@code this} is the only breaker
      */
-    public void setTargetBlock(@NotNull CustomBlock targetCustomBlock, @NotNull BlockPosition targetBlockPosition, @Nullable Set<Player> breakers) {
+    public void setTargetBlock(@NotNull CustomBlock targetCustomBlock, @NotNull BlockPosition targetBlockPosition,
+                               @Nullable Set<Player> breakers) {
         this.targetCustomBlock = targetCustomBlock;
         this.targetBlockPosition = targetBlockPosition;
 
@@ -2515,7 +2518,8 @@ public class Player extends LivingEntity implements CommandSender {
          * @param displayedSkinParts the player displayed skin parts
          * @param mainHand           the player main hand
          */
-        public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors, byte displayedSkinParts, MainHand mainHand) {
+        public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors,
+                            byte displayedSkinParts, MainHand mainHand) {
 
             final boolean viewDistanceChanged = !firstRefresh && this.viewDistance != viewDistance;
 

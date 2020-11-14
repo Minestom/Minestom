@@ -111,7 +111,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     /**
      * Schedules a task to be run during the next instance tick.
-     * It ensures that the task will be executed in the same thread as the instance and its chunks/entities (depending of the {@link ThreadProvider}).
+     * It ensures that the task will be executed in the same thread as the instance
+     * and its chunks/entities (depending of the {@link ThreadProvider}).
      *
      * @param callback the task to execute during the next instance tick
      */

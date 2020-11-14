@@ -34,7 +34,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     // Item pickup
     protected boolean canPickupItem;
     protected UpdateOption itemPickupCooldown = new UpdateOption(10, TimeUnit.TICK);
-    protected long lastItemPickupTime;
+    private long lastItemPickupCheckTime;
 
     protected boolean isDead;
 
@@ -96,8 +96,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         // Items picking
-        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupTime, itemPickupCooldown)) {
-            this.lastItemPickupTime = time;
+        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupCheckTime, itemPickupCooldown)) {
+            this.lastItemPickupCheckTime = time;
 
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
@@ -313,7 +313,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     soundCategory = SoundCategory.HOSTILE;
                 }
 
-                SoundEffectPacket damageSoundPacket = SoundEffectPacket.create(soundCategory, sound, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 1.0f, 1.0f);
+                SoundEffectPacket damageSoundPacket =
+                        SoundEffectPacket.create(soundCategory, sound,
+                                getPosition().getX(), getPosition().getY(), getPosition().getZ(),
+                                1.0f, 1.0f);
                 sendPacketToViewersAndSelf(damageSoundPacket);
             }
         });
