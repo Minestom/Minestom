@@ -20,6 +20,8 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -46,7 +48,7 @@ import java.util.function.Consumer;
  * <p>
  * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
  */
-public abstract class Entity implements Viewable, EventHandler, DataContainer {
+public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
@@ -87,8 +89,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     private boolean autoViewable;
     private final int id;
-    private Data data;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private Data data;
+    private final List<Permission> permissions = new LinkedList<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -344,6 +347,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     @Override
     public void setData(@Nullable Data data) {
         this.data = data;
+    }
+
+    @NotNull
+    @Override
+    public Collection<Permission> getAllPermissions() {
+        return permissions;
     }
 
     /**

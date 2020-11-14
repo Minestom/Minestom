@@ -733,12 +733,6 @@ public class Player extends LivingEntity implements CommandSender {
         sendMessage(ColoredText.of(message));
     }
 
-    @NotNull
-    @Override
-    public Collection<Permission> getAllPermissions() {
-        return permissions;
-    }
-
     /**
      * Sends a message to the player.
      *
