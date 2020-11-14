@@ -5,20 +5,14 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.utils.location.RelativeVec;
 
 public class TestCommand extends Command {
 
     public TestCommand() {
         super("testcmd");
         setDefaultExecutor(this::usage);
-        {
-            //Argument dynamicWord = ArgumentType.DynamicWord("test");
 
-            //addSyntax(this::execute, dynamicWord);
-        }
-
-        Argument test = ArgumentType.RelativeVec2("pos");
+        Argument test = ArgumentType.ItemStack("test");
 
         test.setCallback((source, value, error) -> {
             System.out.println("ERROR " + error);
@@ -30,8 +24,7 @@ public class TestCommand extends Command {
         });
 
         addSyntax((source, args) -> {
-            RelativeVec location = args.getRelativeVector("pos");
-            System.out.println("IT WORKS " + location.fromRelativePosition(source.asPlayer()));
+            System.out.println("ARG 1");
         }, test);
     }
 

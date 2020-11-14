@@ -84,7 +84,13 @@ public final class CommandManager {
      *
      * @param command the command to register
      */
-    public void register(@NotNull Command command) {
+    public synchronized void register(@NotNull Command command) {
+        Check.stateCondition(commandExists(command.getName()),
+                "A command with the name " + command.getName() + " is already registered!");
+        for (String alias : command.getAliases()) {
+            Check.stateCondition(commandExists(alias),
+                    "A command with the name " + alias + " is already registered!");
+        }
         this.dispatcher.register(command);
     }
 
@@ -104,12 +110,18 @@ public final class CommandManager {
      *
      * @param commandProcessor the command to register
      */
-    public void register(@NotNull CommandProcessor commandProcessor) {
-        this.commandProcessorMap.put(commandProcessor.getCommandName().toLowerCase(), commandProcessor);
+    public synchronized void register(@NotNull CommandProcessor commandProcessor) {
+        final String commandName = commandProcessor.getCommandName().toLowerCase();
+        Check.stateCondition(commandExists(commandName),
+                "A command with the name " + commandName + " is already registered!");
+        this.commandProcessorMap.put(commandName, commandProcessor);
         // Register aliases
         final String[] aliases = commandProcessor.getAliases();
         if (aliases != null && aliases.length > 0) {
             for (String alias : aliases) {
+                Check.stateCondition(commandExists(alias),
+                        "A command with the name " + alias + " is already registered!");
+
                 this.commandProcessorMap.put(alias.toLowerCase(), commandProcessor);
             }
         }
@@ -124,6 +136,18 @@ public final class CommandManager {
     @Nullable
     public CommandProcessor getCommandProcessor(@NotNull String commandName) {
         return commandProcessorMap.get(commandName.toLowerCase());
+    }
+
+    /**
+     * Gets if a command with the name {@code commandName} already exists or name.
+     *
+     * @param commandName the command name to check
+     * @return true if the command does exist
+     */
+    public boolean commandExists(@NotNull String commandName) {
+        commandName = commandName.toLowerCase();
+        return dispatcher.findCommand(commandName) != null ||
+                commandProcessorMap.get(commandName) != null;
     }
 
     /**

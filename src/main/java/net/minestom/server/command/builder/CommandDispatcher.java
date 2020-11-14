@@ -17,6 +17,12 @@ public class CommandDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
 
+    /**
+     * Registers a command,
+     * be aware that registering a command name or alias will override the previous entry.
+     *
+     * @param command the command to register
+     */
     public void register(@NotNull Command command) {
         this.commandMap.put(command.getName().toLowerCase(), command);
 
