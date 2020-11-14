@@ -22,7 +22,7 @@ public final class VelocityProxy {
     public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
     private static final int SUPPORTED_FORWARDING_VERSION = 1;
 
-    private static boolean enabled;
+    private static volatile boolean enabled;
     private static byte[] secret;
 
     /**

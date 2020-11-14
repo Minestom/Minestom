@@ -7,7 +7,7 @@ package net.minestom.server.extras.bungee;
  */
 public final class BungeeCordProxy {
 
-    private static boolean enabled;
+    private static volatile boolean enabled;
 
     /**
      * Enables bungee IP forwarding.

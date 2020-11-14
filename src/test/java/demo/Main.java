@@ -6,6 +6,7 @@ import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -47,6 +48,8 @@ public class Main {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
         PlayerInit.init();
+
+        OptifineSupport.enable();
 
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
