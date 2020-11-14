@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @EqualsAndHashCode
 public class Biome {
 
-    public static final AtomicInteger idCounter = new AtomicInteger(0);
+    public static final AtomicInteger ID_COUNTER = new AtomicInteger(0);
 
     private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
             .fog_color(0xC0D8FF)
@@ -37,7 +37,7 @@ public class Biome {
             .effects(DEFAULT_EFFECTS)
             .build();
 
-    private final int id = idCounter.getAndIncrement();
+    private final int id = ID_COUNTER.getAndIncrement();
 
     private final NamespaceID name;
     @Builder.Default

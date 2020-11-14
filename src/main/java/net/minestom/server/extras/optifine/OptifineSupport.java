@@ -18,6 +18,8 @@ public final class OptifineSupport {
 
     /**
      * Enables optifine support by registering the required biomes.
+     *
+     * @throws IllegalStateException if optifine support is already enabled
      */
     public static void enable() {
         Check.stateCondition(enabled, "Optifine support is already enabled!");

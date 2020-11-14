@@ -616,6 +616,16 @@ public class Player extends LivingEntity implements CommandSender {
         return result;
     }
 
+    /**
+     * Changes the player instance and load surrounding chunks if needed.
+     * <p>
+     * Be aware that because chunk operations are expensive,
+     * it is possible for this method to be non-blocking when retrieving chunks is required.
+     * <p>
+     * When this method is called for the first time (during player login), the player will be teleport at {@link #getRespawnPoint()}.
+     *
+     * @param instance the new instance of the player
+     */
     @Override
     public void setInstance(@NotNull Instance instance) {
         Check.notNull(instance, "instance cannot be null!");
@@ -683,6 +693,11 @@ public class Player extends LivingEntity implements CommandSender {
     private void spawnPlayer(Instance instance, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         super.setInstance(instance);
+
+        if (firstSpawn) {
+            teleport(getRespawnPoint());
+        }
+
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
     }
