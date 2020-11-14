@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Utils;
@@ -60,10 +59,7 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
                 if (packetSize >= MinecraftServer.getMaxPacketSize()) {
                     final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
                     if (playerConnection != null) {
-                        final Player player = playerConnection.getPlayer();
-                        final String identifier = player != null ?
-                                player.getUsername() :
-                                playerConnection.getRemoteAddress().toString();
+                        final String identifier = playerConnection.getIdentifier();
                         LOGGER.warn("An user (" + identifier + ") sent a packet over the maximum size (" + packetSize + ")");
                     } else {
                         LOGGER.warn("An unregistered user sent a packet over the maximum size (" + packetSize + ")");

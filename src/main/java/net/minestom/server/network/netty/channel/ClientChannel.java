@@ -10,9 +10,13 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
     private final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
     private final PacketProcessor packetProcessor;
@@ -34,9 +38,10 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
             final int availableBytes = packet.body.readableBytes();
 
             if (availableBytes > 0) {
-                // TODO log4j2
-                System.err.println("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
-                        + " not fully read (" + availableBytes + " bytes left)");
+                final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
+
+                LOGGER.warn("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
+                        + " not fully read (" + availableBytes + " bytes left), " + playerConnection);
 
                 packet.body.skipBytes(availableBytes);
             }

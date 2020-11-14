@@ -16,6 +16,9 @@ public final class OptifineSupport {
 
     private static volatile boolean enabled;
 
+    /**
+     * Enables optifine support by registering the required biomes.
+     */
     public static void enable() {
         Check.stateCondition(enabled, "Optifine support is already enabled!");
         OptifineSupport.enabled = true;

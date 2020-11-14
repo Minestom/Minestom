@@ -74,6 +74,20 @@ public abstract class PlayerConnection {
     }
 
     /**
+     * Returns a printable identifier for this connection, will be the player username
+     * or the connection remote address.
+     *
+     * @return this connection identifier
+     */
+    @NotNull
+    public String getIdentifier() {
+        final Player player = getPlayer();
+        return player != null ?
+                player.getUsername() :
+                getRemoteAddress().toString();
+    }
+
+    /**
      * Serializes the packet and send it to the client.
      * <p>
      * Also responsible for executing {@link ConnectionManager#onPacketSend(PacketConsumer)} consumers.
@@ -155,5 +169,13 @@ public abstract class PlayerConnection {
      */
     public int getLastPacketCounter() {
         return lastPacketCounter.get();
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerConnection{" +
+                "connectionState=" + connectionState +
+                ", identifier=" + getIdentifier() +
+                '}';
     }
 }
