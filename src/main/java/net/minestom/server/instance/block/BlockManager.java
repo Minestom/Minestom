@@ -25,7 +25,7 @@ public class BlockManager {
      * @throws IllegalArgumentException if <code>customBlock</code> block id is not greater than 0
      * @throws IllegalStateException    if the id of <code>customBlock</code> is already registered
      */
-    public void registerCustomBlock(@NotNull CustomBlock customBlock) {
+    public synchronized void registerCustomBlock(@NotNull CustomBlock customBlock) {
         final short id = customBlock.getCustomBlockId();
         Check.argCondition(id <= 0, "Custom block ID must be greater than 0, got: " + id);
         Check.stateCondition(customBlocksInternalId[id] != null, "a CustomBlock with the id " + id + " already exists");
@@ -41,7 +41,7 @@ public class BlockManager {
      * @param blockPlacementRule the block placement rule to register
      * @throws IllegalArgumentException if <code>blockPlacementRule</code> block id is negative
      */
-    public void registerBlockPlacementRule(@NotNull BlockPlacementRule blockPlacementRule) {
+    public synchronized void registerBlockPlacementRule(@NotNull BlockPlacementRule blockPlacementRule) {
         final short id = blockPlacementRule.getBlockId();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
 
