@@ -147,6 +147,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         setVelocityUpdatePeriod(5);
     }
 
+    public Entity(@NotNull EntityType entityType) {
+        this(entityType, new Position());
+    }
+
     /**
      * Schedules a task to be run during the next entity tick.
      * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
@@ -157,12 +161,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.nextTick.add(callback);
     }
 
-    public Entity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
-    }
-
     /**
-     * @param id the entity unique id ({@link #getEntityId()})
+     * Gets an entity based on its id (from {@link #getEntityId()}).
+     * <p>
+     * Entity id are unique server-wide.
+     *
+     * @param id the entity unique id
      * @return the entity having the specified id, null if not found
      */
     @Nullable
@@ -592,7 +596,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * Each entity has an unique id which will change after a restart.
+     * Each entity has an unique id (server-wide) which will change after a restart.
      * <p>
      * All entities can be retrieved by calling {@link Entity#getEntity(int)}.
      *
