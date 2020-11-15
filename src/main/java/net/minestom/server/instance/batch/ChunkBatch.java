@@ -79,18 +79,25 @@ public class ChunkBatch implements InstanceBatch {
         }
     }
 
+    /**
+     * Called to fill the chunk batch.
+     *
+     * @param chunkGenerator the chunk generator
+     * @param callback       the optional callback executed once the batch is done
+     */
     public void flushChunkGenerator(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
-        final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
-        final boolean hasPopulator = populators != null && !populators.isEmpty();
-
-        // Check if there is anything to process
-        if (blocks.isEmpty() && !hasPopulator) {
-            OptionalCallback.execute(callback, chunk);
-            return;
-        }
-
         BLOCK_BATCH_POOL.execute(() -> {
+            final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
+            final boolean hasPopulator = populators != null && !populators.isEmpty();
+
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
+
+            // Check if there is anything to process
+            if (blocks.isEmpty() && !hasPopulator) {
+                OptionalCallback.execute(callback, chunk);
+                return;
+            }
+
             singleThreadFlush(hasPopulator ? null : callback, true);
 
             clearData(); // So the populators won't place those blocks again
