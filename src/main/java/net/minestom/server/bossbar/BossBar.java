@@ -15,7 +15,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Represents a boss bar which is displayed on the top of the client screen (max amount of boss bar defined by {@link #MAX_BOSSBAR}).
  * <p>
- * To use it, create a new instance and add the {@link Player} you want using {@link #addViewer(Player)} and remove them using {@link #removeViewer(Player)}.
+ * To use it, create a new instance using the constructor
+ * and add the {@link Player} you want using {@link #addViewer(Player)} and remove them using {@link #removeViewer(Player)}.
  * <p>
  * You can retrieve all the boss bars of a {@link Player} with {@link #getBossBars(Player)}.
  */

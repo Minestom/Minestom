@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * Represents a tab which can be shared between multiple players.
+ * Represents a tab which can be shared between multiple players. Created using {@link AdvancementManager#createTab(String, AdvancementRoot)}.
  * <p>
  * Each tab requires a root advancement and all succeeding advancements need to have a parent in the tab.
  * You can create a new advancement using {@link #createAdvancement(String, Advancement, Advancement)}.
