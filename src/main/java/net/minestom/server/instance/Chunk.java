@@ -41,7 +41,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
  * allowing you to implement your own storage solution if needed.
  * <p>
- * You can create your own implementation of this class by extending it and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
+ * You can create your own implementation of this class by extending it
+ * and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
+ * <p>
+ * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
+ * you should store the chunk coordinates instead.
  */
 public abstract class Chunk implements Viewable, DataContainer {
 
