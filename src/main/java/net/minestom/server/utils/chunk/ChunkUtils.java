@@ -196,9 +196,7 @@ public final class ChunkUtils {
      * @return the X coordinate of the block index
      */
     public static int blockIndexToPositionX(int index, int chunkX) {
-        int x = (byte) (index & 0xF);
-        x += Chunk.CHUNK_SIZE_X * chunkX;
-        return x;
+        return (int) blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
     }
 
     /**
@@ -219,9 +217,7 @@ public final class ChunkUtils {
      * @return the Z coordinate of the block index
      */
     public static int blockIndexToPositionZ(int index, int chunkZ) {
-        int z = (byte) (index >> 12 & 0xF);
-        z += Chunk.CHUNK_SIZE_Z * chunkZ;
-        return z;
+        return (int) blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
     }
 
     /**
@@ -231,7 +227,7 @@ public final class ChunkUtils {
      * @return the chunk position X (O-15) of the specified index
      */
     public static byte blockIndexToChunkPositionX(int index) {
-        return (byte) blockIndexToPositionX(index, 0);
+        return (byte) (index & 0xF);
     }
 
     /**
@@ -241,7 +237,7 @@ public final class ChunkUtils {
      * @return the chunk position Y (O-255) of the specified index
      */
     public static short blockIndexToChunkPositionY(int index) {
-        return (short) blockIndexToPositionY(index);
+        return (short) (index >>> 4 & 0xFF);
     }
 
     /**
@@ -251,7 +247,7 @@ public final class ChunkUtils {
      * @return the chunk position Z (O-15) of the specified index
      */
     public static byte blockIndexToChunkPositionZ(int index) {
-        return (byte) blockIndexToPositionZ(index, 0);
+        return (byte) (index >> 12 & 0xF);
     }
 
 }

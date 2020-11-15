@@ -597,10 +597,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     /**
      * Each entity has an unique id (server-wide) which will change after a restart.
-     * <p>
-     * All entities can be retrieved by calling {@link Entity#getEntity(int)}.
      *
      * @return the unique entity id
+     * @see Entity#getEntity(int) to retrive an entity based on its id
      */
     public int getEntityId() {
         return id;

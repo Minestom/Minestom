@@ -1,11 +1,18 @@
 package net.minestom.server.instance.batch;
 
-import kotlin.collections.ArrayDeque;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,48 +28,68 @@ import java.util.List;
  */
 public class ChunkBatch implements InstanceBatch {
 
-    private static final int INITIAL_SIZE = (Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SIZE_Y * Chunk.CHUNK_SIZE_Z) / 2;
-
     private final InstanceContainer instance;
     private final Chunk chunk;
 
     // Need to be synchronized manually
-    private final ArrayDeque<BlockData> dataList = new ArrayDeque<>(INITIAL_SIZE);
+    // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
+    private final LongList blocks = new LongArrayList();
 
-    public ChunkBatch(InstanceContainer instance, Chunk chunk) {
+    // Need to be synchronized manually
+    // block index - data
+    private final Int2ObjectMap<Data> blockDataMap = new Int2ObjectOpenHashMap<>();
+
+    public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk) {
         this.instance = instance;
         this.chunk = chunk;
     }
 
     @Override
-    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+    public void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data) {
         addBlockData((byte) x, y, (byte) z, blockStateId, (short) 0, data);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+    public void setCustomBlock(int x, int y, int z, short customBlockId, @Nullable Data data) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the id " + customBlockId + " does not exist!");
         addBlockData((byte) x, y, (byte) z, customBlock.getDefaultBlockStateId(), customBlockId, data);
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
         addBlockData((byte) x, y, (byte) z, blockStateId, customBlockId, data);
     }
 
-    private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, Data data) {
-        // TODO store a single long with bitwise operators (xyz;boolean,short,short,boolean) with the data in a map
-        final BlockData blockData = new BlockData(x, y, z, blockStateId, customBlockId, data);
-        synchronized (dataList) {
-            this.dataList.add(blockData);
+    private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, @Nullable Data data) {
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
+
+        if (data != null) {
+            synchronized (blockDataMap) {
+                this.blockDataMap.put(index, data);
+            }
+        }
+
+        long value = index;
+        value = (value << 16) | blockStateId;
+        value = (value << 16) | customBlockId;
+
+        synchronized (blocks) {
+            this.blocks.add(value);
         }
     }
 
-    public void flushChunkGenerator(ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
-        BLOCK_BATCH_POOL.execute(() -> {
-            final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
-            final boolean hasPopulator = populators != null && !populators.isEmpty();
+    public void flushChunkGenerator(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
+        final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
+        final boolean hasPopulator = populators != null && !populators.isEmpty();
 
+        // Check if there is anything to process
+        if (blocks.isEmpty() && !hasPopulator) {
+            OptionalCallback.execute(callback, chunk);
+            return;
+        }
+
+        BLOCK_BATCH_POOL.execute(() -> {
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
             singleThreadFlush(hasPopulator ? null : callback, true);
 
@@ -104,8 +131,8 @@ public class ChunkBatch implements InstanceBatch {
      * Resets the chunk batch by removing all the entries.
      */
     public void clearData() {
-        synchronized (dataList) {
-            this.dataList.clear();
+        synchronized (blocks) {
+            this.blocks.clear();
         }
     }
 
@@ -116,13 +143,18 @@ public class ChunkBatch implements InstanceBatch {
      * @param safeCallback true to run the callback in the instance update thread, otherwise run in the current one
      */
     private void singleThreadFlush(@Nullable ChunkCallback callback, boolean safeCallback) {
+        if (blocks.isEmpty()) {
+            OptionalCallback.execute(callback, chunk);
+            return;
+        }
+
         synchronized (chunk) {
             if (!chunk.isLoaded())
                 return;
 
-            synchronized (dataList) {
-                for (BlockData data : dataList) {
-                    data.apply(chunk);
+            synchronized (blocks) {
+                for (long block : blocks) {
+                    apply(chunk, block);
                 }
             }
 
@@ -141,25 +173,29 @@ public class ChunkBatch implements InstanceBatch {
         }
     }
 
-    private static class BlockData {
+    /**
+     * Places a block which is encoded in a long.
+     *
+     * @param chunk the chunk to place the block on
+     * @param value the block data
+     */
+    private void apply(@NotNull Chunk chunk, long value) {
+        final short customBlockId = (short) (value & 0xFF);
+        final short blockId = (short) (value >> 16 & 0xFF);
+        final int index = (int) (value >> 32 & 0xFFFF);
 
-        private final int x, y, z;
-        private final short blockStateId;
-        private final short customBlockId;
-        private final Data data;
-
-        private BlockData(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.blockStateId = blockStateId;
-            this.customBlockId = customBlockId;
-            this.data = data;
+        Data data = null;
+        if (!blockDataMap.isEmpty()) {
+            synchronized (blockDataMap) {
+                data = blockDataMap.get(index);
+            }
         }
 
-        public void apply(Chunk chunk) {
-            chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
-        }
+        chunk.UNSAFE_setBlock(ChunkUtils.blockIndexToChunkPositionX(index),
+                ChunkUtils.blockIndexToChunkPositionY(index),
+                ChunkUtils.blockIndexToChunkPositionZ(index),
+                blockId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+
 
     }
 
