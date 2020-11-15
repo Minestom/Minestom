@@ -53,6 +53,9 @@ public final class ChunkUtils {
 
     /**
      * Gets the chunk index of chunk coordinates.
+     * <p>
+     * Used when you want to store a chunk somewhere without using a reference to the whole object
+     * (as this can lead to memory leaks).
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z

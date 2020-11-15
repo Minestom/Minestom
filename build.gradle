@@ -37,8 +37,8 @@ allprojects {
     }
     javadoc {
         options {
+            destinationDir(file("docs"))
             addBooleanOption('html5', true)
-            addBooleanOption('-no-module-directories', true)
         }
     }
 }
