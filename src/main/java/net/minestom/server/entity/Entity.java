@@ -181,7 +181,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Called each tick.
      *
-     * @param time the time of update in milliseconds
+     * @param time time of the update in milliseconds
      */
     public abstract void update(long time);
 

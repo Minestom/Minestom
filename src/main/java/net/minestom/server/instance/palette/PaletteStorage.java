@@ -112,6 +112,33 @@ public class PaletteStorage {
         return sectionBlocks;
     }
 
+    /**
+     * Loops through all the sections and blocks to find unused array (empty chunk section)
+     * <p>
+     * Useful after clearing one or multiple sections of a chunk. Can be unnecessarily expensive if the chunk
+     * is composed of almost-empty sections since the loop will not stop until a non-air block is discovered.
+     */
+    public synchronized void clean() {
+        for (int i = 0; i < sectionBlocks.length; i++) {
+            long[] section = sectionBlocks[i];
+
+            if (section.length != 0) {
+                boolean canClear = true;
+                for (long blockGroup : section) {
+                    if (blockGroup != 0) {
+                        canClear = false;
+                        break;
+                    }
+                }
+                if (canClear) {
+                    sectionBlocks[i] = new long[0];
+                }
+
+            }
+
+        }
+    }
+
     public PaletteStorage copy() {
         PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
         paletteStorage.sectionBlocks = sectionBlocks.clone();

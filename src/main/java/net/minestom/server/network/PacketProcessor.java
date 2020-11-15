@@ -149,7 +149,7 @@ public final class PacketProcessor {
      * @param reader     the buffer containing the packet
      */
     private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
-        final int readableBytes = reader.getBuffer().readableBytes();
+        final int readableBytes = reader.available();
 
         // Check if there is anything to read
         if (readableBytes == 0) {
