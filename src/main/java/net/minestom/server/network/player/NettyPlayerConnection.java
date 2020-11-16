@@ -92,7 +92,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
-            channel.write(serverPacket);
+            if (getPlayer() != null) {
+                channel.write(serverPacket); // Flush on player update
+            } else {
+                channel.writeAndFlush(serverPacket);
+            }
         }
     }
 
