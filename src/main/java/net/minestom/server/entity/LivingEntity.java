@@ -33,7 +33,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
     protected boolean canPickupItem;
-    protected UpdateOption itemPickupCooldown = new UpdateOption(10, TimeUnit.TICK);
+    protected UpdateOption itemPickupCooldown = new UpdateOption(5, TimeUnit.TICK);
     private long lastItemPickupCheckTime;
 
     protected boolean isDead;

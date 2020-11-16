@@ -37,7 +37,7 @@ import java.util.*;
  */
 public class ItemStack implements DataContainer {
 
-    private static final StackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule(64);
+    private static final StackingRule VANILLA_STACKING_RULE = new VanillaStackingRule(64);
 
     private Material material;
 
@@ -76,7 +76,7 @@ public class ItemStack implements DataContainer {
 
     {
         if (defaultStackingRule == null)
-            defaultStackingRule = DEFAULT_STACKING_RULE;
+            defaultStackingRule = VANILLA_STACKING_RULE;
         this.stackingRule = defaultStackingRule;
     }
 

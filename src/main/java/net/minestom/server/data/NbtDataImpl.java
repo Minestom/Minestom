@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class NbtDataImpl extends DataImpl {
 
-    // Used to know if a nbt key is from a Data object, should NOT be changed
+    // Used to know if a nbt key is from a Data object, should NOT be changed and used in a key name
     public static final String KEY_PREFIX = "nbtdata_";
 
     @NotNull
