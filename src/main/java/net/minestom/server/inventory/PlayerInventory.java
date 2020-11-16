@@ -335,7 +335,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     /**
      * Refreshes an inventory slot.
      *
-     * @param slot      the packet slot
+     * @param slot      the packet slot,
      *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
      * @param itemStack the item stack in the slot
      */

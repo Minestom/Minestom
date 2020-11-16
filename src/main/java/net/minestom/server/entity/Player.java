@@ -420,11 +420,6 @@ public class Player extends LivingEntity implements CommandSender {
                     entityPositionAndRotationPacket.pitch = position.getPitch();
                     entityPositionAndRotationPacket.onGround = onGround;
 
-                    lastX = position.getX();
-                    lastY = position.getY();
-                    lastZ = position.getZ();
-                    lastYaw = position.getYaw();
-                    lastPitch = position.getPitch();
                     updatePacket = entityPositionAndRotationPacket;
                 } else if (positionChanged) {
                     EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
@@ -433,9 +428,7 @@ public class Player extends LivingEntity implements CommandSender {
                     entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
                     entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
                     entityPositionPacket.onGround = onGround;
-                    lastX = position.getX();
-                    lastY = position.getY();
-                    lastZ = position.getZ();
+
                     updatePacket = entityPositionPacket;
                 } else {
                     // View changed
@@ -445,8 +438,6 @@ public class Player extends LivingEntity implements CommandSender {
                     entityRotationPacket.pitch = position.getPitch();
                     entityRotationPacket.onGround = onGround;
 
-                    lastYaw = position.getYaw();
-                    lastPitch = position.getPitch();
                     updatePacket = entityRotationPacket;
                 }
 
@@ -471,6 +462,16 @@ public class Player extends LivingEntity implements CommandSender {
                 entityMovementPacket.entityId = getEntityId();
                 sendPacketToViewers(entityMovementPacket);
             }
+        }
+
+        if (positionChanged) {
+            lastX = position.getX();
+            lastY = position.getY();
+            lastZ = position.getZ();
+        }
+        if (viewChanged) {
+            lastYaw = position.getYaw();
+            lastPitch = position.getPitch();
         }
 
     }

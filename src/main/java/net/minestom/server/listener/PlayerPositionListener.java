@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket
 import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionListener {
 
@@ -47,7 +48,7 @@ public class PlayerPositionListener {
         processMovement(player, x, y, z, yaw, pitch, onGround);
     }
 
-    private static void processMovement(Player player, float x, float y, float z,
+    private static void processMovement(@NotNull Player player, float x, float y, float z,
                                         float yaw, float pitch, boolean onGround) {
 
         // Try to move in an unloaded chunk, prevent it
