@@ -84,6 +84,14 @@ public final class PacketListenerManager {
         packetListenerConsumer.accept(packet, player);
     }
 
+    /**
+     * Executes the consumers from {@link ConnectionManager#onPacketSend(PacketConsumer)}.
+     *
+     * @param packet the packet to process
+     * @param player the player which should receive the packet
+     * @param <T>    the packet type
+     * @return true if the packet is not cancelled, false otherwise
+     */
     public <T extends ServerPacket> boolean processServerPacket(@NotNull T packet, @NotNull Player player) {
         final PacketController packetController = new PacketController();
         for (PacketConsumer<ServerPacket> packetConsumer : CONNECTION_MANAGER.getSendPacketConsumers()) {
