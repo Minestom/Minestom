@@ -35,17 +35,22 @@ public class ChunkBatch implements InstanceBatch {
 
     // Need to be synchronized manually
     // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
-    private final LongList blocks = new LongArrayList();
+    private LongList blocks;
 
     // Need to be synchronized manually
     // block index - data
-    private final Int2ObjectMap<Data> blockDataMap = new Int2ObjectOpenHashMap<>();
+    private Int2ObjectMap<Data> blockDataMap;
 
     public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk,
                       boolean generationBatch) {
         this.instance = instance;
         this.chunk = chunk;
         this.generationBatch = generationBatch;
+
+        if (!generationBatch) {
+            this.blocks = new LongArrayList();
+            this.blockDataMap = new Int2ObjectOpenHashMap<>();
+        }
     }
 
     @Override
@@ -66,10 +71,12 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, @Nullable Data data) {
-
         if (isGenerationBatch()) {
+            // Directly place the block
             chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
         } else {
+            // Cache the entry to be placed later during flush
+
             final int index = ChunkUtils.getBlockIndex(x, y, z);
 
             if (data != null) {
@@ -120,6 +127,7 @@ public class ChunkBatch implements InstanceBatch {
                 }
             }
 
+            // Safe callback
             instance.scheduleNextTick(inst -> {
                 OptionalCallback.execute(callback, chunk);
             });
@@ -133,6 +141,7 @@ public class ChunkBatch implements InstanceBatch {
      * @param callback the callback to execute once the blocks are placed
      */
     public void flush(@Nullable ChunkCallback callback) {
+        Check.stateCondition(generationBatch, "#flush is not support for generation batch.");
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(callback, true));
     }
 
@@ -144,6 +153,7 @@ public class ChunkBatch implements InstanceBatch {
      * @param callback the callback to execute once the blocks are placed
      */
     public void unsafeFlush(@Nullable ChunkCallback callback) {
+        Check.stateCondition(generationBatch, "#unsafeFlush is not support for generation batch.");
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(callback, false));
     }
 
@@ -151,6 +161,7 @@ public class ChunkBatch implements InstanceBatch {
      * Resets the chunk batch by removing all the entries.
      */
     public void clearData() {
+        Check.stateCondition(generationBatch, "#clearData is not support for generation batch.");
         synchronized (blocks) {
             this.blocks.clear();
         }

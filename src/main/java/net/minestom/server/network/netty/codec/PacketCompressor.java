@@ -31,10 +31,10 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     private final int threshold;
 
-    private byte[] buffer = new byte[8192];
+    private final byte[] buffer = new byte[8192];
 
-    private Deflater deflater = new Deflater();
-    private Inflater inflater = new Inflater();
+    private final Deflater deflater = new Deflater();
+    private final Inflater inflater = new Inflater();
 
     public PacketCompressor(int threshold) {
         this.threshold = threshold;
@@ -80,14 +80,15 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
                 // TODO optimize to do not initialize arrays each time
 
-                byte[] abyte = new byte[buf.readableBytes()];
-                buf.readBytes(abyte);
+                byte[] input = new byte[buf.readableBytes()];
+                buf.readBytes(input);
 
-                inflater.setInput(abyte);
-                byte[] abyte1 = new byte[i];
+                inflater.setInput(input);
 
-                inflater.inflate(abyte1);
-                out.add(Unpooled.wrappedBuffer(abyte1));
+                byte[] output = new byte[i];
+
+                inflater.inflate(output);
+                out.add(Unpooled.wrappedBuffer(output));
 
                 inflater.reset();
             }
