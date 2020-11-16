@@ -208,7 +208,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>&lt;T extends <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;<br>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processServerPacket(T,net.minestom.server.entity.Player)">processServerPacket</a></span>&#8203;(T&nbsp;packet,
                    <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;<br>void</code></td>
@@ -314,6 +316,16 @@ extends java.lang.Object</pre>
                                                             T&nbsp;packet,
                                                             @NotNull
                                                             <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the packet type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>packet</code> - the packet to process</dd>
+<dd><code>player</code> - the player which should receive the packet</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the packet is not cancelled, false otherwise</dd>
+</dl>
 </li>
 </ul>
 <a id="setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)">
