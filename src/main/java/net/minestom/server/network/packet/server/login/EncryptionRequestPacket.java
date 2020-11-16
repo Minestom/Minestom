@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.login;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.type.array.ByteArrayData;
+import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.player.NettyPlayerConnection;
@@ -23,7 +23,7 @@ public class EncryptionRequestPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString("");
-        final byte[] publicKey = MinecraftServer.getKeyPair().getPublic().getEncoded();
+        final byte[] publicKey = MojangAuth.getKeyPair().getPublic().getEncoded();
         ByteArrayData.encodeByteArray(writer, publicKey);
         ByteArrayData.encodeByteArray(writer, nonce);
     }

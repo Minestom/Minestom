@@ -1,20 +1,15 @@
 package net.minestom.server.world;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * https://minecraft.gamepedia.com/Custom_dimension
  */
-@Data
-@Builder(builderMethodName = "hiddenBuilder", access = AccessLevel.PUBLIC)
 public class DimensionType {
 
     private static final AtomicInteger idCounter = new AtomicInteger(0);
@@ -35,29 +30,45 @@ public class DimensionType {
             .build();
 
     private final int id = idCounter.getAndIncrement();
-    @NotNull
+
     private final NamespaceID name;
     private final boolean natural;
     private final float ambientLight;
     private final boolean ceilingEnabled;
     private final boolean skylightEnabled;
-    @Builder.Default
-    private final Optional<Long> fixedTime = Optional.empty();
+    private final Optional<Long> fixedTime;
     private final boolean raidCapable;
     private final boolean respawnAnchorSafe;
     private final boolean ultrawarm;
-    @Builder.Default
-    private final boolean bedSafe = true;
+    private final boolean bedSafe;
     private final boolean piglinSafe;
-    @Builder.Default
-    private final int logicalHeight = 256;
-    @Builder.Default
-    private final int coordinateScale = 1;
-    @Builder.Default
-    private final NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
+    private final int logicalHeight;
+    private final int coordinateScale;
+    private final NamespaceID infiniburn;
+
+    DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled, boolean skylightEnabled, Optional<Long> fixedTime, boolean raidCapable, boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, boolean piglinSafe, int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
+        this.name = name;
+        this.natural = natural;
+        this.ambientLight = ambientLight;
+        this.ceilingEnabled = ceilingEnabled;
+        this.skylightEnabled = skylightEnabled;
+        this.fixedTime = fixedTime;
+        this.raidCapable = raidCapable;
+        this.respawnAnchorSafe = respawnAnchorSafe;
+        this.ultrawarm = ultrawarm;
+        this.bedSafe = bedSafe;
+        this.piglinSafe = piglinSafe;
+        this.logicalHeight = logicalHeight;
+        this.coordinateScale = coordinateScale;
+        this.infiniburn = infiniburn;
+    }
 
     public static DimensionTypeBuilder builder(NamespaceID name) {
         return hiddenBuilder().name(name);
+    }
+
+    public static DimensionTypeBuilder hiddenBuilder() {
+        return new DimensionTypeBuilder();
     }
 
     public NBTCompound toIndexedNBT() {
@@ -93,7 +104,173 @@ public class DimensionType {
         return name.toString();
     }
 
-    public static class DimensionTypeBuilder {
+    public int getId() {
+        return this.id;
     }
 
+    public NamespaceID getName() {
+        return this.name;
+    }
+
+    public boolean isNatural() {
+        return this.natural;
+    }
+
+    public float getAmbientLight() {
+        return this.ambientLight;
+    }
+
+    public boolean isCeilingEnabled() {
+        return this.ceilingEnabled;
+    }
+
+    public boolean isSkylightEnabled() {
+        return this.skylightEnabled;
+    }
+
+    public Optional<Long> getFixedTime() {
+        return this.fixedTime;
+    }
+
+    public boolean isRaidCapable() {
+        return this.raidCapable;
+    }
+
+    public boolean isRespawnAnchorSafe() {
+        return this.respawnAnchorSafe;
+    }
+
+    public boolean isUltrawarm() {
+        return this.ultrawarm;
+    }
+
+    public boolean isBedSafe() {
+        return this.bedSafe;
+    }
+
+    public boolean isPiglinSafe() {
+        return this.piglinSafe;
+    }
+
+    public int getLogicalHeight() {
+        return this.logicalHeight;
+    }
+
+    public int getCoordinateScale() {
+        return this.coordinateScale;
+    }
+
+    public NamespaceID getInfiniburn() {
+        return this.infiniburn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DimensionType that = (DimensionType) o;
+        return id == that.id &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
+    public static class DimensionTypeBuilder {
+        private NamespaceID name;
+        private boolean natural;
+        private float ambientLight;
+        private boolean ceilingEnabled;
+        private boolean skylightEnabled;
+        private Optional<Long> fixedTime = Optional.empty();
+        private boolean raidCapable;
+        private boolean respawnAnchorSafe;
+        private boolean ultrawarm;
+        private boolean bedSafe = true;
+        private boolean piglinSafe = false;
+        private int logicalHeight = 256;
+        private int coordinateScale = 1;
+        private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
+
+        DimensionTypeBuilder() {
+        }
+
+        public DimensionType.DimensionTypeBuilder name(NamespaceID name) {
+            this.name = name;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder natural(boolean natural) {
+            this.natural = natural;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder ambientLight(float ambientLight) {
+            this.ambientLight = ambientLight;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder ceilingEnabled(boolean ceilingEnabled) {
+            this.ceilingEnabled = ceilingEnabled;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder skylightEnabled(boolean skylightEnabled) {
+            this.skylightEnabled = skylightEnabled;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder fixedTime(Optional<Long> fixedTime) {
+            this.fixedTime = fixedTime;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder raidCapable(boolean raidCapable) {
+            this.raidCapable = raidCapable;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder respawnAnchorSafe(boolean respawnAnchorSafe) {
+            this.respawnAnchorSafe = respawnAnchorSafe;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder ultrawarm(boolean ultrawarm) {
+            this.ultrawarm = ultrawarm;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder bedSafe(boolean bedSafe) {
+            this.bedSafe = bedSafe;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder piglinSafe(boolean piglinSafe) {
+            this.piglinSafe = piglinSafe;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder logicalHeight(int logicalHeight) {
+            this.logicalHeight = logicalHeight;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder coordinateScale(int coordinateScale) {
+            this.coordinateScale = coordinateScale;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder infiniburn(NamespaceID infiniburn) {
+            this.infiniburn = infiniburn;
+            return this;
+        }
+
+        public DimensionType build() {
+            return new DimensionType(name, natural, ambientLight, ceilingEnabled, skylightEnabled,
+                    fixedTime, raidCapable, respawnAnchorSafe, ultrawarm, bedSafe,
+                    piglinSafe, logicalHeight, coordinateScale, infiniburn);
+        }
+    }
 }

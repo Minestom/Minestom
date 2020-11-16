@@ -8,6 +8,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 }
 
+group 'net.minestom.server'
+version '1.0'
+
+sourceCompatibility = 1.11
 project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
@@ -42,11 +46,6 @@ allprojects {
         }
     }
 }
-
-group 'net.minestom.server'
-version '1.0'
-
-sourceCompatibility = 1.11
 
 sourceSets {
     main {
@@ -125,9 +124,6 @@ dependencies {
     api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
     api 'com.mojang:authlib:1.5.21'
-
-    api 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     // Code modification
     api "org.ow2.asm:asm:${asmVersion}"

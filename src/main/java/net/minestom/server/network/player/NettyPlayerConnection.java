@@ -2,8 +2,6 @@ package net.minestom.server.network.player;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
-import lombok.Getter;
-import lombok.Setter;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
@@ -32,14 +30,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     private final SocketChannel channel;
 
     private SocketAddress remoteAddress;
-    @Getter
+
     private boolean encrypted = false;
-    @Getter
     private boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
-    @Getter
-    @Setter
     private byte[] nonce = new byte[4];
 
     // Data from client packets
@@ -231,5 +226,13 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
+    }
+
+    public byte[] getNonce() {
+        return nonce;
+    }
+
+    public void setNonce(byte[] nonce) {
+        this.nonce = nonce;
     }
 }

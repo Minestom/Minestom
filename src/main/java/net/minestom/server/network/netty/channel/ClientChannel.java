@@ -2,7 +2,6 @@ package net.minestom.server.network.netty.channel;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import lombok.extern.slf4j.Slf4j;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
@@ -10,9 +9,12 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
 public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
     private final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
     private final PacketProcessor packetProcessor;
@@ -36,7 +38,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
             if (availableBytes > 0) {
                 final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
 
-                log.warn("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
+                LOGGER.warn("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
                         + " not fully read (" + availableBytes + " bytes left), " + playerConnection);
 
                 packet.body.skipBytes(availableBytes);
@@ -61,7 +63,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        log.info(cause.getMessage());
+        LOGGER.info(cause.getMessage());
         cause.printStackTrace();
         ctx.close();
     }

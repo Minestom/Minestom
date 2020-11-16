@@ -1,10 +1,5 @@
 package net.minestom.server;
 
-import com.mojang.authlib.AuthenticationService;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import lombok.Getter;
-import lombok.Setter;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
@@ -16,7 +11,6 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
-import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
@@ -60,8 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.Proxy;
-import java.security.KeyPair;
 import java.util.Collection;
 
 /**
@@ -72,8 +64,7 @@ import java.util.Collection;
  */
 public final class MinecraftServer {
 
-    @Getter
-    private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     public static final String VERSION_NAME = "1.16.4";
     public static final int PROTOCOL_VERSION = 754;
@@ -99,15 +90,6 @@ public final class MinecraftServer {
     public static final int TICK_PER_SECOND = 20;
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
-
-    @Getter
-    @Setter
-    private static boolean hardcoreLook = false;
-
-    // Extras
-    @Getter
-    @Setter
-    private static boolean fixLighting = true;
 
     // Network monitoring
     private static int rateLimit = 300;
@@ -150,14 +132,6 @@ public final class MinecraftServer {
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static LootTableManager lootTableManager;
     private static TagManager tagManager;
-
-    //Mojang Auth
-    @Getter
-    private static final KeyPair keyPair = MojangCrypt.generateKeyPair();
-    @Getter
-    private static final AuthenticationService authService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
-    @Getter
-    private static final MinecraftSessionService sessionService = authService.createMinecraftSessionService();
 
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice

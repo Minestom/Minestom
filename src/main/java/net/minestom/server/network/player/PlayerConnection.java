@@ -1,6 +1,5 @@
 package net.minestom.server.network.player;
 
-import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -34,7 +33,6 @@ public abstract class PlayerConnection {
     private static final ColoredText rateLimitKickMessage = ColoredText.of(ChatColor.RED + "Too Many Packets");
 
     //Connection Stats
-    @Getter
     private final AtomicInteger packetCounter = new AtomicInteger(0);
     private final AtomicInteger lastPacketCounter = new AtomicInteger(0);
     private short tickCounter = 0;
@@ -71,6 +69,10 @@ public abstract class PlayerConnection {
                 }
             }
         }
+    }
+
+    public AtomicInteger getPacketCounter() {
+        return packetCounter;
     }
 
     /**

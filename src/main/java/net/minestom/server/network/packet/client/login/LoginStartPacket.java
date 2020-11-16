@@ -69,7 +69,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
         }
 
-        if (MojangAuth.isUsingMojangAuth() && isNettyClient) {
+        if (MojangAuth.isEnabled() && isNettyClient) {
             // Mojang auth
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
                 connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED_JSON));

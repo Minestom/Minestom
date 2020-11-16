@@ -446,8 +446,8 @@ public abstract class Chunk implements Viewable, DataContainer {
         // Retrieve & send the buffer to the connection
         playerConnection.sendPacket(getFreshFullDataPacket());
 
-        // TODO do not hardcode
-        if (MinecraftServer.isFixLighting()) {
+        // TODO do not hardcode light
+        {
             UpdateLightPacket updateLightPacket = new UpdateLightPacket();
             updateLightPacket.chunkX = getChunkX();
             updateLightPacket.chunkZ = getChunkZ();
