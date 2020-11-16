@@ -2,51 +2,53 @@ package net.minestom.server.extras.mojangAuth;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 
 public class CipherBase {
-   private final Cipher cipher;
-   private byte[] inTempArray = new byte[0];
-   private byte[] outTempArray = new byte[0];
 
-   protected CipherBase(Cipher cipher) {
-      this.cipher = cipher;
-   }
+    private final Cipher cipher;
+    private byte[] inTempArray = new byte[0];
+    private byte[] outTempArray = new byte[0];
 
-   private byte[] bufToByte(ByteBuf buffer) {
-      int remainingBytes = buffer.readableBytes();
+    protected CipherBase(@NotNull Cipher cipher) {
+        this.cipher = cipher;
+    }
 
-      // Need to resize temp array
-      if (inTempArray.length < remainingBytes) {
-         inTempArray = new byte[remainingBytes];
-      }
+    private byte[] bufToByte(ByteBuf buffer) {
+        int remainingBytes = buffer.readableBytes();
 
-      buffer.readBytes(inTempArray, 0, remainingBytes);
-      return inTempArray;
-   }
+        // Need to resize temp array
+        if (inTempArray.length < remainingBytes) {
+            inTempArray = new byte[remainingBytes];
+        }
 
-   protected ByteBuf decrypt(ChannelHandlerContext channelHandlerContext, ByteBuf byteBufIn) throws ShortBufferException {
-      int remainingBytes = byteBufIn.readableBytes();
-      byte[] bytes = bufToByte(byteBufIn);
+        buffer.readBytes(inTempArray, 0, remainingBytes);
+        return inTempArray;
+    }
 
-      ByteBuf outputBuffer = channelHandlerContext.alloc().heapBuffer(cipher.getOutputSize(remainingBytes));
-      outputBuffer.writerIndex(cipher.update(bytes, 0, remainingBytes, outputBuffer.array(), outputBuffer.arrayOffset()));
+    protected ByteBuf decrypt(ChannelHandlerContext channelHandlerContext, ByteBuf byteBufIn) throws ShortBufferException {
+        int remainingBytes = byteBufIn.readableBytes();
+        byte[] bytes = bufToByte(byteBufIn);
 
-      return outputBuffer;
-   }
+        ByteBuf outputBuffer = channelHandlerContext.alloc().heapBuffer(cipher.getOutputSize(remainingBytes));
+        outputBuffer.writerIndex(cipher.update(bytes, 0, remainingBytes, outputBuffer.array(), outputBuffer.arrayOffset()));
 
-   protected void encrypt(ByteBuf byteBufIn, ByteBuf byteBufOut) throws ShortBufferException {
-      int remainingBytes = byteBufIn.readableBytes();
-      byte[] bytes = bufToByte(byteBufIn);
-      int newSize = cipher.getOutputSize(remainingBytes);
+        return outputBuffer;
+    }
 
-      // Need to resize temp array
-      if (outTempArray.length < newSize) {
-         outTempArray = new byte[newSize];
-      }
+    protected void encrypt(ByteBuf byteBufIn, ByteBuf byteBufOut) throws ShortBufferException {
+        int remainingBytes = byteBufIn.readableBytes();
+        byte[] bytes = bufToByte(byteBufIn);
+        int newSize = cipher.getOutputSize(remainingBytes);
 
-      byteBufOut.writeBytes(outTempArray, 0, cipher.update(bytes, 0, remainingBytes, outTempArray));
-   }
+        // Need to resize temp array
+        if (outTempArray.length < newSize) {
+            outTempArray = new byte[newSize];
+        }
+
+        byteBufOut.writeBytes(outTempArray, 0, cipher.update(bytes, 0, remainingBytes, outTempArray));
+    }
 }

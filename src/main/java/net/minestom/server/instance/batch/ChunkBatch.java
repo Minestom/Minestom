@@ -31,6 +31,8 @@ public class ChunkBatch implements InstanceBatch {
     private final InstanceContainer instance;
     private final Chunk chunk;
 
+    private final boolean generationBatch;
+
     // Need to be synchronized manually
     // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
     private final LongList blocks = new LongArrayList();
@@ -39,9 +41,11 @@ public class ChunkBatch implements InstanceBatch {
     // block index - data
     private final Int2ObjectMap<Data> blockDataMap = new Int2ObjectOpenHashMap<>();
 
-    public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk) {
+    public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk,
+                      boolean generationBatch) {
         this.instance = instance;
         this.chunk = chunk;
+        this.generationBatch = generationBatch;
     }
 
     @Override
@@ -62,21 +66,39 @@ public class ChunkBatch implements InstanceBatch {
     }
 
     private void addBlockData(byte x, int y, byte z, short blockStateId, short customBlockId, @Nullable Data data) {
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
 
-        if (data != null) {
-            synchronized (blockDataMap) {
-                this.blockDataMap.put(index, data);
+        if (isGenerationBatch()) {
+            chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+        } else {
+            final int index = ChunkUtils.getBlockIndex(x, y, z);
+
+            if (data != null) {
+                synchronized (blockDataMap) {
+                    this.blockDataMap.put(index, data);
+                }
+            }
+
+            long value = index;
+            value = (value << 16) | blockStateId;
+            value = (value << 16) | customBlockId;
+
+            synchronized (blocks) {
+                this.blocks.add(value);
             }
         }
+    }
 
-        long value = index;
-        value = (value << 16) | blockStateId;
-        value = (value << 16) | customBlockId;
-
-        synchronized (blocks) {
-            this.blocks.add(value);
-        }
+    /**
+     * Gets if this chunk batch is part of a chunk generation.
+     * <p>
+     * Being a generation batch mean that blocks set are not being stored
+     * but are immediately placed on the chunks. Using less memory
+     * and CPU cycles.
+     *
+     * @return true if this batch is part of a chunk generation
+     */
+    public boolean isGenerationBatch() {
+        return generationBatch;
     }
 
     /**
@@ -92,24 +114,15 @@ public class ChunkBatch implements InstanceBatch {
 
             chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
 
-            // Check if there is anything to process
-            if (blocks.isEmpty() && !hasPopulator) {
-                OptionalCallback.execute(callback, chunk);
-                return;
-            }
-
-            singleThreadFlush(hasPopulator ? null : callback, true);
-
-            clearData(); // So the populators won't place those blocks again
-
             if (hasPopulator) {
                 for (ChunkPopulator chunkPopulator : populators) {
                     chunkPopulator.populateChunk(this, chunk);
                 }
-                singleThreadFlush(callback, true);
-
-                clearData(); // Clear populators blocks
             }
+
+            instance.scheduleNextTick(inst -> {
+                OptionalCallback.execute(callback, chunk);
+            });
         });
     }
 

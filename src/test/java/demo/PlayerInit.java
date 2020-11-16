@@ -30,7 +30,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerInit {
 
@@ -44,7 +43,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         final int loopStart = -3;
@@ -163,8 +162,8 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                int x = ThreadLocalRandom.current().nextInt()%10000;
-                player.setRespawnPoint(new Position(x, 64f, 0));
+                //int x = ThreadLocalRandom.current().nextInt()%10000;
+                player.setRespawnPoint(new Position(0, 64f, 0));
 
                 /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)

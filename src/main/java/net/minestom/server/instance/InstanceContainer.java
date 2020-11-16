@@ -503,7 +503,7 @@ public class InstanceContainer extends Instance {
     @Override
     public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
         Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
-        return new ChunkBatch(this, chunk);
+        return new ChunkBatch(this, chunk, false);
     }
 
     @Override
@@ -540,7 +540,7 @@ public class InstanceContainer extends Instance {
 
         if (chunkGenerator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
-            final ChunkBatch chunkBatch = createChunkBatch(chunk);
+            final ChunkBatch chunkBatch = new ChunkBatch(this, chunk, true);
 
             chunkBatch.flushChunkGenerator(chunkGenerator, callback);
         } else {

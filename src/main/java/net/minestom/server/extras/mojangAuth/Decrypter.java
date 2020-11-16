@@ -8,13 +8,13 @@ import javax.crypto.Cipher;
 import java.util.List;
 
 public class Decrypter extends MessageToMessageDecoder<ByteBuf> {
-   private final CipherBase cipher;
+    private final CipherBase cipher;
 
-   public Decrypter(Cipher cipher) {
-      this.cipher = new CipherBase(cipher);
-   }
+    public Decrypter(Cipher cipher) {
+        this.cipher = new CipherBase(cipher);
+    }
 
-   protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-      list.add(this.cipher.decrypt(channelHandlerContext, byteBuf));
-   }
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+        list.add(this.cipher.decrypt(channelHandlerContext, byteBuf));
+    }
 }
