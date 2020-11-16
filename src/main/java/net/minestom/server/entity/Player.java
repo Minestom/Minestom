@@ -54,6 +54,7 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -295,6 +296,13 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void update(long time) {
+
+        // Flush all pending packets
+        if (PlayerUtils.isNettyClient(this)) {
+            ((NettyPlayerConnection) playerConnection).getChannel().flush();
+        }
+
+        // Network tick verification
         playerConnection.updateStats();
 
         // Process received packets

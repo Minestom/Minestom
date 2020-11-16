@@ -82,10 +82,17 @@ public class NettyPlayerConnection extends PlayerConnection {
         channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
     }
 
+    /**
+     * Writes a packet to the connection channel.
+     * <p>
+     * All packets are flushed during {@link net.minestom.server.entity.Player#update(long)}.
+     *
+     * @param serverPacket the packet to write
+     */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
-            channel.writeAndFlush(serverPacket);
+            channel.write(serverPacket);
         }
     }
 
