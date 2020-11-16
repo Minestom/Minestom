@@ -26,6 +26,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -83,14 +89,14 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -136,27 +142,6 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="constructor.summary">
-<!--   -->
-</a>
-<h3>Constructor Summary</h3>
-<table class="memberSummary">
-<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Constructor</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">DimensionTypeBuilder</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -164,6 +149,89 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ambientLight(float)">ambientLight</a></span>&#8203;(float&nbsp;ambientLight)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#bedSafe(boolean)">bedSafe</a></span>&#8203;(boolean&nbsp;bedSafe)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ceilingEnabled(boolean)">ceilingEnabled</a></span>&#8203;(boolean&nbsp;ceilingEnabled)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#coordinateScale(int)">coordinateScale</a></span>&#8203;(int&nbsp;coordinateScale)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fixedTime(java.util.Optional)">fixedTime</a></span>&#8203;(java.util.Optional&lt;java.lang.Long&gt;&nbsp;fixedTime)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#infiniburn(net.minestom.server.utils.NamespaceID)">infiniburn</a></span>&#8203;(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;infiniburn)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#logicalHeight(int)">logicalHeight</a></span>&#8203;(int&nbsp;logicalHeight)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#name(net.minestom.server.utils.NamespaceID)">name</a></span>&#8203;(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#natural(boolean)">natural</a></span>&#8203;(boolean&nbsp;natural)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#piglinSafe(boolean)">piglinSafe</a></span>&#8203;(boolean&nbsp;piglinSafe)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#raidCapable(boolean)">raidCapable</a></span>&#8203;(boolean&nbsp;raidCapable)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#respawnAnchorSafe(boolean)">respawnAnchorSafe</a></span>&#8203;(boolean&nbsp;respawnAnchorSafe)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#skylightEnabled(boolean)">skylightEnabled</a></span>&#8203;(boolean&nbsp;skylightEnabled)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ultrawarm(boolean)">ultrawarm</a></span>&#8203;(boolean&nbsp;ultrawarm)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -180,20 +248,146 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
-<li class="blockList"><a id="constructor.detail">
+<li class="blockList"><a id="method.detail">
 <!--   -->
 </a>
-<h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
+<h3>Method Detail</h3>
+<a id="name(net.minestom.server.utils.NamespaceID)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>name</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;name&#8203;(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</pre>
+</li>
+</ul>
+<a id="natural(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>natural</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;natural&#8203;(boolean&nbsp;natural)</pre>
+</li>
+</ul>
+<a id="ambientLight(float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ambientLight</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;ambientLight&#8203;(float&nbsp;ambientLight)</pre>
+</li>
+</ul>
+<a id="ceilingEnabled(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ceilingEnabled</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;ceilingEnabled&#8203;(boolean&nbsp;ceilingEnabled)</pre>
+</li>
+</ul>
+<a id="skylightEnabled(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>skylightEnabled</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;skylightEnabled&#8203;(boolean&nbsp;skylightEnabled)</pre>
+</li>
+</ul>
+<a id="fixedTime(java.util.Optional)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fixedTime</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;fixedTime&#8203;(java.util.Optional&lt;java.lang.Long&gt;&nbsp;fixedTime)</pre>
+</li>
+</ul>
+<a id="raidCapable(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>raidCapable</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;raidCapable&#8203;(boolean&nbsp;raidCapable)</pre>
+</li>
+</ul>
+<a id="respawnAnchorSafe(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>respawnAnchorSafe</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;respawnAnchorSafe&#8203;(boolean&nbsp;respawnAnchorSafe)</pre>
+</li>
+</ul>
+<a id="ultrawarm(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ultrawarm</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;ultrawarm&#8203;(boolean&nbsp;ultrawarm)</pre>
+</li>
+</ul>
+<a id="bedSafe(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>bedSafe</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;bedSafe&#8203;(boolean&nbsp;bedSafe)</pre>
+</li>
+</ul>
+<a id="piglinSafe(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>piglinSafe</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;piglinSafe&#8203;(boolean&nbsp;piglinSafe)</pre>
+</li>
+</ul>
+<a id="logicalHeight(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>logicalHeight</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;logicalHeight&#8203;(int&nbsp;logicalHeight)</pre>
+</li>
+</ul>
+<a id="coordinateScale(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>coordinateScale</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;coordinateScale&#8203;(int&nbsp;coordinateScale)</pre>
+</li>
+</ul>
+<a id="infiniburn(net.minestom.server.utils.NamespaceID)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>infiniburn</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.DimensionTypeBuilder.html" title="class in net.minestom.server.world">DimensionType.DimensionTypeBuilder</a>&nbsp;infiniburn&#8203;(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;infiniburn)</pre>
+</li>
+</ul>
+<a id="build()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>DimensionTypeBuilder</h4>
-<pre>public&nbsp;DimensionTypeBuilder()</pre>
+<h4>build</h4>
+<pre class="methodSignature">public&nbsp;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;build()</pre>
 </li>
 </ul>
 </li>
@@ -249,14 +443,14 @@ extends java.lang.Object</pre>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">

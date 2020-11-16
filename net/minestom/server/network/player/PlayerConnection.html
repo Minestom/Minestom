@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":10,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":6,"i7":10,"i8":10,"i9":6,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -232,61 +232,66 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>java.util.concurrent.atomic.AtomicInteger</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPacketCounter()">getPacketCounter</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player linked to this connection.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract java.net.SocketAddress</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemoteAddress()">getRemoteAddress</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the remote address of the client.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnline()">isOnline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the client is still connected to the server.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshOnline(boolean)">refreshOnline</a></span>&#8203;(boolean&nbsp;online)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(<a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
 <td class="colLast">
 <div class="block">Serializes the packet and send it to the client.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConnectionState(net.minestom.server.network.ConnectionState)">setConnectionState</a></span>&#8203;(<a href="../ConnectionState.html" title="enum in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayer(net.minestom.server.entity.Player)">setPlayer</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Changes the player linked to this connection.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a></span>&#8203;(<a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateStats()">updateStats</a></span>()</code></th>
 <td class="colLast">
@@ -363,6 +368,15 @@ extends java.lang.Object</pre>
 <h4>updateStats</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;updateStats()</pre>
 <div class="block">Updates values related to the network connection.</div>
+</li>
+</ul>
+<a id="getPacketCounter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPacketCounter</h4>
+<pre class="methodSignature">public&nbsp;java.util.concurrent.atomic.AtomicInteger&nbsp;getPacketCounter()</pre>
 </li>
 </ul>
 <a id="getIdentifier()">
