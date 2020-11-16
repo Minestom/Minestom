@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -190,8 +190,9 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk)">ChunkBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
-          <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,boolean)">ChunkBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
+          <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+          boolean&nbsp;generationBatch)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -236,6 +237,13 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isGenerationBatch()">isGenerationBatch</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if this chunk batch is part of a chunk generation.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -246,7 +254,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a block at a position.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
               int&nbsp;y,
@@ -257,7 +265,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -269,7 +277,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unsafeFlush(net.minestom.server.utils.chunk.ChunkCallback)">unsafeFlush</a></span>&#8203;(<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
@@ -307,7 +315,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk)">
+<a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -316,7 +324,8 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <pre>public&nbsp;ChunkBatch&#8203;(@NotNull
                   <a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
                   @NotNull
-                  <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+                  <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                  boolean&nbsp;generationBatch)</pre>
 </li>
 </ul>
 </li>
@@ -413,6 +422,24 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <dd><code>blockStateId</code> - the block state id</dd>
 <dd><code>customBlockId</code> - the custom block id</dd>
 <dd><code>data</code> - the block <a href="../../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a>, can be null</dd>
+</dl>
+</li>
+</ul>
+<a id="isGenerationBatch()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isGenerationBatch</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isGenerationBatch()</pre>
+<div class="block">Gets if this chunk batch is part of a chunk generation.
+ <p>
+ Being a generation batch mean that blocks set are not being stored
+ but are immediately placed on the chunks. Using less memory
+ and CPU cycles.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this batch is part of a chunk generation</dd>
 </dl>
 </li>
 </ul>
