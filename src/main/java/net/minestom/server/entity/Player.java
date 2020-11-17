@@ -70,6 +70,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
 /**
  * Those are the major actors of the server,
  * they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}
@@ -118,6 +119,7 @@ public class Player extends LivingEntity implements CommandSender {
     private long defaultEatingTime = 1000L;
     private long eatingTime;
     private boolean isEating;
+
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
 
