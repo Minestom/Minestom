@@ -16,7 +16,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
-    private final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
+    private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     private final PacketProcessor packetProcessor;
 
     public ClientChannel(@NotNull PacketProcessor packetProcessor) {
@@ -55,7 +55,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
             Player player = playerConnection.getPlayer();
             if (player != null) {
                 player.remove();
-                connectionManager.removePlayer(playerConnection);
+                CONNECTION_MANAGER.removePlayer(playerConnection);
             }
             packetProcessor.removePlayerConnection(ctx);
         }

@@ -119,7 +119,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        getChannel().close();
+        channel.close();
     }
 
     @NotNull

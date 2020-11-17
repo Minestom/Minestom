@@ -268,7 +268,7 @@ public final class ConnectionManager {
      *
      * @param player the player to add
      */
-    public void createPlayer(@NotNull Player player) {
+    public synchronized void createPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
     }
@@ -296,7 +296,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
-    public void removePlayer(@NotNull PlayerConnection connection) {
+    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
