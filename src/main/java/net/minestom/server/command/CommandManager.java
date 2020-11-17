@@ -63,6 +63,14 @@ public final class CommandManager {
                     command = command.replaceFirst(COMMAND_PREFIX, "");
                     execute(consoleSender, command);
                 }
+
+                // Prevent permanent looping
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
             scanner.close();
         }, "ConsoleCommand-Thread");
