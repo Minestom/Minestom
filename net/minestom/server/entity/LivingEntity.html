@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -278,133 +278,139 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>float</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></span>&#8203;(<a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
+<td class="colFirst"><code><a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttribute(net.minestom.server.attribute.Attribute)">getAttribute</a></span>&#8203;(<a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
 <td class="colLast">
-<div class="block">Retrieves the attribute value set by <a href="#setAttribute(net.minestom.server.attribute.Attribute,float)"><code>setAttribute(Attribute, float)</code></a>.</div>
+<div class="block">Retrieves the attribute instance and its modifiers.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>float</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></span>&#8203;(<a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
+<td class="colLast">
+<div class="block">Retrieves the attribute value.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFireDamagePeriod()">getFireDamagePeriod</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the time in ms between two fire damage applications.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHealth()">getHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity health.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastDamageSource()">getLastDamageSource</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the last damage source which damaged of this entity.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxHealth()">getMaxHealth</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the entity max health from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> <a href="../attribute/Attribute.html#MAX_HEALTH"><code>Attribute.MAX_HEALTH</code></a>.</div>
+<div class="block">Gets the entity max health from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> <a href="../attribute/Attributes.html#MAX_HEALTH"><code>Attributes.MAX_HEALTH</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMetadataConsumer()">getMetadataConsumer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Should be override when wanting to add a new metadata index</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/EntityPropertiesPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityPropertiesPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPropertiesPacket()">getPropertiesPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets an <a href="../network/packet/server/play/EntityPropertiesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityPropertiesPacket</code></a> for this entity with all of its attributes values.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTeam()">getTeam</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> of the entity.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleVoid()">handleVoid</a></span>()</code></th>
 <td class="colLast">
 <div class="block">How does this entity handle being in the void?</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#heal()">heal</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the heal of the entity as its max health.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDead()">isDead</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is dead or not.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isImmune(net.minestom.server.entity.damage.DamageType)">isImmune</a></span>&#8203;(<a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Is this entity immune to the given type of damage?</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInvulnerable()">isInvulnerable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is invulnerable.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kill()">kill</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Kills the entity, trigger the <a href="../event/entity/EntityDeathEvent.html" title="class in net.minestom.server.event.entity"><code>EntityDeathEvent</code></a> event.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a></span>&#8203;(<a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</code></th>
+<td class="colLast">
+<div class="block">Callback used when an attribute instance has been modified.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a></span>&#8203;(boolean&nbsp;isHandActive,
                  boolean&nbsp;offHand,
                  boolean&nbsp;riptideSpinAttack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshIsDead(boolean)">refreshIsDead</a></span>&#8203;(boolean&nbsp;isDead)</code></th>
 <td class="colLast">
 <div class="block">Used to change the <code>isDead</code> internal field.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArrowCount(int)">setArrowCount</a></span>&#8203;(int&nbsp;arrowCount)</code></th>
 <td class="colLast">
 <div class="block">Changes the amount of arrow stuck in the entity.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAttribute(net.minestom.server.attribute.Attribute,float)">setAttribute</a></span>&#8203;(<a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
-            float&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block">Changes the specified attribute value to <code>value</code>.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoundingBox(float,float,float)">setBoundingBox</a></span>&#8203;(float&nbsp;x,
               float&nbsp;y,
@@ -413,14 +419,14 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Changes the internal entity bounding box.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanPickupItem(boolean)">setCanPickupItem</a></span>&#8203;(boolean&nbsp;canPickupItem)</code></th>
 <td class="colLast">
 <div class="block">When set to false, the entity will not be able to pick <a href="ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> on the ground.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireDamagePeriod(long,net.minestom.server.utils.time.TimeUnit)">setFireDamagePeriod</a></span>&#8203;(long&nbsp;fireDamagePeriod,
                    <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
@@ -428,14 +434,14 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Changes the delay between two fire damage applications.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireForDuration(int)">setFireForDuration</a></span>&#8203;(int&nbsp;duration)</code></th>
 <td class="colLast">
 <div class="block">Sets fire to this entity for a given duration.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireForDuration(int,net.minestom.server.utils.time.TimeUnit)">setFireForDuration</a></span>&#8203;(int&nbsp;duration,
                   <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
@@ -443,28 +449,28 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Sets fire to this entity for a given duration.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHealth(float)">setHealth</a></span>&#8203;(float&nbsp;health)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity health, kill it if <code>health</code> is &gt;= 0 and is not dead yet.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInvulnerable(boolean)">setInvulnerable</a></span>&#8203;(boolean&nbsp;invulnerable)</code></th>
 <td class="colLast">
 <div class="block">Makes the entity vulnerable or invulnerable.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTeam(net.minestom.server.scoreboard.Team)">setTeam</a></span>&#8203;(<a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#swingMainHand()">swingMainHand</a></span>()</code></th>
 <td class="colLast">
@@ -472,7 +478,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
  (can be used for attack animation).</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#swingOffHand()">swingOffHand</a></span>()</code></th>
 <td class="colLast">
@@ -480,7 +486,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
  (can be used for attack animation).</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -883,7 +889,7 @@ public&nbsp;<a href="damage/DamageType.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>getMaxHealth</h4>
 <pre class="methodSignature">public&nbsp;float&nbsp;getMaxHealth()</pre>
-<div class="block">Gets the entity max health from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> <a href="../attribute/Attribute.html#MAX_HEALTH"><code>Attribute.MAX_HEALTH</code></a>.</div>
+<div class="block">Gets the entity max health from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> <a href="../attribute/Attributes.html#MAX_HEALTH"><code>Attributes.MAX_HEALTH</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the entity max health</dd>
@@ -899,23 +905,39 @@ public&nbsp;<a href="damage/DamageType.html" title="class in net.minestom.server
 <pre class="methodSignature">public&nbsp;void&nbsp;heal()</pre>
 <div class="block">Sets the heal of the entity as its max health.
  <p>
- Retrieved from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> with the attribute <a href="../attribute/Attribute.html#MAX_HEALTH"><code>Attribute.MAX_HEALTH</code></a>.</div>
+ Retrieved from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> with the attribute <a href="../attribute/Attributes.html#MAX_HEALTH"><code>Attributes.MAX_HEALTH</code></a>.</div>
 </li>
 </ul>
-<a id="setAttribute(net.minestom.server.attribute.Attribute,float)">
+<a id="getAttribute(net.minestom.server.attribute.Attribute)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setAttribute</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setAttribute&#8203;(@NotNull
-                         <a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
-                         float&nbsp;value)</pre>
-<div class="block">Changes the specified attribute value to <code>value</code>.</div>
+<h4>getAttribute</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;getAttribute&#8203;(@NotNull
+                                      <a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</pre>
+<div class="block">Retrieves the attribute instance and its modifiers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>attribute</code> - The attribute to change</dd>
-<dd><code>value</code> - the new value of the attribute</dd>
+<dd><code>attribute</code> - the attribute instance to get</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the attribute instance</dd>
+</dl>
+</li>
+</ul>
+<a id="onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>onAttributeChanged</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;onAttributeChanged&#8203;(@NotNull
+                                  <a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</pre>
+<div class="block">Callback used when an attribute instance has been modified.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - the modified attribute instance</dd>
 </dl>
 </li>
 </ul>
@@ -926,8 +948,8 @@ public&nbsp;<a href="damage/DamageType.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>getAttributeValue</h4>
 <pre class="methodSignature">public&nbsp;float&nbsp;getAttributeValue&#8203;(@NotNull
-                               <a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</pre>
-<div class="block">Retrieves the attribute value set by <a href="#setAttribute(net.minestom.server.attribute.Attribute,float)"><code>setAttribute(Attribute, float)</code></a>.</div>
+                               <a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</pre>
+<div class="block">Retrieves the attribute value.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>attribute</code> - the attribute value to get</dd>

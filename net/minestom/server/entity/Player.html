@@ -400,9 +400,9 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>float</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></span>&#8203;(<a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></span>&#8203;(<a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
 <td class="colLast">
-<div class="block">Retrieves the attribute value set by <a href="LivingEntity.html#setAttribute(net.minestom.server.attribute.Attribute,float)"><code>LivingEntity.setAttribute(Attribute, float)</code></a>.</div>
+<div class="block">Retrieves the attribute value.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -759,13 +759,20 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i66" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a></span>&#8203;(<a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</code></th>
+<td class="colLast">
+<div class="block">Callback used when an attribute instance has been modified.</div>
+</td>
+</tr>
+<tr id="i67" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openInventory(net.minestom.server.inventory.Inventory)">openInventory</a></span>&#8203;(<a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></th>
 <td class="colLast">
 <div class="block">Opens the specified Inventory, close the previous inventory if existing.</div>
 </td>
 </tr>
-<tr id="i67" class="rowColor">
+<tr id="i68" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playEffect(net.minestom.server.effects.Effects,int,int,int,int,boolean)">playEffect</a></span>&#8203;(<a href="../effects/Effects.html" title="enum in net.minestom.server.effects">Effects</a>&nbsp;effect,
           int&nbsp;x,
@@ -777,14 +784,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a given effect at the given position for this player.</div>
 </td>
 </tr>
-<tr id="i68" class="altColor">
+<tr id="i69" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playerConnectionInit()">playerConnectionInit</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to initialize the player connection</div>
 </td>
 </tr>
-<tr id="i69" class="rowColor">
+<tr id="i70" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(java.lang.String&nbsp;identifier,
          <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
@@ -797,7 +804,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a sound from an identifier (represents a custom sound in a resource pack).</div>
 </td>
 </tr>
-<tr id="i70" class="altColor">
+<tr id="i71" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.minestom.server.sound.Sound,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(<a href="../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;sound,
          <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
@@ -810,7 +817,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a sound from the <a href="../sound/Sound.html" title="enum in net.minestom.server.sound"><code>Sound</code></a> enum.</div>
 </td>
 </tr>
-<tr id="i71" class="rowColor">
+<tr id="i72" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAbilities()">refreshAbilities</a></span>()</code></th>
 <td class="colLast">
@@ -818,7 +825,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  (walkingSpeed set to 0.1).</div>
 </td>
 </tr>
-<tr id="i72" class="altColor">
+<tr id="i73" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAfterTeleport()">refreshAfterTeleport</a></span>()</code></th>
 <td class="colLast">
@@ -826,37 +833,37 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  and send data to his new viewers.</div>
 </td>
 </tr>
-<tr id="i73" class="rowColor">
+<tr id="i74" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAnswerKeepAlive(boolean)">refreshAnswerKeepAlive</a></span>&#8203;(boolean&nbsp;answerKeepAlive)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i74" class="altColor">
+<tr id="i75" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i75" class="rowColor">
+<tr id="i76" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean,long)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating,
              long&nbsp;eatingTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i76" class="altColor">
+<tr id="i77" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshFlying(boolean)">refreshFlying</a></span>&#8203;(boolean&nbsp;flying)</code></th>
 <td class="colLast">
 <div class="block">Updates the internal flying field.</div>
 </td>
 </tr>
-<tr id="i77" class="rowColor">
+<tr id="i78" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshHealth()">refreshHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the player food and health values to their maximum.</div>
 </td>
 </tr>
-<tr id="i78" class="altColor">
+<tr id="i79" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshHeldSlot(byte)">refreshHeldSlot</a></span>&#8203;(byte&nbsp;slot)</code></th>
 <td class="colLast">
@@ -864,26 +871,26 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  Also cancel eating if <a href="#isEating()"><code>isEating()</code></a> was true.</div>
 </td>
 </tr>
-<tr id="i79" class="rowColor">
+<tr id="i80" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshKeepAlive(long)">refreshKeepAlive</a></span>&#8203;(long&nbsp;lastKeepAlive)</code></th>
 <td class="colLast">
 <div class="block">Used to change internally the last sent last keep alive id.</div>
 </td>
 </tr>
-<tr id="i80" class="altColor">
+<tr id="i81" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshLatency(int)">refreshLatency</a></span>&#8203;(int&nbsp;latency)</code></th>
 <td class="colLast">
 <div class="block">Changes the storage player latency and update its tab value.</div>
 </td>
 </tr>
-<tr id="i81" class="rowColor">
+<tr id="i82" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshOnGround(boolean)">refreshOnGround</a></span>&#8203;(boolean&nbsp;onGround)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i82" class="altColor">
+<tr id="i83" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVehicleSteer(float,float,boolean,boolean)">refreshVehicleSteer</a></span>&#8203;(float&nbsp;sideways,
                    float&nbsp;forward,
@@ -891,14 +898,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
                    boolean&nbsp;unmount)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i83" class="rowColor">
+<tr id="i84" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVisibleChunks(net.minestom.server.instance.Chunk)">refreshVisibleChunks</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></th>
 <td class="colLast">
 <div class="block">Called when the player changes chunk (move from one to another).</div>
 </td>
 </tr>
-<tr id="i84" class="altColor">
+<tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVisibleEntities(net.minestom.server.instance.Chunk)">refreshVisibleEntities</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></th>
 <td class="colLast">
@@ -906,35 +913,35 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
 </td>
 </tr>
-<tr id="i85" class="rowColor">
+<tr id="i86" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove()">remove</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes the entity from the server immediately.</div>
 </td>
 </tr>
-<tr id="i86" class="altColor">
+<tr id="i87" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i87" class="rowColor">
+<tr id="i88" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetTargetBlock()">resetTargetBlock</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets data from the current block the player is mining.</div>
 </td>
 </tr>
-<tr id="i88" class="altColor">
+<tr id="i89" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetTitle()">resetTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets the previous title.</div>
 </td>
 </tr>
-<tr id="i89" class="rowColor">
+<tr id="i90" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#respawn()">respawn</a></span>()</code></th>
 <td class="colLast">
@@ -942,28 +949,28 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  to <a href="#getRespawnPoint()"><code>getRespawnPoint()</code></a>.</div>
 </td>
 </tr>
-<tr id="i90" class="altColor">
+<tr id="i91" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendActionBarMessage(net.minestom.server.chat.ColoredText)">sendActionBarMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;actionBar)</code></th>
 <td class="colLast">
 <div class="block">Sends an action bar message.</div>
 </td>
 </tr>
-<tr id="i91" class="rowColor">
+<tr id="i92" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendDimension(net.minestom.server.world.DimensionType)">sendDimension</a></span>&#8203;(<a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
 <td class="colLast">
 <div class="block">Changes the dimension of the player.</div>
 </td>
 </tr>
-<tr id="i92" class="altColor">
+<tr id="i93" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendExperienceUpdatePacket()">sendExperienceUpdatePacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/play/SetExperiencePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetExperiencePacket</code></a> to refresh client-side information about the experience bar.</div>
 </td>
 </tr>
-<tr id="i93" class="rowColor">
+<tr id="i94" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendHeaderFooter(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText)">sendHeaderFooter</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;header,
                 <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;footer)</code></th>
@@ -971,19 +978,19 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sets the header and footer of a player which will be displayed in his tab window.</div>
 </td>
 </tr>
-<tr id="i94" class="altColor">
+<tr id="i95" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendJsonMessage(java.lang.String)">sendJsonMessage</a></span>&#8203;(java.lang.String&nbsp;json)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i95" class="rowColor">
+<tr id="i96" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String)">sendLegacyMessage</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Sends a legacy message with the default color char <a href="../chat/ChatParser.html#COLOR_CHAR"><code>ChatParser.COLOR_CHAR</code></a>.</div>
 </td>
 </tr>
-<tr id="i96" class="altColor">
+<tr id="i97" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String,char)">sendLegacyMessage</a></span>&#8203;(java.lang.String&nbsp;text,
                  char&nbsp;colorChar)</code></th>
@@ -991,21 +998,21 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a legacy message with the specified color char.</div>
 </td>
 </tr>
-<tr id="i97" class="rowColor">
+<tr id="i98" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a raw string message.</div>
 </td>
 </tr>
-<tr id="i98" class="altColor">
+<tr id="i99" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a message to the player.</div>
 </td>
 </tr>
-<tr id="i99" class="rowColor">
+<tr id="i100" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,byte%5B%5D)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  byte[]&nbsp;data)</code></th>
@@ -1013,7 +1020,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a plugin message to the player.</div>
 </td>
 </tr>
-<tr id="i100" class="altColor">
+<tr id="i101" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,java.lang.String)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  java.lang.String&nbsp;message)</code></th>
@@ -1021,21 +1028,21 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a plugin message to the player.</div>
 </td>
 </tr>
-<tr id="i101" class="rowColor">
+<tr id="i102" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendSubtitleMessage(net.minestom.server.chat.ColoredText)">sendSubtitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;subtitle)</code></th>
 <td class="colLast">
 <div class="block">Sends a subtitle message.</div>
 </td>
 </tr>
-<tr id="i102" class="altColor">
+<tr id="i103" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleMessage(net.minestom.server.chat.ColoredText)">sendTitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Sends a title message.</div>
 </td>
 </tr>
-<tr id="i103" class="rowColor">
+<tr id="i104" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleSubtitleMessage(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText)">sendTitleSubtitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
                         <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;subtitle)</code></th>
@@ -1043,7 +1050,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a title and subtitle message.</div>
 </td>
 </tr>
-<tr id="i104" class="altColor">
+<tr id="i105" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleTime(int,int,int)">sendTitleTime</a></span>&#8203;(int&nbsp;fadeIn,
              int&nbsp;stay,
@@ -1052,33 +1059,25 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Specifies the display time of a title.</div>
 </td>
 </tr>
-<tr id="i105" class="rowColor">
+<tr id="i106" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendUpdateHealthPacket()">sendUpdateHealthPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends an <a href="../network/packet/server/play/UpdateHealthPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateHealthPacket</code></a> to refresh client-side information about health and food.</div>
 </td>
 </tr>
-<tr id="i106" class="altColor">
+<tr id="i107" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAdditionalHearts(float)">setAdditionalHearts</a></span>&#8203;(float&nbsp;additionalHearts)</code></th>
 <td class="colLast">
 <div class="block">Updates the internal field and send the appropriate <a href="../network/packet/server/play/EntityMetaDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityMetaDataPacket</code></a>.</div>
 </td>
 </tr>
-<tr id="i107" class="rowColor">
+<tr id="i108" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAllowFlying(boolean)">setAllowFlying</a></span>&#8203;(boolean&nbsp;allowFlying)</code></th>
 <td class="colLast">
 <div class="block">Allows or forbid the player to fly.</div>
-</td>
-</tr>
-<tr id="i108" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAttribute(net.minestom.server.attribute.Attribute,float)">setAttribute</a></span>&#8203;(<a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
-            float&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block">Changes the specified attribute value to <code>value</code>.</div>
 </td>
 </tr>
 <tr id="i109" class="rowColor">
@@ -1385,7 +1384,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.<a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></h3>
-<code><a href="LivingEntity.html#canPickupItem()">canPickupItem</a>, <a href="LivingEntity.html#damage(net.minestom.server.entity.damage.DamageType,float)">damage</a>, <a href="LivingEntity.html#getArrowCount()">getArrowCount</a>, <a href="LivingEntity.html#getFireDamagePeriod()">getFireDamagePeriod</a>, <a href="LivingEntity.html#getHealth()">getHealth</a>, <a href="LivingEntity.html#getLastDamageSource()">getLastDamageSource</a>, <a href="LivingEntity.html#getMaxHealth()">getMaxHealth</a>, <a href="LivingEntity.html#getPropertiesPacket()">getPropertiesPacket</a>, <a href="LivingEntity.html#getTeam()">getTeam</a>, <a href="LivingEntity.html#handleVoid()">handleVoid</a>, <a href="LivingEntity.html#heal()">heal</a>, <a href="LivingEntity.html#isDead()">isDead</a>, <a href="LivingEntity.html#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a>, <a href="LivingEntity.html#refreshIsDead(boolean)">refreshIsDead</a>, <a href="LivingEntity.html#setArrowCount(int)">setArrowCount</a>, <a href="LivingEntity.html#setBoundingBox(float,float,float)">setBoundingBox</a>, <a href="LivingEntity.html#setCanPickupItem(boolean)">setCanPickupItem</a>, <a href="LivingEntity.html#setFireDamagePeriod(long,net.minestom.server.utils.time.TimeUnit)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireForDuration(int)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(int,net.minestom.server.utils.time.TimeUnit)">setFireForDuration</a>, <a href="LivingEntity.html#swingMainHand()">swingMainHand</a>, <a href="LivingEntity.html#swingOffHand()">swingOffHand</a></code></li>
+<code><a href="LivingEntity.html#canPickupItem()">canPickupItem</a>, <a href="LivingEntity.html#damage(net.minestom.server.entity.damage.DamageType,float)">damage</a>, <a href="LivingEntity.html#getArrowCount()">getArrowCount</a>, <a href="LivingEntity.html#getAttribute(net.minestom.server.attribute.Attribute)">getAttribute</a>, <a href="LivingEntity.html#getFireDamagePeriod()">getFireDamagePeriod</a>, <a href="LivingEntity.html#getHealth()">getHealth</a>, <a href="LivingEntity.html#getLastDamageSource()">getLastDamageSource</a>, <a href="LivingEntity.html#getMaxHealth()">getMaxHealth</a>, <a href="LivingEntity.html#getPropertiesPacket()">getPropertiesPacket</a>, <a href="LivingEntity.html#getTeam()">getTeam</a>, <a href="LivingEntity.html#handleVoid()">handleVoid</a>, <a href="LivingEntity.html#heal()">heal</a>, <a href="LivingEntity.html#isDead()">isDead</a>, <a href="LivingEntity.html#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a>, <a href="LivingEntity.html#refreshIsDead(boolean)">refreshIsDead</a>, <a href="LivingEntity.html#setArrowCount(int)">setArrowCount</a>, <a href="LivingEntity.html#setBoundingBox(float,float,float)">setBoundingBox</a>, <a href="LivingEntity.html#setCanPickupItem(boolean)">setCanPickupItem</a>, <a href="LivingEntity.html#setFireDamagePeriod(long,net.minestom.server.utils.time.TimeUnit)">setFireDamagePeriod</a>, <a href="LivingEntity.html#setFireForDuration(int)">setFireForDuration</a>, <a href="LivingEntity.html#setFireForDuration(int,net.minestom.server.utils.time.TimeUnit)">setFireForDuration</a>, <a href="LivingEntity.html#swingMainHand()">swingMainHand</a>, <a href="LivingEntity.html#swingOffHand()">swingOffHand</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.entity.Entity">
@@ -1558,9 +1557,9 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList">
 <h4>getAttributeValue</h4>
 <pre class="methodSignature">public&nbsp;float&nbsp;getAttributeValue&#8203;(@NotNull
-                               <a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</pre>
+                               <a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="LivingEntity.html#getAttributeValue(net.minestom.server.attribute.Attribute)">LivingEntity</a></code></span></div>
-<div class="block">Retrieves the attribute value set by <a href="LivingEntity.html#setAttribute(net.minestom.server.attribute.Attribute,float)"><code>LivingEntity.setAttribute(Attribute, float)</code></a>.</div>
+<div class="block">Retrieves the attribute value.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="LivingEntity.html#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></code>&nbsp;in class&nbsp;<code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></dd>
@@ -2130,23 +2129,21 @@ public&nbsp;java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter
 </dl>
 </li>
 </ul>
-<a id="setAttribute(net.minestom.server.attribute.Attribute,float)">
+<a id="onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setAttribute</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setAttribute&#8203;(@NotNull
-                         <a href="../attribute/Attribute.html" title="enum in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
-                         float&nbsp;value)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="LivingEntity.html#setAttribute(net.minestom.server.attribute.Attribute,float)">LivingEntity</a></code></span></div>
-<div class="block">Changes the specified attribute value to <code>value</code>.</div>
+<h4>onAttributeChanged</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;onAttributeChanged&#8203;(@NotNull
+                                  <a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="LivingEntity.html#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">LivingEntity</a></code></span></div>
+<div class="block">Callback used when an attribute instance has been modified.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="LivingEntity.html#setAttribute(net.minestom.server.attribute.Attribute,float)">setAttribute</a></code>&nbsp;in class&nbsp;<code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></dd>
+<dd><code><a href="LivingEntity.html#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a></code>&nbsp;in class&nbsp;<code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>attribute</code> - The attribute to change</dd>
-<dd><code>value</code> - the new value of the attribute</dd>
+<dd><code>instance</code> - the modified attribute instance</dd>
 </dl>
 </li>
 </ul>
