@@ -6,6 +6,7 @@ import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
 
@@ -35,6 +36,14 @@ public class MainDemo {
                 player.setRespawnPoint(new Position(0, 45, 0));
             });
         });
+
+        // OPTIONAL: optimize networking to prevent having unresponsive threads
+        {
+            NettyServer nettyServer = MinecraftServer.getNettyServer();
+            // Set the maximum bandwidth out and in to 500MB/s, largely enough for a single client
+            nettyServer.setWriteLimit(500_000);
+            nettyServer.setReadLimit(500_000);
+        }
 
         // Start the server
         minecraftServer.start("localhost", 25565);
