@@ -12,6 +12,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.traffic.ChannelTrafficShapingHandler;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.LegacyPingHandler;
@@ -31,6 +32,10 @@ public class NettyServer {
 
     private String address;
     private int port;
+
+    // Options
+    private long writeLimit;
+    private long readLimit;
 
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
@@ -62,6 +67,11 @@ public class NettyServer {
                 config.setOption(ChannelOption.TCP_NODELAY, true);
 
                 ChannelPipeline pipeline = ch.pipeline();
+
+                ChannelTrafficShapingHandler channelTrafficShapingHandler =
+                        new ChannelTrafficShapingHandler(writeLimit, readLimit, 200);
+
+                pipeline.addLast("traffic-limiter", channelTrafficShapingHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 pipeline.addLast("legacy-ping", new LegacyPingHandler());
@@ -97,12 +107,71 @@ public class NettyServer {
         }
     }
 
+    /**
+     * Gets the address of the server.
+     *
+     * @return the server address
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * Gets the port used by the server.
+     *
+     * @return the server port
+     */
     public int getPort() {
         return port;
+    }
+
+    /**
+     * Gets the server write limit.
+     * <p>
+     * Used when you want to limit the bandwidth used by a single connection.
+     * Can also prevent the networking threads from being unresponsive.
+     *
+     * @return the write limit in bytes
+     */
+    public long getWriteLimit() {
+        return writeLimit;
+    }
+
+    /**
+     * Changes the server write limit
+     * <p>
+     * WARNING: the change will only apply to new connections, the current ones will not be updated.
+     *
+     * @param writeLimit the new write limit in bytes
+     * @see #getWriteLimit()
+     */
+    public void setWriteLimit(long writeLimit) {
+        this.writeLimit = writeLimit;
+    }
+
+
+    /**
+     * Gets the server read limit.
+     * <p>
+     * Used when you want to limit the bandwidth used by a single connection.
+     * Can also prevent the networking threads from being unresponsive.
+     *
+     * @return the read limit in bytes
+     */
+    public long getReadLimit() {
+        return readLimit;
+    }
+
+    /**
+     * Changes the server read limit
+     * <p>
+     * WARNING: the change will only apply to new connections, the current ones will not be updated.
+     *
+     * @param readLimit the new read limit in bytes
+     * @see #getWriteLimit()
+     */
+    public void setReadLimit(long readLimit) {
+        this.readLimit = readLimit;
     }
 
     public void stop() {
