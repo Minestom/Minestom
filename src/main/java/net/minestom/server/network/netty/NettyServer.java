@@ -142,7 +142,7 @@ public class NettyServer {
      * <p>
      * WARNING: the change will only apply to new connections, the current ones will not be updated.
      *
-     * @param writeLimit the new write limit in bytes
+     * @param writeLimit the new write limit in bytes, 0 to disable
      * @see #getWriteLimit()
      */
     public void setWriteLimit(long writeLimit) {
@@ -167,7 +167,7 @@ public class NettyServer {
      * <p>
      * WARNING: the change will only apply to new connections, the current ones will not be updated.
      *
-     * @param readLimit the new read limit in bytes
+     * @param readLimit the new read limit in bytes, 0 to disable
      * @see #getWriteLimit()
      */
     public void setReadLimit(long readLimit) {
