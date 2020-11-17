@@ -40,7 +40,7 @@ public class MainDemo {
         // OPTIONAL: optimize networking to prevent having unresponsive threads
         {
             NettyServer nettyServer = MinecraftServer.getNettyServer();
-            // Set the maximum bandwidth out and in to 500MB/s, largely enough for a single client
+            // Set the maximum bandwidth out and in to 500KB/s, largely enough for a single client
             nettyServer.setWriteLimit(500_000);
             nettyServer.setReadLimit(500_000);
         }
