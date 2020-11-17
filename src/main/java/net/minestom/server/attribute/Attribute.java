@@ -16,7 +16,7 @@ public class Attribute {
 	private final boolean shareWithClient;
 
 	public Attribute(@NotNull String key, float defaultValue, float maxValue) {
-		this(key, false, defaultValue, maxValue);
+		this(key, true, defaultValue, maxValue);
 	}
 
 	public Attribute(@NotNull String key, boolean shareWithClient, float defaultValue, float maxValue) {
