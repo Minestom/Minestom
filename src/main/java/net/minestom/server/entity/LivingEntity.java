@@ -405,6 +405,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         return attributeModifiers.get(attribute.getKey());
     }
 
+    /**
+     * Callback used when an attribute instance has been modified.
+     *
+     * @param instance the modified attribute instance
+     */
     protected void onAttributeChanged(@NotNull AttributeInstance instance) { }
 
     /**
