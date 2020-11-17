@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
@@ -66,7 +67,7 @@ public final class CommandManager {
 
                 // Prevent permanent looping
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(MinecraftServer.TICK_MS);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

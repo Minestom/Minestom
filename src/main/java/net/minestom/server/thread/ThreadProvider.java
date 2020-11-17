@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import io.netty.util.NettyRuntime;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.*;
 import net.minestom.server.instance.Chunk;
@@ -36,8 +37,8 @@ public abstract class ThreadProvider {
     private int threadCount;
 
     {
-        // Default thread count in the pool
-        setThreadCount(5);
+        // Default thread count in the pool (cores * 2)
+        setThreadCount(NettyRuntime.availableProcessors() * 2);
     }
 
     /**
