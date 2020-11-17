@@ -1,6 +1,6 @@
 package demo.entity;
 
-import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
 import net.minestom.server.entity.damage.DamageType;
@@ -37,7 +37,7 @@ public class ChickenCreature extends EntityChicken {
         //targetSelectors.add(new ClosestEntityTarget(this, 15, LivingEntity.class));
 
 
-        setAttribute(Attribute.MOVEMENT_SPEED, 0.1f);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         addEventCallback(EntityAttackEvent.class, event -> {
             //System.out.println("CALL ATTACK");

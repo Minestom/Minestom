@@ -1,6 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
+import java.util.Collection;
+
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeInstance;
+import net.minestom.server.attribute.AttributeModifier;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -30,9 +34,14 @@ public class EntityPropertiesPacket implements ServerPacket {
 
         public Attribute attribute;
         public double value;
+        public AttributeInstance instance;
 
         private void write(BinaryWriter writer) {
-            float maxValue = attribute.getMaxVanillaValue();
+            if (instance != null) {
+                attribute = instance.getAttribute();
+                value = instance.getBaseValue();
+            }
+            float maxValue = attribute.getMaxValue();
 
             // Bypass vanilla limit client-side if needed (by sending the max value allowed)
             final double v = value > maxValue ? maxValue : value;
@@ -40,8 +49,16 @@ public class EntityPropertiesPacket implements ServerPacket {
             writer.writeSizedString(attribute.getKey());
             writer.writeDouble(v);
 
-            // TODO support for AttributeOperation
-            writer.writeVarInt(0);
+            {
+                Collection<AttributeModifier> modifiers = instance.getModifiers();
+                writer.writeVarInt(modifiers.size());
+
+                for (var modifier : modifiers) {
+                    writer.writeUuid(modifier.getId());
+                    writer.writeDouble(modifier.getAmount());
+                    writer.writeByte((byte) modifier.getOperation().getId());
+                }
+            }
         }
     }
 

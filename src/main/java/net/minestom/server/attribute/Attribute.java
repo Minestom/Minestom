@@ -1,53 +1,134 @@
 package net.minestom.server.attribute;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public enum Attribute {
+/**
+ * Represent a {@link net.minestom.server.entity.LivingEntity living entity} attribute.
+ */
+public class Attribute {
 
-    MAX_HEALTH("generic.max_health", 20, 1024),
-    FOLLOW_RANGE("generic.follow_range", 32, 2048),
-    KNOCKBACK_RESISTANCE("generic.knockback_resistance", 0, 1),
-    MOVEMENT_SPEED("generic.movement_speed", 0.25f, 1024),
-    ATTACK_DAMAGE("generic.attack_damage", 2, 2048),
-    ATTACK_SPEED("generic.attack_speed", 4, 1024),
-    FLYING_SPEED("generic.flying_speed", 0.4f, 1024),
-    ARMOR("generic.armor", 0, 30),
-    ARMOR_TOUGHNESS("generic.armor_toughness", 0, 20),
-    ATTACK_KNOCKBACK("generic.attack_knockback", 0, 5),
-    LUCK("generic.luck", 0, 1024),
-    HORSE_JUMP_STRENGTH("horse.jump_strength", 0.7f, 2),
-    ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawn_reinforcements", 0, 1);
+	private static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
 
-    private final String key;
-    private final float defaultValue;
-    private final float maxVanillaValue;
+	private final String key;
+	private final float defaultValue;
+	private final float maxValue;
+	private final boolean shareWithClient;
 
-    Attribute(@NotNull String key, float defaultValue, float maxVanillaValue) {
-        this.key = key;
-        this.defaultValue = defaultValue;
-        this.maxVanillaValue = maxVanillaValue;
-    }
+	/**
+	 * Create a new attribute with a given key and default.
+	 * <p>
+	 *     By default, this attribute will be sent to the client.
+	 * </p>
+	 *
+	 * @param key the attribute registry key
+	 * @param defaultValue the default value
+	 * @param maxValue the maximum allowed value
+	 */
+	public Attribute(@NotNull String key, float defaultValue, float maxValue) {
+		this(key, true, defaultValue, maxValue);
+	}
 
-    @NotNull
-    public String getKey() {
-        return key;
-    }
+	/**
+	 * Create a new attribute with a given key and default.
+	 *
+	 * @param key the attribute registry key
+	 * @param shareWithClient whether to send this attribute to the client
+	 * @param defaultValue the default value
+	 * @param maxValue the maximum allowed value
+	 */
+	public Attribute(@NotNull String key, boolean shareWithClient, float defaultValue, float maxValue) {
+		if (defaultValue > maxValue) {
+			throw new IllegalArgumentException("Default value cannot be greater than the maximum allowed");
+		}
+		this.key = key;
+		this.shareWithClient = shareWithClient;
+		this.defaultValue = defaultValue;
+		this.maxValue = maxValue;
+	}
 
-    public float getDefaultValue() {
-        return defaultValue;
-    }
+	/**
+	 * Gets the attribute unique key.
+	 *
+	 * @return the attribute key
+	 */
+	@NotNull
+	public String getKey() {
+		return key;
+	}
 
-    public float getMaxVanillaValue() {
-        return maxVanillaValue;
-    }
+	/**
+	 * Gets the attribute default value that should be applied.
+	 *
+	 * @return the attribute default value
+	 */
+	public float getDefaultValue() {
+		return defaultValue;
+	}
 
-    @Nullable
-    public static Attribute fromKey(@NotNull String key) {
-        for (Attribute attribute : values()) {
-            if (attribute.getKey().equals(key))
-                return attribute;
-        }
-        return null;
-    }
+	/**
+	 * Gets the maximum value applicable to an entity for this attribute.
+	 *
+	 * @return the maximum value of this attribute
+	 */
+	public float getMaxValue() {
+		return maxValue;
+	}
+
+	/**
+	 * Gets whether this attribute's instances should be sent to clients.
+	 *
+	 * @return if this attribute is to be shared
+	 */
+	public boolean isShared() {
+		return shareWithClient;
+	}
+
+	/**
+	 * Register this attribute.
+	 *
+	 * @see #fromKey(String)
+	 * @see #values()
+	 *
+	 * @return this attribute
+	 */
+	@NotNull
+	public Attribute register() {
+		ATTRIBUTES.put(key, this);
+		return this;
+	}
+
+	/**
+	 * Retrieves an attribute by its key.
+	 *
+	 * @param key the key of the attribute
+	 * @return the attribute for the key or null if not any
+	 */
+	@Nullable
+	public static Attribute fromKey(@NotNull String key) {
+		return ATTRIBUTES.get(key);
+	}
+
+	/**
+	 * Retrieves all registered attributes.
+	 *
+	 * @return an array containing all registered attributes
+	 */
+	@NotNull
+	public static Attribute[] values() {
+		return ATTRIBUTES.values().toArray(new Attribute[0]);
+	}
+
+	/**
+	 * Retrieves registered attributes that are shared with the client.
+	 *
+	 * @return an array containing registered, sharable attributes
+	 */
+	@NotNull
+	public static Attribute[] sharedAttributes() {
+		return ATTRIBUTES.values().stream().filter(Attribute::isShared).toArray(Attribute[]::new);
+	}
 }

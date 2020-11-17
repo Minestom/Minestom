@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,13 @@ public final class UniqueIdUtils {
      */
     public static boolean isUniqueId(String input) {
         return input.matches(UNIQUE_ID_PATTERN.pattern());
+    }
+
+    public static UUID createRandomUUID(Random random) {
+        long most = random.nextLong() & -61441L | 16384L;
+        long least = random.nextLong() & 4611686018427387903L | Long.MAX_VALUE;
+
+        return new UUID(most, least);
     }
 
 }
