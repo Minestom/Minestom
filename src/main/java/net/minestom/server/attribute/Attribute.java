@@ -1,53 +1,69 @@
 package net.minestom.server.attribute;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public enum Attribute {
+public class Attribute {
 
-    MAX_HEALTH("generic.max_health", 20, 1024),
-    FOLLOW_RANGE("generic.follow_range", 32, 2048),
-    KNOCKBACK_RESISTANCE("generic.knockback_resistance", 0, 1),
-    MOVEMENT_SPEED("generic.movement_speed", 0.25f, 1024),
-    ATTACK_DAMAGE("generic.attack_damage", 2, 2048),
-    ATTACK_SPEED("generic.attack_speed", 4, 1024),
-    FLYING_SPEED("generic.flying_speed", 0.4f, 1024),
-    ARMOR("generic.armor", 0, 30),
-    ARMOR_TOUGHNESS("generic.armor_toughness", 0, 20),
-    ATTACK_KNOCKBACK("generic.attack_knockback", 0, 5),
-    LUCK("generic.luck", 0, 1024),
-    HORSE_JUMP_STRENGTH("horse.jump_strength", 0.7f, 2),
-    ZOMBIE_SPAWN_REINFORCEMENTS("zombie.spawn_reinforcements", 0, 1);
+	private static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
 
-    private final String key;
-    private final float defaultValue;
-    private final float maxVanillaValue;
+	private final String key;
+	private final float defaultValue;
+	private final float maxValue;
+	private final boolean shareWithClient;
 
-    Attribute(@NotNull String key, float defaultValue, float maxVanillaValue) {
-        this.key = key;
-        this.defaultValue = defaultValue;
-        this.maxVanillaValue = maxVanillaValue;
-    }
+	public Attribute(@NotNull String key, float defaultValue, float maxValue) {
+		this(key, false, defaultValue, maxValue);
+	}
 
-    @NotNull
-    public String getKey() {
-        return key;
-    }
+	public Attribute(@NotNull String key, boolean shareWithClient, float defaultValue, float maxValue) {
+		if (defaultValue > maxValue) {
+			throw new IllegalArgumentException("Default value cannot be greater than the maximum allowed");
+		}
+		this.key = key;
+		this.shareWithClient = shareWithClient;
+		this.defaultValue = defaultValue;
+		this.maxValue = maxValue;
+	}
 
-    public float getDefaultValue() {
-        return defaultValue;
-    }
+	@NotNull
+	public String getKey() {
+		return key;
+	}
 
-    public float getMaxVanillaValue() {
-        return maxVanillaValue;
-    }
+	public float getDefaultValue() {
+		return defaultValue;
+	}
 
-    @Nullable
-    public static Attribute fromKey(@NotNull String key) {
-        for (Attribute attribute : values()) {
-            if (attribute.getKey().equals(key))
-                return attribute;
-        }
-        return null;
-    }
+	public float getMaxValue() {
+		return maxValue;
+	}
+
+	public boolean isShared() {
+		return shareWithClient;
+	}
+
+	@NotNull
+	public Attribute register() {
+		ATTRIBUTES.put(key, this);
+		return this;
+	}
+
+	@Nullable
+	public static Attribute fromKey(@NotNull String key) {
+		return ATTRIBUTES.get(key);
+	}
+
+	@NotNull
+	public static Attribute[] values() {
+		return ATTRIBUTES.values().toArray(new Attribute[0]);
+	}
+
+	@NotNull
+	public static Attribute[] sharedAttributes() {
+		return ATTRIBUTES.values().stream().filter(Attribute::isShared).toArray(Attribute[]::new);
+	}
 }

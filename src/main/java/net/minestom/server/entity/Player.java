@@ -3,6 +3,8 @@ package net.minestom.server.entity;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeInstance;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -288,7 +290,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public float getAttributeValue(@NotNull Attribute attribute) {
-        if (attribute == Attribute.MOVEMENT_SPEED) {
+        if (attribute == Attributes.MOVEMENT_SPEED) {
             return walkingSpeed;
         }
         return super.getAttributeValue(attribute);
@@ -1020,9 +1022,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public void setAttribute(@NotNull Attribute attribute, float value) {
-        super.setAttribute(attribute, value);
-        if (playerConnection != null)
+    protected void onAttributeChanged(@NotNull final AttributeInstance instance) {
+        if (instance.getAttribute().isShared() && playerConnection != null)
             playerConnection.sendPacket(getPropertiesPacket());
     }
 

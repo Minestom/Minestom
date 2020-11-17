@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
@@ -134,7 +134,7 @@ public abstract class EntityCreature extends LivingEntity {
                 this.path = pathFinder.updatePathFor(pathingEntity);
 
                 if (path != null) {
-                    final float speed = getAttributeValue(Attribute.MOVEMENT_SPEED);
+                    final float speed = getAttributeValue(Attributes.MOVEMENT_SPEED);
                     final Position targetPosition = pathingEntity.getTargetPosition();
                     moveTowards(targetPosition, speed);
                 } else {

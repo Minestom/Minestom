@@ -1,6 +1,8 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeInstance;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityDamageEvent;
@@ -26,9 +28,12 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+//TODO: Default attributes registration (and limitation ?)
 public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
@@ -44,7 +49,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final float[] attributeValues = new float[Attribute.values().length];
+    private final Map<String, AttributeInstance> attributeModifiers = new HashMap<>(Attribute.values().length);
 
     private boolean isHandActive;
     private boolean offHand;
@@ -369,41 +374,48 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attribute#MAX_HEALTH}.
+     * Gets the entity max health from {@link #getAttributeValue(Attribute)} {@link Attributes#MAX_HEALTH}.
      *
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attribute.MAX_HEALTH);
+        return getAttributeValue(Attributes.MAX_HEALTH);
     }
 
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth(getAttributeValue(Attributes.MAX_HEALTH));
     }
 
     /**
-     * Changes the specified attribute value to {@code value}.
+     * Retrieves the attribute instance and its modifiers.
      *
-     * @param attribute The attribute to change
-     * @param value     the new value of the attribute
+     * @param attribute the attribute instance to get
+     * @return the attribute instance
      */
-    public void setAttribute(@NotNull Attribute attribute, float value) {
-        this.attributeValues[attribute.ordinal()] = value;
+    @NotNull
+    public AttributeInstance getAttribute(@NotNull Attribute attribute) {
+        if (!attributeModifiers.containsKey(attribute.getKey())) {
+            attributeModifiers.put(attribute.getKey(), new AttributeInstance(attribute, this::onAttributeChanged));
+        }
+        return attributeModifiers.get(attribute.getKey());
     }
 
+    protected void onAttributeChanged(@NotNull AttributeInstance instance) { }
+
     /**
-     * Retrieves the attribute value set by {@link #setAttribute(Attribute, float)}.
+     * Retrieves the attribute value.
      *
      * @param attribute the attribute value to get
      * @return the attribute value
      */
     public float getAttributeValue(@NotNull Attribute attribute) {
-        return this.attributeValues[attribute.ordinal()];
+        AttributeInstance instance = attributeModifiers.get(attribute.getKey());
+        return (instance != null) ? instance.getValue() : attribute.getDefaultValue();
     }
 
     /**
@@ -488,15 +500,16 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
 
-        final int length = Attribute.values().length;
-        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[length];
-        for (int i = 0; i < length; i++) {
+        AttributeInstance[] instances = attributeModifiers.values().stream()
+                .filter(i -> i.getAttribute().isShared())
+                .toArray(AttributeInstance[]::new);
+        EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
+        for (int i = 0; i < properties.length; ++i) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
 
-            final Attribute attribute = Attribute.values()[i];
-            final float value = getAttributeValue(attribute);
+            final float value = instances[i].getBaseValue();
 
-            property.attribute = attribute;
+            property.attribute = instances[i].getAttribute();
             property.value = value;
 
             properties[i] = property;
@@ -511,7 +524,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
-            setAttribute(attribute, attribute.getDefaultValue());
+            attributeModifiers.put(attribute.getKey(), new AttributeInstance(attribute, this::onAttributeChanged));
         }
     }
 
