@@ -217,7 +217,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enableCompression(int)">enableCompression</a></span>&#8203;(int&nbsp;threshold)</code></th>
 <td class="colLast">
-<div class="block">Enables compression and add a new channel to the pipeline.</div>
+<div class="block">Enables compression and add a new codec to the pipeline.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -299,7 +299,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEncryptionKey(javax.crypto.SecretKey)">setEncryptionKey</a></span>&#8203;(javax.crypto.SecretKey&nbsp;secretKey)</code></th>
 <td class="colLast">
-<div class="block">Sets the encryption key and add the channels to the pipeline.</div>
+<div class="block">Sets the encryption key and add the codecs to the pipeline.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -390,7 +390,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <h4>setEncryptionKey</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEncryptionKey&#8203;(@NotNull
                              javax.crypto.SecretKey&nbsp;secretKey)</pre>
-<div class="block">Sets the encryption key and add the channels to the pipeline.</div>
+<div class="block">Sets the encryption key and add the codecs to the pipeline.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>secretKey</code> - the secret key to use in the encryption</dd>
@@ -406,7 +406,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <li class="blockList">
 <h4>enableCompression</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;enableCompression&#8203;(int&nbsp;threshold)</pre>
-<div class="block">Enables compression and add a new channel to the pipeline.</div>
+<div class="block">Enables compression and add a new codec to the pipeline.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>threshold</code> - the threshold for a packet to be compressible</dd>
