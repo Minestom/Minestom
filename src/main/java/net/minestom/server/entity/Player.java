@@ -133,7 +133,7 @@ public class Player extends LivingEntity implements CommandSender {
     private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
 
     // Position synchronization with viewers
-    protected UpdateOption playerSynchronizationCooldown = new UpdateOption(2, TimeUnit.TICK);
+    protected UpdateOption playerSynchronizationCooldown = new UpdateOption(1, TimeUnit.TICK);
     private long lastPlayerSynchronizationTime;
     private float lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ, lastPlayerSyncYaw, lastPlayerSyncPitch;
 
@@ -1777,6 +1777,27 @@ public class Player extends LivingEntity implements CommandSender {
     @Nullable
     public CustomBlock getCustomBlockTarget() {
         return targetCustomBlock;
+    }
+
+    /**
+     * Gets the cooldown before this player warns his viewers about position changes.
+     *
+     * @return the cooldown between position update
+     */
+    @NotNull
+    public UpdateOption getPlayerSynchronizationCooldown() {
+        return playerSynchronizationCooldown;
+    }
+
+    /**
+     * Changes the cooldown between two position update.
+     * <p>
+     * Useful if you have a lot of players close to each other (like 200) and want to limit bandwidth/CPU usage.
+     *
+     * @param playerSynchronizationCooldown the cooldown for position update
+     */
+    public void setPlayerSynchronizationCooldown(@NotNull UpdateOption playerSynchronizationCooldown) {
+        this.playerSynchronizationCooldown = playerSynchronizationCooldown;
     }
 
     /**
