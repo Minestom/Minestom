@@ -34,8 +34,8 @@ public class NettyServer {
     private int port;
 
     // Options
-    private long writeLimit;
-    private long readLimit;
+    private long writeLimit = 750_000L;
+    private long readLimit = 750_000L;
 
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
