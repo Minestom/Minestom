@@ -1,6 +1,6 @@
 package net.minestom.server.extras.selfmodification.mixins;
 
-import net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.service.IClassBytecodeProvider;
@@ -11,9 +11,9 @@ import java.io.IOException;
  * Provides class bytecode for Mixin
  */
 public class MinestomBytecodeProvider implements IClassBytecodeProvider {
-    private final MinestomOverwriteClassLoader classLoader;
+    private final MinestomRootClassLoader classLoader;
 
-    public MinestomBytecodeProvider(MinestomOverwriteClassLoader classLoader) {
+    public MinestomBytecodeProvider(MinestomRootClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
@@ -26,7 +26,7 @@ public class MinestomBytecodeProvider implements IClassBytecodeProvider {
         ClassNode node = new ClassNode();
         ClassReader reader;
         try {
-            reader = new ClassReader(classLoader.loadBytes(name, transform));
+            reader = new ClassReader(classLoader.loadBytesWithChildren(name, transform));
         } catch (IOException e) {
             throw new ClassNotFoundException("Could not load ClassNode with name " + name, e);
         }
