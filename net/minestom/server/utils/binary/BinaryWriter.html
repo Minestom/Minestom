@@ -175,6 +175,12 @@ extends java.io.OutputStream</pre>
 </td>
 </tr>
 <tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf)">BinaryWriter</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
+<td class="colLast">
+<div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple a single buffer.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf...)">BinaryWriter</a></span>&#8203;(io.netty.buffer.ByteBuf...&nbsp;buffers)</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple buffers.</div>
@@ -425,13 +431,29 @@ extends java.io.OutputStream</pre>
 </dl>
 </li>
 </ul>
+<a id="&lt;init&gt;(io.netty.buffer.ByteBuf)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BinaryWriter</h4>
+<pre>public&nbsp;BinaryWriter&#8203;(@NotNull
+                    io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
+<div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple a single buffer.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>buffer</code> - the writer buffer</dd>
+</dl>
+</li>
+</ul>
 <a id="&lt;init&gt;(io.netty.buffer.ByteBuf...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>BinaryWriter</h4>
-<pre>public&nbsp;BinaryWriter&#8203;(io.netty.buffer.ByteBuf...&nbsp;buffers)</pre>
+<pre>public&nbsp;BinaryWriter&#8203;(@NotNull
+                    io.netty.buffer.ByteBuf...&nbsp;buffers)</pre>
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple buffers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
