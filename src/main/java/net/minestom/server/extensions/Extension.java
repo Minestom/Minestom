@@ -3,6 +3,7 @@ package net.minestom.server.extensions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Extension {
@@ -65,7 +66,7 @@ public abstract class Extension {
         ExtensionDescription(@NotNull String name, @NotNull String version, @NotNull List<String> authors, @NotNull DiscoveredExtension origin) {
             this.name = name;
             this.version = version;
-            this.authors = authors != null ? authors : new ArrayList<>();
+            this.authors = authors;
             this.origin = origin;
         }
 

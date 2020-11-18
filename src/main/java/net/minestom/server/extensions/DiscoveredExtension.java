@@ -1,16 +1,19 @@
 package net.minestom.server.extensions;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-@Slf4j(topic = "minestom-extensions")
 final class DiscoveredExtension {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
+
     public static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9]+";
     private String name;
     private String entrypoint;
@@ -82,8 +85,8 @@ final class DiscoveredExtension {
             for (URL f : extension.files) {
                 fileList.append(f.toExternalForm()).append(", ");
             }
-            log.error("Extension with no name. (at {}})", fileList);
-            log.error("Extension at ({}) will not be loaded.", fileList);
+            LOGGER.error("Extension with no name. (at {}})", fileList);
+            LOGGER.error("Extension at ({}) will not be loaded.", fileList);
             extension.loadStatus = DiscoveredExtension.LoadStatus.INVALID_NAME;
 
             // To ensure @NotNull: name = INVALID_NAME
@@ -91,8 +94,8 @@ final class DiscoveredExtension {
             return;
         }
         if (!extension.name.matches(NAME_REGEX)) {
-            log.error("Extension '{}' specified an invalid name.", extension.name);
-            log.error("Extension '{}' will not be loaded.", extension.name);
+            LOGGER.error("Extension '{}' specified an invalid name.", extension.name);
+            LOGGER.error("Extension '{}' will not be loaded.", extension.name);
             extension.loadStatus = DiscoveredExtension.LoadStatus.INVALID_NAME;
 
             // To ensure @NotNull: name = INVALID_NAME
@@ -100,8 +103,8 @@ final class DiscoveredExtension {
             return;
         }
         if (extension.entrypoint == null) {
-            log.error("Extension '{}' did not specify an entry point (via 'entrypoint').", extension.name);
-            log.error("Extension '{}' will not be loaded.", extension.name);
+            LOGGER.error("Extension '{}' did not specify an entry point (via 'entrypoint').", extension.name);
+            LOGGER.error("Extension '{}' will not be loaded.", extension.name);
             extension.loadStatus = DiscoveredExtension.LoadStatus.NO_ENTRYPOINT;
 
             // To ensure @NotNull: entrypoint = NO_ENTRYPOINT
@@ -111,8 +114,8 @@ final class DiscoveredExtension {
         // Handle defaults
         // If we reach this code, then the extension will most likely be loaded:
         if (extension.version == null) {
-            log.warn("Extension '{}' did not specify a version.", extension.name);
-            log.warn("Extension '{}' will continue to load but should specify a plugin version.", extension.name);
+            LOGGER.warn("Extension '{}' did not specify a version.", extension.name);
+            LOGGER.warn("Extension '{}' will continue to load but should specify a plugin version.", extension.name);
             extension.version = "Unspecified";
         }
         if (extension.mixinConfig == null) {

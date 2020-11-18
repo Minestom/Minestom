@@ -1,6 +1,5 @@
 package net.minestom.server.extras.selfmodification;
 
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -23,8 +22,9 @@ import java.util.Set;
 /**
  * Class Loader that can modify class bytecode when they are loaded
  */
-@Slf4j
 public class MinestomRootClassLoader extends HierarchyClassLoader {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinestomRootClassLoader.class);
 
     private static MinestomRootClassLoader INSTANCE;
 
@@ -109,18 +109,18 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         try {
             // we do not load system classes by ourselves
             Class<?> systemClass = ClassLoader.getPlatformClassLoader().loadClass(name);
-            log.trace("System class: " + systemClass);
+            LOGGER.trace("System class: " + systemClass);
             return systemClass;
         } catch (ClassNotFoundException e) {
             try {
                 if (isProtected(name)) {
-                    log.trace("Protected: " + name);
+                    LOGGER.trace("Protected: " + name);
                     return super.loadClass(name, resolve);
                 }
 
                 return define(name, resolve);
             } catch (Exception ex) {
-                log.trace("Fail to load class, resorting to parent loader: " + name, ex);
+                LOGGER.trace("Fail to load class, resorting to parent loader: " + name, ex);
                 // fail to load class, let parent load
                 // this forbids code modification, but at least it will load
                 return super.loadClass(name, resolve);
@@ -143,7 +143,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         try {
             byte[] bytes = loadBytes(name, true);
             Class<?> defined = defineClass(name, bytes, 0, bytes.length);
-            log.trace("Loaded with code modifiers: " + name);
+            LOGGER.trace("Loaded with code modifiers: " + name);
             if (resolve) {
                 resolveClass(defined);
             }
@@ -154,7 +154,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             for(MinestomExtensionClassLoader subloader : children) {
                 try {
                     defined = subloader.loadClassAsChild(name, resolve);
-                    log.trace("Loaded from child {}: {}", subloader, name);
+                    LOGGER.trace("Loaded from child {}: {}", subloader, name);
                     return defined;
                 } catch (ClassNotFoundException e1) {
                     // not found inside this child, move on to next
@@ -226,7 +226,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                 };
                 node.accept(writer);
                 classBytecode = writer.toByteArray();
-                log.trace("Modified " + name);
+                LOGGER.trace("Modified " + name);
             }
         }
         return classBytecode;
@@ -254,7 +254,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             if (CodeModifier.class.isAssignableFrom(modifierClass)) {
                 CodeModifier modifier = (CodeModifier) modifierClass.getDeclaredConstructor().newInstance();
                 synchronized (modifiers) {
-                    log.warn("Added Code modifier: " + modifier);
+                    LOGGER.warn("Added Code modifier: " + modifier);
                     addCodeModifier(modifier);
                 }
             }
