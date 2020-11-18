@@ -74,6 +74,7 @@ public class NettyServer {
                 pipeline.addLast("traffic-limiter", channelTrafficShapingHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
+                // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
                 pipeline.addLast("legacy-ping", new LegacyPingHandler());
 
                 // Adds packetLength at start | Reads framed bytebuf
