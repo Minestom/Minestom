@@ -143,7 +143,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">PlayerStartDiggingEvent</span>
 extends <a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a></pre>
 <div class="block">Called when a <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> start digging a block,
- can be used to forbid the <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from mining it.</div>
+ can be used to forbid the <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from mining it.
+ <p>
+ Be aware that cancelling this event does not necessary prevent the player from breaking the block
+ (could be because of high latency or a modified client) so cancelling <a href="PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player"><code>PlayerBlockBreakEvent</code></a> is also necessary.
+ Could be fixed in future Minestom version.</div>
 </li>
 </ul>
 </div>
