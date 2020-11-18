@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10,"i97":10,"i98":10,"i99":10,"i100":10,"i101":10,"i102":10,"i103":10,"i104":10,"i105":10,"i106":10,"i107":10,"i108":10,"i109":10,"i110":10,"i111":10,"i112":10,"i113":10,"i114":10,"i115":10,"i116":10,"i117":10,"i118":10,"i119":10,"i120":10,"i121":10,"i122":10,"i123":10,"i124":10,"i125":10,"i126":10,"i127":10,"i128":10,"i129":10,"i130":10,"i131":10,"i132":10,"i133":10,"i134":10,"i135":10,"i136":10,"i137":10,"i138":10,"i139":10,"i140":10,"i141":10,"i142":10,"i143":10,"i144":10,"i145":10,"i146":10,"i147":10,"i148":10,"i149":10,"i150":10,"i151":10,"i152":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":9,"i40":9,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10,"i97":10,"i98":10,"i99":10,"i100":10,"i101":10,"i102":10,"i103":10,"i104":10,"i105":10,"i106":10,"i107":10,"i108":10,"i109":10,"i110":10,"i111":10,"i112":10,"i113":10,"i114":10,"i115":10,"i116":10,"i117":10,"i118":10,"i119":10,"i120":10,"i121":10,"i122":10,"i123":10,"i124":10,"i125":10,"i126":10,"i127":10,"i128":10,"i129":10,"i130":10,"i131":10,"i132":10,"i133":10,"i134":9,"i135":10,"i136":10,"i137":10,"i138":10,"i139":10,"i140":10,"i141":10,"i142":10,"i143":10,"i144":10,"i145":10,"i146":10,"i147":10,"i148":10,"i149":10,"i150":10,"i151":10,"i152":10,"i153":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -152,7 +152,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>
 implements <a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></pre>
 <div class="block">Those are the major actors of the server,
- they are not necessary backed by a <a href="../network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player"><code>NettyPlayerConnection</code></a> as shown by <a href="fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>
+ they are not necessary backed by a <a href="../network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player"><code>NettyPlayerConnection</code></a> as shown by <a href="fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.
  <p>
  You can easily create your own implementation of this and use it with <a href="../network/ConnectionManager.html#setPlayerProvider(net.minestom.server.network.PlayerProvider)"><code>ConnectionManager.setPlayerProvider(PlayerProvider)</code></a>.</div>
 </li>
@@ -238,16 +238,11 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playerSynchronizationCooldown">playerSynchronizationCooldown</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>protected java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#viewableChunks">viewableChunks</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected java.util.Set&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#viewableEntities">viewableEntities</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -301,7 +296,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -581,210 +576,216 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i39" class="rowColor">
-<td class="colFirst"><code><a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSynchronizationCooldown()">getPlayerSynchronizationCooldown</a></span>()</code></th>
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSynchronizationGroup()">getPlayerSynchronizationGroup</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the cooldown before this player warns his viewers about position changes.</div>
+<div class="block">For the number of viewers that a player has, the position synchronization packet will be sent
+ every 1 tick + (viewers/<code>playerSynchronizationGroup</code>).</div>
 </td>
 </tr>
 <tr id="i40" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSynchronizationTickDelay(int)">getPlayerSynchronizationTickDelay</a></span>&#8203;(int&nbsp;viewersCount)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/PlayerInfoPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemovePlayerToList()">getRemovePlayerToList</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the packet to remove the player from the tab-list.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code><a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRespawnPoint()">getRespawnPoint</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to retrieve the default spawn point.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code><a href="Player.PlayerSettings.html" title="class in net.minestom.server.entity">Player.PlayerSettings</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSettings()">getSettings</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player settings.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code><a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSkin()">getSkin</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player skin.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;<a href="../stat/PlayerStatistic.html" title="class in net.minestom.server.stat">PlayerStatistic</a>,&#8203;java.lang.Integer&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatisticValueMap()">getStatisticValueMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">This is the map used to send the statistic packet.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUsername()">getUsername</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player username.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code><a href="vehicle/PlayerVehicleInformation.html" title="class in net.minestom.server.entity.vehicle">PlayerVehicleInformation</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVehicleInformation()">getVehicleInformation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player vehicle information.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewableChunks()">getViewableChunks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player viewable chunks.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWalkingSpeed()">getWalkingSpeed</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasReducedDebugScreenInformation()">hasReducedDebugScreenInformation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player has the reduced debug screen.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hideTitle()">hideTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Hides the previous title.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init()">init</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used when the player is created.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAllowFlying()">isAllowFlying</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is allowed to fly.</div>
 </td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCreative()">isCreative</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this player is in creative.</div>
 </td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEating()">isEating</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is eating.</div>
 </td>
 </tr>
-<tr id="i55" class="rowColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEnableRespawnScreen()">isEnableRespawnScreen</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player has the respawn screen enabled or disabled.</div>
 </td>
 </tr>
-<tr id="i56" class="altColor">
+<tr id="i57" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isFlying()">isFlying</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is currently flying.</div>
 </td>
 </tr>
-<tr id="i57" class="rowColor">
+<tr id="i58" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isImmune(net.minestom.server.entity.damage.DamageType)">isImmune</a></span>&#8203;(<a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Is this entity immune to the given type of damage?</div>
 </td>
 </tr>
-<tr id="i58" class="altColor">
+<tr id="i59" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInstantBreak()">isInstantBreak</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i59" class="rowColor">
+<tr id="i60" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInvulnerable()">isInvulnerable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The invulnerable field appear in the <a href="../network/packet/server/play/PlayerAbilitiesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerAbilitiesPacket</code></a> packet.</div>
 </td>
 </tr>
-<tr id="i60" class="altColor">
+<tr id="i61" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnGround()">isOnGround</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i61" class="rowColor">
+<tr id="i62" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnline()">isOnline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is online or not.</div>
 </td>
 </tr>
-<tr id="i62" class="altColor">
+<tr id="i63" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSneaking()">isSneaking</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is sneaking.</div>
 </td>
 </tr>
-<tr id="i63" class="rowColor">
+<tr id="i64" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSprinting()">isSprinting</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is sprinting.</div>
 </td>
 </tr>
-<tr id="i64" class="altColor">
+<tr id="i65" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(java.lang.String)">kick</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Kicks the player with a reason.</div>
 </td>
 </tr>
-<tr id="i65" class="rowColor">
+<tr id="i66" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(net.minestom.server.chat.ColoredText)">kick</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Kicks the player with a reason.</div>
 </td>
 </tr>
-<tr id="i66" class="altColor">
+<tr id="i67" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kill()">kill</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Kills the entity, trigger the <a href="../event/entity/EntityDeathEvent.html" title="class in net.minestom.server.event.entity"><code>EntityDeathEvent</code></a> event.</div>
 </td>
 </tr>
-<tr id="i67" class="rowColor">
+<tr id="i68" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a></span>&#8203;(<a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Callback used when an attribute instance has been modified.</div>
 </td>
 </tr>
-<tr id="i68" class="altColor">
+<tr id="i69" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openInventory(net.minestom.server.inventory.Inventory)">openInventory</a></span>&#8203;(<a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></th>
 <td class="colLast">
 <div class="block">Opens the specified Inventory, close the previous inventory if existing.</div>
 </td>
 </tr>
-<tr id="i69" class="rowColor">
+<tr id="i70" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playEffect(net.minestom.server.effects.Effects,int,int,int,int,boolean)">playEffect</a></span>&#8203;(<a href="../effects/Effects.html" title="enum in net.minestom.server.effects">Effects</a>&nbsp;effect,
           int&nbsp;x,
@@ -796,14 +797,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a given effect at the given position for this player.</div>
 </td>
 </tr>
-<tr id="i70" class="altColor">
+<tr id="i71" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playerConnectionInit()">playerConnectionInit</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to initialize the player connection</div>
 </td>
 </tr>
-<tr id="i71" class="rowColor">
+<tr id="i72" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(java.lang.String&nbsp;identifier,
          <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
@@ -816,7 +817,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a sound from an identifier (represents a custom sound in a resource pack).</div>
 </td>
 </tr>
-<tr id="i72" class="altColor">
+<tr id="i73" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.minestom.server.sound.Sound,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(<a href="../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;sound,
          <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
@@ -829,7 +830,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Plays a sound from the <a href="../sound/Sound.html" title="enum in net.minestom.server.sound"><code>Sound</code></a> enum.</div>
 </td>
 </tr>
-<tr id="i73" class="rowColor">
+<tr id="i74" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAbilities()">refreshAbilities</a></span>()</code></th>
 <td class="colLast">
@@ -837,7 +838,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  (walkingSpeed set to 0.1).</div>
 </td>
 </tr>
-<tr id="i74" class="altColor">
+<tr id="i75" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAfterTeleport()">refreshAfterTeleport</a></span>()</code></th>
 <td class="colLast">
@@ -845,37 +846,37 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  and send data to his new viewers.</div>
 </td>
 </tr>
-<tr id="i75" class="rowColor">
+<tr id="i76" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshAnswerKeepAlive(boolean)">refreshAnswerKeepAlive</a></span>&#8203;(boolean&nbsp;answerKeepAlive)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i76" class="altColor">
+<tr id="i77" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i77" class="rowColor">
+<tr id="i78" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean,long)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating,
              long&nbsp;eatingTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i78" class="altColor">
+<tr id="i79" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshFlying(boolean)">refreshFlying</a></span>&#8203;(boolean&nbsp;flying)</code></th>
 <td class="colLast">
 <div class="block">Updates the internal flying field.</div>
 </td>
 </tr>
-<tr id="i79" class="rowColor">
+<tr id="i80" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshHealth()">refreshHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the player food and health values to their maximum.</div>
 </td>
 </tr>
-<tr id="i80" class="altColor">
+<tr id="i81" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshHeldSlot(byte)">refreshHeldSlot</a></span>&#8203;(byte&nbsp;slot)</code></th>
 <td class="colLast">
@@ -883,26 +884,26 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  Also cancel eating if <a href="#isEating()"><code>isEating()</code></a> was true.</div>
 </td>
 </tr>
-<tr id="i81" class="rowColor">
+<tr id="i82" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshKeepAlive(long)">refreshKeepAlive</a></span>&#8203;(long&nbsp;lastKeepAlive)</code></th>
 <td class="colLast">
 <div class="block">Used to change internally the last sent last keep alive id.</div>
 </td>
 </tr>
-<tr id="i82" class="altColor">
+<tr id="i83" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshLatency(int)">refreshLatency</a></span>&#8203;(int&nbsp;latency)</code></th>
 <td class="colLast">
 <div class="block">Changes the storage player latency and update its tab value.</div>
 </td>
 </tr>
-<tr id="i83" class="rowColor">
+<tr id="i84" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshOnGround(boolean)">refreshOnGround</a></span>&#8203;(boolean&nbsp;onGround)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i84" class="altColor">
+<tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVehicleSteer(float,float,boolean,boolean)">refreshVehicleSteer</a></span>&#8203;(float&nbsp;sideways,
                    float&nbsp;forward,
@@ -910,14 +911,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
                    boolean&nbsp;unmount)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i85" class="rowColor">
+<tr id="i86" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVisibleChunks(net.minestom.server.instance.Chunk)">refreshVisibleChunks</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></th>
 <td class="colLast">
 <div class="block">Called when the player changes chunk (move from one to another).</div>
 </td>
 </tr>
-<tr id="i86" class="altColor">
+<tr id="i87" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVisibleEntities(net.minestom.server.instance.Chunk)">refreshVisibleEntities</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></th>
 <td class="colLast">
@@ -925,35 +926,35 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
 </td>
 </tr>
-<tr id="i87" class="rowColor">
+<tr id="i88" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove()">remove</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes the entity from the server immediately.</div>
 </td>
 </tr>
-<tr id="i88" class="altColor">
+<tr id="i89" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i89" class="rowColor">
+<tr id="i90" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetTargetBlock()">resetTargetBlock</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets data from the current block the player is mining.</div>
 </td>
 </tr>
-<tr id="i90" class="altColor">
+<tr id="i91" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resetTitle()">resetTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets the previous title.</div>
 </td>
 </tr>
-<tr id="i91" class="rowColor">
+<tr id="i92" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#respawn()">respawn</a></span>()</code></th>
 <td class="colLast">
@@ -961,28 +962,28 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  to <a href="#getRespawnPoint()"><code>getRespawnPoint()</code></a>.</div>
 </td>
 </tr>
-<tr id="i92" class="altColor">
+<tr id="i93" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendActionBarMessage(net.minestom.server.chat.ColoredText)">sendActionBarMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;actionBar)</code></th>
 <td class="colLast">
 <div class="block">Sends an action bar message.</div>
 </td>
 </tr>
-<tr id="i93" class="rowColor">
+<tr id="i94" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendDimension(net.minestom.server.world.DimensionType)">sendDimension</a></span>&#8203;(<a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
 <td class="colLast">
 <div class="block">Changes the dimension of the player.</div>
 </td>
 </tr>
-<tr id="i94" class="altColor">
+<tr id="i95" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendExperienceUpdatePacket()">sendExperienceUpdatePacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/play/SetExperiencePacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetExperiencePacket</code></a> to refresh client-side information about the experience bar.</div>
 </td>
 </tr>
-<tr id="i95" class="rowColor">
+<tr id="i96" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendHeaderFooter(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText)">sendHeaderFooter</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;header,
                 <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;footer)</code></th>
@@ -990,19 +991,19 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sets the header and footer of a player which will be displayed in his tab window.</div>
 </td>
 </tr>
-<tr id="i96" class="altColor">
+<tr id="i97" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendJsonMessage(java.lang.String)">sendJsonMessage</a></span>&#8203;(java.lang.String&nbsp;json)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i97" class="rowColor">
+<tr id="i98" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String)">sendLegacyMessage</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Sends a legacy message with the default color char <a href="../chat/ChatParser.html#COLOR_CHAR"><code>ChatParser.COLOR_CHAR</code></a>.</div>
 </td>
 </tr>
-<tr id="i98" class="altColor">
+<tr id="i99" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String,char)">sendLegacyMessage</a></span>&#8203;(java.lang.String&nbsp;text,
                  char&nbsp;colorChar)</code></th>
@@ -1010,21 +1011,21 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a legacy message with the specified color char.</div>
 </td>
 </tr>
-<tr id="i99" class="rowColor">
+<tr id="i100" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a raw string message.</div>
 </td>
 </tr>
-<tr id="i100" class="altColor">
+<tr id="i101" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a message to the player.</div>
 </td>
 </tr>
-<tr id="i101" class="rowColor">
+<tr id="i102" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,byte%5B%5D)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  byte[]&nbsp;data)</code></th>
@@ -1032,7 +1033,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a plugin message to the player.</div>
 </td>
 </tr>
-<tr id="i102" class="altColor">
+<tr id="i103" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,java.lang.String)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  java.lang.String&nbsp;message)</code></th>
@@ -1040,21 +1041,21 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a plugin message to the player.</div>
 </td>
 </tr>
-<tr id="i103" class="rowColor">
+<tr id="i104" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendSubtitleMessage(net.minestom.server.chat.ColoredText)">sendSubtitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;subtitle)</code></th>
 <td class="colLast">
 <div class="block">Sends a subtitle message.</div>
 </td>
 </tr>
-<tr id="i104" class="altColor">
+<tr id="i105" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleMessage(net.minestom.server.chat.ColoredText)">sendTitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Sends a title message.</div>
 </td>
 </tr>
-<tr id="i105" class="rowColor">
+<tr id="i106" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleSubtitleMessage(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText)">sendTitleSubtitleMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
                         <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;subtitle)</code></th>
@@ -1062,7 +1063,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Sends a title and subtitle message.</div>
 </td>
 </tr>
-<tr id="i106" class="altColor">
+<tr id="i107" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendTitleTime(int,int,int)">sendTitleTime</a></span>&#8203;(int&nbsp;fadeIn,
              int&nbsp;stay,
@@ -1071,147 +1072,147 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Specifies the display time of a title.</div>
 </td>
 </tr>
-<tr id="i107" class="rowColor">
+<tr id="i108" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendUpdateHealthPacket()">sendUpdateHealthPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends an <a href="../network/packet/server/play/UpdateHealthPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateHealthPacket</code></a> to refresh client-side information about health and food.</div>
 </td>
 </tr>
-<tr id="i108" class="altColor">
+<tr id="i109" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAdditionalHearts(float)">setAdditionalHearts</a></span>&#8203;(float&nbsp;additionalHearts)</code></th>
 <td class="colLast">
 <div class="block">Updates the internal field and send the appropriate <a href="../network/packet/server/play/EntityMetaDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityMetaDataPacket</code></a>.</div>
 </td>
 </tr>
-<tr id="i109" class="rowColor">
+<tr id="i110" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAllowFlying(boolean)">setAllowFlying</a></span>&#8203;(boolean&nbsp;allowFlying)</code></th>
 <td class="colLast">
 <div class="block">Allows or forbid the player to fly.</div>
 </td>
 </tr>
-<tr id="i110" class="altColor">
+<tr id="i111" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBelowNameTag(net.minestom.server.scoreboard.BelowNameTag)">setBelowNameTag</a></span>&#8203;(<a href="../scoreboard/BelowNameTag.html" title="class in net.minestom.server.scoreboard">BelowNameTag</a>&nbsp;belowNameTag)</code></th>
 <td class="colLast">
 <div class="block">Changes the tag below the name.</div>
 </td>
 </tr>
-<tr id="i111" class="rowColor">
+<tr id="i112" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoots(net.minestom.server.item.ItemStack)">setBoots</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the boots.</div>
 </td>
 </tr>
-<tr id="i112" class="altColor">
+<tr id="i113" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChestplate(net.minestom.server.item.ItemStack)">setChestplate</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the chestplate.</div>
 </td>
 </tr>
-<tr id="i113" class="rowColor">
+<tr id="i114" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultEatingTime(long)">setDefaultEatingTime</a></span>&#8203;(long&nbsp;defaultEatingTime)</code></th>
 <td class="colLast">
 <div class="block">Used to change the default eating time animation.</div>
 </td>
 </tr>
-<tr id="i114" class="altColor">
+<tr id="i115" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDisplayName(net.minestom.server.chat.ColoredText)">setDisplayName</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;displayName)</code></th>
 <td class="colLast">
 <div class="block">Changes the player display name in the tab-list.</div>
 </td>
 </tr>
-<tr id="i115" class="rowColor">
+<tr id="i116" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnableRespawnScreen(boolean)">setEnableRespawnScreen</a></span>&#8203;(boolean&nbsp;enableRespawnScreen)</code></th>
 <td class="colLast">
 <div class="block">Enables or disable the respawn screen.</div>
 </td>
 </tr>
-<tr id="i116" class="altColor">
+<tr id="i117" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setExp(float)">setExp</a></span>&#8203;(float&nbsp;exp)</code></th>
 <td class="colLast">
 <div class="block">Used to change the percentage experience bar.</div>
 </td>
 </tr>
-<tr id="i117" class="rowColor">
+<tr id="i118" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFlying(boolean)">setFlying</a></span>&#8203;(boolean&nbsp;flying)</code></th>
 <td class="colLast">
 <div class="block">Sets the player flying.</div>
 </td>
 </tr>
-<tr id="i118" class="altColor">
+<tr id="i119" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFlyingSpeed(float)">setFlyingSpeed</a></span>&#8203;(float&nbsp;flyingSpeed)</code></th>
 <td class="colLast">
 <div class="block">Updates the internal field and send a <a href="../network/packet/server/play/PlayerAbilitiesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>PlayerAbilitiesPacket</code></a> with the new flying speed.</div>
 </td>
 </tr>
-<tr id="i119" class="rowColor">
+<tr id="i120" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFood(int)">setFood</a></span>&#8203;(int&nbsp;food)</code></th>
 <td class="colLast">
 <div class="block">Sets and refresh client food bar.</div>
 </td>
 </tr>
-<tr id="i120" class="altColor">
+<tr id="i121" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFoodSaturation(float)">setFoodSaturation</a></span>&#8203;(float&nbsp;foodSaturation)</code></th>
 <td class="colLast">
 <div class="block">Sets and refresh client food saturation.</div>
 </td>
 </tr>
-<tr id="i121" class="rowColor">
+<tr id="i122" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGameMode(net.minestom.server.entity.GameMode)">setGameMode</a></span>&#8203;(<a href="GameMode.html" title="enum in net.minestom.server.entity">GameMode</a>&nbsp;gameMode)</code></th>
 <td class="colLast">
 <div class="block">Changes the player <a href="GameMode.html" title="enum in net.minestom.server.entity"><code>GameMode</code></a>.</div>
 </td>
 </tr>
-<tr id="i122" class="altColor">
+<tr id="i123" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHealth(float)">setHealth</a></span>&#8203;(float&nbsp;health)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity health, kill it if <code>health</code> is &gt;= 0 and is not dead yet.</div>
 </td>
 </tr>
-<tr id="i123" class="rowColor">
+<tr id="i124" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHeldItemSlot(byte)">setHeldItemSlot</a></span>&#8203;(byte&nbsp;slot)</code></th>
 <td class="colLast">
 <div class="block">Changes the current held slot for the player.</div>
 </td>
 </tr>
-<tr id="i124" class="altColor">
+<tr id="i125" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the helmet.</div>
 </td>
 </tr>
-<tr id="i125" class="rowColor">
+<tr id="i126" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstance(net.minestom.server.instance.Instance)">setInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Changes the player instance and load surrounding chunks if needed.</div>
 </td>
 </tr>
-<tr id="i126" class="altColor">
+<tr id="i127" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstantBreak(boolean)">setInstantBreak</a></span>&#8203;(boolean&nbsp;instantBreak)</code></th>
 <td class="colLast">
 <div class="block">Changes the player ability "Creative Mode".</div>
 </td>
 </tr>
-<tr id="i127" class="rowColor">
+<tr id="i128" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInvulnerable(boolean)">setInvulnerable</a></span>&#8203;(boolean&nbsp;invulnerable)</code></th>
 <td class="colLast">
@@ -1219,28 +1220,28 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  and prevent the player from receiving damage.</div>
 </td>
 </tr>
-<tr id="i128" class="altColor">
+<tr id="i129" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i129" class="rowColor">
+<tr id="i130" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i130" class="altColor">
+<tr id="i131" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the leggings.</div>
 </td>
 </tr>
-<tr id="i131" class="rowColor">
+<tr id="i132" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLevel(int)">setLevel</a></span>&#8203;(int&nbsp;level)</code></th>
 <td class="colLast">
@@ -1248,49 +1249,49 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  This cannot change the displayed percentage bar see <a href="#setExp(float)"><code>setExp(float)</code></a></div>
 </td>
 </tr>
-<tr id="i132" class="altColor">
+<tr id="i133" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPermissionLevel(int)">setPermissionLevel</a></span>&#8203;(int&nbsp;permissionLevel)</code></th>
 <td class="colLast">
 <div class="block">Changes the player permission level.</div>
 </td>
 </tr>
-<tr id="i133" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerSynchronizationCooldown(net.minestom.server.utils.time.UpdateOption)">setPlayerSynchronizationCooldown</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;playerSynchronizationCooldown)</code></th>
+<tr id="i134" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerSynchronizationGroup(int)">setPlayerSynchronizationGroup</a></span>&#8203;(int&nbsp;playerSynchronizationGroup)</code></th>
 <td class="colLast">
-<div class="block">Changes the cooldown between two position update.</div>
+<div class="block">Changes the viewers count resulting in an additional delay of 1 tick for the position synchronization.</div>
 </td>
 </tr>
-<tr id="i134" class="altColor">
+<tr id="i135" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReducedDebugScreenInformation(boolean)">setReducedDebugScreenInformation</a></span>&#8203;(boolean&nbsp;reduced)</code></th>
 <td class="colLast">
 <div class="block">Sets or remove the reduced debug screen.</div>
 </td>
 </tr>
-<tr id="i135" class="rowColor">
+<tr id="i136" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResourcePack(net.minestom.server.resourcepack.ResourcePack)">setResourcePack</a></span>&#8203;(<a href="../resourcepack/ResourcePack.html" title="class in net.minestom.server.resourcepack">ResourcePack</a>&nbsp;resourcePack)</code></th>
 <td class="colLast">
 <div class="block">Sets the player resource pack.</div>
 </td>
 </tr>
-<tr id="i136" class="altColor">
+<tr id="i137" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRespawnPoint(net.minestom.server.utils.Position)">setRespawnPoint</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;respawnPoint)</code></th>
 <td class="colLast">
 <div class="block">Changes the default spawn point.</div>
 </td>
 </tr>
-<tr id="i137" class="rowColor">
+<tr id="i138" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSkin(net.minestom.server.entity.PlayerSkin)">setSkin</a></span>&#8203;(<a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;skin)</code></th>
 <td class="colLast">
 <div class="block">Changes the player skin.</div>
 </td>
 </tr>
-<tr id="i138" class="altColor">
+<tr id="i139" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTargetBlock(net.minestom.server.instance.block.CustomBlock,net.minestom.server.utils.BlockPosition,java.util.Set)">setTargetBlock</a></span>&#8203;(<a href="../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;targetCustomBlock,
               <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;targetBlockPosition,
@@ -1299,14 +1300,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <div class="block">Makes the player digging a custom block, see <a href="#resetTargetBlock()"><code>resetTargetBlock()</code></a> to rewind.</div>
 </td>
 </tr>
-<tr id="i139" class="rowColor">
+<tr id="i140" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTeam(net.minestom.server.scoreboard.Team)">setTeam</a></span>&#8203;(<a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 </td>
 </tr>
-<tr id="i140" class="altColor">
+<tr id="i141" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUsername(java.lang.String)">setUsername</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
 <td class="colLast">
@@ -1314,12 +1315,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  mostly unsafe outside of it.</div>
 </td>
 </tr>
-<tr id="i141" class="rowColor">
+<tr id="i142" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setWalkingSpeed(float)">setWalkingSpeed</a></span>&#8203;(float&nbsp;walkingSpeed)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i142" class="altColor">
+<tr id="i143" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showPlayer(net.minestom.server.network.player.PlayerConnection)">showPlayer</a></span>&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
@@ -1327,40 +1328,40 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  (create player, spawn position, velocity, metadata, equipments, passengers, team).</div>
 </td>
 </tr>
-<tr id="i143" class="rowColor">
+<tr id="i144" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#spawn()">spawn</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Called when a new instance is set.</div>
 </td>
 </tr>
-<tr id="i144" class="altColor">
+<tr id="i145" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#spectate(net.minestom.server.entity.Entity)">spectate</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Sets the camera at <code>entity</code> eyes.</div>
 </td>
 </tr>
-<tr id="i145" class="rowColor">
+<tr id="i146" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopSound()">stopSound</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/play/StopSoundPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>StopSoundPacket</code></a> packet.</div>
 </td>
 </tr>
-<tr id="i146" class="altColor">
+<tr id="i147" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopSpectating()">stopSpectating</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Resets the camera at the player.</div>
 </td>
 </tr>
-<tr id="i147" class="rowColor">
+<tr id="i148" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i148" class="altColor">
+<tr id="i149" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
         java.lang.Runnable&nbsp;callback)</code></th>
@@ -1369,28 +1370,28 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 </td>
 </tr>
-<tr id="i149" class="rowColor">
+<tr id="i150" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_changeDidCloseInventory(boolean)">UNSAFE_changeDidCloseInventory</a></span>&#8203;(boolean&nbsp;didCloseInventory)</code></th>
 <td class="colLast">
 <div class="block">Used internally to reset the didCloseInventory field.</div>
 </td>
 </tr>
-<tr id="i150" class="altColor">
+<tr id="i151" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Called each tick.</div>
 </td>
 </tr>
-<tr id="i151" class="rowColor">
+<tr id="i152" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePlayerPosition()">updatePlayerPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used for synchronization purpose, mainly for teleportation</div>
 </td>
 </tr>
-<tr id="i152" class="altColor">
+<tr id="i153" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateViewPosition(net.minestom.server.instance.Chunk)">updateViewPosition</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
@@ -1506,15 +1507,6 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <pre>protected&nbsp;boolean onGround</pre>
 </li>
 </ul>
-<a id="playerSynchronizationCooldown">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>playerSynchronizationCooldown</h4>
-<pre>protected&nbsp;<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a> playerSynchronizationCooldown</pre>
-</li>
-</ul>
 <a id="experiencePickupCooldown">
 <!--   -->
 </a>
@@ -1555,6 +1547,49 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getPlayerSynchronizationGroup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPlayerSynchronizationGroup</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;getPlayerSynchronizationGroup()</pre>
+<div class="block">For the number of viewers that a player has, the position synchronization packet will be sent
+ every 1 tick + (viewers/<code>playerSynchronizationGroup</code>).
+ (eg with a value of 100, having 300 viewers means sending the synchronization packet every 3 ticks)
+ <p>
+ Used to prevent sending exponentially more packets and therefore reduce network load.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the viewers count which would result in a 1 tick delay</dd>
+</dl>
+</li>
+</ul>
+<a id="setPlayerSynchronizationGroup(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPlayerSynchronizationGroup</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;setPlayerSynchronizationGroup&#8203;(int&nbsp;playerSynchronizationGroup)</pre>
+<div class="block">Changes the viewers count resulting in an additional delay of 1 tick for the position synchronization.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>playerSynchronizationGroup</code> - the new synchronization group size</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#getPlayerSynchronizationGroup()"><code>getPlayerSynchronizationGroup()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getPlayerSynchronizationTickDelay(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPlayerSynchronizationTickDelay</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;getPlayerSynchronizationTickDelay&#8203;(int&nbsp;viewersCount)</pre>
+</li>
+</ul>
 <a id="init()">
 <!--   -->
 </a>
@@ -3021,38 +3056,6 @@ public&nbsp;<a href="../instance/block/CustomBlock.html" title="class in net.min
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the currently mined <a href="../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> by the player, null if there is not</dd>
-</dl>
-</li>
-</ul>
-<a id="getPlayerSynchronizationCooldown()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPlayerSynchronizationCooldown</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;getPlayerSynchronizationCooldown()</pre>
-<div class="block">Gets the cooldown before this player warns his viewers about position changes.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the cooldown between position update</dd>
-</dl>
-</li>
-</ul>
-<a id="setPlayerSynchronizationCooldown(net.minestom.server.utils.time.UpdateOption)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPlayerSynchronizationCooldown</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPlayerSynchronizationCooldown&#8203;(@NotNull
-                                             <a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;playerSynchronizationCooldown)</pre>
-<div class="block">Changes the cooldown between two position update.
- <p>
- Useful if you have a lot of players close to each other (like 200) and want to limit bandwidth/CPU usage.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>playerSynchronizationCooldown</code> - the cooldown for position update</dd>
 </dl>
 </li>
 </ul>

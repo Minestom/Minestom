@@ -11844,10 +11844,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/damage/DamageType.html#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound(Player)</a></span> - Method in class net.minestom.server.entity.damage.<a href="net/minestom/server/entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#getPlayerSynchronizationCooldown()">getPlayerSynchronizationCooldown()</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#getPlayerSynchronizationGroup()">getPlayerSynchronizationGroup()</a></span> - Static method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
-<div class="block">Gets the cooldown before this player warns his viewers about position changes.</div>
+<div class="block">For the number of viewers that a player has, the position synchronization packet will be sent
+ every 1 tick + (viewers/<code>playerSynchronizationGroup</code>).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#getPlayerSynchronizationTickDelay(int)">getPlayerSynchronizationTickDelay(int)</a></span> - Static method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/player/PlayerPreLoginEvent.html#getPlayerUuid()">getPlayerUuid()</a></span> - Method in class net.minestom.server.event.player.<a href="net/minestom/server/event/player/PlayerPreLoginEvent.html" title="class in net.minestom.server.event.player">PlayerPreLoginEvent</a></dt>
 <dd>
 <div class="block">Gets the player uuid.</div>
@@ -20017,7 +20020,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity"><span class="typeNameLink">Player</span></a> - Class in <a href="net/minestom/server/entity/package-summary.html">net.minestom.server.entity</a></dt>
 <dd>
 <div class="block">Those are the major actors of the server,
- they are not necessary backed by a <a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player"><code>NettyPlayerConnection</code></a> as shown by <a href="net/minestom/server/entity/fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a></div>
+ they are not necessary backed by a <a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player"><code>NettyPlayerConnection</code></a> as shown by <a href="net/minestom/server/entity/fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">Player(UUID, String, PlayerConnection)</a></span> - Constructor for class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>&nbsp;</dd>
@@ -20358,8 +20361,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Called when a player is trying to swap his main and off hand item.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/player/PlayerSwapItemEvent.html#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">PlayerSwapItemEvent(Player, ItemStack, ItemStack)</a></span> - Constructor for class net.minestom.server.event.player.<a href="net/minestom/server/event/player/PlayerSwapItemEvent.html" title="class in net.minestom.server.event.player">PlayerSwapItemEvent</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#playerSynchronizationCooldown">playerSynchronizationCooldown</a></span> - Variable in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/event/player/PlayerTickEvent.html" title="class in net.minestom.server.event.player"><span class="typeNameLink">PlayerTickEvent</span></a> - Class in <a href="net/minestom/server/event/player/package-summary.html">net.minestom.server.event.player</a></dt>
 <dd>
@@ -23982,9 +23983,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Changes the <a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#setPlayerSynchronizationCooldown(net.minestom.server.utils.time.UpdateOption)">setPlayerSynchronizationCooldown(UpdateOption)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#setPlayerSynchronizationGroup(int)">setPlayerSynchronizationGroup(int)</a></span> - Static method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
-<div class="block">Changes the cooldown between two position update.</div>
+<div class="block">Changes the viewers count resulting in an additional delay of 1 tick for the position synchronization.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/player/PlayerPreLoginEvent.html#setPlayerUuid(java.util.UUID)">setPlayerUuid(UUID)</a></span> - Method in class net.minestom.server.event.player.<a href="net/minestom/server/event/player/PlayerPreLoginEvent.html" title="class in net.minestom.server.event.player">PlayerPreLoginEvent</a></dt>
 <dd>
