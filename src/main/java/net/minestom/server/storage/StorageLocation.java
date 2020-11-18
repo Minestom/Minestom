@@ -93,9 +93,9 @@ public class StorageLocation {
         Check.notNull(dataType, "You can only save registered DataType type!");
 
         // Encode the data
-        BinaryWriter binaryWriter = new BinaryWriter();
-        dataType.encode(binaryWriter, object); // Encode
-        final byte[] encodedValue = binaryWriter.toByteArray(); // Retrieve bytes
+        BinaryWriter writer = new BinaryWriter();
+        dataType.encode(writer, object); // Encode
+        final byte[] encodedValue = writer.toByteArray(); // Retrieve bytes
 
         // Write it
         set(key, encodedValue);

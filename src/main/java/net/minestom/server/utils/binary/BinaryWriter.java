@@ -7,6 +7,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
@@ -35,11 +36,20 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
+     * Creates a {@link BinaryWriter} from multiple a single buffer.
+     *
+     * @param buffer the writer buffer
+     */
+    public BinaryWriter(@NotNull ByteBuf buffer) {
+        this.buffer = buffer;
+    }
+
+    /**
      * Creates a {@link BinaryWriter} from multiple buffers.
      *
      * @param buffers the buffers making this
      */
-    public BinaryWriter(ByteBuf... buffers) {
+    public BinaryWriter(@NotNull ByteBuf... buffers) {
         this.buffer = Unpooled.wrappedBuffer(buffers);
     }
 
