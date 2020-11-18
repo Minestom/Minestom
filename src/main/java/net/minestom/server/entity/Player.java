@@ -74,11 +74,43 @@ import java.util.function.Consumer;
 
 /**
  * Those are the major actors of the server,
- * they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}
+ * they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}.
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender {
+
+    /**
+     * @see #getPlayerSynchronizationGroup()
+     */
+    private static volatile int playerSynchronizationGroup = 100;
+
+    /**
+     * For the number of viewers that a player has, the position synchronization packet will be sent
+     * every 1 tick + (viewers/{@code playerSynchronizationGroup}).
+     * (eg with a value of 100, having 300 viewers means sending the synchronization packet every 3 ticks)
+     * <p>
+     * Used to prevent sending exponentially more packets and therefore reduce network load.
+     *
+     * @return the viewers count which would result in a 1 tick delay
+     */
+    public static int getPlayerSynchronizationGroup() {
+        return playerSynchronizationGroup;
+    }
+
+    /**
+     * Changes the viewers count resulting in an additional delay of 1 tick for the position synchronization.
+     *
+     * @param playerSynchronizationGroup the new synchronization group size
+     * @see #getPlayerSynchronizationGroup()
+     */
+    public static void setPlayerSynchronizationGroup(int playerSynchronizationGroup) {
+        Player.playerSynchronizationGroup = playerSynchronizationGroup;
+    }
+
+    public static int getPlayerSynchronizationTickDelay(int viewersCount) {
+        return viewersCount / playerSynchronizationGroup + 1;
+    }
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -133,7 +165,6 @@ public class Player extends LivingEntity implements CommandSender {
     private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
 
     // Position synchronization with viewers
-    protected UpdateOption playerSynchronizationCooldown = new UpdateOption(1, TimeUnit.TICK);
     private long lastPlayerSynchronizationTime;
     private float lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ, lastPlayerSyncYaw, lastPlayerSyncPitch;
 
@@ -419,9 +450,14 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerTickEvent.class, playerTickEvent);
 
         // Multiplayer sync
-        final boolean positionChanged = position.getX() != lastPlayerSyncX || position.getY() != lastPlayerSyncY || position.getZ() != lastPlayerSyncZ;
-        final boolean viewChanged = position.getYaw() != lastPlayerSyncYaw || position.getPitch() != lastPlayerSyncPitch;
-        if (!viewers.isEmpty() && !CooldownUtils.hasCooldown(time, lastPlayerSynchronizationTime, playerSynchronizationCooldown)) {
+        final boolean positionChanged = position.getX() != lastPlayerSyncX ||
+                position.getY() != lastPlayerSyncY ||
+                position.getZ() != lastPlayerSyncZ;
+        final boolean viewChanged = position.getYaw() != lastPlayerSyncYaw ||
+                position.getPitch() != lastPlayerSyncPitch;
+        if (!viewers.isEmpty() &&
+                !CooldownUtils.hasCooldown(time, lastPlayerSynchronizationTime,
+                        TimeUnit.TICK, getPlayerSynchronizationTickDelay(viewers.size()))) {
             this.lastPlayerSynchronizationTime = time;
 
             if (positionChanged || viewChanged) {
@@ -1777,27 +1813,6 @@ public class Player extends LivingEntity implements CommandSender {
     @Nullable
     public CustomBlock getCustomBlockTarget() {
         return targetCustomBlock;
-    }
-
-    /**
-     * Gets the cooldown before this player warns his viewers about position changes.
-     *
-     * @return the cooldown between position update
-     */
-    @NotNull
-    public UpdateOption getPlayerSynchronizationCooldown() {
-        return playerSynchronizationCooldown;
-    }
-
-    /**
-     * Changes the cooldown between two position update.
-     * <p>
-     * Useful if you have a lot of players close to each other (like 200) and want to limit bandwidth/CPU usage.
-     *
-     * @param playerSynchronizationCooldown the cooldown for position update
-     */
-    public void setPlayerSynchronizationCooldown(@NotNull UpdateOption playerSynchronizationCooldown) {
-        this.playerSynchronizationCooldown = playerSynchronizationCooldown;
     }
 
     /**
