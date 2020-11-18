@@ -57,7 +57,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
-     * Sets the encryption key and add the channels to the pipeline.
+     * Sets the encryption key and add the codecs to the pipeline.
      *
      * @param secretKey the secret key to use in the encryption
      * @throws IllegalStateException if encryption is already enabled for this connection
@@ -70,7 +70,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     /**
-     * Enables compression and add a new channel to the pipeline.
+     * Enables compression and add a new codec to the pipeline.
      *
      * @param threshold the threshold for a packet to be compressible
      * @throws IllegalStateException if encryption is already enabled for this connection

@@ -31,7 +31,9 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
+import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,9 +105,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long lastUpdate;
     private final EntityType entityType;
 
-    // Network synchronization
-    private static final long SYNCHRONIZATION_DELAY = 1500; // In ms
-    private long lastSynchronizationTime;
+    // Network synchronization, send the absolute position of the entity each X milliseconds
+    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
+    private long lastAbsoluteSynchronizationTime;
 
     // Events
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
@@ -543,8 +545,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         }
 
         // Scheduled synchronization
-        if (time - lastSynchronizationTime >= SYNCHRONIZATION_DELAY) {
-            lastSynchronizationTime = time;
+        if (!CooldownUtils.hasCooldown(time, lastAbsoluteSynchronizationTime, SYNCHRONIZATION_COOLDOWN)) {
+            this.lastAbsoluteSynchronizationTime = time;
             sendSynchronization();
         }
 
@@ -672,7 +674,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @Nullable
     public Chunk getChunk() {
-        return instance.getChunkAt(lastX, lastZ);
+        return instance.getChunkAt(position.getX(), position.getZ());
     }
 
     /**
@@ -1354,7 +1356,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Asks for a synchronization (position) to happen during next entity tick.
      */
     public void askSynchronization() {
-        this.lastSynchronizationTime = 0;
+        this.lastAbsoluteSynchronizationTime = 0;
     }
 
     private boolean shouldUpdate(long time) {

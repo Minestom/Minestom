@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import io.netty.channel.Channel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
@@ -130,6 +131,11 @@ public class Player extends LivingEntity implements CommandSender {
     private long targetBlockBreakCount; // Number of tick since the last stage change
     private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
     private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
+
+    // Position synchronization with viewers
+    protected UpdateOption playerSynchronizationCooldown = new UpdateOption(2, TimeUnit.TICK);
+    private long lastPlayerSynchronizationTime;
+    private float lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ, lastPlayerSyncYaw, lastPlayerSyncPitch;
 
     // Experience orb pickup
     protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
@@ -301,7 +307,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Flush all pending packets
         if (PlayerUtils.isNettyClient(this)) {
-            ((NettyPlayerConnection) playerConnection).getChannel().flush();
+            Channel channel = ((NettyPlayerConnection) playerConnection).getChannel();
+            channel.eventLoop().execute(() -> channel.flush());
         }
 
         // Network tick verification
@@ -412,9 +419,11 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerTickEvent.class, playerTickEvent);
 
         // Multiplayer sync
-        final boolean positionChanged = position.getX() != lastX || position.getY() != lastY || position.getZ() != lastZ;
-        final boolean viewChanged = position.getYaw() != lastYaw || position.getPitch() != lastPitch;
-        if (!viewers.isEmpty()) {
+        final boolean positionChanged = position.getX() != lastPlayerSyncX || position.getY() != lastPlayerSyncY || position.getZ() != lastPlayerSyncZ;
+        final boolean viewChanged = position.getYaw() != lastPlayerSyncYaw || position.getPitch() != lastPlayerSyncPitch;
+        if (!viewers.isEmpty() && !CooldownUtils.hasCooldown(time, lastPlayerSynchronizationTime, playerSynchronizationCooldown)) {
+            this.lastPlayerSynchronizationTime = time;
+
             if (positionChanged || viewChanged) {
                 // Player moved since last time
 
@@ -423,9 +432,9 @@ public class Player extends LivingEntity implements CommandSender {
                 if (positionChanged && viewChanged) {
                     EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
                     entityPositionAndRotationPacket.entityId = getEntityId();
-                    entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                    entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                    entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                    entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastPlayerSyncX * 32) * 128);
+                    entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastPlayerSyncY * 32) * 128);
+                    entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastPlayerSyncZ * 32) * 128);
                     entityPositionAndRotationPacket.yaw = position.getYaw();
                     entityPositionAndRotationPacket.pitch = position.getPitch();
                     entityPositionAndRotationPacket.onGround = onGround;
@@ -434,9 +443,9 @@ public class Player extends LivingEntity implements CommandSender {
                 } else if (positionChanged) {
                     EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
                     entityPositionPacket.entityId = getEntityId();
-                    entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastX * 32) * 128);
-                    entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastY * 32) * 128);
-                    entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastZ * 32) * 128);
+                    entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastPlayerSyncX * 32) * 128);
+                    entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastPlayerSyncY * 32) * 128);
+                    entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastPlayerSyncZ * 32) * 128);
                     entityPositionPacket.onGround = onGround;
 
                     updatePacket = entityPositionPacket;
@@ -472,16 +481,17 @@ public class Player extends LivingEntity implements CommandSender {
                 entityMovementPacket.entityId = getEntityId();
                 sendPacketToViewers(entityMovementPacket);
             }
-        }
 
-        if (positionChanged) {
-            lastX = position.getX();
-            lastY = position.getY();
-            lastZ = position.getZ();
-        }
-        if (viewChanged) {
-            lastYaw = position.getYaw();
-            lastPitch = position.getPitch();
+            // Update sync data
+            if (positionChanged) {
+                lastPlayerSyncX = position.getX();
+                lastPlayerSyncY = position.getY();
+                lastPlayerSyncZ = position.getZ();
+            }
+            if (viewChanged) {
+                lastPlayerSyncYaw = position.getYaw();
+                lastPlayerSyncPitch = position.getPitch();
+            }
         }
 
     }
