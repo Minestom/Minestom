@@ -4,11 +4,13 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
+import io.netty.util.ResourceLeakDetector;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
@@ -18,7 +20,13 @@ import net.minestom.server.utils.time.UpdateOption;
 public class Main {
 
     public static void main(String[] args) {
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);
+
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        final NettyServer nettyServer = MinecraftServer.getNettyServer();
+        nettyServer.setWriteLimit(500_000);
+        nettyServer.setWriteLimit(500_000);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
@@ -36,9 +44,7 @@ public class Main {
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
-        commandManager.register(new ReloadExtensionCommand());
-        commandManager.register(new UnloadExtensionCommand());
-        commandManager.register(new LoadExtensionCommand());
+        commandManager.register(new PlayersCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 

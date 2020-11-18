@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,9 +86,12 @@ public final class PacketUtils {
      */
     @NotNull
     private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet) {
-        BinaryWriter writer = new BinaryWriter();
+        BinaryWriter writer;
+        if (packet.getId() == ServerPacketIdentifier.CHUNK_DATA)
+            writer = new BinaryWriter(BufUtils.getBuffer(true, 40_000));
+        else
+            writer = new BinaryWriter(BufUtils.getBuffer(true));
         packet.write(writer);
-
         return writer.getBuffer();
     }
 

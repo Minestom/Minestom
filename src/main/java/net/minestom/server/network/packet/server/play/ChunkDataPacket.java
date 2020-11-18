@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
@@ -11,6 +10,7 @@ import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -47,7 +47,7 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeBoolean(fullChunk);
 
         int mask = 0;
-        ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
+        ByteBuf blocks = BufUtils.getBuffer(MAX_BUFFER_SIZE);
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
             if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 final long[] section = paletteStorage.getSectionBlocks()[i];
@@ -93,7 +93,8 @@ public class ChunkDataPacket implements ServerPacket {
         // Data
         writer.writeVarInt(blocks.writerIndex());
         writer.getBuffer().writeBytes(blocks);
-
+        blocks.release();
+        
         // Block entities
         writer.writeVarInt(blockEntities.size());
 

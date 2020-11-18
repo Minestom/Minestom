@@ -517,11 +517,6 @@ public class Player extends LivingEntity implements CommandSender {
                     sendPacketToViewers(updatePacket);
                 }
 
-            } else {
-                // Player did not move since last time
-                EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
-                entityMovementPacket.entityId = getEntityId();
-                sendPacketToViewers(entityMovementPacket);
             }
 
             // Update sync data
