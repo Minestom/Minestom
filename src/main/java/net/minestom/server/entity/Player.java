@@ -108,6 +108,12 @@ public class Player extends LivingEntity implements CommandSender {
         Player.playerSynchronizationGroup = playerSynchronizationGroup;
     }
 
+    /**
+     * Gets the number of tick between each position synchronization.
+     *
+     * @param viewersCount the player viewers count
+     * @return the number of tick between each position synchronization.
+     */
     public static int getPlayerSynchronizationTickDelay(int viewersCount) {
         return viewersCount / playerSynchronizationGroup + 1;
     }
