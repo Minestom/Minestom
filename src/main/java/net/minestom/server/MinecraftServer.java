@@ -98,6 +98,7 @@ public final class MinecraftServer {
     private static PacketListenerManager packetListenerManager;
     private static PacketProcessor packetProcessor;
     private static NettyServer nettyServer;
+    private static boolean processNettyErrors = true;
 
     // In-Game Manager
     private static ConnectionManager connectionManager;
@@ -597,6 +598,25 @@ public final class MinecraftServer {
     public static UpdateManager getUpdateManager() {
         checkInitStatus(updateManager);
         return updateManager;
+    }
+
+    /**
+     * Gets if the server should process netty errors and other unnecessary netty events
+     *
+     * @return should process netty errors
+     */
+    public static boolean processingNettyErrors() {
+        return processNettyErrors;
+    }
+
+    /**
+     * Sets if the server should process netty errors and other unnecessary netty events
+     * false is faster
+     *
+     * @param processNettyErrors should process netty errors
+     */
+    public static void setShouldProcessNettyErrors(boolean processNettyErrors) {
+        MinecraftServer.processNettyErrors = processNettyErrors;
     }
 
     /**

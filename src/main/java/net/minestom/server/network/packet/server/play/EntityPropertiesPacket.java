@@ -1,7 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import java.util.Collection;
-
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.AttributeModifier;
@@ -9,6 +7,8 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 public class EntityPropertiesPacket implements ServerPacket {
 
@@ -37,10 +37,6 @@ public class EntityPropertiesPacket implements ServerPacket {
         public AttributeInstance instance;
 
         private void write(BinaryWriter writer) {
-            if (instance != null) {
-                attribute = instance.getAttribute();
-                value = instance.getBaseValue();
-            }
             float maxValue = attribute.getMaxValue();
 
             // Bypass vanilla limit client-side if needed (by sending the max value allowed)

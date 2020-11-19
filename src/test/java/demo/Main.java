@@ -4,7 +4,6 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
-import io.netty.util.ResourceLeakDetector;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -20,9 +19,12 @@ import net.minestom.server.utils.time.UpdateOption;
 public class Main {
 
     public static void main(String[] args) {
-        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);
+        //System.setProperty("io.netty.leakDetection.targetRecords", "10");
+        //ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        MinecraftServer.setShouldProcessNettyErrors(false);
 
         final NettyServer nettyServer = MinecraftServer.getNettyServer();
         nettyServer.setWriteLimit(500_000);

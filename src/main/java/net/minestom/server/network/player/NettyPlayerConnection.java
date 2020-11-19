@@ -2,6 +2,7 @@ package net.minestom.server.network.player;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
@@ -92,10 +93,26 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
-            if (getPlayer() != null) {
-                channel.write(serverPacket); // Flush on player update
+            if (getPlayer() != null) { // Flush on player update
+                if (MinecraftServer.processingNettyErrors())
+                    channel.write(serverPacket).addListener(future -> {
+                        if (!future.isSuccess()) {
+                            future.cause().printStackTrace();
+                        }
+                    });
+                else {
+                    channel.write(serverPacket, channel.voidPromise());
+                }
             } else {
-                channel.writeAndFlush(serverPacket);
+                if (MinecraftServer.processingNettyErrors())
+                    channel.writeAndFlush(serverPacket).addListener(future -> {
+                        if (!future.isSuccess()) {
+                            future.cause().printStackTrace();
+                        }
+                    });
+                else {
+                    channel.writeAndFlush(serverPacket, channel.voidPromise());
+                }
             }
         }
     }

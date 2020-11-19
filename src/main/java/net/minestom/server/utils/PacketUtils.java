@@ -91,7 +91,11 @@ public final class PacketUtils {
             writer = new BinaryWriter(BufUtils.getBuffer(true, 40_000));
         else
             writer = new BinaryWriter(BufUtils.getBuffer(true));
-        packet.write(writer);
+        try {
+            packet.write(writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return writer.getBuffer();
     }
 

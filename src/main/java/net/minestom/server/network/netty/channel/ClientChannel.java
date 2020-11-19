@@ -32,6 +32,8 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     public void channelRead0(ChannelHandlerContext ctx, InboundPacket packet) {
         try {
             packetProcessor.process(ctx, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             final int availableBytes = packet.body.readableBytes();
 
