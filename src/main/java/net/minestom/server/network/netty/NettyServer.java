@@ -12,7 +12,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.traffic.ChannelTrafficShapingHandler;
+import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
+import io.netty.handler.traffic.TrafficCounter;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.LegacyPingHandler;
@@ -22,8 +23,13 @@ import net.minestom.server.network.netty.codec.PacketFramer;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class NettyServer {
+
+    private static final long DEFAULT_CHANNEL_WRITE_LIMIT = 600_000L;
+    private static final long DEFAULT_CHANNEL_READ_LIMIT = 100_000L;
 
     private final EventLoopGroup boss, worker;
     private final ServerBootstrap bootstrap;
@@ -33,9 +39,12 @@ public class NettyServer {
     private String address;
     private int port;
 
-    // Options
-    private long writeLimit = 750_000L;
-    private long readLimit = 750_000L;
+    private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
+
+    /**
+     * Scheduler used by {@code globalTrafficHandler}.
+     */
+    private final ScheduledExecutorService trafficScheduler = Executors.newScheduledThreadPool(1);
 
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
@@ -61,6 +70,18 @@ public class NettyServer {
                 .group(boss, worker)
                 .channel(channel);
 
+        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 200) {
+            @Override
+            protected void doAccounting(TrafficCounter counter) {
+                // TODO proper monitoring API
+                //System.out.println("data " + counter.lastWriteThroughput() / 1000 + " " + counter.lastReadThroughput() / 1000);
+            }
+        };
+
+        globalTrafficHandler.setWriteChannelLimit(DEFAULT_CHANNEL_WRITE_LIMIT);
+        globalTrafficHandler.setReadChannelLimit(DEFAULT_CHANNEL_READ_LIMIT);
+
+
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
@@ -69,10 +90,7 @@ public class NettyServer {
 
                 ChannelPipeline pipeline = ch.pipeline();
 
-                ChannelTrafficShapingHandler channelTrafficShapingHandler =
-                        new ChannelTrafficShapingHandler(writeLimit, readLimit, 200);
-
-                pipeline.addLast("traffic-limiter", channelTrafficShapingHandler);
+                pipeline.addLast("traffic-limiter", globalTrafficHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
@@ -92,7 +110,13 @@ public class NettyServer {
         });
     }
 
-    public void start(String address, int port) {
+    /**
+     * Binds the address to start the server.
+     *
+     * @param address the server address
+     * @param port    the server port
+     */
+    public void start(@NotNull String address, int port) {
         this.address = address;
         this.port = port;
 
@@ -128,58 +152,27 @@ public class NettyServer {
     }
 
     /**
-     * Gets the server write limit.
+     * Gets the traffic handler, used to control channel and global bandwidth.
      * <p>
-     * Used when you want to limit the bandwidth used by a single connection.
-     * Can also prevent the networking threads from being unresponsive.
+     * The object can be modified as specified by Netty documentation.
      *
-     * @return the write limit in bytes
+     * @return the global traffic handler
      */
-    public long getWriteLimit() {
-        return writeLimit;
+    @NotNull
+    public GlobalChannelTrafficShapingHandler getGlobalTrafficHandler() {
+        return globalTrafficHandler;
     }
 
     /**
-     * Changes the server write limit
-     * <p>
-     * WARNING: the change will only apply to new connections, the current ones will not be updated.
-     *
-     * @param writeLimit the new write limit in bytes, 0 to disable
-     * @see #getWriteLimit()
+     * Stops the server and the various services.
      */
-    public void setWriteLimit(long writeLimit) {
-        this.writeLimit = writeLimit;
-    }
-
-
-    /**
-     * Gets the server read limit.
-     * <p>
-     * Used when you want to limit the bandwidth used by a single connection.
-     * Can also prevent the networking threads from being unresponsive.
-     *
-     * @return the read limit in bytes
-     */
-    public long getReadLimit() {
-        return readLimit;
-    }
-
-    /**
-     * Changes the server read limit
-     * <p>
-     * WARNING: the change will only apply to new connections, the current ones will not be updated.
-     *
-     * @param readLimit the new read limit in bytes, 0 to disable
-     * @see #getWriteLimit()
-     */
-    public void setReadLimit(long readLimit) {
-        this.readLimit = readLimit;
-    }
-
     public void stop() {
-        serverChannel.close();
+        this.serverChannel.close();
 
-        worker.shutdownGracefully();
-        boss.shutdownGracefully();
+        this.worker.shutdownGracefully();
+        this.boss.shutdownGracefully();
+
+        this.trafficScheduler.shutdown();
+        this.globalTrafficHandler.release();
     }
 }
