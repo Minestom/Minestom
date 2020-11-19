@@ -703,7 +703,7 @@ public class Player extends LivingEntity implements CommandSender {
                     sendDimension(instanceDimensionType);
             }
 
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(firstSpawn ? getRespawnPoint() : position, getChunkRange());
             final int length = visibleChunks.length;
 
             AtomicInteger counter = new AtomicInteger(0);
@@ -747,11 +747,11 @@ public class Player extends LivingEntity implements CommandSender {
      */
     private void spawnPlayer(Instance instance, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
-        super.setInstance(instance);
 
         if (firstSpawn) {
-            teleport(getRespawnPoint());
+            this.position = getRespawnPoint();
         }
+        super.setInstance(instance);
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
