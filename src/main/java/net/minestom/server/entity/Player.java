@@ -81,7 +81,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * @see #getPlayerSynchronizationGroup()
      */
-    private static volatile int playerSynchronizationGroup = 100;
+    private static volatile int playerSynchronizationGroup = 50;
 
     /**
      * For the number of viewers that a player has, the position synchronization packet will be sent
