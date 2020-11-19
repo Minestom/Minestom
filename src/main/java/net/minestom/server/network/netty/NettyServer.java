@@ -65,6 +65,7 @@ public class NettyServer {
             protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
                 config.setOption(ChannelOption.TCP_NODELAY, true);
+                config.setOption(ChannelOption.SO_SNDBUF, 1_000_000);
 
                 ChannelPipeline pipeline = ch.pipeline();
 
