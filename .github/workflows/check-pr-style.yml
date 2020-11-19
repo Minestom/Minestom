@@ -27,4 +27,4 @@ jobs:
         # Exit code for reviewdog when errors are found [true,false].
         fail_on_error: false
         # Checkstyle config file
-        checkstyle_config: minestom_checks.xml
+        checkstyle_config: minestom_checks_8.36.xml
