@@ -145,11 +145,11 @@ public final class ConnectionManager {
     /**
      * Gets all the listeners which are called for each packet received.
      *
-     * @return an unmodifiable list of packet's consumers
+     * @return a list of packet's consumers
      */
     @NotNull
     public List<PacketConsumer<ClientPlayPacket>> getReceivePacketConsumers() {
-        return Collections.unmodifiableList(receivePacketConsumers);
+        return receivePacketConsumers;
     }
 
     /**
@@ -164,7 +164,7 @@ public final class ConnectionManager {
     /**
      * Gets all the listeners which are called for each packet sent.
      *
-     * @return an unmodifiable list of packet's consumers
+     * @return a list of packet's consumers
      */
     @NotNull
     public List<PacketConsumer<ServerPacket>> getSendPacketConsumers() {

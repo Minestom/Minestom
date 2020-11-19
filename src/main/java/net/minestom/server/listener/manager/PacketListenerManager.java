@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -93,8 +94,13 @@ public final class PacketListenerManager {
      * @return true if the packet is not cancelled, false otherwise
      */
     public <T extends ServerPacket> boolean processServerPacket(@NotNull T packet, @NotNull Player player) {
+        final List<PacketConsumer<ServerPacket>> consumers = CONNECTION_MANAGER.getSendPacketConsumers();
+        if (consumers.isEmpty()) {
+            return true;
+        }
+
         final PacketController packetController = new PacketController();
-        for (PacketConsumer<ServerPacket> packetConsumer : CONNECTION_MANAGER.getSendPacketConsumers()) {
+        for (PacketConsumer<ServerPacket> packetConsumer : consumers) {
             packetConsumer.accept(player, packetController, packet);
         }
 

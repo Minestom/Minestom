@@ -56,6 +56,14 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = channel.remoteAddress();
     }
 
+    @Override
+    public void update() {
+        // Flush
+        this.channel.eventLoop().execute(() -> channel.flush());
+        // Network stats
+        super.update();
+    }
+
     /**
      * Sets the encryption key and add the codecs to the pipeline.
      *

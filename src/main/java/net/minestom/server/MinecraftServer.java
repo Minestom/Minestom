@@ -124,7 +124,7 @@ public final class MinecraftServer {
     private static boolean initialized;
     private static boolean started;
 
-    private static int chunkViewDistance = 10;
+    private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
     private static ResponseDataConsumer responseDataConsumer;

@@ -45,7 +45,7 @@ public abstract class PlayerConnection {
     /**
      * Updates values related to the network connection.
      */
-    public void updateStats() {
+    public void update() {
         // Check rate limit
         if (MinecraftServer.getRateLimit() > 0) {
             tickCounter++;
