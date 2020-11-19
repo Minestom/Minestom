@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,50 +181,33 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>io.netty.handler.traffic.GlobalChannelTrafficShapingHandler</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGlobalTrafficHandler()">getGlobalTrafficHandler</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the traffic handler, used to control channel and global bandwidth.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPort()">getPort</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the port used by the server.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReadLimit()">getReadLimit</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the server read limit.</div>
-</td>
-</tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWriteLimit()">getWriteLimit</a></span>()</code></th>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(java.lang.String&nbsp;address,
+     int&nbsp;port)</code></th>
 <td class="colLast">
-<div class="block">Gets the server write limit.</div>
+<div class="block">Binds the address to start the server.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReadLimit(long)">setReadLimit</a></span>&#8203;(long&nbsp;readLimit)</code></th>
-<td class="colLast">
-<div class="block">Changes the server read limit</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setWriteLimit(long)">setWriteLimit</a></span>&#8203;(long&nbsp;writeLimit)</code></th>
-<td class="colLast">
-<div class="block">Changes the server write limit</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(java.lang.String&nbsp;address,
-     int&nbsp;port)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stop()">stop</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Stops the server and the various services.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -276,8 +259,15 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>start</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;start&#8203;(java.lang.String&nbsp;address,
+<pre class="methodSignature">public&nbsp;void&nbsp;start&#8203;(@NotNull
+                  java.lang.String&nbsp;address,
                   int&nbsp;port)</pre>
+<div class="block">Binds the address to start the server.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>address</code> - the server address</dd>
+<dd><code>port</code> - the server port</dd>
+</dl>
 </li>
 </ul>
 <a id="getAddress()">
@@ -308,73 +298,20 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="getWriteLimit()">
+<a id="getGlobalTrafficHandler()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getWriteLimit</h4>
-<pre class="methodSignature">public&nbsp;long&nbsp;getWriteLimit()</pre>
-<div class="block">Gets the server write limit.
+<h4>getGlobalTrafficHandler</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;io.netty.handler.traffic.GlobalChannelTrafficShapingHandler&nbsp;getGlobalTrafficHandler()</pre>
+<div class="block">Gets the traffic handler, used to control channel and global bandwidth.
  <p>
- Used when you want to limit the bandwidth used by a single connection.
- Can also prevent the networking threads from being unresponsive.</div>
+ The object can be modified as specified by Netty documentation.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the write limit in bytes</dd>
-</dl>
-</li>
-</ul>
-<a id="setWriteLimit(long)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setWriteLimit</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setWriteLimit&#8203;(long&nbsp;writeLimit)</pre>
-<div class="block">Changes the server write limit
- <p>
- WARNING: the change will only apply to new connections, the current ones will not be updated.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>writeLimit</code> - the new write limit in bytes, 0 to disable</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#getWriteLimit()"><code>getWriteLimit()</code></a></dd>
-</dl>
-</li>
-</ul>
-<a id="getReadLimit()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getReadLimit</h4>
-<pre class="methodSignature">public&nbsp;long&nbsp;getReadLimit()</pre>
-<div class="block">Gets the server read limit.
- <p>
- Used when you want to limit the bandwidth used by a single connection.
- Can also prevent the networking threads from being unresponsive.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the read limit in bytes</dd>
-</dl>
-</li>
-</ul>
-<a id="setReadLimit(long)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setReadLimit</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setReadLimit&#8203;(long&nbsp;readLimit)</pre>
-<div class="block">Changes the server read limit
- <p>
- WARNING: the change will only apply to new connections, the current ones will not be updated.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>readLimit</code> - the new read limit in bytes, 0 to disable</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#getWriteLimit()"><code>getWriteLimit()</code></a></dd>
+<dd>the global traffic handler</dd>
 </dl>
 </li>
 </ul>
@@ -385,6 +322,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>stop</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;stop()</pre>
+<div class="block">Stops the server and the various services.</div>
 </li>
 </ul>
 </li>

@@ -10476,6 +10476,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/damage/DamageType.html#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound(LivingEntity)</a></span> - Method in class net.minestom.server.entity.damage.<a href="net/minestom/server/entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#getGlobalTrafficHandler()">getGlobalTrafficHandler()</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
+<dd>
+<div class="block">Gets the traffic handler, used to control channel and global bandwidth.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/EntityCreature.html#getGoalSelectors()">getGoalSelectors()</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></dt>
 <dd>
 <div class="block">Gets the goal selectors of this entity.</div>
@@ -11985,10 +11989,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the maximum number of packets a client can send over 1 second.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#getReadLimit()">getReadLimit()</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>
-<div class="block">Gets the server read limit.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#getReceivePacketConsumers()">getReceivePacketConsumers()</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
 <dd>
 <div class="block">Gets all the listeners which are called for each packet received.</div>
@@ -12698,10 +12698,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/Instance.html#getWorldBorder()">getWorldBorder()</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></dt>
 <dd>
 <div class="block">Gets the instance <a href="net/minestom/server/instance/WorldBorder.html" title="class in net.minestom.server.instance"><code>WorldBorder</code></a>;</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#getWriteLimit()">getWriteLimit()</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>
-<div class="block">Gets the server write limit.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/advancements/Advancement.html#getX()">getX()</a></span> - Method in class net.minestom.server.advancements.<a href="net/minestom/server/advancements/Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></dt>
 <dd>
@@ -24081,10 +24077,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Changes the number of packet a client can send over 1 second without being disconnected.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#setReadLimit(long)">setReadLimit(long)</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>
-<div class="block">Changes the server read limit</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/Chunk.html#setReadOnly(boolean)">setReadOnly(boolean)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></dt>
 <dd>
 <div class="block">Changes the read state of the chunk.</div>
@@ -24401,10 +24393,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/WorldBorder.html#setWarningTime(int)">setWarningTime(int)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#setWriteLimit(long)">setWriteLimit(long)</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>
-<div class="block">Changes the server write limit</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/advancements/Advancement.html#setX(float)">setX(float)</a></span> - Method in class net.minestom.server.advancements.<a href="net/minestom/server/advancements/Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></dt>
 <dd>
 <div class="block">Changes this advancement X coordinate.</div>
@@ -25366,7 +25354,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Starts the server.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#start(java.lang.String,int)">start(String, int)</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Binds the address to start the server.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">start(String, int, ResponseDataConsumer)</a></span> - Method in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
 <dd>
 <div class="block">Starts the server.</div>
@@ -25589,7 +25579,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/NettyServer.html#stop()">stop()</a></span> - Method in class net.minestom.server.network.netty.<a href="net/minestom/server/network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Stops the server and the various services.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/UpdateManager.html#stop()">stop()</a></span> - Method in class net.minestom.server.<a href="net/minestom/server/UpdateManager.html" title="class in net.minestom.server">UpdateManager</a></dt>
 <dd>
 <div class="block">Stops the server loop.</div>
