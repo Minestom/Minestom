@@ -30,6 +30,6 @@ jobs:
         maven-local-ignore-paths: |
           net/minestom/
     - name: Build Minestom
-      run: ./gradlew build
+      run: ./gradlew assemble
     - name: Run tests
       run: ./gradlew test
