@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -331,13 +331,20 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <div class="block">Sets the internal login username field.</div>
 </td>
 </tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Updates values related to the network connection.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.network.player.PlayerConnection">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.network.player.<a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></h3>
-<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a>, <a href="PlayerConnection.html#updateStats()">updateStats</a></code></li>
+<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -382,6 +389,21 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="update()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>update</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;update()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="PlayerConnection.html#update()">PlayerConnection</a></code></span></div>
+<div class="block">Updates values related to the network connection.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="PlayerConnection.html#update()">update</a></code>&nbsp;in class&nbsp;<code><a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></dd>
+</dl>
+</li>
+</ul>
 <a id="setEncryptionKey(javax.crypto.SecretKey)">
 <!--   -->
 </a>
