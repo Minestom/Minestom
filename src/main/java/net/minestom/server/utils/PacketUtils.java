@@ -152,6 +152,7 @@ public final class PacketUtils {
     private static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
+        // TODO use pooled buffers instead of unpooled ones
         if (MinecraftServer.getCompressionThreshold() > 0) {
 
             ByteBuf compressedBuf = Unpooled.buffer();
