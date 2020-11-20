@@ -3,10 +3,9 @@ package net.minestom.server.network;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.listener.manager.PacketConsumer;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.listener.manager.ClientPacketConsumer;
+import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
-import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -29,9 +28,9 @@ public final class ConnectionManager {
     private final Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     // All the consumers to call once a packet is received
-    private final List<PacketConsumer<ClientPlayPacket>> receivePacketConsumers = new CopyOnWriteArrayList<>();
+    private final List<ClientPacketConsumer> receiveClientPacketConsumers = new CopyOnWriteArrayList<>();
     // All the consumers to call once a packet is sent
-    private final List<PacketConsumer<ServerPacket>> sendPacketConsumers = new CopyOnWriteArrayList<>();
+    private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
     private UuidProvider uuidProvider;
     // The player provider to have your own Player implementation
@@ -148,17 +147,17 @@ public final class ConnectionManager {
      * @return a list of packet's consumers
      */
     @NotNull
-    public List<PacketConsumer<ClientPlayPacket>> getReceivePacketConsumers() {
-        return receivePacketConsumers;
+    public List<ClientPacketConsumer> getReceivePacketConsumers() {
+        return receiveClientPacketConsumers;
     }
 
     /**
      * Adds a consumer to call once a packet is received.
      *
-     * @param packetConsumer the packet consumer
+     * @param clientPacketConsumer the packet consumer
      */
-    public void onPacketReceive(@NotNull PacketConsumer<ClientPlayPacket> packetConsumer) {
-        this.receivePacketConsumers.add(packetConsumer);
+    public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
+        this.receiveClientPacketConsumers.add(clientPacketConsumer);
     }
 
     /**
@@ -167,21 +166,17 @@ public final class ConnectionManager {
      * @return a list of packet's consumers
      */
     @NotNull
-    public List<PacketConsumer<ServerPacket>> getSendPacketConsumers() {
-        return Collections.unmodifiableList(sendPacketConsumers);
+    public List<ServerPacketConsumer> getSendPacketConsumers() {
+        return Collections.unmodifiableList(sendClientPacketConsumers);
     }
 
     /**
      * Adds a consumer to call once a packet is sent.
-     * <p>
-     * Be aware that it is possible for the same packet instance to be used multiple time,
-     * changing the object fields could lead to issues.
-     * (consider canceling the packet instead and send your own)
      *
-     * @param packetConsumer the packet consumer
+     * @param serverPacketConsumer the packet consumer
      */
-    public void onPacketSend(@NotNull PacketConsumer<ServerPacket> packetConsumer) {
-        this.sendPacketConsumers.add(packetConsumer);
+    public void onPacketSend(@NotNull ServerPacketConsumer serverPacketConsumer) {
+        this.sendClientPacketConsumers.add(serverPacketConsumer);
     }
 
     /**

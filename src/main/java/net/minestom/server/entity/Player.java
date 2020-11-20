@@ -339,7 +339,6 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void update(long time) {
-
         // Network tick
         this.playerConnection.update();
 

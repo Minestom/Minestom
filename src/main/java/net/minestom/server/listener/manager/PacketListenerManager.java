@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,8 +75,8 @@ public final class PacketListenerManager {
         }
 
         final PacketController packetController = new PacketController();
-        for (PacketConsumer<ClientPlayPacket> packetConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
-            packetConsumer.accept(player, packetController, packet);
+        for (ClientPacketConsumer clientPacketConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
+            clientPacketConsumer.accept(player, packetController, packet);
         }
 
         if (packetController.isCancel())
@@ -86,22 +87,21 @@ public final class PacketListenerManager {
     }
 
     /**
-     * Executes the consumers from {@link ConnectionManager#onPacketSend(PacketConsumer)}.
+     * Executes the consumers from {@link ConnectionManager#onPacketSend(ServerPacketConsumer)}.
      *
-     * @param packet the packet to process
-     * @param player the player which should receive the packet
-     * @param <T>    the packet type
+     * @param packet  the packet to process
+     * @param players the players which should receive the packet
      * @return true if the packet is not cancelled, false otherwise
      */
-    public <T extends ServerPacket> boolean processServerPacket(@NotNull T packet, @NotNull Player player) {
-        final List<PacketConsumer<ServerPacket>> consumers = CONNECTION_MANAGER.getSendPacketConsumers();
+    public boolean processServerPacket(@NotNull ServerPacket packet, @NotNull Collection<Player> players) {
+        final List<ServerPacketConsumer> consumers = CONNECTION_MANAGER.getSendPacketConsumers();
         if (consumers.isEmpty()) {
             return true;
         }
 
         final PacketController packetController = new PacketController();
-        for (PacketConsumer<ServerPacket> packetConsumer : consumers) {
-            packetConsumer.accept(player, packetController, packet);
+        for (ServerPacketConsumer serverPacketConsumer : consumers) {
+            serverPacketConsumer.accept(players, packetController, packet);
         }
 
         return !packetController.isCancel();
