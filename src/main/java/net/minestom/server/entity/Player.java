@@ -1163,8 +1163,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Gets the player display name in the tab-list.
      *
-     * @return the player display name,
-     * null means that {@link #getUsername()} is displayed
+     * @return the player display name, null means that {@link #getUsername()} is displayed
      */
     @Nullable
     public ColoredText getDisplayName() {

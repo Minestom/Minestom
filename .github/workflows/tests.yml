@@ -31,5 +31,5 @@ jobs:
           net/minestom/
     - name: Build Minestom
       run: ./gradlew classes testClasses
-    - name: Run tests
-      run: ./gradlew check
+    - name: Run Minestom tests
+      run: ./gradlew test
