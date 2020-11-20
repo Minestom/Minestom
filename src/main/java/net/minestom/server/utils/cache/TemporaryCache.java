@@ -34,7 +34,7 @@ public class TemporaryCache<T> {
     public TemporaryCache(long keepTime) {
         this.keepTime = keepTime;
         REMOVER_SERVICE.scheduleAtFixedRate(() -> {
-            final boolean removed = cacheTime.values().removeIf(time -> time + keepTime > System.currentTimeMillis());
+            final boolean removed = cacheTime.values().removeIf(time -> System.currentTimeMillis() > time + keepTime);
             if (removed) {
                 this.cache.entrySet().removeIf(entry -> !cacheTime.containsKey(entry.getKey()));
             }
