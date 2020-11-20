@@ -2,11 +2,13 @@ package net.minestom.server.network.player;
 
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -73,21 +75,26 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
-        channel.pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-        channel.pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
+        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.DECRYPT_HANDLER_NAME,
+                new Decrypter(MojangCrypt.getCipher(2, secretKey)));
+        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.ENCRYPT_HANDLER_NAME,
+                new Encrypter(MojangCrypt.getCipher(1, secretKey)));
     }
 
     /**
      * Enables compression and add a new codec to the pipeline.
      *
-     * @param threshold the threshold for a packet to be compressible
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
-    public void enableCompression(int threshold) {
+    public void startCompression() {
         Check.stateCondition(compressed, "Compression is already enabled!");
+        final int threshold = MinecraftServer.getCompressionThreshold();
+        Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
+
         this.compressed = true;
         sendPacket(new SetCompressionPacket(threshold));
-        channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
+        channel.pipeline().addAfter(NettyServer.FRAMER_HANDLER_NAME, NettyServer.COMPRESSOR_HANDLER_NAME,
+                new PacketCompressor(threshold));
     }
 
     /**

@@ -31,6 +31,21 @@ public class NettyServer {
     private static final long DEFAULT_CHANNEL_WRITE_LIMIT = 600_000L;
     private static final long DEFAULT_CHANNEL_READ_LIMIT = 100_000L;
 
+    public static final String TRAFFIC_LIMITER_HANDLER_NAME = "traffic-limiter";
+    public static final String LEGACY_PING_HANDLER_NAME = "legacy-ping";
+
+    public static final String COMPRESSOR_HANDLER_NAME = "compressor";
+
+    public static final String FRAMER_HANDLER_NAME = "framer";
+
+    public static final String ENCRYPT_HANDLER_NAME = "encrypt";
+    public static final String DECRYPT_HANDLER_NAME = "decrypt";
+
+
+    public static final String DECODER_HANDLER_NAME = "decoder";
+    public static final String ENCODER_HANDLER_NAME = "encoder";
+    public static final String CLIENT_HANDLER_NAME = "handler";
+
     private final EventLoopGroup boss, worker;
     private final ServerBootstrap bootstrap;
 
@@ -90,22 +105,22 @@ public class NettyServer {
 
                 ChannelPipeline pipeline = ch.pipeline();
 
-                pipeline.addLast("traffic-limiter", globalTrafficHandler);
+                pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
-                pipeline.addLast("legacy-ping", new LegacyPingHandler());
+                pipeline.addLast(LEGACY_PING_HANDLER_NAME, new LegacyPingHandler());
 
                 // Adds packetLength at start | Reads framed bytebuf
-                pipeline.addLast("framer", new PacketFramer(packetProcessor));
+                pipeline.addLast(FRAMER_HANDLER_NAME, new PacketFramer(packetProcessor));
 
                 // Reads bytebuf and creating inbound packet
-                pipeline.addLast("decoder", new PacketDecoder());
+                pipeline.addLast(DECODER_HANDLER_NAME, new PacketDecoder());
 
                 // Writes packet to bytebuf
-                pipeline.addLast("encoder", new PacketEncoder());
+                pipeline.addLast(ENCODER_HANDLER_NAME, new PacketEncoder());
 
-                pipeline.addLast("handler", new ClientChannel(packetProcessor));
+                pipeline.addLast(CLIENT_HANDLER_NAME, new ClientChannel(packetProcessor));
             }
         });
     }
