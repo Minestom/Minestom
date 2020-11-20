@@ -459,7 +459,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player
      */
-    protected void sendChunk(@NotNull Player player) {
+    protected synchronized void sendChunk(@NotNull Player player) {
         // Only send loaded chunk
         if (!isLoaded())
             return;
@@ -503,7 +503,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player to update the chunk to
      */
-    public void sendChunkUpdate(@NotNull Player player) {
+    public synchronized void sendChunkUpdate(@NotNull Player player) {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getFreshFullDataPacket());
     }
@@ -511,7 +511,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
-    public void sendChunkUpdate() {
+    public synchronized void sendChunkUpdate() {
         final Set<Player> chunkViewers = getViewers();
         if (!chunkViewers.isEmpty()) {
             chunkViewers.forEach(player -> {
@@ -528,7 +528,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param player  the player to send the packet to
      * @throws IllegalArgumentException if {@code section} is not a valid section
      */
-    public void sendChunkSectionUpdate(int section, @NotNull Player player) {
+    public synchronized void sendChunkSectionUpdate(int section, @NotNull Player player) {
         if (!PlayerUtils.isNettyClient(player))
             return;
         Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),

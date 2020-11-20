@@ -116,21 +116,23 @@ public class ChunkBatch implements InstanceBatch {
      */
     public void flushChunkGenerator(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
         BLOCK_BATCH_POOL.execute(() -> {
-            final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
-            final boolean hasPopulator = populators != null && !populators.isEmpty();
+            synchronized (chunk) {
+                final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
+                final boolean hasPopulator = populators != null && !populators.isEmpty();
 
-            chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
+                chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
 
-            if (hasPopulator) {
-                for (ChunkPopulator chunkPopulator : populators) {
-                    chunkPopulator.populateChunk(this, chunk);
+                if (hasPopulator) {
+                    for (ChunkPopulator chunkPopulator : populators) {
+                        chunkPopulator.populateChunk(this, chunk);
+                    }
                 }
-            }
 
-            // Safe callback
-            instance.scheduleNextTick(inst -> {
-                OptionalCallback.execute(callback, chunk);
-            });
+                // Safe callback
+                instance.scheduleNextTick(inst -> {
+                    OptionalCallback.execute(callback, chunk);
+                });
+            }
         });
     }
 
