@@ -124,7 +124,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                     } else {
                         // Try to retrieve the cached buffer
                         TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
-                        ByteBuf buffer = temporaryCache.retrieve(identifier);
+                        ByteBuf buffer = temporaryCache.retrieve(identifier, cacheablePacket.getLastUpdateTime());
                         if (buffer == null) {
                             // Buffer not found, create and cache it
                             final long time = System.currentTimeMillis();
