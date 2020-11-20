@@ -46,6 +46,11 @@ allprojects {
             addBooleanOption('html5', true)
         }
     }
+
+    checkstyle {
+        toolVersion "8.37"
+        configFile file("${projectDir}/minestom_checks.xml")
+    }
 }
 
 sourceSets {
@@ -71,10 +76,6 @@ sourceSets {
         compileClasspath += sourceSets.main.runtimeClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
-}
-
-tasks.withType(Checkstyle) {
-    configFile file("${projectDir}/minestom_checks.xml")
 }
 
 java {
