@@ -30,6 +30,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerInit {
 
@@ -162,7 +163,9 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                //int x = ThreadLocalRandom.current().nextInt()%10000;
+                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 750;
+                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 750;
+                
                 player.setRespawnPoint(new Position(0, 64f, 0));
 
                 /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {

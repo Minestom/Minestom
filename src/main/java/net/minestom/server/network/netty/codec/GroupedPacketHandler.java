@@ -9,6 +9,10 @@ public class GroupedPacketHandler extends MessageToByteEncoder<FramedPacket> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, FramedPacket msg, ByteBuf out) {
-        out.writeBytes(msg.body.retainedSlice());
+        final ByteBuf packet = msg.body;
+        out.writeBytes(packet.duplicate());
+        if (msg.releaseBuf) {
+            packet.release();
+        }
     }
 }

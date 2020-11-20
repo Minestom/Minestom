@@ -24,8 +24,8 @@ public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
-    private static Deflater deflater = new Deflater(3);
-    private static byte[] buffer = new byte[8192];
+    private final static Deflater deflater = new Deflater(3);
+    private final static byte[] buffer = new byte[8192];
 
     private PacketUtils() {
 
@@ -45,16 +45,20 @@ public final class PacketUtils {
 
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
-            final ByteBuf finalBuffer = createFramedPacket(packet);
-            final FramedPacket framedPacket = new FramedPacket(finalBuffer);
+            final ByteBuf finalBuffer = createFramedPacket(packet, true);
+            final FramedPacket framedPacket = new FramedPacket(finalBuffer, true);
 
+            final int refIncrease = players.size() - 1;
+            if (refIncrease > 0)
+                finalBuffer.retain(refIncrease);
             for (Player player : players) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.getChannel().write(framedPacket);
+                    nettyPlayerConnection.write(framedPacket);
                 } else {
                     playerConnection.sendPacket(packet);
+                    finalBuffer.release();
                 }
             }
         }
@@ -84,7 +88,7 @@ public final class PacketUtils {
 
         // Add 5 for the packet id and for the packet size
         final int size = packetBuffer.writerIndex() + 5 + 5;
-        ByteBuf buffer = Unpooled.buffer(size);
+        ByteBuf buffer = BufUtils.getBuffer(true, size);
 
         writePacket(buffer, packetBuffer, packet.getId());
 
@@ -189,24 +193,27 @@ public final class PacketUtils {
      * @param serverPacket the server packet to write
      * @return the framed packet from the server one
      */
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
+    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
         // TODO use pooled buffers instead of unpooled ones
         if (MinecraftServer.getCompressionThreshold() > 0) {
 
-            ByteBuf compressedBuf = Unpooled.buffer();
-            ByteBuf framedBuf = Unpooled.buffer();
+            ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+            ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
             synchronized (deflater) {
                 compressBuffer(deflater, buffer, packetBuf, compressedBuf);
             }
+            packetBuf.release();
 
             frameBuffer(compressedBuf, framedBuf);
+            compressedBuf.release();
 
             return framedBuf;
         } else {
-            ByteBuf framedBuf = Unpooled.buffer();
+            ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
             frameBuffer(packetBuf, framedBuf);
+            packetBuf.release();
 
             return framedBuf;
         }

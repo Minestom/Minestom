@@ -4,6 +4,7 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
+import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -27,8 +28,11 @@ public class Main {
         MinecraftServer.setShouldProcessNettyErrors(false);
 
         final NettyServer nettyServer = MinecraftServer.getNettyServer();
-        nettyServer.setWriteLimit(500_000);
-        nettyServer.setWriteLimit(500_000);
+        final GlobalChannelTrafficShapingHandler trafficHandler = nettyServer.getGlobalTrafficHandler();
+        trafficHandler.setReadChannelLimit(500_000);
+        trafficHandler.setReadChannelLimit(500_000);
+        //trafficHandler.setReadLimit(500_000);
+        //trafficHandler.setReadLimit(500_000);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());

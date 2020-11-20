@@ -120,14 +120,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
                     if (identifier == null) {
                         // This packet explicitly said to do not retrieve the cache
-                        if (MinecraftServer.processingNettyErrors())
-                            channel.write(serverPacket).addListener(future -> {
-                                if (!future.isSuccess()) {
-                                    future.cause().printStackTrace();
-                                }
-                            });
-                        else
-                            channel.write(serverPacket, channel.voidPromise());
+                        write(serverPacket);
                     } else {
                         // Try to retrieve the cached buffer
                         TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
@@ -135,42 +128,40 @@ public class NettyPlayerConnection extends PlayerConnection {
                         if (buffer == null) {
                             // Buffer not found, create and cache it
                             final long time = System.currentTimeMillis();
-                            buffer = PacketUtils.createFramedPacket(serverPacket);
+                            buffer = PacketUtils.createFramedPacket(serverPacket, false);
                             temporaryCache.cacheObject(identifier, buffer, time);
                         }
-
                         FramedPacket framedPacket = new FramedPacket(buffer);
-                            if (MinecraftServer.processingNettyErrors())
-                                channel.write(framedPacket).addListener(future -> {
-                                    if (!future.isSuccess()) {
-                                        future.cause().printStackTrace();
-                                    }
-                                });
-                            else
-                                channel.write(framedPacket, channel.voidPromise());
+                        write(framedPacket);
                     }
 
-                } else {
-                            if (MinecraftServer.processingNettyErrors())
-                                channel.write(serverPacket).addListener(future -> {
-                                    if (!future.isSuccess()) {
-                                        future.cause().printStackTrace();
-                                    }
-                                });
-                            else
-                                channel.write(serverPacket, channel.voidPromise());
-                }
-            } else {
-                            if (MinecraftServer.processingNettyErrors())
-                                channel.writeAndFlush(serverPacket).addListener(future -> {
-                                    if (!future.isSuccess()) {
-                                        future.cause().printStackTrace();
-                                    }
-                                });
-                            else
-                                channel.writeAndFlush(serverPacket, channel.voidPromise());
-            }
+                } else
+                    write(serverPacket);
+            } else
+                writeAndFlush(serverPacket);
         }
+    }
+
+    public void write(Object message) {
+        if (MinecraftServer.processingNettyErrors())
+            channel.write(message).addListener(future -> {
+                if (!future.isSuccess()) {
+                    future.cause().printStackTrace();
+                }
+            });
+        else
+            channel.write(message, channel.voidPromise());
+    }
+
+    public void writeAndFlush(Object message) {
+        if (MinecraftServer.processingNettyErrors())
+            channel.writeAndFlush(message).addListener(future -> {
+                if (!future.isSuccess()) {
+                    future.cause().printStackTrace();
+                }
+            });
+        else
+            channel.writeAndFlush(message, channel.voidPromise());
     }
 
     @NotNull
