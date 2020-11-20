@@ -114,41 +114,70 @@ public final class PacketUtils {
         return writer.getBuffer();
     }
 
-    public static void frameBuffer(@NotNull ByteBuf from, @NotNull ByteBuf to) {
-        final int packetSize = from.readableBytes();
+    /**
+     * Frames a buffer for it to be understood by a Minecraft client.
+     * <p>
+     * The content of {@code packetBuffer} can be either a compressed or uncompressed packet buffer,
+     * it depends of it the client did receive a {@link net.minestom.server.network.packet.server.login.SetCompressionPacket} packet before.
+     *
+     * @param packetBuffer the buffer containing compressed or uncompressed packet data
+     * @param frameTarget  the buffer which will receive the framed version of {@code from}
+     */
+    public static void frameBuffer(@NotNull ByteBuf packetBuffer, @NotNull ByteBuf frameTarget) {
+        final int packetSize = packetBuffer.readableBytes();
         final int headerSize = Utils.getVarIntSize(packetSize);
 
         if (headerSize > 3) {
             throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
         }
 
-        to.ensureWritable(packetSize + headerSize);
+        frameTarget.ensureWritable(packetSize + headerSize);
 
-        Utils.writeVarIntBuf(to, packetSize);
-        to.writeBytes(from, from.readerIndex(), packetSize);
+        Utils.writeVarIntBuf(frameTarget, packetSize);
+        frameTarget.writeBytes(packetBuffer, packetBuffer.readerIndex(), packetSize);
     }
 
-    public static void compressBuffer(@NotNull Deflater deflater, @NotNull byte[] buffer, @NotNull ByteBuf from, @NotNull ByteBuf to) {
-        final int packetLength = from.readableBytes();
+    /**
+     * Compress using zlib the content of a packet.
+     * <p>
+     * {@code packetBuffer} needs to be the packet content without any header (if you want to use it to write a Minecraft packet).
+     *
+     * @param deflater          the deflater for zlib compression
+     * @param buffer            a cached buffer which will be used to store temporary the deflater output
+     * @param packetBuffer      the buffer containing all the packet fields
+     * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
+     */
+    public static void compressBuffer(@NotNull Deflater deflater, @NotNull byte[] buffer, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
+        final int packetLength = packetBuffer.readableBytes();
 
         if (packetLength < MinecraftServer.getCompressionThreshold()) {
-            Utils.writeVarIntBuf(to, 0);
-            to.writeBytes(from);
+            Utils.writeVarIntBuf(compressionTarget, 0);
+            compressionTarget.writeBytes(packetBuffer);
         } else {
-            Utils.writeVarIntBuf(to, packetLength);
+            Utils.writeVarIntBuf(compressionTarget, packetLength);
 
-            deflater.setInput(from.nioBuffer());
+            deflater.setInput(packetBuffer.nioBuffer());
             deflater.finish();
 
             while (!deflater.finished()) {
                 final int length = deflater.deflate(buffer);
-                to.writeBytes(buffer, 0, length);
+                compressionTarget.writeBytes(buffer, 0, length);
             }
 
             deflater.reset();
         }
     }
 
+    /**
+     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
+     * from a server packet.
+     * <p>
+     * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
+     * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
+     *
+     * @param serverPacket the server packet to write
+     * @return the framed packet from the server one
+     */
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
