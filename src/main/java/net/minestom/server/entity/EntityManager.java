@@ -57,13 +57,14 @@ public final class EntityManager {
     private void waitingPlayersTick() {
         Player waitingPlayer;
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
-            waitingPlayer.init();
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
+            waitingPlayer.init();
 
             spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
         }

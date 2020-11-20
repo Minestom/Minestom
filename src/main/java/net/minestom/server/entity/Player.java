@@ -702,7 +702,7 @@ public class Player extends LivingEntity implements CommandSender {
                     sendDimension(instanceDimensionType);
             }
 
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(firstSpawn ? getRespawnPoint() : position, getChunkRange());
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
             final int length = visibleChunks.length;
 
             AtomicInteger counter = new AtomicInteger(0);
@@ -714,8 +714,9 @@ public class Player extends LivingEntity implements CommandSender {
                     if (chunk != null) {
                         chunk.addViewer(this);
                         if (chunk.getChunkX() == ChunkUtils.getChunkCoordinate((int) getPosition().getX()) &&
-                                chunk.getChunkZ() == ChunkUtils.getChunkCoordinate((int) getPosition().getZ()))
+                                chunk.getChunkZ() == ChunkUtils.getChunkCoordinate((int) getPosition().getZ())) {
                             updateViewPosition(chunk);
+                        }
                     }
                     final boolean isLast = counter.get() == length - 1;
                     if (isLast) {
@@ -747,15 +748,12 @@ public class Player extends LivingEntity implements CommandSender {
     private void spawnPlayer(Instance instance, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
 
+        super.setInstance(instance);
+
         if (firstSpawn) {
-            this.position = getRespawnPoint();
-            this.cacheX = position.getX();
-            this.cacheY = position.getY();
-            this.cacheZ = position.getZ();
-            updatePlayerPosition();
+            teleport(getRespawnPoint());
         }
 
-        super.setInstance(instance);
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
