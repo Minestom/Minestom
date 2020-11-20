@@ -211,9 +211,9 @@ extends java.lang.Object</pre>
                                      java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                                      @NotNull
                                      <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
-<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players. Mostly used for convenience.
+<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.
  <p>
- Be aware that this will cause the send packet listeners to be given the exact same packet object.</div>
+ Can drastically improve performance since the packet will not have to be processed as much.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>players</code> - the players to send the packet to</dd>
