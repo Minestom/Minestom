@@ -34,13 +34,15 @@ public final class PacketUtils {
      * @param packet  the packet to send to the players
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
-        final ByteBuf buffer = writePacket(packet);
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
+            final ByteBuf buffer = writePacket(packet);
+
             for (Player player : players) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) playerConnection).getChannel().write(buffer.retainedSlice());
+                    final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
+                    nettyPlayerConnection.getChannel().write(buffer.retainedSlice());
                 } else {
                     playerConnection.sendPacket(packet);
                 }

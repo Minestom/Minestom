@@ -26,25 +26,24 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class NettyServer {
+public final class NettyServer {
 
     private static final long DEFAULT_CHANNEL_WRITE_LIMIT = 600_000L;
     private static final long DEFAULT_CHANNEL_READ_LIMIT = 100_000L;
 
-    public static final String TRAFFIC_LIMITER_HANDLER_NAME = "traffic-limiter";
-    public static final String LEGACY_PING_HANDLER_NAME = "legacy-ping";
+    public static final String TRAFFIC_LIMITER_HANDLER_NAME = "traffic-limiter"; // Read/write
+    public static final String LEGACY_PING_HANDLER_NAME = "legacy-ping"; // Read
 
-    public static final String COMPRESSOR_HANDLER_NAME = "compressor";
+    public static final String ENCRYPT_HANDLER_NAME = "encrypt"; // Write
+    public static final String DECRYPT_HANDLER_NAME = "decrypt"; // Read
 
-    public static final String FRAMER_HANDLER_NAME = "framer";
+    public static final String FRAMER_HANDLER_NAME = "framer"; // Read/write
 
-    public static final String ENCRYPT_HANDLER_NAME = "encrypt";
-    public static final String DECRYPT_HANDLER_NAME = "decrypt";
+    public static final String COMPRESSOR_HANDLER_NAME = "compressor"; // Read/write
 
-
-    public static final String DECODER_HANDLER_NAME = "decoder";
-    public static final String ENCODER_HANDLER_NAME = "encoder";
-    public static final String CLIENT_HANDLER_NAME = "handler";
+    public static final String DECODER_HANDLER_NAME = "decoder"; // Read
+    public static final String ENCODER_HANDLER_NAME = "encoder"; // Write
+    public static final String CLIENT_HANDLER_NAME = "handler"; // Read
 
     private final EventLoopGroup boss, worker;
     private final ServerBootstrap bootstrap;
