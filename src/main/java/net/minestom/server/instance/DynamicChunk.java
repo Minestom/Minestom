@@ -57,6 +57,8 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
+    private long lastChangeTime;
+
     public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
         super(biomes, chunkX, chunkZ, true);
@@ -86,8 +88,8 @@ public class DynamicChunk extends Chunk {
         // True if the block is not complete air without any custom block capabilities
         final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
 
-        this.blockPalette.setBlockAt(x, y, z, blockStateId);
-        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
+        setBlockAt(blockPalette, x, y, z, blockStateId);
+        setBlockAt(customBlockPalette, x, y, z, customBlockId);
 
         if (!hasBlock) {
             // Block has been deleted, clear cache and return
@@ -155,23 +157,23 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public short getBlockStateId(int x, int y, int z) {
-        return this.blockPalette.getBlockAt(x, y, z);
+        return getBlockAt(blockPalette, x, y, z);
     }
 
     @Override
     public short getCustomBlockId(int x, int y, int z) {
-        return customBlockPalette.getBlockAt(x, y, z);
+        return getBlockAt(customBlockPalette, x, y, z);
     }
 
     @Override
     protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
-        this.blockPalette.setBlockAt(x, y, z, blockStateId);
-        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
+        setBlockAt(blockPalette, x, y, z, blockStateId);
+        setBlockAt(customBlockPalette, x, y, z, customBlockId);
     }
 
     @Override
     protected void refreshBlockStateId(int x, int y, int z, short blockStateId) {
-        this.blockPalette.setBlockAt(x, y, z, blockStateId);
+        setBlockAt(blockPalette, x, y, z, blockStateId);
     }
 
     @Override
@@ -193,6 +195,11 @@ public class DynamicChunk extends Chunk {
     @Override
     public Set<Integer> getBlockEntities() {
         return blockEntities;
+    }
+
+    @Override
+    public long getLastChangeTime() {
+        return lastChangeTime;
     }
 
     /**
@@ -242,8 +249,8 @@ public class DynamicChunk extends Chunk {
                     for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                         final int index = getBlockIndex(x, y, z);
 
-                        final short blockStateId = blockPalette.getBlockAt(x, y, z);
-                        final short customBlockId = customBlockPalette.getBlockAt(x, y, z);
+                        final short blockStateId = getBlockAt(blockPalette, x, y, z);
+                        final short customBlockId = getBlockAt(customBlockPalette, x, y, z);
 
                         // No block at the position
                         if (blockStateId == 0 && customBlockId == 0)
@@ -399,5 +406,14 @@ public class DynamicChunk extends Chunk {
         dynamicChunk.blockEntities.addAll(blockEntities);
 
         return dynamicChunk;
+    }
+
+    private short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
+        return paletteStorage.getBlockAt(x, y, z);
+    }
+
+    private void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
+        paletteStorage.setBlockAt(x, y, z, blockId);
+        this.lastChangeTime = System.currentTimeMillis();
     }
 }

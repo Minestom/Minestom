@@ -192,6 +192,17 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract Set<Integer> getBlockEntities();
 
     /**
+     * Gets the last time that this chunk changed.
+     * <p>
+     * "Change" means here data used in {@link ChunkDataPacket}.
+     * It is necessary to see if the cached version of this chunk can be used
+     * instead of re writing and compressing everything.
+     *
+     * @return the last change time in milliseconds
+     */
+    public abstract long getLastChangeTime();
+
+    /**
      * Serializes the chunk into bytes.
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
