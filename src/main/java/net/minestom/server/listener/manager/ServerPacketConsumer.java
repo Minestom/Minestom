@@ -8,9 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
- * Interface used to add a listener for outgoing packets with {@link ConnectionManager#onPacketSend(ServerPacket)}.
- *
- * @param <T> the packet type
+ * Interface used to add a listener for outgoing packets with {@link ConnectionManager#onPacketSend(ServerPacketConsumer)}.
  */
 @FunctionalInterface
 public interface ServerPacketConsumer {
