@@ -16,7 +16,7 @@ jobs:
       with:
         java-version: 1.11
     - name: Run java checkstyle
-      uses: nikitasavinov/checkstyle-action@61104b8abd3ea7fb471f9b991e5ed71c20a4c9f7
+      uses: nikitasavinov/checkstyle-action@d87d526a914fc5cb0b003908e35038dbb2d6e1b7
       with:
         # Report level for reviewdog [info,warning,error]
         level: info
@@ -27,4 +27,5 @@ jobs:
         # Exit code for reviewdog when errors are found [true,false].
         fail_on_error: false
         # Checkstyle config file
-        checkstyle_config: minestom_checks_8.36.xml
+        checkstyle_config: minestom_checks.xml
+        checkstyle_version: "8.37"
