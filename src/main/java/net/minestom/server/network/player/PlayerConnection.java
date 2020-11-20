@@ -4,8 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
-import net.minestom.server.listener.manager.PacketConsumer;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -45,7 +46,7 @@ public abstract class PlayerConnection {
     /**
      * Updates values related to the network connection.
      */
-    public void updateStats() {
+    public void update() {
         // Check rate limit
         if (MinecraftServer.getRateLimit() > 0) {
             tickCounter++;
@@ -92,7 +93,7 @@ public abstract class PlayerConnection {
     /**
      * Serializes the packet and send it to the client.
      * <p>
-     * Also responsible for executing {@link ConnectionManager#onPacketSend(PacketConsumer)} consumers.
+     * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
      *
      * @param serverPacket the packet to send
      * @see #shouldSendPacket(ServerPacket)
@@ -100,7 +101,8 @@ public abstract class PlayerConnection {
     public abstract void sendPacket(@NotNull ServerPacket serverPacket);
 
     protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
-        return player == null || PACKET_LISTENER_MANAGER.processServerPacket(serverPacket, player);
+        return player == null ||
+                PACKET_LISTENER_MANAGER.processServerPacket(serverPacket, Collections.singleton(player));
     }
 
     /**

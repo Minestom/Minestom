@@ -61,6 +61,8 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
+    private final UUID identifier;
+
     @NotNull
     protected final Biome[] biomes;
     protected final int chunkX, chunkZ;
@@ -79,6 +81,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected Data data;
 
     public Chunk(@Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+        this.identifier = UUID.randomUUID();
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
@@ -192,6 +195,17 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract Set<Integer> getBlockEntities();
 
     /**
+     * Gets the last time that this chunk changed.
+     * <p>
+     * "Change" means here data used in {@link ChunkDataPacket}.
+     * It is necessary to see if the cached version of this chunk can be used
+     * instead of re writing and compressing everything.
+     *
+     * @return the last change time in milliseconds
+     */
+    public abstract long getLastChangeTime();
+
+    /**
      * Serializes the chunk into bytes.
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
@@ -257,6 +271,18 @@ public abstract class Chunk implements Viewable, DataContainer {
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
         return getCustomBlock(x, y, z);
+    }
+
+    /**
+     * Gets the unique identifier of this chunk.
+     * <p>
+     * WARNING: this UUID is not persistent but randomized once the object is instantiate.
+     *
+     * @return the chunk identifier
+     */
+    @NotNull
+    public UUID getIdentifier() {
+        return identifier;
     }
 
     public Biome[] getBiomes() {
@@ -448,7 +474,7 @@ public abstract class Chunk implements Viewable, DataContainer {
 
         // TODO do not hardcode light
         {
-            UpdateLightPacket updateLightPacket = new UpdateLightPacket();
+            UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
             updateLightPacket.chunkX = getChunkX();
             updateLightPacket.chunkZ = getChunkZ();
             updateLightPacket.skyLightMask = 0x3FFF0;

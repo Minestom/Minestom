@@ -11,15 +11,11 @@ public final class DebugUtils {
     public final static Logger LOGGER = LoggerFactory.getLogger(DebugUtils.class);
 
     private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    private static final int OFFSET = 2; // Used to do not show DebugUtils in the stack trace
 
     /**
      * Prints the current thread stack trace elements.
-     *
-     * @param maxLine the maximum number of stack trace element
      */
-    public static synchronized void printStackTrace(int maxLine) {
-        maxLine += OFFSET;
+    public static synchronized void printStackTrace() {
         StackTraceElement[] elements = Thread.currentThread().getStackTrace();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -27,7 +23,7 @@ public final class DebugUtils {
         stringBuilder.append("START STACKTRACE");
         stringBuilder.append(LINE_SEPARATOR);
 
-        for (int i = OFFSET; i < maxLine; i++) {
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
             if (i >= elements.length)
                 break;
 
@@ -40,13 +36,6 @@ public final class DebugUtils {
         stringBuilder.append("END STACKTRACE");
 
         LOGGER.info(stringBuilder.toString());
-    }
-
-    /**
-     * Prints the current thread stack trace elements.
-     */
-    public static synchronized void printStackTrace() {
-        printStackTrace(Integer.MAX_VALUE);
     }
 
 }

@@ -6,6 +6,7 @@ plugins {
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.10'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'checkstyle'
 }
 
 group 'net.minestom.server'
@@ -36,7 +37,7 @@ allprojects {
         maven { url 'https://jitpack.io' }
         maven {
             name 'sponge'
-            url 'http://repo.spongepowered.org/maven'
+            url 'https://repo.spongepowered.org/maven'
         }
     }
     javadoc {
@@ -44,6 +45,11 @@ allprojects {
             destinationDir(file("docs"))
             addBooleanOption('html5', true)
         }
+    }
+
+    checkstyle {
+        toolVersion "8.37"
+        configFile file("${projectDir}/minestom_checks.xml")
     }
 }
 

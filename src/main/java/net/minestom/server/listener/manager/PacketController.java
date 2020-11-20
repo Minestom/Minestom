@@ -1,9 +1,14 @@
 package net.minestom.server.listener.manager;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.client.ClientPlayPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
+
+import java.util.Collection;
 
 /**
- * Used to control the output of a packet in {@link PacketConsumer#accept(Player, PacketController, Object)}.
+ * Used to control the output of a packet in {@link ClientPacketConsumer#accept(Player, PacketController, ClientPlayPacket)}
+ * and {@link ServerPacketConsumer#accept(Collection, PacketController, ServerPacket)}.
  */
 public class PacketController {
 

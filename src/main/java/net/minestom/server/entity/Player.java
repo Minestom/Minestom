@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import io.netty.channel.Channel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
@@ -57,7 +56,6 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -83,7 +81,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * @see #getPlayerSynchronizationGroup()
      */
-    private static volatile int playerSynchronizationGroup = 100;
+    private static volatile int playerSynchronizationGroup = 50;
 
     /**
      * For the number of viewers that a player has, the position synchronization packet will be sent
@@ -341,15 +339,8 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void update(long time) {
-
-        // Flush all pending packets
-        if (PlayerUtils.isNettyClient(this)) {
-            Channel channel = ((NettyPlayerConnection) playerConnection).getChannel();
-            channel.eventLoop().execute(channel::flush);
-        }
-
-        // Network tick verification
-        playerConnection.updateStats();
+        // Network tick
+        this.playerConnection.update();
 
         // Process received packets
         ClientPlayPacket packet;
@@ -706,7 +697,7 @@ public class Player extends LivingEntity implements CommandSender {
                     sendDimension(instanceDimensionType);
             }
 
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(firstSpawn ? getRespawnPoint() : position, getChunkRange());
             final int length = visibleChunks.length;
 
             AtomicInteger counter = new AtomicInteger(0);
@@ -750,11 +741,16 @@ public class Player extends LivingEntity implements CommandSender {
      */
     private void spawnPlayer(Instance instance, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
-        super.setInstance(instance);
 
         if (firstSpawn) {
-            teleport(getRespawnPoint());
+            this.position = getRespawnPoint();
+            this.cacheX = position.getX();
+            this.cacheY = position.getY();
+            this.cacheZ = position.getZ();
+            updatePlayerPosition();
         }
+
+        super.setInstance(instance);
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
@@ -1166,8 +1162,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Gets the player display name in the tab-list.
      *
-     * @return the player display name,
-     * null means that {@link #getUsername()} is displayed
+     * @return the player display name, null means that {@link #getUsername()} is displayed
      */
     @Nullable
     public ColoredText getDisplayName() {
@@ -1377,11 +1372,11 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
      *
-     * @return the default respawn point
+     * @return a copy of the default respawn point
      */
     @NotNull
     public Position getRespawnPoint() {
-        return respawnPoint;
+        return respawnPoint.copy();
     }
 
     /**

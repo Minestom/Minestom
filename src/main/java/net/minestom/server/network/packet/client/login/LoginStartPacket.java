@@ -39,7 +39,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
             // Compression
             final int threshold = MinecraftServer.getCompressionThreshold();
             if (threshold > 0) {
-                nettyPlayerConnection.enableCompression(threshold);
+                nettyPlayerConnection.startCompression();
             }
         }
 

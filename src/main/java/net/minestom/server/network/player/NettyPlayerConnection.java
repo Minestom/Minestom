@@ -1,5 +1,6 @@
 package net.minestom.server.network.player;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
@@ -8,9 +9,14 @@ import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.netty.codec.PacketCompressor;
+import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.cache.CacheablePacket;
+import net.minestom.server.utils.cache.TemporaryCache;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +63,14 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = channel.remoteAddress();
     }
 
+    @Override
+    public void update() {
+        // Flush
+        this.channel.flush();
+        // Network stats
+        super.update();
+    }
+
     /**
      * Sets the encryption key and add the codecs to the pipeline.
      *
@@ -66,21 +80,26 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
-        channel.pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-        channel.pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
+        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.DECRYPT_HANDLER_NAME,
+                new Decrypter(MojangCrypt.getCipher(2, secretKey)));
+        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.ENCRYPT_HANDLER_NAME,
+                new Encrypter(MojangCrypt.getCipher(1, secretKey)));
     }
 
     /**
      * Enables compression and add a new codec to the pipeline.
      *
-     * @param threshold the threshold for a packet to be compressible
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
-    public void enableCompression(int threshold) {
+    public void startCompression() {
         Check.stateCondition(compressed, "Compression is already enabled!");
+        final int threshold = MinecraftServer.getCompressionThreshold();
+        Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
+
         this.compressed = true;
         sendPacket(new SetCompressionPacket(threshold));
-        channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
+        channel.pipeline().addAfter(NettyServer.FRAMER_HANDLER_NAME, NettyServer.COMPRESSOR_HANDLER_NAME,
+                new PacketCompressor(threshold));
     }
 
     /**
@@ -93,26 +112,63 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
-            if (getPlayer() != null) { // Flush on player update
-                if (MinecraftServer.processingNettyErrors())
-                    channel.write(serverPacket).addListener(future -> {
-                        if (!future.isSuccess()) {
-                            future.cause().printStackTrace();
+            if (getPlayer() != null) {
+                // Flush happen during #update()
+                if (serverPacket instanceof CacheablePacket) {
+                    CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
+                    final UUID identifier = cacheablePacket.getIdentifier();
+
+                    if (identifier == null) {
+                        // This packet explicitly said to do not retrieve the cache
+                        if (MinecraftServer.processingNettyErrors())
+                            channel.write(serverPacket).addListener(future -> {
+                                if (!future.isSuccess()) {
+                                    future.cause().printStackTrace();
+                                }
+                            });
+                        else
+                            channel.write(serverPacket, channel.voidPromise());
+                    } else {
+                        // Try to retrieve the cached buffer
+                        TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
+                        ByteBuf buffer = temporaryCache.retrieve(identifier);
+                        if (buffer == null) {
+                            // Buffer not found, create and cache it
+                            final long time = System.currentTimeMillis();
+                            buffer = PacketUtils.createFramedPacket(serverPacket);
+                            temporaryCache.cacheObject(identifier, buffer, time);
                         }
-                    });
-                else {
-                    channel.write(serverPacket, channel.voidPromise());
+
+                        FramedPacket framedPacket = new FramedPacket(buffer);
+                            if (MinecraftServer.processingNettyErrors())
+                                channel.write(framedPacket).addListener(future -> {
+                                    if (!future.isSuccess()) {
+                                        future.cause().printStackTrace();
+                                    }
+                                });
+                            else
+                                channel.write(framedPacket, channel.voidPromise());
+                    }
+
+                } else {
+                            if (MinecraftServer.processingNettyErrors())
+                                channel.write(serverPacket).addListener(future -> {
+                                    if (!future.isSuccess()) {
+                                        future.cause().printStackTrace();
+                                    }
+                                });
+                            else
+                                channel.write(serverPacket, channel.voidPromise());
                 }
             } else {
-                if (MinecraftServer.processingNettyErrors())
-                    channel.writeAndFlush(serverPacket).addListener(future -> {
-                        if (!future.isSuccess()) {
-                            future.cause().printStackTrace();
-                        }
-                    });
-                else {
-                    channel.writeAndFlush(serverPacket, channel.voidPromise());
-                }
+                            if (MinecraftServer.processingNettyErrors())
+                                channel.writeAndFlush(serverPacket).addListener(future -> {
+                                    if (!future.isSuccess()) {
+                                        future.cause().printStackTrace();
+                                    }
+                                });
+                            else
+                                channel.writeAndFlush(serverPacket, channel.voidPromise());
             }
         }
     }
@@ -136,7 +192,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        channel.close();
+        this.channel.close();
     }
 
     @NotNull

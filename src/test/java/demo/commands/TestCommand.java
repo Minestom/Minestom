@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.entity.Player;
 
 public class TestCommand extends Command {
 
@@ -19,11 +20,12 @@ public class TestCommand extends Command {
         });
 
         setDefaultExecutor((source, args) -> {
-            System.out.println("DEFAULT");
             System.gc();
+            source.sendMessage("Explicit GC executed!");
         });
 
         addSyntax((source, args) -> {
+            Player player = (Player) source;
             System.out.println("ARG 1");
         }, test);
     }

@@ -3,11 +3,17 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.cache.CacheablePacket;
+import net.minestom.server.utils.cache.TemporaryPacketCache;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
-public class UpdateLightPacket implements ServerPacket {
+public class UpdateLightPacket implements ServerPacket, CacheablePacket {
+
+    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(10000L);
 
     public int chunkX;
     public int chunkZ;
@@ -22,6 +28,15 @@ public class UpdateLightPacket implements ServerPacket {
 
     public List<byte[]> skyLight;
     public List<byte[]> blockLight;
+
+    // Cacheable data
+    private UUID identifier;
+    private long lastUpdate;
+
+    public UpdateLightPacket(@Nullable UUID identifier, long lastUpdate) {
+        this.identifier = identifier;
+        this.lastUpdate = lastUpdate;
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -52,5 +67,20 @@ public class UpdateLightPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.UPDATE_LIGHT;
+    }
+
+    @Override
+    public TemporaryPacketCache getCache() {
+        return CACHE;
+    }
+
+    @Override
+    public UUID getIdentifier() {
+        return identifier;
+    }
+
+    @Override
+    public long getLastUpdateTime() {
+        return lastUpdate;
     }
 }
