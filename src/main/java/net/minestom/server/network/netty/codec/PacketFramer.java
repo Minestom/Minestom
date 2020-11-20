@@ -7,6 +7,7 @@ import io.netty.handler.codec.CorruptedFrameException;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +26,7 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        final int packetSize = from.readableBytes();
-        final int headerSize = Utils.getVarIntSize(packetSize);
-
-        if (headerSize > 3) {
-            throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
-        }
-
-        to.ensureWritable(packetSize + headerSize);
-
-        Utils.writeVarIntBuf(to, packetSize);
-        to.writeBytes(from, from.readerIndex(), packetSize);
+        PacketUtils.frameBuffer(from, to);
     }
 
     @Override

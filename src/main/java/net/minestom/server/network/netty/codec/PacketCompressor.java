@@ -21,6 +21,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 
 import java.util.List;
@@ -42,24 +43,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        final int packetLength = from.readableBytes();
-
-        if (packetLength < this.threshold) {
-            Utils.writeVarIntBuf(to, 0);
-            to.writeBytes(from);
-        } else {
-            Utils.writeVarIntBuf(to, packetLength);
-
-            deflater.setInput(from.nioBuffer());
-            deflater.finish();
-
-            while (!deflater.finished()) {
-                final int length = deflater.deflate(buffer);
-                to.writeBytes(buffer, 0, length);
-            }
-
-            deflater.reset();
-        }
+        PacketUtils.compressBuffer(deflater, buffer, from, to);
     }
 
     @Override

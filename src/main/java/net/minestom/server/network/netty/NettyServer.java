@@ -16,10 +16,7 @@ import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import io.netty.handler.traffic.TrafficCounter;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
-import net.minestom.server.network.netty.codec.LegacyPingHandler;
-import net.minestom.server.network.netty.codec.PacketDecoder;
-import net.minestom.server.network.netty.codec.PacketEncoder;
-import net.minestom.server.network.netty.codec.PacketFramer;
+import net.minestom.server.network.netty.codec.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
@@ -37,6 +34,7 @@ public final class NettyServer {
     public static final String ENCRYPT_HANDLER_NAME = "encrypt"; // Write
     public static final String DECRYPT_HANDLER_NAME = "decrypt"; // Read
 
+    public static final String GROUPED_PACKET_HANDLER_NAME = "grouped-packet"; // Write
     public static final String FRAMER_HANDLER_NAME = "framer"; // Read/write
 
     public static final String COMPRESSOR_HANDLER_NAME = "compressor"; // Read/write
@@ -109,6 +107,9 @@ public final class NettyServer {
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
                 pipeline.addLast(LEGACY_PING_HANDLER_NAME, new LegacyPingHandler());
+
+                // Used to bypass all the previous handlers by directly sending a framed buffer
+                pipeline.addLast(GROUPED_PACKET_HANDLER_NAME, new GroupedPacketHandler());
 
                 // Adds packetLength at start | Reads framed bytebuf
                 pipeline.addLast(FRAMER_HANDLER_NAME, new PacketFramer(packetProcessor));

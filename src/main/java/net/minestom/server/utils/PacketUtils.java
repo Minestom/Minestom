@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -12,6 +13,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.zip.Deflater;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuf}
@@ -20,6 +22,9 @@ import java.util.Collection;
 public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
+
+    private static Deflater deflater = new Deflater();
+    private static byte[] buffer = new byte[8192];
 
     private PacketUtils() {
 
@@ -36,13 +41,14 @@ public final class PacketUtils {
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
-            final ByteBuf buffer = writePacket(packet);
+            final ByteBuf finalBuffer = createFramedPacket(packet);
+            final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
             for (Player player : players) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.getChannel().write(buffer.retainedSlice());
+                    nettyPlayerConnection.getChannel().write(framedPacket);
                 } else {
                     playerConnection.sendPacket(packet);
                 }
@@ -106,6 +112,64 @@ public final class PacketUtils {
         packet.write(writer);
 
         return writer.getBuffer();
+    }
+
+    public static void frameBuffer(@NotNull ByteBuf from, @NotNull ByteBuf to) {
+        final int packetSize = from.readableBytes();
+        final int headerSize = Utils.getVarIntSize(packetSize);
+
+        if (headerSize > 3) {
+            throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
+        }
+
+        to.ensureWritable(packetSize + headerSize);
+
+        Utils.writeVarIntBuf(to, packetSize);
+        to.writeBytes(from, from.readerIndex(), packetSize);
+    }
+
+    public static void compressBuffer(@NotNull Deflater deflater, @NotNull byte[] buffer, @NotNull ByteBuf from, @NotNull ByteBuf to) {
+        final int packetLength = from.readableBytes();
+
+        if (packetLength < MinecraftServer.getCompressionThreshold()) {
+            Utils.writeVarIntBuf(to, 0);
+            to.writeBytes(from);
+        } else {
+            Utils.writeVarIntBuf(to, packetLength);
+
+            deflater.setInput(from.nioBuffer());
+            deflater.finish();
+
+            while (!deflater.finished()) {
+                final int length = deflater.deflate(buffer);
+                to.writeBytes(buffer, 0, length);
+            }
+
+            deflater.reset();
+        }
+    }
+
+    private static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
+        ByteBuf packetBuf = writePacket(serverPacket);
+
+        if (MinecraftServer.getCompressionThreshold() > 0) {
+
+            ByteBuf compressedBuf = Unpooled.buffer();
+            ByteBuf framedBuf = Unpooled.buffer();
+            synchronized (deflater) {
+                compressBuffer(deflater, buffer, packetBuf, compressedBuf);
+            }
+
+            frameBuffer(compressedBuf, framedBuf);
+
+            return framedBuf;
+        } else {
+            ByteBuf framedBuf = Unpooled.buffer();
+            frameBuffer(packetBuf, framedBuf);
+
+            return framedBuf;
+        }
+
     }
 
 }
