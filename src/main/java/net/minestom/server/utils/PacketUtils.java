@@ -2,8 +2,12 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,21 +19,32 @@ import java.util.Collection;
  */
 public final class PacketUtils {
 
+    private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
+
     private PacketUtils() {
 
     }
 
     /**
-     * Sends a {@link ServerPacket} to multiple players. Mostly used for convenience.
+     * Sends a {@link ServerPacket} to multiple players.
      * <p>
-     * Be aware that this will cause the send packet listeners to be given the exact same packet object.
+     * Can drastically improve performance since the packet will not have to be processed as much.
      *
      * @param players the players to send the packet to
      * @param packet  the packet to send to the players
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
-        for (Player player : players) {
-            player.getPlayerConnection().sendPacket(packet);
+        final ByteBuf buffer = writePacket(packet);
+        final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
+        if (success) {
+            for (Player player : players) {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+                if (playerConnection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) playerConnection).getChannel().write(buffer.retainedSlice());
+                } else {
+                    playerConnection.sendPacket(packet);
+                }
+            }
         }
     }
 
