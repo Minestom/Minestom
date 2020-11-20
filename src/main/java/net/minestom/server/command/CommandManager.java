@@ -2,7 +2,6 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
@@ -30,6 +29,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -55,25 +57,35 @@ public final class CommandManager {
         running = true;
         // Setup console thread
         Thread consoleThread = new Thread(() -> {
-            final Scanner scanner = new Scanner(System.in);
+            BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
             while (running) {
-                if (scanner.hasNext()) {
-                    String command = scanner.nextLine();
-                    if (!command.startsWith(COMMAND_PREFIX))
-                        continue;
-                    command = command.replaceFirst(COMMAND_PREFIX, "");
-                    execute(consoleSender, command);
+
+                try {
+                    if (bi.ready()) {
+                        String command = bi.readLine();
+                        if (!command.startsWith(COMMAND_PREFIX))
+                            continue;
+                        command = command.replaceFirst(COMMAND_PREFIX, "");
+                        execute(consoleSender, command);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
                 }
 
                 // Prevent permanent looping
                 try {
-                    Thread.sleep(MinecraftServer.TICK_MS);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
             }
-            scanner.close();
+            try {
+                bi.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }, "ConsoleCommand-Thread");
         consoleThread.setDaemon(true);
         consoleThread.start();

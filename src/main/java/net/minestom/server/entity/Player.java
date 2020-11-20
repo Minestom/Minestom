@@ -345,7 +345,7 @@ public class Player extends LivingEntity implements CommandSender {
         // Flush all pending packets
         if (PlayerUtils.isNettyClient(this)) {
             Channel channel = ((NettyPlayerConnection) playerConnection).getChannel();
-            channel.eventLoop().execute(() -> channel.flush());
+            channel.eventLoop().execute(channel::flush);
         }
 
         // Network tick verification
