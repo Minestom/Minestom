@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -296,13 +296,20 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastChangeTime()">getLastChangeTime</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the last time that this chunk changed.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSerializedData()">getSerializedData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Serialize this <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> based on <a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)"><code>readChunk(BinaryReader, ChunkCallback)</code></a></div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)">readChunk</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
          <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
@@ -310,7 +317,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Reads the chunk from binary.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockStateId(int,int,int,short)">refreshBlockStateId</a></span>&#8203;(int&nbsp;x,
                    int&nbsp;y,
@@ -320,7 +327,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Changes the block state id at a position (the custom block id stays the same).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockValue(int,int,int,short,short)">refreshBlockValue</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -331,7 +338,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Changes the block state id and the custom block id at a position.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(int,int,int,net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(int&nbsp;x,
             int&nbsp;y,
@@ -341,7 +348,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long,net.minestom.server.instance.Instance)">tick</a></span>&#8203;(long&nbsp;time,
     <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
@@ -349,7 +356,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Executes a chunk tick.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBlock(int,int,int,short,short,net.minestom.server.data.Data,boolean)">UNSAFE_setBlock</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -714,6 +721,27 @@ public&nbsp;java.util.Set&lt;java.lang.Integer&gt;&nbsp;getBlockEntities()</pre>
 <dd><code><a href="Chunk.html#getBlockEntities()">getBlockEntities</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the block entities in this chunk</dd>
+</dl>
+</li>
+</ul>
+<a id="getLastChangeTime()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLastChangeTime</h4>
+<pre class="methodSignature">public&nbsp;long&nbsp;getLastChangeTime()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#getLastChangeTime()">Chunk</a></code></span></div>
+<div class="block">Gets the last time that this chunk changed.
+ <p>
+ "Change" means here data used in <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a>.
+ It is necessary to see if the cached version of this chunk can be used
+ instead of re writing and compressing everything.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Chunk.html#getLastChangeTime()">getLastChangeTime</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the last change time in milliseconds</dd>
 </dl>
 </li>
 </ul>
