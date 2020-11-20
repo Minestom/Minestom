@@ -127,17 +127,18 @@ public class ChunkBatch implements InstanceBatch {
                         chunkPopulator.populateChunk(this, chunk);
                     }
                 }
+
+                // Refresh chunk for viewers
+                this.chunk.sendChunkUpdate();
+
+                this.instance.refreshLastBlockChangeTime();
+
+                // Safe callback
+                instance.scheduleNextTick(inst -> {
+                    OptionalCallback.execute(callback, chunk);
+                });
+
             }
-
-            // Refresh chunk for viewers
-            this.chunk.sendChunkUpdate();
-
-            this.instance.refreshLastBlockChangeTime();
-
-            // Safe callback
-            instance.scheduleNextTick(inst -> {
-                OptionalCallback.execute(callback, chunk);
-            });
         });
     }
 
@@ -199,9 +200,9 @@ public class ChunkBatch implements InstanceBatch {
             // Refresh chunk for viewers
             chunk.sendChunkUpdate();
 
-            if (callback != null) {
-                this.instance.refreshLastBlockChangeTime();
+            this.instance.refreshLastBlockChangeTime();
 
+            if (callback != null) {
                 if (safeCallback) {
                     this.instance.scheduleNextTick(inst -> callback.accept(chunk));
                 } else {

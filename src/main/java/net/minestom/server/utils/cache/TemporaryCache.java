@@ -60,8 +60,13 @@ public class TemporaryCache<T> {
      * @return the retrieved object or null if not found
      */
     @Nullable
-    public T retrieve(@NotNull UUID identifier) {
-        return cache.get(identifier);
+    public synchronized T retrieve(@NotNull UUID identifier, long lastUpdate) {
+        if (!cacheTime.containsKey(identifier)) {
+            return null;
+        }
+
+        final long cachedTime = cacheTime.get(identifier);
+        return lastUpdate <= cachedTime ? cache.get(identifier) : null;
     }
 
     /**
