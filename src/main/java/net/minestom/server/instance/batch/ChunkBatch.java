@@ -127,12 +127,17 @@ public class ChunkBatch implements InstanceBatch {
                         chunkPopulator.populateChunk(this, chunk);
                     }
                 }
-
-                // Safe callback
-                instance.scheduleNextTick(inst -> {
-                    OptionalCallback.execute(callback, chunk);
-                });
             }
+
+            // Refresh chunk for viewers
+            this.chunk.sendChunkUpdate();
+
+            this.instance.refreshLastBlockChangeTime();
+
+            // Safe callback
+            instance.scheduleNextTick(inst -> {
+                OptionalCallback.execute(callback, chunk);
+            });
         });
     }
 

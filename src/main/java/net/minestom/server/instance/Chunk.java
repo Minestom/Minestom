@@ -17,6 +17,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -512,13 +513,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
     public synchronized void sendChunkUpdate() {
-        final Set<Player> chunkViewers = getViewers();
-        if (!chunkViewers.isEmpty()) {
-            chunkViewers.forEach(player -> {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
-                playerConnection.sendPacket(getFreshFullDataPacket());
-            });
-        }
+        PacketUtils.sendGroupedPacket(getViewers(), getFreshFullDataPacket());
     }
 
     /**
