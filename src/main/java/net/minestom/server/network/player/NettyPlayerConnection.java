@@ -66,7 +66,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void update() {
         // Flush
-        this.channel.eventLoop().execute(() -> channel.flush());
+        this.channel.flush();
         // Network stats
         super.update();
     }
