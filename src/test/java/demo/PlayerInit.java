@@ -23,7 +23,9 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -47,8 +49,8 @@ public class PlayerInit {
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        final int loopStart = -3;
-        final int loopEnd = 3;
+        final int loopStart = -10;
+        final int loopEnd = 10;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
                 //instanceContainer.loadChunk(x, z);
@@ -57,7 +59,7 @@ public class PlayerInit {
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
             p.sendMessage("click type inventory: " + clickType);
-            System.out.println("slot inv: " + slot);
+            System.out.println("slot inv: " + slot)0;
             inventoryConditionResult.setCancel(slot == 3);
         });*/
         inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
@@ -73,9 +75,15 @@ public class PlayerInit {
 
             final ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
             final ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
-            for (Player player : connectionManager.getOnlinePlayers()) {
-                player.sendHeaderFooter(header, footer);
+
+            {
+                PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
+                playerListHeaderAndFooterPacket.header = header;
+                playerListHeaderAndFooterPacket.footer = footer;
+
+                PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), playerListHeaderAndFooterPacket);
             }
+
         }).repeat(10, TimeUnit.TICK).schedule();
 
         connectionManager.onPacketReceive((player, packetController, packet) -> {
@@ -84,9 +92,9 @@ public class PlayerInit {
             packetController.setCancel(false);
         });
 
-        connectionManager.onPacketSend((player, packetController, packet) -> {
+        connectionManager.onPacketSend((players, packetController, packet) -> {
             // Listen to all sent packet
-            // System.out.println("PACKET: " + packet.getClass().getSimpleName());
+            //System.out.println("PACKET: " + packet.getClass().getSimpleName());
             packetController.setCancel(false);
         });
 
@@ -135,6 +143,7 @@ public class PlayerInit {
                 final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
                 final Block block = Block.fromStateId(blockStateId);
                 player.sendMessage("You clicked at the block " + block + " " + customBlock);
+                player.sendMessage("CHUNK COUNT " + instanceContainer.getChunks().size());
             });
 
             player.addEventCallback(PickupItemEvent.class, event -> {
@@ -163,10 +172,9 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 750;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1500 - 750;
-                
-                player.setRespawnPoint(new Position(0, 64f, 0));
+                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
+                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
+                player.setRespawnPoint(new Position(0, 70f, 0));
 
                 /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
@@ -178,7 +186,7 @@ public class PlayerInit {
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.SURVIVAL);
+                player.setGameMode(GameMode.CREATIVE);
 
                 ItemStack itemStack = new ItemStack(Material.DIAMOND_BLOCK, (byte) 64);
                 NbtDataImpl data = new NbtDataImpl();
