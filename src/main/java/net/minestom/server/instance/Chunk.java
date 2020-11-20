@@ -17,6 +17,7 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -459,7 +460,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player
      */
-    protected void sendChunk(@NotNull Player player) {
+    protected synchronized void sendChunk(@NotNull Player player) {
         // Only send loaded chunk
         if (!isLoaded())
             return;
@@ -503,7 +504,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player to update the chunk to
      */
-    public void sendChunkUpdate(@NotNull Player player) {
+    public synchronized void sendChunkUpdate(@NotNull Player player) {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getFreshFullDataPacket());
     }
@@ -511,14 +512,8 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
-    public void sendChunkUpdate() {
-        final Set<Player> chunkViewers = getViewers();
-        if (!chunkViewers.isEmpty()) {
-            chunkViewers.forEach(player -> {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
-                playerConnection.sendPacket(getFreshFullDataPacket());
-            });
-        }
+    public synchronized void sendChunkUpdate() {
+        PacketUtils.sendGroupedPacket(getViewers(), getFreshFullDataPacket());
     }
 
     /**
@@ -528,7 +523,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param player  the player to send the packet to
      * @throws IllegalArgumentException if {@code section} is not a valid section
      */
-    public void sendChunkSectionUpdate(int section, @NotNull Player player) {
+    public synchronized void sendChunkSectionUpdate(int section, @NotNull Player player) {
         if (!PlayerUtils.isNettyClient(player))
             return;
         Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),

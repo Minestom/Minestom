@@ -23,7 +23,7 @@ public class TemporaryCache<T> {
     // Identifier = time
     protected ConcurrentHashMap<UUID, Long> cacheTime = new ConcurrentHashMap<>();
 
-    private long keepTime;
+    private final long keepTime;
 
     /**
      * Creates a new temporary cache.
@@ -42,13 +42,13 @@ public class TemporaryCache<T> {
     }
 
     /**
-     * Caches an object
+     * Caches an object.
      *
      * @param identifier the object identifier
      * @param value      the object to cache
      * @param time       the current time in milliseconds
      */
-    public synchronized void cacheObject(@NotNull UUID identifier, T value, long time) {
+    public void cacheObject(@NotNull UUID identifier, T value, long time) {
         this.cache.put(identifier, value);
         this.cacheTime.put(identifier, time);
     }
