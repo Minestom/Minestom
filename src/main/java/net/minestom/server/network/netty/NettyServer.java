@@ -14,6 +14,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import io.netty.handler.traffic.TrafficCounter;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
@@ -25,8 +26,11 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class NettyServer {
 
-    private static final long DEFAULT_CHANNEL_WRITE_LIMIT = 600_000L;
-    private static final long DEFAULT_CHANNEL_READ_LIMIT = 100_000L;
+    private static final long DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT = 600_000L;
+    private static final long DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT = 100_000L;
+
+    private static final long DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT = 15_000_000L;
+    private static final long DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT = 1_000_000L;
 
     public static final String TRAFFIC_LIMITER_HANDLER_NAME = "traffic-limiter"; // Read/write
     public static final String LEGACY_PING_HANDLER_NAME = "legacy-ping"; // Read
@@ -90,9 +94,6 @@ public final class NettyServer {
             }
         };
 
-        globalTrafficHandler.setWriteChannelLimit(DEFAULT_CHANNEL_WRITE_LIMIT);
-        globalTrafficHandler.setReadChannelLimit(DEFAULT_CHANNEL_READ_LIMIT);
-
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
@@ -132,6 +133,18 @@ public final class NettyServer {
      * @param port    the server port
      */
     public void start(@NotNull String address, int port) {
+
+        {
+            final boolean compression = MinecraftServer.getCompressionThreshold() != 0;
+            if (compression) {
+                globalTrafficHandler.setWriteChannelLimit(DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT);
+                globalTrafficHandler.setReadChannelLimit(DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT);
+            } else {
+                globalTrafficHandler.setWriteChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT);
+                globalTrafficHandler.setReadChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT);
+            }
+        }
+
         this.address = address;
         this.port = port;
 

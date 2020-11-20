@@ -23,7 +23,7 @@ public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
-    private static Deflater deflater = new Deflater();
+    private static Deflater deflater = new Deflater(3);
     private static byte[] buffer = new byte[8192];
 
     private PacketUtils() {
