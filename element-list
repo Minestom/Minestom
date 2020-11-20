@@ -112,6 +112,7 @@ net.minestom.server.utils
 net.minestom.server.utils.advancement
 net.minestom.server.utils.binary
 net.minestom.server.utils.block
+net.minestom.server.utils.cache
 net.minestom.server.utils.callback
 net.minestom.server.utils.callback.validator
 net.minestom.server.utils.chunk

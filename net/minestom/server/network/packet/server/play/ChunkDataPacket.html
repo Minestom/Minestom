@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code>, <code><a href="../../../../utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache">CacheablePacket</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">ChunkDataPacket</span>
 extends java.lang.Object
-implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></pre>
+implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>, <a href="../../../../utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache">CacheablePacket</a></pre>
 </li>
 </ul>
 </div>
@@ -220,7 +220,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ChunkDataPacket</a></span>()</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,long)">ChunkDataPacket</a></span>&#8203;(java.util.UUID&nbsp;identifier,
+               long&nbsp;lastUpdate)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -242,13 +243,34 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../../utils/cache/TemporaryPacketCache.html" title="class in net.minestom.server.utils.cache">TemporaryPacketCache</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCache()">getCache</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the cache linked to this packet.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the id of this packet.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.util.UUID</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the identifier of this packet.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastUpdateTime()">getLastUpdateTime</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the last time this packet changed.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -370,13 +392,15 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
+<a id="&lt;init&gt;(java.util.UUID,long)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ChunkDataPacket</h4>
-<pre>public&nbsp;ChunkDataPacket()</pre>
+<pre>public&nbsp;ChunkDataPacket&#8203;(@Nullable
+                       java.util.UUID&nbsp;identifier,
+                       long&nbsp;lastUpdate)</pre>
 </li>
 </ul>
 </li>
@@ -412,7 +436,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="getId()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
@@ -425,6 +449,61 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code><a href="../ServerPacket.html#getId()">getId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the id of this packet</dd>
+</dl>
+</li>
+</ul>
+<a id="getCache()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCache</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../../../utils/cache/TemporaryPacketCache.html" title="class in net.minestom.server.utils.cache">TemporaryPacketCache</a>&nbsp;getCache()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html#getCache()">CacheablePacket</a></code></span></div>
+<div class="block">Gets the cache linked to this packet.
+ <p>
+ WARNING: the cache needs to be shared between all the object instances, tips is to make it static.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../utils/cache/CacheablePacket.html#getCache()">getCache</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache">CacheablePacket</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the temporary packet cache</dd>
+</dl>
+</li>
+</ul>
+<a id="getIdentifier()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIdentifier</h4>
+<pre class="methodSignature">public&nbsp;java.util.UUID&nbsp;getIdentifier()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html#getIdentifier()">CacheablePacket</a></code></span></div>
+<div class="block">Gets the identifier of this packet.
+ <p>
+ Used to verify if this packet is already cached or not.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../utils/cache/CacheablePacket.html#getIdentifier()">getIdentifier</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache">CacheablePacket</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this packet identifier, null to do not retrieve the cache</dd>
+</dl>
+</li>
+</ul>
+<a id="getLastUpdateTime()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getLastUpdateTime</h4>
+<pre class="methodSignature">public&nbsp;long&nbsp;getLastUpdateTime()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html#getLastUpdateTime()">CacheablePacket</a></code></span></div>
+<div class="block">Gets the last time this packet changed.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../utils/cache/CacheablePacket.html#getLastUpdateTime()">getLastUpdateTime</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache">CacheablePacket</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the last packet update time in milliseconds</dd>
 </dl>
 </li>
 </ul>
