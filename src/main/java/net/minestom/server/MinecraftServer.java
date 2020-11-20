@@ -77,7 +77,7 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = 2;
+    public static final int THREAD_COUNT_BLOCK_BATCH = 4;
 
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
     public static final int THREAD_COUNT_SCHEDULER = 1;
@@ -124,7 +124,7 @@ public final class MinecraftServer {
     private static boolean initialized;
     private static boolean started;
 
-    private static int chunkViewDistance = 10;
+    private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
     private static ResponseDataConsumer responseDataConsumer;

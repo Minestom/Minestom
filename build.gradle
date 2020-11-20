@@ -129,6 +129,8 @@ dependencies {
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
     api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
+    // Guava 21.0+ required for Mixin, but Authlib imports 17.0
+    api 'com.google.guava:guava:21.0'
     api 'com.mojang:authlib:1.5.21'
 
     // Code modification
@@ -143,6 +145,8 @@ dependencies {
     api 'com.github.MadMartian:hydrazine-path-finding:1.4.2'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // NBT parsing/manipulation/saving
     api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}")
     api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
     api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
@@ -150,6 +154,8 @@ dependencies {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
         }
     }
+
+    implementation "com.github.Minestom:DependencyGetter:v1.0.1"
 
     // LWJGL, for map rendering
     lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")

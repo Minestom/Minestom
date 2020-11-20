@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixins;
 public class TestExtensionLauncherNoSetup {
 
     public static void main(String[] args) {
-        Bootstrap.bootstrap("fr.themode.demo.MainDemo", args);
+        Bootstrap.bootstrap("demo.MainDemo", args);
     }
 
 }

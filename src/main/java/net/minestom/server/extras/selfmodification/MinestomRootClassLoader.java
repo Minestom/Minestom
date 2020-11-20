@@ -1,6 +1,5 @@
 package net.minestom.server.extras.selfmodification;
 
-import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,11 +22,11 @@ import java.util.Set;
 /**
  * Class Loader that can modify class bytecode when they are loaded
  */
-public class MinestomOverwriteClassLoader extends URLClassLoader {
+public class MinestomRootClassLoader extends HierarchyClassLoader {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinestomRootClassLoader.class);
 
-    private static MinestomOverwriteClassLoader INSTANCE;
+    private static MinestomRootClassLoader INSTANCE;
 
     /**
      * Classes that cannot be loaded/modified by this classloader.
@@ -47,6 +47,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
             add("org.apache");
             add("org.spongepowered");
             add("net.minestom.server.extras.selfmodification");
+            add("org.jboss.shrinkwrap.resolver");
         }
     };
     /**
@@ -62,16 +63,16 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
     // TODO: priorities?
     private final List<CodeModifier> modifiers = new LinkedList<>();
 
-    private MinestomOverwriteClassLoader(ClassLoader parent) {
-        super("Minestom ClassLoader", extractURLsFromClasspath(), parent);
+    private MinestomRootClassLoader(ClassLoader parent) {
+        super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
         asmClassLoader = newChild(new URL[0]);
     }
 
-    public static MinestomOverwriteClassLoader getInstance() {
+    public static MinestomRootClassLoader getInstance() {
         if (INSTANCE == null) {
-            synchronized (MinestomOverwriteClassLoader.class) {
+            synchronized (MinestomRootClassLoader.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new MinestomOverwriteClassLoader(MinestomOverwriteClassLoader.class.getClassLoader());
+                    INSTANCE = new MinestomRootClassLoader(MinestomRootClassLoader.class.getClassLoader());
                 }
             }
         }
@@ -117,7 +118,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
                     return super.loadClass(name, resolve);
                 }
 
-                return define(name, loadBytes(name, true), resolve);
+                return define(name, resolve);
             } catch (Exception ex) {
                 LOGGER.trace("Fail to load class, resorting to parent loader: " + name, ex);
                 // fail to load class, let parent load
@@ -138,13 +139,29 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         return true;
     }
 
-    private Class<?> define(String name, byte[] bytes, boolean resolve) {
-        Class<?> defined = defineClass(name, bytes, 0, bytes.length);
-        LOGGER.trace("Loaded with code modifiers: " + name);
-        if (resolve) {
-            resolveClass(defined);
+    private Class<?> define(String name, boolean resolve) throws IOException, ClassNotFoundException {
+        try {
+            byte[] bytes = loadBytes(name, true);
+            Class<?> defined = defineClass(name, bytes, 0, bytes.length);
+            LOGGER.trace("Loaded with code modifiers: " + name);
+            if (resolve) {
+                resolveClass(defined);
+            }
+            return defined;
+        } catch (ClassNotFoundException e) {
+            // could not load inside this classloader, attempt with children
+            Class<?> defined = null;
+            for(MinestomExtensionClassLoader subloader : children) {
+                try {
+                    defined = subloader.loadClassAsChild(name, resolve);
+                    LOGGER.trace("Loaded from child {}: {}", subloader, name);
+                    return defined;
+                } catch (ClassNotFoundException e1) {
+                    // not found inside this child, move on to next
+                }
+            }
+            throw e;
         }
-        return defined;
     }
 
     /**
@@ -160,9 +177,35 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         if (name == null)
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
-        byte[] bytes = getResourceAsStream(path).readAllBytes();
-        if (transform && !isProtected(name)) {
-            ClassReader reader = new ClassReader(bytes);
+        InputStream input = getResourceAsStream(path);
+        if(input == null) {
+            throw new ClassNotFoundException("Could not find resource "+path);
+        }
+        byte[] originalBytes = input.readAllBytes();
+        if(transform) {
+            return transformBytes(originalBytes, name);
+        }
+        return originalBytes;
+    }
+
+    public byte[] loadBytesWithChildren(String name, boolean transform) throws IOException, ClassNotFoundException {
+        if (name == null)
+            throw new ClassNotFoundException();
+        String path = name.replace(".", "/") + ".class";
+        InputStream input = getResourceAsStreamWithChildren(path);
+        if(input == null) {
+            throw new ClassNotFoundException("Could not find resource "+path);
+        }
+        byte[] originalBytes = input.readAllBytes();
+        if(transform) {
+            return transformBytes(originalBytes, name);
+        }
+        return originalBytes;
+    }
+
+    byte[] transformBytes(byte[] classBytecode, String name) {
+        if (!isProtected(name)) {
+            ClassReader reader = new ClassReader(classBytecode);
             ClassNode node = new ClassNode();
             reader.accept(node, 0);
             boolean modified = false;
@@ -182,11 +225,11 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
                     }
                 };
                 node.accept(writer);
-                bytes = writer.toByteArray();
+                classBytecode = writer.toByteArray();
                 LOGGER.trace("Modified " + name);
             }
         }
-        return bytes;
+        return classBytecode;
     }
 
     // overriden to increase access (from protected to public)
@@ -224,6 +267,11 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         synchronized (modifiers) {
             modifiers.add(modifier);
         }
+    }
+
+    @Override
+    public void addURL(URL url) {
+        super.addURL(url);
     }
 
     public List<CodeModifier> getModifiers() {

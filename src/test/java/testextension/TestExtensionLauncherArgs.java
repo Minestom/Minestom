@@ -11,7 +11,7 @@ public class TestExtensionLauncherArgs {
         System.arraycopy(args, 0, argsWithMixins, 0, args.length);
         argsWithMixins[argsWithMixins.length-2] = "--mixin";
         argsWithMixins[argsWithMixins.length-1] = "mixins.testextension.json";
-        Bootstrap.bootstrap("fr.themode.demo.MainDemo", argsWithMixins);
+        Bootstrap.bootstrap("demo.MainDemo", argsWithMixins);
     }
 
 }

@@ -36,6 +36,9 @@ public class Main {
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
+        commandManager.register(new ReloadExtensionCommand());
+        commandManager.register(new UnloadExtensionCommand());
+        commandManager.register(new LoadExtensionCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 

@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a {@link Player} start digging a block,
  * can be used to forbid the {@link Player} from mining it.
+ * <p>
+ * Be aware that cancelling this event does not necessary prevent the player from breaking the block
+ * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
+ * Could be fixed in future Minestom version.
  */
 public class PlayerStartDiggingEvent extends CancellableEvent {
 

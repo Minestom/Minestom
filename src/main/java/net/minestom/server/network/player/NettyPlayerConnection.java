@@ -56,8 +56,16 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = channel.remoteAddress();
     }
 
+    @Override
+    public void update() {
+        // Flush
+        this.channel.eventLoop().execute(() -> channel.flush());
+        // Network stats
+        super.update();
+    }
+
     /**
-     * Sets the encryption key and add the channels to the pipeline.
+     * Sets the encryption key and add the codecs to the pipeline.
      *
      * @param secretKey the secret key to use in the encryption
      * @throws IllegalStateException if encryption is already enabled for this connection
@@ -65,12 +73,12 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
-        getChannel().pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-        getChannel().pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
+        channel.pipeline().addBefore("framer", "decrypt", new Decrypter(MojangCrypt.getCipher(2, secretKey)));
+        channel.pipeline().addBefore("framer", "encrypt", new Encrypter(MojangCrypt.getCipher(1, secretKey)));
     }
 
     /**
-     * Enables compression and add a new channel to the pipeline.
+     * Enables compression and add a new codec to the pipeline.
      *
      * @param threshold the threshold for a packet to be compressible
      * @throws IllegalStateException if encryption is already enabled for this connection
@@ -93,9 +101,9 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
-                channel.write(serverPacket); // Flush on player update
+                this.channel.write(serverPacket); // Flush on player update
             } else {
-                channel.writeAndFlush(serverPacket);
+                this.channel.writeAndFlush(serverPacket);
             }
         }
     }

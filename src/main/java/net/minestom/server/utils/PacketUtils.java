@@ -74,6 +74,7 @@ public final class PacketUtils {
     private static void writePacket(@NotNull ByteBuf buf, @NotNull ByteBuf packetBuffer, int packetId) {
         Utils.writeVarIntBuf(buf, packetId);
         buf.writeBytes(packetBuffer);
+        packetBuffer.release();
     }
 
     /**

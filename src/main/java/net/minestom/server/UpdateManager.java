@@ -3,7 +3,7 @@ package net.minestom.server;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.thread.PerGroupChunkProvider;
+import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
@@ -33,7 +33,8 @@ public final class UpdateManager {
 
     {
         // DEFAULT THREAD PROVIDER
-        threadProvider = new PerGroupChunkProvider();
+        //threadProvider = new PerGroupChunkProvider();
+        threadProvider = new PerInstanceThreadProvider();
     }
 
     /**
