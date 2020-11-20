@@ -749,7 +749,12 @@ public class Player extends LivingEntity implements CommandSender {
 
         if (firstSpawn) {
             this.position = getRespawnPoint();
+            this.cacheX = position.getX();
+            this.cacheY = position.getY();
+            this.cacheZ = position.getZ();
+            updatePlayerPosition();
         }
+
         super.setInstance(instance);
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
@@ -1372,11 +1377,11 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
      *
-     * @return the default respawn point
+     * @return a copy of the default respawn point
      */
     @NotNull
     public Position getRespawnPoint() {
-        return respawnPoint;
+        return respawnPoint.copy();
     }
 
     /**
