@@ -263,14 +263,14 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReceivePacketConsumers()">getReceivePacketConsumers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the listeners which are called for each packet received.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSendPacketConsumers()">getSendPacketConsumers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the listeners which are called for each packet sent.</div>
@@ -278,14 +278,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.PacketConsumer)">onPacketReceive</a></span>&#8203;(<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&nbsp;packetConsumer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive</a></span>&#8203;(<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is received.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)">onPacketSend</a></span>&#8203;(<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetConsumer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">onPacketSend</a></span>&#8203;(<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is sent.</div>
 </td>
@@ -475,7 +475,7 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>getReceivePacketConsumers</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&gt;&nbsp;getReceivePacketConsumers()</pre>
+public&nbsp;java.util.List&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;&nbsp;getReceivePacketConsumers()</pre>
 <div class="block">Gets all the listeners which are called for each packet received.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -483,18 +483,18 @@ public&nbsp;java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" 
 </dl>
 </li>
 </ul>
-<a id="onPacketReceive(net.minestom.server.listener.manager.PacketConsumer)">
+<a id="onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>onPacketReceive</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onPacketReceive&#8203;(@NotNull
-                            <a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&nbsp;packetConsumer)</pre>
+                            <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</pre>
 <div class="block">Adds a consumer to call once a packet is received.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>packetConsumer</code> - the packet consumer</dd>
+<dd><code>clientPacketConsumer</code> - the packet consumer</dd>
 </dl>
 </li>
 </ul>
@@ -505,7 +505,7 @@ public&nbsp;java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" 
 <li class="blockList">
 <h4>getSendPacketConsumers</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&gt;&nbsp;getSendPacketConsumers()</pre>
+public&nbsp;java.util.List&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;&nbsp;getSendPacketConsumers()</pre>
 <div class="block">Gets all the listeners which are called for each packet sent.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -513,22 +513,18 @@ public&nbsp;java.util.List&lt;<a href="../listener/manager/PacketConsumer.html" 
 </dl>
 </li>
 </ul>
-<a id="onPacketSend(net.minestom.server.listener.manager.PacketConsumer)">
+<a id="onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>onPacketSend</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onPacketSend&#8203;(@NotNull
-                         <a href="../listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;<a href="packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;packetConsumer)</pre>
-<div class="block">Adds a consumer to call once a packet is sent.
- <p>
- Be aware that it is possible for the same packet instance to be used multiple time,
- changing the object fields could lead to issues.
- (consider canceling the packet instead and send your own)</div>
+                         <a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</pre>
+<div class="block">Adds a consumer to call once a packet is sent.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>packetConsumer</code> - the packet consumer</dd>
+<dd><code>serverPacketConsumer</code> - the packet consumer</dd>
 </dl>
 </li>
 </ul>

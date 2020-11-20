@@ -276,13 +276,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/ServerPacketConsumer.html#accept(java.util.Collection,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.server.ServerPacket)">accept(Collection&lt;Player&gt;, PacketController, ServerPacket)</a></span> - Method in interface net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a></dt>
+<dd>
+<div class="block">Called when a packet is sent to a client.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/condition/InventoryCondition.html#accept(net.minestom.server.entity.Player,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.inventory.condition.InventoryConditionResult)">accept(Player, int, ClickType, InventoryConditionResult)</a></span> - Method in interface net.minestom.server.inventory.condition.<a href="net/minestom/server/inventory/condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a></dt>
 <dd>
 <div class="block">Called when a <a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> clicks in the inventory where this <a href="net/minestom/server/inventory/condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition"><code>InventoryCondition</code></a> has been added to.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/PacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,T)">accept(Player, PacketController, T)</a></span> - Method in interface net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/ClientPacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.client.ClientPlayPacket)">accept(Player, PacketController, ClientPlayPacket)</a></span> - Method in interface net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a></dt>
 <dd>
-<div class="block">Called when a packet is received/sent from/to a client.</div>
+<div class="block">Called when a packet is received from a client.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/ping/ResponseDataConsumer.html#accept(net.minestom.server.network.player.PlayerConnection,net.minestom.server.ping.ResponseData)">accept(PlayerConnection, ResponseData)</a></span> - Method in interface net.minestom.server.ping.<a href="net/minestom/server/ping/ResponseDataConsumer.html" title="interface in net.minestom.server.ping">ResponseDataConsumer</a></dt>
 <dd>&nbsp;</dd>
@@ -3889,6 +3893,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/network/packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client"><span class="typeNameLink">ClientPacket</span></a> - Interface in <a href="net/minestom/server/network/packet/client/package-summary.html">net.minestom.server.network.packet.client</a></dt>
 <dd>
 <div class="block">Represents a packet received from a client.</div>
+</dd>
+<dt><a href="net/minestom/server/listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager"><span class="typeNameLink">ClientPacketConsumer</span></a> - Interface in <a href="net/minestom/server/listener/manager/package-summary.html">net.minestom.server.listener.manager</a></dt>
+<dd>
+<div class="block">Interface used to add a listener for incoming packets with <a href="net/minestom/server/network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)"><code>ConnectionManager.onPacketReceive(ClientPacketConsumer)</code></a>.</div>
 </dd>
 <dt><a href="net/minestom/server/network/packet/client/handler/ClientPacketsHandler.html" title="class in net.minestom.server.network.packet.client.handler"><span class="typeNameLink">ClientPacketsHandler</span></a> - Class in <a href="net/minestom/server/network/packet/client/handler/package-summary.html">net.minestom.server.network.packet.client.handler</a></dt>
 <dd>
@@ -19391,11 +19399,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/minecraft/ArgumentEntities.html#onlyPlayers(boolean)">onlyPlayers(boolean)</a></span> - Method in class net.minestom.server.command.builder.arguments.minecraft.<a href="net/minestom/server/command/builder/arguments/minecraft/ArgumentEntities.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntities</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.PacketConsumer)">onPacketReceive(PacketConsumer&lt;ClientPlayPacket&gt;)</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive(ClientPacketConsumer)</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
 <dd>
 <div class="block">Adds a consumer to call once a packet is received.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)">onPacketSend(PacketConsumer&lt;ServerPacket&gt;)</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">onPacketSend(ServerPacketConsumer)</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
 <dd>
 <div class="block">Adds a consumer to call once a packet is sent.</div>
 </dd>
@@ -19606,14 +19614,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/codec/PacketCompressor.html#%3Cinit%3E(int)">PacketCompressor(int)</a></span> - Constructor for class net.minestom.server.network.netty.codec.<a href="net/minestom/server/network/netty/codec/PacketCompressor.html" title="class in net.minestom.server.network.netty.codec">PacketCompressor</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="net/minestom/server/listener/manager/PacketConsumer.html" title="interface in net.minestom.server.listener.manager"><span class="typeNameLink">PacketConsumer</span></a>&lt;<a href="net/minestom/server/listener/manager/PacketConsumer.html" title="type parameter in PacketConsumer">T</a>&gt; - Interface in <a href="net/minestom/server/listener/manager/package-summary.html">net.minestom.server.listener.manager</a></dt>
-<dd>
-<div class="block">Interface used to add a listener for incoming/outgoing packets with
- <a href="net/minestom/server/network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketReceive(PacketConsumer)</code></a> and <a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
-</dd>
 <dt><a href="net/minestom/server/listener/manager/PacketController.html" title="class in net.minestom.server.listener.manager"><span class="typeNameLink">PacketController</span></a> - Class in <a href="net/minestom/server/listener/manager/package-summary.html">net.minestom.server.listener.manager</a></dt>
 <dd>
-<div class="block">Used to control the output of a packet in <a href="net/minestom/server/listener/manager/PacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,T)"><code>PacketConsumer.accept(Player, PacketController, Object)</code></a>.</div>
+<div class="block">Used to control the output of a packet in <a href="net/minestom/server/listener/manager/ClientPacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.client.ClientPlayPacket)"><code>ClientPacketConsumer.accept(Player, PacketController, ClientPlayPacket)</code></a>
+ and <a href="net/minestom/server/listener/manager/ServerPacketConsumer.html#accept(java.util.Collection,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.server.ServerPacket)"><code>ServerPacketConsumer.accept(Collection, PacketController, ServerPacket)</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/PacketController.html#%3Cinit%3E()">PacketController()</a></span> - Constructor for class net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/PacketController.html" title="class in net.minestom.server.listener.manager">PacketController</a></dt>
 <dd>&nbsp;</dd>
@@ -21044,9 +21048,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Recalculate the value of this attribute instance using the modifiers.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/PacketListenerManager.html#processServerPacket(T,net.minestom.server.entity.Player)">processServerPacket(T, Player)</a></span> - Method in class net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/PacketListenerManager.html" title="class in net.minestom.server.listener.manager">PacketListenerManager</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/listener/manager/PacketListenerManager.html#processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">processServerPacket(ServerPacket, Collection&lt;Player&gt;)</a></span> - Method in class net.minestom.server.listener.manager.<a href="net/minestom/server/listener/manager/PacketListenerManager.html" title="class in net.minestom.server.listener.manager">PacketListenerManager</a></dt>
 <dd>
-<div class="block">Executes the consumers from <a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+<div class="block">Executes the consumers from <a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/CustomBlock.html#processStage(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player,byte)">processStage(Instance, BlockPosition, Player, byte)</a></span> - Method in class net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a></dt>
 <dd>
@@ -22991,6 +22995,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><span class="typeNameLink">ServerPacket</span></a> - Interface in <a href="net/minestom/server/network/packet/server/package-summary.html">net.minestom.server.network.packet.server</a></dt>
 <dd>
 <div class="block">Represents a packet which can be sent to a player using <a href="net/minestom/server/network/player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>PlayerConnection.sendPacket(ServerPacket)</code></a>.</div>
+</dd>
+<dt><a href="net/minestom/server/listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager"><span class="typeNameLink">ServerPacketConsumer</span></a> - Interface in <a href="net/minestom/server/listener/manager/package-summary.html">net.minestom.server.listener.manager</a></dt>
+<dd>
+<div class="block">Interface used to add a listener for outgoing packets with <a href="net/minestom/server/network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 </dd>
 <dt><a href="net/minestom/server/network/packet/server/ServerPacketIdentifier.html" title="class in net.minestom.server.network.packet.server"><span class="typeNameLink">ServerPacketIdentifier</span></a> - Class in <a href="net/minestom/server/network/packet/server/package-summary.html">net.minestom.server.network.packet.server</a></dt>
 <dd>&nbsp;</dd>

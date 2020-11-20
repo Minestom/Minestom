@@ -205,11 +205,11 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>&lt;T extends <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;<br>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processServerPacket(T,net.minestom.server.entity.Player)">processServerPacket</a></span>&#8203;(T&nbsp;packet,
-                   <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">processServerPacket</a></span>&#8203;(<a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                   java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
 <td class="colLast">
-<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -304,25 +304,21 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="processServerPacket(net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.entity.Player)">
-<!--   -->
-</a><a id="processServerPacket(T,net.minestom.server.entity.Player)">
+<a id="processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>processServerPacket</h4>
-<pre class="methodSignature">public&nbsp;&lt;T extends <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;&nbsp;boolean&nbsp;processServerPacket&#8203;(@NotNull
-                                                            T&nbsp;packet,
-                                                            @NotNull
-                                                            <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
-<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;processServerPacket&#8203;(@NotNull
+                                   <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                   @NotNull
+                                   java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
+<div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 <dl>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - the packet type</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packet</code> - the packet to process</dd>
-<dd><code>player</code> - the player which should receive the packet</dd>
+<dd><code>players</code> - the players which should receive the packet</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the packet is not cancelled, false otherwise</dd>
 </dl>

@@ -105,16 +105,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="PacketConsumer.html" title="interface in net.minestom.server.listener.manager">PacketConsumer</a>&lt;T&gt;</th>
+<th class="colFirst" scope="row"><a href="ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a></th>
 <td class="colLast">
-<div class="block">Interface used to add a listener for incoming/outgoing packets with
- <a href="../../network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketReceive(PacketConsumer)</code></a> and <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.PacketConsumer)"><code>ConnectionManager.onPacketSend(PacketConsumer)</code></a>.</div>
+<div class="block">Interface used to add a listener for incoming packets with <a href="../../network/ConnectionManager.html#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)"><code>ConnectionManager.onPacketReceive(ClientPacketConsumer)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;</th>
 <td class="colLast">
 <div class="block">Small convenient interface to use method references with <a href="PacketListenerManager.html#setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)"><code>PacketListenerManager.setListener(Class, PacketListenerConsumer)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colFirst" scope="row"><a href="ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a></th>
+<td class="colLast">
+<div class="block">Interface used to add a listener for outgoing packets with <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 </td>
 </tr>
 </tbody>
@@ -131,7 +136,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="PacketController.html" title="class in net.minestom.server.listener.manager">PacketController</a></th>
 <td class="colLast">
-<div class="block">Used to control the output of a packet in <a href="PacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,T)"><code>PacketConsumer.accept(Player, PacketController, Object)</code></a>.</div>
+<div class="block">Used to control the output of a packet in <a href="ClientPacketConsumer.html#accept(net.minestom.server.entity.Player,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.client.ClientPlayPacket)"><code>ClientPacketConsumer.accept(Player, PacketController, ClientPlayPacket)</code></a>
+ and <a href="ServerPacketConsumer.html#accept(java.util.Collection,net.minestom.server.listener.manager.PacketController,net.minestom.server.network.packet.server.ServerPacket)"><code>ServerPacketConsumer.accept(Collection, PacketController, ServerPacket)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
