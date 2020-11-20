@@ -158,20 +158,27 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,byte%5B%5D,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(java.util.zip.Deflater&nbsp;deflater,
               byte[]&nbsp;buffer,
-              io.netty.buffer.ByteBuf&nbsp;from,
-              io.netty.buffer.ByteBuf&nbsp;to)</code></th>
-<td class="colLast">&nbsp;</td>
+              io.netty.buffer.ByteBuf&nbsp;packetBuffer,
+              io.netty.buffer.ByteBuf&nbsp;compressionTarget)</code></th>
+<td class="colLast">
+<div class="block">Compress using zlib the content of a packet.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static io.netty.buffer.ByteBuf</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
+ from a server packet.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">frameBuffer</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;from,
-           io.netty.buffer.ByteBuf&nbsp;to)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">frameBuffer</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;packetBuffer,
+           io.netty.buffer.ByteBuf&nbsp;frameTarget)</code></th>
+<td class="colLast">
+<div class="block">Frames a buffer for it to be understood by a Minecraft client.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
@@ -283,9 +290,18 @@ public static&nbsp;io.netty.buffer.ByteBuf&nbsp;writePacket&#8203;(@NotNull
 <li class="blockList">
 <h4>frameBuffer</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;frameBuffer&#8203;(@NotNull
-                               io.netty.buffer.ByteBuf&nbsp;from,
+                               io.netty.buffer.ByteBuf&nbsp;packetBuffer,
                                @NotNull
-                               io.netty.buffer.ByteBuf&nbsp;to)</pre>
+                               io.netty.buffer.ByteBuf&nbsp;frameTarget)</pre>
+<div class="block">Frames a buffer for it to be understood by a Minecraft client.
+ <p>
+ The content of <code>packetBuffer</code> can be either a compressed or uncompressed packet buffer,
+ it depends of it the client did receive a <a href="../network/packet/server/login/SetCompressionPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>SetCompressionPacket</code></a> packet before.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>packetBuffer</code> - the buffer containing compressed or uncompressed packet data</dd>
+<dd><code>frameTarget</code> - the buffer which will receive the framed version of <code>from</code></dd>
+</dl>
 </li>
 </ul>
 <a id="compressBuffer(java.util.zip.Deflater,byte[],io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
@@ -299,9 +315,19 @@ public static&nbsp;io.netty.buffer.ByteBuf&nbsp;writePacket&#8203;(@NotNull
                                   @NotNull
                                   byte[]&nbsp;buffer,
                                   @NotNull
-                                  io.netty.buffer.ByteBuf&nbsp;from,
+                                  io.netty.buffer.ByteBuf&nbsp;packetBuffer,
                                   @NotNull
-                                  io.netty.buffer.ByteBuf&nbsp;to)</pre>
+                                  io.netty.buffer.ByteBuf&nbsp;compressionTarget)</pre>
+<div class="block">Compress using zlib the content of a packet.
+ <p>
+ <code>packetBuffer</code> needs to be the packet content without any header (if you want to use it to write a Minecraft packet).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>deflater</code> - the deflater for zlib compression</dd>
+<dd><code>buffer</code> - a cached buffer which will be used to store temporary the deflater output</dd>
+<dd><code>packetBuffer</code> - the buffer containing all the packet fields</dd>
+<dd><code>compressionTarget</code> - the buffer which will receive the compressed version of <code>packetBuffer</code></dd>
+</dl>
 </li>
 </ul>
 <a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">
@@ -312,6 +338,17 @@ public static&nbsp;io.netty.buffer.ByteBuf&nbsp;writePacket&#8203;(@NotNull
 <h4>createFramedPacket</h4>
 <pre class="methodSignature">public static&nbsp;io.netty.buffer.ByteBuf&nbsp;createFramedPacket&#8203;(@NotNull
                                                          <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
+<div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
+ from a server packet.
+ <p>
+ Can be used if you want to store a raw buffer and send it later without the additional writing cost.
+ Compression is applied if <a href="../MinecraftServer.html#getCompressionThreshold()"><code>MinecraftServer.getCompressionThreshold()</code></a> is greater than 0.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>serverPacket</code> - the server packet to write</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the framed packet from the server one</dd>
+</dl>
 </li>
 </ul>
 </li>
