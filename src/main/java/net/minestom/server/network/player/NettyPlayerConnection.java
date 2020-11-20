@@ -1,5 +1,6 @@
 package net.minestom.server.network.player;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
@@ -10,8 +11,12 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.netty.codec.PacketCompressor;
+import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.cache.CacheablePacket;
+import net.minestom.server.utils.cache.TemporaryCache;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,7 +113,32 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void sendPacket(@NotNull ServerPacket serverPacket) {
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
-                this.channel.write(serverPacket); // Flush on player update
+                // Flush happen during #update()
+                if (serverPacket instanceof CacheablePacket) {
+                    CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
+                    final UUID identifier = cacheablePacket.getIdentifier();
+
+                    if (identifier == null) {
+                        // This packet explicitly said to do not retrieve the cache
+                        this.channel.write(serverPacket);
+                    } else {
+                        // Try to retrieve the cached buffer
+                        TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
+                        ByteBuf buffer = temporaryCache.retrieve(identifier);
+                        if (buffer == null) {
+                            // Buffer not found, create and cache it
+                            final long time = System.currentTimeMillis();
+                            buffer = PacketUtils.createFramedPacket(serverPacket);
+                            temporaryCache.cacheObject(identifier, buffer, time);
+                        }
+
+                        FramedPacket framedPacket = new FramedPacket(buffer);
+                        this.channel.write(framedPacket);
+                    }
+
+                } else {
+                    this.channel.write(serverPacket);
+                }
             } else {
                 this.channel.writeAndFlush(serverPacket);
             }

@@ -383,7 +383,7 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
-        ChunkDataPacket fullDataPacket = new ChunkDataPacket();
+        ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;

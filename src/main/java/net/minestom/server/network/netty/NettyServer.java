@@ -45,7 +45,7 @@ public final class NettyServer {
 
     public static final String DECODER_HANDLER_NAME = "decoder"; // Read
     public static final String ENCODER_HANDLER_NAME = "encoder"; // Write
-    public static final String CLIENT_HANDLER_NAME = "handler"; // Read
+    public static final String CLIENT_CHANNEL_NAME = "handler"; // Read
 
     private final EventLoopGroup boss, worker;
     private final ServerBootstrap bootstrap;
@@ -121,7 +121,7 @@ public final class NettyServer {
                 // Writes packet to bytebuf
                 pipeline.addLast(ENCODER_HANDLER_NAME, new PacketEncoder());
 
-                pipeline.addLast(CLIENT_HANDLER_NAME, new ClientChannel(packetProcessor));
+                pipeline.addLast(CLIENT_CHANNEL_NAME, new ClientChannel(packetProcessor));
             }
         });
     }

@@ -43,6 +43,7 @@ import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.cache.TemporaryCache;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -654,6 +655,7 @@ public final class MinecraftServer {
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         commandManager.stopConsoleThread();
+        TemporaryCache.REMOVER_SERVICE.shutdown();
         MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
     }
