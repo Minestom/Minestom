@@ -15,6 +15,6 @@ public class StringData extends DataType<String> {
     @NotNull
     @Override
     public String decode(@NotNull BinaryReader reader) {
-        return reader.readSizedString();
+        return reader.readSizedString(Integer.MAX_VALUE);
     }
 }

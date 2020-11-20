@@ -2,6 +2,7 @@ package net.minestom.server.item.rule;
 
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class VanillaStackingRule extends StackingRule {
@@ -17,7 +18,7 @@ public class VanillaStackingRule extends StackingRule {
 
     @Override
     public boolean canApply(@NotNull ItemStack item, int newAmount) {
-        return newAmount > 0 && newAmount <= getMaxSize();
+        return MathUtils.isBetween(newAmount, 0, getMaxSize());
     }
 
     @NotNull

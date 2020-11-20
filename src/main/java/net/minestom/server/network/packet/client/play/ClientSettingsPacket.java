@@ -16,7 +16,7 @@ public class ClientSettingsPacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.locale = reader.readSizedString();
+        this.locale = reader.readSizedString(128);
         this.viewDistance = reader.readByte();
         this.chatMode = Player.ChatMode.values()[reader.readVarInt()];
         this.chatColors = reader.readBoolean();

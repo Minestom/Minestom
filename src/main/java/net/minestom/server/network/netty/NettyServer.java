@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.epoll.EpollServerSocketChannel;
+import io.netty.channel.kqueue.KQueue;
+import io.netty.channel.kqueue.KQueueEventLoopGroup;
+import io.netty.channel.kqueue.KQueueServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
@@ -29,24 +32,29 @@ public class NettyServer {
     private String address;
     private int port;
 
-    public NettyServer(PacketProcessor packetProcessor) {
+    public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
 
         if (Epoll.isAvailable()) {
             boss = new EpollEventLoopGroup(2);
-            worker = new EpollEventLoopGroup();
+            worker = new EpollEventLoopGroup(); // thread count = core * 2
 
             channel = EpollServerSocketChannel.class;
+        } else if (KQueue.isAvailable()) {
+            boss = new KQueueEventLoopGroup(2);
+            worker = new KQueueEventLoopGroup(); // thread count = core * 2
+
+            channel = KQueueServerSocketChannel.class;
         } else {
             boss = new NioEventLoopGroup(2);
-            worker = new NioEventLoopGroup();
+            worker = new NioEventLoopGroup(); // thread count = core * 2
 
             channel = NioServerSocketChannel.class;
         }
 
-        bootstrap = new ServerBootstrap();
-        bootstrap.group(boss, worker);
-        bootstrap.channel(channel);
+        bootstrap = new ServerBootstrap()
+                .group(boss, worker)
+                .channel(channel);
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
@@ -55,10 +63,11 @@ public class NettyServer {
 
                 ChannelPipeline pipeline = ch.pipeline();
 
+                // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 pipeline.addLast("legacy-ping", new LegacyPingHandler());
 
                 // Adds packetLength at start | Reads framed bytebuf
-                pipeline.addLast("framer", new PacketFramer());
+                pipeline.addLast("framer", new PacketFramer(packetProcessor));
 
                 // Reads bytebuf and creating inbound packet
                 pipeline.addLast("decoder", new PacketDecoder());

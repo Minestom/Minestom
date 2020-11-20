@@ -13,7 +13,6 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
@@ -214,7 +213,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * the inventory items
      */
     public void update() {
-        PacketWriterUtils.writeAndSend(player, createWindowItemsPacket());
+        player.getPlayerConnection().sendPacket(createWindowItemsPacket());
     }
 
     /**
@@ -336,7 +335,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     /**
      * Refreshes an inventory slot.
      *
-     * @param slot      the packet slot
+     * @param slot      the packet slot,
      *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
      * @param itemStack the item stack in the slot
      */

@@ -1,11 +1,10 @@
 package net.minestom.server;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -56,7 +55,7 @@ public interface Viewable {
      * @param packet the packet to send to all viewers
      */
     default void sendPacketToViewers(@NotNull ServerPacket packet) {
-        PacketWriterUtils.writeAndSend(getViewers(), packet);
+        PacketUtils.sendGroupedPacket(getViewers(), packet);
     }
 
     /**
@@ -69,40 +68,22 @@ public interface Viewable {
      */
     default void sendPacketsToViewers(@NotNull ServerPacket... packets) {
         for (ServerPacket packet : packets) {
-            PacketWriterUtils.writeAndSend(getViewers(), packet);
+            PacketUtils.sendGroupedPacket(getViewers(), packet);
         }
     }
 
     /**
      * Sends a packet to all viewers and the viewable element if it is a player.
      * <p>
-     * If 'this' isn't a player, then {@link #sendPacketToViewers(ServerPacket)} is called instead.
+     * If 'this' isn't a player, then {only @link #sendPacketToViewers(ServerPacket)} is called.
      *
      * @param packet the packet to send
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         if (this instanceof Player) {
-            if (getViewers().isEmpty()) {
-                PacketWriterUtils.writeAndSend((Player) this, packet);
-            } else {
-                UNSAFE_sendPacketToViewersAndSelf(packet);
-            }
-        } else {
-            sendPacketToViewers(packet);
+            ((Player) this).getPlayerConnection().sendPacket(packet);
         }
-    }
-
-    /**
-     * Sends a packet to all the viewers and 'this'.
-     * <p>
-     * Unsafe because of a cast to {@link Player} without any check beforehand.
-     *
-     * @param packet the packet to send
-     */
-    private void UNSAFE_sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
-        Set<Player> recipients = new HashSet<>(getViewers());
-        recipients.add((Player) this);
-        PacketWriterUtils.writeAndSend(recipients, packet);
+        sendPacketToViewers(packet);
     }
 
 }

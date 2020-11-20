@@ -3,6 +3,11 @@ package net.minestom.server.command.builder.arguments.relative;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Common interface for all the relative location arguments.
+ *
+ * @param <T> the relative location type
+ */
 public abstract class ArgumentRelative<T> extends Argument<T> {
 
     public static final String RELATIVE_CHAR = "~";

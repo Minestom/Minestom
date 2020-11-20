@@ -1,10 +1,5 @@
 package net.minestom.server;
 
-import com.mojang.authlib.AuthenticationService;
-import com.mojang.authlib.minecraft.MinecraftSessionService;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import lombok.Getter;
-import lombok.Setter;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
@@ -16,7 +11,6 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
-import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
@@ -31,7 +25,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
@@ -49,6 +42,7 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -60,8 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.Proxy;
-import java.security.KeyPair;
 import java.util.Collection;
 
 /**
@@ -72,8 +64,7 @@ import java.util.Collection;
  */
 public final class MinecraftServer {
 
-    @Getter
-    private final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     public static final String VERSION_NAME = "1.16.4";
     public static final int PROTOCOL_VERSION = 754;
@@ -84,9 +75,6 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_MAIN_UPDATE = "Ms-MainUpdate";
 
     public static final String THREAD_NAME_TICK = "Ms-Tick";
-
-    public static final String THREAD_NAME_PACKET_WRITER = "Ms-PacketWriterPool";
-    public static final int THREAD_COUNT_PACKET_WRITER = 2;
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 2;
@@ -103,21 +91,12 @@ public final class MinecraftServer {
     private static final int MS_TO_SEC = 1000;
     public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
 
-    @Getter
-    @Setter
-    private static boolean hardcoreLook = false;
-
-    //Extras
-    @Getter
-    @Setter
-    private static boolean fixLighting = true;
-
-    //Rate Limiting
-    private static int rateLimit = 0;
-    // TODO
-    public static final int MAX_PACKET_SIZE = 300_000;
-
+    // Network monitoring
+    private static int rateLimit = 300;
+    private static int maxPacketSize = 30_000;
+    // Network
     private static PacketListenerManager packetListenerManager;
+    private static PacketProcessor packetProcessor;
     private static NettyServer nettyServer;
 
     // In-Game Manager
@@ -154,14 +133,6 @@ public final class MinecraftServer {
     private static LootTableManager lootTableManager;
     private static TagManager tagManager;
 
-    //Mojang Auth
-    @Getter
-    private static final KeyPair keyPair = MojangCrypt.generateKeyPair();
-    @Getter
-    private static final AuthenticationService authService = new YggdrasilAuthenticationService(Proxy.NO_PROXY, "");
-    @Getter
-    private static final MinecraftSessionService sessionService = authService.createMinecraftSessionService();
-
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
             return minecraftServer;
@@ -185,7 +156,7 @@ public final class MinecraftServer {
 
         connectionManager = new ConnectionManager();
         // Networking
-        final PacketProcessor packetProcessor = new PacketProcessor();
+        packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
 
         instanceManager = new InstanceManager();
@@ -239,19 +210,17 @@ public final class MinecraftServer {
      * @param brandName the server brand name
      * @throws NullPointerException if {@code brandName} is null
      */
-    @NotNull
-    public static void setBrandName(String brandName) {
+    public static void setBrandName(@NotNull String brandName) {
         Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
-        PluginMessagePacket brandMessage = PluginMessagePacket.getBrandPacket();
-        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), brandMessage);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
     }
 
     /**
-     * Gets the max number of packets a client can send over 1 second.
+     * Gets the maximum number of packets a client can send over 1 second.
      *
-     * @return the packet count limit over 1 second
+     * @return the packet count limit over 1 second, 0 if not enabled
      */
     public static int getRateLimit() {
         return rateLimit;
@@ -264,6 +233,24 @@ public final class MinecraftServer {
      */
     public static void setRateLimit(int rateLimit) {
         MinecraftServer.rateLimit = rateLimit;
+    }
+
+    /**
+     * Gets the maximum packet size (in bytes) that a client can send without getting disconnected.
+     *
+     * @return the maximum packet size
+     */
+    public static int getMaxPacketSize() {
+        return maxPacketSize;
+    }
+
+    /**
+     * Changes the maximum packet size (in bytes) that a client can send without getting disconnected.
+     *
+     * @param maxPacketSize the new max packet size
+     */
+    public static void setMaxPacketSize(int maxPacketSize) {
+        MinecraftServer.maxPacketSize = maxPacketSize;
     }
 
     /**
@@ -281,17 +268,15 @@ public final class MinecraftServer {
      *
      * @param difficulty the new server difficulty
      */
-    @NotNull
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
-        // The difficulty packet
+        // Send the packet to all online players
         ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
         serverDifficultyPacket.difficulty = difficulty;
         serverDifficultyPacket.locked = true; // Can only be modified on single-player
-        // Send the packet to all online players
-        PacketWriterUtils.writeAndSend(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
     }
 
     /**
@@ -425,6 +410,18 @@ public final class MinecraftServer {
     }
 
     /**
+     * Gets the object handling the client packets processing.
+     * <p>
+     * Can be used if you want to convert a buffer to a client packet object.
+     *
+     * @return the packet processor
+     */
+    public static PacketProcessor getPacketProcessor() {
+        checkInitStatus(packetProcessor);
+        return packetProcessor;
+    }
+
+    /**
      * Gets if the server is up and running.
      *
      * @return true if the server is started
@@ -453,14 +450,16 @@ public final class MinecraftServer {
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
-            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
-            updateViewDistancePacket.viewDistance = chunkViewDistance;
 
             final Collection<Player> players = connectionManager.getOnlinePlayers();
 
-            PacketWriterUtils.writeAndSend(players, updateViewDistancePacket);
+            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
+            updateViewDistancePacket.viewDistance = chunkViewDistance;
 
-            connectionManager.getOnlinePlayers().forEach(player -> {
+            // Send packet to all online players
+            PacketUtils.sendGroupedPacket(players, updateViewDistancePacket);
+
+            players.forEach(player -> {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleChunks(playerChunk);
@@ -625,11 +624,11 @@ public final class MinecraftServer {
         extensionManager.getExtensions().forEach(Extension::initialize);
         extensionManager.getExtensions().forEach(Extension::postInitialize);
 
+        MinecraftServer.started = true;
+
         final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
         LOGGER.info("Extensions loaded in " + loadTime + "ms");
         LOGGER.info("Minestom server started successfully.");
-
-        MinecraftServer.started = true;
     }
 
     /**

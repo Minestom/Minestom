@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.client.handshake;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -13,6 +14,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
+import java.util.UUID;
 
 public class HandshakePacket implements ClientPreplayPacket {
 
@@ -31,7 +33,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.protocolVersion = reader.readVarInt();
-        this.serverAddress = reader.readSizedString();
+        this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
         this.serverPort = reader.readUnsignedShort();
         this.nextState = reader.readVarInt();
     }
@@ -39,6 +41,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
+        // Bungee support (IP forwarding)
         if (BungeeCordProxy.isEnabled() && connection instanceof NettyPlayerConnection) {
             NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
 
@@ -48,8 +51,25 @@ public class HandshakePacket implements ClientPreplayPacket {
                 if (split.length == 3 || split.length == 4) {
                     this.serverAddress = split[0];
 
-                    final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1], ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
+                    final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
+                            ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
                     nettyPlayerConnection.setRemoteAddress(socketAddress);
+
+                    UUID playerUuid = UUID.fromString(
+                            split[2]
+                                    .replaceFirst(
+                                            "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
+                                    )
+                    );
+                    PlayerSkin playerSkin = null;
+
+                    if (split.length == 4) {
+                        playerSkin = BungeeCordProxy.readSkin(split[3]);
+                    }
+
+                    nettyPlayerConnection.UNSAFE_setBungeeUuid(playerUuid);
+                    nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
+
                 } else {
                     nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
                     nettyPlayerConnection.disconnect();

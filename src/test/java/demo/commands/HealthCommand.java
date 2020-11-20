@@ -17,15 +17,15 @@ public class HealthCommand extends Command {
 
         setDefaultExecutor(this::defaultExecutor);
 
-        Argument arg0 = ArgumentType.Word("mode").from("set", "add");
+        Argument modeArg = ArgumentType.Word("mode").from("set", "add");
 
-        Argument arg1 = ArgumentType.Integer("value").between(0, 100);
+        Argument valueArg = ArgumentType.Integer("value").between(0, 100);
 
-        setArgumentCallback(this::modeCallback, arg0);
-        setArgumentCallback(this::valueCallback, arg1);
+        setArgumentCallback(this::onModeError, modeArg);
+        setArgumentCallback(this::onValueError, valueArg);
 
-        addSyntax(this::execute2, arg0, arg1);
-        addSyntax(this::execute, arg0);
+        addSyntax(this::sendSuggestionMessage, modeArg);
+        addSyntax(this::onHealthCommand, modeArg, valueArg);
     }
 
     private boolean condition(CommandSender sender, String commandString) {
@@ -40,11 +40,11 @@ public class HealthCommand extends Command {
         sender.sendMessage("Correct usage: health [set/add] [number]");
     }
 
-    private void modeCallback(CommandSender sender, String value, int error) {
+    private void onModeError(CommandSender sender, String value, int error) {
         sender.sendMessage("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
     }
 
-    private void valueCallback(CommandSender sender, String value, int error) {
+    private void onValueError(CommandSender sender, String value, int error) {
         switch (error) {
             case ArgumentNumber.NOT_NUMBER_ERROR:
                 sender.sendMessage("SYNTAX ERROR: '" + value + "' isn't a number!");
@@ -55,14 +55,14 @@ public class HealthCommand extends Command {
         }
     }
 
-    private void execute(CommandSender sender, Arguments args) {
+    private void sendSuggestionMessage(CommandSender sender, Arguments args) {
         sender.sendMessage("/health " + args.getWord("mode") + " [Integer]");
     }
 
-    private void execute2(CommandSender sender, Arguments args) {
-        Player player = (Player) sender;
-        String mode = args.getWord("mode");
-        int value = args.getInteger("value");
+    private void onHealthCommand(CommandSender sender, Arguments args) {
+        final Player player = (Player) sender;
+        final String mode = args.getWord("mode");
+        final int value = args.getInteger("value");
 
         switch (mode.toLowerCase()) {
             case "set":
@@ -72,6 +72,7 @@ public class HealthCommand extends Command {
                 player.setHealth(player.getHealth() + value);
                 break;
         }
+
         player.sendMessage("You have now " + player.getHealth() + " health");
     }
 

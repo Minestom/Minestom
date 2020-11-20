@@ -1,16 +1,18 @@
 package net.minestom.server.network.player;
 
-import io.netty.buffer.ByteBuf;
-import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
+import net.minestom.server.listener.manager.PacketConsumer;
+import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class PlayerConnection {
 
+    protected static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
+
     private Player player;
     private ConnectionState connectionState;
     private boolean online;
@@ -29,7 +33,6 @@ public abstract class PlayerConnection {
     private static final ColoredText rateLimitKickMessage = ColoredText.of(ChatColor.RED + "Too Many Packets");
 
     //Connection Stats
-    @Getter
     private final AtomicInteger packetCounter = new AtomicInteger(0);
     private final AtomicInteger lastPacketCounter = new AtomicInteger(0);
     private short tickCounter = 0;
@@ -68,33 +71,37 @@ public abstract class PlayerConnection {
         }
     }
 
-    /**
-     * Sends a raw {@link ByteBuf} to the client.
-     *
-     * @param buffer The buffer to send.
-     * @param copy   Should be true unless your only using the ByteBuf once.
-     */
-    public abstract void sendPacket(@NotNull ByteBuf buffer, boolean copy);
+    public AtomicInteger getPacketCounter() {
+        return packetCounter;
+    }
 
     /**
-     * Writes a raw {@link ByteBuf} to the client.
+     * Returns a printable identifier for this connection, will be the player username
+     * or the connection remote address.
      *
-     * @param buffer The buffer to send.
-     * @param copy   Should be true unless your only using the ByteBuf once.
+     * @return this connection identifier
      */
-    public abstract void writePacket(@NotNull ByteBuf buffer, boolean copy);
+    @NotNull
+    public String getIdentifier() {
+        final Player player = getPlayer();
+        return player != null ?
+                player.getUsername() :
+                getRemoteAddress().toString();
+    }
 
     /**
      * Serializes the packet and send it to the client.
+     * <p>
+     * Also responsible for executing {@link ConnectionManager#onPacketSend(PacketConsumer)} consumers.
      *
      * @param serverPacket the packet to send
+     * @see #shouldSendPacket(ServerPacket)
      */
     public abstract void sendPacket(@NotNull ServerPacket serverPacket);
 
-    /**
-     * Flush all waiting packets.
-     */
-    public abstract void flush();
+    protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
+        return player == null || PACKET_LISTENER_MANAGER.processServerPacket(serverPacket, player);
+    }
 
     /**
      * Gets the remote address of the client.
@@ -112,8 +119,9 @@ public abstract class PlayerConnection {
     /**
      * Gets the player linked to this connection.
      *
-     * @return the player
+     * @return the player, can be null if not initialized yet
      */
+    @Nullable
     public Player getPlayer() {
         return player;
     }
@@ -163,5 +171,13 @@ public abstract class PlayerConnection {
      */
     public int getLastPacketCounter() {
         return lastPacketCounter.get();
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerConnection{" +
+                "connectionState=" + connectionState +
+                ", identifier=" + getIdentifier() +
+                '}';
     }
 }

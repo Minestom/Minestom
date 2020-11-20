@@ -94,7 +94,7 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    @NotNull
+    @Nullable
     public static ItemStack readItemStack(@NotNull BinaryReader reader) {
         final boolean present = reader.readBoolean();
 
@@ -188,21 +188,21 @@ public final class NBTUtils {
 
         // Meta specific field
         final ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null)
-            return;
-        itemMeta.read(nbt);
+        if (itemMeta != null) {
+            itemMeta.read(nbt);
+        }
 
         NbtDataImpl customData = null;
         for (String key : nbt.getKeys()) {
             if (key.startsWith(NbtDataImpl.KEY_PREFIX)) {
                 if (customData == null) {
                     customData = new NbtDataImpl();
+                    item.setData(customData);
                 }
                 final NBT keyNbt = nbt.get(key);
 
                 final String dataKey = key.replaceFirst(NbtDataImpl.KEY_PREFIX, "");
                 final Object dataValue = fromNBT(keyNbt);
-
                 customData.set(dataKey, dataValue);
             }
         }

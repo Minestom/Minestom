@@ -14,8 +14,9 @@ public class PlayerSkinInitEvent extends Event {
     private final Player player;
     private PlayerSkin skin;
 
-    public PlayerSkinInitEvent(@NotNull Player player) {
+    public PlayerSkinInitEvent(@NotNull Player player, @Nullable PlayerSkin currentSkin) {
         this.player = player;
+        this.skin = currentSkin;
     }
 
     /**

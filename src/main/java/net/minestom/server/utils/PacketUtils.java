@@ -2,17 +2,35 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 /**
- * Class used to write packets.
+ * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuf}
+ * for network processing.
  */
 public final class PacketUtils {
 
     private PacketUtils() {
 
+    }
+
+    /**
+     * Sends a {@link ServerPacket} to multiple players. Mostly used for convenience.
+     * <p>
+     * Be aware that this will cause the send packet listeners to be given the exact same packet object.
+     *
+     * @param players the players to send the packet to
+     * @param packet  the packet to send to the players
+     */
+    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
+        for (Player player : players) {
+            player.getPlayerConnection().sendPacket(packet);
+        }
     }
 
     /**
@@ -22,7 +40,6 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
-
         final ByteBuf packetBuffer = getPacketBuffer(packet);
 
         writePacket(buf, packetBuffer, packet.getId());

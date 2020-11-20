@@ -9,9 +9,9 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketWriterUtils;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.utils.PacketUtils;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -62,7 +62,7 @@ public class ChatMessageListener {
                 ChatMessagePacket chatMessagePacket =
                         new ChatMessagePacket(jsonMessage, ChatMessagePacket.Position.CHAT, player.getUuid());
 
-                PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
+                PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
             }
 
         });

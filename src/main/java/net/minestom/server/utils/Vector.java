@@ -233,7 +233,7 @@ public class Vector {
     }
 
     /**
-     * Gets a new vector.
+     * Gets a new vector with the same values.
      *
      * @return vector
      */
@@ -263,5 +263,14 @@ public class Vector {
 
     public void setZ(float z) {
         this.z = z;
+    }
+
+    /**
+     * Gets a new {@link Position} from this vector.
+     *
+     * @return this vector as a position
+     */
+    public Position toPosition() {
+        return new Position(x, y, z);
     }
 }

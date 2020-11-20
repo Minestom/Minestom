@@ -1,9 +1,7 @@
 package demo;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
@@ -34,13 +32,7 @@ public class MainDemo {
             // Set the spawning instance
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
-                player.setRespawnPoint(new Position(0,45,0));
-            });
-
-            // Teleport the player at spawn
-            player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.teleport(new Position(0, 45, 0));
-                player.setGameMode(GameMode.CREATIVE);
+                player.setRespawnPoint(new Position(0, 45, 0));
             });
         });
 

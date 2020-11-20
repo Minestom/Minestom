@@ -15,7 +15,7 @@ import java.util.Collections;
  * <p>
  * Contains {@link Biome#PLAINS} by default but can be removed.
  */
-public class BiomeManager {
+public final class BiomeManager {
 
     private final Int2ObjectMap<Biome> biomes = new Int2ObjectOpenHashMap<>();
 
@@ -28,7 +28,7 @@ public class BiomeManager {
      *
      * @param biome the biome to add
      */
-    public void addBiome(Biome biome) {
+    public synchronized void addBiome(Biome biome) {
         this.biomes.put(biome.getId(), biome);
     }
 
@@ -37,7 +37,7 @@ public class BiomeManager {
      *
      * @param biome the biome to remove
      */
-    public void removeBiome(Biome biome) {
+    public synchronized void removeBiome(Biome biome) {
         this.biomes.remove(biome.getId());
     }
 

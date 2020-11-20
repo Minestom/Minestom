@@ -25,7 +25,7 @@ public class JoinGamePacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(entityId);
-        writer.writeBoolean(MinecraftServer.isHardcoreLook());
+        writer.writeBoolean(gameMode.isHardcore());
         writer.writeByte(gameMode.getId());
         //Previous Gamemode
         writer.writeByte(gameMode.getId());

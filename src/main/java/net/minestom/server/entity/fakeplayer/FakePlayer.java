@@ -60,6 +60,9 @@ public class FakePlayer extends Player {
 
     /**
      * Inits a new {@link FakePlayer} without adding it in cache.
+     * <p>
+     * If you want the fake player to be obtainable with the {@link net.minestom.server.network.ConnectionManager}
+     * you need to specify it in a {@link FakePlayerOption} and use {@link #initPlayer(UUID, String, FakePlayerOption, Consumer)}.
      *
      * @param uuid          the FakePlayer uuid
      * @param username      the FakePlayer username

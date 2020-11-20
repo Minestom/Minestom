@@ -8,6 +8,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 }
 
+group 'net.minestom.server'
+version '1.0'
+
+sourceCompatibility = 1.11
 project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
@@ -37,16 +41,11 @@ allprojects {
     }
     javadoc {
         options {
+            destinationDir(file("docs"))
             addBooleanOption('html5', true)
-            addBooleanOption('-no-module-directories', true)
         }
     }
 }
-
-group 'net.minestom.server'
-version '1.0'
-
-sourceCompatibility = 1.11
 
 sourceSets {
     main {
@@ -101,12 +100,13 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
     // Netty
-    api 'io.netty:netty-handler:4.1.52.Final'
-    api 'io.netty:netty-codec:4.1.52.Final'
-    implementation 'io.netty:netty-transport-native-epoll:4.1.52.Final:linux-x86_64'
+    api 'io.netty:netty-handler:4.1.54.Final'
+    api 'io.netty:netty-codec:4.1.54.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.54.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.54.Final:osx-x86_64'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
-    api 'it.unimi.dsi:fastutil:8.4.2'
+    api 'it.unimi.dsi:fastutil:8.4.3'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.6'
@@ -116,17 +116,14 @@ dependencies {
     api 'com.github.Articdive:Jnoise:1.0.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api 'org.rocksdb:rocksdbjni:6.11.4'
+    api 'org.rocksdb:rocksdbjni:6.13.3'
 
     // Logging
-    api 'org.apache.logging.log4j:log4j-core:2.13.3'
+    api 'org.apache.logging.log4j:log4j-core:2.14.0'
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
     api 'com.mojang:authlib:1.5.21'
-
-    api 'org.projectlombok:lombok:1.18.12'
-    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     // Code modification
     api "org.ow2.asm:asm:${asmVersion}"
@@ -134,7 +131,6 @@ dependencies {
     api "org.ow2.asm:asm-analysis:${asmVersion}"
     api "org.ow2.asm:asm-util:${asmVersion}"
     api "org.ow2.asm:asm-commons:${asmVersion}"
-    implementation 'com.google.guava:guava:21.0'
     api "org.spongepowered:mixin:${mixinVersion}"
 
     // Path finding

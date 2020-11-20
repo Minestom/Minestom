@@ -26,7 +26,7 @@ public class BinaryWriter extends OutputStream {
     private final NBTWriter nbtWriter = new NBTWriter(this, false);
 
     /**
-     * Creates a {@link BinaryWriter} with a custom initial capacity.
+     * Creates a {@link BinaryWriter} using a heap buffer with a custom initial capacity.
      *
      * @param initialCapacity the initial capacity of the binary writer
      */

@@ -35,7 +35,7 @@ public class PlayerLoginEvent extends Event {
      * <p>
      * WARNING: this must NOT be null, otherwise the player cannot spawn.
      *
-     * @return the spawning instance
+     * @return the spawning instance, null if not already defined
      */
     @Nullable
     public Instance getSpawningInstance() {

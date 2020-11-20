@@ -581,7 +581,7 @@ public class InstanceContainer extends Instance {
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
-        Check.notNull(chunkSupplier, "The chunk supplier cannot be null, you can use a StaticChunk for a lightweight implementation");
+        Check.notNull(chunkSupplier, "The chunk supplier cannot be null!");
         this.chunkSupplier = chunkSupplier;
     }
 
@@ -603,6 +603,15 @@ public class InstanceContainer extends Instance {
      */
     public List<SharedInstance> getSharedInstances() {
         return Collections.unmodifiableList(sharedInstances);
+    }
+
+    /**
+     * Gets if this instance has {@link SharedInstance} linked to it.
+     *
+     * @return true if {@link #getSharedInstances()} is not empty
+     */
+    public boolean hasSharedInstances() {
+        return !sharedInstances.isEmpty();
     }
 
     /**
@@ -744,7 +753,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the block position
      * @param blockStateId  the new state of the block
      */
-    private void sendBlockChange(Chunk chunk, BlockPosition blockPosition, short blockStateId) {
+    private void sendBlockChange(@NotNull Chunk chunk, @NotNull BlockPosition blockPosition, short blockStateId) {
         BlockChangePacket blockChangePacket = new BlockChangePacket();
         blockChangePacket.blockPosition = blockPosition;
         blockChangePacket.blockStateId = blockStateId;

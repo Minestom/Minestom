@@ -5,6 +5,7 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
@@ -16,20 +17,20 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerInit {
 
@@ -38,12 +39,12 @@ public class PlayerInit {
     private static final Inventory inventory;
 
     static {
-        StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
+        //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD, storageLocation);
+        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         // Load some chunks beforehand
         final int loopStart = -3;
@@ -80,6 +81,12 @@ public class PlayerInit {
         connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
             //System.out.println("PACKET: "+packet.getClass().getSimpleName());
+            packetController.setCancel(false);
+        });
+
+        connectionManager.onPacketSend((player, packetController, packet) -> {
+            // Listen to all sent packet
+            // System.out.println("PACKET: " + packet.getClass().getSimpleName());
             packetController.setCancel(false);
         });
 
@@ -125,8 +132,9 @@ public class PlayerInit {
                     return;
 
                 final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
+                final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
                 final Block block = Block.fromStateId(blockStateId);
-                player.sendMessage("You clicked at the block " + block);
+                player.sendMessage("You clicked at the block " + block + " " + customBlock);
             });
 
             player.addEventCallback(PickupItemEvent.class, event -> {
@@ -155,6 +163,8 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
+                int x = ThreadLocalRandom.current().nextInt()%10000;
+                player.setRespawnPoint(new Position(x, 64f, 0));
 
                 /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
@@ -167,11 +177,11 @@ public class PlayerInit {
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                if (event.isFirstSpawn()) {
-                    player.teleport(new Position(0, 64f, 0));
-                }
 
-                ItemStack itemStack = new ItemStack(Material.DIAMOND_PICKAXE, (byte) 64);
+                ItemStack itemStack = new ItemStack(Material.DIAMOND_BLOCK, (byte) 64);
+                NbtDataImpl data = new NbtDataImpl();
+                data.set("testc", 2);
+                itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
 
                 //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));

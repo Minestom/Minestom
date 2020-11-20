@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Representation of a permission granted to a {@link CommandSender}.
  *
- * @param <T> the type of data that this permission can handle in {@link #isValidFor(CommandSender, Object)}.
+ * @param <T> the type of data that this permission can handle in {@link #isValidFor(PermissionHandler, Object)}.
  *            Used if you want to allow passing additional data to check if the permission is valid in a certain situation,
  *            you can default it to {@link Object} if you do not need it.
  */
@@ -21,11 +21,11 @@ public interface Permission<T> {
      * Called with {@link CommandSender#hasPermission(Permission)}, the {@link CommandSender} requires to both
      * have this permission and validate the condition in this method.
      *
-     * @param commandSender the command sender
-     * @param data          the optional data (eg the number of home possible, placing a block at X position)
+     * @param permissionHandler the permission handler
+     * @param data              the optional data (eg the number of home possible, placing a block at X position)
      * @return true if the commandSender possesses this permission
      */
-    boolean isValidFor(@NotNull CommandSender commandSender, @Nullable T data);
+    boolean isValidFor(@NotNull PermissionHandler permissionHandler, @Nullable T data);
 
     /**
      * Writes any required data for this permission inside the given destination.

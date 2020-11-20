@@ -20,6 +20,8 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -41,7 +43,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-public abstract class Entity implements Viewable, EventHandler, DataContainer {
+/**
+ * Could be a player, a monster, or an object.
+ * <p>
+ * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
+ */
+public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
@@ -82,8 +89,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
     private boolean autoViewable;
     private final int id;
-    private Data data;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private Data data;
+    private final List<Permission> permissions = new LinkedList<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -139,6 +147,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         setVelocityUpdatePeriod(5);
     }
 
+    public Entity(@NotNull EntityType entityType) {
+        this(entityType, new Position());
+    }
+
     /**
      * Schedules a task to be run during the next entity tick.
      * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
@@ -149,12 +161,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.nextTick.add(callback);
     }
 
-    public Entity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
-    }
-
     /**
-     * @param id the entity unique id ({@link #getEntityId()})
+     * Gets an entity based on its id (from {@link #getEntityId()}).
+     * <p>
+     * Entity id are unique server-wide.
+     *
+     * @param id the entity unique id
      * @return the entity having the specified id, null if not found
      */
     @Nullable
@@ -169,7 +181,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     /**
      * Called each tick.
      *
-     * @param time the time of update in milliseconds
+     * @param time time of the update in milliseconds
      */
     public abstract void update(long time);
 
@@ -341,6 +353,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
         this.data = data;
     }
 
+    @NotNull
+    @Override
+    public Collection<Permission> getAllPermissions() {
+        return permissions;
+    }
+
     /**
      * Updates the entity, called every tick.
      * <p>
@@ -365,8 +383,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             return;
         }
 
-        BlockPosition blockPosition = position.toBlockPosition();
-        if (!ChunkUtils.isLoaded(instance, position.getX(), position.getZ()) || !ChunkUtils.isLoaded(instance, blockPosition.getX(), blockPosition.getZ())) {
+        final Chunk currentChunk = getChunk(); // current entity chunk
+
+        if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
         }
@@ -454,8 +473,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
 
                 float drag;
                 if (onGround) {
-                    final CustomBlock customBlock =
-                            instance.getCustomBlock(blockPosition);
+                    final BlockPosition blockPosition = position.toBlockPosition();
+                    final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
                     if (customBlock != null) {
                         // Custom drag
                         drag = customBlock.getDrag(instance, blockPosition);
@@ -484,6 +503,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
             }
 
             // handle block contacts
+            // TODO do not call every tick (it is pretty expensive)
             final int minX = (int) Math.floor(boundingBox.getMinX());
             final int maxX = (int) Math.ceil(boundingBox.getMaxX());
             final int minY = (int) Math.floor(boundingBox.getMinY());
@@ -576,11 +596,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer {
     }
 
     /**
-     * Each entity has an unique id which will change after a restart.
-     * <p>
-     * All entities can be retrieved by calling {@link Entity#getEntity(int)}.
+     * Each entity has an unique id (server-wide) which will change after a restart.
      *
      * @return the unique entity id
+     * @see Entity#getEntity(int) to retrive an entity based on its id
      */
     public int getEntityId() {
         return id;

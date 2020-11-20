@@ -34,8 +34,9 @@ public class PluginMessagePacket implements ServerPacket {
         PluginMessagePacket brandMessage = new PluginMessagePacket();
         brandMessage.channel = "minecraft:brand";
 
-        BinaryWriter writer = new BinaryWriter();
-        writer.writeSizedString(MinecraftServer.getBrandName());
+        final String brandName = MinecraftServer.getBrandName();
+        BinaryWriter writer = new BinaryWriter(4 + brandName.length());
+        writer.writeSizedString(brandName);
 
         brandMessage.data = writer.toByteArray();
 

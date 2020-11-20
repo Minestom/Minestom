@@ -27,45 +27,38 @@ import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-// TODO Optimize
 public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
-
-    private final byte[] buffer = new byte[8192];
 
     private final int threshold;
 
-    private final Inflater inflater;
-    private final Deflater deflater;
+    private byte[] buffer = new byte[8192];
+
+    private Deflater deflater = new Deflater();
+    private Inflater inflater = new Inflater();
 
     public PacketCompressor(int threshold) {
-        this.inflater = new Inflater();
-        this.deflater = new Deflater();
-
         this.threshold = threshold;
     }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        int i = from.readableBytes();
+        final int packetLength = from.readableBytes();
 
-        if (i < this.threshold) {
+        if (packetLength < this.threshold) {
             Utils.writeVarIntBuf(to, 0);
             to.writeBytes(from);
         } else {
-            byte[] abyte = new byte[i];
-            from.readBytes(abyte);
+            Utils.writeVarIntBuf(to, packetLength);
 
-            Utils.writeVarIntBuf(to, abyte.length);
-            this.deflater.setInput(abyte, 0, i);
-            this.deflater.finish();
+            deflater.setInput(from.nioBuffer());
+            deflater.finish();
 
-            while (!this.deflater.finished()) {
-                int j = this.deflater.deflate(this.buffer);
-
-                to.writeBytes(this.buffer, 0, j);
+            while (!deflater.finished()) {
+                final int length = deflater.deflate(buffer);
+                to.writeBytes(buffer, 0, length);
             }
 
-            this.deflater.reset();
+            deflater.reset();
         }
     }
 
@@ -85,16 +78,18 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
                     throw new DecoderException("Badly compressed packet - size of " + i + " is larger than protocol maximum of 2097152");
                 }
 
+                // TODO optimize to do not initialize arrays each time
+
                 byte[] abyte = new byte[buf.readableBytes()];
                 buf.readBytes(abyte);
 
-                this.inflater.setInput(abyte);
+                inflater.setInput(abyte);
                 byte[] abyte1 = new byte[i];
 
-                this.inflater.inflate(abyte1);
+                inflater.inflate(abyte1);
                 out.add(Unpooled.wrappedBuffer(abyte1));
 
-                this.inflater.reset();
+                inflater.reset();
             }
         }
     }

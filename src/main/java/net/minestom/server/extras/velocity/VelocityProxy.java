@@ -2,6 +2,7 @@ package net.minestom.server.extras.velocity;
 
 import com.google.common.net.InetAddresses;
 import io.netty.buffer.ByteBuf;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,7 @@ public final class VelocityProxy {
     public static final String PLAYER_INFO_CHANNEL = "velocity:player_info";
     private static final int SUPPORTED_FORWARDING_VERSION = 1;
 
-    private static boolean enabled;
+    private static volatile boolean enabled;
     private static byte[] secret;
 
     /**
@@ -72,7 +73,30 @@ public final class VelocityProxy {
     }
 
     public static InetAddress readAddress(@NotNull BinaryReader reader) {
-        return InetAddresses.forString(reader.readSizedString());
+        return InetAddresses.forString(reader.readSizedString(Integer.MAX_VALUE));
+    }
+
+    public static PlayerSkin readSkin(@NotNull BinaryReader reader) {
+        String skinTexture = null;
+        String skinSignature = null;
+
+        final int properties = reader.readVarInt();
+        for (int i1 = 0; i1 < properties; i1++) {
+            final String name = reader.readSizedString(Short.MAX_VALUE);
+            final String value = reader.readSizedString(Short.MAX_VALUE);
+            final String signature = reader.readBoolean() ? reader.readSizedString(Short.MAX_VALUE) : null;
+
+            if (name.equals("textures")) {
+                skinTexture = value;
+                skinSignature = signature;
+            }
+        }
+
+        if (skinTexture != null && skinSignature != null) {
+            return new PlayerSkin(skinTexture, skinSignature);
+        } else {
+            return null;
+        }
     }
 
 }

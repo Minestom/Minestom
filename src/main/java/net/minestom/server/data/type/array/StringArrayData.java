@@ -9,19 +9,12 @@ public class StringArrayData extends DataType<String[]> {
 
     @Override
     public void encode(@NotNull BinaryWriter writer, @NotNull String[] value) {
-        writer.writeVarInt(value.length);
-        for (String val : value) {
-            writer.writeSizedString(val);
-        }
+        writer.writeStringArray(value);
     }
 
     @NotNull
     @Override
     public String[] decode(@NotNull BinaryReader reader) {
-        String[] array = new String[reader.readVarInt()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = reader.readSizedString();
-        }
-        return array;
+        return reader.readSizedStringArray(Integer.MAX_VALUE);
     }
 }

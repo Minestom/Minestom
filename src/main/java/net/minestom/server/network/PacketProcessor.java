@@ -23,6 +23,16 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Responsible for processing client packets.
+ * <p>
+ * You can retrieve the different packet handlers per state (status/login/play)
+ * from the {@link net.minestom.server.network.packet.client.handler.ClientPacketsHandler} class.
+ * <p>
+ * Packet handlers are cached here and can be retrieved with {@link #getStatusPacketsHandler()}, {@link #getLoginPacketsHandler()}
+ * and {@link #getPlayPacketsHandler()}. The one to use depend on the type of packet you need to retrieve (the packet id 0 does not have
+ * the same meaning as it is a login or play packet).
+ */
 public final class PacketProcessor {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
@@ -94,8 +104,41 @@ public final class PacketProcessor {
         return connectionPlayerConnectionMap.get(channel);
     }
 
-    public void removePlayerConnection(ChannelHandlerContext channel) {
+    public void removePlayerConnection(@NotNull ChannelHandlerContext channel) {
         connectionPlayerConnectionMap.remove(channel);
+    }
+
+    /**
+     * Gets the handler for client status packets.
+     *
+     * @return the status packets handler
+     * @see <a href="https://wiki.vg/Protocol#Status">Status packets</a>
+     */
+    @NotNull
+    public ClientStatusPacketsHandler getStatusPacketsHandler() {
+        return statusPacketsHandler;
+    }
+
+    /**
+     * Gets the handler for client login packets.
+     *
+     * @return the status login handler
+     * @see <a href="https://wiki.vg/Protocol#Login">Login packets</a>
+     */
+    @NotNull
+    public ClientLoginPacketsHandler getLoginPacketsHandler() {
+        return loginPacketsHandler;
+    }
+
+    /**
+     * Gets the handler for client play packets.
+     *
+     * @return the play packets handler
+     * @see <a href="https://wiki.vg/Protocol#Play">Play packets</a>
+     */
+    @NotNull
+    public ClientPlayPacketsHandler getPlayPacketsHandler() {
+        return playPacketsHandler;
     }
 
     /**
@@ -106,12 +149,20 @@ public final class PacketProcessor {
      * @param reader     the buffer containing the packet
      */
     private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
+        final int readableBytes = reader.available();
+
+        // Check if there is anything to read
+        if (readableBytes == 0) {
+            return;
+        }
+
         try {
             readable.read(reader);
         } catch (Exception e) {
             final Player player = connection.getPlayer();
             final String username = player != null ? player.getUsername() : "null";
             LOGGER.warn("Connection " + connection.getRemoteAddress() + " (" + username + ") sent an unexpected packet.");
+            e.printStackTrace();
         }
     }
 }

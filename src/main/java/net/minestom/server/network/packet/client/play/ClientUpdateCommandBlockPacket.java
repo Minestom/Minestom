@@ -15,7 +15,7 @@ public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
-        this.command = reader.readSizedString();
+        this.command = reader.readSizedString(Short.MAX_VALUE);
         this.mode = Mode.values()[reader.readVarInt()];
         this.flags = reader.readByte();
     }

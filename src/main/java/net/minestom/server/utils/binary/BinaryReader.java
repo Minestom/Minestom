@@ -10,6 +10,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.NBTReader;
@@ -28,7 +30,7 @@ public class BinaryReader extends InputStream {
     private final ByteBuf buffer;
     private final NBTReader nbtReader = new NBTReader(this, false);
 
-    public BinaryReader(ByteBuf buffer) {
+    public BinaryReader(@NotNull ByteBuf buffer) {
         this.buffer = buffer;
     }
 
@@ -76,14 +78,21 @@ public class BinaryReader extends InputStream {
         return buffer.readDouble();
     }
 
-    public String readSizedString() {
+    /**
+     * Reads a string size by a var-int.
+     * <p>
+     * If the string length is higher than {@code maxLength},
+     * the code throws an exception and the string bytes are not read.
+     *
+     * @param maxLength the max length of the string
+     * @return the string
+     * @throws IllegalStateException if the string length is higher than {@code maxLength}
+     */
+    public String readSizedString(int maxLength) {
         final int length = readVarInt();
-        final byte[] bytes = readBytes(length);
-        return new String(bytes);
-    }
+        Check.stateCondition(length >= maxLength,
+                "String length (" + length + ") was higher than the max length of " + maxLength);
 
-    public String readShortSizedString() {
-        final short length = readShort();
         final byte[] bytes = readBytes(length);
         return new String(bytes);
     }
@@ -96,11 +105,11 @@ public class BinaryReader extends InputStream {
         return bytes;
     }
 
-    public String[] readSizedStringArray() {
+    public String[] readSizedStringArray(int maxLength) {
         final int size = readVarInt();
         String[] strings = new String[size];
         for (int i = 0; i < size; i++) {
-            strings[i] = readSizedString();
+            strings[i] = readSizedString(maxLength);
         }
         return strings;
     }
@@ -129,12 +138,20 @@ public class BinaryReader extends InputStream {
         return new UUID(most, least);
     }
 
+    /**
+     * Tries to read an {@link ItemStack}.
+     *
+     * @return the read item
+     * @throws NullPointerException if the item could not get read
+     */
     public ItemStack readSlot() {
-        return NBTUtils.readItemStack(this);
+        final ItemStack itemStack = NBTUtils.readItemStack(this);
+        Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
+        return itemStack;
     }
 
-    public JsonMessage readJsonMessage() {
-        final String string = readSizedString();
+    public JsonMessage readJsonMessage(int maxLength) {
+        final String string = readSizedString(maxLength);
         final JsonObject jsonObject = JsonParser.parseString(string).getAsJsonObject();
         return new JsonMessage.RawJsonMessage(jsonObject);
     }

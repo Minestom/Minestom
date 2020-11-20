@@ -22,9 +22,9 @@ public class RelativeBlockPosition extends RelativeLocation<BlockPosition> {
         }
         final Position entityPosition = entity.getPosition();
 
-        final int x = relativeX ? (int) entityPosition.getX() : location.getX();
-        final int y = relativeY ? (int) entityPosition.getY() : location.getY();
-        final int z = relativeZ ? (int) entityPosition.getZ() : location.getZ();
+        final int x = location.getX() + (relativeX ? (int) entityPosition.getX() : 0);
+        final int y = location.getY() + (relativeY ? (int) entityPosition.getY() : 0);
+        final int z = location.getZ() + (relativeZ ? (int) entityPosition.getZ() : 0);
 
         return new BlockPosition(x, y, z);
     }

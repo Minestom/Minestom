@@ -4,10 +4,13 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.listener.manager.PacketConsumer;
+import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +29,9 @@ public final class ConnectionManager {
     private final Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
 
     // All the consumers to call once a packet is received
-    private final List<PacketConsumer> receivePacketConsumers = new CopyOnWriteArrayList<>();
+    private final List<PacketConsumer<ClientPlayPacket>> receivePacketConsumers = new CopyOnWriteArrayList<>();
+    // All the consumers to call once a packet is sent
+    private final List<PacketConsumer<ServerPacket>> sendPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
     private UuidProvider uuidProvider;
     // The player provider to have your own Player implementation
@@ -115,7 +120,8 @@ public final class ConnectionManager {
     private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
         ChatMessagePacket chatMessagePacket =
                 new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
-        PacketWriterUtils.writeAndSend(recipients, chatMessagePacket);
+
+        PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
     }
 
     private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
@@ -142,7 +148,7 @@ public final class ConnectionManager {
      * @return an unmodifiable list of packet's consumers
      */
     @NotNull
-    public List<PacketConsumer> getReceivePacketConsumers() {
+    public List<PacketConsumer<ClientPlayPacket>> getReceivePacketConsumers() {
         return Collections.unmodifiableList(receivePacketConsumers);
     }
 
@@ -151,14 +157,39 @@ public final class ConnectionManager {
      *
      * @param packetConsumer the packet consumer
      */
-    public void onPacketReceive(@NotNull PacketConsumer packetConsumer) {
+    public void onPacketReceive(@NotNull PacketConsumer<ClientPlayPacket> packetConsumer) {
         this.receivePacketConsumers.add(packetConsumer);
+    }
+
+    /**
+     * Gets all the listeners which are called for each packet sent.
+     *
+     * @return an unmodifiable list of packet's consumers
+     */
+    @NotNull
+    public List<PacketConsumer<ServerPacket>> getSendPacketConsumers() {
+        return Collections.unmodifiableList(sendPacketConsumers);
+    }
+
+    /**
+     * Adds a consumer to call once a packet is sent.
+     * <p>
+     * Be aware that it is possible for the same packet instance to be used multiple time,
+     * changing the object fields could lead to issues.
+     * (consider canceling the packet instead and send your own)
+     *
+     * @param packetConsumer the packet consumer
+     */
+    public void onPacketSend(@NotNull PacketConsumer<ServerPacket> packetConsumer) {
+        this.sendPacketConsumers.add(packetConsumer);
     }
 
     /**
      * Changes how {@link UUID} are attributed to players.
      * <p>
      * Shouldn't be override if already defined.
+     * <p>
+     * Be aware that it is possible for an UUID provider to be ignored, for example in the case of a proxy (eg: velocity).
      *
      * @param uuidProvider the new player connection uuid provider,
      *                     setting it to null would apply a random UUID for each player connection
@@ -248,10 +279,13 @@ public final class ConnectionManager {
      * @param uuid       the new player uuid
      * @param username   the new player username
      * @param connection the new player connection
+     * @return the newly created player object
      */
-    public void createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
+    @NotNull
+    public Player createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         createPlayer(player);
+        return player;
     }
 
     /**
@@ -277,12 +311,14 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @param uuid       the uuid of the player
      * @param username   the username of the player
+     * @return the newly created player object
      */
-    public void startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
+    @NotNull
+    public Player startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
         LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
         connection.sendPacket(loginSuccessPacket);
 
         connection.setConnectionState(ConnectionState.PLAY);
-        createPlayer(uuid, username, connection);
+        return createPlayer(uuid, username, connection);
     }
 }

@@ -1,7 +1,6 @@
 package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
@@ -93,6 +92,32 @@ public final class Utils {
         return new UUID(uuidMost, uuidLeast);
     }
 
+    public static void writeBlocks(ByteBuf buffer, short[] palette, long[] blocksId, int bitsPerEntry) {
+        /*short count = 0;
+        for (short id : blocksId)
+            if (id != 0)
+                count++;*/
+
+        //buffer.writeShort(count);
+        buffer.writeShort(200);
+        buffer.writeByte((byte) bitsPerEntry);
+
+        // Palette
+        if (bitsPerEntry < 9) {
+            // Palette has to exist
+            writeVarIntBuf(buffer, palette.length);
+            for (short paletteValue : palette) {
+                writeVarIntBuf(buffer, paletteValue);
+            }
+        }
+
+        final long[] data = blocksId;
+        writeVarIntBuf(buffer, data.length);
+        for (long datum : data) {
+            buffer.writeLong(datum);
+        }
+    }
+
     private static final int[] MAGIC = {
             -1, -1, 0, Integer.MIN_VALUE, 0, 0, 1431655765, 1431655765, 0, Integer.MIN_VALUE,
             0, 1, 858993459, 858993459, 0, 715827882, 715827882, 0, 613566756, 613566756,
@@ -115,31 +140,6 @@ public final class Utils {
             70409299, 70409299, 0, 69273666, 69273666, 0, 68174084, 68174084, 0, Integer.MIN_VALUE,
             0, 5};
 
-    public static void writeBlocks(ByteBuf buffer, short[] blocksId, int bitsPerEntry) {
-        short count = 0;
-        for (short id : blocksId)
-            if (id != 0)
-                count++;
-
-        buffer.writeShort(count);
-        buffer.writeByte((byte) bitsPerEntry);
-        int[] blocksData = new int[Chunk.CHUNK_SIZE_X * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SIZE_Z];
-        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
-            for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-                for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                    int sectionIndex = (((y * 16) + x) * 16) + z;
-                    int index = y << 8 | z << 4 | x;
-                    blocksData[index] = blocksId[sectionIndex];
-                }
-            }
-        }
-        final long[] data = encodeBlocks(blocksData, bitsPerEntry);
-        writeVarIntBuf(buffer, data.length);
-        for (long datum : data) {
-            buffer.writeLong(datum);
-        }
-    }
-
     public static long[] encodeBlocks(int[] blocks, int bitsPerEntry) {
         final long maxEntryValue = (1L << bitsPerEntry) - 1;
         final char valuesPerLong = (char) (64 / bitsPerEntry);
@@ -160,4 +160,5 @@ public final class Utils {
 
         return data;
     }
+
 }

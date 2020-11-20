@@ -10,10 +10,9 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.CustomBlockUtils;
@@ -42,11 +41,9 @@ public class DynamicChunk extends Chunk {
      */
     private static final int DATA_FORMAT_VERSION = 1;
 
-    // blocks id based on coordinate, see Chunk#getBlockIndex
-    // WARNING: those arrays are NOT thread-safe
-    // and modifying them can cause issue with block data, update, block entity and the cached chunk packet
-    protected final short[] blocksStateId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
-    protected final short[] customBlocksId = new short[CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z];
+    // WARNING: not thread-safe and should not be changed
+    protected PaletteStorage blockPalette;
+    protected PaletteStorage customBlockPalette;
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
@@ -60,8 +57,17 @@ public class DynamicChunk extends Chunk {
     // Block entities
     protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
 
-    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
+                        @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
         super(biomes, chunkX, chunkZ, true);
+        this.blockPalette = blockPalette;
+        this.customBlockPalette = customBlockPalette;
+    }
+
+    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
+        this(biomes, chunkX, chunkZ,
+                new PaletteStorage(6, 2),
+                new PaletteStorage(6, 2));
     }
 
     @Override
@@ -79,14 +85,12 @@ public class DynamicChunk extends Chunk {
         final int index = getBlockIndex(x, y, z);
         // True if the block is not complete air without any custom block capabilities
         final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
-        if (hasBlock) {
-            this.blocksStateId[index] = blockStateId;
-            this.customBlocksId[index] = customBlockId;
-        } else {
-            // Block has been deleted, clear cache and return
 
-            this.blocksStateId[index] = 0; // Set to air
-            this.customBlocksId[index] = 0; // Remove custom block
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
+        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
+
+        if (!hasBlock) {
+            // Block has been deleted, clear cache and return
 
             this.blocksData.remove(index);
 
@@ -94,8 +98,6 @@ public class DynamicChunk extends Chunk {
             this.updatableBlocksLastUpdate.remove(index);
 
             this.blockEntities.remove(index);
-
-            this.packetUpdated = false;
             return;
         }
 
@@ -121,8 +123,6 @@ public class DynamicChunk extends Chunk {
         } else {
             this.blockEntities.remove(index);
         }
-
-        this.packetUpdated = false;
     }
 
     @Override
@@ -155,41 +155,23 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public short getBlockStateId(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
-            return 0; // TODO: custom invalid block
-        }
-        return blocksStateId[index];
+        return this.blockPalette.getBlockAt(x, y, z);
     }
 
     @Override
     public short getCustomBlockId(int x, int y, int z) {
-        final int index = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(index, 0, blocksStateId.length)) {
-            return 0; // TODO: custom invalid block
-        }
-        return customBlocksId[index];
+        return customBlockPalette.getBlockAt(x, y, z);
     }
 
     @Override
     protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
-        final int blockIndex = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(blockIndex, 0, blocksStateId.length)) {
-            return;
-        }
-
-        this.blocksStateId[blockIndex] = blockStateId;
-        this.customBlocksId[blockIndex] = customBlockId;
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
+        this.customBlockPalette.setBlockAt(x, y, z, customBlockId);
     }
 
     @Override
     protected void refreshBlockStateId(int x, int y, int z, short blockStateId) {
-        final int blockIndex = getBlockIndex(x, y, z);
-        if (!MathUtils.isBetween(blockIndex, 0, blocksStateId.length)) {
-            return;
-        }
-
-        this.blocksStateId[blockIndex] = blockStateId;
+        this.blockPalette.setBlockAt(x, y, z, blockStateId);
     }
 
     @Override
@@ -260,8 +242,8 @@ public class DynamicChunk extends Chunk {
                     for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                         final int index = getBlockIndex(x, y, z);
 
-                        final short blockStateId = blocksStateId[index];
-                        final short customBlockId = customBlocksId[index];
+                        final short blockStateId = blockPalette.getBlockAt(x, y, z);
+                        final short customBlockId = customBlockPalette.getBlockAt(x, y, z);
 
                         // No block at the position
                         if (blockStateId == 0 && customBlockId == 0)
@@ -398,8 +380,8 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.biomes = biomes.clone();
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.blocksStateId = blocksStateId.clone();
-        fullDataPacket.customBlocksId = customBlocksId.clone();
+        fullDataPacket.paletteStorage = blockPalette.copy();
+        fullDataPacket.customBlockPaletteStorage = customBlockPalette.copy();
         fullDataPacket.blockEntities = new HashSet<>(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
@@ -409,8 +391,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
-        ArrayUtils.copyToDestination(blocksStateId, dynamicChunk.blocksStateId);
-        ArrayUtils.copyToDestination(customBlocksId, dynamicChunk.customBlocksId);
+        dynamicChunk.blockPalette = blockPalette.copy();
+        dynamicChunk.customBlockPalette = customBlockPalette.copy();
         dynamicChunk.blocksData.putAll(blocksData);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
         dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);

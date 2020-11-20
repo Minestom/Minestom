@@ -3,10 +3,10 @@ package demo;
 import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
-import demo.commands.GamemodeCommand;
-import demo.commands.TestCommand;
+import demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
@@ -30,13 +30,12 @@ public class Main {
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
         commandManager.register(new GamemodeCommand());
-        /*commandManager.register(new EntitySelectorCommand());
+        commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
-        commandManager.register(new GamemodeCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
-        commandManager.register(new TeleportCommand());*/
+        commandManager.register(new TeleportCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 
@@ -50,10 +49,12 @@ public class Main {
 
         PlayerInit.init();
 
+        OptifineSupport.enable();
+
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
 
-       // MojangAuth.init();
+        // MojangAuth.init();
 
         minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
     }

@@ -1,10 +1,8 @@
 package net.minestom.server.network.player;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
-import lombok.Getter;
-import lombok.Setter;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
@@ -19,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,16 +30,14 @@ public class NettyPlayerConnection extends PlayerConnection {
     private final SocketChannel channel;
 
     private SocketAddress remoteAddress;
-    @Getter
+
     private boolean encrypted = false;
-    @Getter
     private boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
-    @Getter
-    @Setter
     private byte[] nonce = new byte[4];
 
+    // Data from client packets
     private String loginUsername;
     private String serverAddress;
     private int serverPort;
@@ -48,6 +45,10 @@ public class NettyPlayerConnection extends PlayerConnection {
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
     private final Map<Integer, String> pluginRequestMap = new ConcurrentHashMap<>();
+
+    // Bungee
+    private UUID bungeeUuid;
+    private PlayerSkin bungeeSkin;
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
@@ -81,38 +82,22 @@ public class NettyPlayerConnection extends PlayerConnection {
         channel.pipeline().addAfter("framer", "compressor", new PacketCompressor(threshold));
     }
 
-    @Override
-    public void sendPacket(@NotNull ByteBuf buffer, boolean copy) {
-        if (copy) {
-            buffer = buffer.copy();
-            buffer.retain();
-            channel.writeAndFlush(buffer);
-            buffer.release();
-        } else {
-            channel.writeAndFlush(buffer);
-        }
-    }
-
-    @Override
-    public void writePacket(@NotNull ByteBuf buffer, boolean copy) {
-        if (copy) {
-            buffer = buffer.copy();
-            buffer.retain();
-            channel.write(buffer);
-            buffer.release();
-        } else {
-            channel.write(buffer);
-        }
-    }
-
+    /**
+     * Writes a packet to the connection channel.
+     * <p>
+     * All packets are flushed during {@link net.minestom.server.entity.Player#update(long)}.
+     *
+     * @param serverPacket the packet to write
+     */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
-        channel.writeAndFlush(serverPacket);
-    }
-
-    @Override
-    public void flush() {
-        getChannel().flush();
+        if (shouldSendPacket(serverPacket)) {
+            if (getPlayer() != null) {
+                channel.write(serverPacket); // Flush on player update
+            } else {
+                channel.writeAndFlush(serverPacket);
+            }
+        }
     }
 
     @NotNull
@@ -186,6 +171,24 @@ public class NettyPlayerConnection extends PlayerConnection {
         return serverPort;
     }
 
+    @Nullable
+    public UUID getBungeeUuid() {
+        return bungeeUuid;
+    }
+
+    public void UNSAFE_setBungeeUuid(UUID bungeeUuid) {
+        this.bungeeUuid = bungeeUuid;
+    }
+
+    @Nullable
+    public PlayerSkin getBungeeSkin() {
+        return bungeeSkin;
+    }
+
+    public void UNSAFE_setBungeeSkin(PlayerSkin bungeeSkin) {
+        this.bungeeSkin = bungeeSkin;
+    }
+
     /**
      * Adds an entry to the plugin request map.
      * <p>
@@ -234,5 +237,13 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
+    }
+
+    public byte[] getNonce() {
+        return nonce;
+    }
+
+    public void setNonce(byte[] nonce) {
+        this.nonce = nonce;
     }
 }

@@ -1,9 +1,9 @@
 package permissions;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.PermissionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,14 +41,14 @@ public class TestPermissions {
 
     class PermTest1 implements Permission<Object> {
         @Override
-        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
+        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
             return true;
         }
     }
 
     class PermTest2 implements Permission<Object> {
         @Override
-        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
+        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
             return true;
         }
     }
@@ -73,7 +73,7 @@ public class TestPermissions {
         }
 
         @Override
-        public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
+        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
             return value;
         }
     }

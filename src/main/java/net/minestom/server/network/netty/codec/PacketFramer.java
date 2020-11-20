@@ -4,11 +4,24 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.CorruptedFrameException;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(PacketFramer.class);
+
+    private final PacketProcessor packetProcessor;
+
+    public PacketFramer(PacketProcessor packetProcessor) {
+        this.packetProcessor = packetProcessor;
+    }
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
@@ -40,14 +53,26 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
             if (b >= 0) {
                 buf.resetReaderIndex();
 
-                final int j = Utils.readVarInt(buf);
+                final int packetSize = Utils.readVarInt(buf);
 
-                if (buf.readableBytes() < j) {
+                // Max packet size check
+                if (packetSize >= MinecraftServer.getMaxPacketSize()) {
+                    final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
+                    if (playerConnection != null) {
+                        final String identifier = playerConnection.getIdentifier();
+                        LOGGER.warn("An user (" + identifier + ") sent a packet over the maximum size (" + packetSize + ")");
+                    } else {
+                        LOGGER.warn("An unregistered user sent a packet over the maximum size (" + packetSize + ")");
+                    }
+                    ctx.close();
+                }
+
+                if (buf.readableBytes() < packetSize) {
                     buf.resetReaderIndex();
                     return;
                 }
 
-                out.add(buf.readRetainedSlice(j));
+                out.add(buf.readRetainedSlice(packetSize));
                 return;
             }
         }

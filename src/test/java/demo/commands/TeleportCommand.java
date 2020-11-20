@@ -1,42 +1,45 @@
 package demo.commands;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.location.RelativeVec;
 
 public class TeleportCommand extends Command {
+
     public TeleportCommand() {
         super("tp");
 
         setDefaultExecutor((source, args) -> source.sendMessage("Usage: /tp x y z"));
 
-        Argument x = ArgumentType.Float("x");
-        Argument y = ArgumentType.Float("y");
-        Argument z = ArgumentType.Float("z");
-        Argument playerArg = ArgumentType.Word("pl");
+        Argument posArg = ArgumentType.RelativeVec3("pos");
+        Argument playerArg = ArgumentType.Word("player");
 
-        setArgumentCallback((source, value, error) -> {
-            System.out.println("error: " + error);
-        }, x);
-
-        addSyntax((sender, args) -> {
-            Player pl = MinecraftServer.getConnectionManager().getPlayer(args.getWord("pl"));
-            if (pl != null && sender.isPlayer()) {
-                Player player = (Player) sender;
-                player.teleport(pl.getPosition());
-            }
-        }, playerArg);
-
-        addSyntax((source, args) -> {
-            final float posX = args.getFloat("x");
-            final float posY = args.getFloat("y");
-            final float posZ = args.getFloat("z");
-
-            ((Player) source).teleport(new Position(posX, posY, posZ));
-            source.sendMessage("TELEPORTING");
-        }, x, y, z);
+        addSyntax(this::onPlayerTeleport, playerArg);
+        addSyntax(this::onPositionTeleport, posArg);
     }
+
+    private void onPlayerTeleport(CommandSender sender, Arguments args) {
+        Player pl = MinecraftServer.getConnectionManager().getPlayer(args.getWord("player"));
+        if (pl != null && sender.isPlayer()) {
+            Player player = (Player) sender;
+            player.teleport(pl.getPosition());
+        }
+    }
+
+    private void onPositionTeleport(CommandSender sender, Arguments args) {
+        final Player player = sender.asPlayer();
+
+        final RelativeVec relativeVec = args.getRelativeVector("pos");
+        final Position position = relativeVec.fromRelativePosition(player).toPosition();
+
+        player.teleport(position);
+        player.sendMessage("You have been teleported to " + position);
+    }
+
 }

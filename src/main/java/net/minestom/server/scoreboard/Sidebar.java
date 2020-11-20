@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Represents a sidebar which can contain up to 16 {@link ScoreboardLine}.
  * <p>
- * In order to use it you need to create a new instance using {@link #Sidebar(String)} and create new lines
+ * In order to use it you need to create a new instance using the constructor {@link #Sidebar(String)} and create new lines
  * with {@link #createLine(ScoreboardLine)}. You can then add a {@link Player} to the viewing list using {@link #addViewer(Player)}
  * and remove him later with {@link #removeViewer(Player)}.
  * <p>
@@ -57,7 +57,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param title The title of the sidebar
      */
-    public Sidebar(String title) {
+    public Sidebar(@NotNull String title) {
         this.title = title;
 
         this.objectiveName = SCOREBOARD_PREFIX + COUNTER.incrementAndGet();
@@ -401,13 +401,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix.toString();
-            teamsPacket.teamSuffix = suffix.toString();
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             teamsPacket.entities = new String[]{entityName};
             return teamsPacket;
         }
@@ -434,13 +434,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = teamDisplayName.toString();
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix.toString();
-            teamsPacket.teamSuffix = suffix.toString();
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             return teamsPacket;
         }
 

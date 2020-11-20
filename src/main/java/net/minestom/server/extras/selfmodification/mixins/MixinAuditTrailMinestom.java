@@ -1,25 +1,29 @@
 package net.minestom.server.extras.selfmodification.mixins;
 
-import lombok.extern.slf4j.Slf4j;
+import net.minestom.server.MinecraftServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.service.IMixinAuditTrail;
 
 /**
  * Takes care of logging mixin operations
  */
-@Slf4j
 public class MixinAuditTrailMinestom implements IMixinAuditTrail {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
+
     @Override
     public void onApply(String className, String mixinName) {
-        log.trace("Applied mixin "+mixinName+" to class "+className);
+        LOGGER.trace("Applied mixin " + mixinName + " to class " + className);
     }
 
     @Override
     public void onPostProcess(String className) {
-        log.trace("Post processing "+className);
+        LOGGER.trace("Post processing " + className);
     }
 
     @Override
     public void onGenerate(String className, String generatorName) {
-        log.trace("Generating class "+className+" via generator "+generatorName);
+        LOGGER.trace("Generating class " + className + " via generator " + generatorName);
     }
 }

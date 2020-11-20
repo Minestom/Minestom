@@ -17,7 +17,7 @@ public abstract class ClientPlayPacket implements ClientPacket {
      * @param player the player who sent the packet
      */
     public void process(@NotNull Player player) {
-        PACKET_LISTENER_MANAGER.process(this, player);
+        PACKET_LISTENER_MANAGER.processClientPacket(this, player);
     }
 
 }

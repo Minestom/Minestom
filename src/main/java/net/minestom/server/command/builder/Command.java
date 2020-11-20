@@ -58,7 +58,7 @@ public class Command {
     }
 
     /**
-     * Creates a {@link Command} with a name without any aliases.
+     * Creates a {@link Command} with a name and no alias.
      *
      * @param name the name of the command
      * @see #Command(String, String...)
@@ -70,8 +70,10 @@ public class Command {
     /**
      * Gets the {@link CommandCondition}.
      * <p>
-     * It is called no matter the syntax used and can be used to check permissions or
+     * It is called after the parsing and just before the execution no matter the syntax used and can be used to check permissions or
      * the {@link CommandSender} type.
+     * <p>
+     * Worth mentioning that the condition is also used to know if the command known from a player (at connection).
      *
      * @return the command condition, null if not any
      */
@@ -84,6 +86,7 @@ public class Command {
      * Sets the {@link CommandCondition}.
      *
      * @param commandCondition the new command condition, null to do not call anything
+     * @see #getCondition()
      */
     public void setCondition(@Nullable CommandCondition commandCondition) {
         this.condition = commandCondition;
@@ -104,7 +107,7 @@ public class Command {
     /**
      * Adds a new syntax in the command.
      * <p>
-     * A syntax is simply a list of arguments.
+     * A syntax is simply a list of arguments and an executor called when successfully parsed.
      *
      * @param commandCondition the condition to use the syntax
      * @param executor         the executor to call when the syntax is successfully received

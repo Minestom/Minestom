@@ -1,5 +1,6 @@
 package loottables;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataImpl;
 import net.minestom.server.gamedata.conditions.SurvivesExplosionCondition;
@@ -10,12 +11,14 @@ import net.minestom.server.gamedata.loottables.entries.ItemType;
 import net.minestom.server.gamedata.loottables.tabletypes.BlockType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -25,6 +28,12 @@ public class TestLootTables {
 
     @BeforeEach
     public void init() {
+        try {
+            ResourceGatherer.ensureResourcesArePresent(MinecraftServer.VERSION_NAME);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         tableManager = new LootTableManager();
         tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());
         tableManager.registerTableType(NamespaceID.from("minecraft:block"), new BlockType());

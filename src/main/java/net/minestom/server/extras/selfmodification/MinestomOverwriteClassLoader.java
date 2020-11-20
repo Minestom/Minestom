@@ -1,10 +1,12 @@
 package net.minestom.server.extras.selfmodification;
 
-import lombok.extern.slf4j.Slf4j;
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +22,9 @@ import java.util.Set;
 /**
  * Class Loader that can modify class bytecode when they are loaded
  */
-@Slf4j
 public class MinestomOverwriteClassLoader extends URLClassLoader {
+
+    public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     private static MinestomOverwriteClassLoader INSTANCE;
 
@@ -105,18 +108,18 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
         try {
             // we do not load system classes by ourselves
             Class<?> systemClass = ClassLoader.getPlatformClassLoader().loadClass(name);
-            log.trace("System class: " + systemClass);
+            LOGGER.trace("System class: " + systemClass);
             return systemClass;
         } catch (ClassNotFoundException e) {
             try {
                 if (isProtected(name)) {
-                    log.trace("Protected: " + name);
+                    LOGGER.trace("Protected: " + name);
                     return super.loadClass(name, resolve);
                 }
 
                 return define(name, loadBytes(name, true), resolve);
             } catch (Exception ex) {
-                log.trace("Fail to load class, resorting to parent loader: " + name, ex);
+                LOGGER.trace("Fail to load class, resorting to parent loader: " + name, ex);
                 // fail to load class, let parent load
                 // this forbids code modification, but at least it will load
                 return super.loadClass(name, resolve);
@@ -137,7 +140,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
 
     private Class<?> define(String name, byte[] bytes, boolean resolve) {
         Class<?> defined = defineClass(name, bytes, 0, bytes.length);
-        log.trace("Loaded with code modifiers: " + name);
+        LOGGER.trace("Loaded with code modifiers: " + name);
         if (resolve) {
             resolveClass(defined);
         }
@@ -180,7 +183,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
                 };
                 node.accept(writer);
                 bytes = writer.toByteArray();
-                log.trace("Modified " + name);
+                LOGGER.trace("Modified " + name);
             }
         }
         return bytes;
@@ -208,7 +211,7 @@ public class MinestomOverwriteClassLoader extends URLClassLoader {
             if (CodeModifier.class.isAssignableFrom(modifierClass)) {
                 CodeModifier modifier = (CodeModifier) modifierClass.getDeclaredConstructor().newInstance();
                 synchronized (modifiers) {
-                    log.warn("Added Code modifier: " + modifier);
+                    LOGGER.warn("Added Code modifier: " + modifier);
                     addCodeModifier(modifier);
                 }
             }

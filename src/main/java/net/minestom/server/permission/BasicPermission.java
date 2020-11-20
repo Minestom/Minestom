@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BasicPermission implements Permission<Object> {
     @Override
-    public boolean isValidFor(@NotNull CommandSender commandSender, Object data) {
+    public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
         return true;
     }
 }

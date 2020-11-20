@@ -120,7 +120,17 @@ public class PerGroupChunkProvider extends ThreadProvider {
     @NotNull
     @Override
     public List<Future<?>> update(long time) {
-        List<Future<?>> futures = new ArrayList<>();
+
+        List<Future<?>> futures;
+        int potentialSize = 0;
+
+        // Compute the potential array size
+        {
+            for (Map<LongSet, Instance> longSetInstanceMap : instanceInstanceMap.values()) {
+                potentialSize += 1 + longSetInstanceMap.size();
+            }
+            futures = new ArrayList<>(potentialSize);
+        }
 
         instanceInstanceMap.forEach((instance, instanceMap) -> {
 
@@ -147,6 +157,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
                 chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
             })));
         });
+
         return futures;
     }
 

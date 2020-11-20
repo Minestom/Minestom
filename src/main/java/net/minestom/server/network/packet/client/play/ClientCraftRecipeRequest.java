@@ -13,7 +13,7 @@ public class ClientCraftRecipeRequest extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.windowId = reader.readByte();
-        this.recipe = reader.readSizedString();
+        this.recipe = reader.readSizedString(256);
         this.makeAll = reader.readBoolean();
     }
 }

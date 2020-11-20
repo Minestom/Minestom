@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -66,4 +67,17 @@ public class DataImpl implements Data {
         return data;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DataImpl data1 = (DataImpl) o;
+        return Objects.equals(data, data1.data) &&
+                Objects.equals(dataType, data1.dataType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data, dataType);
+    }
 }

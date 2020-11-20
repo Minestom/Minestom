@@ -10,6 +10,6 @@ public class ClientChatMessagePacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.message = reader.readSizedString();
+        this.message = reader.readSizedString(256);
     }
 }

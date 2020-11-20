@@ -12,6 +12,6 @@ public class ClientTabCompletePacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.transactionId = reader.readVarInt();
-        this.text = reader.readSizedString();
+        this.text = reader.readSizedString(Short.MAX_VALUE);
     }
 }

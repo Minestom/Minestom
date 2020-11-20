@@ -9,34 +9,10 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Example: -1.2 ~
  */
-public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
+public class ArgumentRelativeVec2 extends ArgumentRelativeVec {
 
     public ArgumentRelativeVec2(@NotNull String id) {
         super(id, 2);
-    }
-
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        final String[] split = value.split(" ");
-
-        // Check if the value has enough element to be correct
-        if (split.length != getNumberCount()) {
-            return INVALID_NUMBER_COUNT_ERROR;
-        }
-
-        // Check if each element is correct
-        for (String element : split) {
-            if (!element.equals(RELATIVE_CHAR)) {
-                try {
-                    // Will throw the exception if not a float
-                    Float.parseFloat(element);
-                } catch (NumberFormatException e) {
-                    return INVALID_NUMBER_ERROR;
-                }
-            }
-        }
-
-        return SUCCESS;
     }
 
     @NotNull
@@ -50,12 +26,23 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
 
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
-            if (element.equals(RELATIVE_CHAR)) {
+            if (element.startsWith(RELATIVE_CHAR)) {
                 if (i == 0) {
                     relativeX = true;
                 } else if (i == 1) {
                     relativeZ = true;
                 }
+
+                if (element.length() != RELATIVE_CHAR.length()) {
+                    final String potentialNumber = element.substring(1);
+                    final float number = Float.parseFloat(potentialNumber);
+                    if (i == 0) {
+                        vector.setX(number);
+                    } else if (i == 1) {
+                        vector.setZ(number);
+                    }
+                }
+
             } else {
                 final float number = Float.parseFloat(element);
                 if (i == 0) {
@@ -69,8 +56,4 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
         return new RelativeVec(vector, relativeX, false, relativeZ);
     }
 
-    @Override
-    public int getConditionResult(@NotNull RelativeVec value) {
-        return SUCCESS;
-    }
 }

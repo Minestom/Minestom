@@ -186,7 +186,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
             setItemStackInternal(i, ItemStack.getAirItem());
         }
         // Send the cleared inventory to viewers
-        // TODO cached packet with empty content
         update();
     }
 

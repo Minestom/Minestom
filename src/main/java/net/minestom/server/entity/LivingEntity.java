@@ -19,7 +19,9 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +31,11 @@ import java.util.function.Consumer;
 
 public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
+    // Item pickup
     protected boolean canPickupItem;
+    protected UpdateOption itemPickupCooldown = new UpdateOption(5, TimeUnit.TICK);
+    private long lastItemPickupCheckTime;
+
     protected boolean isDead;
 
     private float health;
@@ -90,8 +96,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         // Items picking
-        if (canPickupItem()) {
-            final Chunk chunk = instance.getChunkAt(getPosition()); // TODO check surrounding chunks
+        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupCheckTime, itemPickupCooldown)) {
+            this.lastItemPickupCheckTime = time;
+
+            final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
@@ -305,7 +313,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                     soundCategory = SoundCategory.HOSTILE;
                 }
 
-                SoundEffectPacket damageSoundPacket = SoundEffectPacket.create(soundCategory, sound, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 1.0f, 1.0f);
+                SoundEffectPacket damageSoundPacket =
+                        SoundEffectPacket.create(soundCategory, sound,
+                                getPosition().getX(), getPosition().getY(), getPosition().getZ(),
+                                1.0f, 1.0f);
                 sendPacketToViewersAndSelf(damageSoundPacket);
             }
         });

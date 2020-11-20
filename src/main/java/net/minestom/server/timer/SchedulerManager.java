@@ -96,11 +96,11 @@ public final class SchedulerManager {
      * Shutdowns all normal tasks and call the registered shutdown tasks.
      */
     public void shutdown() {
-        MinecraftServer.getLOGGER().info("Executing all shutdown tasks..");
+        MinecraftServer.LOGGER.info("Executing all shutdown tasks..");
         for (Task task : this.getShutdownTasks()) {
             task.schedule();
         }
-        MinecraftServer.getLOGGER().info("Shutting down the scheduled execution service and batches pool.");
+        MinecraftServer.LOGGER.info("Shutting down the scheduled execution service and batches pool.");
         this.timerExecutionService.shutdown();
         this.batchesPool.shutdown();
         try {

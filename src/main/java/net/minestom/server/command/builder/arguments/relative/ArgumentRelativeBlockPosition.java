@@ -26,12 +26,22 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
 
         // Check if each element is correct
         for (String element : split) {
-            if (!element.equals(RELATIVE_CHAR)) {
+            if (!element.startsWith(RELATIVE_CHAR)) {
                 try {
                     // Will throw the exception if not an integer
                     Integer.parseInt(element);
                 } catch (NumberFormatException e) {
                     return INVALID_NUMBER_ERROR;
+                }
+            } else {
+                if (element.length() > RELATIVE_CHAR.length()) {
+                    try {
+                        final String potentialNumber = element.substring(1);
+                        // Will throw the exception if not an integer
+                        Integer.parseInt(potentialNumber);
+                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                        return INVALID_NUMBER_ERROR;
+                    }
                 }
             }
         }
@@ -51,7 +61,8 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
 
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
-            if (element.equals(RELATIVE_CHAR)) {
+            if (element.startsWith(RELATIVE_CHAR)) {
+
                 if (i == 0) {
                     relativeX = true;
                 } else if (i == 1) {
@@ -59,6 +70,19 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
                 } else if (i == 2) {
                     relativeZ = true;
                 }
+
+                if (element.length() != RELATIVE_CHAR.length()) {
+                    final String potentialNumber = element.substring(1);
+                    final int number = Integer.parseInt(potentialNumber);
+                    if (i == 0) {
+                        blockPosition.setX(number);
+                    } else if (i == 1) {
+                        blockPosition.setY(number);
+                    } else if (i == 2) {
+                        blockPosition.setZ(number);
+                    }
+                }
+
             } else {
                 final int number = Integer.parseInt(element);
                 if (i == 0) {

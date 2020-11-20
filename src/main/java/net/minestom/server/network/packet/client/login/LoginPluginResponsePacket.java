@@ -3,6 +3,8 @@ package net.minestom.server.network.packet.client.login;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -37,7 +39,11 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
             if (channel != null) {
                 boolean success = false;
+
                 SocketAddress socketAddress = null;
+                UUID playerUuid = null;
+                String playerUsername = null;
+                PlayerSkin playerSkin = null;
 
                 // Velocity
                 if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
@@ -49,6 +55,12 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                             final InetAddress address = VelocityProxy.readAddress(reader);
                             final int port = ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort();
                             socketAddress = new InetSocketAddress(address, port);
+
+                            playerUuid = reader.readUuid();
+                            playerUsername = reader.readSizedString(16);
+
+                            playerSkin = VelocityProxy.readSkin(reader);
+
                         }
                     }
                 }
@@ -57,12 +69,16 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                     if (socketAddress != null) {
                         nettyPlayerConnection.setRemoteAddress(socketAddress);
                     }
+                    if (playerUsername != null) {
+                        nettyPlayerConnection.UNSAFE_setLoginUsername(playerUsername);
+                    }
 
-                    // Proxy usage always mean that the server is in offline mode
                     final String username = nettyPlayerConnection.getLoginUsername();
-                    final UUID playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
+                    final UUID uuid = playerUuid != null ?
+                            playerUuid : CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-                    CONNECTION_MANAGER.startPlayState(connection, playerUuid, username);
+                    Player player = CONNECTION_MANAGER.startPlayState(connection, uuid, username);
+                    player.setSkin(playerSkin);
                 } else {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
                     nettyPlayerConnection.sendPacket(disconnectPacket);

@@ -103,13 +103,16 @@ public abstract class ThreadProvider {
     }
 
     private void refreshPool() {
+        if (pool != null) {
+            this.pool.shutdown();
+        }
         this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
     }
 
     // INSTANCE UPDATE
 
     /**
-     * Process a whole tick for a chunk.
+     * Processes a whole tick for a chunk.
      *
      * @param instance   the instance of the chunk
      * @param chunkIndex the index of the chunk {@link ChunkUtils#getChunkIndex(int, int)}
@@ -240,6 +243,10 @@ public abstract class ThreadProvider {
     private void updateSharedInstances(@NotNull Instance instance, @NotNull Consumer<SharedInstance> callback) {
         if (instance instanceof InstanceContainer) {
             final InstanceContainer instanceContainer = (InstanceContainer) instance;
+
+            if (!instanceContainer.hasSharedInstances())
+                return;
+
             for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {
                 callback.accept(sharedInstance);
             }
