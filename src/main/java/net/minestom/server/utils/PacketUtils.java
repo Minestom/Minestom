@@ -39,6 +39,9 @@ public final class PacketUtils {
      * @param packet  the packet to send to the players
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
+        if (players.isEmpty())
+            return;
+
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
             final ByteBuf finalBuffer = createFramedPacket(packet);
