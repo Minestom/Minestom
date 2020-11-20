@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -156,13 +156,27 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,byte%5B%5D,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(java.util.zip.Deflater&nbsp;deflater,
+              byte[]&nbsp;buffer,
+              io.netty.buffer.ByteBuf&nbsp;from,
+              io.netty.buffer.ByteBuf&nbsp;to)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">frameBuffer</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;from,
+           io.netty.buffer.ByteBuf&nbsp;to)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)">sendGroupedPacket</a></span>&#8203;(java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                  <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buf,
            <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
@@ -170,7 +184,7 @@ extends java.lang.Object</pre>
 <div class="block">Writes a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <code>ByteBuf</code>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static io.netty.buffer.ByteBuf</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
@@ -242,7 +256,7 @@ extends java.lang.Object</pre>
 <a id="writePacket(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>writePacket</h4>
 <pre class="methodSignature">@NotNull
@@ -255,6 +269,34 @@ public static&nbsp;io.netty.buffer.ByteBuf&nbsp;writePacket&#8203;(@NotNull
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>ByteBuf</code> containing <code>packet</code></dd>
 </dl>
+</li>
+</ul>
+<a id="frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>frameBuffer</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;frameBuffer&#8203;(@NotNull
+                               io.netty.buffer.ByteBuf&nbsp;from,
+                               @NotNull
+                               io.netty.buffer.ByteBuf&nbsp;to)</pre>
+</li>
+</ul>
+<a id="compressBuffer(java.util.zip.Deflater,byte[],io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>compressBuffer</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;compressBuffer&#8203;(@NotNull
+                                  java.util.zip.Deflater&nbsp;deflater,
+                                  @NotNull
+                                  byte[]&nbsp;buffer,
+                                  @NotNull
+                                  io.netty.buffer.ByteBuf&nbsp;from,
+                                  @NotNull
+                                  io.netty.buffer.ByteBuf&nbsp;to)</pre>
 </li>
 </ul>
 </li>
