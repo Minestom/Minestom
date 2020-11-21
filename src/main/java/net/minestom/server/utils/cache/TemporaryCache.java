@@ -57,6 +57,8 @@ public class TemporaryCache<T> {
      * Retrieves an object from cache.
      *
      * @param identifier the object identifier
+     * @param lastUpdate the last update time of your identifier's object,
+     *                   used to see if the cached value is up-to-date
      * @return the retrieved object or null if not found
      */
     @Nullable
