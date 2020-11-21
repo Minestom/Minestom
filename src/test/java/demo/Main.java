@@ -30,9 +30,7 @@ public class Main {
         final NettyServer nettyServer = MinecraftServer.getNettyServer();
         final GlobalChannelTrafficShapingHandler trafficHandler = nettyServer.getGlobalTrafficHandler();
         trafficHandler.setReadChannelLimit(500_000);
-        trafficHandler.setReadChannelLimit(500_000);
-        //trafficHandler.setReadLimit(500_000);
-        //trafficHandler.setReadLimit(500_000);
+        trafficHandler.setReadLimit(500_000);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
