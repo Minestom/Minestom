@@ -5,7 +5,8 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.data.NbtDataImpl;
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
@@ -172,24 +173,25 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
-                player.setRespawnPoint(new Position(0, 70f, 0));
+                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 250;
+                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 250;
+                player.setRespawnPoint(new Position(x, 70f, z));
 
-                /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
                         return;
                     inventoryConditionResult.setCancel(false);
                     ItemStack itemStack = p.getInventory().getItemStack(slot);
-                    System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + (itemStack.getData() != null));
-                });*/
+                    final int value = itemStack.getData() != null ? itemStack.getData().get("testc") : 0;
+                    System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + value);
+                });
             });
 
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
                 player.setGameMode(GameMode.CREATIVE);
 
                 ItemStack itemStack = new ItemStack(Material.DIAMOND_BLOCK, (byte) 64);
-                NbtDataImpl data = new NbtDataImpl();
+                Data data = new DataImpl();
                 data.set("testc", 2);
                 itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
