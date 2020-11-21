@@ -698,7 +698,12 @@ public class Player extends LivingEntity implements CommandSender {
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
 
-        if (needWorldRefresh && !firstSpawn) {
+        // true if the player needs every chunk around its position
+        final boolean needChunkLoad = !firstSpawn || firstSpawn &&
+                ChunkUtils.getChunkCoordinate((int) getRespawnPoint().getX()) == 0 &&
+                ChunkUtils.getChunkCoordinate((int) getRespawnPoint().getZ()) == 0;
+
+        if (needWorldRefresh && needChunkLoad) {
             // Remove all previous viewable chunks (from the previous instance)
             for (Chunk viewableChunk : viewableChunks) {
                 viewableChunk.removeViewer(this);
@@ -729,7 +734,7 @@ public class Player extends LivingEntity implements CommandSender {
                     final boolean isLast = counter.get() == length - 1;
                     if (isLast) {
                         // This is the last chunk to be loaded , spawn player
-                        spawnPlayer(instance, false);
+                        spawnPlayer(instance, firstSpawn);
                     } else {
                         // Increment the counter of current loaded chunks
                         counter.incrementAndGet();
@@ -739,7 +744,7 @@ public class Player extends LivingEntity implements CommandSender {
                 // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
                 instance.loadOptionalChunk(chunkX, chunkZ, callback);
             }
-        } else if (firstSpawn) {
+        } else if (!needChunkLoad) {
             // The player always believe that his position is 0;0 so this is a pretty hacky fix
             instance.loadOptionalChunk(0, 0, chunk -> spawnPlayer(instance, true));
         } else {
