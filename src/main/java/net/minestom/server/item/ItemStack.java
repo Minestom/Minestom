@@ -160,6 +160,10 @@ public class ItemStack implements DataContainer {
      */
     public boolean isSimilar(@NotNull ItemStack itemStack) {
         synchronized (ItemStack.class) {
+            if (itemStack.getIdentifier().equals(identifier)) {
+                return true;
+            }
+
             final ColoredText itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
                     (displayName != null && displayName.equals(itemDisplayName));
