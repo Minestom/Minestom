@@ -606,7 +606,7 @@ public final class MinecraftServer {
      *
      * @return should process netty errors
      */
-    public static boolean processingNettyErrors() {
+    public static boolean shouldProcessNettyErrors() {
         return processNettyErrors;
     }
 

@@ -65,8 +65,10 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        LOGGER.info(cause.getMessage());
-        cause.printStackTrace();
+        if (MinecraftServer.shouldProcessNettyErrors()) {
+            LOGGER.info(cause.getMessage());
+            cause.printStackTrace();
+        }
         ctx.close();
     }
 }

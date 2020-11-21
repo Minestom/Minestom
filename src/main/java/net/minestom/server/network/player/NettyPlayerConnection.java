@@ -143,7 +143,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void write(Object message) {
-        if (MinecraftServer.processingNettyErrors())
+        if (MinecraftServer.shouldProcessNettyErrors())
             channel.write(message).addListener(future -> {
                 if (!future.isSuccess()) {
                     future.cause().printStackTrace();
@@ -154,7 +154,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void writeAndFlush(Object message) {
-        if (MinecraftServer.processingNettyErrors())
+        if (MinecraftServer.shouldProcessNettyErrors())
             channel.writeAndFlush(message).addListener(future -> {
                 if (!future.isSuccess()) {
                     future.cause().printStackTrace();

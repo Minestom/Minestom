@@ -1,6 +1,7 @@
 package net.minestom.server.network.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollEventLoopGroup;
@@ -100,6 +101,7 @@ public final class NettyServer {
                 ChannelConfig config = ch.config();
                 config.setOption(ChannelOption.TCP_NODELAY, true);
                 config.setOption(ChannelOption.SO_SNDBUF, 1_000_000);
+                config.setAllocator(ByteBufAllocator.DEFAULT);
 
                 ChannelPipeline pipeline = ch.pipeline();
 

@@ -49,11 +49,11 @@ public class PlayerInit {
         instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
-        final int loopStart = -32;
-        final int loopEnd = 32;
+        final int loopStart = -16;
+        final int loopEnd = 16;
         for (int x = loopStart; x < loopEnd; x++)
             for (int z = loopStart; z < loopEnd; z++) {
-                instanceContainer.loadChunk(x, z);
+                //instanceContainer.loadChunk(x, z);
             }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
@@ -172,9 +172,9 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 + 500;
-                player.setRespawnPoint(new Position(0, 70f, 0));
+                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
+                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
+                player.setRespawnPoint(new Position(x, 70f, z));
 
                 /*player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
