@@ -114,7 +114,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
                 // Flush happen during #update()
-                if (serverPacket instanceof CacheablePacket) {
+                if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
                     CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
                     final UUID identifier = cacheablePacket.getIdentifier();
 

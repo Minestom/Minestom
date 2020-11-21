@@ -128,6 +128,7 @@ public final class MinecraftServer {
     private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
+    private static boolean packetCaching = true;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -518,6 +519,33 @@ public final class MinecraftServer {
     public static void setCompressionThreshold(int compressionThreshold) {
         Check.stateCondition(started, "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
+    }
+
+    /**
+     * Gets if the packet caching feature is enabled.
+     * <p>
+     * This feature allows some packets (implementing the {@link net.minestom.server.utils.cache.CacheablePacket} to be cached
+     * in order to do not have to be written and compressed over and over gain), this is especially useful for chunk and light packets.
+     * <p>
+     * It is enabled by default and it is our recommendation, you should only disable it if you want to focus on low memory usage
+     * at the cost of many packet writing and compression.
+     *
+     * @return true if the packet caching feature is enabled, false otherwise
+     */
+    public static boolean hasPacketCaching() {
+        return packetCaching;
+    }
+
+    /**
+     * Enables or disable packet caching.
+     *
+     * @param packetCaching true to enable packet caching
+     * @throws IllegalStateException if this is called after the server started
+     * @see #hasPacketCaching()
+     */
+    public static void setPacketCaching(boolean packetCaching) {
+        Check.stateCondition(started, "You cannot change the packet caching value after the server has been started.");
+        MinecraftServer.packetCaching = packetCaching;
     }
 
     /**
