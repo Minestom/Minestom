@@ -630,6 +630,14 @@ public class Player extends LivingEntity implements CommandSender {
             }
         }
 
+        // Item ownership cache
+        {
+            ItemStack[] itemStacks = inventory.getItemStacks();
+            for (ItemStack itemStack : itemStacks) {
+                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
+            }
+        }
+
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks

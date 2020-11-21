@@ -3,7 +3,6 @@ package net.minestom.server.item;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
@@ -17,6 +16,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.utils.ownership.OwnershipHandler;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,11 @@ import java.util.*;
  */
 public class ItemStack implements DataContainer {
 
+    public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler();
+    public static final String OWNERSHIP_DATA_KEY = "ownership_identifier";
     private static final StackingRule VANILLA_STACKING_RULE = new VanillaStackingRule(64);
+
+    private UUID identifier;
 
     private Material material;
 
@@ -48,6 +52,7 @@ public class ItemStack implements DataContainer {
     private int damage;
 
     public ItemStack(@NotNull Material material, byte amount, int damage) {
+        this.identifier = DATA_OWNERSHIP.generateIdentifier();
         this.material = material;
         this.amount = amount;
         this.damage = damage;
@@ -71,8 +76,6 @@ public class ItemStack implements DataContainer {
 
     private StackingRule stackingRule;
     private Data data;
-
-    private NBTConsumer nbtConsumer;
 
     {
         if (defaultStackingRule == null)
@@ -494,6 +497,19 @@ public class ItemStack implements DataContainer {
     }
 
     /**
+     * Gets the unique identifier of this object.
+     * <p>
+     * This value is non persistent and will be randomized once this item is separated with a right-click,
+     * when copied and when the server restart. It is used internally by the data ownership system.
+     *
+     * @return this item unique identifier
+     */
+    @NotNull
+    public UUID getIdentifier() {
+        return identifier;
+    }
+
+    /**
      * Gets the item {@link Material}.
      *
      * @return the item material
@@ -527,7 +543,7 @@ public class ItemStack implements DataContainer {
                 hideFlag != 0 ||
                 customModelData != 0 ||
                 (itemMeta != null && itemMeta.hasNbt()) ||
-                (data instanceof NbtDataImpl && !data.isEmpty());
+                (data != null && !data.isEmpty());
     }
 
     /**
@@ -571,33 +587,13 @@ public class ItemStack implements DataContainer {
 
     /**
      * Sets the data of this item.
-     * <p>
-     * It is recommended to use {@link NbtDataImpl} if you want the data to be passed to the client.
      *
      * @param data the new {@link Data} of this container, null to remove it
      */
     @Override
     public void setData(@Nullable Data data) {
+        DATA_OWNERSHIP.saveOwnObject(getIdentifier(), data);
         this.data = data;
-    }
-
-    /**
-     * Gets the {@link NBTConsumer} called when the item is serialized into a packet.
-     *
-     * @return the item nbt consumer, null if not any
-     */
-    @Nullable
-    public NBTConsumer getNBTConsumer() {
-        return nbtConsumer;
-    }
-
-    /**
-     * Changes the item {@link NBTConsumer}.
-     *
-     * @param nbtConsumer the new item nbt consumer, can be null
-     */
-    public void setNBTConsumer(@Nullable NBTConsumer nbtConsumer) {
-        this.nbtConsumer = nbtConsumer;
     }
 
     /**
