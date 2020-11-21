@@ -72,7 +72,7 @@ public class TemporaryCache<T> {
     }
 
     /**
-     * Gets the time an object will be kept without being retrieved
+     * Gets the time an object will be kept without being retrieved.
      *
      * @return the keep time in milliseconds
      */
