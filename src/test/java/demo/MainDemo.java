@@ -29,14 +29,14 @@ public class MainDemo {
         // Add event listeners
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         connectionManager.addPlayerInitialization(player -> {
-            // Set the spawning instance
+            // Set the spawning instance and spawn position
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
-                player.setRespawnPoint(new Position(0, 45, 0));
+                player.setRespawnPoint(new Position(0, 42, 0));
             });
         });
 
-        // Start the server
+        // Start the server on port 25565
         minecraftServer.start("localhost", 25565);
     }
 
@@ -55,7 +55,7 @@ public class MainDemo {
 
         @Override
         public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
-            Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
+            Arrays.fill(biomes, Biome.PLAINS);
         }
 
         @Override
