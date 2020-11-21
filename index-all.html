@@ -3821,6 +3821,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/PlayerInventory.html#clear()">clear()</a></span> - Method in class net.minestom.server.inventory.<a href="net/minestom/server/inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/ownership/OwnershipHandler.html#clearCache(java.util.UUID)">clearCache(UUID)</a></span> - Method in class net.minestom.server.utils.ownership.<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/click/InventoryClickProcessor.html#clearCache(net.minestom.server.entity.Player)">clearCache(Player)</a></span> - Method in class net.minestom.server.inventory.click.<a href="net/minestom/server/inventory/click/InventoryClickProcessor.html" title="class in net.minestom.server.inventory.click">InventoryClickProcessor</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/batch/ChunkBatch.html#clearData()">clearData()</a></span> - Method in class net.minestom.server.instance.batch.<a href="net/minestom/server/instance/batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></dt>
@@ -4498,8 +4500,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Copies this data.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/data/DataImpl.html#copy()">copy()</a></span> - Method in class net.minestom.server.data.<a href="net/minestom/server/data/DataImpl.html" title="class in net.minestom.server.data">DataImpl</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/data/NbtDataImpl.html#copy()">copy()</a></span> - Method in class net.minestom.server.data.<a href="net/minestom/server/data/NbtDataImpl.html" title="class in net.minestom.server.data">NbtDataImpl</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/data/SerializableDataImpl.html#copy()">copy()</a></span> - Method in class net.minestom.server.data.<a href="net/minestom/server/data/SerializableDataImpl.html" title="class in net.minestom.server.data">SerializableDataImpl</a></dt>
 <dd>&nbsp;</dd>
@@ -5495,6 +5495,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/registry/ResourceGatherer.html#DATA_FOLDER">DATA_FOLDER</a></span> - Static variable in class net.minestom.server.registry.<a href="net/minestom/server/registry/ResourceGatherer.html" title="class in net.minestom.server.registry">ResourceGatherer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/data/SerializableData.html#DATA_MANAGER">DATA_MANAGER</a></span> - Static variable in interface net.minestom.server.data.<a href="net/minestom/server/data/SerializableData.html" title="interface in net.minestom.server.data">SerializableData</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/item/ItemStack.html#DATA_OWNERSHIP">DATA_OWNERSHIP</a></span> - Static variable in class net.minestom.server.item.<a href="net/minestom/server/item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/ParticlePacket.html#dataConsumer">dataConsumer</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/ParticlePacket.html" title="class in net.minestom.server.network.packet.server.play">ParticlePacket</a></dt>
 <dd>&nbsp;</dd>
@@ -9138,6 +9140,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Called when the blocks in the <a href="net/minestom/server/instance/Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> should be set using <a href="net/minestom/server/instance/BlockModifier.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)"><code>BlockModifier.setBlock(int, int, int, Block)</code></a>
  or similar.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/ownership/OwnershipHandler.html#generateIdentifier()">generateIdentifier()</a></span> - Method in class net.minestom.server.utils.ownership.<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a></dt>
+<dd>
+<div class="block">Generates a new unique identifier.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/extras/mojangAuth/MojangCrypt.html#generateKeyPair()">generateKeyPair()</a></span> - Static method in class net.minestom.server.extras.mojangAuth.<a href="net/minestom/server/extras/mojangAuth/MojangCrypt.html" title="class in net.minestom.server.extras.mojangAuth">MojangCrypt</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/gamedata/loottables/LootTable.Entry.html#generateStacks(java.util.List,net.minestom.server.data.Data)">generateStacks(List&lt;ItemStack&gt;, Data)</a></span> - Method in class net.minestom.server.gamedata.loottables.<a href="net/minestom/server/gamedata/loottables/LootTable.Entry.html" title="class in net.minestom.server.gamedata.loottables">LootTable.Entry</a></dt>
@@ -10929,6 +10935,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the unique identifier of this chunk.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/item/ItemStack.html#getIdentifier()">getIdentifier()</a></span> - Method in class net.minestom.server.item.<a href="net/minestom/server/item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></dt>
+<dd>
+<div class="block">Gets the unique identifier of this object.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/ChunkDataPacket.html#getIdentifier()">getIdentifier()</a></span> - Method in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/TeamsPacket.CollisionRule.html#getIdentifier()">getIdentifier()</a></span> - Method in enum net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/TeamsPacket.CollisionRule.html" title="enum in net.minestom.server.network.packet.server.play">TeamsPacket.CollisionRule</a></dt>
@@ -11588,10 +11598,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/Arguments.html#getNbtCompound(java.lang.String)">getNbtCompound(String)</a></span> - Method in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/item/ItemStack.html#getNBTConsumer()">getNBTConsumer()</a></span> - Method in class net.minestom.server.item.<a href="net/minestom/server/item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></dt>
-<dd>
-<div class="block">Gets the <a href="net/minestom/server/item/NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a> called when the item is serialized into a packet.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/chunk/ChunkUtils.html#getNeighbours(net.minestom.server.instance.Instance,int,int)">getNeighbours(Instance, int, int)</a></span> - Static method in class net.minestom.server.utils.chunk.<a href="net/minestom/server/utils/chunk/ChunkUtils.html" title="class in net.minestom.server.utils.chunk">ChunkUtils</a></dt>
 <dd>
 <div class="block">Gets all the loaded neighbours of a chunk and itself, no diagonals.</div>
@@ -11690,6 +11696,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/NamespaceIDHashMap.html#getOrDefault(java.lang.String,V)">getOrDefault(String, V)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/NamespaceIDHashMap.html" title="class in net.minestom.server.utils">NamespaceIDHashMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/ownership/OwnershipHandler.html#getOwnObject(java.util.UUID)">getOwnObject(UUID)</a></span> - Method in class net.minestom.server.utils.ownership.<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a></dt>
+<dd>
+<div class="block">Retrieves the owned object based on its identifier.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/player/PlayerConnection.html#getPacketCounter()">getPacketCounter()</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/handler/ClientPacketsHandler.html#getPacketInstance(int)">getPacketInstance(int)</a></span> - Method in class net.minestom.server.network.packet.client.handler.<a href="net/minestom/server/network/packet/client/handler/ClientPacketsHandler.html" title="class in net.minestom.server.network.packet.client.handler">ClientPacketsHandler</a></dt>
@@ -17005,8 +17015,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/AdvancementsPacket.ProgressMapping.html#key">key</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/AdvancementsPacket.ProgressMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.ProgressMapping</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/data/NbtDataImpl.html#KEY_PREFIX">KEY_PREFIX</a></span> - Static variable in class net.minestom.server.data.<a href="net/minestom/server/data/NbtDataImpl.html" title="class in net.minestom.server.data">NbtDataImpl</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#kick(java.lang.String)">kick(String)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
 <div class="block">Kicks the player with a reason.</div>
@@ -18594,14 +18602,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/ArgumentType.html#NbtCompound(java.lang.String)">NbtCompound(String)</a></span> - Static method in class net.minestom.server.command.builder.arguments.<a href="net/minestom/server/command/builder/arguments/ArgumentType.html" title="class in net.minestom.server.command.builder.arguments">ArgumentType</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="net/minestom/server/item/NBTConsumer.html" title="interface in net.minestom.server.item"><span class="typeNameLink">NBTConsumer</span></a> - Interface in <a href="net/minestom/server/item/package-summary.html">net.minestom.server.item</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="net/minestom/server/data/NbtDataImpl.html" title="class in net.minestom.server.data"><span class="typeNameLink">NbtDataImpl</span></a> - Class in <a href="net/minestom/server/data/package-summary.html">net.minestom.server.data</a></dt>
-<dd>
-<div class="block">A data implementation backed by a <code>NBTCompound</code>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/data/NbtDataImpl.html#%3Cinit%3E()">NbtDataImpl()</a></span> - Constructor for class net.minestom.server.data.<a href="net/minestom/server/data/NbtDataImpl.html" title="class in net.minestom.server.data">NbtDataImpl</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/NBTUtils.html" title="class in net.minestom.server.utils"><span class="typeNameLink">NBTUtils</span></a> - Class in <a href="net/minestom/server/utils/package-summary.html">net.minestom.server.utils</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/NBTUtils.EnchantmentSetter.html" title="interface in net.minestom.server.utils"><span class="typeNameLink">NBTUtils.EnchantmentSetter</span></a> - Interface in <a href="net/minestom/server/utils/package-summary.html">net.minestom.server.utils</a></dt>
@@ -18855,6 +18855,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/utils/location/package-summary.html">net.minestom.server.utils.location</a> - package net.minestom.server.utils.location</dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/math/package-summary.html">net.minestom.server.utils.math</a> - package net.minestom.server.utils.math</dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/utils/ownership/package-summary.html">net.minestom.server.utils.ownership</a> - package net.minestom.server.utils.ownership</dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/utils/player/package-summary.html">net.minestom.server.utils.player</a> - package net.minestom.server.utils.player</dt>
 <dd>&nbsp;</dd>
@@ -19687,6 +19689,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/metadata/WrittenBookMeta.WrittenBookGeneration.html#ORIGINAL">ORIGINAL</a></span> - net.minestom.server.item.metadata.<a href="net/minestom/server/item/metadata/WrittenBookMeta.WrittenBookGeneration.html" title="enum in net.minestom.server.item.metadata">WrittenBookMeta.WrittenBookGeneration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/world/DimensionType.html#OVERWORLD">OVERWORLD</a></span> - Static variable in class net.minestom.server.world.<a href="net/minestom/server/world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/item/ItemStack.html#OWNERSHIP_DATA_KEY">OWNERSHIP_DATA_KEY</a></span> - Static variable in class net.minestom.server.item.<a href="net/minestom/server/item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership"><span class="typeNameLink">OwnershipHandler</span></a>&lt;<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="type parameter in OwnershipHandler">T</a>&gt; - Class in <a href="net/minestom/server/utils/ownership/package-summary.html">net.minestom.server.utils.ownership</a></dt>
+<dd>
+<div class="block">Convenient class to keep trace of objects linked to an <code>UUID</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/ownership/OwnershipHandler.html#%3Cinit%3E()">OwnershipHandler()</a></span> - Constructor for class net.minestom.server.utils.ownership.<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/Block.html#OXEYE_DAISY">OXEYE_DAISY</a></span> - net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a></dt>
 <dd>&nbsp;</dd>
@@ -22773,6 +22783,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Saves the instance (<a href="net/minestom/server/instance/Instance.html#getUniqueId()"><code>Instance.getUniqueId()</code></a> <a href="net/minestom/server/instance/Instance.html#getData()"><code>Instance.getData()</code></a>) and call <a href="net/minestom/server/instance/InstanceContainer.html#saveChunksToStorage(java.lang.Runnable)"><code>InstanceContainer.saveChunksToStorage(Runnable)</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/ownership/OwnershipHandler.html#saveOwnObject(java.util.UUID,T)">saveOwnObject(UUID, T)</a></span> - Method in class net.minestom.server.utils.ownership.<a href="net/minestom/server/utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a></dt>
+<dd>
+<div class="block">Saves, replace or remove the own object of an identifier.</div>
+</dd>
 <dt><a href="net/minestom/server/instance/block/states/Scaffolding.html" title="class in net.minestom.server.instance.block.states"><span class="typeNameLink">Scaffolding</span></a> - Class in <a href="net/minestom/server/instance/block/states/package-summary.html">net.minestom.server.instance.block.states</a></dt>
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -24042,10 +24056,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/scoreboard/Team.html#setNameTagVisibility(net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility)">setNameTagVisibility(TeamsPacket.NameTagVisibility)</a></span> - Method in class net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></dt>
 <dd>
 <div class="block">Changes the <a href="net/minestom/server/network/packet/server/play/TeamsPacket.NameTagVisibility.html" title="enum in net.minestom.server.network.packet.server.play"><code>TeamsPacket.NameTagVisibility</code></a> of the team.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/item/ItemStack.html#setNBTConsumer(net.minestom.server.item.NBTConsumer)">setNBTConsumer(NBTConsumer)</a></span> - Method in class net.minestom.server.item.<a href="net/minestom/server/item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></dt>
-<dd>
-<div class="block">Changes the item <a href="net/minestom/server/item/NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryCloseEvent.html#setNewInventory(net.minestom.server.inventory.Inventory)">setNewInventory(Inventory)</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryCloseEvent.html" title="class in net.minestom.server.event.inventory">InventoryCloseEvent</a></dt>
 <dd>
@@ -29249,10 +29259,6 @@ the order they are declared.</div>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/BinaryWriter.html#writeStringArray(java.lang.String%5B%5D)">writeStringArray(String[])</a></span> - Method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a></dt>
 <dd>
 <div class="block">Writes a string to the buffer.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/data/NbtDataImpl.html#writeToNbt(org.jglrxavpok.hephaistos.nbt.NBTCompound)">writeToNbt(NBTCompound)</a></span> - Method in class net.minestom.server.data.<a href="net/minestom/server/data/NbtDataImpl.html" title="class in net.minestom.server.data">NbtDataImpl</a></dt>
-<dd>
-<div class="block">Writes all the data into a <code>NBTCompound</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/BinaryWriter.html#writeUuid(java.util.UUID)">writeUuid(UUID)</a></span> - Method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a></dt>
 <dd>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":9,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":9,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -150,6 +150,34 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a>&lt;<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DATA_OWNERSHIP">DATA_OWNERSHIP</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OWNERSHIP_DATA_KEY">OWNERSHIP_DATA_KEY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -319,38 +347,38 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 </td>
 </tr>
 <tr id="i18" class="altColor">
+<td class="colFirst"><code>java.util.UUID</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the unique identifier of this object.</div>
+</td>
+</tr>
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="ItemFlag.html" title="enum in net.minestom.server.item">ItemFlag</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemFlags()">getItemFlags</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item flags.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="metadata/ItemMeta.html" title="interface in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemMeta()">getItemMeta</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the special meta object for this item.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>java.util.ArrayList&lt;<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLore()">getLore</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item lore.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="Material.html" title="enum in net.minestom.server.item">Material</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaterial()">getMaterial</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item <a href="Material.html" title="enum in net.minestom.server.item"><code>Material</code></a>.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
-<td class="colFirst"><code><a href="NBTConsumer.html" title="interface in net.minestom.server.item">NBTConsumer</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNBTConsumer()">getNBTConsumer</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the <a href="NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a> called when the item is serialized into a packet.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -546,26 +574,19 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 </tr>
 <tr id="i49" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNBTConsumer(net.minestom.server.item.NBTConsumer)">setNBTConsumer</a></span>&#8203;(<a href="NBTConsumer.html" title="interface in net.minestom.server.item">NBTConsumer</a>&nbsp;nbtConsumer)</code></th>
-<td class="colLast">
-<div class="block">Changes the item <a href="NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a>.</div>
-</td>
-</tr>
-<tr id="i50" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStackingRule(net.minestom.server.item.StackingRule)">setStackingRule</a></span>&#8203;(<a href="StackingRule.html" title="class in net.minestom.server.item">StackingRule</a>&nbsp;stackingRule)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="StackingRule.html" title="class in net.minestom.server.item"><code>StackingRule</code></a> of the item.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnbreakable(boolean)">setUnbreakable</a></span>&#8203;(boolean&nbsp;unbreakable)</code></th>
 <td class="colLast">
 <div class="block">Makes the item unbreakable.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toNBT()">toNBT</a></span>()</code></th>
 <td class="colLast">
@@ -589,6 +610,38 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="DATA_OWNERSHIP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DATA_OWNERSHIP</h4>
+<pre>public static final&nbsp;<a href="../utils/ownership/OwnershipHandler.html" title="class in net.minestom.server.utils.ownership">OwnershipHandler</a>&lt;<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&gt; DATA_OWNERSHIP</pre>
+</li>
+</ul>
+<a id="OWNERSHIP_DATA_KEY">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>OWNERSHIP_DATA_KEY</h4>
+<pre>public static final&nbsp;java.lang.String OWNERSHIP_DATA_KEY</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#net.minestom.server.item.ItemStack.OWNERSHIP_DATA_KEY">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -1185,6 +1238,24 @@ public&nbsp;java.util.Set&lt;<a href="ItemFlag.html" title="enum in net.minestom
 </dl>
 </li>
 </ul>
+<a id="getIdentifier()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIdentifier</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.UUID&nbsp;getIdentifier()</pre>
+<div class="block">Gets the unique identifier of this object.
+ <p>
+ This value is non persistent and will be randomized once this item is separated with a right-click,
+ when copied and when the server restart. It is used internally by the data ownership system.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this item unique identifier</dd>
+</dl>
+</li>
+</ul>
 <a id="getMaterial()">
 <!--   -->
 </a>
@@ -1273,44 +1344,12 @@ public&nbsp;<a href="../data/Data.html" title="interface in net.minestom.server.
 <h4>setData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setData&#8203;(@Nullable
                     <a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</pre>
-<div class="block">Sets the data of this item.
- <p>
- It is recommended to use <a href="../data/NbtDataImpl.html" title="class in net.minestom.server.data"><code>NbtDataImpl</code></a> if you want the data to be passed to the client.</div>
+<div class="block">Sets the data of this item.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../data/DataContainer.html#setData(net.minestom.server.data.Data)">setData</a></code>&nbsp;in interface&nbsp;<code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the new <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> of this container, null to remove it</dd>
-</dl>
-</li>
-</ul>
-<a id="getNBTConsumer()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNBTConsumer</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="NBTConsumer.html" title="interface in net.minestom.server.item">NBTConsumer</a>&nbsp;getNBTConsumer()</pre>
-<div class="block">Gets the <a href="NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a> called when the item is serialized into a packet.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the item nbt consumer, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="setNBTConsumer(net.minestom.server.item.NBTConsumer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setNBTConsumer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setNBTConsumer&#8203;(@Nullable
-                           <a href="NBTConsumer.html" title="interface in net.minestom.server.item">NBTConsumer</a>&nbsp;nbtConsumer)</pre>
-<div class="block">Changes the item <a href="NBTConsumer.html" title="interface in net.minestom.server.item"><code>NBTConsumer</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nbtConsumer</code> - the new item nbt consumer, can be null</dd>
 </dl>
 </li>
 </ul>
@@ -1540,13 +1579,13 @@ public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;toNBT()</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

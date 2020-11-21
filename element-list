@@ -122,6 +122,7 @@ net.minestom.server.utils.instance
 net.minestom.server.utils.inventory
 net.minestom.server.utils.location
 net.minestom.server.utils.math
+net.minestom.server.utils.ownership
 net.minestom.server.utils.player
 net.minestom.server.utils.thread
 net.minestom.server.utils.time
