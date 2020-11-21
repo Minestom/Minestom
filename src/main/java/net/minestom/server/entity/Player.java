@@ -81,7 +81,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * @see #getPlayerSynchronizationGroup()
      */
-    private static volatile int playerSynchronizationGroup = 50;
+    private static volatile int playerSynchronizationGroup = 75;
 
     /**
      * For the number of viewers that a player has, the position synchronization packet will be sent
@@ -625,6 +625,14 @@ public class Player extends LivingEntity implements CommandSender {
             }
         }
 
+        // Item ownership cache
+        {
+            ItemStack[] itemStacks = inventory.getItemStacks();
+            for (ItemStack itemStack : itemStacks) {
+                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
+            }
+        }
+
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
@@ -685,7 +693,7 @@ public class Player extends LivingEntity implements CommandSender {
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
 
-        if (needWorldRefresh) {
+        if (needWorldRefresh && !firstSpawn) {
             // Remove all previous viewable chunks (from the previous instance)
             for (Chunk viewableChunk : viewableChunks) {
                 viewableChunk.removeViewer(this);
@@ -716,7 +724,7 @@ public class Player extends LivingEntity implements CommandSender {
                     final boolean isLast = counter.get() == length - 1;
                     if (isLast) {
                         // This is the last chunk to be loaded , spawn player
-                        spawnPlayer(instance, firstSpawn);
+                        spawnPlayer(instance, false);
                     } else {
                         // Increment the counter of current loaded chunks
                         counter.incrementAndGet();
@@ -726,8 +734,13 @@ public class Player extends LivingEntity implements CommandSender {
                 // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
                 instance.loadOptionalChunk(chunkX, chunkZ, callback);
             }
+        } else if (firstSpawn) {
+            // The player always believe that his position is 0;0 so this is a pretty hacky fix
+            instance.loadOptionalChunk(0, 0, chunk -> spawnPlayer(instance, true));
         } else {
-            spawnPlayer(instance, firstSpawn);
+            // The player already has the good version of all the chunks.
+            // We just need to refresh his entity viewing list and add him to the instance
+            spawnPlayer(instance, false);
         }
     }
 

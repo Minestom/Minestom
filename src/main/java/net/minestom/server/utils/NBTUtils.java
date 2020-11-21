@@ -7,12 +7,10 @@ import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
-import net.minestom.server.data.NbtDataImpl;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.NBTConsumer;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.item.metadata.ItemMeta;
@@ -192,18 +190,15 @@ public final class NBTUtils {
             itemMeta.read(nbt);
         }
 
-        NbtDataImpl customData = null;
-        for (String key : nbt.getKeys()) {
-            if (key.startsWith(NbtDataImpl.KEY_PREFIX)) {
-                if (customData == null) {
-                    customData = new NbtDataImpl();
-                    item.setData(customData);
+        // Ownership
+        {
+            if (nbt.containsKey(ItemStack.OWNERSHIP_DATA_KEY)) {
+                final String identifierString = nbt.getString(ItemStack.OWNERSHIP_DATA_KEY);
+                final UUID identifier = UUID.fromString(identifierString);
+                final Data data = ItemStack.DATA_OWNERSHIP.getOwnObject(identifier);
+                if (data != null) {
+                    item.setData(data);
                 }
-                final NBT keyNbt = nbt.get(key);
-
-                final String dataKey = key.replaceFirst(NbtDataImpl.KEY_PREFIX, "");
-                final Object dataValue = fromNBT(keyNbt);
-                customData.set(dataKey, dataValue);
             }
         }
     }
@@ -238,12 +233,6 @@ public final class NBTUtils {
 
             // Vanilla compound
             saveDataIntoNBT(itemStack, itemNBT);
-
-            // Custom item nbt
-            final NBTConsumer nbtConsumer = itemStack.getNBTConsumer();
-            if (nbtConsumer != null) {
-                nbtConsumer.accept(itemNBT);
-            }
 
             // End custom model data
             packet.writeNBT("", itemNBT);
@@ -349,15 +338,15 @@ public final class NBTUtils {
         }
         // End custom meta
 
-        // Start NbtData data
+        // Start ownership
         {
             final Data data = itemStack.getData();
-            if (data instanceof NbtDataImpl) {
-                NbtDataImpl nbtData = (NbtDataImpl) data;
-                nbtData.writeToNbt(itemNBT);
+            if (data != null && !data.isEmpty()) {
+                final UUID identifier = itemStack.getIdentifier();
+                itemNBT.setString(ItemStack.OWNERSHIP_DATA_KEY, identifier.toString());
             }
         }
-        // End NbtData
+        // End ownership
     }
 
     /**

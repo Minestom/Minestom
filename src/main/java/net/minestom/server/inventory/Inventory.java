@@ -23,7 +23,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -199,7 +198,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @NotNull
     @Override
     public ItemStack[] getItemStacks() {
-        return Arrays.copyOf(itemStacks, itemStacks.length);
+        return itemStacks.clone();
     }
 
     @Override

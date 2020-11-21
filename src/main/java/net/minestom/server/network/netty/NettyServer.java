@@ -15,6 +15,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import io.netty.handler.traffic.TrafficCounter;
+import io.netty.incubator.channel.uring.IOUring;
+import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
+import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
@@ -66,7 +69,12 @@ public final class NettyServer {
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         Class<? extends ServerChannel> channel;
 
-        if (Epoll.isAvailable()) {
+        if (IOUring.isAvailable()) {
+            boss = new IOUringEventLoopGroup(2);
+            worker = new IOUringEventLoopGroup(); // thread count = core * 2
+
+            channel = IOUringServerSocketChannel.class;
+        } else if (Epoll.isAvailable()) {
             boss = new EpollEventLoopGroup(2);
             worker = new EpollEventLoopGroup(); // thread count = core * 2
 

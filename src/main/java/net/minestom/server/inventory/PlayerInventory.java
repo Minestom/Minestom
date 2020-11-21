@@ -22,7 +22,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -59,7 +58,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @NotNull
     @Override
     public ItemStack[] getItemStacks() {
-        return Arrays.copyOf(items, items.length);
+        return items.clone();
     }
 
     @NotNull
