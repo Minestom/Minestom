@@ -10,7 +10,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="STDOUT-WithCaller" level="info"/>
         </Root>
     </Loggers>
