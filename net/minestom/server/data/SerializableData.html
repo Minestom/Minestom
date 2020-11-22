@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":1,"i3":18,"i4":6,"i5":6,"i6":1};
+var data = {"i0":18,"i1":6,"i2":1,"i3":18,"i4":6,"i5":1};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -223,15 +223,6 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T,java.lang.Class)">set</a></span>&#8203;(java.lang.String&nbsp;key,
-   T&nbsp;value,
-   java.lang.Class&lt;T&gt;&nbsp;type)</code></th>
-<td class="colLast">
-<div class="block">Assigns a value to a specific key.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeDataIndexHeader(net.minestom.server.utils.binary.BinaryWriter,it.unimi.dsi.fastutil.objects.Object2ShortMap)">writeDataIndexHeader</a></span>&#8203;(<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;indexWriter,
                     it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</code></th>
@@ -245,7 +236,7 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.data.<a href="Data.html" title="interface in net.minestom.server.data">Data</a></h3>
-<code><a href="Data.html#copy()">copy</a>, <a href="Data.html#get(java.lang.String)">get</a>, <a href="Data.html#getKeys()">getKeys</a>, <a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a>, <a href="Data.html#hasKey(java.lang.String)">hasKey</a>, <a href="Data.html#isEmpty()">isEmpty</a>, <a href="Data.html#set(java.lang.String,T)">set</a></code></li>
+<code><a href="Data.html#copy()">copy</a>, <a href="Data.html#get(java.lang.String)">get</a>, <a href="Data.html#getKeys()">getKeys</a>, <a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a>, <a href="Data.html#hasKey(java.lang.String)">hasKey</a>, <a href="Data.html#isEmpty()">isEmpty</a>, <a href="Data.html#set(java.lang.String,T)">set</a>, <a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code></li>
 </ul>
 </li>
 </ul>
@@ -282,35 +273,6 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="set(java.lang.String,java.lang.Object,java.lang.Class)">
-<!--   -->
-</a><a id="set(java.lang.String,T,java.lang.Class)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set</h4>
-<pre class="methodSignature">&lt;T&gt;&nbsp;void&nbsp;set&#8203;(@NotNull
-             java.lang.String&nbsp;key,
-             @Nullable
-             T&nbsp;value,
-             @Nullable
-             java.lang.Class&lt;T&gt;&nbsp;type)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">Data</a></code></span></div>
-<div class="block">Assigns a value to a specific key.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - the value generic</dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>key</code> - the key</dd>
-<dd><code>value</code> - the value object, null to remove the key</dd>
-<dd><code>type</code> - the value type, <a href="Data.html#set(java.lang.String,T)"><code>Data.set(String, Object)</code></a> can be used instead.
-              null if <code>value</code> is also null</dd>
-</dl>
-</li>
-</ul>
 <a id="getSerializedData(it.unimi.dsi.fastutil.objects.Object2ShortMap,boolean)">
 <!--   -->
 </a>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -194,7 +194,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">ArgumentDynamicWord</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.command.builder.arguments.minecraft.SuggestionType)">ArgumentDynamicWord</a></span>&#8203;(java.lang.String&nbsp;id,
+                   <a href="minecraft/SuggestionType.html" title="enum in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a>&nbsp;suggestionType)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -237,6 +238,13 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="minecraft/SuggestionType.html" title="enum in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSuggestionType()">getSuggestionType</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the suggestion type of this argument.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
 <td class="colLast">
@@ -310,13 +318,16 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String)">
+<a id="&lt;init&gt;(java.lang.String,net.minestom.server.command.builder.arguments.minecraft.SuggestionType)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ArgumentDynamicWord</h4>
-<pre>public&nbsp;ArgumentDynamicWord&#8203;(java.lang.String&nbsp;id)</pre>
+<pre>public&nbsp;ArgumentDynamicWord&#8203;(@NotNull
+                           java.lang.String&nbsp;id,
+                           @NotNull
+                           <a href="minecraft/SuggestionType.html" title="enum in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a>&nbsp;suggestionType)</pre>
 </li>
 </ul>
 </li>
@@ -396,6 +407,23 @@ public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
 <dd><code>value</code> - The parsed argument</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the error code or <a href="Argument.html#SUCCESS"><code>Argument.SUCCESS</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getSuggestionType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSuggestionType</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="minecraft/SuggestionType.html" title="enum in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a>&nbsp;getSuggestionType()</pre>
+<div class="block">Gets the suggestion type of this argument.
+ <p>
+ Suggestions are only suggestion, this means that the end value could not be the expected one.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this argument suggestion type</dd>
 </dl>
 </li>
 </ul>
