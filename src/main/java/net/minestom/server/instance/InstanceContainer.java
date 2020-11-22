@@ -313,7 +313,7 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(BlockPosition blockPosition) {
+    private void executeNeighboursBlockPlacementRule(@NotNull BlockPosition blockPosition) {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
@@ -827,9 +827,7 @@ public class InstanceContainer extends Instance {
 
                 // Clear cache
                 this.chunks.remove(index);
-                synchronized (chunkEntities) {
-                    this.chunkEntities.remove(index);
-                }
+                this.chunkEntities.remove(index);
 
                 chunk.unload();
 

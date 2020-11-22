@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
@@ -81,7 +82,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
-    protected final Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
+    protected final Long2ObjectMap<Set<Entity>> chunkEntities = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
+    private Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -921,7 +923,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
         Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
         final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        synchronized (chunkEntities) {
+        synchronized (entitiesLock) {
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
             this.chunkEntities.put(chunkIndex, entities);
@@ -948,7 +950,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunk  the chunk where the entity will be removed
      */
     public void removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        synchronized (chunkEntities) {
+        synchronized (entitiesLock) {
             final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.remove(entity);
@@ -973,9 +975,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     @NotNull
     private Set<Entity> getEntitiesInChunk(long index) {
-        synchronized (chunkEntities) {
-            return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
-        }
+        return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
     }
 
     /**

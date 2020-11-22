@@ -186,7 +186,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z    the block Z
      * @param data the new data, can be null
      */
-    public abstract void setBlockData(int x, int y, int z, Data data);
+    public abstract void setBlockData(int x, int y, int z, @Nullable Data data);
 
     /**
      * Gets all the block entities in this chunk.
