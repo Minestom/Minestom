@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.utils.callback.validator.StringValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,10 +14,13 @@ public class ArgumentDynamicWord extends Argument<String> {
     public static final int SPACE_ERROR = 1;
     public static final int RESTRICTION_ERROR = 2;
 
+    private SuggestionType suggestionType;
+
     private StringValidator dynamicRestriction;
 
-    public ArgumentDynamicWord(String id) {
+    public ArgumentDynamicWord(@NotNull String id, @NotNull SuggestionType suggestionType) {
         super(id);
+        this.suggestionType = suggestionType;
     }
 
     @Override
@@ -44,6 +48,18 @@ public class ArgumentDynamicWord extends Argument<String> {
         }
 
         return SUCCESS;
+    }
+
+    /**
+     * Gets the suggestion type of this argument.
+     * <p>
+     * Suggestions are only suggestion, this means that the end value could not be the expected one.
+     *
+     * @return this argument suggestion type
+     */
+    @NotNull
+    public SuggestionType getSuggestionType() {
+        return suggestionType;
     }
 
     /**

@@ -568,11 +568,13 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentDynamicWord) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
 
+            final SuggestionType suggestionType = ((ArgumentDynamicWord) argument).getSuggestionType();
+
             argumentNode.parser = "brigadier:string";
             argumentNode.properties = packetWriter -> {
                 packetWriter.writeVarInt(0); // Single word
             };
-            argumentNode.suggestionsType = "minecraft:ask_server";
+            argumentNode.suggestionsType = suggestionType.getIdentifier();
 
         } else if (argument instanceof ArgumentString) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);

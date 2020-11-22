@@ -314,6 +314,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @return the position of this chunk
      */
+    @NotNull
     public Position toPosition() {
         return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
