@@ -939,7 +939,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><span class="typeNameLink">ArgumentDynamicWord</span></a> - Class in <a href="net/minestom/server/command/builder/arguments/package-summary.html">net.minestom.server.command.builder.arguments</a></dt>
 <dd>
 <div class="block">Same as <a href="net/minestom/server/command/builder/arguments/ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentWord</code></a> with the exception
- that this argument can trigger <a href="net/minestom/server/command/builder/Command.html#onDynamicWrite(java.lang.String)"><code>Command.onDynamicWrite(String)</code></a>.</div>
+ that this argument can trigger <a href="net/minestom/server/command/builder/Command.html#onDynamicWrite(java.lang.String)"><code>Command.onDynamicWrite(String)</code></a>
+ when the suggestion type is <a href="net/minestom/server/command/builder/arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a>, or any other suggestions available in the enum.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html#%3Cinit%3E(java.lang.String,net.minestom.server.command.builder.arguments.minecraft.SuggestionType)">ArgumentDynamicWord(String, SuggestionType)</a></span> - Constructor for class net.minestom.server.command.builder.arguments.<a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentDynamicWord</a></dt>
 <dd>&nbsp;</dd>
@@ -19445,7 +19446,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/Command.html#onDynamicWrite(java.lang.String)">onDynamicWrite(String)</a></span> - Method in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/Command.html" title="class in net.minestom.server.command.builder">Command</a></dt>
 <dd>
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat
- when in a dynamic argument (<a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> and <a href="net/minestom/server/command/builder/arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicStringArray</code></a>).</div>
+ when in a dynamic argument (<a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> (when <a href="net/minestom/server/command/builder/arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a> is used)
+ and <a href="net/minestom/server/command/builder/arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicStringArray</code></a>).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/CustomBlock.html#onExplode(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onExplode(Instance, BlockPosition, Data)</a></span> - Method in class net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a></dt>
 <dd>
