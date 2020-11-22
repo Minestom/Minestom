@@ -30,6 +30,8 @@ import java.util.Set;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
+ * <p>
+ * WARNING: not thread-safe
  */
 public class DynamicChunk extends Chunk {
 
