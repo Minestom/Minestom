@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
@@ -79,7 +81,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
     protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
     // Entities per chunk
-    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+    protected final Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -971,7 +973,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     @NotNull
     private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
+        synchronized (chunkEntities) {
+            return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
+        }
     }
 
     /**

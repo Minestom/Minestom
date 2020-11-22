@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
@@ -33,7 +35,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -56,7 +57,7 @@ public class InstanceContainer extends Instance {
     // the chunk generator used, can be null
     private ChunkGenerator chunkGenerator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
-    private final ConcurrentHashMap<Long, Chunk> chunks = new ConcurrentHashMap<>();
+    private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
     // contains all the chunks to remove during the next instance tick
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
@@ -450,8 +451,10 @@ public class InstanceContainer extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        final Chunk chunk = chunks.get(index);
-        return ChunkUtils.isLoaded(chunk) ? chunk : null;
+        synchronized (chunks) {
+            final Chunk chunk = chunks.get(index);
+            return ChunkUtils.isLoaded(chunk) ? chunk : null;
+        }
     }
 
     /**
@@ -492,7 +495,10 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunksToStorage(@Nullable Runnable callback) {
-        this.chunkLoader.saveChunks(chunks.values(), callback);
+        synchronized (chunks) {
+            Collection<Chunk> chunksCollection = chunks.values();
+            this.chunkLoader.saveChunks(chunksCollection, callback);
+        }
     }
 
     @Override
@@ -639,14 +645,16 @@ public class InstanceContainer extends Instance {
         copiedInstance.srcInstance = this;
         copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
 
-        for (Chunk chunk : chunks.values()) {
-            final int chunkX = chunk.getChunkX();
-            final int chunkZ = chunk.getChunkZ();
+        synchronized (chunks) {
+            for (Chunk chunk : chunks.values()) {
+                final int chunkX = chunk.getChunkX();
+                final int chunkZ = chunk.getChunkZ();
 
-            final Chunk copiedChunk = chunk.copy(chunkX, chunkZ);
+                final Chunk copiedChunk = chunk.copy(chunkX, chunkZ);
 
-            copiedInstance.cacheChunk(copiedChunk);
-            UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunkX, chunkZ);
+                copiedInstance.cacheChunk(copiedChunk);
+                UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunkX, chunkZ);
+            }
         }
 
         return copiedInstance;
@@ -693,7 +701,9 @@ public class InstanceContainer extends Instance {
      */
     public void cacheChunk(@NotNull Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        this.chunks.put(index, chunk);
+        synchronized (chunks) {
+            this.chunks.put(index, chunk);
+        }
     }
 
     @Override
@@ -823,8 +833,12 @@ public class InstanceContainer extends Instance {
                 });
 
                 // Clear cache
-                this.chunks.remove(index);
-                this.chunkEntities.remove(index);
+                synchronized (chunks) {
+                    this.chunks.remove(index);
+                }
+                synchronized (chunkEntities) {
+                    this.chunkEntities.remove(index);
+                }
 
                 chunk.unload();
 
