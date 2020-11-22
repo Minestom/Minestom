@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockManager;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Set;
 import java.util.UUID;
 
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
@@ -36,7 +36,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public PaletteStorage paletteStorage;
     public PaletteStorage customBlockPaletteStorage;
 
-    public Set<Integer> blockEntities;
+    public IntSet blockEntities;
     public Int2ObjectMap<Data> blocksData;
 
     public int[] sections;

@@ -693,55 +693,42 @@ public class Player extends LivingEntity implements CommandSender {
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
 
-        // true if the player needs every chunk around its position
-        final boolean needChunkLoad = !firstSpawn || firstSpawn &&
-                ChunkUtils.getChunkCoordinate((int) getRespawnPoint().getX()) == 0 &&
-                ChunkUtils.getChunkCoordinate((int) getRespawnPoint().getZ()) == 0;
-
-        if (needWorldRefresh && needChunkLoad) {
+        if (needWorldRefresh) {
             // Remove all previous viewable chunks (from the previous instance)
             for (Chunk viewableChunk : viewableChunks) {
                 viewableChunk.removeViewer(this);
             }
-
+            // Send the new dimension
             if (this.instance != null) {
                 final DimensionType instanceDimensionType = instance.getDimensionType();
                 if (dimensionType != instanceDimensionType)
                     sendDimension(instanceDimensionType);
             }
+            // Load all the required chunks
+            final Position pos = firstSpawn ? getRespawnPoint() : position;
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(pos, getChunkRange());
 
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(position, getChunkRange());
-            final int length = visibleChunks.length;
-
-            AtomicInteger counter = new AtomicInteger(0);
-            for (long visibleChunk : visibleChunks) {
-                final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
-                final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
-
-                final ChunkCallback callback = (chunk) -> {
-                    if (chunk != null) {
-                        chunk.addViewer(this);
-                        if (chunk.getChunkX() == ChunkUtils.getChunkCoordinate((int) getPosition().getX()) &&
-                                chunk.getChunkZ() == ChunkUtils.getChunkCoordinate((int) getPosition().getZ())) {
-                            updateViewPosition(chunk);
-                        }
+            final ChunkCallback eachCallback = chunk -> {
+                if (chunk != null) {
+                    final int chunkX = ChunkUtils.getChunkCoordinate((int) pos.getX());
+                    final int chunkZ = ChunkUtils.getChunkCoordinate((int) pos.getZ());
+                    if (chunk.getChunkX() == chunkX &&
+                            chunk.getChunkZ() == chunkZ) {
+                        updateViewPosition(chunkX, chunkZ);
                     }
-                    final boolean isLast = counter.get() == length - 1;
-                    if (isLast) {
-                        // This is the last chunk to be loaded , spawn player
-                        spawnPlayer(instance, firstSpawn);
-                    } else {
-                        // Increment the counter of current loaded chunks
-                        counter.incrementAndGet();
-                    }
-                };
+                }
+            };
 
-                // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
-                instance.loadOptionalChunk(chunkX, chunkZ, callback);
-            }
-        } else if (!needChunkLoad) {
-            // The player always believe that his position is 0;0 so this is a pretty hacky fix
-            instance.loadOptionalChunk(0, 0, chunk -> spawnPlayer(instance, true));
+            final ChunkCallback endCallback = chunk -> {
+                // This is the last chunk to be loaded , spawn player
+                spawnPlayer(instance, firstSpawn);
+            };
+
+            // Chunk 0;0 always needs to be loaded
+            instance.loadChunk(0, 0, chunk ->
+                    // Load all the required chunks
+                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
+
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
@@ -758,7 +745,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param firstSpawn true if this is the player first spawn
      */
-    private void spawnPlayer(Instance instance, boolean firstSpawn) {
+    private void spawnPlayer(@NotNull Instance instance, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
 
         super.setInstance(instance);
@@ -766,7 +753,6 @@ public class Player extends LivingEntity implements CommandSender {
         if (firstSpawn) {
             teleport(getRespawnPoint());
         }
-
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
@@ -1545,7 +1531,7 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Update client render distance
-        updateViewPosition(newChunk);
+        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
 
         // Load new chunks
         for (int index : newChunks) {
@@ -1610,11 +1596,17 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        super.teleport(position, () -> {
+    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
+        super.teleport(position, chunks, () -> {
             updatePlayerPosition();
             OptionalCallback.execute(callback);
         });
+    }
+
+    @Override
+    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
+        final long[] chunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+        teleport(position, chunks, callback);
     }
 
     @Override
@@ -1948,12 +1940,13 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Sends a {@link UpdateViewPositionPacket}  to the player.
      *
-     * @param chunk the chunk to update the view
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
      */
-    public void updateViewPosition(@NotNull Chunk chunk) {
+    public void updateViewPosition(int chunkX, int chunkZ) {
         UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket();
-        updateViewPositionPacket.chunkX = chunk.getChunkX();
-        updateViewPositionPacket.chunkZ = chunk.getChunkZ();
+        updateViewPositionPacket.chunkX = chunkX;
+        updateViewPositionPacket.chunkZ = chunkZ;
         playerConnection.sendPacket(updateViewPositionPacket);
     }
 

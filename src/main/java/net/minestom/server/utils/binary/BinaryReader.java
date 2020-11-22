@@ -90,7 +90,7 @@ public class BinaryReader extends InputStream {
      */
     public String readSizedString(int maxLength) {
         final int length = readVarInt();
-        Check.stateCondition(length >= maxLength,
+        Check.stateCondition(length > maxLength,
                 "String length (" + length + ") was higher than the max length of " + maxLength);
 
         final byte[] bytes = readBytes(length);

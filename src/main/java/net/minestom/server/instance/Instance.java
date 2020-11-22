@@ -894,6 +894,19 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Synchronized method to execute {@link #removeEntityFromChunk(Entity, Chunk)}
+     * and {@link #addEntityToChunk(Entity, Chunk)} simultaneously.
+     *
+     * @param entity    the entity to change its chunk
+     * @param lastChunk the last entity chunk
+     * @param newChunk  the new entity chunk
+     */
+    public synchronized void switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
+        removeEntityFromChunk(entity, lastChunk);
+        addEntityToChunk(entity, newChunk);
+    }
+
+    /**
      * Adds the specified {@link Entity} to the instance entities cache.
      * <p>
      * Warning: this is done automatically when the entity move out of his chunk.

@@ -80,9 +80,9 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
-        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.DECRYPT_HANDLER_NAME,
+        channel.pipeline().addBefore(NettyServer.GROUPED_PACKET_HANDLER_NAME, NettyServer.DECRYPT_HANDLER_NAME,
                 new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-        channel.pipeline().addBefore(NettyServer.FRAMER_HANDLER_NAME, NettyServer.ENCRYPT_HANDLER_NAME,
+        channel.pipeline().addBefore(NettyServer.GROUPED_PACKET_HANDLER_NAME, NettyServer.ENCRYPT_HANDLER_NAME,
                 new Encrypter(MojangCrypt.getCipher(1, secretKey)));
     }
 

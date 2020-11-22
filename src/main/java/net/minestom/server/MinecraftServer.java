@@ -456,15 +456,14 @@ public final class MinecraftServer {
 
             final Collection<Player> players = connectionManager.getOnlinePlayers();
 
-            UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
-            updateViewDistancePacket.viewDistance = chunkViewDistance;
-
-            // Send packet to all online players
-            PacketUtils.sendGroupedPacket(players, updateViewDistancePacket);
-
             players.forEach(player -> {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
+
+                    UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
+                    updateViewDistancePacket.viewDistance = player.getChunkRange();
+                    player.getPlayerConnection().sendPacket(updateViewDistancePacket);
+
                     player.refreshVisibleChunks(playerChunk);
                 }
             });

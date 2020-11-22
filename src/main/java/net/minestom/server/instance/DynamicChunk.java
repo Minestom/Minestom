@@ -26,9 +26,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -55,7 +53,7 @@ public class DynamicChunk extends Chunk {
     protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     // Block entities
-    protected final Set<Integer> blockEntities = new CopyOnWriteArraySet<>();
+    protected final IntSet blockEntities = new IntOpenHashSet();
 
     private long lastChangeTime;
 
@@ -384,12 +382,12 @@ public class DynamicChunk extends Chunk {
     @Override
     protected ChunkDataPacket createFreshPacket() {
         ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
-        fullDataPacket.biomes = biomes.clone();
+        fullDataPacket.biomes = biomes;
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
         fullDataPacket.paletteStorage = blockPalette.copy();
         fullDataPacket.customBlockPaletteStorage = customBlockPalette.copy();
-        fullDataPacket.blockEntities = new HashSet<>(blockEntities);
+        fullDataPacket.blockEntities = new IntOpenHashSet(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
     }
