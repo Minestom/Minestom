@@ -28,6 +28,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
+import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -229,29 +230,34 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
      *
      * @param position the teleport position
+     * @param chunks   the chunk indexes to load before teleporting the entity,
+     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                 can be null or empty to only load the chunk at {@code position}
      * @param callback the optional callback executed, even if auto chunk is not enabled
+     * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
+    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
         Check.notNull(position, "Teleport position cannot be null");
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
-        final Runnable runnable = () -> {
-            if (!this.position.isSimilar(position)) {
-                refreshPosition(position.getX(), position.getY(), position.getZ());
-            }
-            if (!this.position.hasSimilarView(position)) {
-                refreshView(position.getYaw(), position.getPitch());
-            }
+        final ChunkCallback endCallback = (chunk) -> {
+            refreshPosition(position.getX(), position.getY(), position.getZ());
+            refreshView(position.getYaw(), position.getPitch());
+
             sendSynchronization();
 
             OptionalCallback.execute(callback);
         };
 
-        if (instance.hasEnabledAutoChunkLoad()) {
-            instance.loadChunk(position, chunk -> runnable.run());
+        if (chunks == null || chunks.length == 0) {
+            instance.loadOptionalChunk(position, endCallback);
         } else {
-            runnable.run();
+            ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
         }
+    }
+
+    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
+        teleport(position, null, callback);
     }
 
     public void teleport(@NotNull Position position) {
@@ -1020,13 +1026,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         final Instance instance = getInstance();
         if (instance != null) {
+
+            // Needed to refresh the client chunks when connecting for the first time
+            final boolean forceUpdate = this instanceof Player && getAliveTicks() == 0;
+
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
-            if (lastChunk != null && newChunk != null && lastChunk != newChunk) {
-                synchronized (instance) {
-                    instance.removeEntityFromChunk(this, lastChunk);
-                    instance.addEntityToChunk(this, newChunk);
-                }
+            if (forceUpdate || (lastChunk != null && newChunk != null && lastChunk != newChunk)) {
+                instance.switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;

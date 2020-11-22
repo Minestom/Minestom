@@ -409,13 +409,17 @@ public abstract class Chunk implements Viewable, DataContainer {
     public boolean addViewer(@NotNull Player player) {
         final boolean result = this.viewers.add(player);
 
-        // Send the chunk data & light packets to the player
-        sendChunk(player);
         // Add to the viewable chunks set
         player.getViewableChunks().add(this);
 
-        PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-        player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
+        if (result) {
+            // Send the chunk data & light packets to the player
+            sendChunk(player);
+
+            PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
+            player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
+        }
+
         return result;
     }
 
@@ -433,8 +437,11 @@ public abstract class Chunk implements Viewable, DataContainer {
         // Remove from the viewable chunks set
         player.getViewableChunks().remove(this);
 
-        PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
-        player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
+        if (result) {
+            PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
+            player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
+        }
+
         return result;
     }
 
@@ -463,9 +470,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     protected synchronized void sendChunk(@NotNull Player player) {
         // Only send loaded chunk
         if (!isLoaded())
-            return;
-        // Only send chunk to netty client (because it sends raw ByteBuf buffer)
-        if (!PlayerUtils.isNettyClient(player))
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
