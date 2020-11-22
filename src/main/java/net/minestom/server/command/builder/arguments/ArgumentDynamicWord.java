@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Same as {@link ArgumentWord} with the exception
- * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(String)}.
+ * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(String)}
+ * when the suggestion type is {@link SuggestionType#ASK_SERVER}, or any other suggestions available in the enum.
  */
 public class ArgumentDynamicWord extends Argument<String> {
 
