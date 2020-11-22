@@ -729,7 +729,10 @@ public class Player extends LivingEntity implements CommandSender {
                 spawnPlayer(instance, firstSpawn);
             };
 
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback);
+            // Chunk 0;0 always needs to be loaded
+            instance.loadChunk(0, 0, chunk ->
+                    // Load all the required chunks
+                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
 
         } else {
             // The player already has the good version of all the chunks.
