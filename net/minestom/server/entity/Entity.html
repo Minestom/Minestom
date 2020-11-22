@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":6,"i79":10,"i80":10,"i81":10,"i82":10,"i83":6};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":6,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":6};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -1004,7 +1004,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i80" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+        long[]&nbsp;chunks,
         java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
@@ -1013,19 +1014,25 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i81" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+        java.lang.Runnable&nbsp;callback)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i82" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Updates the entity, called every tick.</div>
 </td>
 </tr>
-<tr id="i82" class="altColor">
+<tr id="i83" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#triggerStatus(byte)">triggerStatus</a></span>&#8203;(byte&nbsp;status)</code></th>
 <td class="colLast">
 <div class="block">Entity statuses can be found <a href="https://wiki.vg/Entity_statuses">here</a>.</div>
 </td>
 </tr>
-<tr id="i83" class="rowColor">
+<tr id="i84" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -1702,6 +1709,32 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 </dl>
 </li>
 </ul>
+<a id="teleport(net.minestom.server.utils.Position,long[],java.lang.Runnable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>teleport</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;teleport&#8203;(@NotNull
+                     <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+                     @Nullable
+                     long[]&nbsp;chunks,
+                     @Nullable
+                     java.lang.Runnable&nbsp;callback)</pre>
+<div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
+ <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the teleport position</dd>
+<dd><code>chunks</code> - the chunk indexes to load before teleporting the entity,
+                 indexes are from <a href="../utils/chunk/ChunkUtils.html#getChunkIndex(int,int)"><code>ChunkUtils.getChunkIndex(int, int)</code></a>,
+                 can be null or empty to only load the chunk at <code>position</code></dd>
+<dd><code>callback</code> - the optional callback executed, even if auto chunk is not enabled</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalStateException</code> - if you try to teleport an entity before settings its instance</dd>
+</dl>
+</li>
+</ul>
 <a id="teleport(net.minestom.server.utils.Position,java.lang.Runnable)">
 <!--   -->
 </a>
@@ -1712,13 +1745,6 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
                      <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
                      @Nullable
                      java.lang.Runnable&nbsp;callback)</pre>
-<div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
- <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the teleport position</dd>
-<dd><code>callback</code> - the optional callback executed, even if auto chunk is not enabled</dd>
-</dl>
 </li>
 </ul>
 <a id="teleport(net.minestom.server.utils.Position)">

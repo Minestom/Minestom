@@ -19590,6 +19590,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/callback/OptionalCallback.html#%3Cinit%3E()">OptionalCallback()</a></span> - Constructor for class net.minestom.server.utils.callback.<a href="net/minestom/server/utils/callback/OptionalCallback.html" title="class in net.minestom.server.utils.callback">OptionalCallback</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/chunk/ChunkUtils.html#optionalLoadAll(net.minestom.server.instance.Instance,long%5B%5D,net.minestom.server.utils.chunk.ChunkCallback,net.minestom.server.utils.chunk.ChunkCallback)">optionalLoadAll(Instance, long[], ChunkCallback, ChunkCallback)</a></span> - Static method in class net.minestom.server.utils.chunk.<a href="net/minestom/server/utils/chunk/ChunkUtils.html" title="class in net.minestom.server.utils.chunk">ChunkUtils</a></dt>
+<dd>
+<div class="block">Executes <a href="net/minestom/server/instance/Instance.html#loadOptionalChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)"><code>Instance.loadOptionalChunk(int, int, ChunkCallback)</code></a> for the array of chunks <code>chunks</code>
+ with multiple callbacks, <code>eachCallback</code> which is executed each time a new chunk is loaded and
+ <code>endCallback</code> when all the chunks in the array have been loaded.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/Block.html#ORANGE_BANNER">ORANGE_BANNER</a></span> - net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/Material.html#ORANGE_BANNER">ORANGE_BANNER</a></span> - net.minestom.server.item.<a href="net/minestom/server/item/Material.html" title="enum in net.minestom.server.item">Material</a></dt>
@@ -26174,6 +26180,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Sends a <a href="net/minestom/server/network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
  (can be used for attack animation).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/instance/Instance.html#switchEntityChunk(net.minestom.server.entity.Entity,net.minestom.server.instance.Chunk,net.minestom.server.instance.Chunk)">switchEntityChunk(Entity, Chunk, Chunk)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></dt>
+<dd>
+<div class="block">Synchronized method to execute <a href="net/minestom/server/instance/Instance.html#removeEntityFromChunk(net.minestom.server.entity.Entity,net.minestom.server.instance.Chunk)"><code>Instance.removeEntityFromChunk(Entity, Chunk)</code></a>
+ and <a href="net/minestom/server/instance/Instance.html#addEntityToChunk(net.minestom.server.entity.Entity,net.minestom.server.instance.Chunk)"><code>Instance.addEntityToChunk(Entity, Chunk)</code></a> simultaneously.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/inventory/EquipmentHandler.html#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment(EntityEquipmentPacket.Slot)</a></span> - Method in interface net.minestom.server.inventory.<a href="net/minestom/server/inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></dt>
 <dd>
 <div class="block">Sends a specific equipment to viewers.</div>
@@ -26433,11 +26444,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#teleport(net.minestom.server.utils.Position)">teleport(Position)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport(Position, Runnable)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport(Position, long[], Runnable)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
  <a href="net/minestom/server/instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport(Position, long[], Runnable)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport(Position, Runnable)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport(Position, Runnable)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/play/ClientTeleportConfirmPacket.html#teleportId">teleportId</a></span> - Variable in class net.minestom.server.network.packet.client.play.<a href="net/minestom/server/network/packet/client/play/ClientTeleportConfirmPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientTeleportConfirmPacket</a></dt>
@@ -27375,7 +27390,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/UpdateViewDistancePacket.html#%3Cinit%3E()">UpdateViewDistancePacket()</a></span> - Constructor for class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/UpdateViewDistancePacket.html" title="class in net.minestom.server.network.packet.server.play">UpdateViewDistancePacket</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#updateViewPosition(net.minestom.server.instance.Chunk)">updateViewPosition(Chunk)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#updateViewPosition(int,int)">updateViewPosition(int, int)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
 <div class="block">Sends a <a href="net/minestom/server/network/packet/server/play/UpdateViewPositionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateViewPositionPacket</code></a>  to the player.</div>
 </dd>

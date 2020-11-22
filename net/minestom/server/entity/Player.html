@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":9,"i40":9,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10,"i97":10,"i98":10,"i99":10,"i100":10,"i101":10,"i102":10,"i103":10,"i104":10,"i105":10,"i106":10,"i107":10,"i108":10,"i109":10,"i110":10,"i111":10,"i112":10,"i113":10,"i114":10,"i115":10,"i116":10,"i117":10,"i118":10,"i119":10,"i120":10,"i121":10,"i122":10,"i123":10,"i124":10,"i125":10,"i126":10,"i127":10,"i128":10,"i129":10,"i130":10,"i131":10,"i132":10,"i133":10,"i134":9,"i135":10,"i136":10,"i137":10,"i138":10,"i139":10,"i140":10,"i141":10,"i142":10,"i143":10,"i144":10,"i145":10,"i146":10,"i147":10,"i148":10,"i149":10,"i150":10,"i151":10,"i152":10,"i153":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":9,"i40":9,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10,"i97":10,"i98":10,"i99":10,"i100":10,"i101":10,"i102":10,"i103":10,"i104":10,"i105":10,"i106":10,"i107":10,"i108":10,"i109":10,"i110":10,"i111":10,"i112":10,"i113":10,"i114":10,"i115":10,"i116":10,"i117":10,"i118":10,"i119":10,"i120":10,"i121":10,"i122":10,"i123":10,"i124":10,"i125":10,"i126":10,"i127":10,"i128":10,"i129":10,"i130":10,"i131":10,"i132":10,"i133":10,"i134":9,"i135":10,"i136":10,"i137":10,"i138":10,"i139":10,"i140":10,"i141":10,"i142":10,"i143":10,"i144":10,"i145":10,"i146":10,"i147":10,"i148":10,"i149":10,"i150":10,"i151":10,"i152":10,"i153":10,"i154":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -1365,7 +1365,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i149" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+        long[]&nbsp;chunks,
         java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
@@ -1374,28 +1375,35 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i150" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+        java.lang.Runnable&nbsp;callback)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i151" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_changeDidCloseInventory(boolean)">UNSAFE_changeDidCloseInventory</a></span>&#8203;(boolean&nbsp;didCloseInventory)</code></th>
 <td class="colLast">
 <div class="block">Used internally to reset the didCloseInventory field.</div>
 </td>
 </tr>
-<tr id="i151" class="rowColor">
+<tr id="i152" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Called each tick.</div>
 </td>
 </tr>
-<tr id="i152" class="altColor">
+<tr id="i153" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePlayerPosition()">updatePlayerPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used for synchronization purpose, mainly for teleportation</div>
 </td>
 </tr>
-<tr id="i153" class="rowColor">
+<tr id="i154" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateViewPosition(net.minestom.server.instance.Chunk)">updateViewPosition</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateViewPosition(int,int)">updateViewPosition</a></span>&#8203;(int&nbsp;chunkX,
+                  int&nbsp;chunkZ)</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/play/UpdateViewPositionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateViewPositionPacket</code></a>  to the player.</div>
 </td>
@@ -2749,6 +2757,33 @@ public&nbsp;<a href="../utils/Position.html" title="class in net.minestom.server
 </dl>
 </li>
 </ul>
+<a id="teleport(net.minestom.server.utils.Position,long[],java.lang.Runnable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>teleport</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;teleport&#8203;(@NotNull
+                     <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+                     @Nullable
+                     long[]&nbsp;chunks,
+                     @Nullable
+                     java.lang.Runnable&nbsp;callback)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">Entity</a></code></span></div>
+<div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
+ <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the teleport position</dd>
+<dd><code>chunks</code> - the chunk indexes to load before teleporting the entity,
+                 indexes are from <a href="../utils/chunk/ChunkUtils.html#getChunkIndex(int,int)"><code>ChunkUtils.getChunkIndex(int, int)</code></a>,
+                 can be null or empty to only load the chunk at <code>position</code></dd>
+<dd><code>callback</code> - the optional callback executed, even if auto chunk is not enabled</dd>
+</dl>
+</li>
+</ul>
 <a id="teleport(net.minestom.server.utils.Position,java.lang.Runnable)">
 <!--   -->
 </a>
@@ -2759,15 +2794,9 @@ public&nbsp;<a href="../utils/Position.html" title="class in net.minestom.server
                      <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
                      @Nullable
                      java.lang.Runnable&nbsp;callback)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">Entity</a></code></span></div>
-<div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
- <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the teleport position</dd>
-<dd><code>callback</code> - the optional callback executed, even if auto chunk is not enabled</dd>
 </dl>
 </li>
 </ul>
@@ -3160,18 +3189,19 @@ public&nbsp;<a href="../inventory/Inventory.html" title="class in net.minestom.s
 </dl>
 </li>
 </ul>
-<a id="updateViewPosition(net.minestom.server.instance.Chunk)">
+<a id="updateViewPosition(int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>updateViewPosition</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;updateViewPosition&#8203;(@NotNull
-                               <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;updateViewPosition&#8203;(int&nbsp;chunkX,
+                               int&nbsp;chunkZ)</pre>
 <div class="block">Sends a <a href="../network/packet/server/play/UpdateViewPositionPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>UpdateViewPositionPacket</code></a>  to the player.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunk</code> - the chunk to update the view</dd>
+<dd><code>chunkX</code> - the chunk X</dd>
+<dd><code>chunkZ</code> - the chunk Z</dd>
 </dl>
 </li>
 </ul>
