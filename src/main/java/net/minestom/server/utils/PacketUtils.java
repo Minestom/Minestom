@@ -46,7 +46,7 @@ public final class PacketUtils {
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
             final ByteBuf finalBuffer = createFramedPacket(packet, true);
-            final FramedPacket framedPacket = new FramedPacket(finalBuffer, true);
+            final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
             final int refIncrease = players.size() - 1;
             if (refIncrease > 0)
@@ -55,7 +55,7 @@ public final class PacketUtils {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.write(framedPacket);
+                    nettyPlayerConnection.getChannel().write(framedPacket).addListener((p) -> finalBuffer.release());
                 } else {
                     playerConnection.sendPacket(packet);
                     finalBuffer.release();

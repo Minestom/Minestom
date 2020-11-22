@@ -175,7 +175,7 @@ public class PlayerInit {
                 event.setSpawningInstance(instanceContainer);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
-                player.setRespawnPoint(new Position(0, 70f, 0));
+                player.setRespawnPoint(new Position(x, 70f, z));
 
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)

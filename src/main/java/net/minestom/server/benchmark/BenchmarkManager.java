@@ -104,20 +104,20 @@ public final class BenchmarkManager {
     }
 
     public String getCpuMonitoringMessage() {
-        String benchmarkMessage = "";
+        StringBuilder benchmarkMessage = new StringBuilder();
         for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();
             final ThreadResult result = resultEntry.getValue();
 
-            benchmarkMessage += ChatColor.GRAY + name;
-            benchmarkMessage += ": ";
-            benchmarkMessage += ChatColor.YELLOW.toString() + MathUtils.round(result.getCpuPercentage(), 2) + "% CPU ";
-            benchmarkMessage += ChatColor.RED.toString() + MathUtils.round(result.getUserPercentage(), 2) + "% USER ";
-            benchmarkMessage += ChatColor.PINK.toString() + MathUtils.round(result.getBlockedPercentage(), 2) + "% BLOCKED ";
-            benchmarkMessage += ChatColor.BRIGHT_GREEN.toString() + MathUtils.round(result.getWaitedPercentage(), 2) + "% WAITED ";
-            benchmarkMessage += "\n";
+            benchmarkMessage.append(ChatColor.GRAY).append(name);
+            benchmarkMessage.append(": ");
+            benchmarkMessage.append(ChatColor.YELLOW.toString()).append(MathUtils.round(result.getCpuPercentage(), 2)).append("% CPU ");
+            benchmarkMessage.append(ChatColor.RED.toString()).append(MathUtils.round(result.getUserPercentage(), 2)).append("% USER ");
+            benchmarkMessage.append(ChatColor.PINK.toString()).append(MathUtils.round(result.getBlockedPercentage(), 2)).append("% BLOCKED ");
+            benchmarkMessage.append(ChatColor.BRIGHT_GREEN.toString()).append(MathUtils.round(result.getWaitedPercentage(), 2)).append("% WAITED ");
+            benchmarkMessage.append("\n");
         }
-        return benchmarkMessage;
+        return benchmarkMessage.toString();
     }
 
     private void refreshData() {

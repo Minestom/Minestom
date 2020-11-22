@@ -10,15 +10,9 @@ import org.jetbrains.annotations.NotNull;
 public class FramedPacket {
 
     public final ByteBuf body;
-    public boolean releaseBuf = false;
 
     public FramedPacket(@NotNull ByteBuf body) {
         this.body = body;
-    }
-
-    public FramedPacket(@NotNull ByteBuf body, boolean releaseBuf) {
-        this.body = body;
-        this.releaseBuf = releaseBuf;
     }
 
 }

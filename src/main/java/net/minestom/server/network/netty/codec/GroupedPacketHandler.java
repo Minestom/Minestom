@@ -13,10 +13,6 @@ public class GroupedPacketHandler extends MessageToByteEncoder<FramedPacket> {
 
         out.setBytes(0, packet, 0, packet.writerIndex());
         out.writerIndex(packet.writerIndex());
-        
-        if (msg.releaseBuf) {
-            packet.release();
-        }
     }
 
     @Override
