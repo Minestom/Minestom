@@ -102,7 +102,7 @@ public enum Enchantment {
     }
 
     public static Enchantment fromId(int id) {
-        if(id >= 0 && id < values().length) {
+        if (id >= 0 && id < values().length) {
             return values()[id];
         }
         return null;
