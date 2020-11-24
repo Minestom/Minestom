@@ -37,9 +37,9 @@ public class CommandDispatcher {
         this.commands.add(command);
     }
 
-    public void unregister(Command command) {
+    public void unregister(@NotNull Command command) {
         commandMap.remove(command.getName().toLowerCase());
-        for(String alias : command.getAliases()) {
+        for (String alias : command.getAliases()) {
             this.commandMap.remove(alias.toLowerCase());
         }
         commands.remove(command);
@@ -248,7 +248,6 @@ public class CommandDispatcher {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
                 final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
-
                 // Check if at least 1 argument of the syntax is correct
                 if (max > 0) {
                     // Get the data of the closest syntax

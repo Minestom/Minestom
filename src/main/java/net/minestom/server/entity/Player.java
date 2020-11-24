@@ -703,12 +703,14 @@ public class Player extends LivingEntity implements CommandSender {
             for (Chunk viewableChunk : viewableChunks) {
                 viewableChunk.removeViewer(this);
             }
+
             // Send the new dimension
             if (this.instance != null) {
                 final DimensionType instanceDimensionType = instance.getDimensionType();
                 if (dimensionType != instanceDimensionType)
                     sendDimension(instanceDimensionType);
             }
+
             // Load all the required chunks
             final Position pos = firstSpawn ? getRespawnPoint() : position;
             final long[] visibleChunks = ChunkUtils.getChunksInRange(pos, getChunkRange());
@@ -757,6 +759,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         if (firstSpawn) {
             teleport(getRespawnPoint());
+        } else {
+            refreshVisibleChunks(getChunk());
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);

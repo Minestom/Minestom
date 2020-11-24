@@ -1175,17 +1175,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay    the time before removing the entity
+     * @param delay    the time before removing the entity,
+     *                 0 to cancel the removing
      * @param timeUnit the unit of the delay
      */
     public void scheduleRemove(long delay, @NotNull TimeUnit timeUnit) {
-        delay = timeUnit.toMilliseconds(delay);
-
         if (delay == 0) { // Cancel the scheduled remove
             this.scheduledRemoveTime = 0;
             return;
         }
-        this.scheduledRemoveTime = System.currentTimeMillis() + delay;
+        this.scheduledRemoveTime = System.currentTimeMillis() + timeUnit.toMilliseconds(delay);
     }
 
     /**
