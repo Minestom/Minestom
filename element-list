@@ -26,7 +26,6 @@ net.minestom.server.entity.damage
 net.minestom.server.entity.fakeplayer
 net.minestom.server.entity.hologram
 net.minestom.server.entity.pathfinding
-net.minestom.server.entity.task
 net.minestom.server.entity.type
 net.minestom.server.entity.type.ambient
 net.minestom.server.entity.type.animal
