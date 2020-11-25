@@ -170,7 +170,7 @@ public enum Particle {
     }
 
     public static Particle fromId(int id) {
-        if(id >= 0 && id < values().length) {
+        if (id >= 0 && id < values().length) {
             return values()[id];
         }
         return null;

@@ -82,7 +82,7 @@ public enum PotionEffect {
     }
 
     public int getId() {
-        return ordinal();
+        return ordinal() + 1;
     }
 
     public String getNamespaceID() {
@@ -90,8 +90,8 @@ public enum PotionEffect {
     }
 
     public static PotionEffect fromId(int id) {
-        if(id >= 0 && id < values().length) {
-            return values()[id];
+        if (id >= 0 && id < values().length + 1) {
+            return values()[id - 1];
         }
         return null;
     }

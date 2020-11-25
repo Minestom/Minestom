@@ -1,5 +1,8 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 /**
@@ -72,8 +75,8 @@ public class Position {
 
     /**
      * Gets the distance between 2 positions.
-     *   In cases where performance matters, {@link #getDistanceSquared(Position)} should be used
-     *   as it does not perform the expensive Math.sqrt method.
+     * In cases where performance matters, {@link #getDistanceSquared(Position)} should be used
+     * as it does not perform the expensive Math.sqrt method.
      *
      * @param position the second position
      * @return the distance between {@code this} and {@code position}
@@ -86,15 +89,15 @@ public class Position {
 
     /**
      * Gets the square distance to another position.
-    *
-    * @param position the second position
-    * @return the squared distance between {@code this} and {@code position}
-    */
-   public float getDistanceSquared(Position position) {
-       return MathUtils.square(getX() - position.getX()) +
-               MathUtils.square(getY() - position.getY()) +
-               MathUtils.square(getZ() - position.getZ());
-   }
+     *
+     * @param position the second position
+     * @return the squared distance between {@code this} and {@code position}
+     */
+    public float getDistanceSquared(Position position) {
+        return MathUtils.square(getX() - position.getX()) +
+                MathUtils.square(getY() - position.getY()) +
+                MathUtils.square(getZ() - position.getZ());
+    }
 
     /**
      * Gets a unit-vector pointing in the direction that this Location is
@@ -209,7 +212,7 @@ public class Position {
      * @param position the position to compare
      * @return true if the two positions are similar
      */
-    public boolean isSimilar(Position position) {
+    public boolean isSimilar(@NotNull Position position) {
         return Float.compare(position.x, x) == 0 &&
                 Float.compare(position.y, y) == 0 &&
                 Float.compare(position.z, z) == 0;
@@ -221,9 +224,25 @@ public class Position {
      * @param position the position to compare
      * @return true if the two positions have the same view
      */
-    public boolean hasSimilarView(Position position) {
+    public boolean hasSimilarView(@NotNull Position position) {
         return Float.compare(position.yaw, yaw) == 0 &&
                 Float.compare(position.pitch, pitch) == 0;
+    }
+
+    /**
+     * Gets if two positions are in the same chunk.
+     *
+     * @param position the checked position chunk
+     * @return true if 'this' is in the same chunk as {@code position}
+     */
+    public boolean inSameChunk(@NotNull Position position) {
+        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(getX()));
+        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(getZ()));
+
+        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
+        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
+
+        return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }
 
     @Override

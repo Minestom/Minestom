@@ -45,12 +45,12 @@ public class PaletteStorage {
     private int valuesPerLong;
     private boolean hasPalette;
 
-    private long[][] sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
+    private long[][] sectionBlocks;
 
     // chunk section - palette index = block id
-    private Short2ShortLinkedOpenHashMap[] paletteBlockMaps = new Short2ShortLinkedOpenHashMap[CHUNK_SECTION_COUNT];
+    private Short2ShortLinkedOpenHashMap[] paletteBlockMaps;
     // chunk section - block id = palette index
-    private Short2ShortOpenHashMap[] blockPaletteMaps = new Short2ShortOpenHashMap[CHUNK_SECTION_COUNT];
+    private Short2ShortOpenHashMap[] blockPaletteMaps;
 
     /**
      * Creates a new palette storage.
@@ -72,6 +72,15 @@ public class PaletteStorage {
 
         this.valuesPerLong = Long.SIZE / bitsPerEntry;
         this.hasPalette = bitsPerEntry <= PALETTE_MAXIMUM_BITS;
+
+        init();
+    }
+
+    private void init() {
+        this.sectionBlocks = new long[CHUNK_SECTION_COUNT][0];
+
+        this.paletteBlockMaps = new Short2ShortLinkedOpenHashMap[CHUNK_SECTION_COUNT];
+        this.blockPaletteMaps = new Short2ShortOpenHashMap[CHUNK_SECTION_COUNT];
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
@@ -139,6 +148,14 @@ public class PaletteStorage {
         }
     }
 
+    /**
+     * Clears all the data in the palette and data array.
+     */
+    public void clear() {
+        init();
+    }
+
+    @NotNull
     public PaletteStorage copy() {
         PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
         paletteStorage.sectionBlocks = sectionBlocks.clone();

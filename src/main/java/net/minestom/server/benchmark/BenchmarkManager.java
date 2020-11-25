@@ -99,11 +99,14 @@ public final class BenchmarkManager {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
+    @NotNull
     public Map<String, ThreadResult> getResultMap() {
         return Collections.unmodifiableMap(resultMap);
     }
 
+    @NotNull
     public String getCpuMonitoringMessage() {
+        Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
         StringBuilder benchmarkMessage = new StringBuilder();
         for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();

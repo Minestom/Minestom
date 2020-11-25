@@ -678,40 +678,40 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
-     * <p>
-     * When this method is called for the first time (during player login), the player will be teleport at {@link #getRespawnPoint()}.
      *
-     * @param instance the new instance of the player
+     * @param instance      the new player instance
+     * @param spawnPosition the new position of the player,
+     *                      can be null or {@link #getPosition()} if you do not want to teleport the player
      */
-    @Override
-    public void setInstance(@NotNull Instance instance) {
+    public void setInstance(@NotNull Instance instance, @Nullable Position spawnPosition) {
         Check.notNull(instance, "instance cannot be null!");
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
-
-        final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
 
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
 
         if (needWorldRefresh) {
+            final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
+
             // Remove all previous viewable chunks (from the previous instance)
             for (Chunk viewableChunk : viewableChunks) {
                 viewableChunk.removeViewer(this);
             }
+
             // Send the new dimension
             if (this.instance != null) {
                 final DimensionType instanceDimensionType = instance.getDimensionType();
                 if (dimensionType != instanceDimensionType)
                     sendDimension(instanceDimensionType);
             }
+
             // Load all the required chunks
-            final Position pos = firstSpawn ? getRespawnPoint() : position;
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(pos, getChunkRange());
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
 
             final ChunkCallback eachCallback = chunk -> {
                 if (chunk != null) {
-                    final int chunkX = ChunkUtils.getChunkCoordinate((int) pos.getX());
-                    final int chunkZ = ChunkUtils.getChunkCoordinate((int) pos.getZ());
+                    final int chunkX = ChunkUtils.getChunkCoordinate((int) spawnPosition.getX());
+                    final int chunkZ = ChunkUtils.getChunkCoordinate((int) spawnPosition.getZ());
                     if (chunk.getChunkX() == chunkX &&
                             chunk.getChunkZ() == chunkZ) {
                         updateViewPosition(chunkX, chunkZ);
@@ -721,7 +721,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, firstSpawn);
+                spawnPlayer(instance, spawnPosition, firstSpawn);
             };
 
             // Chunk 0;0 always needs to be loaded
@@ -732,8 +732,20 @@ public class Player extends LivingEntity implements CommandSender {
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, false);
+            spawnPlayer(instance, spawnPosition, false);
         }
+    }
+
+    /**
+     * Changes the player instance without changing its position (defaulted to {@link #getRespawnPoint()}
+     * if the player is not in any instance.
+     *
+     * @param instance the new player instance
+     * @see #setInstance(Instance, Position)
+     */
+    @Override
+    public void setInstance(@NotNull Instance instance) {
+        setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
     }
 
     /**
@@ -741,17 +753,21 @@ public class Player extends LivingEntity implements CommandSender {
      * <p>
      * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
      * <p>
-     * UNSAFE: only called with {@link #setInstance(Instance)}.
+     * UNSAFE: only called with {@link #setInstance(Instance, Position)}.
      *
-     * @param firstSpawn true if this is the player first spawn
+     * @param spawnPosition the position to teleport the player
+     * @param firstSpawn    true if this is the player first spawn
      */
-    private void spawnPlayer(@NotNull Instance instance, boolean firstSpawn) {
+    private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition, boolean firstSpawn) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
 
         super.setInstance(instance);
 
-        if (firstSpawn) {
-            teleport(getRespawnPoint());
+        if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
+            teleport(spawnPosition,
+                    position.inSameChunk(spawnPosition) ? () -> refreshVisibleChunks(getChunk()) : null);
+        } else {
+            refreshVisibleChunks(getChunk());
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
@@ -1510,7 +1526,7 @@ public class Player extends LivingEntity implements CommandSender {
         // New chunks indexes
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
 
-        // Find the difference between the two arrays¬
+        // Find the difference between the two arrays
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 

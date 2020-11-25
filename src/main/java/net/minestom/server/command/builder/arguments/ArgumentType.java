@@ -49,8 +49,12 @@ public class ArgumentType {
         return new ArgumentWord(id);
     }
 
+    public static ArgumentDynamicWord DynamicWord(@NotNull String id, @NotNull SuggestionType suggestionType) {
+        return new ArgumentDynamicWord(id, suggestionType);
+    }
+
     public static ArgumentDynamicWord DynamicWord(@NotNull String id) {
-        return new ArgumentDynamicWord(id);
+        return DynamicWord(id, SuggestionType.ASK_SERVER);
     }
 
     public static ArgumentStringArray StringArray(@NotNull String id) {

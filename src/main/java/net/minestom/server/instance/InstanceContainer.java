@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
@@ -57,7 +58,7 @@ public class InstanceContainer extends Instance {
     // the chunk generator used, can be null
     private ChunkGenerator chunkGenerator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
-    private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<Chunk> chunks = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
     // contains all the chunks to remove during the next instance tick
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
@@ -312,7 +313,7 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(BlockPosition blockPosition) {
+    private void executeNeighboursBlockPlacementRule(@NotNull BlockPosition blockPosition) {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
@@ -451,10 +452,8 @@ public class InstanceContainer extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        synchronized (chunks) {
-            final Chunk chunk = chunks.get(index);
-            return ChunkUtils.isLoaded(chunk) ? chunk : null;
-        }
+        final Chunk chunk = chunks.get(index);
+        return ChunkUtils.isLoaded(chunk) ? chunk : null;
     }
 
     /**
@@ -480,7 +479,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Save the instance without callback.
+     * Saves the instance without callback.
      *
      * @see #saveInstance(Runnable)
      */
@@ -495,10 +494,8 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void saveChunksToStorage(@Nullable Runnable callback) {
-        synchronized (chunks) {
-            Collection<Chunk> chunksCollection = chunks.values();
-            this.chunkLoader.saveChunks(chunksCollection, callback);
-        }
+        Collection<Chunk> chunksCollection = chunks.values();
+        this.chunkLoader.saveChunks(chunksCollection, callback);
     }
 
     @Override
@@ -645,16 +642,14 @@ public class InstanceContainer extends Instance {
         copiedInstance.srcInstance = this;
         copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
 
-        synchronized (chunks) {
-            for (Chunk chunk : chunks.values()) {
-                final int chunkX = chunk.getChunkX();
-                final int chunkZ = chunk.getChunkZ();
+        for (Chunk chunk : chunks.values()) {
+            final int chunkX = chunk.getChunkX();
+            final int chunkZ = chunk.getChunkZ();
 
-                final Chunk copiedChunk = chunk.copy(chunkX, chunkZ);
+            final Chunk copiedChunk = chunk.copy(chunkX, chunkZ);
 
-                copiedInstance.cacheChunk(copiedChunk);
-                UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunkX, chunkZ);
-            }
+            copiedInstance.cacheChunk(copiedChunk);
+            UPDATE_MANAGER.signalChunkLoad(copiedInstance, chunkX, chunkZ);
         }
 
         return copiedInstance;
@@ -701,9 +696,7 @@ public class InstanceContainer extends Instance {
      */
     public void cacheChunk(@NotNull Chunk chunk) {
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        synchronized (chunks) {
-            this.chunks.put(index, chunk);
-        }
+        this.chunks.put(index, chunk);
     }
 
     @Override
@@ -833,12 +826,8 @@ public class InstanceContainer extends Instance {
                 });
 
                 // Clear cache
-                synchronized (chunks) {
-                    this.chunks.remove(index);
-                }
-                synchronized (chunkEntities) {
-                    this.chunkEntities.remove(index);
-                }
+                this.chunks.remove(index);
+                this.chunkEntities.remove(index);
 
                 chunk.unload();
 

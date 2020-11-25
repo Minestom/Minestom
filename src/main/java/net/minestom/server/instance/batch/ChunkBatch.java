@@ -22,7 +22,7 @@ import java.util.List;
  * use a {@link BlockBatch} instead otherwise.
  * Can be created using {@link Instance#createChunkBatch(Chunk)}.
  * <p>
- * Use chunk coordinate (0-15) instead of world's.
+ * Uses chunk coordinate (0-15) instead of world's.
  *
  * @see InstanceBatch
  */
@@ -30,6 +30,7 @@ public class ChunkBatch implements InstanceBatch {
 
     private final InstanceContainer instance;
     private final Chunk chunk;
+    private final BatchOption batchOption;
 
     private final boolean generationBatch;
 
@@ -42,15 +43,22 @@ public class ChunkBatch implements InstanceBatch {
     private Int2ObjectMap<Data> blockDataMap;
 
     public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk,
+                      @NotNull BatchOption batchOption,
                       boolean generationBatch) {
         this.instance = instance;
         this.chunk = chunk;
+        this.batchOption = batchOption;
         this.generationBatch = generationBatch;
 
         if (!generationBatch) {
             this.blocks = new LongArrayList();
             this.blockDataMap = new Int2ObjectOpenHashMap<>();
         }
+    }
+
+    public ChunkBatch(@NotNull InstanceContainer instance, @NotNull Chunk chunk,
+                      boolean generationBatch) {
+        this(instance, chunk, new BatchOption(), generationBatch);
     }
 
     @Override
@@ -120,6 +128,10 @@ public class ChunkBatch implements InstanceBatch {
                 final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
                 final boolean hasPopulator = populators != null && !populators.isEmpty();
 
+                if (batchOption.isFullChunk()) {
+                    this.chunk.reset();
+                }
+
                 chunkGenerator.generateChunkData(this, chunk.getChunkX(), chunk.getChunkZ());
 
                 if (hasPopulator) {
@@ -128,16 +140,7 @@ public class ChunkBatch implements InstanceBatch {
                     }
                 }
 
-                // Refresh chunk for viewers
-                this.chunk.sendChunkUpdate();
-
-                this.instance.refreshLastBlockChangeTime();
-
-                // Safe callback
-                instance.scheduleNextTick(inst -> {
-                    OptionalCallback.execute(callback, chunk);
-                });
-
+                updateChunk(callback, true);
             }
         });
     }
@@ -197,18 +200,7 @@ public class ChunkBatch implements InstanceBatch {
                 }
             }
 
-            // Refresh chunk for viewers
-            chunk.sendChunkUpdate();
-
-            this.instance.refreshLastBlockChangeTime();
-
-            if (callback != null) {
-                if (safeCallback) {
-                    this.instance.scheduleNextTick(inst -> callback.accept(chunk));
-                } else {
-                    callback.accept(chunk);
-                }
-            }
+            updateChunk(callback, safeCallback);
         }
     }
 
@@ -234,8 +226,26 @@ public class ChunkBatch implements InstanceBatch {
                 ChunkUtils.blockIndexToChunkPositionY(index),
                 ChunkUtils.blockIndexToChunkPositionZ(index),
                 blockId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+    }
 
+    private void updateChunk(@Nullable ChunkCallback callback, boolean safeCallback) {
 
+        // Refresh chunk for viewers
+        if (batchOption.isFullChunk()) {
+            chunk.sendChunk();
+        } else {
+            chunk.sendChunkUpdate();
+        }
+
+        this.instance.refreshLastBlockChangeTime();
+
+        if (callback != null) {
+            if (safeCallback) {
+                this.instance.scheduleNextTick(inst -> callback.accept(chunk));
+            } else {
+                callback.accept(chunk);
+            }
+        }
     }
 
 }

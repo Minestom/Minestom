@@ -6,6 +6,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,33 +25,39 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BlockBatch implements InstanceBatch {
 
     private final InstanceContainer instance;
+    private final BatchOption batchOption;
 
     private final Map<Chunk, List<BlockData>> data = new HashMap<>();
 
-    public BlockBatch(InstanceContainer instance) {
+    public BlockBatch(@NotNull InstanceContainer instance, @NotNull BatchOption batchOption) {
         this.instance = instance;
+        this.batchOption = batchOption;
+    }
+
+    public BlockBatch(@NotNull InstanceContainer instance) {
+        this(instance, new BatchOption());
     }
 
     @Override
-    public synchronized void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
+    public synchronized void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data) {
         final Chunk chunk = this.instance.getChunkAt(x, z);
         addBlockData(chunk, x, y, z, blockStateId, (short) 0, data);
     }
 
     @Override
-    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
+    public void setCustomBlock(int x, int y, int z, short customBlockId, @Nullable Data data) {
         final Chunk chunk = this.instance.getChunkAt(x, z);
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
         addBlockData(chunk, x, y, z, customBlock.getDefaultBlockStateId(), customBlockId, data);
     }
 
     @Override
-    public synchronized void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+    public synchronized void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
         final Chunk chunk = this.instance.getChunkAt(x, z);
         addBlockData(chunk, x, y, z, blockStateId, customBlockId, data);
     }
 
-    private void addBlockData(Chunk chunk, int x, int y, int z, short blockStateId, short customBlockId, Data data) {
+    private void addBlockData(@NotNull Chunk chunk, int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
         List<BlockData> blocksData = this.data.get(chunk);
         if (blocksData == null)
             blocksData = new ArrayList<>();
@@ -67,7 +75,7 @@ public class BlockBatch implements InstanceBatch {
         this.data.put(chunk, blocksData);
     }
 
-    public void flush(Runnable callback) {
+    public void flush(@Nullable Runnable callback) {
         synchronized (data) {
             AtomicInteger counter = new AtomicInteger();
             for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
@@ -78,12 +86,20 @@ public class BlockBatch implements InstanceBatch {
                         if (!chunk.isLoaded())
                             return;
 
+                        if (batchOption.isFullChunk()) {
+                            chunk.reset();
+                        }
+
                         for (BlockData data : dataList) {
                             data.apply(chunk);
                         }
 
                         // Refresh chunk for viewers
-                        chunk.sendChunkUpdate();
+                        if (batchOption.isFullChunk()) {
+                            chunk.sendChunk();
+                        } else {
+                            chunk.sendChunkUpdate();
+                        }
 
                         final boolean isLast = counter.incrementAndGet() == data.size();
 

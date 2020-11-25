@@ -66,6 +66,7 @@ public final class EntityManager {
 
             waitingPlayer.init();
 
+            // Spawn the player at Player#getRespawnPoint during the next instance tick
             spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
         }
     }

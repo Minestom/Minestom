@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
+import net.minestom.server.instance.batch.BatchOption;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
@@ -186,7 +187,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z    the block Z
      * @param data the new data, can be null
      */
-    public abstract void setBlockData(int x, int y, int z, Data data);
+    public abstract void setBlockData(int x, int y, int z, @Nullable Data data);
 
     /**
      * Gets all the block entities in this chunk.
@@ -240,14 +241,21 @@ public abstract class Chunk implements Viewable, DataContainer {
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
      * <p>
-     * The instance and chunk position (X/Z) can be modified using the given arguments.
+     * The chunk position (X/Z) can be modified using the given arguments.
      *
-     * @param chunkX the new chunk X
-     * @param chunkZ the new chunk Z
+     * @param chunkX the chunk X of the copy
+     * @param chunkZ the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
     @NotNull
     public abstract Chunk copy(int chunkX, int chunkZ);
+
+    /**
+     * Resets the chunk, this means clearing all the data making it empty.
+     * <p>
+     * Used for {@link BatchOption#isFullChunk()}.
+     */
+    public abstract void reset();
 
     /**
      * Gets the {@link CustomBlock} at a position.
@@ -314,6 +322,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @return the position of this chunk
      */
+    @NotNull
     public Position toPosition() {
         return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
@@ -383,6 +392,37 @@ public abstract class Chunk implements Viewable, DataContainer {
         ChunkDataPacket fullDataPacket = createFreshPacket();
         fullDataPacket.fullChunk = false;
         return fullDataPacket;
+    }
+
+    /**
+     * Gets the light packet of this chunk.
+     *
+     * @return the light packet
+     */
+    @NotNull
+    public UpdateLightPacket getLightPacket() {
+        // TODO do not hardcode light
+        UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
+        updateLightPacket.chunkX = getChunkX();
+        updateLightPacket.chunkZ = getChunkZ();
+        updateLightPacket.skyLightMask = 0x3FFF0;
+        updateLightPacket.blockLightMask = 0x3F;
+        updateLightPacket.emptySkyLightMask = 0x0F;
+        updateLightPacket.emptyBlockLightMask = 0x3FFC0;
+        byte[] bytes = new byte[2048];
+        Arrays.fill(bytes, (byte) 0xFF);
+        List<byte[]> temp = new ArrayList<>(14);
+        List<byte[]> temp2 = new ArrayList<>(6);
+        for (int i = 0; i < 14; ++i) {
+            temp.add(bytes);
+        }
+        for (int i = 0; i < 6; ++i) {
+            temp2.add(bytes);
+        }
+        updateLightPacket.skyLight = temp;
+        updateLightPacket.blockLight = temp2;
+
+        return updateLightPacket;
     }
 
     /**
@@ -468,7 +508,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      *
      * @param player the player
      */
-    protected synchronized void sendChunk(@NotNull Player player) {
+    public synchronized void sendChunk(@NotNull Player player) {
         // Only send loaded chunk
         if (!isLoaded())
             return;
@@ -478,30 +518,16 @@ public abstract class Chunk implements Viewable, DataContainer {
         // Retrieve & send the buffer to the connection
         playerConnection.sendPacket(getFreshFullDataPacket());
 
-        // TODO do not hardcode light
-        {
-            UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
-            updateLightPacket.chunkX = getChunkX();
-            updateLightPacket.chunkZ = getChunkZ();
-            updateLightPacket.skyLightMask = 0x3FFF0;
-            updateLightPacket.blockLightMask = 0x3F;
-            updateLightPacket.emptySkyLightMask = 0x0F;
-            updateLightPacket.emptyBlockLightMask = 0x3FFC0;
-            byte[] bytes = new byte[2048];
-            Arrays.fill(bytes, (byte) 0xFF);
-            List<byte[]> temp = new ArrayList<>(14);
-            List<byte[]> temp2 = new ArrayList<>(6);
-            for (int i = 0; i < 14; ++i) {
-                temp.add(bytes);
-            }
-            for (int i = 0; i < 6; ++i) {
-                temp2.add(bytes);
-            }
-            updateLightPacket.skyLight = temp;
-            updateLightPacket.blockLight = temp2;
+        playerConnection.sendPacket(getLightPacket());
+    }
 
-            playerConnection.sendPacket(updateLightPacket);
+    public synchronized void sendChunk() {
+        if (!isLoaded()) {
+            return;
         }
+
+        sendPacketToViewers(getFreshFullDataPacket());
+        sendPacketToViewers(getLightPacket());
     }
 
     /**

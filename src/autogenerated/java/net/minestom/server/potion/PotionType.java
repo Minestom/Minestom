@@ -112,7 +112,7 @@ public enum PotionType {
     }
 
     public static PotionType fromId(int id) {
-        if(id >= 0 && id < values().length) {
+        if (id >= 0 && id < values().length) {
             return values()[id];
         }
         return EMPTY;

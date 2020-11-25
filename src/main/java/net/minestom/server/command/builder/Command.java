@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -187,7 +188,8 @@ public class Command {
 
     /**
      * Allows for tab auto completion, this is called everytime the player press a key in the chat
-     * when in a dynamic argument ({@link ArgumentDynamicWord} and {@link ArgumentDynamicStringArray}).
+     * when in a dynamic argument ({@link ArgumentDynamicWord} (when {@link SuggestionType#ASK_SERVER} is used)
+     * and {@link ArgumentDynamicStringArray}).
      *
      * @param text the whole player's text
      * @return the array containing all the suggestion for the current arg (split " "), can be null

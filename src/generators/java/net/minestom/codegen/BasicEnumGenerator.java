@@ -20,13 +20,23 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
     private final boolean linear;
     private NamespaceID defaultEntry;
 
-    protected BasicEnumGenerator(File targetFolder) throws IOException {
-        this(targetFolder, true);
+    /**
+     * True if the enum is linear and start by 1 instead of 0
+     */
+    private boolean incrementOrdinal;
+
+    protected BasicEnumGenerator(File targetFolder, boolean linear, boolean incrementOrdinal) throws IOException {
+        this.linear = linear;
+        this.incrementOrdinal = incrementOrdinal;
+        generateTo(targetFolder);
     }
 
     protected BasicEnumGenerator(File targetFolder, boolean linear) throws IOException {
-        this.linear = linear;
-        generateTo(targetFolder);
+        this(targetFolder, linear, false);
+    }
+
+    protected BasicEnumGenerator(File targetFolder) throws IOException {
+        this(targetFolder, true);
     }
 
     @Override
@@ -59,17 +69,19 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         ParameterSpec idParam = ParameterSpec.builder(TypeName.INT, "id").build();
         ParameterSpec[] signature = new ParameterSpec[]{idParam};
         if (linear) {
+            final String ordinalIncrementCondition = incrementOrdinal ? " + 1" : "";
+            final String ordinalIncrementIndex = incrementOrdinal ? " - 1" : "";
             generator.addStaticMethod("fromId", signature, className, code -> {
-                        code.beginControlFlow("if($N >= 0 && $N < values().length)", idParam, idParam)
-                                .addStatement("return values()[$N]", idParam)
+                        code.beginControlFlow("if ($N >= 0 && $N < values().length" + ordinalIncrementCondition + ")", idParam, idParam)
+                                .addStatement("return values()[$N" + ordinalIncrementIndex + "]", idParam)
                                 .endControlFlow()
                                 .addStatement("return " + (defaultEntry == null ? "null" : identifier(defaultEntry)));
                     }
             );
         } else {
             generator.addStaticMethod("fromId", signature, className, code -> {
-                        code.beginControlFlow("for($T o : values())")
-                                .beginControlFlow("if(o.getId() == id)")
+                        code.beginControlFlow("for ($T o : values())")
+                                .beginControlFlow("if (o.getId() == id)")
                                 .addStatement("return o")
                                 .endControlFlow()
                                 .endControlFlow()
@@ -94,7 +106,7 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         ClassName registriesClass = ClassName.get(Registries.class);
         if (linear) {
             generator.setParams(ParameterSpec.builder(ClassName.get(String.class), "namespaceID").build());
-            generator.addMethod("getId", new ParameterSpec[0], TypeName.INT, code -> code.addStatement("return ordinal()"));
+            generator.addMethod("getId", new ParameterSpec[0], TypeName.INT, code -> code.addStatement("return ordinal()" + (incrementOrdinal ? " + 1" : "")));
         } else {
             generator.setParams(ParameterSpec.builder(ClassName.get(String.class), "namespaceID").build(), ParameterSpec.builder(TypeName.INT, "id").build());
             generator.addMethod("getId", new ParameterSpec[0], TypeName.INT, code -> code.addStatement("return $N", "id"));
