@@ -1799,7 +1799,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <h4>setInstance</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setInstance&#8203;(@NotNull
                         <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        @NotNull
+                        @Nullable
                         <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
 <div class="block">Changes the player instance and load surrounding chunks if needed.
  <p>
@@ -1808,6 +1808,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the new player instance</dd>
+<dd><code>spawnPosition</code> - the new position of the player,
+                      can be null or <a href="Entity.html#getPosition()"><code>Entity.getPosition()</code></a> if you do not want to teleport the player</dd>
 </dl>
 </li>
 </ul>
