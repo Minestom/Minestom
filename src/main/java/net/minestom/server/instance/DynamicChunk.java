@@ -31,7 +31,7 @@ import java.util.Set;
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
  * <p>
- * WARNING: not thread-safe
+ * WARNING: not thread-safe.
  */
 public class DynamicChunk extends Chunk {
 
@@ -406,6 +406,17 @@ public class DynamicChunk extends Chunk {
         dynamicChunk.blockEntities.addAll(blockEntities);
 
         return dynamicChunk;
+    }
+
+    @Override
+    public void reset() {
+        this.blockPalette.clear();
+        this.customBlockPalette.clear();
+
+        this.blocksData.clear();
+        this.updatableBlocks.clear();
+        this.updatableBlocksLastUpdate.clear();
+        this.blockEntities.clear();
     }
 
     private short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
