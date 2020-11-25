@@ -684,9 +684,11 @@ public class Player extends LivingEntity implements CommandSender {
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
      *
-     * @param instance the new player instance
+     * @param instance      the new player instance
+     * @param spawnPosition the new position of the player,
+     *                      can be null or {@link #getPosition()} if you do not want to teleport the player
      */
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    public void setInstance(@NotNull Instance instance, @Nullable Position spawnPosition) {
         Check.notNull(instance, "instance cannot be null!");
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
