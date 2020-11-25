@@ -1123,34 +1123,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * Gets if this entity is in the same chunk as the specified position.
-     *
-     * @param position the checked position chunk
-     * @return true if the entity is in the same chunk as {@code position}
-     */
-    public boolean sameChunk(@NotNull Position position) {
-        Check.notNull(position, "Position cannot be null");
-        final Position pos = getPosition();
-        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getX()));
-        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(pos.getZ()));
-
-        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
-        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
-
-        return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
-    }
-
-    /**
-     * Gets if the entity is in the same chunk as another.
-     *
-     * @param entity the entity to check
-     * @return true if both entities are in the same chunk, false otherwise
-     */
-    public boolean sameChunk(@NotNull Entity entity) {
-        return sameChunk(entity.getPosition());
-    }
-
-    /**
      * Removes the entity from the server immediately.
      * <p>
      * WARNING: this do not trigger the {@link EntityDeathEvent} event.
