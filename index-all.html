@@ -15762,6 +15762,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/TradeListPacket.Trade.html#inputItem2">inputItem2</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/TradeListPacket.Trade.html" title="class in net.minestom.server.network.packet.server.play">TradeListPacket.Trade</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/Position.html#inSameChunk(net.minestom.server.utils.Position)">inSameChunk(Position)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/Position.html" title="class in net.minestom.server.utils">Position</a></dt>
+<dd>
+<div class="block">Gets if two positions are in the same chunk.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/client/play/ClientPlayerBlockPlacementPacket.html#insideBlock">insideBlock</a></span> - Variable in class net.minestom.server.network.packet.client.play.<a href="net/minestom/server/network/packet/client/play/ClientPlayerBlockPlacementPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientPlayerBlockPlacementPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/stat/StatisticType.html#INSPECT_DISPENSER">INSPECT_DISPENSER</a></span> - net.minestom.server.stat.<a href="net/minestom/server/stat/StatisticType.html" title="enum in net.minestom.server.stat">StatisticType</a></dt>
@@ -22701,14 +22705,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/Material.html#SALMON_SPAWN_EGG">SALMON_SPAWN_EGG</a></span> - net.minestom.server.item.<a href="net/minestom/server/item/Material.html" title="enum in net.minestom.server.item">Material</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#sameChunk(net.minestom.server.entity.Entity)">sameChunk(Entity)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
-<dd>
-<div class="block">Gets if the entity is in the same chunk as another.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#sameChunk(net.minestom.server.utils.Position)">sameChunk(Position)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
-<dd>
-<div class="block">Gets if this entity is in the same chunk as the specified position.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/ArrayUtils.html#sameStart(T%5B%5D,T%5B%5D,int)">sameStart(T[], T[], int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/ArrayUtils.html" title="class in net.minestom.server.utils">ArrayUtils</a></dt>
 <dd>
 <div class="block">Gets if two arrays share the same start until <code>length</code>.</div>
@@ -23894,6 +23890,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/EntityCreature.html#setInstance(net.minestom.server.instance.Instance)">setInstance(Instance)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#setInstance(net.minestom.server.instance.Instance)">setInstance(Instance)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
+<dd>
+<div class="block">Changes the player instance without changing its position (defaulted to <a href="net/minestom/server/entity/Player.html#getRespawnPoint()"><code>Player.getRespawnPoint()</code></a>
+ if the player is not in any instance.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Player.html#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">setInstance(Instance, Position)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Player.html" title="class in net.minestom.server.entity">Player</a></dt>
 <dd>
 <div class="block">Changes the player instance and load surrounding chunks if needed.</div>
 </dd>
