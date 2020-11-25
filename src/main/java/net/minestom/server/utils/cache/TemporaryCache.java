@@ -63,12 +63,13 @@ public class TemporaryCache<T> {
      */
     @Nullable
     public synchronized T retrieve(@NotNull UUID identifier, long lastUpdate) {
-        if (!cacheTime.containsKey(identifier)) {
+        Long tempL = cacheTime.get(identifier);
+        if (tempL == null) {
             return null;
         }
 
-        final long cachedTime = cacheTime.get(identifier);
-        return lastUpdate <= cachedTime ? cache.get(identifier) : null;
+        //cache.get(identifier) will return null if the race condition occurred which is what we want
+        return lastUpdate <= tempL ? cache.get(identifier) : null;
     }
 
     /**
