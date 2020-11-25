@@ -22,7 +22,7 @@ import java.util.List;
  * use a {@link BlockBatch} instead otherwise.
  * Can be created using {@link Instance#createChunkBatch(Chunk)}.
  * <p>
- * Use chunk coordinate (0-15) instead of world's.
+ * Uses chunk coordinate (0-15) instead of world's.
  *
  * @see InstanceBatch
  */
