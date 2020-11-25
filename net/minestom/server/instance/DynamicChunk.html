@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,7 +143,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></pre>
 <div class="block">Represents a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> which store each individual block in memory.
  <p>
- WARNING: not thread-safe</div>
+ WARNING: not thread-safe.</div>
 </li>
 </ul>
 </div>
@@ -342,6 +342,13 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the chunk, this means clearing all the data making it empty.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(int,int,int,net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(int&nbsp;x,
             int&nbsp;y,
             int&nbsp;z,
@@ -350,7 +357,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long,net.minestom.server.instance.Instance)">tick</a></span>&#8203;(long&nbsp;time,
     <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
@@ -358,7 +365,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <div class="block">Executes a chunk tick.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBlock(int,int,int,short,short,net.minestom.server.data.Data,boolean)">UNSAFE_setBlock</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -377,7 +384,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
-<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#createChunkSectionUpdatePacket(int)">createChunkSectionUpdatePacket</a>, <a href="Chunk.html#getBiomes()">getBiomes</a>, <a href="Chunk.html#getBlockIndex(int,int,int)">getBlockIndex</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getCustomBlock(int)">getCustomBlock</a>, <a href="Chunk.html#getCustomBlock(int,int,int)">getCustomBlock</a>, <a href="Chunk.html#getData()">getData</a>, <a href="Chunk.html#getFreshFullDataPacket()">getFreshFullDataPacket</a>, <a href="Chunk.html#getFreshPartialDataPacket()">getFreshPartialDataPacket</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isBlockEntity(short)">isBlockEntity</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#sendChunkSectionUpdate(int,net.minestom.server.entity.Player)">sendChunkSectionUpdate</a>, <a href="Chunk.html#sendChunkUpdate()">sendChunkUpdate</a>, <a href="Chunk.html#sendChunkUpdate(net.minestom.server.entity.Player)">sendChunkUpdate</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></li>
+<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#createChunkSectionUpdatePacket(int)">createChunkSectionUpdatePacket</a>, <a href="Chunk.html#getBiomes()">getBiomes</a>, <a href="Chunk.html#getBlockIndex(int,int,int)">getBlockIndex</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getCustomBlock(int)">getCustomBlock</a>, <a href="Chunk.html#getCustomBlock(int,int,int)">getCustomBlock</a>, <a href="Chunk.html#getData()">getData</a>, <a href="Chunk.html#getFreshFullDataPacket()">getFreshFullDataPacket</a>, <a href="Chunk.html#getFreshPartialDataPacket()">getFreshPartialDataPacket</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getLightPacket()">getLightPacket</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isBlockEntity(short)">isBlockEntity</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#sendChunkSectionUpdate(int,net.minestom.server.entity.Player)">sendChunkSectionUpdate</a>, <a href="Chunk.html#sendChunkUpdate()">sendChunkUpdate</a>, <a href="Chunk.html#sendChunkUpdate(net.minestom.server.entity.Player)">sendChunkUpdate</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -815,7 +822,7 @@ protected&nbsp;<a href="../network/packet/server/play/ChunkDataPacket.html" titl
 <a id="copy(int,int)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
 <pre class="methodSignature">@NotNull
@@ -824,15 +831,32 @@ public&nbsp;<a href="Chunk.html" title="class in net.minestom.server.instance">C
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#copy(int,int)">Chunk</a></code></span></div>
 <div class="block">Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
  <p>
- The instance and chunk position (X/Z) can be modified using the given arguments.</div>
+ The chunk position (X/Z) can be modified using the given arguments.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Chunk.html#copy(int,int)">copy</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunkX</code> - the new chunk X</dd>
-<dd><code>chunkZ</code> - the new chunk Z</dd>
+<dd><code>chunkX</code> - the chunk X of the copy</dd>
+<dd><code>chunkZ</code> - the chunk Z of the copy</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a copy of this chunk with a potentially new instance and position</dd>
+</dl>
+</li>
+</ul>
+<a id="reset()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>reset</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;reset()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#reset()">Chunk</a></code></span></div>
+<div class="block">Resets the chunk, this means clearing all the data making it empty.
+ <p>
+ Used for <a href="batch/BatchOption.html#isFullChunk()"><code>BatchOption.isFullChunk()</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Chunk.html#reset()">reset</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 </dl>
 </li>
 </ul>

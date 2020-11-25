@@ -191,6 +191,11 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer)">BlockBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.batch.BatchOption)">BlockBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
+          <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;batchOption)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -279,13 +284,26 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.batch.BatchOption)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BlockBatch</h4>
+<pre>public&nbsp;BlockBatch&#8203;(@NotNull
+                  <a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
+                  @NotNull
+                  <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;batchOption)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BlockBatch</h4>
-<pre>public&nbsp;BlockBatch&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance)</pre>
+<pre>public&nbsp;BlockBatch&#8203;(@NotNull
+                  <a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance)</pre>
 </li>
 </ul>
 </li>
@@ -308,6 +326,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
                             int&nbsp;y,
                             int&nbsp;z,
                             short&nbsp;blockStateId,
+                            @Nullable
                             <a href="../../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
 <div class="block">Sets a block at a position.
@@ -335,6 +354,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
                            int&nbsp;y,
                            int&nbsp;z,
                            short&nbsp;customBlockId,
+                           @Nullable
                            <a href="../../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.
@@ -363,6 +383,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
                               int&nbsp;z,
                               short&nbsp;blockStateId,
                               short&nbsp;customBlockId,
+                              @Nullable
                               <a href="../../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.
@@ -388,7 +409,8 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>flush</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(java.lang.Runnable&nbsp;callback)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(@Nullable
+                  java.lang.Runnable&nbsp;callback)</pre>
 </li>
 </ul>
 </li>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":6,"i4":10,"i5":6,"i6":6,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":10,"i13":6,"i14":10,"i15":10,"i16":10,"i17":10,"i18":6,"i19":6,"i20":10,"i21":10,"i22":10,"i23":10,"i24":6,"i25":6,"i26":6,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":6,"i33":10,"i34":10,"i35":10,"i36":10,"i37":6,"i38":10,"i39":10,"i40":10,"i41":6};
+var data = {"i0":10,"i1":6,"i2":10,"i3":6,"i4":10,"i5":6,"i6":6,"i7":10,"i8":6,"i9":10,"i10":10,"i11":10,"i12":10,"i13":6,"i14":10,"i15":10,"i16":10,"i17":10,"i18":6,"i19":10,"i20":6,"i21":10,"i22":10,"i23":10,"i24":10,"i25":6,"i26":6,"i27":6,"i28":10,"i29":6,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":6,"i36":10,"i37":10,"i38":10,"i39":10,"i40":6,"i41":10,"i42":10,"i43":10,"i44":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -432,41 +432,48 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </td>
 </tr>
 <tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="../network/packet/server/play/UpdateLightPacket.html" title="class in net.minestom.server.network.packet.server.play">UpdateLightPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLightPacket()">getLightPacket</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the light packet of this chunk.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>abstract byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSerializedData()">getSerializedData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Serializes the chunk into bytes.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isBlockEntity(short)">isBlockEntity</a></span>&#8203;(short&nbsp;blockStateId)</code></th>
 <td class="colLast">
 <div class="block">Gets if a block state id represents a block entity.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLoaded()">isLoaded</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to verify if the chunk should still be kept in memory.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isReadOnly()">isReadOnly</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this chunk is read-only.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)">readChunk</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
          <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
@@ -474,7 +481,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Reads the chunk from binary.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockStateId(int,int,int,short)">refreshBlockStateId</a></span>&#8203;(int&nbsp;x,
                    int&nbsp;y,
@@ -484,7 +491,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Changes the block state id at a position (the custom block id stays the same).</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockValue(int,int,int,short,short)">refreshBlockValue</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -495,7 +502,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Changes the block state id and the custom block id at a position.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
@@ -503,14 +510,26 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  and send a <a href="../event/player/PlayerChunkUnloadEvent.html" title="class in net.minestom.server.event.player"><code>PlayerChunkUnloadEvent</code></a>.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
-<td class="colFirst"><code>protected void</code></td>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reset()">reset</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Resets the chunk, this means clearing all the data making it empty.</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendChunk()">sendChunk</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendChunk(net.minestom.server.entity.Player)">sendChunk</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Sends the chunk data to <code>player</code>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendChunkSectionUpdate(int,net.minestom.server.entity.Player)">sendChunkSectionUpdate</a></span>&#8203;(int&nbsp;section,
                       <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
@@ -518,21 +537,21 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Sends a chunk section update packet to <code>player</code>.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendChunkUpdate()">sendChunkUpdate</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends a full <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> to all chunk viewers.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendChunkUpdate(net.minestom.server.entity.Player)">sendChunkUpdate</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Sends a full <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> to <code>player</code>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(int,int,int,net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(int&nbsp;x,
             int&nbsp;y,
@@ -542,35 +561,35 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a></span>&#8203;(<a href="../entity/pathfinding/PFColumnarSpace.html" title="class in net.minestom.server.entity.pathfinding">PFColumnarSpace</a>&nbsp;columnarSpace)</code></th>
 <td class="colLast">
 <div class="block">Changes this chunk columnar space.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReadOnly(boolean)">setReadOnly</a></span>&#8203;(boolean&nbsp;readOnly)</code></th>
 <td class="colLast">
 <div class="block">Changes the read state of the chunk.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldGenerate()">shouldGenerate</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this chunk will or had been loaded with a <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long,net.minestom.server.instance.Instance)">tick</a></span>&#8203;(long&nbsp;time,
     <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
@@ -578,26 +597,26 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Executes a chunk tick.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code><a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toPosition()">toPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="../utils/Position.html" title="class in net.minestom.server.utils"><code>Position</code></a> object based on this chunk.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unload()">unload</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the chunk as "unloaded".</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBlock(int,int,int,short,short,net.minestom.server.data.Data,boolean)">UNSAFE_setBlock</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -1110,14 +1129,26 @@ public abstract&nbsp;<a href="Chunk.html" title="class in net.minestom.server.in
                            int&nbsp;chunkZ)</pre>
 <div class="block">Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
  <p>
- The instance and chunk position (X/Z) can be modified using the given arguments.</div>
+ The chunk position (X/Z) can be modified using the given arguments.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunkX</code> - the new chunk X</dd>
-<dd><code>chunkZ</code> - the new chunk Z</dd>
+<dd><code>chunkX</code> - the chunk X of the copy</dd>
+<dd><code>chunkZ</code> - the chunk Z of the copy</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a copy of this chunk with a potentially new instance and position</dd>
 </dl>
+</li>
+</ul>
+<a id="reset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>reset</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;reset()</pre>
+<div class="block">Resets the chunk, this means clearing all the data making it empty.
+ <p>
+ Used for <a href="batch/BatchOption.html#isFullChunk()"><code>BatchOption.isFullChunk()</code></a>.</div>
 </li>
 </ul>
 <a id="getCustomBlock(int,int,int)">
@@ -1318,6 +1349,21 @@ public&nbsp;<a href="../network/packet/server/play/ChunkDataPacket.html" title="
 </dl>
 </li>
 </ul>
+<a id="getLightPacket()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLightPacket</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../network/packet/server/play/UpdateLightPacket.html" title="class in net.minestom.server.network.packet.server.play">UpdateLightPacket</a>&nbsp;getLightPacket()</pre>
+<div class="block">Gets the light packet of this chunk.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the light packet</dd>
+</dl>
+</li>
+</ul>
 <a id="isLoaded()">
 <!--   -->
 </a>
@@ -1451,13 +1497,22 @@ public&nbsp;<a href="../data/Data.html" title="interface in net.minestom.server.
 <ul class="blockList">
 <li class="blockList">
 <h4>sendChunk</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;sendChunk&#8203;(@NotNull
-                         <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;sendChunk&#8203;(@NotNull
+                      <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Sends the chunk data to <code>player</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - the player</dd>
 </dl>
+</li>
+</ul>
+<a id="sendChunk()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendChunk</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;sendChunk()</pre>
 </li>
 </ul>
 <a id="sendChunkUpdate(net.minestom.server.entity.Player)">
