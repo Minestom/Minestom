@@ -12,8 +12,7 @@ public class LoginSuccessPacket implements ServerPacket {
     public UUID uuid;
     public String username;
 
-    public LoginSuccessPacket(UUID uuid, String username) {
-        System.out.println(username + " logged in");
+    public LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) {
         this.uuid = uuid;
         this.username = username;
     }

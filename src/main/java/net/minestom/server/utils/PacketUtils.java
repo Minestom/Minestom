@@ -117,15 +117,18 @@ public final class PacketUtils {
     @NotNull
     private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet) {
         BinaryWriter writer;
-        if (packet.getId() == ServerPacketIdentifier.CHUNK_DATA)
+        if (packet.getId() == ServerPacketIdentifier.CHUNK_DATA || packet.getId() == ServerPacketIdentifier.UPDATE_LIGHT) {
             writer = new BinaryWriter(BufUtils.getBuffer(true, 40_000));
-        else
+        } else {
             writer = new BinaryWriter(BufUtils.getBuffer(true));
+        }
+
         try {
             packet.write(writer);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return writer.getBuffer();
     }
 
@@ -196,7 +199,6 @@ public final class PacketUtils {
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
-        // TODO use pooled buffers instead of unpooled ones
         if (MinecraftServer.getCompressionThreshold() > 0) {
 
             ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
