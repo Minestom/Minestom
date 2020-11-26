@@ -32,10 +32,10 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public final class NettyServer {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
+
     private static final long DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT = 600_000L;
     private static final long DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT = 100_000L;
-
-    private static final Logger log = LoggerFactory.getLogger(NettyServer.class);
 
     private static final long DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT = 15_000_000L;
     private static final long DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT = 1_000_000L;
@@ -79,28 +79,28 @@ public final class NettyServer {
 
             channel = IOUringServerSocketChannel.class;
 
-            log.info("Using Io_uring");
+            LOGGER.info("Using io_uring");
         } else if (Epoll.isAvailable()) {
             boss = new EpollEventLoopGroup(2);
             worker = new EpollEventLoopGroup(); // thread count = core * 2
 
             channel = EpollServerSocketChannel.class;
 
-            log.info("Using Epoll");
+            LOGGER.info("Using epoll");
         } else if (KQueue.isAvailable()) {
             boss = new KQueueEventLoopGroup(2);
             worker = new KQueueEventLoopGroup(); // thread count = core * 2
 
             channel = KQueueServerSocketChannel.class;
 
-            log.info("Using KQueue");
+            LOGGER.info("Using kqueue");
         } else {
             boss = new NioEventLoopGroup(2);
             worker = new NioEventLoopGroup(); // thread count = core * 2
 
             channel = NioServerSocketChannel.class;
 
-            log.info("Using Nio");
+            LOGGER.info("Using NIO");
         }
 
         bootstrap = new ServerBootstrap()
