@@ -166,7 +166,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static io.netty.buffer.ByteBuf</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">createFramedPacket</a></span>&#8203;(<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
+                  boolean&nbsp;directBuffer)</code></th>
 <td class="colLast">
 <div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
  from a server packet.</div>
@@ -330,14 +331,15 @@ public static&nbsp;io.netty.buffer.ByteBuf&nbsp;writePacket&#8203;(@NotNull
 </dl>
 </li>
 </ul>
-<a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">
+<a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createFramedPacket</h4>
 <pre class="methodSignature">public static&nbsp;io.netty.buffer.ByteBuf&nbsp;createFramedPacket&#8203;(@NotNull
-                                                         <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
+                                                         <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
+                                                         boolean&nbsp;directBuffer)</pre>
 <div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
  from a server packet.
  <p>

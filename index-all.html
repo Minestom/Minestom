@@ -643,6 +643,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/Material.html#ALLIUM">ALLIUM</a></span> - net.minestom.server.item.<a href="net/minestom/server/item/Material.html" title="enum in net.minestom.server.item">Material</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/netty/codec/GroupedPacketHandler.html#allocateBuffer(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.FramedPacket,boolean)">allocateBuffer(ChannelHandlerContext, FramedPacket, boolean)</a></span> - Method in class net.minestom.server.network.netty.codec.<a href="net/minestom/server/network/netty/codec/GroupedPacketHandler.html" title="class in net.minestom.server.network.netty.codec">GroupedPacketHandler</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/PlayerAbilitiesPacket.html#allowFlying">allowFlying</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/PlayerAbilitiesPacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerAbilitiesPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/scoreboard/TeamBuilder.html#allowFriendlyFire()">allowFriendlyFire()</a></span> - Method in class net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></dt>
@@ -3207,6 +3209,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 &nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/Material.html#BUCKET">BUCKET</a></span> - net.minestom.server.item.<a href="net/minestom/server/item/Material.html" title="enum in net.minestom.server.item">Material</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils"><span class="typeNameLink">BufUtils</span></a> - Class in <a href="net/minestom/server/utils/package-summary.html">net.minestom.server.utils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#%3Cinit%3E()">BufUtils()</a></span> - Constructor for class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/ping/ResponseData.html#build()">build()</a></span> - Method in class net.minestom.server.ping.<a href="net/minestom/server/ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a></dt>
 <dd>
 <div class="block">Converts the response data into a <code>JsonObject</code>.</div>
@@ -4730,7 +4736,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Creates a new explosion</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.html#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket(ServerPacket)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.html" title="class in net.minestom.server.utils">PacketUtils</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/PacketUtils.html#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">createFramedPacket(ServerPacket, boolean)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/PacketUtils.html" title="class in net.minestom.server.utils">PacketUtils</a></dt>
 <dd>
 <div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
  from a server packet.</div>
@@ -9568,6 +9574,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets the raw buffer used by this binary writer.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer()">getBuffer()</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer(boolean)">getBuffer(boolean)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer(boolean,int)">getBuffer(boolean, int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer(boolean,int,int)">getBuffer(boolean, int, int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer(int)">getBuffer(int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/BufUtils.html#getBuffer(int,int)">getBuffer(int, int)</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/BufUtils.html" title="class in net.minestom.server.utils">BufUtils</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/player/NettyPlayerConnection.html#getBungeeSkin()">getBungeeSkin()</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player">NettyPlayerConnection</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/player/NettyPlayerConnection.html#getBungeeUuid()">getBungeeUuid()</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player">NettyPlayerConnection</a></dt>
@@ -24359,6 +24377,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/BlockModifier.html#setSeparateBlocks(net.minestom.server.utils.BlockPosition,short,short)">setSeparateBlocks(BlockPosition, short, short)</a></span> - Method in interface net.minestom.server.instance.<a href="net/minestom/server/instance/BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#setShouldProcessNettyErrors(boolean)">setShouldProcessNettyErrors(boolean)</a></span> - Static method in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
+<dd>
+<div class="block">Sets if the server should process netty errors and other unnecessary netty events
+ false is faster</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#setSilent(boolean)">setSilent(boolean)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/type/monster/EntityPhantom.html#setSize(int)">setSize(int)</a></span> - Method in class net.minestom.server.entity.type.monster.<a href="net/minestom/server/entity/type/monster/EntityPhantom.html" title="class in net.minestom.server.entity.type.monster">EntityPhantom</a></dt>
@@ -24681,6 +24704,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/vehicle/PlayerVehicleInformation.html#shouldJump()">shouldJump()</a></span> - Method in class net.minestom.server.entity.vehicle.<a href="net/minestom/server/entity/vehicle/PlayerVehicleInformation.html" title="class in net.minestom.server.entity.vehicle">PlayerVehicleInformation</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#shouldProcessNettyErrors()">shouldProcessNettyErrors()</a></span> - Static method in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
+<dd>
+<div class="block">Gets if the server should process netty errors and other unnecessary netty events</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#shouldRemove()">shouldRemove()</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/player/PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket(ServerPacket)</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></dt>
@@ -28929,6 +28956,8 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/BinaryWriter.html#write(int)">write(int)</a></span> - Method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/player/NettyPlayerConnection.html#write(java.lang.Object)">write(Object)</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player">NettyPlayerConnection</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/BinaryWriter.html#write(java.util.function.Consumer)">write(Consumer&lt;BinaryWriter&gt;)</a></span> - Method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a></dt>
 <dd>
 <div class="block">Consumer this object to write at a different time</div>
@@ -29233,6 +29262,8 @@ the order they are declared.</div>
 <dd>
 <div class="block">Represents an element which can write to a <a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/player/NettyPlayerConnection.html#writeAndFlush(java.lang.Object)">writeAndFlush(Object)</a></span> - Method in class net.minestom.server.network.player.<a href="net/minestom/server/network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player">NettyPlayerConnection</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/binary/BinaryWriter.html#writeAtEnd(net.minestom.server.utils.binary.BinaryWriter)">writeAtEnd(BinaryWriter)</a></span> - Method in class net.minestom.server.utils.binary.<a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a></dt>
 <dd>
 <div class="block">Adds a <a href="net/minestom/server/utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the end of this writer.</div>
