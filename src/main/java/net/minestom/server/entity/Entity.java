@@ -455,6 +455,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             // Velocity
             final boolean applyVelocity = (hasVelocity() && !PlayerUtils.isNettyClient(this)) ||
+                    (!isOnGround() && !PlayerUtils.isNettyClient(this)) ||
                     (PlayerUtils.isNettyClient(this) && hasVelocity());
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;

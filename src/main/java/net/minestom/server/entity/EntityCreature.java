@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.IPath;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.ai.GoalSelector;
@@ -431,6 +432,7 @@ public abstract class EntityCreature extends LivingEntity {
 
         final float radians = (float) Math.atan2(dz, dx);
         final float speedX = (float) (Math.cos(radians) * speed);
+        final float speedY = noGravity ? 0 : -gravityDragPerTick * MinecraftServer.TICK_PER_SECOND;
         final float speedZ = (float) (Math.sin(radians) * speed);
 
         lookAlong(dx, direction.getY(), dz);
@@ -439,7 +441,7 @@ public abstract class EntityCreature extends LivingEntity {
         Vector newVelocityOut = new Vector();
 
         // Prevent ghosting
-        CollisionUtils.handlePhysics(this, new Vector(speedX, 0, speedZ), newPosition, newVelocityOut);
+        CollisionUtils.handlePhysics(this, new Vector(speedX, speedY, speedZ), newPosition, newVelocityOut);
 
         getPosition().setX(newPosition.getX());
         getPosition().setZ(newPosition.getZ());
