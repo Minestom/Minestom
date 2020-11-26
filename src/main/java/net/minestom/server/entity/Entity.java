@@ -415,7 +415,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     cachePitch != position.getPitch();
             final float distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
 
-            if (distance >= 8) {
+            if (distance >= 8 || (positionChange && PlayerUtils.isNettyClient(this))) {
                 // Teleport has the priority over everything else
                 teleport(position);
             } else if (positionChange && viewChange) {
