@@ -28,9 +28,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 //TODO: Default attributes registration (and limitation ?)
@@ -49,7 +49,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final Map<String, AttributeInstance> attributeModifiers = new HashMap<>(Attribute.values().length);
+    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
 
     private boolean isHandActive;
     private boolean offHand;
@@ -399,10 +399,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     public AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        if (!attributeModifiers.containsKey(attribute.getKey())) {
-            attributeModifiers.put(attribute.getKey(), new AttributeInstance(attribute, this::onAttributeChanged));
-        }
-        return attributeModifiers.get(attribute.getKey());
+        return attributeModifiers.computeIfAbsent(attribute.getKey(),
+                s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
     /**
@@ -410,7 +408,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @param instance the modified attribute instance
      */
-    protected void onAttributeChanged(@NotNull AttributeInstance instance) { }
+    protected void onAttributeChanged(@NotNull AttributeInstance instance) {
+    }
 
     /**
      * Retrieves the attribute value.
