@@ -73,6 +73,12 @@ public class Position {
         return this;
     }
 
+    public float getDistance(float x, float y, float z) {
+        return (float) Math.sqrt(MathUtils.square(x - getX()) +
+                MathUtils.square(y - getY()) +
+                MathUtils.square(z - getZ()));
+    }
+
     /**
      * Gets the distance between 2 positions.
      * In cases where performance matters, {@link #getDistanceSquared(Position)} should be used
@@ -81,10 +87,8 @@ public class Position {
      * @param position the second position
      * @return the distance between {@code this} and {@code position}
      */
-    public float getDistance(Position position) {
-        return (float) Math.sqrt(MathUtils.square(position.getX() - getX()) +
-                MathUtils.square(position.getY() - getY()) +
-                MathUtils.square(position.getZ() - getZ()));
+    public float getDistance(@NotNull Position position) {
+        return getDistance(position.getX(), position.getY(), position.getZ());
     }
 
     /**
@@ -93,7 +97,7 @@ public class Position {
      * @param position the second position
      * @return the squared distance between {@code this} and {@code position}
      */
-    public float getDistanceSquared(Position position) {
+    public float getDistanceSquared(@NotNull Position position) {
         return MathUtils.square(getX() - position.getX()) +
                 MathUtils.square(getY() - position.getY()) +
                 MathUtils.square(getZ() - position.getZ());
@@ -106,6 +110,7 @@ public class Position {
      * @return a vector pointing the direction of this location's {@link
      * #getPitch() pitch} and {@link #getYaw() yaw}
      */
+    @NotNull
     public Vector getDirection() {
         Vector vector = new Vector();
 
@@ -126,7 +131,8 @@ public class Position {
      * Sets the {@link #getYaw() yaw} and {@link #getPitch() pitch} to point
      * in the direction of the vector.
      */
-    public Position setDirection(Vector vector) {
+    @NotNull
+    public Position setDirection(@NotNull Vector vector) {
         /*
          * Sin = Opp / Hyp
          * Cos = Adj / Hyp

@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,5 +28,20 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.ENTITY_POSITION_AND_ROTATION;
+    }
+
+    public static EntityPositionAndRotationPacket getPacket(int entityId,
+                                                            @NotNull Position newPosition, @NotNull Position oldPosition,
+                                                            boolean onGround) {
+        EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
+        entityPositionAndRotationPacket.entityId = entityId;
+        entityPositionAndRotationPacket.deltaX = (short) ((newPosition.getX() * 32 - oldPosition.getX() * 32) * 128);
+        entityPositionAndRotationPacket.deltaY = (short) ((newPosition.getY() * 32 - oldPosition.getY() * 32) * 128);
+        entityPositionAndRotationPacket.deltaZ = (short) ((newPosition.getZ() * 32 - oldPosition.getZ() * 32) * 128);
+        entityPositionAndRotationPacket.yaw = newPosition.getYaw();
+        entityPositionAndRotationPacket.pitch = newPosition.getPitch();
+        entityPositionAndRotationPacket.onGround = onGround;
+
+        return entityPositionAndRotationPacket;
     }
 }

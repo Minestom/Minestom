@@ -18,9 +18,10 @@ public class CollisionUtils {
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      *
-     * @param entity      the entity to move
-     * @param positionOut the Position object in which the new position will be saved
-     * @param velocityOut the Vector object in which the new velocity will be saved
+     * @param entity        the entity to move
+     * @param deltaPosition
+     * @param positionOut   the Position object in which the new position will be saved
+     * @param velocityOut   the Vector object in which the new velocity will be saved
      * @return whether this entity is on the ground
      */
     public static boolean handlePhysics(Entity entity, Vector deltaPosition, Position positionOut, Vector velocityOut) {

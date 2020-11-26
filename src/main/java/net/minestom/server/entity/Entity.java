@@ -408,24 +408,53 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         // Synchronization with updated fields in #getPosition()
         {
-            // X/Y/Z axis
-            if (cacheX != position.getX() ||
+            final boolean positionChange = cacheX != position.getX() ||
                     cacheY != position.getY() ||
-                    cacheZ != position.getZ()) {
+                    cacheZ != position.getZ();
+            final boolean viewChange = cacheYaw != position.getYaw() ||
+                    cachePitch != position.getPitch();
+            final float distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
+
+            if (distance >= 8) {
+                // Teleport has the priority over everything else
                 teleport(position);
-            }
-            // Yaw/Pitch
-            if (cacheYaw != position.getYaw() ||
-                    cachePitch != position.getPitch()) {
+            } else if (positionChange && viewChange) {
+                EntityPositionAndRotationPacket positionAndRotationPacket =
+                        EntityPositionAndRotationPacket.getPacket(getEntityId(),
+                                position, new Position(cacheX, cacheY, cacheZ), isOnGround());
+
+                sendPacketToViewersAndSelf(positionAndRotationPacket);
+
+                refreshPosition(position.copy());
+
+                // Fix head rotation
+                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+                entityHeadLookPacket.entityId = getEntityId();
+                entityHeadLookPacket.yaw = position.getYaw();
+
+                sendPacketToViewersAndSelf(entityHeadLookPacket);
+
+            } else if (positionChange) {
+                EntityPositionPacket entityPositionPacket = EntityPositionPacket.getPacket(getEntityId(),
+                        position, new Position(cacheX, cacheY, cacheZ), isOnGround());
+
+                sendPacketToViewersAndSelf(entityPositionPacket);
+
+                refreshPosition(position.copy());
+
+            } else if (viewChange) {
+                // Yaw/Pitch
                 setView(position);
             }
+
         }
 
+        // Entity tick
         if (shouldUpdate(time)) {
             this.lastUpdate = time;
 
             // Velocity
-            final boolean applyVelocity = !PlayerUtils.isNettyClient(this) ||
+            final boolean applyVelocity = (hasVelocity() && !PlayerUtils.isNettyClient(this)) ||
                     (PlayerUtils.isNettyClient(this) && hasVelocity());
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;

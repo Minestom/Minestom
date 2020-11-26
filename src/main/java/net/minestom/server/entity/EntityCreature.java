@@ -2,8 +2,8 @@ package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.IPath;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attributes;
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
@@ -424,7 +424,7 @@ public abstract class EntityCreature extends LivingEntity {
         final float dx = targetX - currentX;
 
         // the purpose of these few lines is to slow down entities when they reach their destination
-        float distSquared = dx * dx + dz * dz;
+        final float distSquared = dx * dx + dz * dz;
         if (speed > distSquared) {
             speed = distSquared;
         }
@@ -435,10 +435,14 @@ public abstract class EntityCreature extends LivingEntity {
 
         lookAlong(dx, direction.getY(), dz);
 
-        // TODO: is a hard set an issue if there are other external forces at play?
-        final float tps = MinecraftServer.TICK_PER_SECOND;
-        velocity.setX(speedX * tps);
-        velocity.setZ(speedZ * tps);
+        Position newPosition = new Position();
+        Vector newVelocityOut = new Vector();
+
+        // Prevent ghosting
+        CollisionUtils.handlePhysics(this, new Vector(speedX, 0, speedZ), newPosition, newVelocityOut);
+
+        getPosition().setX(newPosition.getX());
+        getPosition().setZ(newPosition.getZ());
     }
 
     /**

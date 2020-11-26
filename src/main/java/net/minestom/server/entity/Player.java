@@ -463,25 +463,11 @@ public class Player extends LivingEntity implements CommandSender {
                 ServerPacket updatePacket;
                 ServerPacket optionalUpdatePacket = null;
                 if (positionChanged && viewChanged) {
-                    EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
-                    entityPositionAndRotationPacket.entityId = getEntityId();
-                    entityPositionAndRotationPacket.deltaX = (short) ((position.getX() * 32 - lastPlayerSyncX * 32) * 128);
-                    entityPositionAndRotationPacket.deltaY = (short) ((position.getY() * 32 - lastPlayerSyncY * 32) * 128);
-                    entityPositionAndRotationPacket.deltaZ = (short) ((position.getZ() * 32 - lastPlayerSyncZ * 32) * 128);
-                    entityPositionAndRotationPacket.yaw = position.getYaw();
-                    entityPositionAndRotationPacket.pitch = position.getPitch();
-                    entityPositionAndRotationPacket.onGround = onGround;
-
-                    updatePacket = entityPositionAndRotationPacket;
+                    updatePacket = EntityPositionAndRotationPacket.getPacket(getEntityId(),
+                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
                 } else if (positionChanged) {
-                    EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
-                    entityPositionPacket.entityId = getEntityId();
-                    entityPositionPacket.deltaX = (short) ((position.getX() * 32 - lastPlayerSyncX * 32) * 128);
-                    entityPositionPacket.deltaY = (short) ((position.getY() * 32 - lastPlayerSyncY * 32) * 128);
-                    entityPositionPacket.deltaZ = (short) ((position.getZ() * 32 - lastPlayerSyncZ * 32) * 128);
-                    entityPositionPacket.onGround = onGround;
-
-                    updatePacket = entityPositionPacket;
+                    updatePacket = EntityPositionPacket.getPacket(getEntityId(),
+                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
                 } else {
                     // View changed
                     EntityRotationPacket entityRotationPacket = new EntityRotationPacket();

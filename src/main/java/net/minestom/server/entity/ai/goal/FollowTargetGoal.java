@@ -29,7 +29,8 @@ public class FollowTargetGoal extends GoalSelector {
 
     @Override
     public boolean shouldStart() {
-        return entityCreature.getTarget() != null && getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) >= 2;
+        return entityCreature.getTarget() != null &&
+                getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) >= 2;
     }
 
     @Override
@@ -58,7 +59,9 @@ public class FollowTargetGoal extends GoalSelector {
 
     @Override
     public void tick(long time) {
-        if (forceEnd || updateOption.getValue() == 0 || updateOption.getTimeUnit().toMilliseconds(updateOption.getValue()) + lastUpdateTime > time) {
+        if (forceEnd ||
+                updateOption.getValue() == 0 ||
+                updateOption.getTimeUnit().toMilliseconds(updateOption.getValue()) + lastUpdateTime > time) {
             return;
         }
         Position targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
@@ -71,7 +74,9 @@ public class FollowTargetGoal extends GoalSelector {
 
     @Override
     public boolean shouldEnd() {
-        return forceEnd || entityCreature.getTarget() == null || getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) < 2;
+        return forceEnd ||
+                entityCreature.getTarget() == null ||
+                getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) < 2;
     }
 
     @Override
