@@ -121,7 +121,7 @@ public class CommandDispatcher {
 
         for (CommandSyntax syntax : syntaxes) {
             final Argument<?>[] arguments = syntax.getArguments();
-            final String[] argsValues = new String[arguments.length];
+            final String[] argsValues = new String[Byte.MAX_VALUE];
 
             boolean syntaxCorrect = true;
             // The current index in the raw command string arguments
@@ -157,22 +157,22 @@ public class CommandDispatcher {
                         correctionResult = argument.getCorrectionResult(argValueString);
                         if (correctionResult == Argument.SUCCESS) {
                             correct = true;
-                            argsValues[argIndex] = argValueString;
+                            argsValues[argCount] = argValueString;
                         }
                     }
                 } else {
                     // Argument is either single-word or can accept optional delimited space(s)
                     for (int i = argIndex; i < args.length; i++) {
-                        final String arg = args[i];
+                        final String rawArg = args[i];
 
-                        argValue.append(arg);
+                        argValue.append(rawArg);
 
                         final String argValueString = argValue.toString();
 
                         correctionResult = argument.getCorrectionResult(argValueString);
                         if (correctionResult == Argument.SUCCESS) {
                             correct = true;
-                            argsValues[argIndex] = argValueString;
+                            argsValues[argCount] = argValueString;
                             argIndex = i + 1;
                             break;
                         } else {
