@@ -217,10 +217,22 @@ public final class NettyServer {
      * Stops the server and the various services.
      */
     public void stop() {
-        this.serverChannel.close();
+        try {
+            this.serverChannel.close().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        this.worker.shutdownGracefully();
-        this.boss.shutdownGracefully();
+        try {
+            this.worker.shutdownGracefully().await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.boss.shutdownGracefully().await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         this.trafficScheduler.shutdown();
         this.globalTrafficHandler.release();

@@ -70,6 +70,8 @@ public class Main {
         //MojangAuth.init();
 
         minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
+
+        Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 
 }
