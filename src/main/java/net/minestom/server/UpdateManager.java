@@ -80,7 +80,8 @@ public final class UpdateManager {
                 try {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    if (!stopRequested)
+                        e.printStackTrace();
                 }
             }
 
