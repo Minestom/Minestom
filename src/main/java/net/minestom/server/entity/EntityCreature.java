@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
+import com.extollit.gaming.ai.path.SchedulingPriority;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.CollisionUtils;
@@ -404,6 +405,16 @@ public abstract class EntityCreature extends LivingEntity {
     @Nullable
     public Position getPathPosition() {
         return pathPosition;
+    }
+
+    /**
+     * Changes the pathfinding priority for this entity.
+     *
+     * @param schedulingPriority the new scheduling priority
+     * @see <a href="https://github.com/MadMartian/hydrazine-path-finding#path-finding-scheduling">Scheduling Priority</a>
+     */
+    public void setPathfindingPriority(@NotNull SchedulingPriority schedulingPriority) {
+        this.pathFinder.schedulingPriority(schedulingPriority);
     }
 
     /**
