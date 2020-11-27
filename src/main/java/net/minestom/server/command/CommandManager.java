@@ -7,10 +7,7 @@ import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentPotionEffect;
+import net.minestom.server.command.builder.arguments.minecraft.registry.*;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -502,7 +499,7 @@ public final class CommandManager {
 
         // You can uncomment this to test any brigadier parser on the client
         /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
-        testNode.parser = "minecraft:vec3";
+        testNode.parser = "minecraft:block_state";
 
         if (true) {
             return nodes;
@@ -628,6 +625,9 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentEntityType) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:entity_summon";
+        } else if (argument instanceof ArgumentBlockState) {
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
+            argumentNode.parser = "minecraft:block_state";
         } else if (argument instanceof ArgumentIntRange) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:int_range";

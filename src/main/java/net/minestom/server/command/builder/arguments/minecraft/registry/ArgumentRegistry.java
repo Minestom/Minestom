@@ -11,7 +11,7 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
         super(id);
     }
 
-    public abstract T getRegistry(String value);
+    public abstract T getRegistry(@NotNull String value);
 
     @Override
     public int getCorrectionResult(@NotNull String value) {

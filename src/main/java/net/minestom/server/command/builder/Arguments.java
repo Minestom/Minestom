@@ -3,6 +3,7 @@ package net.minestom.server.command.builder;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
@@ -96,6 +97,11 @@ public final class Arguments {
     @NotNull
     public EntityType getEntityType(@NotNull String id) {
         return (EntityType) getObject(id);
+    }
+
+    @NotNull
+    public Block getBlockState(@NotNull String id) {
+        return (Block) getObject(id);
     }
 
     @NotNull
