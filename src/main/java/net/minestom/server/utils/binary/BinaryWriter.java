@@ -157,7 +157,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param string the string to write
      */
-    public void writeSizedString(String string) {
+    public void writeSizedString(@NotNull String string) {
         final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         writeVarInt(bytes.length);
         writeBytes(bytes);
@@ -170,7 +170,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param string the string to write
      */
-    public void writeShortSizedString(String string) {
+    public void writeShortSizedString(@NotNull String string) {
         final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         writeShort((short) bytes.length);
         writeBytes(bytes);
@@ -201,7 +201,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param bytes the byte array to write
      */
-    public void writeBytes(byte[] bytes) {
+    public void writeBytes(@NotNull byte[] bytes) {
         buffer.writeBytes(bytes);
     }
 
@@ -212,7 +212,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param array the string array to write
      */
-    public void writeStringArray(String[] array) {
+    public void writeStringArray(@NotNull String[] array) {
         if (array == null) {
             writeVarInt(0);
             return;
@@ -239,12 +239,12 @@ public class BinaryWriter extends OutputStream {
      *
      * @param uuid the {@link UUID} to write
      */
-    public void writeUuid(UUID uuid) {
+    public void writeUuid(@NotNull UUID uuid) {
         writeLong(uuid.getMostSignificantBits());
         writeLong(uuid.getLeastSignificantBits());
     }
 
-    public void writeBlockPosition(BlockPosition blockPosition) {
+    public void writeBlockPosition(@NotNull BlockPosition blockPosition) {
         writeBlockPosition(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
@@ -252,11 +252,11 @@ public class BinaryWriter extends OutputStream {
         writeLong(SerializerUtils.positionToLong(x, y, z));
     }
 
-    public void writeItemStack(ItemStack itemStack) {
+    public void writeItemStack(@NotNull ItemStack itemStack) {
         NBTUtils.writeItemStack(this, itemStack);
     }
 
-    public void writeNBT(String name, NBT tag) {
+    public void writeNBT(@NotNull String name, @NotNull NBT tag) {
         try {
             nbtWriter.writeNamed(name, tag);
         } catch (IOException e) {
@@ -282,7 +282,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param headerWriter the {@link BinaryWriter} to add at the beginning
      */
-    public void writeAtStart(BinaryWriter headerWriter) {
+    public void writeAtStart(@NotNull BinaryWriter headerWriter) {
         // Get the buffer of the header
         final ByteBuf headerBuf = headerWriter.getBuffer();
         // Merge both the headerBuf and this buffer
@@ -296,7 +296,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param footerWriter the {@link BinaryWriter} to add at the end
      */
-    public void writeAtEnd(BinaryWriter footerWriter) {
+    public void writeAtEnd(@NotNull BinaryWriter footerWriter) {
         // Get the buffer of the footer
         final ByteBuf footerBuf = footerWriter.getBuffer();
         // Merge both this buffer and the footerBuf

@@ -177,7 +177,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         return entityById.getOrDefault(id, null);
     }
 
-    private static int generateId() {
+    /**
+     * Generate and return a new unique entity id.
+     * <p>
+     * Useful if you want to spawn entities using packet but don't risk to have duplicated id.
+     *
+     * @return a newly generated entity id
+     */
+    public static int generateId() {
         return lastEntityId.incrementAndGet();
     }
 
