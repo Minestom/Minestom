@@ -627,7 +627,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeSizedString</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeSizedString&#8203;(java.lang.String&nbsp;string)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeSizedString&#8203;(@NotNull
+                             java.lang.String&nbsp;string)</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The size is a var-int type.</div>
@@ -643,7 +644,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeShortSizedString</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeShortSizedString&#8203;(java.lang.String&nbsp;string)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeShortSizedString&#8203;(@NotNull
+                                  java.lang.String&nbsp;string)</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The size is a short type.</div>
@@ -675,7 +677,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeBytes</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeBytes&#8203;(byte[]&nbsp;bytes)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeBytes&#8203;(@NotNull
+                       byte[]&nbsp;bytes)</pre>
 <div class="block">Writes a byte array.
  <p>
  WARNING: it doesn't write the length of <code>bytes</code>.</div>
@@ -691,7 +694,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeStringArray</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeStringArray&#8203;(java.lang.String[]&nbsp;array)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeStringArray&#8203;(@NotNull
+                             java.lang.String[]&nbsp;array)</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The array is sized by a var-int and all strings are wrote using <a href="#writeSizedString(java.lang.String)"><code>writeSizedString(String)</code></a>.</div>
@@ -721,7 +725,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeUuid</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeUuid&#8203;(java.util.UUID&nbsp;uuid)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeUuid&#8203;(@NotNull
+                      java.util.UUID&nbsp;uuid)</pre>
 <div class="block">Writes an <code>UUID</code>.
  It is done by writing both long, the most and least significant bits.</div>
 <dl>
@@ -736,7 +741,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeBlockPosition</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeBlockPosition&#8203;(<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeBlockPosition&#8203;(@NotNull
+                               <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 </li>
 </ul>
 <a id="writeBlockPosition(int,int,int)">
@@ -756,7 +762,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeItemStack</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeItemStack&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeItemStack&#8203;(@NotNull
+                           <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
 <a id="writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)">
@@ -765,7 +772,9 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeNBT</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeNBT&#8203;(java.lang.String&nbsp;name,
+<pre class="methodSignature">public&nbsp;void&nbsp;writeNBT&#8203;(@NotNull
+                     java.lang.String&nbsp;name,
+                     @NotNull
                      org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</pre>
 </li>
 </ul>
@@ -789,7 +798,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeAtStart</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeAtStart&#8203;(<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeAtStart&#8203;(@NotNull
+                         <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</pre>
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the beginning of this writer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -803,7 +813,8 @@ extends java.io.OutputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeAtEnd</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeAtEnd&#8203;(<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeAtEnd&#8203;(@NotNull
+                       <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</pre>
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the end of this writer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
