@@ -217,18 +217,11 @@ public final class NettyServer {
      * Stops the server and the various services.
      */
     public void stop() {
+        // FIXME: fix "java.util.concurrent.RejectedExecutionException: event executor terminated"
+        // TODO: probably because we are doing IO after #stop() is executed
         try {
             this.serverChannel.close().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
             this.worker.shutdownGracefully().await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
             this.boss.shutdownGracefully().await();
         } catch (InterruptedException e) {
             e.printStackTrace();
