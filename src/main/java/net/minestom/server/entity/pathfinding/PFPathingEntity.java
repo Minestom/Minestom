@@ -20,6 +20,8 @@ public class PFPathingEntity implements IPathingEntity {
     private boolean cautious;
     private boolean climber;
     private boolean swimmer;
+    private boolean aquatic;
+    private boolean avian;
     private boolean aquaphobic;
     private boolean avoidsDoorways;
     private boolean opensDoors;
@@ -84,6 +86,22 @@ public class PFPathingEntity implements IPathingEntity {
         this.swimmer = swimmer;
     }
 
+    public boolean isAquatic() {
+        return aquatic;
+    }
+
+    public void setAquatic(boolean aquatic) {
+        this.aquatic = aquatic;
+    }
+
+    public boolean isAvian() {
+        return avian;
+    }
+
+    public void setAvian(boolean avian) {
+        this.avian = avian;
+    }
+
     public boolean isAquaphobic() {
         return aquaphobic;
     }
@@ -138,12 +156,12 @@ public class PFPathingEntity implements IPathingEntity {
 
             @Override
             public boolean aquatic() {
-                return false;
+                return aquatic;
             }
 
             @Override
             public boolean avian() {
-                return false;
+                return avian;
             }
 
             @Override
@@ -170,9 +188,12 @@ public class PFPathingEntity implements IPathingEntity {
         final float z = (float) position.z;
         this.targetPosition = new Position(x, y, z);
 
-        final float entityY = entity.getPosition().getY();
-        if (entityY < y) {
-            entity.jump(1);
+        // Jump for non-flying entities
+        if (!avian) {
+            final float entityY = entity.getPosition().getY();
+            if (entityY < y) {
+                entity.jump(1);
+            }
         }
     }
 

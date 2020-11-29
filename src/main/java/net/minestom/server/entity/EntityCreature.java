@@ -427,21 +427,28 @@ public abstract class EntityCreature extends LivingEntity {
      */
     public void moveTowards(@NotNull Position direction, float speed) {
         Check.notNull(direction, "The direction cannot be null");
+
         final float currentX = position.getX();
+        final float currentY = position.getY();
         final float currentZ = position.getZ();
+
         final float targetX = direction.getX();
+        final float targetY = direction.getY();
         final float targetZ = direction.getZ();
-        final float dz = targetZ - currentZ;
+
         final float dx = targetX - currentX;
+        final float dy = targetY - currentY;
+        final float dz = targetZ - currentZ;
 
         // the purpose of these few lines is to slow down entities when they reach their destination
-        final float distSquared = dx * dx + dz * dz;
+        final float distSquared = dx * dx + dy * dy + dz * dz;
         if (speed > distSquared) {
             speed = distSquared;
         }
 
         final float radians = (float) Math.atan2(dz, dx);
         final float speedX = (float) (Math.cos(radians) * speed);
+        final float speedY = dy * speed;
         final float speedZ = (float) (Math.sin(radians) * speed);
 
         lookAlong(dx, direction.getY(), dz);
@@ -450,11 +457,10 @@ public abstract class EntityCreature extends LivingEntity {
         Vector newVelocityOut = new Vector();
 
         // Prevent ghosting
-        this.onGround = CollisionUtils.handlePhysics(this, new Vector(speedX, 0, speedZ), newPosition, newVelocityOut);
+        this.onGround = CollisionUtils.handlePhysics(this, new Vector(speedX, speedY, speedZ), newPosition, newVelocityOut);
 
         // Will move the entity during Entity#tick
-        getPosition().setX(newPosition.getX());
-        getPosition().setZ(newPosition.getZ());
+        getPosition().copyCoordinates(newPosition);
     }
 
     /**

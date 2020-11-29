@@ -461,8 +461,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             this.lastUpdate = time;
 
             // Velocity
-            final boolean applyVelocity = !PlayerUtils.isNettyClient(this) ||
-                    (PlayerUtils.isNettyClient(this) && hasVelocity());
+            boolean applyVelocity = false;
+            // Non-player entities with either velocity or gravity enabled
+            applyVelocity |= !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
+            // Players with a velocity applied (client is responsible for gravity)
+            applyVelocity |= PlayerUtils.isNettyClient(this) && hasVelocity();
+
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
                 float newX = position.getX() + velocity.getX() / tps;

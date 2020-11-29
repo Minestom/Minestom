@@ -2,13 +2,14 @@ package net.minestom.server.entity.ai;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class GoalSelector {
 
     protected final EntityCreature entityCreature;
 
-    public GoalSelector(EntityCreature entityCreature) {
+    public GoalSelector(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
 
@@ -25,7 +26,7 @@ public abstract class GoalSelector {
     public abstract void start();
 
     /**
-     * Called every tick when this {@link GoalSelector} is running
+     * Called every tick when this {@link GoalSelector} is running.
      *
      * @param time the time of the update in milliseconds
      */

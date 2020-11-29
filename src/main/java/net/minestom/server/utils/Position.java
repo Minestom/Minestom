@@ -166,23 +166,34 @@ public class Position {
      *
      * @param position the vector to copy the values from
      */
-    public void copy(Vector position) {
+    public void copy(@NotNull Vector position) {
         this.x = position.getX();
         this.y = position.getY();
         this.z = position.getZ();
     }
 
     /**
-     * Sets the x/y/z field of this position to the value of {@code position}.
+     * Sets the x/y/z/yaw/pitch fields of this position to the value of {@code position}.
      *
      * @param position the position to copy the values from
      */
-    public void copy(Position position) {
+    public void copy(@NotNull Position position) {
         this.x = position.getX();
         this.y = position.getY();
         this.z = position.getZ();
         this.yaw = position.getYaw();
         this.pitch = position.getPitch();
+    }
+
+    /**
+     * Sets the x/y/z fields of this position to the value of {@code position}.
+     *
+     * @param position the position to copy the values from
+     */
+    public void copyCoordinates(@NotNull Position position) {
+        this.x = position.getX();
+        this.y = position.getY();
+        this.z = position.getZ();
     }
 
     /**
