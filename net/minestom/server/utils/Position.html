@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -216,7 +216,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(net.minestom.server.utils.Position)">copy</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
-<div class="block">Sets the x/y/z field of this position to the value of <code>position</code>.</div>
+<div class="block">Sets the x/y/z/yaw/pitch fields of this position to the value of <code>position</code>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -227,13 +227,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyCoordinates(net.minestom.server.utils.Position)">copyCoordinates</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Sets the x/y/z fields of this position to the value of <code>position</code>.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two objects are position and have the same values.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDirection()">getDirection</a></span>()</code></th>
 <td class="colLast">
@@ -241,89 +248,89 @@ extends java.lang.Object</pre>
  facing.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistance(float,float,float)">getDistance</a></span>&#8203;(float&nbsp;x,
            float&nbsp;y,
            float&nbsp;z)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistance(net.minestom.server.utils.Position)">getDistance</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Gets the distance between 2 positions.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistanceSquared(net.minestom.server.utils.Position)">getDistanceSquared</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Gets the square distance to another position.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPitch()">getPitch</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position pitch.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getX()">getX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position X.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getY()">getY</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position Y.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getYaw()">getYaw</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position yaw.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getZ()">getZ</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position Z.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasSimilarView(net.minestom.server.utils.Position)">hasSimilarView</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Checks if two positions have a similar view (yaw/pitch).</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#inSameChunk(net.minestom.server.utils.Position)">inSameChunk</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Gets if two positions are in the same chunk.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.utils.Position)">isSimilar</a></span>&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Checks it two positions are similar (x/y/z).</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDirection(net.minestom.server.utils.Vector)">setDirection</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;vector)</code></th>
 <td class="colLast">
@@ -331,42 +338,42 @@ extends java.lang.Object</pre>
  in the direction of the vector.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPitch(float)">setPitch</a></span>&#8203;(float&nbsp;pitch)</code></th>
 <td class="colLast">
 <div class="block">Changes the position pitch.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setX(float)">setX</a></span>&#8203;(float&nbsp;x)</code></th>
 <td class="colLast">
 <div class="block">Changes the position X.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setY(float)">setY</a></span>&#8203;(float&nbsp;y)</code></th>
 <td class="colLast">
 <div class="block">Changes the position Y.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setYaw(float)">setYaw</a></span>&#8203;(float&nbsp;yaw)</code></th>
 <td class="colLast">
 <div class="block">Changes the position yaw.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZ(float)">setZ</a></span>&#8203;(float&nbsp;z)</code></th>
 <td class="colLast">
 <div class="block">Changes the position Z.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(float,float,float)">subtract</a></span>&#8203;(float&nbsp;x,
         float&nbsp;y,
@@ -375,19 +382,19 @@ extends java.lang.Object</pre>
 <div class="block">Removes offsets to the current position.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toBlockPosition()">toBlockPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Converts this position to a <a href="BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toVector()">toVector</a></span>()</code></th>
 <td class="colLast">
@@ -599,7 +606,8 @@ public&nbsp;<a href="Position.html" title="class in net.minestom.server.utils">P
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;position)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(@NotNull
+                 <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;position)</pre>
 <div class="block">Sets the x/y/z field of this position to the value of <code>position</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -613,8 +621,24 @@ public&nbsp;<a href="Position.html" title="class in net.minestom.server.utils">P
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(<a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
-<div class="block">Sets the x/y/z field of this position to the value of <code>position</code>.</div>
+<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(@NotNull
+                 <a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<div class="block">Sets the x/y/z/yaw/pitch fields of this position to the value of <code>position</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the position to copy the values from</dd>
+</dl>
+</li>
+</ul>
+<a id="copyCoordinates(net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>copyCoordinates</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;copyCoordinates&#8203;(@NotNull
+                            <a href="Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<div class="block">Sets the x/y/z fields of this position to the value of <code>position</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - the position to copy the values from</dd>

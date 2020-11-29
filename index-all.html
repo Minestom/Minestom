@@ -4592,7 +4592,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/Position.html#copy(net.minestom.server.utils.Position)">copy(Position)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/Position.html" title="class in net.minestom.server.utils">Position</a></dt>
 <dd>
-<div class="block">Sets the x/y/z field of this position to the value of <code>position</code>.</div>
+<div class="block">Sets the x/y/z/yaw/pitch fields of this position to the value of <code>position</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/Position.html#copy(net.minestom.server.utils.Vector)">copy(Vector)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/Position.html" title="class in net.minestom.server.utils">Position</a></dt>
 <dd>
@@ -4606,6 +4606,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/metadata/WrittenBookMeta.WrittenBookGeneration.html#COPY_OF_ORIGINAL">COPY_OF_ORIGINAL</a></span> - net.minestom.server.item.metadata.<a href="net/minestom/server/item/metadata/WrittenBookMeta.WrittenBookGeneration.html" title="enum in net.minestom.server.item.metadata">WrittenBookMeta.WrittenBookGeneration</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/Position.html#copyCoordinates(net.minestom.server.utils.Position)">copyCoordinates(Position)</a></span> - Method in class net.minestom.server.utils.<a href="net/minestom/server/utils/Position.html" title="class in net.minestom.server.utils">Position</a></dt>
+<dd>
+<div class="block">Sets the x/y/z fields of this position to the value of <code>position</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/RespawnPacket.html#copyMeta">copyMeta</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/RespawnPacket.html" title="class in net.minestom.server.network.packet.server.play">RespawnPacket</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/utils/ArrayUtils.html#copyToDestination(short%5B%5D,short%5B%5D)">copyToDestination(short[], short[])</a></span> - Static method in class net.minestom.server.utils.<a href="net/minestom/server/utils/ArrayUtils.html" title="class in net.minestom.server.utils">ArrayUtils</a></dt>
@@ -16148,6 +16152,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#isAquaphobic()">isAquaphobic()</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#isAquatic()">isAquatic()</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/item/Material.html#isArmor()">isArmor()</a></span> - Method in enum net.minestom.server.item.<a href="net/minestom/server/item/Material.html" title="enum in net.minestom.server.item">Material</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/type/monster/EntityGhast.html#isAttacking()">isAttacking()</a></span> - Method in class net.minestom.server.entity.type.monster.<a href="net/minestom/server/entity/type/monster/EntityGhast.html" title="class in net.minestom.server.entity.type.monster">EntityGhast</a></dt>
@@ -16158,6 +16164,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  This can be use to complete control over which player can see it, without having to deal with
  raw packets.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#isAvian()">isAvian()</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#isAvoidsDoorways()">isAvoidsDoorways()</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/type/monster/EntityZombie.html#isBaby()">isBaby()</a></span> - Method in class net.minestom.server.entity.type.monster.<a href="net/minestom/server/entity/type/monster/EntityZombie.html" title="class in net.minestom.server.entity.type.monster">EntityZombie</a></dt>
@@ -23268,6 +23276,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#setAquaphobic(boolean)">setAquaphobic(boolean)</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#setAquatic(boolean)">setAquatic(boolean)</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/Arguments.html#setArg(java.lang.String,java.lang.Object)">setArg(String, Object)</a></span> - Method in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/Command.html#setArgumentCallback(net.minestom.server.command.builder.ArgumentCallback,net.minestom.server.command.builder.arguments.Argument)">setArgumentCallback(ArgumentCallback, Argument&lt;?&gt;)</a></span> - Method in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/Command.html" title="class in net.minestom.server.command.builder">Command</a></dt>
@@ -23290,6 +23300,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Makes the entity auto viewable or only manually.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#setAvian(boolean)">setAvian(boolean)</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#setAvoidsDoorways(boolean)">setAvoidsDoorways(boolean)</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/type/monster/EntityZombie.html#setBaby(boolean)">setBaby(boolean)</a></span> - Method in class net.minestom.server.entity.type.monster.<a href="net/minestom/server/entity/type/monster/EntityZombie.html" title="class in net.minestom.server.entity.type.monster">EntityZombie</a></dt>
@@ -26657,7 +26669,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/ai/GoalSelector.html#tick(long)">tick(long)</a></span> - Method in class net.minestom.server.entity.ai.<a href="net/minestom/server/entity/ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a></dt>
 <dd>
-<div class="block">Called every tick when this <a href="net/minestom/server/entity/ai/GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> is running</div>
+<div class="block">Called every tick when this <a href="net/minestom/server/entity/ai/GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> is running.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#tick(long)">tick(long)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>
