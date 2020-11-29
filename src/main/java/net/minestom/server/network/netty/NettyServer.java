@@ -22,6 +22,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,15 +56,19 @@ public final class NettyServer {
     public static final String ENCODER_HANDLER_NAME = "encoder"; // Write
     public static final String CLIENT_CHANNEL_NAME = "handler"; // Read
 
-    private final EventLoopGroup boss, worker;
-    private final ServerBootstrap bootstrap;
+    private boolean initialized = false;
+
+    private PacketProcessor packetProcessor;
+
+    private EventLoopGroup boss, worker;
+    private ServerBootstrap bootstrap;
 
     private ServerSocketChannel serverChannel;
 
     private String address;
     private int port;
 
-    private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
+    private GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
     /**
      * Scheduler used by {@code globalTrafficHandler}.
@@ -71,32 +76,48 @@ public final class NettyServer {
     private final ScheduledExecutorService trafficScheduler = Executors.newScheduledThreadPool(1);
 
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
+        this.packetProcessor = packetProcessor;
+
+        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 200) {
+            @Override
+            protected void doAccounting(TrafficCounter counter) {
+                // TODO proper monitoring API
+                //System.out.println("data " + counter.lastWriteThroughput() / 1000 + " " + counter.lastReadThroughput() / 1000);
+            }
+        };
+    }
+
+    public void init() {
+        Check.stateCondition(initialized, "Netty server has already been initialized!");
+        initialized = true;
+
         Class<? extends ServerChannel> channel;
+        final int workerThreadCount = MinecraftServer.getNettyThreadCount();
 
         if (IOUring.isAvailable()) {
             boss = new IOUringEventLoopGroup(2);
-            worker = new IOUringEventLoopGroup(); // thread count = core * 2
+            worker = new IOUringEventLoopGroup(workerThreadCount);
 
             channel = IOUringServerSocketChannel.class;
 
             LOGGER.info("Using io_uring");
         } else if (Epoll.isAvailable()) {
             boss = new EpollEventLoopGroup(2);
-            worker = new EpollEventLoopGroup(); // thread count = core * 2
+            worker = new EpollEventLoopGroup(workerThreadCount);
 
             channel = EpollServerSocketChannel.class;
 
             LOGGER.info("Using epoll");
         } else if (KQueue.isAvailable()) {
             boss = new KQueueEventLoopGroup(2);
-            worker = new KQueueEventLoopGroup(); // thread count = core * 2
+            worker = new KQueueEventLoopGroup(workerThreadCount);
 
             channel = KQueueServerSocketChannel.class;
 
             LOGGER.info("Using kqueue");
         } else {
             boss = new NioEventLoopGroup(2);
-            worker = new NioEventLoopGroup(); // thread count = core * 2
+            worker = new NioEventLoopGroup(workerThreadCount);
 
             channel = NioServerSocketChannel.class;
 
@@ -106,14 +127,6 @@ public final class NettyServer {
         bootstrap = new ServerBootstrap()
                 .group(boss, worker)
                 .channel(channel);
-
-        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 200) {
-            @Override
-            protected void doAccounting(TrafficCounter counter) {
-                // TODO proper monitoring API
-                //System.out.println("data " + counter.lastWriteThroughput() / 1000 + " " + counter.lastReadThroughput() / 1000);
-            }
-        };
 
 
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {

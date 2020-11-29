@@ -97,6 +97,7 @@ public final class MinecraftServer {
     private static PacketListenerManager packetListenerManager;
     private static PacketProcessor packetProcessor;
     private static NettyServer nettyServer;
+    private static int nettyThreadCount = Runtime.getRuntime().availableProcessors();
     private static boolean processNettyErrors = true;
 
     // In-Game Manager
@@ -627,6 +628,28 @@ public final class MinecraftServer {
     }
 
     /**
+     * Gets the number of threads used by Netty.
+     * <p>
+     * Is the number of vCPU by default.
+     *
+     * @return the number of netty threads
+     */
+    public static int getNettyThreadCount() {
+        return nettyThreadCount;
+    }
+
+    /**
+     * Changes the number of threads used by Netty.
+     *
+     * @param nettyThreadCount the number of threads
+     * @throws IllegalStateException if the server is already started
+     */
+    public static void setNettyThreadCount(int nettyThreadCount) {
+        Check.stateCondition(started, "Netty thread count can only be changed before the server starts!");
+        MinecraftServer.nettyThreadCount = nettyThreadCount;
+    }
+
+    /**
      * Gets if the server should process netty errors and other unnecessary netty events
      *
      * @return should process netty errors
@@ -659,21 +682,27 @@ public final class MinecraftServer {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
+        MinecraftServer.started = true;
+
         LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
+
         updateManager.start();
+
+        // Init & start the TCP server
+        nettyServer.init();
         nettyServer.start(address, port);
-        long t1 = -System.nanoTime();
+
+        final long t1 = -System.nanoTime();
         // Init extensions
         // TODO: Extensions should handle depending on each other and have a load-order.
         extensionManager.getExtensions().forEach(Extension::preInitialize);
         extensionManager.getExtensions().forEach(Extension::initialize);
         extensionManager.getExtensions().forEach(Extension::postInitialize);
 
-        MinecraftServer.started = true;
-
         final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
         LOGGER.info("Extensions loaded in " + loadTime + "ms");
+
         LOGGER.info("Minestom server started successfully.");
     }
 
