@@ -1,28 +1,22 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.SchedulingPriority;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.attribute.Attributes;
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
+import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.PFPathingEntity;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.EntityMovementPacket;
 import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +25,10 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-public abstract class EntityCreature extends LivingEntity {
+public abstract class EntityCreature extends LivingEntity implements NavigableEntity {
+
+    // TODO all pathfinding requests should be process in another thread
+    private final ReentrantLock pathLock = new ReentrantLock();
 
     private final PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
@@ -52,9 +49,6 @@ public abstract class EntityCreature extends LivingEntity {
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
-
-    // TODO all pathfinding requests should be process in another thread
-    private final ReentrantLock pathLock = new ReentrantLock();
 
     public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
@@ -129,27 +123,7 @@ public abstract class EntityCreature extends LivingEntity {
 
 
         // Path finding
-        {
-            if (pathPosition != null) {
-                this.pathLock.lock();
-                this.path = pathFinder.updatePathFor(pathingEntity);
-
-                if (path != null) {
-                    final float speed = getAttributeValue(Attributes.MOVEMENT_SPEED);
-                    final Position targetPosition = pathingEntity.getTargetPosition();
-                    if (targetPosition != null) {
-                        moveTowards(targetPosition, speed);
-                    }
-                } else {
-                    if (pathPosition != null) {
-                        this.pathPosition = null;
-                        this.pathFinder.reset();
-                    }
-                }
-
-                this.pathLock.unlock();
-            }
-        }
+        pathFindingTick(getAttributeValue(Attributes.MOVEMENT_SPEED));
 
         super.update(time);
     }
@@ -339,151 +313,59 @@ public abstract class EntityCreature extends LivingEntity {
         attack(target, false);
     }
 
-    public void jump(float height) {
-        // FIXME magic value
-        final Vector velocity = new Vector(0, height * 2.5f, 0);
-        setVelocity(velocity);
-    }
-
-    /**
-     * Retrieves the path to {@code position} and ask the entity to follow the path.
-     * <p>
-     * Can be set to null to reset the pathfinder.
-     * <p>
-     * The position is cloned, if you want the entity to continually follow this position object
-     * you need to call this when you want the path to update.
-     *
-     * @param position the position to find the path to, null to reset the pathfinder
-     * @return true if a path has been found
-     */
-    public boolean setPathTo(@Nullable Position position) {
-        if (position != null && getPathPosition() != null && position.isSimilar(getPathPosition())) {
-            // Tried to set path to the same target position
-            return false;
-        }
-
-        if (pathFinder == null) {
-            // Unexpected error
-            return false;
-        }
-
+    @Override
+    public void pathFindingTick(float speed) {
         this.pathLock.lock();
-
-        this.pathFinder.reset();
-        if (position == null) {
-            this.pathLock.unlock();
-            return false;
-        }
-
-        // Can't path outside of the world border
-        final WorldBorder worldBorder = instance.getWorldBorder();
-        if (!worldBorder.isInside(position)) {
-            this.pathLock.unlock();
-            return false;
-        }
-
-        // Can't path in an unloaded chunk
-        final Chunk chunk = instance.getChunkAt(position);
-        if (!ChunkUtils.isLoaded(chunk)) {
-            this.pathLock.unlock();
-            return false;
-        }
-
-        final Position targetPosition = position.copy();
-
-        this.path = pathFinder.initiatePathTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
+        NavigableEntity.super.pathFindingTick(speed);
         this.pathLock.unlock();
-        final boolean success = path != null;
-        this.pathPosition = success ? targetPosition : null;
-
-        return success;
     }
 
-    /**
-     * Gets the target pathfinder position.
-     *
-     * @return the target pathfinder position, null if there is no one
-     */
+    @Override
+    public boolean setPathTo(@Nullable Position position) {
+        this.pathLock.lock();
+        final boolean result = NavigableEntity.super.setPathTo(position);
+        this.pathLock.unlock();
+        return result;
+    }
+
     @Nullable
+    @Override
     public Position getPathPosition() {
         return pathPosition;
     }
 
-    /**
-     * Changes the pathfinding priority for this entity.
-     *
-     * @param schedulingPriority the new scheduling priority
-     * @see <a href="https://github.com/MadMartian/hydrazine-path-finding#path-finding-scheduling">Scheduling Priority</a>
-     */
-    public void setPathfindingPriority(@NotNull SchedulingPriority schedulingPriority) {
-        this.pathFinder.schedulingPriority(schedulingPriority);
+    @Override
+    public void setPathPosition(Position pathPosition) {
+        this.pathPosition = pathPosition;
     }
 
-    /**
-     * Used to move the entity toward {@code direction} in the X and Z axis
-     * Gravity is still applied but the entity will not attempt to jump
-     * Also update the yaw/pitch of the entity to look along 'direction'
-     *
-     * @param direction the targeted position
-     * @param speed     define how far the entity will move
-     */
-    public void moveTowards(@NotNull Position direction, float speed) {
-        Check.notNull(direction, "The direction cannot be null");
-
-        final float currentX = position.getX();
-        final float currentY = position.getY();
-        final float currentZ = position.getZ();
-
-        final float targetX = direction.getX();
-        final float targetY = direction.getY();
-        final float targetZ = direction.getZ();
-
-        final float dx = targetX - currentX;
-        final float dy = targetY - currentY;
-        final float dz = targetZ - currentZ;
-
-        // the purpose of these few lines is to slow down entities when they reach their destination
-        final float distSquared = dx * dx + dy * dy + dz * dz;
-        if (speed > distSquared) {
-            speed = distSquared;
-        }
-
-        final float radians = (float) Math.atan2(dz, dx);
-        final float speedX = (float) (Math.cos(radians) * speed);
-        final float speedY = dy * speed;
-        final float speedZ = (float) (Math.sin(radians) * speed);
-
-        lookAlong(dx, direction.getY(), dz);
-
-        Position newPosition = new Position();
-        Vector newVelocityOut = new Vector();
-
-        // Prevent ghosting
-        this.onGround = CollisionUtils.handlePhysics(this, new Vector(speedX, speedY, speedZ), newPosition, newVelocityOut);
-
-        // Will move the entity during Entity#tick
-        getPosition().copyCoordinates(newPosition);
+    @Nullable
+    @Override
+    public IPath getPath() {
+        return path;
     }
 
-    /**
-     * Gets the pathing entity.
-     * <p>
-     * Used by the pathfinder.
-     *
-     * @return the pathing entity
-     */
+    @Override
+    public void setPath(IPath path) {
+        this.path = path;
+    }
+
     @NotNull
+    @Override
     public PFPathingEntity getPathingEntity() {
         return pathingEntity;
     }
 
-    private void lookAlong(float dx, float dy, float dz) {
-        final float horizontalAngle = (float) Math.atan2(dz, dx);
-        final float yaw = (float) (horizontalAngle * (180.0 / Math.PI)) - 90;
-        final float pitch = (float) Math.atan2(dy, Math.max(Math.abs(dx), Math.abs(dz)));
+    @Nullable
+    @Override
+    public HydrazinePathFinder getPathFinder() {
+        return pathFinder;
+    }
 
-        getPosition().setYaw(yaw);
-        getPosition().setPitch(pitch);
+    @NotNull
+    @Override
+    public Entity getNavigableEntity() {
+        return this;
     }
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull ArmorEquipEvent.ArmorSlot armorSlot) {

@@ -4,13 +4,17 @@ import com.extollit.gaming.ai.path.model.Gravitation;
 import com.extollit.gaming.ai.path.model.IPathingEntity;
 import com.extollit.gaming.ai.path.model.Passibility;
 import com.extollit.linalg.immutable.Vec3d;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.Attributes;
-import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 public class PFPathingEntity implements IPathingEntity {
 
-    private final EntityCreature entity;
+    private final NavigableEntity navigableEntity;
+    private final Entity entity;
 
     private float searchRange;
     private Position targetPosition;
@@ -26,9 +30,11 @@ public class PFPathingEntity implements IPathingEntity {
     private boolean avoidsDoorways;
     private boolean opensDoors;
 
-    public PFPathingEntity(EntityCreature entity) {
-        this.entity = entity;
-        this.searchRange = entity.getAttributeValue(Attributes.FOLLOW_RANGE);
+    public PFPathingEntity(NavigableEntity navigableEntity) {
+        this.navigableEntity = navigableEntity;
+        this.entity = navigableEntity.getNavigableEntity();
+
+        this.searchRange = getAttributeValue(Attributes.FOLLOW_RANGE);
     }
 
     public Position getTargetPosition() {
@@ -131,7 +137,7 @@ public class PFPathingEntity implements IPathingEntity {
         return new Capabilities() {
             @Override
             public float speed() {
-                return entity.getAttributeValue(Attributes.MOVEMENT_SPEED);
+                return getAttributeValue(Attributes.MOVEMENT_SPEED);
             }
 
             @Override
@@ -190,7 +196,7 @@ public class PFPathingEntity implements IPathingEntity {
 
         final float entityY = entity.getPosition().getY();
         if (entityY < y) {
-            entity.jump(1);
+            navigableEntity.jump(1);
         }
     }
 
@@ -208,5 +214,12 @@ public class PFPathingEntity implements IPathingEntity {
     @Override
     public float height() {
         return entity.getBoundingBox().getHeight();
+    }
+
+    private float getAttributeValue(@NotNull Attribute attribute) {
+        if (entity instanceof LivingEntity) {
+            return ((LivingEntity) entity).getAttributeValue(attribute);
+        }
+        return 0f;
     }
 }
