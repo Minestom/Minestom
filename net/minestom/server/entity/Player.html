@@ -2532,7 +2532,9 @@ public&nbsp;java.lang.String&nbsp;getUsername()</pre>
 <h4>dropItem</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;dropItem&#8203;(@NotNull
                         <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item)</pre>
-<div class="block">Calls an <a href="../event/item/ItemDropEvent.html" title="class in net.minestom.server.event.item"><code>ItemDropEvent</code></a> with a specified item.</div>
+<div class="block">Calls an <a href="../event/item/ItemDropEvent.html" title="class in net.minestom.server.event.item"><code>ItemDropEvent</code></a> with a specified item.
+ <p>
+ Returns false if <code>item</code> is air.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - the item to drop</dd>
