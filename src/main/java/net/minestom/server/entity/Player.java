@@ -1290,11 +1290,17 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Calls an {@link ItemDropEvent} with a specified item.
+     * <p>
+     * Returns false if {@code item} is air.
      *
      * @param item the item to drop
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
     public boolean dropItem(@NotNull ItemStack item) {
+        if (item.isAir()) {
+            return false;
+        }
+
         ItemDropEvent itemDropEvent = new ItemDropEvent(item);
         callEvent(ItemDropEvent.class, itemDropEvent);
         return !itemDropEvent.isCancelled();
