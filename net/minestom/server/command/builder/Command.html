@@ -136,7 +136,7 @@ extends java.lang.Object</pre>
  <p>
  The command works using a list of valid syntaxes.
  For instance we could build the command
- "/health set Notch 50" into multiple argument types "/health [set/add/remove] [Username] [Integer]"
+ "/health set Notch 50" into multiple argument types "/health [set/add/remove] [username] [integer]"
  <p>
  All the default argument types can be found in <a href="arguments/ArgumentType.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentType</code></a>
  and the syntax be created/registered using <a href="#addSyntax(net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)"><code>addSyntax(CommandExecutor, Argument[])</code></a>.
@@ -511,6 +511,8 @@ public&nbsp;<a href="CommandExecutor.html" title="interface in net.minestom.serv
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the default executor, null if not any</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#setDefaultExecutor(net.minestom.server.command.builder.CommandExecutor)"><code>setDefaultExecutor(CommandExecutor)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -543,6 +545,8 @@ public&nbsp;java.util.Collection&lt;<a href="CommandSyntax.html" title="class in
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a collection containing all this command syntaxes</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#addSyntax(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)"><code>addSyntax(CommandCondition, CommandExecutor, Argument[])</code></a></dd>
 </dl>
 </li>
 </ul>
