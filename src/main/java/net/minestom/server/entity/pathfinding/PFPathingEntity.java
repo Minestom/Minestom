@@ -188,12 +188,9 @@ public class PFPathingEntity implements IPathingEntity {
         final float z = (float) position.z;
         this.targetPosition = new Position(x, y, z);
 
-        // Jump for non-flying entities
-        if (!avian) {
-            final float entityY = entity.getPosition().getY();
-            if (entityY < y) {
-                entity.jump(1);
-            }
+        final float entityY = entity.getPosition().getY();
+        if (entityY < y) {
+            entity.jump(1);
         }
     }
 

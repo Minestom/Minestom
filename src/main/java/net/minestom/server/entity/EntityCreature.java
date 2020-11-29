@@ -137,7 +137,9 @@ public abstract class EntityCreature extends LivingEntity {
                 if (path != null) {
                     final float speed = getAttributeValue(Attributes.MOVEMENT_SPEED);
                     final Position targetPosition = pathingEntity.getTargetPosition();
-                    moveTowards(targetPosition, speed);
+                    if (targetPosition != null) {
+                        moveTowards(targetPosition, speed);
+                    }
                 } else {
                     if (pathPosition != null) {
                         this.pathPosition = null;
