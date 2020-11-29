@@ -10,21 +10,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class FollowTargetGoal extends GoalSelector {
 
-    private final UpdateOption updateOption;
+    private final UpdateOption pathUpdateOption;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
     private Position lastTargetPos;
 
-    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull UpdateOption updateOption) {
+    /**
+     * Creates a follow target goal object.
+     *
+     * @param entityCreature   the entity
+     * @param pathUpdateOption the time between each path update (to check if the target moved)
+     */
+    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull UpdateOption pathUpdateOption) {
         super(entityCreature);
-        this.updateOption = updateOption;
-    }
-
-    private float getDistance(Position a, Position b) {
-        if (a == null || b == null)
-            throw new NullPointerException();
-        return MathUtils.square(a.getX() - b.getX()) +
-                MathUtils.square(a.getZ() - b.getZ());
+        this.pathUpdateOption = pathUpdateOption;
     }
 
     @Override
@@ -60,8 +59,8 @@ public class FollowTargetGoal extends GoalSelector {
     @Override
     public void tick(long time) {
         if (forceEnd ||
-                updateOption.getValue() == 0 ||
-                updateOption.getTimeUnit().toMilliseconds(updateOption.getValue()) + lastUpdateTime > time) {
+                pathUpdateOption.getValue() == 0 ||
+                pathUpdateOption.getTimeUnit().toMilliseconds(pathUpdateOption.getValue()) + lastUpdateTime > time) {
             return;
         }
         Position targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
@@ -82,5 +81,10 @@ public class FollowTargetGoal extends GoalSelector {
     @Override
     public void end() {
         entityCreature.setPathTo(null);
+    }
+
+    private float getDistance(@NotNull Position a, @NotNull Position b) {
+        return MathUtils.square(a.getX() - b.getX()) +
+                MathUtils.square(a.getZ() - b.getZ());
     }
 }
