@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":6,"i4":18,"i5":18,"i6":18};
+var data = {"i0":6,"i1":6,"i2":18,"i3":6,"i4":18,"i5":18,"i6":18,"i7":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -189,12 +189,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToSelf</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">
+<div class="block">Sends a packet to the viewable element if it is a player.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet to all viewers.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
@@ -323,7 +330,7 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <a id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>sendPacketToViewersAndSelf</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;sendPacketToViewersAndSelf&#8203;(@NotNull
@@ -331,6 +338,23 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <div class="block">Sends a packet to all viewers and the viewable element if it is a player.
  <p>
  If 'this' isn't a player, then {only @link #sendPacketToViewers(ServerPacket)} is called.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>packet</code> - the packet to send</dd>
+</dl>
+</li>
+</ul>
+<a id="sendPacketToSelf(net.minestom.server.network.packet.server.ServerPacket)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>sendPacketToSelf</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;sendPacketToSelf&#8203;(@NotNull
+                              <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
+<div class="block">Sends a packet to the viewable element if it is a player.
+ <p>
+ If 'this' isn't a player, then nothing is called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packet</code> - the packet to send</dd>
