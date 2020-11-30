@@ -85,5 +85,17 @@ public interface Viewable {
         }
         sendPacketToViewers(packet);
     }
-
+    
+    /**
+     * Sends a packet to the viewable element if it is a player.
+     * <p>
+     * If 'this' isn't a player, then nothing is called.
+     *
+     * @param packet the packet to send
+     */
+    default void sendPacketToSelf(@NotNull ServerPacket packet) {
+        if (this instanceof Player) {
+            ((Player) this).getPlayerConnection().sendPacket(packet);
+        }
+    }
 }
