@@ -84,7 +84,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
             // (null if not found)
             final Supplier<GoalSelector> goalSelectorSupplier = () -> {
                 for (GoalSelector goalSelector : goalSelectors) {
-                    final boolean start = goalSelector.shouldStart();
+                    final boolean start = goalSelector.shouldStart(this);
                     if (start) {
                         return goalSelector;
                     }
@@ -100,10 +100,10 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
                 this.currentGoalSelector = goalSelectorSupplier.get();
                 newGoalSelector = currentGoalSelector != null;
             } else {
-                final boolean stop = currentGoalSelector.shouldEnd();
+                final boolean stop = currentGoalSelector.shouldEnd(this);
                 if (stop) {
                     // The current goal selector stopped, find a new one
-                    this.currentGoalSelector.end();
+                    this.currentGoalSelector.end(this);
                     this.currentGoalSelector = goalSelectorSupplier.get();
                     newGoalSelector = currentGoalSelector != null;
                 }
@@ -111,12 +111,12 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
             // Start the new goal selector
             if (newGoalSelector) {
-                this.currentGoalSelector.start();
+                this.currentGoalSelector.start(this);
             }
 
             // Execute tick for the current goal selector
             if (currentGoalSelector != null) {
-                currentGoalSelector.tick(time);
+                currentGoalSelector.tick(this, time);
             }
         }
 

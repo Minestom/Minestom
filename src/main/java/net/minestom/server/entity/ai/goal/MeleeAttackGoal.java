@@ -24,32 +24,30 @@ public class MeleeAttackGoal extends GoalSelector {
     private boolean stop;
 
     /**
-     * @param entityCreature the entity to add the goal to
      * @param delay          the delay between each attacks
      * @param timeUnit       the unit of the delay
      */
-    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, int delay, @NotNull TimeUnit timeUnit) {
-        super(entityCreature);
+    public MeleeAttackGoal(int delay, @NotNull TimeUnit timeUnit) {
         this.delay = delay;
         this.timeUnit = timeUnit;
     }
 
     @Override
-    public boolean shouldStart() {
-        return getTarget() != null;
+    public boolean shouldStart(@NotNull EntityCreature entityCreature) {
+        return getTarget(entityCreature) != null;
     }
 
     @Override
-    public void start() {
-        final Entity target = getTarget();
+    public void start(@NotNull EntityCreature entityCreature) {
+        final Entity target = getTarget(entityCreature);
         Check.notNull(target, "The target is not expected to be null!");
         final Position targetPosition = target.getPosition();
         entityCreature.setPathTo(targetPosition);
     }
 
     @Override
-    public void tick(long time) {
-        final Entity target = getTarget();
+    public void tick(@NotNull EntityCreature entityCreature, long time) {
+        final Entity target = getTarget(entityCreature);
 
         this.stop = target == null;
 
@@ -74,12 +72,12 @@ public class MeleeAttackGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldEnd() {
+    public boolean shouldEnd(@NotNull EntityCreature entityCreature) {
         return stop;
     }
 
     @Override
-    public void end() {
+    public void end(@NotNull EntityCreature entityCreature) {
         // Stop following the target
         entityCreature.setPathTo(null);
     }
@@ -91,8 +89,8 @@ public class MeleeAttackGoal extends GoalSelector {
      * @return the target of the entity
      */
     @Nullable
-    private Entity getTarget() {
+    private Entity getTarget(@NotNull EntityCreature entityCreature) {
         final Entity target = entityCreature.getTarget();
-        return target == null ? findTarget() : target;
+        return target == null ? findTarget(entityCreature) : target;
     }
 }

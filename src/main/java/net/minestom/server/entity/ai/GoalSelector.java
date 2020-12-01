@@ -7,10 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class GoalSelector {
 
-    protected EntityCreature entityCreature;
+    public GoalSelector() {
 
-    public GoalSelector(@NotNull EntityCreature entityCreature) {
-        this.entityCreature = entityCreature;
     }
 
     /**
@@ -18,31 +16,31 @@ public abstract class GoalSelector {
      *
      * @return true to start
      */
-    public abstract boolean shouldStart();
+    public abstract boolean shouldStart(@NotNull EntityCreature entityCreature);
 
     /**
      * Starts this {@link GoalSelector}.
      */
-    public abstract void start();
+    public abstract void start(@NotNull EntityCreature entityCreature);
 
     /**
      * Called every tick when this {@link GoalSelector} is running.
      *
      * @param time the time of the update in milliseconds
      */
-    public abstract void tick(long time);
+    public abstract void tick(@NotNull EntityCreature entityCreature, long time);
 
     /**
      * Whether or not this {@link GoalSelector} should end.
      *
      * @return true to end
      */
-    public abstract boolean shouldEnd();
+    public abstract boolean shouldEnd(@NotNull EntityCreature entityCreature);
 
     /**
      * Ends this {@link GoalSelector}.
      */
-    public abstract void end();
+    public abstract void end(@NotNull EntityCreature entityCreature);
 
     /**
      * Finds a target based on the entity {@link TargetSelector}.
@@ -50,7 +48,7 @@ public abstract class GoalSelector {
      * @return the target entity, null if not found
      */
     @Nullable
-    public Entity findTarget() {
+    public Entity findTarget(@NotNull EntityCreature entityCreature) {
         for (TargetSelector targetSelector : entityCreature.getTargetSelectors()) {
             final Entity entity = targetSelector.findTarget();
             if (entity != null) {
@@ -58,28 +56,5 @@ public abstract class GoalSelector {
             }
         }
         return null;
-    }
-
-    /**
-     * Gets the entity behind the goal selector.
-     *
-     * @return the entity
-     */
-    @NotNull
-    public EntityCreature getEntityCreature() {
-        return entityCreature;
-    }
-
-    /**
-     * Changes the entity affected by the goal selector.
-     * <p>
-     * WARNING: this does not add the goal selector to {@code entityCreature},
-     * this only change the internal entity field. Be sure to remove the goal from
-     * the previous entity and add it to the new one using {@link EntityCreature#getGoalSelectors()}.
-     *
-     * @param entityCreature the new affected entity
-     */
-    public void setEntityCreature(@NotNull EntityCreature entityCreature) {
-        this.entityCreature = entityCreature;
     }
 }

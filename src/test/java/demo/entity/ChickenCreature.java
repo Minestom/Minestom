@@ -16,7 +16,7 @@ public class ChickenCreature extends EntityChicken {
 
         //goalSelectors.add(new DoNothingGoal(this, 500, 0.1f));
         //goalSelectors.add(new MeleeAttackGoal(this, 500, TimeUnit.MILLISECOND));
-        goalSelectors.add(new RandomStrollGoal(this, 2));
+        goalSelectors.add(new RandomStrollGoal(2));
         /*goalSelectors.add(new EatBlockGoal(this,
                 new HashMap<>() {
                     {

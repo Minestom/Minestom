@@ -17,24 +17,21 @@ public class EatBlockGoal extends GoalSelector {
     private int eatAnimationTick;
 
     /**
-     * @param entityCreature Creature that should eat a block.
      * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
      * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
      * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
      */
     public EatBlockGoal(
-            @NotNull EntityCreature entityCreature,
             @NotNull Map<Short, Short> eatInMap,
             @NotNull Map<Short, Short> eatBelowMap,
             int chancePerTick) {
-        super(entityCreature);
         this.eatInMap = eatInMap;
         this.eatBelowMap = eatBelowMap;
         this.chancePerTick = chancePerTick;
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean shouldStart(@NotNull EntityCreature entityCreature) {
         // TODO: is Baby
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
@@ -48,7 +45,7 @@ public class EatBlockGoal extends GoalSelector {
     }
 
     @Override
-    public void start() {
+    public void start(@NotNull EntityCreature entityCreature) {
         this.eatAnimationTick = 40;
         // TODO: EatBlockEvent call here.
         // Stop moving
@@ -56,7 +53,7 @@ public class EatBlockGoal extends GoalSelector {
     }
 
     @Override
-    public void tick(long time) {
+    public void tick(@NotNull EntityCreature entityCreature, long time) {
         this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
         if (this.eatAnimationTick != 4) {
             return;
@@ -76,12 +73,12 @@ public class EatBlockGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldEnd() {
+    public boolean shouldEnd(@NotNull EntityCreature entityCreature) {
         return eatAnimationTick <= 0;
     }
 
     @Override
-    public void end() {
+    public void end(@NotNull EntityCreature entityCreature) {
         this.eatAnimationTick = 0;
     }
 }

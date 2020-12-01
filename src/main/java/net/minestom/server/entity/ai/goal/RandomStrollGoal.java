@@ -18,20 +18,20 @@ public class RandomStrollGoal extends GoalSelector {
 
     private long lastStroll;
 
-    public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
-        super(entityCreature);
+    public RandomStrollGoal(int radius) {
+        super();
         this.radius = radius;
 
         this.closePositions = getNearbyBlocks(radius);
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean shouldStart(@NotNull EntityCreature entityCreature) {
         return System.currentTimeMillis() - lastStroll >= DELAY;
     }
 
     @Override
-    public void start() {
+    public void start(@NotNull EntityCreature entityCreature) {
         Collections.shuffle(closePositions);
 
         for (Position position : closePositions) {
@@ -45,17 +45,17 @@ public class RandomStrollGoal extends GoalSelector {
     }
 
     @Override
-    public void tick(long time) {
+    public void tick(@NotNull EntityCreature entityCreature, long time) {
 
     }
 
     @Override
-    public boolean shouldEnd() {
+    public boolean shouldEnd(@NotNull EntityCreature entityCreature) {
         return true;
     }
 
     @Override
-    public void end() {
+    public void end(@NotNull EntityCreature entityCreature) {
         this.lastStroll = System.currentTimeMillis();
     }
 

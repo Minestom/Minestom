@@ -18,22 +18,20 @@ public class FollowTargetGoal extends GoalSelector {
     /**
      * Creates a follow target goal object.
      *
-     * @param entityCreature   the entity
      * @param pathUpdateOption the time between each path update (to check if the target moved)
      */
-    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull UpdateOption pathUpdateOption) {
-        super(entityCreature);
+    public FollowTargetGoal(@NotNull UpdateOption pathUpdateOption) {
         this.pathUpdateOption = pathUpdateOption;
     }
 
     @Override
-    public boolean shouldStart() {
+    public boolean shouldStart(@NotNull EntityCreature entityCreature) {
         return entityCreature.getTarget() != null &&
                 getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) >= 2;
     }
 
     @Override
-    public void start() {
+    public void start(@NotNull EntityCreature entityCreature) {
         lastUpdateTime = 0;
         forceEnd = false;
         lastTargetPos = null;
@@ -57,7 +55,7 @@ public class FollowTargetGoal extends GoalSelector {
     }
 
     @Override
-    public void tick(long time) {
+    public void tick(@NotNull EntityCreature entityCreature, long time) {
         if (forceEnd ||
                 pathUpdateOption.getValue() == 0 ||
                 pathUpdateOption.getTimeUnit().toMilliseconds(pathUpdateOption.getValue()) + lastUpdateTime > time) {
@@ -72,14 +70,14 @@ public class FollowTargetGoal extends GoalSelector {
     }
 
     @Override
-    public boolean shouldEnd() {
+    public boolean shouldEnd(@NotNull EntityCreature entityCreature) {
         return forceEnd ||
                 entityCreature.getTarget() == null ||
                 getDistance(entityCreature.getTarget().getPosition(), entityCreature.getPosition()) < 2;
     }
 
     @Override
-    public void end() {
+    public void end(@NotNull EntityCreature entityCreature) {
         entityCreature.setPathTo(null);
     }
 
