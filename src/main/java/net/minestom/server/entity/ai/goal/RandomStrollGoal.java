@@ -4,7 +4,6 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,15 +18,8 @@ public class RandomStrollGoal extends GoalSelector {
 
     private long lastStroll;
 
-    public RandomStrollGoal(@Nullable EntityCreature entityCreature, int radius) {
+    public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
         super(entityCreature);
-        this.radius = radius;
-
-        this.closePositions = getNearbyBlocks(radius);
-    }
-
-    public RandomStrollGoal(int radius) {
-        super();
         this.radius = radius;
 
         this.closePositions = getNearbyBlocks(radius);

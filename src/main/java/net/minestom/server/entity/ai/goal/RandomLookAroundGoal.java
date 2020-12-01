@@ -4,7 +4,6 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -18,25 +17,8 @@ public class RandomLookAroundGoal extends GoalSelector {
     private Vector lookDirection;
     private int lookTime = 0;
 
-    public RandomLookAroundGoal(@Nullable EntityCreature entityCreature, int chancePerTick) {
+    public RandomLookAroundGoal(EntityCreature entityCreature, int chancePerTick) {
         this(entityCreature, chancePerTick,
-                // These two functions act similarily enough to how MC randomly looks around.
-
-                // Look in one direction for at most 40 ticks and at minimum 20 ticks.
-                () -> 20 + RANDOM.nextInt(20),
-                // Look at a random block
-                (creature) -> {
-                    final double n = Math.PI * 2 * RANDOM.nextDouble();
-                    return new Vector(
-                            (float) Math.cos(n),
-                            0,
-                            (float) Math.sin(n)
-                    );
-                });
-    }
-
-    public RandomLookAroundGoal(int chancePerTick) {
-        this(chancePerTick,
                 // These two functions act similarily enough to how MC randomly looks around.
 
                 // Look in one direction for at most 40 ticks and at minimum 20 ticks.
@@ -59,28 +41,12 @@ public class RandomLookAroundGoal extends GoalSelector {
      * @param randomDirectionFunction A function that returns a random vector that the entity will look in/at.
      */
     public RandomLookAroundGoal(
-            @Nullable EntityCreature entityCreature,
+            EntityCreature entityCreature,
             int chancePerTick,
             @NotNull Supplier<Integer> minimalLookTimeSupplier,
             @NotNull Function<EntityCreature, Vector> randomDirectionFunction
     ) {
         super(entityCreature);
-        this.chancePerTick = chancePerTick;
-        this.minimalLookTimeSupplier = minimalLookTimeSupplier;
-        this.randomDirectionFunction = randomDirectionFunction;
-    }
-
-    /**
-     * @param chancePerTick           The chance (per tick) that the entity looks around. Setting this to N would mean there is a 1 in N chance.
-     * @param minimalLookTimeSupplier A supplier that returns the minimal amount of time an entity looks in a direction.
-     * @param randomDirectionFunction A function that returns a random vector that the entity will look in/at.
-     */
-    public RandomLookAroundGoal(
-            int chancePerTick,
-            @NotNull Supplier<Integer> minimalLookTimeSupplier,
-            @NotNull Function<EntityCreature, Vector> randomDirectionFunction
-    ) {
-        super();
         this.chancePerTick = chancePerTick;
         this.minimalLookTimeSupplier = minimalLookTimeSupplier;
         this.randomDirectionFunction = randomDirectionFunction;

@@ -9,12 +9,8 @@ public abstract class GoalSelector {
 
     protected EntityCreature entityCreature;
 
-    public GoalSelector(@Nullable EntityCreature entityCreature) {
+    public GoalSelector(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
-    }
-
-    public GoalSelector() {
-        this.entityCreature = null;
     }
 
     /**
@@ -69,7 +65,7 @@ public abstract class GoalSelector {
      *
      * @return the entity
      */
-    @Nullable
+    @NotNull
     public EntityCreature getEntityCreature() {
         return entityCreature;
     }
@@ -81,12 +77,9 @@ public abstract class GoalSelector {
      * this only change the internal entity field. Be sure to remove the goal from
      * the previous entity and add it to the new one using {@link EntityCreature#getGoalSelectors()}.
      *
-     * WARNING: If the EntityCreature is null when goals are running, the goal will not run properly.
-     * Setting it to null is an unsafe operation.
-     *
      * @param entityCreature the new affected entity
      */
-    public void setEntityCreature(@Nullable EntityCreature entityCreature) {
+    public void setEntityCreature(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
 }

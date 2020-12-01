@@ -27,18 +27,6 @@ public class DoNothingGoal extends GoalSelector {
         this.chance = MathUtils.clampFloat(chance, 0, 1);
     }
 
-    /**
-     * Create a DoNothing goal with no applicable creature (unsafe)
-     *
-     * @param time           the time in milliseconds where nothing happen
-     * @param chance         the chance to do nothing (0-1)
-     */
-    public DoNothingGoal(long time, float chance) {
-        super();
-        this.time = time;
-        this.chance = MathUtils.clampFloat(chance, 0, 1);
-    }
-
     @Override
     public void end() {
         this.startTime = 0;
