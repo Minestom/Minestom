@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10,"i2":6,"i3":6,"i4":6,"i5":6};
+var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,27 +215,41 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityCreature()">getEntityCreature</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the entity behind the goal selector.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntityCreature(net.minestom.server.entity.EntityCreature)">setEntityCreature</a></span>&#8203;(<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</code></th>
+<td class="colLast">
+<div class="block">Changes the entity affected by the goal selector.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldEnd()">shouldEnd</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Whether or not this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> should end.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldStart()">shouldStart</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Whether or not this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> should start.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start()">start</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Starts this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -272,7 +286,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>entityCreature</h4>
-<pre>protected final&nbsp;<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a> entityCreature</pre>
+<pre>protected&nbsp;<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a> entityCreature</pre>
 </li>
 </ul>
 </li>
@@ -370,7 +384,7 @@ extends java.lang.Object</pre>
 <a id="findTarget()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>findTarget</h4>
 <pre class="methodSignature">@Nullable
@@ -379,6 +393,40 @@ public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity"
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the target entity, null if not found</dd>
+</dl>
+</li>
+</ul>
+<a id="getEntityCreature()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEntityCreature</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;getEntityCreature()</pre>
+<div class="block">Gets the entity behind the goal selector.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the entity</dd>
+</dl>
+</li>
+</ul>
+<a id="setEntityCreature(net.minestom.server.entity.EntityCreature)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setEntityCreature</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setEntityCreature&#8203;(@NotNull
+                              <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</pre>
+<div class="block">Changes the entity affected by the goal selector.
+ <p>
+ WARNING: this does not add the goal selector to <code>entityCreature</code>,
+ this only change the internal entity field. Be sure to remove the goal from
+ the previous entity and add it to the new one using <a href="../EntityCreature.html#getGoalSelectors()"><code>EntityCreature.getGoalSelectors()</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entityCreature</code> - the new affected entity</dd>
 </dl>
 </li>
 </ul>
