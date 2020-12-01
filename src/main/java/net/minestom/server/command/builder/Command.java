@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represents a command which have suggestion/auto-completion.
+ * Represents a command which has suggestion/auto-completion.
  * <p>
  * The command works using a list of valid syntaxes.
  * For instance we could build the command
