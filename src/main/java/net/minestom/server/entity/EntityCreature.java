@@ -22,13 +22,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity implements NavigableEntity {
 
     // TODO all pathfinding requests should be process in another thread
-    private final ReentrantLock pathLock = new ReentrantLock();
+    private final Object pathLock = new Object();
 
     private final PFPathingEntity pathingEntity = new PFPathingEntity(this);
     private HydrazinePathFinder pathFinder;
@@ -315,17 +314,16 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     @Override
     public void pathFindingTick(float speed) {
-        this.pathLock.lock();
-        NavigableEntity.super.pathFindingTick(speed);
-        this.pathLock.unlock();
+        synchronized (pathLock){
+            NavigableEntity.super.pathFindingTick(speed);
+        }
     }
 
     @Override
     public boolean setPathTo(@Nullable Position position) {
-        this.pathLock.lock();
-        final boolean result = NavigableEntity.super.setPathTo(position);
-        this.pathLock.unlock();
-        return result;
+        synchronized (pathLock){
+            return NavigableEntity.super.setPathTo(position);
+        }
     }
 
     @Nullable

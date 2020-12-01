@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class GoalSelector {
 
-    protected final EntityCreature entityCreature;
+    protected EntityCreature entityCreature;
 
     public GoalSelector(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
@@ -58,5 +58,28 @@ public abstract class GoalSelector {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets the entity behind the goal selector.
+     *
+     * @return the entity
+     */
+    @NotNull
+    public EntityCreature getEntityCreature() {
+        return entityCreature;
+    }
+
+    /**
+     * Changes the entity affected by the goal selector.
+     * <p>
+     * WARNING: this does not add the goal selector to {@code entityCreature},
+     * this only change the internal entity field. Be sure to remove the goal from
+     * the previous entity and add it to the new one using {@link EntityCreature#getGoalSelectors()}.
+     *
+     * @param entityCreature the new affected entity
+     */
+    public void setEntityCreature(@NotNull EntityCreature entityCreature) {
+        this.entityCreature = entityCreature;
     }
 }
