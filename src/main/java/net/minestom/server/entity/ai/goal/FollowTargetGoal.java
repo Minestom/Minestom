@@ -7,6 +7,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FollowTargetGoal extends GoalSelector {
 
@@ -21,7 +22,7 @@ public class FollowTargetGoal extends GoalSelector {
      * @param entityCreature   the entity
      * @param pathUpdateOption the time between each path update (to check if the target moved)
      */
-    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull UpdateOption pathUpdateOption) {
+    public FollowTargetGoal(@Nullable EntityCreature entityCreature, @NotNull UpdateOption pathUpdateOption) {
         super(entityCreature);
         this.pathUpdateOption = pathUpdateOption;
     }

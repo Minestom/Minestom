@@ -5,6 +5,7 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Random;
@@ -23,7 +24,7 @@ public class EatBlockGoal extends GoalSelector {
      * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
      */
     public EatBlockGoal(
-            @NotNull EntityCreature entityCreature,
+            @Nullable EntityCreature entityCreature,
             @NotNull Map<Short, Short> eatInMap,
             @NotNull Map<Short, Short> eatBelowMap,
             int chancePerTick) {

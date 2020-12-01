@@ -4,6 +4,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -17,7 +18,7 @@ public class RandomLookAroundGoal extends GoalSelector {
     private Vector lookDirection;
     private int lookTime = 0;
 
-    public RandomLookAroundGoal(EntityCreature entityCreature, int chancePerTick) {
+    public RandomLookAroundGoal(@Nullable EntityCreature entityCreature, int chancePerTick) {
         this(entityCreature, chancePerTick,
                 // These two functions act similarily enough to how MC randomly looks around.
 
@@ -41,7 +42,7 @@ public class RandomLookAroundGoal extends GoalSelector {
      * @param randomDirectionFunction A function that returns a random vector that the entity will look in/at.
      */
     public RandomLookAroundGoal(
-            EntityCreature entityCreature,
+            @Nullable EntityCreature entityCreature,
             int chancePerTick,
             @NotNull Supplier<Integer> minimalLookTimeSupplier,
             @NotNull Function<EntityCreature, Vector> randomDirectionFunction

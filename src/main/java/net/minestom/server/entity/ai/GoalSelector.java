@@ -9,7 +9,7 @@ public abstract class GoalSelector {
 
     protected EntityCreature entityCreature;
 
-    public GoalSelector(@NotNull EntityCreature entityCreature) {
+    public GoalSelector(@Nullable EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
 
@@ -65,7 +65,7 @@ public abstract class GoalSelector {
      *
      * @return the entity
      */
-    @NotNull
+    @Nullable
     public EntityCreature getEntityCreature() {
         return entityCreature;
     }
@@ -79,7 +79,7 @@ public abstract class GoalSelector {
      *
      * @param entityCreature the new affected entity
      */
-    public void setEntityCreature(@NotNull EntityCreature entityCreature) {
+    public void setEntityCreature(@Nullable EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
 }

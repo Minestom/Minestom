@@ -3,6 +3,7 @@ package net.minestom.server.entity.ai.goal;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -21,7 +22,7 @@ public class DoNothingGoal extends GoalSelector {
      * @param time           the time in milliseconds where nothing happen
      * @param chance         the chance to do nothing (0-1)
      */
-    public DoNothingGoal(EntityCreature entityCreature, long time, float chance) {
+    public DoNothingGoal(@Nullable EntityCreature entityCreature, long time, float chance) {
         super(entityCreature);
         this.time = time;
         this.chance = MathUtils.clampFloat(chance, 0, 1);
