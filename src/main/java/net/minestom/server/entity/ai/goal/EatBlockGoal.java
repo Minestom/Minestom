@@ -5,6 +5,7 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Random;
@@ -17,17 +18,37 @@ public class EatBlockGoal extends GoalSelector {
     private int eatAnimationTick;
 
     /**
+     * Create an EatBlockGoal goal
+     *
      * @param entityCreature Creature that should eat a block.
      * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
      * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
      * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
      */
     public EatBlockGoal(
-            @NotNull EntityCreature entityCreature,
+            @Nullable EntityCreature entityCreature,
             @NotNull Map<Short, Short> eatInMap,
             @NotNull Map<Short, Short> eatBelowMap,
             int chancePerTick) {
         super(entityCreature);
+        this.eatInMap = eatInMap;
+        this.eatBelowMap = eatBelowMap;
+        this.chancePerTick = chancePerTick;
+    }
+
+    /**
+     *
+     * Create an EatBlockGoal goal with no applicable creature (unsafe)
+     *
+     * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
+     * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
+     * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
+     */
+    public EatBlockGoal(
+            @NotNull Map<Short, Short> eatInMap,
+            @NotNull Map<Short, Short> eatBelowMap,
+            int chancePerTick) {
+        super();
         this.eatInMap = eatInMap;
         this.eatBelowMap = eatBelowMap;
         this.chancePerTick = chancePerTick;

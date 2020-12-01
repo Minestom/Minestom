@@ -28,8 +28,18 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param delay          the delay between each attacks
      * @param timeUnit       the unit of the delay
      */
-    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, int delay, @NotNull TimeUnit timeUnit) {
+    public MeleeAttackGoal(@Nullable EntityCreature entityCreature, int delay, @NotNull TimeUnit timeUnit) {
         super(entityCreature);
+        this.delay = delay;
+        this.timeUnit = timeUnit;
+    }
+
+    /**
+     * @param delay          the delay between each attacks
+     * @param timeUnit       the unit of the delay
+     */
+    public MeleeAttackGoal(int delay, @NotNull TimeUnit timeUnit) {
+        super();
         this.delay = delay;
         this.timeUnit = timeUnit;
     }
