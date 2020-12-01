@@ -18,6 +18,7 @@ public class FollowTargetGoal extends GoalSelector {
 
     /**
      * Creates a follow target goal object.
+     *
      * @param entityCreature   the entity
      * @param pathUpdateOption the time between each path update (to check if the target moved)
      */
@@ -28,6 +29,7 @@ public class FollowTargetGoal extends GoalSelector {
 
     /**
      * Creates a follow target goal object.
+     *
      * @param pathUpdateOption the time between each path update (to check if the target moved)
      */
     public FollowTargetGoal(@NotNull UpdateOption pathUpdateOption) {

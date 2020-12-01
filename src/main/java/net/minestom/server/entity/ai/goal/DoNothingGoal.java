@@ -15,7 +15,7 @@ public class DoNothingGoal extends GoalSelector {
     private long startTime;
 
     /**
-     * Create a DoNothing goal.
+     * Create a DoNothing goal
      *
      * @param entityCreature the entity
      * @param time           the time in milliseconds where nothing happen
@@ -28,7 +28,7 @@ public class DoNothingGoal extends GoalSelector {
     }
 
     /**
-     * Create a DoNothing goal with no applicable creature (unsafe).
+     * Create a DoNothing goal with no applicable creature (unsafe)
      *
      * @param time           the time in milliseconds where nothing happen
      * @param chance         the chance to do nothing (0-1)
