@@ -19,7 +19,6 @@ public class EatBlockGoal extends GoalSelector {
 
     /**
      * Create an EatBlockGoal goal
-     *
      * @param entityCreature Creature that should eat a block.
      * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
      * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
@@ -37,9 +36,7 @@ public class EatBlockGoal extends GoalSelector {
     }
 
     /**
-     *
      * Create an EatBlockGoal goal with no applicable creature (unsafe)
-     *
      * @param eatInMap       Map containing the block IDs that the entity can eat (when inside the block) and the block ID of the replacement block.
      * @param eatBelowMap    Map containing block IDs that the entity can eat (when above the block) and the block ID of the replacement block.
      * @param chancePerTick  The chance (per tick) that the entity eats. Settings this to N would mean there is a 1 in N chance.
