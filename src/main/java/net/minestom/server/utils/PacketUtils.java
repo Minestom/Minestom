@@ -2,6 +2,7 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -58,7 +59,8 @@ public final class PacketUtils {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.getChannel().write(framedPacket).addListener((p) -> finalBuffer.release());
+                    final Channel channel = nettyPlayerConnection.getChannel();
+                    channel.write(framedPacket).addListener((p) -> finalBuffer.release());
                 } else {
                     playerConnection.sendPacket(packet);
                     finalBuffer.release();
