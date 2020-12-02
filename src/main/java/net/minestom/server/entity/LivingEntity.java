@@ -320,7 +320,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
                 SoundEffectPacket damageSoundPacket =
                         SoundEffectPacket.create(soundCategory, sound,
-                                getPosition().getX(), getPosition().getY(), getPosition().getZ(),
+                                getPosition(),
                                 1.0f, 1.0f);
                 sendPacketToViewersAndSelf(damageSoundPacket);
             }

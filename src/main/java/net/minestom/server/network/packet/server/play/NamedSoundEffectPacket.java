@@ -18,9 +18,9 @@ public class NamedSoundEffectPacket implements ServerPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(soundName);
         writer.writeVarInt(soundCategory.ordinal());
-        writer.writeInt(x);
-        writer.writeInt(y);
-        writer.writeInt(z);
+        writer.writeInt(x * 8);
+        writer.writeInt(y * 8);
+        writer.writeInt(z * 8);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
     }

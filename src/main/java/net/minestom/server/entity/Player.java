@@ -881,9 +881,9 @@ public class Player extends LivingEntity implements CommandSender {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundCategory = soundCategory;
-        soundEffectPacket.x = x * 8;
-        soundEffectPacket.y = y * 8;
-        soundEffectPacket.z = z * 8;
+        soundEffectPacket.x = x;
+        soundEffectPacket.y = y;
+        soundEffectPacket.z = z;
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);
@@ -904,9 +904,9 @@ public class Player extends LivingEntity implements CommandSender {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
         namedSoundEffectPacket.soundCategory = soundCategory;
-        namedSoundEffectPacket.x = x * 8;
-        namedSoundEffectPacket.y = y * 8;
-        namedSoundEffectPacket.z = z * 8;
+        namedSoundEffectPacket.x = x;
+        namedSoundEffectPacket.y = y;
+        namedSoundEffectPacket.z = z;
         namedSoundEffectPacket.volume = volume;
         namedSoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(namedSoundEffectPacket);
