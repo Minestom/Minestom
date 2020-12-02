@@ -22,7 +22,7 @@ public final class UpdateManager {
 
     private final ScheduledExecutorService updateExecutionService = Executors.newSingleThreadScheduledExecutor();
 
-    private boolean stopRequested;
+    private volatile boolean stopRequested;
 
     private ThreadProvider threadProvider;
 

@@ -723,8 +723,8 @@ public final class MinecraftServer {
     public static void stopCleanly() {
         LOGGER.info("Stopping Minestom server.");
         updateManager.stop();
-        nettyServer.stop();
         schedulerManager.shutdown();
+        nettyServer.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
