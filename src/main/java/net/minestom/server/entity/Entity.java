@@ -596,7 +596,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             sendSynchronization();
         }
 
-        if (shouldRemove()) {
+        if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
     }

@@ -1,21 +1,5 @@
 package net.minestom.server.entity;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
@@ -37,16 +21,7 @@ import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
-import net.minestom.server.event.player.PlayerChunkLoadEvent;
-import net.minestom.server.event.player.PlayerChunkUnloadEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerEatEvent;
-import net.minestom.server.event.player.PlayerPreLoginEvent;
-import net.minestom.server.event.player.PlayerRespawnEvent;
-import net.minestom.server.event.player.PlayerSkinInitEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.event.player.PlayerTickEvent;
-import net.minestom.server.event.player.UpdateTagListEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -61,49 +36,7 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket;
-import net.minestom.server.network.packet.server.play.CameraPacket;
-import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
-import net.minestom.server.network.packet.server.play.CloseWindowPacket;
-import net.minestom.server.network.packet.server.play.CombatEventPacket;
-import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
-import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
-import net.minestom.server.network.packet.server.play.DisconnectPacket;
-import net.minestom.server.network.packet.server.play.EffectPacket;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import net.minestom.server.network.packet.server.play.EntityPositionAndRotationPacket;
-import net.minestom.server.network.packet.server.play.EntityPositionPacket;
-import net.minestom.server.network.packet.server.play.EntityRotationPacket;
-import net.minestom.server.network.packet.server.play.EntitySoundEffect;
-import net.minestom.server.network.packet.server.play.FacePlayerPacket;
-import net.minestom.server.network.packet.server.play.HeldItemChangePacket;
-import net.minestom.server.network.packet.server.play.JoinGamePacket;
-import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.network.packet.server.play.NamedSoundEffectPacket;
-import net.minestom.server.network.packet.server.play.OpenWindowPacket;
-import net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket;
-import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
-import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
-import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
-import net.minestom.server.network.packet.server.play.PluginMessagePacket;
-import net.minestom.server.network.packet.server.play.ResourcePackSendPacket;
-import net.minestom.server.network.packet.server.play.RespawnPacket;
-import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
-import net.minestom.server.network.packet.server.play.SetExperiencePacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
-import net.minestom.server.network.packet.server.play.SpawnPlayerPacket;
-import net.minestom.server.network.packet.server.play.SpawnPositionPacket;
-import net.minestom.server.network.packet.server.play.StopSoundPacket;
-import net.minestom.server.network.packet.server.play.TagsPacket;
-import net.minestom.server.network.packet.server.play.TitlePacket;
-import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.network.packet.server.play.UnlockRecipesPacket;
-import net.minestom.server.network.packet.server.play.UpdateHealthPacket;
-import net.minestom.server.network.packet.server.play.UpdateViewPositionPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
@@ -128,6 +61,14 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * Those are the major actors of the server,
@@ -970,23 +911,23 @@ public class Player extends LivingEntity implements CommandSender {
         namedSoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(namedSoundEffectPacket);
     }
-    
+
     /**
      * Plays a sound directly to the player (constant volume).
      *
-     * @param sound    		the sound to play
+     * @param sound         the sound to play
      * @param soundCategory the sound category
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
-    	EntitySoundEffect entitySoundEffect = new EntitySoundEffect();
-		entitySoundEffect.entityId = getEntityId();
-		entitySoundEffect.soundId = sound.getId();
-		entitySoundEffect.soundCategory = soundCategory;
-		entitySoundEffect.volume = volume;
-		entitySoundEffect.pitch = pitch;
-		playerConnection.sendPacket(entitySoundEffect);
+        EntitySoundEffect entitySoundEffect = new EntitySoundEffect();
+        entitySoundEffect.entityId = getEntityId();
+        entitySoundEffect.soundId = sound.getId();
+        entitySoundEffect.soundCategory = soundCategory;
+        entitySoundEffect.volume = volume;
+        entitySoundEffect.pitch = pitch;
+        playerConnection.sendPacket(entitySoundEffect);
     }
 
     /**

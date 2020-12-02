@@ -74,6 +74,15 @@ public class Task implements Runnable {
     }
 
     /**
+     * Executes the internal runnable.
+     * <p>
+     * Should probably use {@link #schedule()} instead.
+     */
+    public void runRunnable() {
+        this.runnable.run();
+    }
+
+    /**
      * Sets up the task for correct execution.
      */
     public void schedule() {
