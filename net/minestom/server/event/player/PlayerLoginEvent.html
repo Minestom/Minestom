@@ -139,6 +139,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a></pre>
 <div class="block">Called at player login, used to define his spawn instance.
  <p>
+ Be aware that the player is not yet in a world when the event
+ is called, meaning that most player methods will not work.
+ You can use <a href="PlayerSpawnEvent.html" title="class in net.minestom.server.event.player"><code>PlayerSpawnEvent</code></a> and <a href="PlayerSpawnEvent.html#isFirstSpawn()"><code>PlayerSpawnEvent.isFirstSpawn()</code></a>
+ if needed.
+ <p>
  WARNING: defining the spawning instance is MANDATORY.</div>
 </li>
 </ul>
