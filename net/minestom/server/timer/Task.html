@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -227,6 +227,13 @@ implements java.lang.Runnable</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runRunnable()">runRunnable</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Executes the internal runnable.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets up the task for correct execution.</div>
@@ -302,6 +309,18 @@ implements java.lang.Runnable</pre>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>run</code>&nbsp;in interface&nbsp;<code>java.lang.Runnable</code></dd>
 </dl>
+</li>
+</ul>
+<a id="runRunnable()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>runRunnable</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;runRunnable()</pre>
+<div class="block">Executes the internal runnable.
+ <p>
+ Should probably use <a href="#schedule()"><code>schedule()</code></a> instead.</div>
 </li>
 </ul>
 <a id="schedule()">

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -277,41 +277,62 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownText()">getShutdownText</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive</a></span>&#8203;(<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is received.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">onPacketSend</a></span>&#8203;(<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is sent.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)">removePlayer</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from the players list.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)">setPlayerProvider</a></span>&#8203;(<a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.minestom.server.chat.ColoredText)">setShutdownText</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;shutdownText)</code></th>
+<td class="colLast">
+<div class="block">Changes the kick reason in case of a shutdown.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuidProvider(net.minestom.server.network.UuidProvider)">setUuidProvider</a></span>&#8203;(<a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes how <code>UUID</code> are attributed to players.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Shutdowns the connection manager by kicking all the currently connected players</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)">startPlayState</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
               java.util.UUID&nbsp;uuid,
@@ -640,6 +661,38 @@ public&nbsp;java.util.List&lt;java.util.function.Consumer&lt;<a href="../entity/
 </dl>
 </li>
 </ul>
+<a id="getShutdownText()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShutdownText</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;getShutdownText()</pre>
+<div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the kick reason in case on a shutdown</dd>
+</dl>
+</li>
+</ul>
+<a id="setShutdownText(net.minestom.server.chat.ColoredText)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setShutdownText</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setShutdownText&#8203;(@NotNull
+                            <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;shutdownText)</pre>
+<div class="block">Changes the kick reason in case of a shutdown.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>shutdownText</code> - the new shutdown kick reason</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#getShutdownText()"><code>getShutdownText()</code></a></dd>
+</dl>
+</li>
+</ul>
 <a id="createPlayer(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
@@ -704,7 +757,7 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
 <a id="startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>startPlayState</h4>
 <pre class="methodSignature">@NotNull
@@ -723,6 +776,16 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the newly created player object</dd>
 </dl>
+</li>
+</ul>
+<a id="shutdown()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>shutdown</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;shutdown()</pre>
+<div class="block">Shutdowns the connection manager by kicking all the currently connected players</div>
 </li>
 </ul>
 </li>

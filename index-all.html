@@ -12405,6 +12405,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets a <code>Collection</code> with all the registered shutdown <a href="net/minestom/server/timer/Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#getShutdownText()">getShutdownText()</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
+<dd>
+<div class="block">Gets the kick reason when the server is shutdown using <a href="net/minestom/server/MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/extras/selfmodification/mixins/MixinPlatformAgentMinestom.html#getSideName()">getSideName()</a></span> - Method in class net.minestom.server.extras.selfmodification.mixins.<a href="net/minestom/server/extras/selfmodification/mixins/MixinPlatformAgentMinestom.html" title="class in net.minestom.server.extras.selfmodification.mixins">MixinPlatformAgentMinestom</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/vehicle/PlayerVehicleInformation.html#getSideways()">getSideways()</a></span> - Method in class net.minestom.server.entity.vehicle.<a href="net/minestom/server/entity/vehicle/PlayerVehicleInformation.html" title="class in net.minestom.server.entity.vehicle">PlayerVehicleInformation</a></dt>
@@ -16617,6 +16621,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#isStarted()">isStarted()</a></span> - Static method in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
 <dd>
 <div class="block">Gets if the server is up and running.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/MinecraftServer.html#isStopping()">isStopping()</a></span> - Static method in class net.minestom.server.<a href="net/minestom/server/MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></dt>
+<dd>
+<div class="block">Gets if the server is currently being shutdown using <a href="net/minestom/server/MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html#isSwimmer()">isSwimmer()</a></span> - Method in class net.minestom.server.entity.pathfinding.<a href="net/minestom/server/entity/pathfinding/PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></dt>
 <dd>&nbsp;</dd>
@@ -22789,6 +22797,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Runs a command when clicked.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/timer/Task.html#runRunnable()">runRunnable()</a></span> - Method in class net.minestom.server.timer.<a href="net/minestom/server/timer/Task.html" title="class in net.minestom.server.timer">Task</a></dt>
+<dd>
+<div class="block">Executes the internal runnable.</div>
+</dd>
 </dl>
 <a id="I:S">
 <!--   -->
@@ -24498,6 +24510,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Sets if the server should process netty errors and other unnecessary netty events
  false is faster</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#setShutdownText(net.minestom.server.chat.ColoredText)">setShutdownText(ColoredText)</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
+<dd>
+<div class="block">Changes the kick reason in case of a shutdown.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#setSilent(boolean)">setSilent(boolean)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/entity/type/monster/EntityPhantom.html#setSize(int)">setSize(int)</a></span> - Method in class net.minestom.server.entity.type.monster.<a href="net/minestom/server/entity/type/monster/EntityPhantom.html" title="class in net.minestom.server.entity.type.monster">EntityPhantom</a></dt>
@@ -24909,6 +24925,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 &nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/network/ConnectionManager.html#shutdown()">shutdown()</a></span> - Method in class net.minestom.server.network.<a href="net/minestom/server/network/ConnectionManager.html" title="class in net.minestom.server.network">ConnectionManager</a></dt>
+<dd>
+<div class="block">Shutdowns the connection manager by kicking all the currently connected players</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/timer/SchedulerManager.html#shutdown()">shutdown()</a></span> - Method in class net.minestom.server.timer.<a href="net/minestom/server/timer/SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a></dt>
 <dd>
 <div class="block">Shutdowns all normal tasks and call the registered shutdown tasks.</div>
