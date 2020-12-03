@@ -622,4 +622,15 @@ public class ExtensionManager {
         // call GC to try to get rid of classes and classloader
         System.gc();
     }
+
+    /**
+     * Shutdowns all the extensions by unloading them.
+     */
+    public void shutdown() {
+        Iterator<Extension> extensionIterator = extensionList.iterator();
+        while (extensionIterator.hasNext()) {
+            final Extension extension = extensionIterator.next();
+            unload(extension);
+        }
+    }
 }

@@ -738,6 +738,8 @@ public final class MinecraftServer {
         connectionManager.shutdown();
         nettyServer.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
+        LOGGER.info("Unloading all extensions.");
+        extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         commandManager.stopConsoleThread();
