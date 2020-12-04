@@ -17,7 +17,6 @@ import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
@@ -469,10 +468,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
-                float newX = position.getX() + velocity.getX() / tps;
-                float newY = position.getY() + velocity.getY() / tps;
-                float newZ = position.getZ() + velocity.getZ() / tps;
-
+                final float newX = position.getX() + velocity.getX() / tps;
+                final float newY = position.getY() + velocity.getY() / tps;
+                final float newZ = position.getZ() + velocity.getZ() / tps;
                 Position newPosition = new Position(newX, newY, newZ);
 
                 if (!noGravity) {
@@ -487,63 +485,52 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 );
                 this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
+                // Stop here if the position is the same
+                final boolean updatePosition = !newPosition.isSimilar(position);
+
                 // Check chunk
                 if (!ChunkUtils.isLoaded(instance, newPosition.getX(), newPosition.getZ())) {
                     return;
                 }
 
-                // World border collision
+                // World border and apply the position
+                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+                if (finalVelocityPosition != null && updatePosition) {
+                    refreshPosition(finalVelocityPosition);
+                }
+
+
+                // Update velocity
                 {
-                    final WorldBorder worldBorder = instance.getWorldBorder();
-                    final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
-                    switch (collisionAxis) {
-                        case NONE:
-                            // Apply velocity + gravity
-                            refreshPosition(newPosition);
-                            break;
-                        case BOTH:
-                            // Apply Y velocity/gravity
-                            refreshPosition(position.getX(), newPosition.getY(), position.getZ());
-                            break;
-                        case X:
-                            // Apply Y/Z velocity/gravity
-                            refreshPosition(position.getX(), newPosition.getY(), newPosition.getZ());
-                            break;
-                        case Z:
-                            // Apply X/Y velocity/gravity
-                            refreshPosition(newPosition.getX(), newPosition.getY(), position.getZ());
-                            break;
-                    }
-                }
+                    this.velocity.copy(newVelocityOut);
+                    this.velocity.multiply(tps);
 
-                this.velocity.copy(newVelocityOut);
-                this.velocity.multiply(tps);
+                    float drag;
+                    if (onGround) {
+                        final BlockPosition blockPosition = position.toBlockPosition();
+                        final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+                        if (customBlock != null) {
+                            // Custom drag
+                            drag = customBlock.getDrag(instance, blockPosition);
+                        } else {
+                            // Default ground drag
+                            drag = 0.5f;
+                        }
 
-                float drag;
-                if (onGround) {
-                    final BlockPosition blockPosition = position.toBlockPosition();
-                    final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-                    if (customBlock != null) {
-                        // Custom drag
-                        drag = customBlock.getDrag(instance, blockPosition);
+                        // Stop player velocity
+                        if (PlayerUtils.isNettyClient(this)) {
+                            velocity.zero();
+                        }
                     } else {
-                        // Default ground drag
-                        drag = 0.5f;
+                        drag = 0.98f; // air drag
                     }
 
-                    // Stop player velocity
-                    if (PlayerUtils.isNettyClient(this)) {
-                        velocity.zero();
-                    }
-                } else {
-                    drag = 0.98f; // air drag
+                    this.velocity.setX(velocity.getX() * drag);
+                    this.velocity.setZ(velocity.getZ() * drag);
                 }
 
-                this.velocity.setX(velocity.getX() * drag);
-                this.velocity.setZ(velocity.getZ() * drag);
-
+                // Synchronization and packets...
                 sendSynchronization();
-
                 if (shouldSendVelocityUpdate(time)) {
                     sendVelocityPacket();
                     lastVelocityUpdateTime = time;

@@ -3,11 +3,13 @@ package net.minestom.server.collision;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {
 
@@ -170,6 +172,35 @@ public class CollisionUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * Applies world border collision.
+     *
+     * @param instance        the instance where the world border is
+     * @param currentPosition the current position
+     * @param newPosition     the future target position
+     * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
+     */
+    public static Position applyWorldBorder(@NotNull Instance instance,
+                                            @NotNull Position currentPosition, @NotNull Position newPosition) {
+        final WorldBorder worldBorder = instance.getWorldBorder();
+        final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
+        switch (collisionAxis) {
+            case NONE:
+                // Apply velocity + gravity
+                return newPosition;
+            case BOTH:
+                // Apply Y velocity/gravity
+                return new Position(currentPosition.getX(), newPosition.getY(), currentPosition.getZ());
+            case X:
+                // Apply Y/Z velocity/gravity
+                return new Position(currentPosition.getX(), newPosition.getY(), newPosition.getZ());
+            case Z:
+                // Apply X/Y velocity/gravity
+                return new Position(newPosition.getX(), newPosition.getY(), currentPosition.getZ());
+        }
+        throw new IllegalStateException("Something weird happened...");
     }
 
 }
