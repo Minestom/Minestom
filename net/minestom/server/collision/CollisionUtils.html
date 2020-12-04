@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9};
+var data = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -174,6 +174,15 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.utils.Position)">applyWorldBorder</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
+                <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</code></th>
+<td class="colLast">
+<div class="block">Applies world border collision.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector,net.minestom.server.utils.Position,net.minestom.server.utils.Vector)">handlePhysics</a></span>&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
              <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;deltaPosition,
@@ -229,7 +238,7 @@ extends java.lang.Object</pre>
 <a id="handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector,net.minestom.server.utils.Position,net.minestom.server.utils.Vector)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>handlePhysics</h4>
 <pre class="methodSignature">public static&nbsp;boolean&nbsp;handlePhysics&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
@@ -245,6 +254,29 @@ extends java.lang.Object</pre>
 <dd><code>velocityOut</code> - the Vector object in which the new velocity will be saved</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>whether this entity is on the ground</dd>
+</dl>
+</li>
+</ul>
+<a id="applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>applyWorldBorder</h4>
+<pre class="methodSignature">public static&nbsp;<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;applyWorldBorder&#8203;(@NotNull
+                                        <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                        @NotNull
+                                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
+                                        @NotNull
+                                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</pre>
+<div class="block">Applies world border collision.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - the instance where the world border is</dd>
+<dd><code>currentPosition</code> - the current position</dd>
+<dd><code>newPosition</code> - the future target position</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the position with the world border collision applied (can be <code>newPosition</code> if not changed)</dd>
 </dl>
 </li>
 </ul>
