@@ -1072,7 +1072,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
-            if (forceUpdate || (lastChunk != null && newChunk != null && lastChunk != newChunk)) {
+            final boolean chunkChange = lastChunk != null && newChunk != null && lastChunk != newChunk;
+            if (forceUpdate || chunkChange) {
                 instance.switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view

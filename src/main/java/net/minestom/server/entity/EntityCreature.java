@@ -314,14 +314,14 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     @Override
     public void pathFindingTick(float speed) {
-        synchronized (pathLock){
+        synchronized (pathLock) {
             NavigableEntity.super.pathFindingTick(speed);
         }
     }
 
     @Override
     public boolean setPathTo(@Nullable Position position) {
-        synchronized (pathLock){
+        synchronized (pathLock) {
             return NavigableEntity.super.setPathTo(position);
         }
     }
