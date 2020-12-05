@@ -220,6 +220,17 @@ public class BlockPosition {
     }
 
     /**
+     * Sets the x/y/z fields of this block position to the value of {@code block position}.
+     *
+     * @param blockPosition the block position to copy the values from
+     */
+    public void copyCoordinates(@NotNull BlockPosition blockPosition) {
+        this.x = blockPosition.getX();
+        this.y = blockPosition.getY();
+        this.z = blockPosition.getZ();
+    }
+    
+    /**
      * Converts this block position to a {@link Position}.
      *
      * @return the converted {@link Position}

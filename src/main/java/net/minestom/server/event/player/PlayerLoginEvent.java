@@ -9,6 +9,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called at player login, used to define his spawn instance.
  * <p>
+ * Be aware that the player is not yet in a world when the event
+ * is called, meaning that most player methods will not work.
+ * You can use {@link PlayerSpawnEvent} and {@link PlayerSpawnEvent#isFirstSpawn()}
+ * if needed.
+ * <p>
  * WARNING: defining the spawning instance is MANDATORY.
  */
 public class PlayerLoginEvent extends Event {

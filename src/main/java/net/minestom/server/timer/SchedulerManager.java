@@ -98,7 +98,7 @@ public final class SchedulerManager {
     public void shutdown() {
         MinecraftServer.LOGGER.info("Executing all shutdown tasks..");
         for (Task task : this.getShutdownTasks()) {
-            task.schedule();
+            task.runRunnable();
         }
         MinecraftServer.LOGGER.info("Shutting down the scheduled execution service and batches pool.");
         this.timerExecutionService.shutdown();

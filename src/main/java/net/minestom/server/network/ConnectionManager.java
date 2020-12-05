@@ -1,5 +1,9 @@
 package net.minestom.server.network;
 
+import io.netty.channel.Channel;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -8,6 +12,8 @@ import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.network.packet.server.play.DisconnectPacket;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
@@ -37,6 +43,8 @@ public final class ConnectionManager {
     private PlayerProvider playerProvider;
     // The consumers to call once a player connect, mostly used to init events
     private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
+
+    private ColoredText shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -256,6 +264,26 @@ public final class ConnectionManager {
     }
 
     /**
+     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
+     *
+     * @return the kick reason in case on a shutdown
+     */
+    @NotNull
+    public ColoredText getShutdownText() {
+        return shutdownText;
+    }
+
+    /**
+     * Changes the kick reason in case of a shutdown.
+     *
+     * @param shutdownText the new shutdown kick reason
+     * @see #getShutdownText()
+     */
+    public void setShutdownText(@NotNull ColoredText shutdownText) {
+        this.shutdownText = shutdownText;
+    }
+
+    /**
      * Adds a new {@link Player} in the players list.
      * Is currently used at
      * {@link LoginStartPacket#process(PlayerConnection)}
@@ -315,5 +343,24 @@ public final class ConnectionManager {
 
         connection.setConnectionState(ConnectionState.PLAY);
         return createPlayer(uuid, username, connection);
+    }
+
+    /**
+     * Shutdowns the connection manager by kicking all the currently connected players
+     */
+    public void shutdown() {
+        DisconnectPacket disconnectPacket = new DisconnectPacket();
+        disconnectPacket.message = getShutdownText();
+        for (Player player : getOnlinePlayers()) {
+            final PlayerConnection playerConnection = player.getPlayerConnection();
+            if (playerConnection instanceof NettyPlayerConnection) {
+                final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
+                final Channel channel = nettyPlayerConnection.getChannel();
+                channel.writeAndFlush(disconnectPacket);
+                channel.close();
+            }
+        }
+        this.players.clear();
+        this.connectionPlayerMap.clear();
     }
 }

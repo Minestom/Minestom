@@ -124,6 +124,7 @@ public final class MinecraftServer {
     // Data
     private static boolean initialized;
     private static boolean started;
+    private static boolean stopping;
 
     private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
@@ -433,6 +434,15 @@ public final class MinecraftServer {
     }
 
     /**
+     * Gets if the server is currently being shutdown using {@link #stopCleanly()}.
+     *
+     * @return true if the server is being stopped
+     */
+    public static boolean isStopping() {
+        return stopping;
+    }
+
+    /**
      * Gets the chunk view distance of the server.
      *
      * @return the chunk view distance
@@ -721,11 +731,15 @@ public final class MinecraftServer {
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
+        stopping = true;
         LOGGER.info("Stopping Minestom server.");
         updateManager.stop();
-        nettyServer.stop();
         schedulerManager.shutdown();
+        connectionManager.shutdown();
+        nettyServer.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
+        LOGGER.info("Unloading all extensions.");
+        extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
         commandManager.stopConsoleThread();

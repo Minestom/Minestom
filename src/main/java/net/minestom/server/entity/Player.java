@@ -166,7 +166,7 @@ public class Player extends LivingEntity implements CommandSender {
     private long targetBreakDelay; // The last break delay requested
     private long targetBlockBreakCount; // Number of tick since the last stage change
     private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
-    private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
+    private final Set<Player> targetBreakers = Collections.singleton(this); // Only used if multi player breaking is disabled, contains only this player
 
     // Position synchronization with viewers
     private long lastPlayerSynchronizationTime;
@@ -220,9 +220,6 @@ public class Player extends LivingEntity implements CommandSender {
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelFlat = true;
         refreshPosition(0, 0, 0);
-
-        // Used to cache the breaker for single custom block breaking
-        this.targetBreakers.add(this);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -881,9 +878,9 @@ public class Player extends LivingEntity implements CommandSender {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundCategory = soundCategory;
-        soundEffectPacket.x = x * 8;
-        soundEffectPacket.y = y * 8;
-        soundEffectPacket.z = z * 8;
+        soundEffectPacket.x = x;
+        soundEffectPacket.y = y;
+        soundEffectPacket.z = z;
         soundEffectPacket.volume = volume;
         soundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(soundEffectPacket);
@@ -904,12 +901,30 @@ public class Player extends LivingEntity implements CommandSender {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
         namedSoundEffectPacket.soundCategory = soundCategory;
-        namedSoundEffectPacket.x = x * 8;
-        namedSoundEffectPacket.y = y * 8;
-        namedSoundEffectPacket.z = z * 8;
+        namedSoundEffectPacket.x = x;
+        namedSoundEffectPacket.y = y;
+        namedSoundEffectPacket.z = z;
         namedSoundEffectPacket.volume = volume;
         namedSoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(namedSoundEffectPacket);
+    }
+
+    /**
+     * Plays a sound directly to the player (constant volume).
+     *
+     * @param sound         the sound to play
+     * @param soundCategory the sound category
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
+        EntitySoundEffect entitySoundEffect = new EntitySoundEffect();
+        entitySoundEffect.entityId = getEntityId();
+        entitySoundEffect.soundId = sound.getId();
+        entitySoundEffect.soundCategory = soundCategory;
+        entitySoundEffect.volume = volume;
+        entitySoundEffect.pitch = pitch;
+        playerConnection.sendPacket(entitySoundEffect);
     }
 
     /**
@@ -1229,13 +1244,13 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
-        for (Player viewer : getViewers()) {
-            final PlayerConnection connection = viewer.getPlayerConnection();
+        {
+            // Remove player
+            sendPacketToViewers(removePlayerPacket);
+            sendPacketToViewers(destroyEntitiesPacket);
 
-            connection.sendPacket(removePlayerPacket);
-            connection.sendPacket(destroyEntitiesPacket);
-
-            showPlayer(connection);
+            // Show player again
+            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
         getInventory().update();
@@ -1613,7 +1628,9 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        final long[] chunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+        final boolean sameChunk = getPosition().inSameChunk(position);
+        final long[] chunks = sameChunk ? null :
+                ChunkUtils.getChunksInRange(position, getChunkRange());
         teleport(position, chunks, callback);
     }
 

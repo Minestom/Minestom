@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
@@ -36,7 +37,7 @@ public class ExtensionManager {
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
 
-    private final List<Extension> extensionList = new ArrayList<>();
+    private final List<Extension> extensionList = new CopyOnWriteArrayList<>();
     private final List<Extension> immutableExtensionListView = Collections.unmodifiableList(extensionList);
 
     public ExtensionManager() {
@@ -621,5 +622,12 @@ public class ExtensionManager {
 
         // call GC to try to get rid of classes and classloader
         System.gc();
+    }
+
+    /**
+     * Shutdowns all the extensions by unloading them.
+     */
+    public void shutdown() {
+        this.extensionList.forEach(extension -> unload(extension));
     }
 }

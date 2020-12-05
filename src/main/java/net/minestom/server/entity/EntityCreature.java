@@ -21,7 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity implements NavigableEntity {
@@ -39,6 +41,11 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     private GoalSelector currentGoalSelector;
 
     private Entity target;
+
+    /**
+     * Lock used to support #switchEntityType
+     */
+    private final Object entityTypeLock = new Object();
 
     // Equipments
     private ItemStack mainHandItem;
@@ -148,33 +155,63 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
+        synchronized (entityTypeLock) {
+            final boolean result = super.addViewer(player);
 
-        final PlayerConnection playerConnection = player.getPlayerConnection();
+            final PlayerConnection playerConnection = player.getPlayerConnection();
 
-        EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
-        entityMovementPacket.entityId = getEntityId();
+            EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
+            entityMovementPacket.entityId = getEntityId();
 
-        SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
-        spawnLivingEntityPacket.entityId = getEntityId();
-        spawnLivingEntityPacket.entityUuid = getUuid();
-        spawnLivingEntityPacket.entityType = getEntityType().getId();
-        spawnLivingEntityPacket.position = getPosition();
-        spawnLivingEntityPacket.headPitch = 0;
+            SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
+            spawnLivingEntityPacket.entityId = getEntityId();
+            spawnLivingEntityPacket.entityUuid = getUuid();
+            spawnLivingEntityPacket.entityType = getEntityType().getId();
+            spawnLivingEntityPacket.position = getPosition();
+            spawnLivingEntityPacket.headPitch = 0;
 
-        playerConnection.sendPacket(entityMovementPacket);
-        playerConnection.sendPacket(spawnLivingEntityPacket);
-        playerConnection.sendPacket(getVelocityPacket());
-        playerConnection.sendPacket(getMetadataPacket());
+            playerConnection.sendPacket(entityMovementPacket);
+            playerConnection.sendPacket(spawnLivingEntityPacket);
+            playerConnection.sendPacket(getVelocityPacket());
+            playerConnection.sendPacket(getMetadataPacket());
 
-        // Equipments synchronization
-        syncEquipments(playerConnection);
+            // Equipments synchronization
+            syncEquipments(playerConnection);
 
-        if (hasPassenger()) {
-            playerConnection.sendPacket(getPassengersPacket());
+            if (hasPassenger()) {
+                playerConnection.sendPacket(getPassengersPacket());
+            }
+
+            return result;
         }
+    }
 
-        return result;
+    @Override
+    public boolean removeViewer(@NotNull Player player) {
+        synchronized (entityTypeLock) {
+            return super.removeViewer(player);
+        }
+    }
+
+    /**
+     * Changes the entity type of this entity.
+     * <p>
+     * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}
+     * followed by {@link #addViewer(Player)} to all current viewers.
+     * <p>
+     * Be aware that this only change the visual of the entity, the {@link net.minestom.server.collision.BoundingBox}
+     * will not be modified.
+     *
+     * @param entityType the new entity type
+     */
+    public void switchEntityType(@NotNull EntityType entityType) {
+        synchronized (entityTypeLock) {
+            this.entityType = entityType;
+
+            Set<Player> viewers = new HashSet<>(getViewers());
+            getViewers().forEach(this::removeViewer);
+            viewers.forEach(this::addViewer);
+        }
     }
 
     /**
@@ -314,14 +351,14 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     @Override
     public void pathFindingTick(float speed) {
-        synchronized (pathLock){
+        synchronized (pathLock) {
             NavigableEntity.super.pathFindingTick(speed);
         }
     }
 
     @Override
     public boolean setPathTo(@Nullable Position position) {
-        synchronized (pathLock){
+        synchronized (pathLock) {
             return NavigableEntity.super.setPathTo(position);
         }
     }

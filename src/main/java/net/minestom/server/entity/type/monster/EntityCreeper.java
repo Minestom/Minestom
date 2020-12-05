@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public class EntityCreeper extends EntityCreature implements Monster {
 
-    private CreeperState creeperState;
+    private CreeperState creeperState = CreeperState.IDLE;
     private boolean charged;
     private boolean ignited;
 
@@ -47,11 +47,12 @@ public class EntityCreeper extends EntityCreature implements Monster {
         }
     }
 
+    @NotNull
     public CreeperState getCreeperState() {
         return creeperState;
     }
 
-    public void setCreeperState(CreeperState creeperState) {
+    public void setCreeperState(@NotNull CreeperState creeperState) {
         this.creeperState = creeperState;
         sendMetadataIndex(15);
     }

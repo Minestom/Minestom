@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionAndRotationPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
@@ -50,6 +51,13 @@ public class PlayerPositionListener {
 
     private static void processMovement(@NotNull Player player, float x, float y, float z,
                                         float yaw, float pitch, boolean onGround) {
+
+        // Prevent the player from moving during a teleport
+        final float distance = player.getPosition().getDistance(x, y, z);
+        final int chunkRange = player.getChunkRange() * Chunk.CHUNK_SECTION_SIZE;
+        if (distance >= chunkRange) {
+            return;
+        }
 
         // Try to move in an unloaded chunk, prevent it
         if (!ChunkUtils.isLoaded(player.getInstance(), x, z)) {

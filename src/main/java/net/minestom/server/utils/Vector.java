@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Vector {
 
     private static final double epsilon = 0.000001;
@@ -91,6 +93,17 @@ public class Vector {
         return this;
     }
 
+    /**
+     * Sets the x/y/z fields of this vector to the value of {@code vector}.
+     *
+     * @param vector the vector to copy the values from
+     */
+    public void copyCoordinates(@NotNull Vector vector) {
+        this.x = vector.getX();
+        this.y = vector.getY();
+        this.z = vector.getZ();
+    }
+    
     /**
      * Gets the magnitude of the vector, defined as sqrt(x^2+y^2+z^2). The
      * value of this method is not cached and uses a costly square-root
