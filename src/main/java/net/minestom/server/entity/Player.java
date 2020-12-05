@@ -166,7 +166,7 @@ public class Player extends LivingEntity implements CommandSender {
     private long targetBreakDelay; // The last break delay requested
     private long targetBlockBreakCount; // Number of tick since the last stage change
     private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
-    private final Set<Player> targetBreakers = new HashSet<>(1); // Only used if multi player breaking is disabled, contains only this player
+    private final Set<Player> targetBreakers = Collections.singleton(this); // Only used if multi player breaking is disabled, contains only this player
 
     // Position synchronization with viewers
     private long lastPlayerSynchronizationTime;
@@ -220,9 +220,6 @@ public class Player extends LivingEntity implements CommandSender {
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelFlat = true;
         refreshPosition(0, 0, 0);
-
-        // Used to cache the breaker for single custom block breaking
-        this.targetBreakers.add(this);
 
         // FakePlayer init its connection there
         playerConnectionInit();
