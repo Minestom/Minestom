@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -137,6 +137,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">LeatherArmorMeta</span>
 extends java.lang.Object
 implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.metadata">ItemMeta</a></pre>
+<div class="block">Represents the item meat for leather armor parts.</div>
 </li>
 </ul>
 </div>
@@ -243,12 +244,21 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(byte,byte,byte)">setColor</a></span>&#8203;(byte&nbsp;red,
+        byte&nbsp;green,
+        byte&nbsp;blue)</code></th>
+<td class="colLast">
+<div class="block">Changes the color of the leather armor piece.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.chat.ChatColor)">setColor</a></span>&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Sets the color of the leather armor piece.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
@@ -309,6 +319,24 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>color</code> - the color of the leather armor</dd>
+</dl>
+</li>
+</ul>
+<a id="setColor(byte,byte,byte)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColor</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setColor&#8203;(byte&nbsp;red,
+                     byte&nbsp;green,
+                     byte&nbsp;blue)</pre>
+<div class="block">Changes the color of the leather armor piece.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>red</code> - The red color of the leather armor piece.</dd>
+<dd><code>green</code> - The green color of the leather armor piece.</dd>
+<dd><code>blue</code> - The blue color of the leather armor piece.</dd>
 </dl>
 </li>
 </ul>
@@ -385,7 +413,6 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <li class="blockList">
 <h4>hasNbt</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasNbt()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ItemMeta.html#hasNbt()">ItemMeta</a></code></span></div>
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -403,7 +430,6 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
                          <a href="ItemMeta.html" title="interface in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
  It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
@@ -425,7 +451,6 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
  WARNING: it is possible that it contains no useful data,
@@ -446,7 +471,6 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
                   org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -464,7 +488,6 @@ implements <a href="ItemMeta.html" title="interface in net.minestom.server.item.
 <h4>copy</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ItemMeta.html" title="interface in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;copy()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ItemMeta.html#copy()">ItemMeta</a></code></span></div>
 <div class="block">Copies this item meta.
  <p>
  Used by <a href="../ItemStack.html#copy()"><code>ItemStack.copy()</code></a>.</div>
