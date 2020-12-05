@@ -48,7 +48,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             add("org.spongepowered");
             add("net.minestom.server.extras.selfmodification");
             add("org.jboss.shrinkwrap.resolver");
-            add("kotlin.reflect");
+            add("kotlin");
         }
     };
     /**
