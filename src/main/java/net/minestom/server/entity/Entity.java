@@ -384,21 +384,23 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (instance == null)
             return;
 
-        if (scheduledRemoveTime != 0) { // Any entity with scheduled remove does not update
+        // Scheduled remove
+        if (scheduledRemoveTime != 0) {
             final boolean finished = time >= scheduledRemoveTime;
             if (finished) {
                 remove();
+                return;
             }
-            return;
         }
 
+        // Instant remove
         if (shouldRemove()) {
             remove();
             return;
         }
 
-        final Chunk currentChunk = getChunk(); // current entity chunk
-
+        // Check if the entity chunk is loaded
+        final Chunk currentChunk = getChunk();
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
