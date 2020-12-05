@@ -103,7 +103,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
     private long lastUpdate;
-    private final EntityType entityType;
+    protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity each X milliseconds
     private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
