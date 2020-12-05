@@ -1631,7 +1631,9 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        final long[] chunks = ChunkUtils.getChunksInRange(position, getChunkRange());
+        final boolean sameChunk = getPosition().inSameChunk(position);
+        final long[] chunks = sameChunk ? null :
+                ChunkUtils.getChunksInRange(position, getChunkRange());
         teleport(position, chunks, callback);
     }
 
