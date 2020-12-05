@@ -28,6 +28,8 @@ import java.util.function.Supplier;
 
 public abstract class EntityCreature extends LivingEntity implements NavigableEntity {
 
+    private int removalAnimationDelay = 1000;
+
     // TODO all pathfinding requests should be process in another thread
     private final Object pathLock = new Object();
 
@@ -149,8 +151,13 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     public void kill() {
         super.kill();
 
-        // Needed for proper death animation (wait for it to finish before destroying the entity)
-        scheduleRemove(1000, TimeUnit.MILLISECOND);
+        if (removalAnimationDelay > 0) {
+            // Needed for proper death animation (wait for it to finish before destroying the entity)
+            scheduleRemove(removalAnimationDelay, TimeUnit.MILLISECOND);
+        } else {
+            // Instant removal without animation playback
+            remove();
+        }
     }
 
     @Override
@@ -212,6 +219,27 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
             getViewers().forEach(this::removeViewer);
             viewers.forEach(this::addViewer);
         }
+    }
+
+    /**
+     * Gets the kill animation delay before vanishing the entity.
+     *
+     * @return the removal animation delay in milliseconds, 0 if not any
+     */
+    public int getRemovalAnimationDelay() {
+        return removalAnimationDelay;
+    }
+
+
+    /**
+     * Changes the removal animation delay of the entity.
+     * <p>
+     * Testing shows that 1000 is the minimum value to display the death particles.
+     *
+     * @param removalAnimationDelay the new removal animation delay in milliseconds, 0 to remove it
+     */
+    public void setRemovalAnimationDelay(int removalAnimationDelay) {
+        this.removalAnimationDelay = removalAnimationDelay;
     }
 
     /**
