@@ -1247,13 +1247,13 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
-        for (Player viewer : getViewers()) {
-            final PlayerConnection connection = viewer.getPlayerConnection();
+        {
+            // Remove player
+            sendPacketToViewers(removePlayerPacket);
+            sendPacketToViewers(destroyEntitiesPacket);
 
-            connection.sendPacket(removePlayerPacket);
-            connection.sendPacket(destroyEntitiesPacket);
-
-            showPlayer(connection);
+            // Show player again
+            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
         getInventory().update();

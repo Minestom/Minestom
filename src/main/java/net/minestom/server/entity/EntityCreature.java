@@ -45,7 +45,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     /**
      * Lock used to support #switchEntityType
      */
-    private Object entityTypeLock = new Object();
+    private final Object entityTypeLock = new Object();
 
     // Equipments
     private ItemStack mainHandItem;
