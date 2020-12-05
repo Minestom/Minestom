@@ -113,7 +113,7 @@ public class Command {
      *
      * @param commandCondition the condition to use the syntax
      * @param executor         the executor to call when the syntax is successfully received
-     * @param args             all the arguments of the syntax
+     * @param args             all the arguments of the syntax, the length needs to be higher than 0
      * @return the created {@link CommandSyntax}
      */
     public CommandSyntax addSyntax(@Nullable CommandCondition commandCondition,
@@ -130,7 +130,7 @@ public class Command {
      * Adds a new syntax in the command without any condition.
      *
      * @param executor the executor to call when the syntax is successfully received
-     * @param args     all the arguments of the syntax
+     * @param args     all the arguments of the syntax, the length needs to be higher than 0
      * @return the created {@link CommandSyntax}
      * @see #addSyntax(CommandCondition, CommandExecutor, Argument[])
      */
