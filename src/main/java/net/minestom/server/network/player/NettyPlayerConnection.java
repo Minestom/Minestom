@@ -2,6 +2,7 @@ package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
@@ -142,27 +143,27 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    public void write(@NotNull Object message) {
+    public ChannelFuture write(@NotNull Object message) {
         if (MinecraftServer.shouldProcessNettyErrors()) {
-            channel.write(message).addListener(future -> {
+            return channel.write(message).addListener(future -> {
                 if (!future.isSuccess()) {
                     future.cause().printStackTrace();
                 }
             });
         } else {
-            channel.write(message, channel.voidPromise());
+            return channel.write(message, channel.voidPromise());
         }
     }
 
-    public void writeAndFlush(@NotNull Object message) {
+    public ChannelFuture writeAndFlush(@NotNull Object message) {
         if (MinecraftServer.shouldProcessNettyErrors()) {
-            channel.writeAndFlush(message).addListener(future -> {
+            return channel.writeAndFlush(message).addListener(future -> {
                 if (!future.isSuccess()) {
                     future.cause().printStackTrace();
                 }
             });
         } else {
-            channel.writeAndFlush(message, channel.voidPromise());
+            return channel.writeAndFlush(message, channel.voidPromise());
         }
     }
 
