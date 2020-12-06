@@ -151,7 +151,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                 }
             });
         } else {
-            return channel.write(message, channel.voidPromise());
+            return channel.write(message);
         }
     }
 
@@ -163,7 +163,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                 }
             });
         } else {
-            return channel.writeAndFlush(message, channel.voidPromise());
+            return channel.writeAndFlush(message);
         }
     }
 
