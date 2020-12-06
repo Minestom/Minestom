@@ -738,9 +738,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAutoViewable()">isAutoViewable</a></span>()</code></th>
 <td class="colLast">
-<div class="block">When set to true, the entity will automatically get new viewers when they come too close
- This can be use to complete control over which player can see it, without having to deal with
- raw packets.</div>
+<div class="block">When set to true, the entity will automatically get new viewers when they come too close.</div>
 </td>
 </tr>
 <tr id="i40" class="altColor">
@@ -1891,13 +1889,13 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <li class="blockList">
 <h4>isAutoViewable</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isAutoViewable()</pre>
-<div class="block">When set to true, the entity will automatically get new viewers when they come too close
- This can be use to complete control over which player can see it, without having to deal with
+<div class="block">When set to true, the entity will automatically get new viewers when they come too close.
+ This can be use to have complete control over which player can see it, without having to deal with
  raw packets.
  <p>
  True by default for all entities.
  When set to false, it is important to mention that the players will not be removed automatically from its viewers
- list, you would have to do that manually when being too far.</div>
+ list, you would have to do that manually using <a href="#addViewer(net.minestom.server.entity.Player)"><code>addViewer(Player)</code></a> and <a href="#removeViewer(net.minestom.server.entity.Player)"><code>removeViewer(Player)</code></a>..</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the entity is automatically viewable for close players, false otherwise</dd>
