@@ -23,7 +23,7 @@ public class EntityItemFrame extends ObjectEntity {
         this.orientation = orientation;
         this.rotation = Rotation.NONE;
         setNoGravity(true);
-        setGravity(0f);
+        setGravity(0f, 0f, 0f);
     }
 
     @NotNull

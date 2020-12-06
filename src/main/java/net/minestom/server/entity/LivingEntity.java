@@ -80,7 +80,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
         setupAttributes();
-        setGravity(0.02f);
+        setGravity(0.02f, 0.08f, 3.92f);
     }
 
     public LivingEntity(@NotNull EntityType entityType) {

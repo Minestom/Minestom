@@ -87,6 +87,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long velocityUpdatePeriod;
 
     protected float gravityDragPerTick;
+    protected float gravityAcceleration;
+    protected float gravityTerminalVelocity;
+    protected float gravityTickCount; // Number of tick where gravity tick was applied
     protected float eyeHeight;
 
     private boolean autoViewable;
@@ -475,8 +478,24 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 final float newZ = position.getZ() + velocity.getZ() / tps;
                 Position newPosition = new Position(newX, newY, newZ);
 
-                if (!noGravity) {
-                    velocity.setY(velocity.getY() - gravityDragPerTick * tps);
+                // Gravity
+                {
+                    // Cache the number of "gravity tick"
+                    if (!isOnGround()) {
+                        gravityTickCount++;
+                    } else {
+                        gravityTickCount = 0;
+                    }
+
+                    // Compute the gravity change (drag per tick + acceleration)
+                    final float gravityY = Math.min(
+                            -gravityDragPerTick - (gravityAcceleration * gravityTickCount),
+                            gravityTerminalVelocity);
+
+                    // Change velocity to apply gravity
+                    if (!noGravity) {
+                        velocity.setY(velocity.getY() + gravityY);
+                    }
                 }
 
                 Vector newVelocityOut = new Vector();
@@ -783,12 +802,53 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Gets the gravity drag per tick.
+     *
+     * @return the gravity drag per tick in block
+     */
+    public float getGravityDragPerTick() {
+        return gravityDragPerTick;
+    }
+
+    /**
+     * Gets the gravity acceleration.
+     *
+     * @return the gravity acceleration in block
+     */
+    public float getGravityAcceleration() {
+        return gravityAcceleration;
+    }
+
+    /**
+     * Gets the maximum gravity velocity.
+     *
+     * @return the maximum gravity velocity in block
+     */
+    public float getGravityTerminalVelocity() {
+        return gravityTerminalVelocity;
+    }
+
+    /**
+     * Gets the number of tick this entity has been applied gravity.
+     *
+     * @return the number of tick of which gravity has been consequently applied
+     */
+    public float getGravityTickCount() {
+        return gravityTickCount;
+    }
+
+    /**
      * Changes the gravity of the entity.
      *
-     * @param gravityDragPerTick the gravity drag per tick
+     * @param gravityDragPerTick      the gravity drag per tick in block
+     * @param gravityAcceleration     the gravity acceleration in block
+     * @param gravityTerminalVelocity the gravity terminal velocity (maximum) in block
+     * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
      */
-    public void setGravity(float gravityDragPerTick) {
+    public void setGravity(float gravityDragPerTick, float gravityAcceleration, float gravityTerminalVelocity) {
         this.gravityDragPerTick = gravityDragPerTick;
+        this.gravityAcceleration = gravityAcceleration;
+        this.gravityTerminalVelocity = gravityTerminalVelocity;
     }
 
     /**
