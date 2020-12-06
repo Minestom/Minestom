@@ -143,6 +143,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
+    @NotNull
     public ChannelFuture write(@NotNull Object message) {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channel.write(message).addListener(future -> {
@@ -155,6 +156,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
+    @NotNull
     public ChannelFuture writeAndFlush(@NotNull Object message) {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channel.writeAndFlush(message).addListener(future -> {

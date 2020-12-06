@@ -481,7 +481,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 // Gravity
                 {
                     // Cache the number of "gravity tick"
-                    if (!isOnGround()) {
+                    if (!onGround) {
                         gravityTickCount++;
                     } else {
                         gravityTickCount = 0;
