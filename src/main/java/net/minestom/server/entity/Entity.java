@@ -307,13 +307,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * When set to true, the entity will automatically get new viewers when they come too close
-     * This can be use to complete control over which player can see it, without having to deal with
+     * When set to true, the entity will automatically get new viewers when they come too close.
+     * This can be use to have complete control over which player can see it, without having to deal with
      * raw packets.
      * <p>
      * True by default for all entities.
      * When set to false, it is important to mention that the players will not be removed automatically from its viewers
-     * list, you would have to do that manually when being too far.
+     * list, you would have to do that manually using {@link #addViewer(Player)} and {@link #removeViewer(Player)}..
      *
      * @return true if the entity is automatically viewable for close players, false otherwise
      */
