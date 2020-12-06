@@ -4,13 +4,11 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.StoneBlock;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
-import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
-import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
@@ -20,17 +18,9 @@ import net.minestom.server.utils.time.UpdateOption;
 public class Main {
 
     public static void main(String[] args) {
-        //System.setProperty("io.netty.leakDetection.targetRecords", "10");
-        //ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.PARANOID);
-
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        MinecraftServer.setShouldProcessNettyErrors(false);
-
-        final NettyServer nettyServer = MinecraftServer.getNettyServer();
-        final GlobalChannelTrafficShapingHandler trafficHandler = nettyServer.getGlobalTrafficHandler();
-        trafficHandler.setReadChannelLimit(500_000);
-        trafficHandler.setReadLimit(500_000);
+        // MinecraftServer.setShouldProcessNettyErrors(true);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new StoneBlock());
@@ -71,7 +61,7 @@ public class Main {
 
         minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
+        //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 
 }

@@ -17,6 +17,7 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
@@ -42,12 +43,13 @@ public class PlayerInit {
     private static final Inventory inventory;
 
     static {
+        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = MinecraftServer.getInstanceManager().createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         // Load some chunks beforehand
         final int loopStart = -10;
@@ -105,9 +107,9 @@ public class PlayerInit {
                 final Entity entity = event.getTarget();
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
-                    creature.damage(DamageType.fromPlayer(player), -1);
-                    Vector velocity = player.getPosition().copy().getDirection().multiply(6);
-                    velocity.setY(4f);
+                    creature.damage(DamageType.fromPlayer(player), 0);
+                    Vector velocity = player.getPosition().copy().getDirection().multiply(3);
+                    velocity.setY(3f);
                     entity.setVelocity(velocity);
                     player.sendMessage("You attacked an entity!");
                 } else if (entity instanceof Player) {
@@ -162,8 +164,9 @@ public class PlayerInit {
                 Vector velocity = player.getPosition().copy().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
 
-                EntityZombie entityZombie = new EntityZombie(player.getPosition());
+                EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
                 entityZombie.setInstance(player.getInstance());
+                entityZombie.setPathTo(player.getPosition());
             });
 
             player.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -173,9 +176,9 @@ public class PlayerInit {
             player.addEventCallback(PlayerLoginEvent.class, event -> {
 
                 event.setSpawningInstance(instanceContainer);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 2000 - 1000;
-                player.setRespawnPoint(new Position(x, 70f, z));
+                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
+                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
+                player.setRespawnPoint(new Position(x, 45f, z));
 
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
