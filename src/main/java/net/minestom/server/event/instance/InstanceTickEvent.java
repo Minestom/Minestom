@@ -1,11 +1,7 @@
 package net.minestom.server.event.instance;
 
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
-
 import net.minestom.server.event.Event;
-import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.Instance;
 
 /**
  * Called when an instance processes a tick 
@@ -13,9 +9,9 @@ import net.minestom.server.instance.InstanceContainer;
 public class InstanceTickEvent extends Event {
 
 	private final int duration;
-	private final InstanceContainer instance;
+	private final Instance instance;
 
-    public InstanceTickEvent(@NotNull long time, @Nullable long lastTickAge, InstanceContainer someInstance) {
+    public InstanceTickEvent(long time, long lastTickAge, Instance someInstance) {
         this.duration = (int) (time - lastTickAge);
         this.instance = someInstance;
     }
@@ -25,7 +21,6 @@ public class InstanceTickEvent extends Event {
      *
      * @return the duration
      */
-    @NotNull
     public int getDuration() {
         return duration;
     }
@@ -35,8 +30,7 @@ public class InstanceTickEvent extends Event {
      *
      * @return the instance
      */
-    @NotNull
-    public InstanceContainer getInstance() {
+    public Instance getInstance() {
         return instance;
     }
 }
