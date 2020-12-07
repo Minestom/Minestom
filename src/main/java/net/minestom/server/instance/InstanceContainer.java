@@ -65,6 +65,9 @@ public class InstanceContainer extends Instance {
 
     private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private final Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+    
+    // Fields for tick events
+    private long lastTickAge = System.currentTimeMillis();
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
@@ -78,9 +81,6 @@ public class InstanceContainer extends Instance {
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
-    
-    // Fields for tick events
-    private long lastTickAge;
 
     /**
      * Creates an {@link InstanceContainer}.
@@ -794,7 +794,7 @@ public class InstanceContainer extends Instance {
         super.tick(time);
         
         // Process tick events
-        InstanceTickEvent chunkTickEvent = new InstanceTickEvent(time, lastTickAge);
+        InstanceTickEvent chunkTickEvent = new InstanceTickEvent(time, lastTickAge, this);
         callEvent(InstanceTickEvent.class, chunkTickEvent);
         
         Lock wrlock = changingBlockLock.writeLock();
