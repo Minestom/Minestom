@@ -1308,10 +1308,12 @@ public&nbsp;<a href="Material.html" title="enum in net.minestom.server.item">Mat
 <h4>copy</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;copy()</pre>
-<div class="block">Copies this item stack.</div>
+<div class="block">Copies this item stack.
+ <p>
+ Be aware that the identifier (<a href="#getIdentifier()"><code>getIdentifier()</code></a>) will change.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a cloned item stack</dd>
+<dd>a cloned item stack with a different identifier</dd>
 </dl>
 </li>
 </ul>
