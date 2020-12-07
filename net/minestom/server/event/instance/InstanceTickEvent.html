@@ -158,9 +158,9 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long,long,net.minestom.server.instance.InstanceContainer)">InstanceTickEvent</a></span>&#8203;(long&nbsp;time,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long,long,net.minestom.server.instance.Instance)">InstanceTickEvent</a></span>&#8203;(long&nbsp;time,
                  long&nbsp;lastTickAge,
-                 <a href="../../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;someInstance)</code></th>
+                 <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;someInstance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -189,7 +189,7 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
+<td class="colFirst"><code><a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance()">getInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the instance of the event</div>
@@ -219,17 +219,15 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(long,long,net.minestom.server.instance.InstanceContainer)">
+<a id="&lt;init&gt;(long,long,net.minestom.server.instance.Instance)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InstanceTickEvent</h4>
-<pre>public&nbsp;InstanceTickEvent&#8203;(@NotNull
-                         long&nbsp;time,
-                         @Nullable
+<pre>public&nbsp;InstanceTickEvent&#8203;(long&nbsp;time,
                          long&nbsp;lastTickAge,
-                         <a href="../../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;someInstance)</pre>
+                         <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;someInstance)</pre>
 </li>
 </ul>
 </li>
@@ -248,8 +246,7 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <ul class="blockList">
 <li class="blockList">
 <h4>getDuration</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;int&nbsp;getDuration()</pre>
+<pre class="methodSignature">public&nbsp;int&nbsp;getDuration()</pre>
 <div class="block">Gets the duration of the tick in ms</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -263,8 +260,7 @@ public&nbsp;int&nbsp;getDuration()</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getInstance</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;getInstance()</pre>
+<pre class="methodSignature">public&nbsp;<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;getInstance()</pre>
 <div class="block">Gets the instance of the event</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
