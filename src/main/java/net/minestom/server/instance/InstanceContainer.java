@@ -9,6 +9,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
+import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
@@ -64,6 +65,9 @@ public class InstanceContainer extends Instance {
 
     private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
     private final Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+    
+    // Fields for tick events
+    private long lastTickAge = System.currentTimeMillis();
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
@@ -788,11 +792,18 @@ public class InstanceContainer extends Instance {
 
         // Time/world border
         super.tick(time);
-
+        
+        // Process tick events
+        InstanceTickEvent chunkTickEvent = new InstanceTickEvent(time, lastTickAge, this);
+        callEvent(InstanceTickEvent.class, chunkTickEvent);
+        
         Lock wrlock = changingBlockLock.writeLock();
         wrlock.lock();
         currentlyChangingBlocks.clear();
         wrlock.unlock();
+        
+        // Set last tick age
+        lastTickAge = time;
     }
 
     /**
