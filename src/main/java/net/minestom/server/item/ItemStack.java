@@ -51,19 +51,6 @@ public class ItemStack implements DataContainer {
     private byte amount;
     private int damage;
 
-    public ItemStack(@NotNull Material material, byte amount, int damage) {
-        this.identifier = DATA_OWNERSHIP.generateIdentifier();
-        this.material = material;
-        this.amount = amount;
-        this.damage = damage;
-        this.lore = new ArrayList<>();
-
-        this.enchantmentMap = new HashMap<>();
-        this.attributes = new ArrayList<>();
-
-        this.itemMeta = findMeta();
-    }
-
     private ColoredText displayName;
     private boolean unbreakable;
     private ArrayList<ColoredText> lore;
@@ -81,6 +68,19 @@ public class ItemStack implements DataContainer {
         if (defaultStackingRule == null)
             defaultStackingRule = VANILLA_STACKING_RULE;
         this.stackingRule = defaultStackingRule;
+    }
+
+    public ItemStack(@NotNull Material material, byte amount, int damage) {
+        this.identifier = DATA_OWNERSHIP.generateIdentifier();
+        this.material = material;
+        this.amount = amount;
+        this.damage = damage;
+        this.lore = new ArrayList<>();
+
+        this.enchantmentMap = new HashMap<>();
+        this.attributes = new ArrayList<>();
+
+        this.itemMeta = findMeta();
     }
 
     public ItemStack(@NotNull Material material, byte amount) {
@@ -552,8 +552,10 @@ public class ItemStack implements DataContainer {
 
     /**
      * Copies this item stack.
+     * <p>
+     * Be aware that the identifier ({@link #getIdentifier()}) will change.
      *
-     * @return a cloned item stack
+     * @return a cloned item stack with a different identifier
      */
     @NotNull
     public synchronized ItemStack copy() {

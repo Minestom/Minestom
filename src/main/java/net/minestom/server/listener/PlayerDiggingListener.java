@@ -92,19 +92,30 @@ public class PlayerDiggingListener {
                 }
                 break;
             case DROP_ITEM_STACK:
-                final ItemStack droppedItemStack = player.getInventory().getItemInMainHand().copy();
+                final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
                 dropItem(player, droppedItemStack, ItemStack.getAirItem());
                 break;
             case DROP_ITEM:
-                ItemStack handItem = player.getInventory().getItemInMainHand().copy();
-                ItemStack droppedItemStack2 = handItem.copy();
-                final StackingRule handStackingRule = handItem.getStackingRule();
+                final int dropAmount = 1;
 
-                droppedItemStack2 = handStackingRule.apply(droppedItemStack2, 1);
+                ItemStack handItem = player.getInventory().getItemInMainHand();
+                final StackingRule stackingRule = handItem.getStackingRule();
+                final int handAmount = stackingRule.getAmount(handItem);
 
-                handItem = handStackingRule.apply(handItem, handStackingRule.getAmount(handItem) - 1);
+                if (handAmount == dropAmount) {
+                    // Drop the whole item without copy
+                    dropItem(player, handItem, ItemStack.getAirItem());
+                } else {
+                    // Drop a single item, need a copy
+                    ItemStack droppedItemStack2 = handItem.copy();
 
-                dropItem(player, droppedItemStack2, handItem);
+                    droppedItemStack2 = stackingRule.apply(droppedItemStack2, dropAmount);
+
+                    handItem = handItem.copy(); // Force the copy
+                    handItem = stackingRule.apply(handItem, handAmount - dropAmount);
+
+                    dropItem(player, droppedItemStack2, handItem);
+                }
                 break;
             case UPDATE_ITEM_STATE:
                 player.refreshEating(false);

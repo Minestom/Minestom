@@ -254,14 +254,13 @@ public class PaletteStorage {
                     8191, 16383, 32767};
 
     private static void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
-        if (y < 0 || y >= Chunk.CHUNK_SIZE_Y) {
+        if (!MathUtils.isBetween(y, 0, Chunk.CHUNK_SIZE_Y)) {
             return;
         }
 
         final int section = ChunkUtils.getSectionAt(y);
 
         final int valuesPerLong = paletteStorage.valuesPerLong;
-        final int bitsPerEntry = paletteStorage.bitsPerEntry;
 
         if (paletteStorage.sectionBlocks[section].length == 0) {
             if (blockId == 0) {
@@ -273,6 +272,7 @@ public class PaletteStorage {
             paletteStorage.sectionBlocks[section] = new long[getSize(valuesPerLong)];
         }
 
+        // Convert world coordinates to chunk coordinates
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
@@ -282,6 +282,8 @@ public class PaletteStorage {
         final int sectionIndex = getSectionIndex(x, y, z);
 
         final int index = sectionIndex / valuesPerLong;
+        final int bitsPerEntry = paletteStorage.bitsPerEntry;
+
         final int bitIndex = (sectionIndex % valuesPerLong) * bitsPerEntry;
 
         final long[] sectionBlock = paletteStorage.sectionBlocks[section];
