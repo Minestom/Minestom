@@ -13,6 +13,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
+import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
@@ -72,6 +73,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private int timeRate = 1;
     private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
+
+    // Field for tick events
+    private long lastTickAge = System.currentTimeMillis();
 
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
@@ -998,7 +1002,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param time the tick time in milliseconds
      */
     public void tick(long time) {
-        // scheduled tasks
+        // Scheduled tasks
         if (!nextTick.isEmpty()) {
             Consumer<Instance> callback;
             while ((callback = nextTick.poll()) != null) {
@@ -1006,8 +1010,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             }
         }
 
+        // Time
         {
-            // time
             this.worldAge++;
 
             this.time += timeRate;
@@ -1018,6 +1022,16 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 this.lastTimeUpdate = time;
             }
 
+        }
+
+        // Tick event
+        {
+            // Process tick events
+            InstanceTickEvent chunkTickEvent = new InstanceTickEvent(this, time, lastTickAge);
+            callEvent(InstanceTickEvent.class, chunkTickEvent);
+
+            // Set last tick age
+            lastTickAge = time;
         }
 
         this.worldBorder.update();
