@@ -102,7 +102,7 @@ public class PlayerDiggingListener {
                 final StackingRule stackingRule = handItem.getStackingRule();
                 final int handAmount = stackingRule.getAmount(handItem);
 
-                if (handAmount == dropAmount) {
+                if (handAmount <= dropAmount) {
                     // Drop the whole item without copy
                     dropItem(player, handItem, ItemStack.getAirItem());
                 } else {
@@ -132,10 +132,8 @@ public class PlayerDiggingListener {
             case SWAP_ITEM_HAND:
                 PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
                 player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
-                    synchronized (playerInventory) {
-                        playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
-                        playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
-                    }
+                    playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
+                    playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
                 });
                 break;
         }
