@@ -9,6 +9,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
+import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
@@ -77,6 +78,9 @@ public class InstanceContainer extends Instance {
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
+    
+    // Fields for tick events
+    private long lastTickAge;
 
     /**
      * Creates an {@link InstanceContainer}.
@@ -788,11 +792,18 @@ public class InstanceContainer extends Instance {
 
         // Time/world border
         super.tick(time);
-
+        
+        // Process tick events
+        InstanceTickEvent chunkTickEvent = new InstanceTickEvent(time, lastTickAge);
+        callEvent(InstanceTickEvent.class, chunkTickEvent);
+        
         Lock wrlock = changingBlockLock.writeLock();
         wrlock.lock();
         currentlyChangingBlocks.clear();
         wrlock.unlock();
+        
+        // Set last tick age
+        lastTickAge = time;
     }
 
     /**
