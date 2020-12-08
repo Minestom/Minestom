@@ -7,7 +7,7 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 
 /**
- * Hacky class for Optifine because of an issue making the client crash if biomes 'swamp' or 'swamp_hills'
+ * Hacky class for Optifine because of an issue making the client crash if biomes 'swamp' and 'swamp_hills'
  * are not registered.
  * <p>
  * Can be removed anytime, hope that it will be fixed.
