@@ -354,7 +354,8 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>setTitle</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setTitle&#8203;(java.lang.String&nbsp;title)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
+                     java.lang.String&nbsp;title)</pre>
 <div class="block">Changes the <a href="Sidebar.html" title="class in net.minestom.server.scoreboard"><code>Sidebar</code></a> title</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -368,7 +369,8 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>createLine</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;createLine&#8203;(<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&nbsp;scoreboardLine)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;createLine&#8203;(@NotNull
+                       <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&nbsp;scoreboardLine)</pre>
 <div class="block">Creates a new <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -386,7 +388,9 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>updateLineContent</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;updateLineContent&#8203;(java.lang.String&nbsp;id,
+<pre class="methodSignature">public&nbsp;void&nbsp;updateLineContent&#8203;(@NotNull
+                              java.lang.String&nbsp;id,
+                              @NotNull
                               <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;content)</pre>
 <div class="block">Updates a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> content through the given identifier.</div>
 <dl>
@@ -402,7 +406,8 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>updateLineScore</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;updateLineScore&#8203;(java.lang.String&nbsp;id,
+<pre class="methodSignature">public&nbsp;void&nbsp;updateLineScore&#8203;(@NotNull
+                            java.lang.String&nbsp;id,
                             int&nbsp;score)</pre>
 <div class="block">Updates the score of a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> through the given identifier</div>
 <dl>
@@ -418,7 +423,9 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>getLine</h4>
-<pre class="methodSignature">public&nbsp;<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&nbsp;getLine&#8203;(java.lang.String&nbsp;id)</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&nbsp;getLine&#8203;(@NotNull
+                                      java.lang.String&nbsp;id)</pre>
 <div class="block">Gets a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> through the given identifier</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -434,7 +441,8 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLine</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;removeLine&#8203;(java.lang.String&nbsp;id)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeLine&#8203;(@NotNull
+                       java.lang.String&nbsp;id)</pre>
 <div class="block">Removes a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> through the given identifier</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
