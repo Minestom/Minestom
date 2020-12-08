@@ -12,6 +12,7 @@ import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Queue;
@@ -74,7 +75,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param title The new sidebar title
      */
-    public void setTitle(String title) {
+    public void setTitle(@NotNull String title) {
         this.title = title;
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
@@ -94,7 +95,7 @@ public class Sidebar implements Scoreboard {
      * @throws IllegalArgumentException if the sidebar already contains the line {@code scoreboardLine}
      *                                  or has a line with the same id
      */
-    public void createLine(ScoreboardLine scoreboardLine) {
+    public void createLine(@NotNull ScoreboardLine scoreboardLine) {
         synchronized (lines) {
             Check.stateCondition(lines.size() >= MAX_LINES_COUNT, "You cannot have more than " + MAX_LINES_COUNT + "  lines");
             Check.argCondition(lines.contains(scoreboardLine), "You cannot add two times the same ScoreboardLine");
@@ -123,7 +124,7 @@ public class Sidebar implements Scoreboard {
      * @param id      The identifier of the {@link ScoreboardLine}
      * @param content The new content for the {@link ScoreboardLine}
      */
-    public void updateLineContent(String id, ColoredText content) {
+    public void updateLineContent(@NotNull String id, @NotNull ColoredText content) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
@@ -137,7 +138,7 @@ public class Sidebar implements Scoreboard {
      * @param id    The identifier of the team
      * @param score The new score for the {@link ScoreboardLine}
      */
-    public void updateLineScore(String id, int score) {
+    public void updateLineScore(@NotNull String id, int score) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.line = score;
@@ -151,7 +152,8 @@ public class Sidebar implements Scoreboard {
      * @param id The identifier of the line
      * @return a {@link ScoreboardLine} or {@code null}
      */
-    public ScoreboardLine getLine(String id) {
+    @Nullable
+    public ScoreboardLine getLine(@NotNull String id) {
         for (ScoreboardLine line : lines) {
             if (line.id.equals(id))
                 return line;
@@ -164,7 +166,7 @@ public class Sidebar implements Scoreboard {
      *
      * @param id the identifier of the {@link ScoreboardLine}
      */
-    public void removeLine(String id) {
+    public void removeLine(@NotNull String id) {
         synchronized (lines) {
             Iterator<ScoreboardLine> iterator = lines.iterator();
             while (iterator.hasNext()) {
