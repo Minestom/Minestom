@@ -48,20 +48,14 @@ public final class PacketUtils {
             final ByteBuf finalBuffer = createFramedPacket(packet, false);
             final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
-            // Prevent premature release
-            final int refIncrease = players.size() - 1;
-            if (refIncrease > 0)
-                finalBuffer.retain(refIncrease);
-
             // Send packet to all players
             for (Player player : players) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.write(framedPacket).addListener((p) -> finalBuffer.release());
+                    nettyPlayerConnection.write(framedPacket);
                 } else {
                     playerConnection.sendPacket(packet);
-                    finalBuffer.release();
                 }
             }
         }
