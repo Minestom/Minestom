@@ -1,5 +1,6 @@
 package net.minestom.server;
 
+import com.google.common.collect.Queues;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -9,7 +10,11 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.Queue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
 
 /**
@@ -26,8 +31,8 @@ public final class UpdateManager {
 
     private ThreadProvider threadProvider;
 
-    private final ConcurrentLinkedQueue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
+    private final Queue<LongConsumer> tickStartCallbacks = Queues.newConcurrentLinkedQueue();
+    private final Queue<LongConsumer> tickEndCallbacks = Queues.newConcurrentLinkedQueue();
 
     {
         // DEFAULT THREAD PROVIDER
@@ -106,7 +111,7 @@ public final class UpdateManager {
      * @param callbacks the callbacks to execute
      * @param value     the value to give to the consumers
      */
-    private void doTickCallback(ConcurrentLinkedQueue<LongConsumer> callbacks, long value) {
+    private void doTickCallback(Queue<LongConsumer> callbacks, long value) {
         if (!callbacks.isEmpty()) {
             LongConsumer callback;
             while ((callback = callbacks.poll()) != null) {

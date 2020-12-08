@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
@@ -65,7 +66,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -134,7 +134,7 @@ public class Player extends LivingEntity implements CommandSender {
     private final AtomicInteger teleportId = new AtomicInteger();
 
     protected boolean onGround;
-    private final ConcurrentLinkedQueue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
+    private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;

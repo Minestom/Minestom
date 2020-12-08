@@ -1,5 +1,6 @@
 package net.minestom.server.scoreboard;
 
+import com.google.common.collect.Queues;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -13,8 +14,8 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -45,7 +46,7 @@ public class Sidebar implements Scoreboard {
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
 
-    private final ConcurrentLinkedQueue<ScoreboardLine> lines = new ConcurrentLinkedQueue<>();
+    private final Queue<ScoreboardLine> lines = Queues.newConcurrentLinkedQueue();
     private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
 
     private final String objectiveName;

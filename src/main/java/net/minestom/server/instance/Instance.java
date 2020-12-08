@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import com.google.common.collect.Queues;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -39,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
@@ -93,7 +93,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     protected UUID uniqueId;
 
     // list of scheduled tasks to be executed during the next instance tick
-    protected final ConcurrentLinkedQueue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
+    protected final Queue<Consumer<Instance>> nextTick = Queues.newConcurrentLinkedQueue();
 
     // instance custom data
     private Data data;

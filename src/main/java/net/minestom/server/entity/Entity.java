@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.ColoredText;
@@ -40,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -132,7 +132,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected Pose pose = Pose.STANDING;
 
     // list of scheduled tasks to be executed during the next entity tick
-    protected final ConcurrentLinkedQueue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
+    protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
     // Tick related
     private long ticks;

@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -11,8 +12,8 @@ import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 public final class EntityManager {
@@ -23,7 +24,7 @@ public final class EntityManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
 
-    private final ConcurrentLinkedQueue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
+    private final Queue<Player> waitingPlayers = Queues.newConcurrentLinkedQueue();
 
     /**
      * Connects waiting players.
