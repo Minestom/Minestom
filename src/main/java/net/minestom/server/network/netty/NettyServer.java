@@ -78,11 +78,11 @@ public final class NettyServer {
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
 
-        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 200) {
+        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 1000) {
             @Override
             protected void doAccounting(TrafficCounter counter) {
                 // TODO proper monitoring API
-                //System.out.println("data " + counter.lastWriteThroughput() / 1000 + " " + counter.lastReadThroughput() / 1000);
+                //System.out.println("data " + counter.getRealWriteThroughput() / 1e6);
             }
         };
     }

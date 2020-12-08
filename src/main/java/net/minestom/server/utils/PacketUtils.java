@@ -45,7 +45,7 @@ public final class PacketUtils {
 
         final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
         if (success) {
-            final ByteBuf finalBuffer = createFramedPacket(packet, true);
+            final ByteBuf finalBuffer = createFramedPacket(packet, false);
             final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
             // Prevent premature release
@@ -199,6 +199,7 @@ public final class PacketUtils {
      * @param serverPacket the server packet to write
      * @return the framed packet from the server one
      */
+    @NotNull
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
