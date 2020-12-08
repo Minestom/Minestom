@@ -232,8 +232,8 @@ public final class NettyServer {
     public void stop() {
         try {
             this.serverChannel.close().sync();
-            this.worker.shutdownGracefully().await();
-            this.boss.shutdownGracefully().await();
+            this.worker.shutdownGracefully();
+            this.boss.shutdownGracefully();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
