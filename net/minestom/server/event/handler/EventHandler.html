@@ -149,7 +149,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>void</code></td>
+<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">addEventCallback</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
                 <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
 <td class="colLast">
@@ -195,7 +195,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>void</code></td>
+<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">removeEventCallback</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
                    <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
 <td class="colLast">
@@ -240,10 +240,10 @@ java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="cla
 <ul class="blockList">
 <li class="blockList">
 <h4>addEventCallback</h4>
-<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;void&nbsp;addEventCallback&#8203;(@NotNull
-                                                java.lang.Class&lt;E&gt;&nbsp;eventClass,
-                                                @NotNull
-                                                <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
+<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;boolean&nbsp;addEventCallback&#8203;(@NotNull
+                                                   java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                   @NotNull
+                                                   <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
 <div class="block">Adds a new event callback for the specified type <code>eventClass</code>.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -251,6 +251,8 @@ java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="cla
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>eventClass</code> - the event class</dd>
 <dd><code>eventCallback</code> - the event callback</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the callback collection changed as a result of the call</dd>
 </dl>
 </li>
 </ul>
@@ -260,10 +262,10 @@ java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="cla
 <ul class="blockList">
 <li class="blockList">
 <h4>removeEventCallback</h4>
-<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;void&nbsp;removeEventCallback&#8203;(@NotNull
-                                                   java.lang.Class&lt;E&gt;&nbsp;eventClass,
-                                                   @NotNull
-                                                   <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
+<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;boolean&nbsp;removeEventCallback&#8203;(@NotNull
+                                                      java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                      @NotNull
+                                                      <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
 <div class="block">Removes an event callback.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -271,6 +273,8 @@ java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="cla
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>eventClass</code> - the event class</dd>
 <dd><code>eventCallback</code> - the event callback</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the callback was removed as a result of this call</dd>
 </dl>
 </li>
 </ul>
