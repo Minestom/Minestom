@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":6,"i5":18};
+var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":6,"i5":18,"i6":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,6 +197,13 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <div class="block">Sends multiple raw string messages.</div>
 </td>
 </tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.ColoredText)">sendMessage</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;text)</code></th>
+<td class="colLast">
+<div class="block">Sends a <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> message.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
@@ -248,6 +255,23 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>messages</code> - the messages to send</dd>
+</dl>
+</li>
+</ul>
+<a id="sendMessage(net.minestom.server.chat.ColoredText)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendMessage</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
+                         <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;text)</pre>
+<div class="block">Sends a <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> message.
+
+  If this is not a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>, only the content of the message will be sent as a string.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>text</code> - The <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> to send.</dd>
 </dl>
 </li>
 </ul>
