@@ -142,7 +142,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = UUID.randomUUID();
-        this.position = spawnPosition.copy();
+        this.position = spawnPosition.clone();
 
         setBoundingBox(0, 0, 0);
 
@@ -436,7 +436,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 sendPacketToViewersAndSelf(positionAndRotationPacket);
 
-                refreshPosition(position.copy());
+                refreshPosition(position.clone());
 
                 // Fix head rotation
                 EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
@@ -451,7 +451,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 sendPacketToViewersAndSelf(entityPositionPacket);
 
-                refreshPosition(position.copy());
+                refreshPosition(position.clone());
 
             } else if (viewChange) {
                 // Yaw/Pitch

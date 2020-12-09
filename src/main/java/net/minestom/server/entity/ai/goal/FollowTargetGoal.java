@@ -40,7 +40,7 @@ public class FollowTargetGoal extends GoalSelector {
         final Entity target = entityCreature.getTarget();
 
         if (target != null) {
-            lastTargetPos = target.getPosition().copy();
+            lastTargetPos = target.getPosition().clone();
             if (getDistance(lastTargetPos, entityCreature.getPosition()) < 2) {
                 forceEnd = true;
                 entityCreature.setPathTo(null);

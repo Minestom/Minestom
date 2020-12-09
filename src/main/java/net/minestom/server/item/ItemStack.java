@@ -567,6 +567,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @return a cloned item stack with a different identifier
      */
+    @NotNull
     @Override
     public ItemStack clone() {
         try {

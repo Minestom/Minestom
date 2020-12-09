@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
  * The format used is the one described in the {@link net.minestom.server.network.packet.server.play.ChunkDataPacket},
  * the reason is that it allows us to write the packet much faster.
  */
-public class PaletteStorage {
+public class PaletteStorage implements PublicCloneable<PaletteStorage> {
 
     /**
      * The maximum bits per entry value.
@@ -155,15 +156,29 @@ public class PaletteStorage {
         init();
     }
 
+    /**
+     * @deprecated use {@link #clone()}
+     */
+    @Deprecated
     @NotNull
     public PaletteStorage copy() {
-        PaletteStorage paletteStorage = new PaletteStorage(bitsPerEntry, bitsIncrement);
-        paletteStorage.sectionBlocks = sectionBlocks.clone();
+        return clone();
+    }
 
-        paletteStorage.paletteBlockMaps = paletteBlockMaps.clone();
-        paletteStorage.blockPaletteMaps = blockPaletteMaps.clone();
+    @NotNull
+    @Override
+    public PaletteStorage clone() {
+        try {
+            PaletteStorage paletteStorage = (PaletteStorage) super.clone();
+            paletteStorage.sectionBlocks = sectionBlocks.clone();
 
-        return paletteStorage;
+            paletteStorage.paletteBlockMaps = paletteBlockMaps.clone();
+            paletteStorage.blockPaletteMaps = blockPaletteMaps.clone();
+            return paletteStorage;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Weird thing happened");
+        }
     }
 
     /**

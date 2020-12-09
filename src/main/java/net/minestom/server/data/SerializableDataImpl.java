@@ -89,6 +89,7 @@ public class SerializableDataImpl extends SerializableData {
         return data.isEmpty();
     }
 
+    @NotNull
     @Override
     public SerializableDataImpl clone() {
         return (SerializableDataImpl) super.clone();

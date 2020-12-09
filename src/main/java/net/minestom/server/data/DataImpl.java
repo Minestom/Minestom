@@ -58,6 +58,7 @@ public class DataImpl extends Data {
         return data.isEmpty();
     }
 
+    @NotNull
     @Override
     public DataImpl clone() {
         return (DataImpl) super.clone();

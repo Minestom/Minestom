@@ -107,11 +107,11 @@ public class PlayerDiggingListener {
                     dropItem(player, handItem, ItemStack.getAirItem());
                 } else {
                     // Drop a single item, need a copy
-                    ItemStack droppedItemStack2 = handItem.copy();
+                    ItemStack droppedItemStack2 = handItem.clone();
 
                     droppedItemStack2 = stackingRule.apply(droppedItemStack2, dropAmount);
 
-                    handItem = handItem.copy(); // Force the copy
+                    handItem = handItem.clone(); // Force the copy
                     handItem = stackingRule.apply(handItem, handAmount - dropAmount);
 
                     dropItem(player, droppedItemStack2, handItem);

@@ -86,7 +86,7 @@ public class CollisionUtils {
         BlockPosition[] cornerPositions = new BlockPosition[corners.length];
         Vector[] cornersCopy = new Vector[corners.length];
         for (int i = 0; i < corners.length; i++) {
-            cornersCopy[i] = corners[i].copy();
+            cornersCopy[i] = corners[i].clone();
             cornerPositions[i] = new BlockPosition(corners[i]);
         }
 

@@ -222,6 +222,7 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
         return clone();
     }
 
+    @NotNull
     @Override
     public BlockPosition clone() {
         try {

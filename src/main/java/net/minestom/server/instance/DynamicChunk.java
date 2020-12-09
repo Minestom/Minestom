@@ -387,8 +387,8 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.biomes = biomes;
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.paletteStorage = blockPalette.copy();
-        fullDataPacket.customBlockPaletteStorage = customBlockPalette.copy();
+        fullDataPacket.paletteStorage = blockPalette.clone();
+        fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
         fullDataPacket.blockEntities = new IntOpenHashSet(blockEntities);
         fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
         return fullDataPacket;
@@ -398,8 +398,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
-        dynamicChunk.blockPalette = blockPalette.copy();
-        dynamicChunk.customBlockPalette = customBlockPalette.copy();
+        dynamicChunk.blockPalette = blockPalette.clone();
+        dynamicChunk.customBlockPalette = customBlockPalette.clone();
         dynamicChunk.blocksData.putAll(blocksData);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
         dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);

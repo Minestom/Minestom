@@ -18,7 +18,7 @@ public class RelativeBlockPosition extends RelativeLocation<BlockPosition> {
     @Override
     public BlockPosition fromRelativePosition(Entity entity) {
         if (!relativeX && !relativeY && !relativeZ) {
-            return location.copy();
+            return location.clone();
         }
         final Position entityPosition = entity.getPosition();
 

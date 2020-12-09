@@ -41,8 +41,8 @@ public class EatBlockGoal extends GoalSelector {
         }
         final Instance instance = entityCreature.getInstance();
         final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
-        final short blockStateIdIn = instance.getBlockStateId(blockPosition.copy().subtract(0, 1, 0));
-        final short blockStateIdBelow = instance.getBlockStateId(blockPosition.copy().subtract(0, 2, 0));
+        final short blockStateIdIn = instance.getBlockStateId(blockPosition.clone().subtract(0, 1, 0));
+        final short blockStateIdBelow = instance.getBlockStateId(blockPosition.clone().subtract(0, 2, 0));
 
         return eatInMap.containsKey(blockStateIdIn) || eatBelowMap.containsKey(blockStateIdBelow);
     }
@@ -62,8 +62,8 @@ public class EatBlockGoal extends GoalSelector {
             return;
         }
         Instance instance = entityCreature.getInstance();
-        final BlockPosition currentPosition = entityCreature.getPosition().toBlockPosition().copy().subtract(0, 1, 0);
-        final BlockPosition belowPosition = currentPosition.copy().subtract(0, 1, 0);
+        final BlockPosition currentPosition = entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0);
+        final BlockPosition belowPosition = currentPosition.clone().subtract(0, 1, 0);
 
         final short blockStateIdIn = instance.getBlockStateId(currentPosition);
         final short blockStateIdBelow = instance.getBlockStateId(belowPosition);

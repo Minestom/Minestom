@@ -67,7 +67,7 @@ public class PlayerPositionListener {
 
         final Position currentPosition = player.getPosition().copy();
         Position newPosition = new Position(x, y, z, yaw, pitch);
-        final Position cachedPosition = newPosition.copy();
+        final Position cachedPosition = newPosition.clone();
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         player.callEvent(PlayerMoveEvent.class, playerMoveEvent);

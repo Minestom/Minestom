@@ -197,6 +197,7 @@ public class Position implements PublicCloneable<Position> {
         this.z = position.getZ();
     }
 
+    @NotNull
     @Override
     public Position clone() {
         try {

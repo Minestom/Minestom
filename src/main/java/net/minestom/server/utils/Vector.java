@@ -1,8 +1,9 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
-public class Vector {
+public class Vector implements PublicCloneable<Vector> {
 
     private static final double epsilon = 0.000001;
 
@@ -103,7 +104,7 @@ public class Vector {
         this.y = vector.getY();
         this.z = vector.getZ();
     }
-    
+
     /**
      * Gets the magnitude of the vector, defined as sqrt(x^2+y^2+z^2). The
      * value of this method is not cached and uses a costly square-root
@@ -246,12 +247,23 @@ public class Vector {
     }
 
     /**
-     * Gets a new vector with the same values.
-     *
-     * @return vector
+     * @deprecated use {@link #clone()}
      */
+    @Deprecated
+    @NotNull
     public Vector copy() {
-        return new Vector(x, y, z);
+        return clone();
+    }
+
+    @NotNull
+    @Override
+    public Vector clone() {
+        try {
+            return (Vector) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Weird thing happened");
+        }
     }
 
     public float getX() {

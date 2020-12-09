@@ -66,6 +66,7 @@ public abstract class SerializableData extends Data {
         readSerializedData(reader, typeToIndexMap);
     }
 
+    @NotNull
     @Override
     public SerializableData clone() {
         return (SerializableData) super.clone();

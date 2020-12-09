@@ -120,7 +120,7 @@ public interface NavigableEntity {
             return false;
         }
 
-        final Position targetPosition = position.copy();
+        final Position targetPosition = position.clone();
 
         final IPath path = pathFinder.initiatePathTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
         setPath(path);

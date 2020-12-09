@@ -4,7 +4,6 @@ import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
@@ -25,9 +24,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -49,7 +46,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        instanceContainer.setChunkGenerator(noiseTestGenerator);
 
         // Load some chunks beforehand
         final int loopStart = -10;
@@ -65,14 +62,14 @@ public class PlayerInit {
             System.out.println("slot inv: " + slot)0;
             inventoryConditionResult.setCancel(slot == 3);
         });*/
-        inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
+        //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
     }
 
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
+        /*MinecraftServer.getSchedulerManager().buildTask(() -> {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
@@ -87,7 +84,7 @@ public class PlayerInit {
                 PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), playerListHeaderAndFooterPacket);
             }
 
-        }).repeat(10, TimeUnit.TICK).schedule();
+        }).repeat(10, TimeUnit.TICK).schedule();*/
 
         connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
@@ -108,13 +105,13 @@ public class PlayerInit {
                 if (entity instanceof EntityCreature) {
                     EntityCreature creature = (EntityCreature) entity;
                     creature.damage(DamageType.fromPlayer(player), 0);
-                    Vector velocity = player.getPosition().copy().getDirection().multiply(3);
+                    Vector velocity = player.getPosition().clone().getDirection().multiply(3);
                     velocity.setY(3f);
                     entity.setVelocity(velocity);
                     player.sendMessage("You attacked an entity!");
                 } else if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    Vector velocity = player.getPosition().copy().getDirection().multiply(4);
+                    Vector velocity = player.getPosition().clone().getDirection().multiply(4);
                     velocity.setY(3.5f);
                     target.setVelocity(velocity);
                     target.damage(DamageType.fromPlayer(player), 5);
@@ -157,11 +154,11 @@ public class PlayerInit {
             player.addEventCallback(ItemDropEvent.class, event -> {
                 ItemStack droppedItem = event.getItemStack();
 
-                Position position = player.getPosition().copy().add(0, 1.5f, 0);
+                Position position = player.getPosition().clone().add(0, 1.5f, 0);
                 ItemEntity itemEntity = new ItemEntity(droppedItem, position);
                 itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
                 itemEntity.setInstance(player.getInstance());
-                Vector velocity = player.getPosition().copy().getDirection().multiply(6);
+                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
 
                 EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
@@ -178,15 +175,13 @@ public class PlayerInit {
                 event.setSpawningInstance(instanceContainer);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-                player.setRespawnPoint(new Position(x, 45f, z));
+                player.setRespawnPoint(new Position(0, 70f, 0));
 
                 player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                     if (slot == -999)
                         return;
-                    inventoryConditionResult.setCancel(false);
                     ItemStack itemStack = p.getInventory().getItemStack(slot);
-                    final int value = itemStack.getData() != null ? itemStack.getData().get("testc") : 0;
-                    System.out.println("slot player: " + slot + " : " + itemStack.getMaterial() + " : " + value);
+                    System.out.println("test "+itemStack.getIdentifier()+" "+itemStack.getData());
                 });
             });
 
@@ -199,7 +194,7 @@ public class PlayerInit {
                 itemStack.setData(data);
                 player.getInventory().addItemStack(itemStack);
 
-                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte)64));
+                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
             });
 
             player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

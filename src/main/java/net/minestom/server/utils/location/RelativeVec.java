@@ -19,7 +19,7 @@ public class RelativeVec extends RelativeLocation<Vector> {
     @Override
     public Vector fromRelativePosition(@Nullable Entity entity) {
         if (!relativeX && !relativeY && !relativeZ) {
-            return location.copy();
+            return location.clone();
         }
         final Position entityPosition = entity.getPosition();
 

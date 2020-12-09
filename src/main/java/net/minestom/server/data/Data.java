@@ -40,6 +40,7 @@ public abstract class Data implements PublicCloneable<Data> {
             return true;
         }
 
+        @NotNull
         @Override
         public Data clone() {
             return this;
@@ -119,6 +120,7 @@ public abstract class Data implements PublicCloneable<Data> {
      */
     public abstract boolean isEmpty();
 
+    @NotNull
     @Override
     public Data clone() {
         try {
