@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
 /**
  * Represents the position of a block, so with integers instead of floating numbers.
  */
-public class BlockPosition {
+public class BlockPosition implements PublicCloneable<BlockPosition> {
 
     private int x, y, z;
 
@@ -199,24 +200,36 @@ public class BlockPosition {
 
     /**
      * Gets the square distance to another block position.
-    *
-    * @param blockPosition the block position to check the distance
-    * @return the distance between 'this' and {@code blockPosition}
-    */
-   public int getDistanceSquared(@NotNull BlockPosition blockPosition) {
-       return MathUtils.square(getX() - blockPosition.getX()) +
-               MathUtils.square(getY() - blockPosition.getY()) +
-               MathUtils.square(getZ() - blockPosition.getZ());
-   }
+     *
+     * @param blockPosition the block position to check the distance
+     * @return the distance between 'this' and {@code blockPosition}
+     */
+    public int getDistanceSquared(@NotNull BlockPosition blockPosition) {
+        return MathUtils.square(getX() - blockPosition.getX()) +
+                MathUtils.square(getY() - blockPosition.getY()) +
+                MathUtils.square(getZ() - blockPosition.getZ());
+    }
 
     /**
      * Copies this block position.
      *
      * @return the cloned block position
+     * @deprecated use {@link #clone()}
      */
+    @Deprecated
     @NotNull
     public BlockPosition copy() {
-        return new BlockPosition(x, y, z);
+        return clone();
+    }
+
+    @Override
+    public BlockPosition clone() {
+        try {
+            return (BlockPosition) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -229,7 +242,7 @@ public class BlockPosition {
         this.y = blockPosition.getY();
         this.z = blockPosition.getZ();
     }
-    
+
     /**
      * Converts this block position to a {@link Position}.
      *

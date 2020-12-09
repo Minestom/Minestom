@@ -8,7 +8,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
 
-public class WritableBookMeta implements ItemMeta {
+public class WritableBookMeta extends ItemMeta {
 
     private ArrayList<String> pages = new ArrayList<>();
 
@@ -68,8 +68,8 @@ public class WritableBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        WritableBookMeta writableBookMeta = new WritableBookMeta();
+    public ItemMeta clone() {
+        WritableBookMeta writableBookMeta = (WritableBookMeta) super.clone();
         writableBookMeta.pages.addAll(pages);
 
         return writableBookMeta;

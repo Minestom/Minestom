@@ -10,7 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
-public class CrossbowMeta implements ItemMeta {
+public class CrossbowMeta extends ItemMeta {
 
     private boolean triple;
     private ItemStack projectile1, projectile2, projectile3;
@@ -180,12 +180,12 @@ public class CrossbowMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        CrossbowMeta crossbowMeta = new CrossbowMeta();
+    public ItemMeta clone() {
+        CrossbowMeta crossbowMeta = (CrossbowMeta) super.clone();
         crossbowMeta.triple = triple;
-        crossbowMeta.projectile1 = projectile1 == null ? null : projectile1.copy();
-        crossbowMeta.projectile2 = projectile2 == null ? null : projectile2.copy();
-        crossbowMeta.projectile3 = projectile3 == null ? null : projectile3.copy();
+        crossbowMeta.projectile1 = projectile1 == null ? null : projectile1.clone();
+        crossbowMeta.projectile2 = projectile2 == null ? null : projectile2.clone();
+        crossbowMeta.projectile3 = projectile3 == null ? null : projectile3.clone();
 
         crossbowMeta.charged = charged;
 

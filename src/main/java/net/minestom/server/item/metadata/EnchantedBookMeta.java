@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnchantedBookMeta implements ItemMeta {
+public class EnchantedBookMeta extends ItemMeta {
 
     private final Map<Enchantment, Short> storedEnchantmentMap = new HashMap<>();
 
@@ -85,8 +85,8 @@ public class EnchantedBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        EnchantedBookMeta enchantedBookMeta = new EnchantedBookMeta();
+    public ItemMeta clone() {
+        EnchantedBookMeta enchantedBookMeta = (EnchantedBookMeta) super.clone();
         enchantedBookMeta.storedEnchantmentMap.putAll(storedEnchantmentMap);
 
         return enchantedBookMeta;

@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * {@link net.minestom.server.item.Material#SPLASH_POTION},
  * {@link net.minestom.server.item.Material#TIPPED_ARROW}.
  */
-public class PotionMeta implements ItemMeta {
+public class PotionMeta extends ItemMeta {
 
     private PotionType potionType;
     private final List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
@@ -152,8 +152,8 @@ public class PotionMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        PotionMeta potionMeta = new PotionMeta();
+    public ItemMeta clone() {
+        PotionMeta potionMeta = (PotionMeta) super.clone();
         potionMeta.potionType = potionType;
         potionMeta.customPotionEffects.addAll(customPotionEffects);
 

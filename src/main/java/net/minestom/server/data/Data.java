@@ -1,5 +1,6 @@
 package net.minestom.server.data;
 
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,7 @@ import java.util.Set;
  * <p>
  * See {@link DataImpl} for the default implementation.
  */
-public abstract class Data implements Cloneable {
+public abstract class Data implements PublicCloneable<Data> {
 
     public static final Data EMPTY = new Data() {
         @Override

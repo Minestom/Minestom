@@ -1,20 +1,21 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 /**
  * Represents nbt data only available for a type of item.
  */
-public interface ItemMeta {
+public abstract class ItemMeta implements PublicCloneable<ItemMeta> {
 
     /**
      * Gets if this meta object contains any useful data to send to the client.
      *
      * @return true if this item has nbt data, false otherwise
      */
-    boolean hasNbt();
+    public abstract boolean hasNbt();
 
     /**
      * Gets if the two ItemMeta are similar.
@@ -24,7 +25,7 @@ public interface ItemMeta {
      * @param itemMeta the second item meta to check
      * @return true if the two meta are similar, false otherwise
      */
-    boolean isSimilar(@NotNull ItemMeta itemMeta);
+    public abstract boolean isSimilar(@NotNull ItemMeta itemMeta);
 
     /**
      * Reads nbt data from a compound.
@@ -34,23 +35,23 @@ public interface ItemMeta {
      *
      * @param compound the compound containing the data
      */
-    void read(@NotNull NBTCompound compound);
+    public abstract void read(@NotNull NBTCompound compound);
 
     /**
      * Writes nbt data to a compound.
      *
      * @param compound the compound receiving the item meta data
      */
-    void write(@NotNull NBTCompound compound);
+    public abstract void write(@NotNull NBTCompound compound);
 
-    /**
-     * Copies this item meta.
-     * <p>
-     * Used by {@link ItemStack#copy()}.
-     *
-     * @return the cloned item meta
-     */
     @NotNull
-    ItemMeta copy();
-
+    @Override
+    public ItemMeta clone() {
+        try {
+            return (ItemMeta) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Weird thing happened");
+        }
+    }
 }

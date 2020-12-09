@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Represents a position.
  * The instance is not contained.
  */
-public class Position implements Cloneable {
+public class Position implements PublicCloneable<Position> {
 
     private float x, y, z;
     private float yaw, pitch;

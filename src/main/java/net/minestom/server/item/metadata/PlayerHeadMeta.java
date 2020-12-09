@@ -4,7 +4,7 @@ import net.minestom.server.entity.PlayerSkin;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public class PlayerHeadMeta implements ItemMeta {
+public class PlayerHeadMeta extends ItemMeta {
 
     private String playerName;
     private PlayerSkin playerSkin;
@@ -34,7 +34,7 @@ public class PlayerHeadMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
+    public ItemMeta clone() {
         return null;
     }
 }

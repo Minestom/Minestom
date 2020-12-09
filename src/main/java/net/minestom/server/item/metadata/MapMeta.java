@@ -9,7 +9,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapMeta implements ItemMeta {
+public class MapMeta extends ItemMeta {
 
     private int mapId;
     private int mapScaleDirection = 1;
@@ -132,17 +132,17 @@ public class MapMeta implements ItemMeta {
                 final byte type = decorationCompound.getAsByte("type");
                 byte x = 0;
 
-                if(decorationCompound.containsKey("x")) {
+                if (decorationCompound.containsKey("x")) {
                     x = decorationCompound.getAsByte("x");
                 }
 
                 byte z = 0;
-                if(decorationCompound.containsKey("z")) {
+                if (decorationCompound.containsKey("z")) {
                     z = decorationCompound.getAsByte("z");
                 }
 
                 double rotation = 0.0;
-                if(decorationCompound.containsKey("rot")) {
+                if (decorationCompound.containsKey("rot")) {
                     rotation = decorationCompound.getAsDouble("rot");
                 }
 
@@ -194,8 +194,8 @@ public class MapMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        MapMeta mapMeta = new MapMeta();
+    public ItemMeta clone() {
+        MapMeta mapMeta = (MapMeta) super.clone();
         mapMeta.setMapId(mapId);
         mapMeta.setMapScaleDirection(mapScaleDirection);
         mapMeta.decorations.addAll(decorations);

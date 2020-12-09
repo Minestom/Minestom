@@ -16,6 +16,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.ownership.OwnershipHandler;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,7 @@ import java.util.*;
  * Here a non-exhaustive list of what you can do to update the item:
  * {@link PlayerInventory#refreshSlot(short)}, {@link Inventory#refreshSlot(short)} or a raw {@link SetSlotPacket}.
  */
-public class ItemStack implements DataContainer {
+public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
     public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler();
     public static final String OWNERSHIP_DATA_KEY = "ownership_identifier";
@@ -551,38 +552,52 @@ public class ItemStack implements DataContainer {
     }
 
     /**
-     * Copies this item stack.
+     * @deprecated use {@link #clone()}
+     */
+    @Deprecated
+    @NotNull
+    public synchronized ItemStack copy() {
+        return clone();
+    }
+
+    /**
+     * Clones this item stack.
      * <p>
      * Be aware that the identifier ({@link #getIdentifier()}) will change.
      *
      * @return a cloned item stack with a different identifier
      */
-    @NotNull
-    public synchronized ItemStack copy() {
-        ItemStack itemStack = new ItemStack(material, amount, damage);
-        itemStack.setDisplayName(displayName);
-        itemStack.setUnbreakable(unbreakable);
-        if (lore != null) {
-            itemStack.setLore(new ArrayList<>(lore));
+    @Override
+    public ItemStack clone() {
+        try {
+            ItemStack itemStack = (ItemStack) super.clone();
+            itemStack.setDisplayName(displayName);
+            itemStack.setUnbreakable(unbreakable);
+            if (lore != null) {
+                itemStack.setLore(new ArrayList<>(lore));
+            }
+            if (stackingRule != null) {
+                itemStack.setStackingRule(stackingRule);
+            }
+
+            itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
+            itemStack.attributes = new ArrayList<>(attributes);
+
+            itemStack.hideFlag = hideFlag;
+            itemStack.customModelData = customModelData;
+
+            if (itemMeta != null)
+                itemStack.itemMeta = itemMeta.clone();
+
+            final Data data = getData();
+            if (data != null)
+                itemStack.setData(data.clone());
+
+            return itemStack;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
         }
-        if (stackingRule != null) {
-            itemStack.setStackingRule(stackingRule);
-        }
-
-        itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
-        itemStack.attributes = new ArrayList<>(attributes);
-
-        itemStack.hideFlag = hideFlag;
-        itemStack.customModelData = customModelData;
-
-        if (itemMeta != null)
-            itemStack.itemMeta = itemMeta.copy();
-
-        final Data data = getData();
-        if (data != null)
-            itemStack.setData(data.clone());
-
-        return itemStack;
     }
 
     @Nullable

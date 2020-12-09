@@ -3,7 +3,7 @@ package net.minestom.server.item.metadata;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public class CompassMeta implements ItemMeta {
+public class CompassMeta extends ItemMeta {
 
     private boolean lodestoneTracked;
     private String lodestoneDimension;
@@ -84,7 +84,7 @@ public class CompassMeta implements ItemMeta {
     @Override
     public void write(@NotNull NBTCompound compound) {
         compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
-        if(lodestoneDimension != null) {
+        if (lodestoneDimension != null) {
             compound.setString("LodestoneDimension", lodestoneDimension);
         }
 
@@ -99,8 +99,8 @@ public class CompassMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        CompassMeta compassMeta = new CompassMeta();
+    public ItemMeta clone() {
+        CompassMeta compassMeta = (CompassMeta) super.clone();
         compassMeta.lodestoneTracked = lodestoneTracked;
         compassMeta.lodestoneDimension = lodestoneDimension;
         compassMeta.x = x;

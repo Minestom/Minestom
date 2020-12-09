@@ -11,7 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
 
-public class WrittenBookMeta implements ItemMeta {
+public class WrittenBookMeta extends ItemMeta {
 
     private boolean resolved;
     private WrittenBookGeneration generation;
@@ -180,8 +180,8 @@ public class WrittenBookMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        WrittenBookMeta writtenBookMeta = new WrittenBookMeta();
+    public ItemMeta clone() {
+        WrittenBookMeta writtenBookMeta = (WrittenBookMeta) super.clone();
         writtenBookMeta.resolved = resolved;
         writtenBookMeta.generation = generation;
         writtenBookMeta.author = author;

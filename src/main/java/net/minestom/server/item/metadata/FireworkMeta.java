@@ -3,7 +3,7 @@ package net.minestom.server.item.metadata;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public class FireworkMeta implements ItemMeta {
+public class FireworkMeta extends ItemMeta {
 
     private boolean flicker;
     private boolean trail;
@@ -36,7 +36,7 @@ public class FireworkMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
+    public ItemMeta clone() {
         return null;
     }
 

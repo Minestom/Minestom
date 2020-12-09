@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 // TODO for which item
-public class SpawnEggMeta implements ItemMeta {
+public class SpawnEggMeta extends ItemMeta {
 
     private EntityType entityType;
 
@@ -42,8 +42,8 @@ public class SpawnEggMeta implements ItemMeta {
 
     @NotNull
     @Override
-    public ItemMeta copy() {
-        SpawnEggMeta spawnEggMeta = new SpawnEggMeta();
+    public ItemMeta clone() {
+        SpawnEggMeta spawnEggMeta = (SpawnEggMeta) super.clone();
         spawnEggMeta.entityType = entityType;
         return spawnEggMeta;
     }
