@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * {@link Data} implementation which uses a {@link ConcurrentHashMap}.
  */
-public class DataImpl implements Data {
+public class DataImpl extends Data {
 
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
@@ -58,13 +58,9 @@ public class DataImpl implements Data {
         return data.isEmpty();
     }
 
-    @NotNull
     @Override
-    public Data copy() {
-        DataImpl data = new DataImpl();
-        data.data.putAll(this.data);
-        data.dataType.putAll(this.dataType);
-        return data;
+    public DataImpl clone() {
+        return (DataImpl) super.clone();
     }
 
     @Override

@@ -11,9 +11,9 @@ import java.util.Set;
  * <p>
  * See {@link DataImpl} for the default implementation.
  */
-public interface Data {
+public abstract class Data implements Cloneable {
 
-    Data EMPTY = new Data() {
+    public static final Data EMPTY = new Data() {
         @Override
         public <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
         }
@@ -39,9 +39,8 @@ public interface Data {
             return true;
         }
 
-        @NotNull
         @Override
-        public Data copy() {
+        public Data clone() {
             return this;
         }
 
@@ -60,7 +59,7 @@ public interface Data {
      *              null if {@code value} is also null
      * @param <T>   the value generic
      */
-    <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type);
+    public abstract <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type);
 
     /**
      * Assigns a value to a specific key.
@@ -71,7 +70,7 @@ public interface Data {
      * @param value the value object, null to remove the key
      * @param <T>   the value generic
      */
-    default <T> void set(@NotNull String key, @Nullable T value) {
+    public <T> void set(@NotNull String key, @Nullable T value) {
         set(key, value, value != null ? (Class<T>) value.getClass() : null);
     }
 
@@ -83,7 +82,7 @@ public interface Data {
      * @return the data associated with the key or null
      */
     @Nullable
-    <T> T get(@NotNull String key);
+    public abstract <T> T get(@NotNull String key);
 
     /**
      * Retrieves a value based on its key, give a default value if not found.
@@ -94,7 +93,7 @@ public interface Data {
      * @return {@link #get(String)} if found, {@code defaultValue} otherwise
      */
     @Nullable
-    <T> T getOrDefault(@NotNull String key, @Nullable T defaultValue);
+    public abstract <T> T getOrDefault(@NotNull String key, @Nullable T defaultValue);
 
     /**
      * Gets if the data has a key.
@@ -102,7 +101,7 @@ public interface Data {
      * @param key the key to check
      * @return true if the data contains the key
      */
-    boolean hasKey(@NotNull String key);
+    public abstract boolean hasKey(@NotNull String key);
 
     /**
      * Gets the list of data keys.
@@ -110,21 +109,22 @@ public interface Data {
      * @return an unmodifiable {@link Set} containing all the keys
      */
     @NotNull
-    Set<String> getKeys();
+    public abstract Set<String> getKeys();
 
     /**
      * Gets if the data is empty or not.
      *
      * @return true if the data does not contain anything, false otherwise
      */
-    boolean isEmpty();
+    public abstract boolean isEmpty();
 
-    /**
-     * Copies this data.
-     *
-     * @return a cloned data object
-     */
-    @NotNull
-    Data copy();
-
+    @Override
+    public Data clone() {
+        try {
+            return (Data) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

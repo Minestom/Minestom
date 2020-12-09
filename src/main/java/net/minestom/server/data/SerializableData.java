@@ -2,7 +2,6 @@ package net.minestom.server.data;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -12,9 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * See {@link SerializableDataImpl} for the default implementation.
  */
-public interface SerializableData extends Data {
-
-    DataManager DATA_MANAGER = MinecraftServer.getDataManager();
+public abstract class SerializableData extends Data {
 
     /**
      * Serializes the data into an array of bytes.
@@ -29,7 +26,7 @@ public interface SerializableData extends Data {
      * @return the array representation of this data object
      */
     @NotNull
-    byte[] getSerializedData(@NotNull Object2ShortMap<String> typeToIndexMap, boolean indexed);
+    public abstract byte[] getSerializedData(@NotNull Object2ShortMap<String> typeToIndexMap, boolean indexed);
 
     /**
      * Reads the data of a {@link SerializableData} when you already have the index map.
@@ -40,7 +37,7 @@ public interface SerializableData extends Data {
      * @param reader         the binary reader
      * @param typeToIndexMap the index map
      */
-    void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap);
+    public abstract void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap);
 
     /**
      * Serializes the data into an array of bytes.
@@ -53,7 +50,7 @@ public interface SerializableData extends Data {
      * @return the array representation of this data object
      */
     @NotNull
-    default byte[] getIndexedSerializedData() {
+    public byte[] getIndexedSerializedData() {
         return getSerializedData(new Object2ShortOpenHashMap<>(), true);
     }
 
@@ -64,9 +61,14 @@ public interface SerializableData extends Data {
      *
      * @param reader the binary reader
      */
-    default void readIndexedSerializedData(@NotNull BinaryReader reader) {
+    public void readIndexedSerializedData(@NotNull BinaryReader reader) {
         final Object2ShortMap<String> typeToIndexMap = SerializableData.readDataIndexes(reader);
         readSerializedData(reader, typeToIndexMap);
+    }
+
+    @Override
+    public SerializableData clone() {
+        return (SerializableData) super.clone();
     }
 
     /**
@@ -76,7 +78,7 @@ public interface SerializableData extends Data {
      *
      * @param typeToIndexMap the filled data index map
      */
-    static void writeDataIndexHeader(@NotNull BinaryWriter indexWriter, @NotNull Object2ShortMap<String> typeToIndexMap) {
+    public static void writeDataIndexHeader(@NotNull BinaryWriter indexWriter, @NotNull Object2ShortMap<String> typeToIndexMap) {
         // Write the size of the following index list (class name-> class index)
         indexWriter.writeVarInt(typeToIndexMap.size());
 
@@ -100,7 +102,7 @@ public interface SerializableData extends Data {
      * @return a map containing the indexes of your data
      */
     @NotNull
-    static Object2ShortMap<String> readDataIndexes(@NotNull BinaryReader binaryReader) {
+    public static Object2ShortMap<String> readDataIndexes(@NotNull BinaryReader binaryReader) {
         Object2ShortMap<String> typeToIndexMap = new Object2ShortOpenHashMap<>();
         {
             final int dataIndexSize = binaryReader.readVarInt();

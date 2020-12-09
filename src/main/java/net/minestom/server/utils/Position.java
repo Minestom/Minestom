@@ -9,7 +9,7 @@ import java.util.Objects;
  * Represents a position.
  * The instance is not contained.
  */
-public class Position {
+public class Position implements Cloneable {
 
     private float x, y, z;
     private float yaw, pitch;
@@ -196,13 +196,22 @@ public class Position {
         this.z = position.getZ();
     }
 
+    @Override
+    public Position clone() {
+        try {
+            return (Position) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
-     * Copies this position object with the same values.
-     *
-     * @return a new {@link Position} object with the same coordinates
+     * @deprecated Please use {@link #clone()}
      */
+    @Deprecated
     public Position copy() {
-        return new Position(getX(), getY(), getZ(), getYaw(), getPitch());
+        return clone();
     }
 
     /**

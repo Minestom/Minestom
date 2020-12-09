@@ -580,7 +580,7 @@ public class ItemStack implements DataContainer {
 
         final Data data = getData();
         if (data != null)
-            itemStack.setData(data.copy());
+            itemStack.setData(data.clone());
 
         return itemStack;
     }

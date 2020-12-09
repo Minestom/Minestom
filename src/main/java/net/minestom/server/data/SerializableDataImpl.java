@@ -3,6 +3,7 @@ package net.minestom.server.data;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.PrimitiveConversion;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -10,19 +11,31 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@link SerializableData} implementation based on {@link DataImpl}.
  */
-public class SerializableDataImpl extends DataImpl implements SerializableData {
+public class SerializableDataImpl extends SerializableData {
+
+    protected static final DataManager DATA_MANAGER = MinecraftServer.getDataManager();
 
     /**
      * Class name -> Class
      * Used to cache class instances so we don't load them by name every time
      */
     private static final ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
+
+    protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
+
+    /**
+     * Data key = Class
+     * Used to know the type of an element of this data object (for serialization purpose)
+     */
+    protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
 
     /**
      * Sets a value to a specific key.
@@ -41,16 +54,44 @@ public class SerializableDataImpl extends DataImpl implements SerializableData {
             throw new UnsupportedOperationException("Type " + type.getName() + " hasn't been registered in DataManager#registerType");
         }
 
-        super.set(key, value, type);
+        if (value != null) {
+            this.data.put(key, value);
+            this.dataType.put(key, type);
+        } else {
+            this.data.remove(key);
+            this.dataType.remove(key);
+        }
+    }
+
+    @Override
+    public <T> T get(@NotNull String key) {
+        return (T) data.get(key);
+    }
+
+    @Override
+    public <T> T getOrDefault(@NotNull String key, T defaultValue) {
+        return (T) data.getOrDefault(key, defaultValue);
+    }
+
+    @Override
+    public boolean hasKey(@NotNull String key) {
+        return data.containsKey(key);
     }
 
     @NotNull
     @Override
-    public Data copy() {
-        SerializableDataImpl data = new SerializableDataImpl();
-        data.data.putAll(this.data);
-        data.dataType.putAll(this.dataType);
-        return data;
+    public Set<String> getKeys() {
+        return Collections.unmodifiableSet(data.keySet());
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    @Override
+    public SerializableDataImpl clone() {
+        return (SerializableDataImpl) super.clone();
     }
 
     @NotNull
