@@ -1,11 +1,12 @@
 package demo;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
 
@@ -26,14 +27,12 @@ public class MainDemo {
         // Enable the auto chunk loading (when players come close)
         instanceContainer.enableAutoChunkLoad(true);
 
-        // Add event listeners
-        ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
-        connectionManager.addPlayerInitialization(player -> {
-            // Set the spawning instance and spawn position
-            player.addEventCallback(PlayerLoginEvent.class, event -> {
-                event.setSpawningInstance(instanceContainer);
-                player.setRespawnPoint(new Position(0, 42, 0));
-            });
+        // Add an event callback to specify the spawning instance (and the spawn position)
+        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+            final Player player = event.getPlayer();
+            event.setSpawningInstance(instanceContainer);
+            player.setRespawnPoint(new Position(0, 42, 0));
         });
 
         // Start the server on port 25565
