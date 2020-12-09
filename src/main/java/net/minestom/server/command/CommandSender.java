@@ -2,7 +2,6 @@ package net.minestom.server.command;
 
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
 import org.jetbrains.annotations.NotNull;
@@ -34,14 +33,16 @@ public interface CommandSender extends PermissionHandler {
 
     /**
      * Sends a {@link ColoredText} message.
-     *
-     *  If this is not a {@link Player}, only the content of the message will be sent as a string.
+     * If this is not a {@link Player}, only the content of the message will be sent as a string.
      *
      * @param text The {@link ColoredText} to send.
      * */
     default void sendMessage(@NotNull ColoredText text) {
-        if (this instanceof Player) ((Player) this).sendMessage((JsonMessage) text);
-        else sendMessage(text.getMessage());
+        if (this instanceof Player) {
+            ((Player) this).sendMessage((JsonMessage) text);
+        } else {
+            sendMessage(text.getMessage());
+        }
     }
 
     /**
