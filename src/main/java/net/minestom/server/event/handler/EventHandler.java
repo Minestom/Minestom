@@ -1,9 +1,11 @@
 package net.minestom.server.event.handler;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -89,17 +91,21 @@ public interface EventHandler {
      * @param <E>        the event type
      */
     default <E extends Event> void callEvent(@NotNull Class<E> eventClass, @NotNull E event) {
-        // TODO global event
-        final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
-        for (EventCallback<E> eventCallback : eventCallbacks) {
-            eventCallback.run(event);
+
+        // Global listeners
+        if (!(this instanceof GlobalEventHandler)) {
+            MinecraftServer.getGlobalEventListener().callEvent(eventClass, event);
         }
+
+        // Local listeners
+        final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
+        runEvent(eventCallbacks, event);
 
         // Call the same event for the current entity instance
         if (this instanceof Entity) {
             final Instance instance = ((Entity) this).getInstance();
             if (instance != null) {
-                instance.callEvent(eventClass, event);
+                runEvent(instance.getEventCallbacks(eventClass), event);
             }
         }
     }
@@ -119,6 +125,12 @@ public interface EventHandler {
         callEvent(eventClass, event);
         if (!event.isCancelled()) {
             successCallback.run();
+        }
+    }
+
+    private <E extends Event> void runEvent(@NotNull Collection<EventCallback> eventCallbacks, @NotNull E event) {
+        for (EventCallback<E> eventCallback : eventCallbacks) {
+            eventCallback.run(event);
         }
     }
 

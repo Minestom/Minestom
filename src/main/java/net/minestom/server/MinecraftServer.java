@@ -9,6 +9,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluids.Fluid;
@@ -133,6 +134,7 @@ public final class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
+    private static GlobalEventHandler globalEventHandler = new GlobalEventHandler();
     private static LootTableManager lootTableManager;
     private static TagManager tagManager;
 
@@ -280,6 +282,18 @@ public final class MinecraftServer {
         serverDifficultyPacket.difficulty = difficulty;
         serverDifficultyPacket.locked = true; // Can only be modified on single-player
         PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
+    }
+
+    /**
+     * Gets the global event handler.
+     * <p>
+     * Used to register event callback at a global scale.
+     *
+     * @return the global event handler
+     */
+    @NotNull
+    public static GlobalEventHandler getGlobalEventListener() {
+        return globalEventHandler;
     }
 
     /**
