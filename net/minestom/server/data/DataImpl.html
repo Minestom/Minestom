@@ -122,7 +122,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
+<li><a href="Data.html" title="class in net.minestom.server.data">net.minestom.server.data.Data</a></li>
+<li>
+<ul class="inheritance">
 <li>net.minestom.server.data.DataImpl</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -131,17 +136,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
-</dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><code><a href="SerializableDataImpl.html" title="class in net.minestom.server.data">SerializableDataImpl</a></code></dd>
+<dd><code>java.lang.Cloneable</code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">DataImpl</span>
-extends java.lang.Object
-implements <a href="Data.html" title="interface in net.minestom.server.data">Data</a></pre>
-<div class="block"><a href="Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> implementation which uses a <code>ConcurrentHashMap</code>.</div>
+extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></pre>
+<div class="block"><a href="Data.html" title="class in net.minestom.server.data"><code>Data</code></a> implementation which uses a <code>ConcurrentHashMap</code>.</div>
 </li>
 </ul>
 </div>
@@ -180,7 +180,7 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.data.Data">
 <!--   -->
 </a>
-<h3>Fields inherited from interface&nbsp;net.minestom.server.data.<a href="Data.html" title="interface in net.minestom.server.data">Data</a></h3>
+<h3>Fields inherited from class&nbsp;net.minestom.server.data.<a href="Data.html" title="class in net.minestom.server.data">Data</a></h3>
 <code><a href="Data.html#EMPTY">EMPTY</a></code></li>
 </ul>
 </li>
@@ -222,11 +222,9 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy()">copy</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Copies this data.</div>
-</td>
+<td class="colFirst"><code><a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -285,18 +283,18 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.data.Data">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.data.<a href="Data.html" title="class in net.minestom.server.data">Data</a></h3>
+<code><a href="Data.html#set(java.lang.String,T)">set</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.data.Data">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;net.minestom.server.data.<a href="Data.html" title="interface in net.minestom.server.data">Data</a></h3>
-<code><a href="Data.html#set(java.lang.String,T)">set</a></code></li>
+<code>finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -377,11 +375,11 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
                     T&nbsp;value,
                     @Nullable
                     java.lang.Class&lt;T&gt;&nbsp;type)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">Data</a></code></span></div>
 <div class="block">Assigns a value to a specific key.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>T</code> - the value generic</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -400,11 +398,11 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <h4>get</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
                  java.lang.String&nbsp;key)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#get(java.lang.String)">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#get(java.lang.String)">Data</a></code></span></div>
 <div class="block">Retrieves a value based on its key.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#get(java.lang.String)">get</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#get(java.lang.String)">get</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>T</code> - the value type</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -425,11 +423,11 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
                           java.lang.String&nbsp;key,
                           T&nbsp;defaultValue)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#getOrDefault(java.lang.String,T)">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#getOrDefault(java.lang.String,T)">Data</a></code></span></div>
 <div class="block">Retrieves a value based on its key, give a default value if not found.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>T</code> - the value type</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -448,11 +446,11 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <h4>hasKey</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasKey&#8203;(@NotNull
                       java.lang.String&nbsp;key)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#hasKey(java.lang.String)">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#hasKey(java.lang.String)">Data</a></code></span></div>
 <div class="block">Gets if the data has a key.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#hasKey(java.lang.String)">hasKey</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#hasKey(java.lang.String)">hasKey</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -468,11 +466,11 @@ implements <a href="Data.html" title="interface in net.minestom.server.data">Dat
 <h4>getKeys</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#getKeys()">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#getKeys()">Data</a></code></span></div>
 <div class="block">Gets the list of data keys.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#getKeys()">getKeys</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#getKeys()">getKeys</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an unmodifiable <code>Set</code> containing all the keys</dd>
 </dl>
@@ -485,31 +483,26 @@ public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
 <li class="blockList">
 <h4>isEmpty</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isEmpty()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#isEmpty()">Data</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#isEmpty()">Data</a></code></span></div>
 <div class="block">Gets if the data is empty or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#isEmpty()">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dd><code><a href="Data.html#isEmpty()">isEmpty</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the data does not contain anything, false otherwise</dd>
 </dl>
 </li>
 </ul>
-<a id="copy()">
+<a id="clone()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>copy</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;copy()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Data.html#copy()">Data</a></code></span></div>
-<div class="block">Copies this data.</div>
+<h4>clone</h4>
+<pre class="methodSignature">public&nbsp;<a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a>&nbsp;clone()</pre>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Data.html#copy()">copy</a></code>&nbsp;in interface&nbsp;<code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a cloned data object</dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Data.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 </dl>
 </li>
 </ul>

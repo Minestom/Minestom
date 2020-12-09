@@ -175,7 +175,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&gt;</code></td>
+<td class="colFirst"><code>protected it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blocksData">blocksData</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -266,10 +266,10 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a></code></td>
+<td class="colFirst"><code><a href="../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockData(int)">getBlockData</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">
-<div class="block">Gets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a block index.</div>
+<div class="block">Gets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> at a block index.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -352,9 +352,9 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(int,int,int,net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(int&nbsp;x,
             int&nbsp;y,
             int&nbsp;z,
-            <a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+            <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
-<div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a position.</div>
+<div class="block">Sets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> at a position.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -372,7 +372,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
                int&nbsp;z,
                short&nbsp;blockStateId,
                short&nbsp;customBlockId,
-               <a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data,
+               <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data,
                boolean&nbsp;updatable)</code></th>
 <td class="colLast">
 <div class="block">Sets a block at a position.</div>
@@ -440,7 +440,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <ul class="blockList">
 <li class="blockList">
 <h4>blocksData</h4>
-<pre>protected final&nbsp;it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&gt; blocksData</pre>
+<pre>protected final&nbsp;it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&gt; blocksData</pre>
 </li>
 </ul>
 <a id="updatableBlocks">
@@ -529,7 +529,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
                             int&nbsp;z,
                             short&nbsp;blockStateId,
                             short&nbsp;customBlockId,
-                            <a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data,
+                            <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data,
                             boolean&nbsp;updatable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#UNSAFE_setBlock(int,int,int,short,short,net.minestom.server.data.Data,boolean)">Chunk</a></code></span></div>
 <div class="block">Sets a block at a position.
@@ -548,7 +548,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <dd><code>z</code> - the block Z</dd>
 <dd><code>blockStateId</code> - the block state id</dd>
 <dd><code>customBlockId</code> - the custom block id, 0 if not</dd>
-<dd><code>data</code> - the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> of the block, can be null</dd>
+<dd><code>data</code> - the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of the block, can be null</dd>
 <dd><code>updatable</code> - true if the block has an update method
                       Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
                       will be retrieved from the associated <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> object</dd>
@@ -679,16 +679,16 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlockData</h4>
-<pre class="methodSignature">public&nbsp;<a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;getBlockData&#8203;(int&nbsp;index)</pre>
+<pre class="methodSignature">public&nbsp;<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;getBlockData&#8203;(int&nbsp;index)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#getBlockData(int)">Chunk</a></code></span></div>
-<div class="block">Gets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a block index.</div>
+<div class="block">Gets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> at a block index.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Chunk.html#getBlockData(int)">getBlockData</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>index</code> - the block index</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at the block index, null if none</dd>
+<dd>the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> at the block index, null if none</dd>
 </dl>
 </li>
 </ul>
@@ -701,9 +701,9 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <pre class="methodSignature">public&nbsp;void&nbsp;setBlockData&#8203;(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
-                         <a href="../data/Data.html" title="interface in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                         <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#setBlockData(int,int,int,net.minestom.server.data.Data)">Chunk</a></code></span></div>
-<div class="block">Sets the <a href="../data/Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> at a position.</div>
+<div class="block">Sets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> at a position.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Chunk.html#setBlockData(int,int,int,net.minestom.server.data.Data)">setBlockData</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>

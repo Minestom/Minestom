@@ -215,7 +215,7 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAndCacheData(java.lang.String,net.minestom.server.data.DataContainer)">getAndCacheData</a></span>&#8203;(java.lang.String&nbsp;key,
                <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a>&nbsp;dataContainer)</code></th>
 <td class="colLast">
-<div class="block">Gets a shared <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> if already in memory or retrieve it from the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> and save it in cache
+<div class="block">Gets a shared <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> if already in memory or retrieve it from the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> and save it in cache
  for further request.</div>
 </td>
 </tr>
@@ -224,7 +224,7 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAndCloneData(java.lang.String,net.minestom.server.data.DataContainer)">getAndCloneData</a></span>&#8203;(java.lang.String&nbsp;key,
                <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a>&nbsp;dataContainer)</code></th>
 <td class="colLast">
-<div class="block">Gets an unique <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>
+<div class="block">Gets an unique <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>
  which is cloned if cached or retrieved with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 </td>
 </tr>
@@ -246,21 +246,21 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveAndRemoveCachedData(java.lang.String)">saveAndRemoveCachedData</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
-<div class="block">Saves a specified cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> and remove it from memory.</div>
+<div class="block">Saves a specified cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> and remove it from memory.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveCachedData()">saveCachedData</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Saves the all the cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
+<div class="block">Saves the all the cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveCachedData(java.lang.String)">saveCachedData</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
-<div class="block">Saves an unique cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
+<div class="block">Saves an unique cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -474,7 +474,7 @@ public&nbsp;byte[]&nbsp;get&#8203;(@NotNull
                             java.lang.String&nbsp;key,
                             @NotNull
                             <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a>&nbsp;dataContainer)</pre>
-<div class="block">Gets an unique <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>
+<div class="block">Gets an unique <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>
  which is cloned if cached or retrieved with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -493,7 +493,7 @@ public&nbsp;byte[]&nbsp;get&#8203;(@NotNull
                             java.lang.String&nbsp;key,
                             @NotNull
                             <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a>&nbsp;dataContainer)</pre>
-<div class="block">Gets a shared <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> if already in memory or retrieve it from the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> and save it in cache
+<div class="block">Gets a shared <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> if already in memory or retrieve it from the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> and save it in cache
  for further request.
  Those cached data can be saved using <a href="#saveCachedData()"><code>saveCachedData()</code></a> or individually with <a href="#saveCachedData(java.lang.String)"><code>saveCachedData(String)</code></a>
  It is also possible to save an individual data and remove it directly with <a href="#saveAndRemoveCachedData(java.lang.String)"><code>saveAndRemoveCachedData(String)</code></a></div>
@@ -512,7 +512,7 @@ public&nbsp;byte[]&nbsp;get&#8203;(@NotNull
 <h4>saveAndRemoveCachedData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveAndRemoveCachedData&#8203;(@NotNull
                                     java.lang.String&nbsp;key)</pre>
-<div class="block">Saves a specified cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> and remove it from memory.</div>
+<div class="block">Saves a specified cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> and remove it from memory.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the specified cached data key</dd>
@@ -526,7 +526,7 @@ public&nbsp;byte[]&nbsp;get&#8203;(@NotNull
 <li class="blockList">
 <h4>saveCachedData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveCachedData()</pre>
-<div class="block">Saves the all the cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
+<div class="block">Saves the all the cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 </li>
 </ul>
 <a id="saveCachedData(java.lang.String)">
@@ -537,7 +537,7 @@ public&nbsp;byte[]&nbsp;get&#8203;(@NotNull
 <h4>saveCachedData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveCachedData&#8203;(@NotNull
                            java.lang.String&nbsp;key)</pre>
-<div class="block">Saves an unique cached <a href="../data/SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
+<div class="block">Saves an unique cached <a href="../data/SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the data key</dd>

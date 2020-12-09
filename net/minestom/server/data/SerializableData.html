@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":1,"i3":18,"i4":6,"i5":1};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var data = {"i0":10,"i1":10,"i2":6,"i3":9,"i4":10,"i5":6,"i6":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -89,13 +89,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -115,24 +115,37 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.data</a></div>
-<h2 title="Interface SerializableData" class="title">Interface SerializableData</h2>
+<h2 title="Class SerializableData" class="title">Class SerializableData</h2>
 </div>
 <div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li><a href="Data.html" title="class in net.minestom.server.data">net.minestom.server.data.Data</a></li>
+<li>
+<ul class="inheritance">
+<li>net.minestom.server.data.SerializableData</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
 <dl>
-<dt>All Superinterfaces:</dt>
-<dd><code><a href="Data.html" title="interface in net.minestom.server.data">Data</a></code></dd>
+<dt>All Implemented Interfaces:</dt>
+<dd><code>java.lang.Cloneable</code></dd>
 </dl>
 <dl>
-<dt>All Known Implementing Classes:</dt>
+<dt>Direct Known Subclasses:</dt>
 <dd><code><a href="SerializableDataImpl.html" title="class in net.minestom.server.data">SerializableDataImpl</a></code></dd>
 </dl>
 <hr>
-<pre>public interface <span class="typeNameLabel">SerializableData</span>
-extends <a href="Data.html" title="interface in net.minestom.server.data">Data</a></pre>
-<div class="block">Represents a <a href="Data.html" title="interface in net.minestom.server.data"><code>Data</code></a> object which can be serialized and read back.
+<pre>public abstract class <span class="typeNameLabel">SerializableData</span>
+extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></pre>
+<div class="block">Represents a <a href="Data.html" title="class in net.minestom.server.data"><code>Data</code></a> object which can be serialized and read back.
  <p>
  See <a href="SerializableDataImpl.html" title="class in net.minestom.server.data"><code>SerializableDataImpl</code></a> for the default implementation.</div>
 </li>
@@ -148,26 +161,34 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="DataManager.html" title="class in net.minestom.server.data">DataManager</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DATA_MANAGER">DATA_MANAGER</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.data.Data">
 <!--   -->
 </a>
-<h3>Fields inherited from interface&nbsp;net.minestom.server.data.<a href="Data.html" title="interface in net.minestom.server.data">Data</a></h3>
+<h3>Fields inherited from class&nbsp;net.minestom.server.data.<a href="Data.html" title="class in net.minestom.server.data">Data</a></h3>
 <code><a href="Data.html#EMPTY">EMPTY</a></code></li>
 </ul>
+</li>
+</ul>
+</section>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">SerializableData</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 </li>
 </ul>
 </section>
@@ -179,50 +200,55 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>default byte[]</code></td>
+<td class="colFirst"><code><a href="SerializableData.html" title="class in net.minestom.server.data">SerializableData</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIndexedSerializedData()">getIndexedSerializedData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Serializes the data into an array of bytes.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>abstract byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSerializedData(it.unimi.dsi.fastutil.objects.Object2ShortMap,boolean)">getSerializedData</a></span>&#8203;(it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap,
                  boolean&nbsp;indexed)</code></th>
 <td class="colLast">
 <div class="block">Serializes the data into an array of bytes.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readDataIndexes(net.minestom.server.utils.binary.BinaryReader)">readDataIndexes</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</code></th>
 <td class="colLast">
 <div class="block">Reads a data index map (type name -&gt; type index).</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readIndexedSerializedData(net.minestom.server.utils.binary.BinaryReader)">readIndexedSerializedData</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
-<td class="colLast">
-<div class="block">Reads the index map and the data of a serialized <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
-</td>
-</tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readSerializedData(net.minestom.server.utils.binary.BinaryReader,it.unimi.dsi.fastutil.objects.Object2ShortMap)">readSerializedData</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
-                  it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readIndexedSerializedData(net.minestom.server.utils.binary.BinaryReader)">readIndexedSerializedData</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
-<div class="block">Reads the data of a <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> when you already have the index map.</div>
+<div class="block">Reads the index map and the data of a serialized <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readSerializedData(net.minestom.server.utils.binary.BinaryReader,it.unimi.dsi.fastutil.objects.Object2ShortMap)">readSerializedData</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
+                  it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</code></th>
+<td class="colLast">
+<div class="block">Reads the data of a <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> when you already have the index map.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeDataIndexHeader(net.minestom.server.utils.binary.BinaryWriter,it.unimi.dsi.fastutil.objects.Object2ShortMap)">writeDataIndexHeader</a></span>&#8203;(<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;indexWriter,
                     it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</code></th>
@@ -235,8 +261,15 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.data.Data">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.minestom.server.data.<a href="Data.html" title="interface in net.minestom.server.data">Data</a></h3>
-<code><a href="Data.html#copy()">copy</a>, <a href="Data.html#get(java.lang.String)">get</a>, <a href="Data.html#getKeys()">getKeys</a>, <a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a>, <a href="Data.html#hasKey(java.lang.String)">hasKey</a>, <a href="Data.html#isEmpty()">isEmpty</a>, <a href="Data.html#set(java.lang.String,T)">set</a>, <a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code></li>
+<h3>Methods inherited from class&nbsp;net.minestom.server.data.<a href="Data.html" title="class in net.minestom.server.data">Data</a></h3>
+<code><a href="Data.html#get(java.lang.String)">get</a>, <a href="Data.html#getKeys()">getKeys</a>, <a href="Data.html#getOrDefault(java.lang.String,T)">getOrDefault</a>, <a href="Data.html#hasKey(java.lang.String)">hasKey</a>, <a href="Data.html#isEmpty()">isEmpty</a>, <a href="Data.html#set(java.lang.String,T)">set</a>, <a href="Data.html#set(java.lang.String,T,java.lang.Class)">set</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -247,20 +280,20 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
-<li class="blockList"><a id="field.detail">
+<li class="blockList"><a id="constructor.detail">
 <!--   -->
 </a>
-<h3>Field Detail</h3>
-<a id="DATA_MANAGER">
+<h3>Constructor Detail</h3>
+<a id="&lt;init&gt;()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>DATA_MANAGER</h4>
-<pre>static final&nbsp;<a href="DataManager.html" title="class in net.minestom.server.data">DataManager</a> DATA_MANAGER</pre>
+<h4>SerializableData</h4>
+<pre>public&nbsp;SerializableData()</pre>
 </li>
 </ul>
 </li>
@@ -280,14 +313,14 @@ extends <a href="Data.html" title="interface in net.minestom.server.data">Data</
 <li class="blockList">
 <h4>getSerializedData</h4>
 <pre class="methodSignature">@NotNull
-byte[]&nbsp;getSerializedData&#8203;(@NotNull
-                         it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap,
-                         boolean&nbsp;indexed)</pre>
+public abstract&nbsp;byte[]&nbsp;getSerializedData&#8203;(@NotNull
+                                         it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap,
+                                         boolean&nbsp;indexed)</pre>
 <div class="block">Serializes the data into an array of bytes.
  <p>
  Use <a href="#readIndexedSerializedData(net.minestom.server.utils.binary.BinaryReader)"><code>readIndexedSerializedData(BinaryReader)</code></a> if <code>indexed</code> is true,
  <a href="#readSerializedData(net.minestom.server.utils.binary.BinaryReader,it.unimi.dsi.fastutil.objects.Object2ShortMap)"><code>readSerializedData(BinaryReader, Object2ShortMap)</code></a> otherwise with the index map
- to convert it back to a <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.</div>
+ to convert it back to a <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>typeToIndexMap</code> - the type to index map, will create entries if new types are discovered.
@@ -304,11 +337,11 @@ byte[]&nbsp;getSerializedData&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>readSerializedData</h4>
-<pre class="methodSignature">void&nbsp;readSerializedData&#8203;(@NotNull
-                        <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
-                        @NotNull
-                        it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</pre>
-<div class="block">Reads the data of a <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a> when you already have the index map.
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;readSerializedData&#8203;(@NotNull
+                                        <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
+                                        @NotNull
+                                        it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</pre>
+<div class="block">Reads the data of a <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a> when you already have the index map.
  <p>
  WARNING: the data to read should not have any index to read and your index map should be COMPLETE.
  Use <a href="#readIndexedSerializedData(net.minestom.server.utils.binary.BinaryReader)"><code>readIndexedSerializedData(BinaryReader)</code></a> if you need to read the header.</div>
@@ -326,11 +359,11 @@ byte[]&nbsp;getSerializedData&#8203;(@NotNull
 <li class="blockList">
 <h4>getIndexedSerializedData</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;byte[]&nbsp;getIndexedSerializedData()</pre>
+public&nbsp;byte[]&nbsp;getIndexedSerializedData()</pre>
 <div class="block">Serializes the data into an array of bytes.
  <p>
  Use <a href="#readIndexedSerializedData(net.minestom.server.utils.binary.BinaryReader)"><code>readIndexedSerializedData(BinaryReader)</code></a>
- to convert it back to a <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.
+ to convert it back to a <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.
  <p>
  This will create a type index map which will be present in the header.</div>
 <dl>
@@ -345,14 +378,27 @@ default&nbsp;byte[]&nbsp;getIndexedSerializedData()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>readIndexedSerializedData</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;readIndexedSerializedData&#8203;(@NotNull
-                                       <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
-<div class="block">Reads the index map and the data of a serialized <a href="SerializableData.html" title="interface in net.minestom.server.data"><code>SerializableData</code></a>.
+<pre class="methodSignature">public&nbsp;void&nbsp;readIndexedSerializedData&#8203;(@NotNull
+                                      <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+<div class="block">Reads the index map and the data of a serialized <a href="SerializableData.html" title="class in net.minestom.server.data"><code>SerializableData</code></a>.
  <p>
  Got from <a href="#getIndexedSerializedData()"><code>getIndexedSerializedData()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>reader</code> - the binary reader</dd>
+</dl>
+</li>
+</ul>
+<a id="clone()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clone</h4>
+<pre class="methodSignature">public&nbsp;<a href="SerializableData.html" title="class in net.minestom.server.data">SerializableData</a>&nbsp;clone()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Data.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -362,10 +408,10 @@ default&nbsp;byte[]&nbsp;getIndexedSerializedData()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeDataIndexHeader</h4>
-<pre class="methodSignature">static&nbsp;void&nbsp;writeDataIndexHeader&#8203;(@NotNull
-                                 <a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;indexWriter,
-                                 @NotNull
-                                 it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</pre>
+<pre class="methodSignature">public static&nbsp;void&nbsp;writeDataIndexHeader&#8203;(@NotNull
+                                        <a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;indexWriter,
+                                        @NotNull
+                                        it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;typeToIndexMap)</pre>
 <div class="block">Writes the index info (class name -&gt; class index), used to write the header for indexed serialized data.
  <p>
  Sized by a var-int.</div>
@@ -382,8 +428,8 @@ default&nbsp;byte[]&nbsp;getIndexedSerializedData()</pre>
 <li class="blockList">
 <h4>readDataIndexes</h4>
 <pre class="methodSignature">@NotNull
-static&nbsp;it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;readDataIndexes&#8203;(@NotNull
-                                                                                       <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</pre>
+public static&nbsp;it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt;&nbsp;readDataIndexes&#8203;(@NotNull
+                                                                                              <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</pre>
 <div class="block">Reads a data index map (type name -&gt; type index).
  <p>
  Can then be used with <a href="#readSerializedData(net.minestom.server.utils.binary.BinaryReader,it.unimi.dsi.fastutil.objects.Object2ShortMap)"><code>readSerializedData(BinaryReader, Object2ShortMap)</code></a>.</div>
@@ -448,13 +494,13 @@ static&nbsp;it.unimi.dsi.fastutil.objects.Object2ShortMap&lt;java.lang.String&gt
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
