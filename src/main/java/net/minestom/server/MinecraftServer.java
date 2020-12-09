@@ -292,7 +292,7 @@ public final class MinecraftServer {
      * @return the global event handler
      */
     @NotNull
-    public static GlobalEventHandler getGlobalEventListener() {
+    public static GlobalEventHandler getGlobalEventHandler() {
         return globalEventHandler;
     }
 
