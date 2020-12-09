@@ -641,16 +641,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         return eventCallbacks;
     }
 
-    @Override
-    public <E extends Event> void callEvent(@NotNull Class<E> eventClass, @NotNull E event) {
-        EventHandler.super.callEvent(eventClass, event);
-
-        // Call the same event for the current entity instance
-        if (instance != null) {
-            instance.callEvent(eventClass, event);
-        }
-    }
-
     /**
      * Each entity has an unique id (server-wide) which will change after a restart.
      *

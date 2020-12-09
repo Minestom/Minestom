@@ -1,8 +1,10 @@
 package net.minestom.server.event.handler;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -91,6 +93,14 @@ public interface EventHandler {
         final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
         for (EventCallback<E> eventCallback : eventCallbacks) {
             eventCallback.run(event);
+        }
+
+        // Call the same event for the current entity instance
+        if (this instanceof Entity) {
+            final Instance instance = ((Entity) this).getInstance();
+            if (instance != null) {
+                instance.callEvent(eventClass, event);
+            }
         }
     }
 
