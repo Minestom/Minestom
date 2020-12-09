@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Used when the blocks you want to place need to be divided in multiple chunks,
  * use a {@link ChunkBatch} instead otherwise.
- * Can be created using {@link Instance#createBlockBatch()}.
+ * Can be created using {@link Instance#createBlockBatch()}, and executed with {@link #flush(Runnable)}.
  *
  * @see InstanceBatch
  */

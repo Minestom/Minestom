@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Used when all the blocks you want to place can be contained within only one {@link Chunk},
  * use a {@link BlockBatch} instead otherwise.
- * Can be created using {@link Instance#createChunkBatch(Chunk)}.
+ * Can be created using {@link Instance#createChunkBatch(Chunk)}, and executed with {@link #flush(ChunkCallback)}.
  * <p>
  * Uses chunk coordinate (0-15) instead of world's.
  *
