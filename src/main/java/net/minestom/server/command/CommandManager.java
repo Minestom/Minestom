@@ -59,10 +59,7 @@ public final class CommandManager {
 
                 try {
                     if (bi.ready()) {
-                        String command = bi.readLine();
-                        if (!command.startsWith(COMMAND_PREFIX))
-                            continue;
-                        command = command.replaceFirst(COMMAND_PREFIX, "");
+                        final String command = bi.readLine();
                         execute(consoleSender, command);
                     }
                 } catch (IOException e) {
