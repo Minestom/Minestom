@@ -3,16 +3,15 @@ package net.minestom.server.command;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Represents the console when sending a command to the server.
  */
 public class ConsoleSender implements CommandSender {
 
-    private final List<Permission> permissions = new LinkedList<>();
+    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     @Override
     public void sendMessage(@NotNull String message) {
@@ -21,7 +20,7 @@ public class ConsoleSender implements CommandSender {
 
     @NotNull
     @Override
-    public Collection<Permission> getAllPermissions() {
+    public Set<Permission> getAllPermissions() {
         return permissions;
     }
 }

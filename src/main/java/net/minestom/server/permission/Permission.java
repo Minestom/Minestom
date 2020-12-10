@@ -1,47 +1,70 @@
 package net.minestom.server.permission;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.data.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+
+import java.util.Objects;
 
 /**
  * Representation of a permission granted to a {@link CommandSender}.
- *
- * @param <T> the type of data that this permission can handle in {@link #isValidFor(PermissionHandler, Object)}.
- *            Used if you want to allow passing additional data to check if the permission is valid in a certain situation,
- *            you can default it to {@link Object} if you do not need it.
  */
-@FunctionalInterface
-public interface Permission<T> {
+public class Permission {
+
+    private String permissionName;
+    private NBTCompound data;
 
     /**
-     * Does the given {@link CommandSender} have the permission represented by this object?
-     * <p>
-     * Called with {@link CommandSender#hasPermission(Permission)}, the {@link CommandSender} requires to both
-     * have this permission and validate the condition in this method.
+     * Creates a new permission object with optional data.
      *
-     * @param permissionHandler the permission handler
-     * @param data              the optional data (eg the number of home possible, placing a block at X position)
-     * @return true if the commandSender possesses this permission
+     * @param permissionName the name of the permission
+     * @param data           the optional data of the permission
      */
-    boolean isValidFor(@NotNull PermissionHandler permissionHandler, @Nullable T data);
-
-    /**
-     * Writes any required data for this permission inside the given destination.
-     *
-     * @param destination the {@link Data} to write to
-     */
-    default void write(@NotNull Data destination) {
+    public Permission(@NotNull String permissionName, @Nullable NBTCompound data) {
+        this.permissionName = permissionName;
+        this.data = data;
     }
 
     /**
-     * Reads any required data for this permission from the given destination.
+     * Creates a new permission object without additional data
      *
-     * @param source the {@link Data} to read from
-     * @return this for chaining
+     * @param permissionName the name of the permission
      */
-    default Permission read(@Nullable Data source) {
-        return this;
+    public Permission(@NotNull String permissionName) {
+        this(permissionName, null);
+    }
+
+    /**
+     * Gets the name of the permission.
+     *
+     * @return the permission name
+     */
+    @NotNull
+    public String getPermissionName() {
+        return permissionName;
+    }
+
+    /**
+     * Gets the data associated to this permission.
+     *
+     * @return the nbt data of this permission, can be null if not any
+     */
+    @Nullable
+    public NBTCompound getNBTData() {
+        return data;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Permission that = (Permission) o;
+        return permissionName.equals(that.permissionName) && Objects.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(permissionName, data);
     }
 }

@@ -3,8 +3,7 @@ package permissions;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
-import net.minestom.server.permission.PermissionHandler;
-import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +18,8 @@ public class TestPermissions {
 
     private Player player;
 
+    private Permission permission1, permission2;
+
     @BeforeEach
     public void init() {
         MinecraftServer.init(); // for entity manager
@@ -32,67 +33,42 @@ public class TestPermissions {
                 return false;
             }
         };
+
+        permission1 = new Permission("perm.name",
+                new NBTCompound()
+                        .setString("name", "Minestom")
+                        .setInt("amount", 5));
+
+        permission2 = new Permission("perm.name2");
     }
 
     @Test
     public void noPermission() {
-        assertFalse(player.hasPermission(Permission.class));
-    }
-
-    class PermTest1 implements Permission<Object> {
-        @Override
-        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
-            return true;
-        }
-    }
-
-    class PermTest2 implements Permission<Object> {
-        @Override
-        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
-            return true;
-        }
+        assertFalse(player.hasPermission(""));
+        assertFalse(player.hasPermission("random.permission"));
     }
 
     @Test
     public void hasPermissionClass() {
-        assertFalse(player.hasPermission(Permission.class));
-        player.addPermission(new PermTest1());
-        assertTrue(player.hasPermission(PermTest1.class));
-        assertFalse(player.hasPermission(PermTest2.class));
-        assertTrue(player.hasPermission(Permission.class)); // allow superclasses
 
-        player.addPermission(new PermTest2());
-        assertTrue(player.hasPermission(PermTest2.class));
-    }
+        assertFalse(player.hasPermission(permission1));
+        player.addPermission(permission1);
+        assertTrue(player.hasPermission(permission1));
+        assertFalse(player.hasPermission(permission2));
 
-    class BooleanPerm implements Permission<Object> {
-        private final boolean value;
-
-        BooleanPerm(boolean v) {
-            this.value = v;
-        }
-
-        @Override
-        public boolean isValidFor(@NotNull PermissionHandler permissionHandler, Object data) {
-            return value;
-        }
+        player.addPermission(permission2);
+        assertTrue(player.hasPermission(permission2));
     }
 
     @Test
-    public void hasTwoPermissionsOfSameClassButContradictEachOther() {
-        player.addPermission(new BooleanPerm(true));
-        assertTrue(player.hasPermission(BooleanPerm.class));
-        player.addPermission(new BooleanPerm(false));
-        assertFalse(player.hasPermission(BooleanPerm.class)); // all permissions must be valid
-    }
+    public void hasPermissionNameNbt() {
+        player.addPermission(permission1);
+        assertTrue(player.hasPermission("perm.name"));
+        assertTrue(player.hasPermission("perm.name",
+                nbtCompound -> nbtCompound != null && nbtCompound.getString("name").equals("Minestom")));
 
-    @Test
-    public void singlePermission() {
-        Permission p = (commandSender, data) -> true;
-        player.addPermission(p);
-        assertTrue(p.isValidFor(player, null));
-        assertTrue(player.hasPermission(p));
-        assertTrue(player.hasPermission(Permission.class));
+        player.addPermission(permission2);
+        assertFalse(player.hasPermission("perm.name2", nbtCompound -> nbtCompound != null));
     }
 
     @AfterEach

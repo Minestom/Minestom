@@ -96,7 +96,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private final int id;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private Data data;
-    private final List<Permission> permissions = new LinkedList<>();
+    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -372,7 +372,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     @NotNull
     @Override
-    public Collection<Permission> getAllPermissions() {
+    public Set<Permission> getAllPermissions() {
         return permissions;
     }
 

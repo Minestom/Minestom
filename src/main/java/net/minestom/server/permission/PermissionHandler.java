@@ -3,7 +3,7 @@ package net.minestom.server.permission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * Represents an object which can have permissions.
@@ -11,16 +11,16 @@ import java.util.Collection;
 public interface PermissionHandler {
 
     /**
-     * Returns all permissions associated to this command sender.
+     * Returns all permissions associated to this handler.
      * The returned collection should be modified only by subclasses.
      *
-     * @return the permissions of this command sender.
+     * @return the permissions of this handler.
      */
     @NotNull
-    Collection<Permission> getAllPermissions();
+    Set<Permission> getAllPermissions();
 
     /**
-     * Adds a {@link Permission} to this commandSender
+     * Adds a {@link Permission} to this handler.
      *
      * @param permission the permission to add
      */
@@ -29,7 +29,7 @@ public interface PermissionHandler {
     }
 
     /**
-     * Removes a {@link Permission} from this commandSender
+     * Removes a {@link Permission} from this handler.
      *
      * @param permission the permission to remove
      */
@@ -38,55 +38,49 @@ public interface PermissionHandler {
     }
 
     /**
-     * Checks if the given {@link Permission} is possessed by this command sender.
-     * Simple shortcut to <pre>getAllPermissions().contains(permission) &amp;&amp; permission.isValidFor(this)</pre> for readability.
+     * Gets if this handler has the permission {@code permission}.
+     * <p>
+     * Uses {@link Permission#equals(Object)} internally.
      *
-     * @param p permission to check against
-     * @return true if the sender has the permission and validate {@link Permission#isValidFor(PermissionHandler, Object)}
+     * @param permission the permission to check
+     * @return true if the handler has the permission
      */
-    default boolean hasPermission(@NotNull Permission p) {
-        return hasPermission(p, null);
-    }
-
-    default <T> boolean hasPermission(@NotNull Permission<T> p, @Nullable T data) {
-        return getAllPermissions().contains(p) && p.isValidFor(this, data);
+    default boolean hasPermission(@NotNull Permission permission) {
+        for (Permission permissionLoop : getAllPermissions()) {
+            if (permissionLoop.equals(permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * Checks if the given {@link Permission} is possessed by this command sender.
-     * Will call {@link Permission#isValidFor(PermissionHandler, Object)} on all permissions that are an instance of {@code permissionClass}.
-     * If no matching permission is found, this result returns false.
+     * Gets if this handler has the permission with the name {@code permissionName} and which verify the optional
+     * {@link PermissionVerifier}.
      *
-     * @param permissionClass the permission class to check
-     * @return true if the sender has the permission and validate {@link Permission#isValidFor(PermissionHandler, Object)}
-     * @see #getAllPermissions()
+     * @param permissionName     the permission name
+     * @param permissionVerifier the optional verifier
+     * @return true if the handler has the permission
      */
-    default boolean hasPermission(@NotNull Class<? extends Permission> permissionClass) {
-        boolean result = true;
-        boolean foundPerm = false;
-        for (Permission p : getAllPermissions()) {
-            if (permissionClass.isInstance(p)) {
-                foundPerm = true;
-                result &= p.isValidFor(this, null);
+    default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
+        for (Permission permission : getAllPermissions()) {
+            if (permission.getPermissionName().equals(permissionName)) {
+                return permissionVerifier != null ?
+                        permissionVerifier.isValid(permission.getNBTData()) :
+                        true;
             }
         }
-        if (!foundPerm)
-            return false;
-        return result;
+        return false;
     }
 
-    default <T> boolean hasPermission(@NotNull Class<? extends Permission<T>> permissionClass, @Nullable T data) {
-        boolean result = true;
-        boolean foundPerm = false;
-        for (Permission p : getAllPermissions()) {
-            if (permissionClass.isInstance(p)) {
-                foundPerm = true;
-                result &= p.isValidFor(this, data);
-            }
-        }
-        if (!foundPerm)
-            return false;
-        return result;
+    /**
+     * Gets if this handler has the permission with the name {@code permissionName}.
+     *
+     * @param permissionName the permission name
+     * @return true if the handler has the permission
+     */
+    default boolean hasPermission(@NotNull String permissionName) {
+        return hasPermission(permissionName, null);
     }
 
 }
