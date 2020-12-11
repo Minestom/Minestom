@@ -129,8 +129,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>@FunctionalInterface
 public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 <div class="block">Consumer used to fill a <a href="ResponseData.html" title="class in net.minestom.server.ping"><code>ResponseData</code></a> object before being sent to a connection.
- <p>
- Can be specified in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int, ResponseDataConsumer)</code></a>.</div>
+
+ <p>Can be specified in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int,
+ ResponseDataConsumer)</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -155,7 +156,9 @@ public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(net.minestom.server.network.player.PlayerConnection,net.minestom.server.ping.ResponseData)">accept</a></span>&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
       <a href="ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">A method to fill the data of the response.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -182,6 +185,12 @@ public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 <h4>accept</h4>
 <pre class="methodSignature">void&nbsp;accept&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
             <a href="ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</pre>
+<div class="block">A method to fill the data of the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>playerConnection</code> - The player connection to which the response should be sent.</dd>
+<dd><code>responseData</code> - The data for the response.</dd>
+</dl>
 </li>
 </ul>
 </li>

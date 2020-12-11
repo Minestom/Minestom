@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -133,8 +133,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">ResponseData</span>
 extends java.lang.Object</pre>
 <div class="block">Represents the data sent to the player when refreshing the server list.
- <p>
- Filled by <a href="ResponseDataConsumer.html" title="interface in net.minestom.server.ping"><code>ResponseDataConsumer</code></a> and specified in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int, ResponseDataConsumer)</code></a>.</div>
+
+ <p>Filled by <a href="ResponseDataConsumer.html" title="interface in net.minestom.server.ping"><code>ResponseDataConsumer</code></a> and specified in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int, ResponseDataConsumer)</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -156,7 +156,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ResponseData</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Constructs a new <a href="ResponseData.html" title="class in net.minestom.server.ping"><code>ResponseData</code></a>.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -180,7 +182,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String,java.util.UUID)">addPlayer</a></span>&#8203;(java.lang.String&nbsp;name,
          java.util.UUID&nbsp;uuid)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds a player to the response.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>com.google.gson.JsonObject</code></td>
@@ -191,33 +195,52 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(java.lang.String)">setDescription</a></span>&#8203;(java.lang.String&nbsp;description)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearPlayers()">clearPlayers</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Removes all of the ping players from this <a href="#pingPlayers"><code>pingPlayers</code></a>.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavicon(java.lang.String)">setFavicon</a></span>&#8203;(java.lang.String&nbsp;favicon)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(java.lang.String)">setDescription</a></span>&#8203;(java.lang.String&nbsp;description)</code></th>
+<td class="colLast">
+<div class="block">Sets the response description.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPlayer(int)">setMaxPlayer</a></span>&#8203;(int&nbsp;maxPlayer)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavicon(java.lang.String)">setFavicon</a></span>&#8203;(java.lang.String&nbsp;favicon)</code></th>
+<td class="colLast">
+<div class="block">Sets the response favicon.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPlayer(int)">setMaxPlayer</a></span>&#8203;(int&nbsp;maxPlayer)</code></th>
+<td class="colLast">
+<div class="block">Sets the response maximum player count.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnline(int)">setOnline</a></span>&#8203;(int&nbsp;online)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">Sets the name for the response.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnline(int)">setOnline</a></span>&#8203;(int&nbsp;online)</code></th>
+<td class="colLast">
+<div class="block">Sets the response online count.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProtocol(int)">setProtocol</a></span>&#8203;(int&nbsp;protocol)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the response protocol version.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -250,6 +273,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ResponseData</h4>
 <pre>public&nbsp;ResponseData()</pre>
+<div class="block">Constructs a new <a href="ResponseData.html" title="class in net.minestom.server.ping"><code>ResponseData</code></a>.</div>
 </li>
 </ul>
 </li>
@@ -269,6 +293,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setName</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setName&#8203;(java.lang.String&nbsp;name)</pre>
+<div class="block">Sets the name for the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The name for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="setProtocol(int)">
@@ -278,6 +307,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setProtocol</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setProtocol&#8203;(int&nbsp;protocol)</pre>
+<div class="block">Sets the response protocol version.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>protocol</code> - The protocol version for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="setMaxPlayer(int)">
@@ -287,6 +321,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setMaxPlayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setMaxPlayer&#8203;(int&nbsp;maxPlayer)</pre>
+<div class="block">Sets the response maximum player count.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>maxPlayer</code> - The maximum player count for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="setOnline(int)">
@@ -296,6 +335,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setOnline</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setOnline&#8203;(int&nbsp;online)</pre>
+<div class="block">Sets the response online count.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>online</code> - The online count for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="addPlayer(java.lang.String,java.util.UUID)">
@@ -306,6 +350,23 @@ extends java.lang.Object</pre>
 <h4>addPlayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(java.lang.String&nbsp;name,
                       java.util.UUID&nbsp;uuid)</pre>
+<div class="block">Adds a player to the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The name of the player.</dd>
+<dd><code>uuid</code> - The unique identifier of the player.</dd>
+</dl>
+</li>
+</ul>
+<a id="clearPlayers()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearPlayers</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;clearPlayers()</pre>
+<div class="block">Removes all of the ping players from this <a href="#pingPlayers"><code>pingPlayers</code></a>. The <a href="#pingPlayers"><code>pingPlayers</code></a> list
+ will be empty this call returns.</div>
 </li>
 </ul>
 <a id="setDescription(java.lang.String)">
@@ -315,6 +376,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setDescription</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(java.lang.String&nbsp;description)</pre>
+<div class="block">Sets the response description.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>description</code> - The description for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="setFavicon(java.lang.String)">
@@ -324,6 +390,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setFavicon</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setFavicon&#8203;(java.lang.String&nbsp;favicon)</pre>
+<div class="block">Sets the response favicon.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>favicon</code> - The favicon for the response data.</dd>
+</dl>
 </li>
 </ul>
 <a id="build()">
@@ -336,7 +407,7 @@ extends java.lang.Object</pre>
 <div class="block">Converts the response data into a <code>JsonObject</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the converted json data</dd>
+<dd>The converted response data as a json tree.</dd>
 </dl>
 </li>
 </ul>
