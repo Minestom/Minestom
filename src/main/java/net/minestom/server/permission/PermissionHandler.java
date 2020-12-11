@@ -56,6 +56,8 @@ public interface PermissionHandler {
 
     /**
      * Gets the {@link Permission} with the name {@code permissionName}.
+     * <p>
+     * Useful if you want to retrieve the permission data.
      *
      * @param permissionName the permission name
      * @return the permission from its name, null if not found
