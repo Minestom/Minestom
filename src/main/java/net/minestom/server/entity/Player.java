@@ -1317,7 +1317,7 @@ public class Player extends LivingEntity implements CommandSender {
             return false;
         }
 
-        ItemDropEvent itemDropEvent = new ItemDropEvent(item);
+        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
         callEvent(ItemDropEvent.class, itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
