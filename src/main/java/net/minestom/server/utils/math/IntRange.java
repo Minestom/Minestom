@@ -1,31 +1,19 @@
 package net.minestom.server.utils.math;
 
-public class IntRange {
+public class IntRange extends Range<Integer> {
 
-    private int min, max;
+  public IntRange(Integer minimum, Integer maximum) {
+    super(minimum, maximum);
+  }
 
-    public IntRange(int min, int max) {
-        this.min = min;
-        this.max = max;
-    }
+  public IntRange(Integer value) {
+    super(value);
+  }
 
-    public IntRange(int value) {
-        this(value, value);
-    }
+  /** {@inheritDoc} */
+  @Override
+  public boolean isInRange(Integer value) {
+    return value >= this.getMinimum() && value <= this.getMaximum();
 
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
-    }
+  }
 }
