@@ -1074,12 +1074,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (instance != null) {
 
             // Needed to refresh the client chunks when connecting for the first time
-            final boolean forceUpdate = this instanceof Player && getAliveTicks() == 0;
+            final boolean forceUpdate = this instanceof Player && ((Player) this).getViewableChunks().isEmpty();
 
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
-            final boolean chunkChange = lastChunk != null && newChunk != null && lastChunk != newChunk;
-            if (forceUpdate || chunkChange) {
+
+            final boolean chunkExist = lastChunk != null && newChunk != null;
+            final boolean chunkChange = lastChunk != newChunk;
+            if (chunkExist && (forceUpdate || chunkChange)) {
                 instance.switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
