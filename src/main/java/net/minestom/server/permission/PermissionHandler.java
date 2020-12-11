@@ -77,7 +77,7 @@ public interface PermissionHandler {
      *
      * @param permissionName     the permission name
      * @param permissionVerifier the optional verifier,
-     *                           null mean that only the permission name will be used
+     *                           null means that only the permission name will be used
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
