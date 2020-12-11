@@ -432,9 +432,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         {
 
             // Velocity
-            boolean applyVelocity = false;
+            boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
-            applyVelocity |= !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
+            applyVelocity = !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
             // Players with a velocity applied (client is responsible for gravity)
             applyVelocity |= PlayerUtils.isNettyClient(this) && hasVelocity();
 
