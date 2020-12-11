@@ -105,7 +105,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long scheduledRemoveTime;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
-    private long lastUpdate;
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity each X milliseconds
@@ -461,8 +460,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         }
 
         // Entity tick
-        if (shouldUpdate(time)) {
-            this.lastUpdate = time;
+        {
 
             // Velocity
             boolean applyVelocity = false;
@@ -1415,10 +1413,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void askSynchronization() {
         this.lastAbsoluteSynchronizationTime = 0;
-    }
-
-    private boolean shouldUpdate(long time) {
-        return (float) (time - lastUpdate) >= MinecraftServer.TICK_MS * 0.9f; // Margin of error
     }
 
     private enum Pose {
