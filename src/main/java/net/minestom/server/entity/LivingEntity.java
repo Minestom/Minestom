@@ -122,7 +122,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                         if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
                             continue;
                         final ItemStack item = itemEntity.getItemStack();
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(item);
+                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, item);
                         callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
                             CollectItemPacket collectItemPacket = new CollectItemPacket();
                             collectItemPacket.collectedEntityId = itemEntity.getEntityId();

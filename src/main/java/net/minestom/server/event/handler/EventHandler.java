@@ -94,7 +94,8 @@ public interface EventHandler {
 
         // Global listeners
         if (!(this instanceof GlobalEventHandler)) {
-            MinecraftServer.getGlobalEventHandler().callEvent(eventClass, event);
+            final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+            runEvent(globalEventHandler.getEventCallbacks(eventClass), event);
         }
 
         // Local listeners

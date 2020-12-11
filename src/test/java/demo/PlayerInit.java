@@ -4,11 +4,13 @@ import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
+import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
@@ -24,7 +26,9 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -46,7 +50,7 @@ public class PlayerInit {
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
         instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(noiseTestGenerator);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         // Load some chunks beforehand
         final int loopStart = -10;
@@ -69,7 +73,7 @@ public class PlayerInit {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
-        /*MinecraftServer.getSchedulerManager().buildTask(() -> {
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
@@ -84,7 +88,7 @@ public class PlayerInit {
                 PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), playerListHeaderAndFooterPacket);
             }
 
-        }).repeat(10, TimeUnit.TICK).schedule();*/
+        }).repeat(10, TimeUnit.TICK).schedule();
 
         connectionManager.onPacketReceive((player, packetController, packet) -> {
             // Listen to all received packet
@@ -98,128 +102,147 @@ public class PlayerInit {
             packetController.setCancel(false);
         });
 
-        connectionManager.addPlayerInitialization(player -> {
+        // EVENT REGISTERING
 
-            player.addEventCallback(EntityAttackEvent.class, event -> {
-                final Entity entity = event.getTarget();
-                if (entity instanceof EntityCreature) {
-                    EntityCreature creature = (EntityCreature) entity;
-                    creature.damage(DamageType.fromPlayer(player), 0);
-                    Vector velocity = player.getPosition().clone().getDirection().multiply(3);
-                    velocity.setY(3f);
-                    entity.setVelocity(velocity);
-                    player.sendMessage("You attacked an entity!");
-                } else if (entity instanceof Player) {
-                    Player target = (Player) entity;
-                    Vector velocity = player.getPosition().clone().getDirection().multiply(4);
-                    velocity.setY(3.5f);
-                    target.setVelocity(velocity);
-                    target.damage(DamageType.fromPlayer(player), 5);
-                    player.sendMessage("ATTACK");
-                }
-            });
+        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
 
-            player.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN)
-                    return;
+        globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
+            final Entity source = event.getSource();
+            final Entity entity = event.getTarget();
+            if (entity instanceof EntityCreature) {
+                EntityCreature creature = (EntityCreature) entity;
+                creature.damage(DamageType.fromEntity(source), 0);
+                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
+                velocity.setY(3f);
+                entity.setVelocity(velocity);
+            } else if (entity instanceof Player) {
+                Player target = (Player) entity;
+                Vector velocity = source.getPosition().clone().getDirection().multiply(4);
+                velocity.setY(3.5f);
+                target.setVelocity(velocity);
+                target.damage(DamageType.fromEntity(source), 5);
+            }
 
-                final Block block = Block.fromStateId(event.getBlockStateId());
+            if (source instanceof Player) {
+                ((Player) source).sendMessage("You attacked something!");
+            }
+        });
 
-                if (block == Block.STONE) {
-                    event.setCustomBlock("custom_block");
-                    System.out.println("custom stone");
-                }
-                if (block == Block.TORCH) {
-                    event.setCustomBlock((short) 3); // custom torch block
-                }
+        globalEventHandler.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
+            if (event.getHand() != Player.Hand.MAIN)
+                return;
 
-            });
+            final Block block = Block.fromStateId(event.getBlockStateId());
 
-            player.addEventCallback(PlayerBlockInteractEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN)
-                    return;
+            if (block == Block.STONE) {
+                event.setCustomBlock("custom_block");
+                System.out.println("custom stone");
+            }
+            if (block == Block.TORCH) {
+                event.setCustomBlock((short) 3); // custom torch block
+            }
 
-                final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
-                final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
-                final Block block = Block.fromStateId(blockStateId);
-                player.sendMessage("You clicked at the block " + block + " " + customBlock);
-                player.sendMessage("CHUNK COUNT " + instanceContainer.getChunks().size());
-            });
+        });
 
-            player.addEventCallback(PickupItemEvent.class, event -> {
+        globalEventHandler.addEventCallback(PlayerBlockInteractEvent.class, event -> {
+            if (event.getHand() != Player.Hand.MAIN)
+                return;
+            final Player player = event.getPlayer();
+
+            final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
+            final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
+            final Block block = Block.fromStateId(blockStateId);
+            player.sendMessage("You clicked at the block " + block + " " + customBlock);
+            player.sendMessage("CHUNK COUNT " + instanceContainer.getChunks().size());
+        });
+
+        globalEventHandler.addEventCallback(PickupItemEvent.class, event -> {
+            final Entity entity = event.getLivingEntity();
+            if (entity instanceof Player) {
                 // Cancel event if player does not have enough inventory space
-                event.setCancelled(!player.getInventory().addItemStack(event.getItemStack()));
-            });
+                event.setCancelled(!((Player) entity).getInventory().addItemStack(event.getItemStack()));
+            }
+        });
 
-            player.addEventCallback(ItemDropEvent.class, event -> {
-                ItemStack droppedItem = event.getItemStack();
+        globalEventHandler.addEventCallback(ItemDropEvent.class, event -> {
+            final Player player = event.getPlayer();
+            ItemStack droppedItem = event.getItemStack();
 
-                Position position = player.getPosition().clone().add(0, 1.5f, 0);
-                ItemEntity itemEntity = new ItemEntity(droppedItem, position);
-                itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
-                itemEntity.setInstance(player.getInstance());
-                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
-                itemEntity.setVelocity(velocity);
+            Position position = player.getPosition().clone().add(0, 1.5f, 0);
+            ItemEntity itemEntity = new ItemEntity(droppedItem, position);
+            itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
+            itemEntity.setInstance(player.getInstance());
+            Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+            itemEntity.setVelocity(velocity);
 
-                EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
-                entityZombie.setInstance(player.getInstance());
-                entityZombie.setPathTo(player.getPosition());
-            });
+            EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
+            entityZombie.setInstance(player.getInstance());
+            entityZombie.setPathTo(player.getPosition());
+        });
 
-            player.addEventCallback(PlayerDisconnectEvent.class, event -> {
-                System.out.println("DISCONNECTION " + player.getUsername());
-            });
+        globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
+            final Player player = event.getPlayer();
+            System.out.println("DISCONNECTION " + player.getUsername());
+        });
 
-            player.addEventCallback(PlayerLoginEvent.class, event -> {
+        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+            final Player player = event.getPlayer();
 
-                event.setSpawningInstance(instanceContainer);
-                int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-                int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-                player.setRespawnPoint(new Position(0, 70f, 0));
+            event.setSpawningInstance(instanceContainer);
+            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
+            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
+            player.setRespawnPoint(new Position(0, 42f, 0));
 
-                player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-                    if (slot == -999)
-                        return;
-                    ItemStack itemStack = p.getInventory().getItemStack(slot);
-                    System.out.println("test "+itemStack.getIdentifier()+" "+itemStack.getData());
-                });
-            });
-
-            player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.setGameMode(GameMode.CREATIVE);
-
-                ItemStack itemStack = new ItemStack(Material.DIAMOND_BLOCK, (byte) 64);
-                Data data = new DataImpl();
-                data.set("testc", 2);
-                itemStack.setData(data);
-                player.getInventory().addItemStack(itemStack);
-
-                //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
-            });
-
-            player.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
-                player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
-            });
-
-            player.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
-                player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
-                player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
-            });
-
-            player.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
-                Instance instance = player.getInstance();
-
-                Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
-
-                if (chunk == null)
+            player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
+                if (slot == -999)
                     return;
-
-                // Unload the chunk (save memory) if it has no remaining viewer
-                if (chunk.getViewers().isEmpty()) {
-                    //player.getInstance().unloadChunk(chunk);
-                }
+                ItemStack itemStack = p.getInventory().getItemStack(slot);
+                System.out.println("test " + itemStack.getIdentifier() + " " + itemStack.getData());
             });
+        });
 
+        globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
+            final Player player = event.getPlayer();
+            player.setGameMode(GameMode.CREATIVE);
+
+            ItemStack itemStack = new ItemStack(Material.BARRIER, (byte) 64);
+            Data data = new DataImpl();
+            data.set("testc", 2);
+            itemStack.setData(data);
+            player.getInventory().addItemStack(itemStack);
+
+            //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
+        });
+
+        globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
+            final short blockStateId = event.getBlockStateId();
+            System.out.println("broke " + blockStateId + " " + Block.fromStateId(blockStateId));
+        });
+
+        globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
+            final Player player = useEvent.getPlayer();
+            player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
+        });
+
+        globalEventHandler.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
+            final Player player = useEvent.getPlayer();
+            player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
+            player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
+        });
+
+        globalEventHandler.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
+            final Player player = event.getPlayer();
+            final Instance instance = player.getInstance();
+
+            Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
+
+            if (chunk == null)
+                return;
+
+            // Unload the chunk (save memory) if it has no remaining viewer
+            if (chunk.getViewers().isEmpty()) {
+                //player.getInstance().unloadChunk(chunk);
+            }
         });
     }
 

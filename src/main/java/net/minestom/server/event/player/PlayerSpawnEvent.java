@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,18 @@ public class PlayerSpawnEvent extends EntitySpawnEvent {
     public PlayerSpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance, boolean firstSpawn) {
         super(entity, spawnInstance);
         this.firstSpawn = firstSpawn;
+    }
+
+    /**
+     * Gets the player who spawned.
+     * <p>
+     * Shortcut for casting {@link #getEntity()}.
+     *
+     * @return
+     */
+    @NotNull
+    public Player getPlayer() {
+        return (Player) getEntity();
     }
 
     /**

@@ -83,13 +83,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
-    protected long lastVelocityUpdateTime; // Reset velocity to 0 after countdown
-    private long velocityUpdatePeriod;
 
     protected float gravityDragPerTick;
     protected float gravityAcceleration;
     protected float gravityTerminalVelocity;
-    protected float gravityTickCount; // Number of tick where gravity tick was applied
+    protected int gravityTickCount; // Number of tick where gravity tick was applied
     protected float eyeHeight;
 
     private boolean autoViewable;
@@ -148,7 +146,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         setAutoViewable(true);
 
         entityById.put(id, this);
-        setVelocityUpdatePeriod(5);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -203,34 +200,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     public boolean isOnGround() {
         return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
-    }
-
-    /**
-     * Checks if now is a good time to send a velocity update packet.
-     *
-     * @param time the current time in milliseconds
-     * @return true if the velocity update packet should be send
-     */
-    protected boolean shouldSendVelocityUpdate(long time) {
-        return (time - lastVelocityUpdateTime) >= velocityUpdatePeriod;
-    }
-
-    /**
-     * Gets the period, in ms, between two velocity update packets.
-     *
-     * @return period, in ms, between two velocity update packets
-     */
-    public long getVelocityUpdatePeriod() {
-        return velocityUpdatePeriod;
-    }
-
-    /**
-     * Sets the period, in ms, between two velocity update packets.
-     *
-     * @param velocityUpdatePeriod period, in ms, between two velocity update packets
-     */
-    public void setVelocityUpdatePeriod(long velocityUpdatePeriod) {
-        this.velocityUpdatePeriod = velocityUpdatePeriod;
     }
 
     /**
@@ -463,9 +432,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         {
 
             // Velocity
-            boolean applyVelocity = false;
+            boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
-            applyVelocity |= !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
+            applyVelocity = !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
             // Players with a velocity applied (client is responsible for gravity)
             applyVelocity |= PlayerUtils.isNettyClient(this) && hasVelocity();
 
@@ -487,12 +456,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                     // Compute the gravity change (drag per tick + acceleration)
                     final float gravityY = Math.min(
-                            -gravityDragPerTick - (gravityAcceleration * gravityTickCount),
+                            gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
                             gravityTerminalVelocity);
 
                     // Change velocity to apply gravity
                     if (!noGravity) {
-                        velocity.setY(velocity.getY() + gravityY);
+                        velocity.setY(velocity.getY() - gravityY);
                     }
                 }
 
@@ -550,9 +519,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 // Synchronization and packets...
                 sendSynchronization();
-                if (shouldSendVelocityUpdate(time)) {
+                // Verify if velocity packet has to be sent
+                if (hasVelocity() || gravityTickCount > 0) {
                     sendVelocityPacket();
-                    lastVelocityUpdateTime = time;
                 }
             }
 
@@ -821,7 +790,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the number of tick of which gravity has been consequently applied
      */
-    public float getGravityTickCount() {
+    public int getGravityTickCount() {
         return gravityTickCount;
     }
 
