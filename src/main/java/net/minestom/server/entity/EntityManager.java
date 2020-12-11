@@ -9,6 +9,7 @@ import net.minestom.server.event.player.PlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +77,8 @@ public final class EntityManager {
      * Calls the player initialization callbacks and the event {@link PlayerPreLoginEvent}.
      * If the {@link Player} hasn't been kicked, add him to the waiting list.
      * <p>
-     * Can be considered as a pre-init thing.
+     * Can be considered as a pre-init thing,
+     * currently executed in {@link Player#Player(UUID, String, PlayerConnection)}.
      *
      * @param player the {@link Player} to add
      */
