@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,7 +122,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
+<li><a href="Range.html" title="class in net.minestom.server.utils.math">net.minestom.server.utils.math.Range</a>&lt;java.lang.Integer&gt;</li>
+<li>
+<ul class="inheritance">
 <li>net.minestom.server.utils.math.IntRange</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -131,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">IntRange</span>
-extends java.lang.Object</pre>
+extends <a href="Range.html" title="class in net.minestom.server.utils.math">Range</a>&lt;java.lang.Integer&gt;</pre>
 </li>
 </ul>
 </div>
@@ -152,12 +157,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int)">IntRange</a></span>&#8203;(int&nbsp;value)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Integer)">IntRange</a></span>&#8203;(java.lang.Integer&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,int)">IntRange</a></span>&#8203;(int&nbsp;min,
-        int&nbsp;max)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Integer,java.lang.Integer)">IntRange</a></span>&#8203;(java.lang.Integer&nbsp;minimum,
+        java.lang.Integer&nbsp;maximum)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -179,26 +184,20 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMax()">getMax</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMin()">getMin</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMax(int)">setMax</a></span>&#8203;(int&nbsp;max)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMin(int)">setMin</a></span>&#8203;(int&nbsp;min)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInRange(java.lang.Integer)">isInRange</a></span>&#8203;(java.lang.Integer&nbsp;value)</code></th>
+<td class="colLast">
+<div class="block">Whether the given <code>value</code> is in range of the minimum and the maximum.</div>
+</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.utils.math.Range">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.utils.math.<a href="Range.html" title="class in net.minestom.server.utils.math">Range</a></h3>
+<code><a href="Range.html#getMaximum()">getMaximum</a>, <a href="Range.html#getMinimum()">getMinimum</a>, <a href="Range.html#setMaximum(T)">setMaximum</a>, <a href="Range.html#setMinimum(T)">setMinimum</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -222,23 +221,23 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int,int)">
+<a id="&lt;init&gt;(java.lang.Integer,java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>IntRange</h4>
-<pre>public&nbsp;IntRange&#8203;(int&nbsp;min,
-                int&nbsp;max)</pre>
+<pre>public&nbsp;IntRange&#8203;(java.lang.Integer&nbsp;minimum,
+                java.lang.Integer&nbsp;maximum)</pre>
 </li>
 </ul>
-<a id="&lt;init&gt;(int)">
+<a id="&lt;init&gt;(java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IntRange</h4>
-<pre>public&nbsp;IntRange&#8203;(int&nbsp;value)</pre>
+<pre>public&nbsp;IntRange&#8203;(java.lang.Integer&nbsp;value)</pre>
 </li>
 </ul>
 </li>
@@ -251,40 +250,23 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getMin()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getMin</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getMin()</pre>
-</li>
-</ul>
-<a id="setMin(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setMin</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setMin&#8203;(int&nbsp;min)</pre>
-</li>
-</ul>
-<a id="getMax()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getMax</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getMax()</pre>
-</li>
-</ul>
-<a id="setMax(int)">
+<a id="isInRange(java.lang.Integer)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setMax</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setMax&#8203;(int&nbsp;max)</pre>
+<h4>isInRange</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isInRange&#8203;(java.lang.Integer&nbsp;value)</pre>
+<div class="block">Whether the given <code>value</code> is in range of the minimum and the maximum.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Range.html#isInRange(T)">isInRange</a></code>&nbsp;in class&nbsp;<code><a href="Range.html" title="class in net.minestom.server.utils.math">Range</a>&lt;java.lang.Integer&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - The value to be checked.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the value in the range of <code>minimum</code> and <code>maximum</code>,
+     otherwise <code>false</code>.</dd>
+</dl>
 </li>
 </ul>
 </li>
