@@ -105,15 +105,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="Permission.html" title="interface in net.minestom.server.permission">Permission</a>&lt;T&gt;</th>
-<td class="colLast">
-<div class="block">Representation of a permission granted to a <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></th>
 <td class="colLast">
 <div class="block">Represents an object which can have permissions.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="PermissionVerifier.html" title="interface in net.minestom.server.permission">PermissionVerifier</a></th>
+<td class="colLast">
+<div class="block">Interface used to check if the <code>nbt data</code> of a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> is correct.</div>
 </td>
 </tr>
 </tbody>
@@ -128,10 +128,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="BasicPermission.html" title="class in net.minestom.server.permission">BasicPermission</a></th>
+<th class="colFirst" scope="row"><a href="Permission.html" title="class in net.minestom.server.permission">Permission</a></th>
 <td class="colLast">
-<div class="block">Basic <a href="Permission.html" title="interface in net.minestom.server.permission"><code>Permission</code></a> implementation that only requires the permission to be given to the <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> to be considered applied
- (eg.</div>
+<div class="block">Representation of a permission granted to a <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 </td>
 </tr>
 </tbody>

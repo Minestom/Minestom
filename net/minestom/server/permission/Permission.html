@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":18,"i2":18};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -89,13 +89,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -115,36 +115,64 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.permission</a></div>
-<h2 title="Interface Permission" class="title">Interface Permission&lt;T&gt;</h2>
+<h2 title="Class Permission" class="title">Class Permission</h2>
 </div>
 <div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>net.minestom.server.permission.Permission</li>
+</ul>
+</li>
+</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - the type of data that this permission can handle in <a href="#isValidFor(net.minestom.server.permission.PermissionHandler,T)"><code>isValidFor(PermissionHandler, Object)</code></a>.
-            Used if you want to allow passing additional data to check if the permission is valid in a certain situation,
-            you can default it to <code>Object</code> if you do not need it.</dd>
-</dl>
-<dl>
-<dt>All Known Implementing Classes:</dt>
-<dd><code><a href="BasicPermission.html" title="class in net.minestom.server.permission">BasicPermission</a></code></dd>
-</dl>
-<dl>
-<dt>Functional Interface:</dt>
-<dd>This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.</dd>
-</dl>
 <hr>
-<pre>@FunctionalInterface
-public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
-<div class="block">Representation of a permission granted to a <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
+<pre>public class <span class="typeNameLabel">Permission</span>
+extends java.lang.Object</pre>
+<div class="block">Representation of a permission granted to a <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.
+ Each permission has a string representation used as an identifier, and an optional
+ <code>NBTCompound</code> used to store additional data.
+ <p>
+ The class is immutable.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="memberSummary">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Constructor</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">Permission</a></span>&#8203;(java.lang.String&nbsp;permissionName)</code></th>
+<td class="colLast">
+<div class="block">Creates a new permission object without additional data</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBTCompound)">Permission</a></span>&#8203;(java.lang.String&nbsp;permissionName,
+          org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</code></th>
+<td class="colLast">
+<div class="block">Creates a new permission object with optional data.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -153,7 +181,7 @@ public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -161,27 +189,36 @@ public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isValidFor(net.minestom.server.permission.PermissionHandler,T)">isValidFor</a></span>&#8203;(<a href="PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a>&nbsp;permissionHandler,
-          <a href="Permission.html" title="type parameter in Permission">T</a>&nbsp;data)</code></th>
-<td class="colLast">
-<div class="block">Does the given <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> have the permission represented by this object?</div>
-</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>default <a href="Permission.html" title="interface in net.minestom.server.permission">Permission</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.data.Data)">read</a></span>&#8203;(<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;source)</code></th>
+<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNBTData()">getNBTData</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Reads any required data for this permission from the given destination.</div>
+<div class="block">Gets the data associated to this permission.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.data.Data)">write</a></span>&#8203;(<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;destination)</code></th>
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPermissionName()">getPermissionName</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Writes any required data for this permission inside the given destination.</div>
+<div class="block">Gets the name of the permission.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
 </li>
 </ul>
 </section>
@@ -191,6 +228,49 @@ public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="constructor.detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Permission</h4>
+<pre>public&nbsp;Permission&#8203;(@NotNull
+                  java.lang.String&nbsp;permissionName,
+                  @Nullable
+                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;data)</pre>
+<div class="block">Creates a new permission object with optional data.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>permissionName</code> - the name of the permission</dd>
+<dd><code>data</code> - the optional data of the permission</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>Permission</h4>
+<pre>public&nbsp;Permission&#8203;(@NotNull
+                  java.lang.String&nbsp;permissionName)</pre>
+<div class="block">Creates a new permission object without additional data</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>permissionName</code> - the name of the permission</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
@@ -198,60 +278,59 @@ public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="isValidFor(net.minestom.server.permission.PermissionHandler,java.lang.Object)">
-<!--   -->
-</a><a id="isValidFor(net.minestom.server.permission.PermissionHandler,T)">
+<a id="getPermissionName()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isValidFor</h4>
-<pre class="methodSignature">boolean&nbsp;isValidFor&#8203;(@NotNull
-                   <a href="PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a>&nbsp;permissionHandler,
-                   @Nullable
-                   <a href="Permission.html" title="type parameter in Permission">T</a>&nbsp;data)</pre>
-<div class="block">Does the given <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> have the permission represented by this object?
- <p>
- Called with <a href="PermissionHandler.html#hasPermission(net.minestom.server.permission.Permission)"><code>PermissionHandler.hasPermission(Permission)</code></a>, the <a href="../command/CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> requires to both
- have this permission and validate the condition in this method.</div>
+<h4>getPermissionName</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.lang.String&nbsp;getPermissionName()</pre>
+<div class="block">Gets the name of the permission.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>permissionHandler</code> - the permission handler</dd>
-<dd><code>data</code> - the optional data (eg the number of home possible, placing a block at X position)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the commandSender possesses this permission</dd>
+<dd>the permission name</dd>
 </dl>
 </li>
 </ul>
-<a id="write(net.minestom.server.data.Data)">
+<a id="getNBTData()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>write</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;write&#8203;(@NotNull
-                   <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;destination)</pre>
-<div class="block">Writes any required data for this permission inside the given destination.</div>
+<h4>getNBTData</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;getNBTData()</pre>
+<div class="block">Gets the data associated to this permission.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>destination</code> - the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> to write to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the nbt data of this permission, can be null if not any</dd>
 </dl>
 </li>
 </ul>
-<a id="read(net.minestom.server.data.Data)">
+<a id="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="hashCode()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>read</h4>
-<pre class="methodSignature">default&nbsp;<a href="Permission.html" title="interface in net.minestom.server.permission">Permission</a>&nbsp;read&#8203;(@Nullable
-                        <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;source)</pre>
-<div class="block">Reads any required data for this permission from the given destination.</div>
+<h4>hashCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> to read from</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this for chaining</dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>
@@ -308,13 +387,13 @@ public interface <span class="typeNameLabel">Permission&lt;T&gt;</span></pre>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
