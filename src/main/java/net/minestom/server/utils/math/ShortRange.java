@@ -1,19 +1,18 @@
 package net.minestom.server.utils.math;
 
-public class FloatRange extends Range<Float> {
+public class ShortRange extends Range<Short> {
 
-  public FloatRange(Float minimum, Float maximum) {
+  public ShortRange(Short minimum, Short maximum) {
     super(minimum, maximum);
   }
 
-  public FloatRange(Float value) {
+  public ShortRange(Short value) {
     super(value);
   }
 
   /** {@inheritDoc} */
   @Override
-  public boolean isInRange(Float value) {
+  public boolean isInRange(Short value) {
     return value >= this.getMinimum() && value <= this.getMaximum();
-
   }
 }
