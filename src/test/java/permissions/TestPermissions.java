@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -66,14 +67,12 @@ public class TestPermissions {
         assertTrue(player.hasPermission("perm.name"));
         assertTrue(player.hasPermission("perm.name",
                 nbtCompound -> {
-                    if (nbtCompound != null && nbtCompound.containsKey("name")) {
-                        return nbtCompound.getString("name").equals("Minestom");
-                    }
-                    return false;
+                    final String name = nbtCompound != null ? nbtCompound.getString("name") : null;
+                    return Objects.equals(name, "Minestom");
                 }));
 
         player.addPermission(permission2);
-        assertFalse(player.hasPermission("perm.name2", nbtCompound -> nbtCompound != null));
+        assertFalse(player.hasPermission("perm.name2", Objects::nonNull));
     }
 
     @AfterEach
