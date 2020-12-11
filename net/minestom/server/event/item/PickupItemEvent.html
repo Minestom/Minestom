@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -162,7 +162,8 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.item.ItemStack)">PickupItemEvent</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,net.minestom.server.item.ItemStack)">PickupItemEvent</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;livingEntity,
+               <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -186,6 +187,11 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLivingEntity()">getLivingEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -219,13 +225,15 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.item.ItemStack)">
+<a id="&lt;init&gt;(net.minestom.server.entity.LivingEntity,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PickupItemEvent</h4>
 <pre>public&nbsp;PickupItemEvent&#8203;(@NotNull
+                       <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;livingEntity,
+                       @NotNull
                        <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
@@ -239,6 +247,16 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getLivingEntity()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLivingEntity</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;getLivingEntity()</pre>
+</li>
+</ul>
 <a id="getItemStack()">
 <!--   -->
 </a>

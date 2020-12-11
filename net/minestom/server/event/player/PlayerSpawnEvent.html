@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,6 +187,13 @@ extends <a href="../entity/EntitySpawnEvent.html" title="class in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the player who spawned.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isFirstSpawn()">isFirstSpawn</a></span>()</code></th>
 <td class="colLast">
@@ -247,6 +254,22 @@ extends <a href="../entity/EntitySpawnEvent.html" title="class in net.minestom.s
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getPlayer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPlayer</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+<div class="block">Gets the player who spawned.
+ <p>
+ Shortcut for casting <a href="../entity/EntitySpawnEvent.html#getEntity()"><code>EntitySpawnEvent.getEntity()</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+</dl>
+</li>
+</ul>
 <a id="isFirstSpawn()">
 <!--   -->
 </a>
