@@ -43,7 +43,7 @@ public interface PermissionHandler {
      * Uses {@link Permission#equals(Object)} internally.
      *
      * @param permission the permission to check
-     * @return true if the handler has the permission
+     * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull Permission permission) {
         for (Permission permissionLoop : getAllPermissions()) {
@@ -55,20 +55,39 @@ public interface PermissionHandler {
     }
 
     /**
+     * Gets the {@link Permission} with the name {@code permissionName}.
+     *
+     * @param permissionName the permission name
+     * @return the permission from its name, null if not found
+     */
+    @Nullable
+    default Permission getPermission(@NotNull String permissionName) {
+        for (Permission permission : getAllPermissions()) {
+            // Verify permission name equality
+            if (permission.getPermissionName().equals(permissionName)) {
+                return permission;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Gets if this handler has the permission with the name {@code permissionName} and which verify the optional
      * {@link PermissionVerifier}.
      *
      * @param permissionName     the permission name
-     * @param permissionVerifier the optional verifier
-     * @return true if the handler has the permission
+     * @param permissionVerifier the optional verifier,
+     *                           null mean that only the permission name will be used
+     * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
-        for (Permission permission : getAllPermissions()) {
-            if (permission.getPermissionName().equals(permissionName)) {
-                return permissionVerifier != null ?
-                        permissionVerifier.isValid(permission.getNBTData()) :
-                        true;
-            }
+        final Permission permission = getPermission(permissionName);
+
+        if (permission != null) {
+            // Verify using the permission verifier
+            return permissionVerifier != null ?
+                    permissionVerifier.isValid(permission.getNBTData()) :
+                    true;
         }
         return false;
     }
@@ -77,7 +96,7 @@ public interface PermissionHandler {
      * Gets if this handler has the permission with the name {@code permissionName}.
      *
      * @param permissionName the permission name
-     * @return true if the handler has the permission
+     * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull String permissionName) {
         return hasPermission(permissionName, null);

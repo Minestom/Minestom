@@ -12,8 +12,8 @@ import java.util.Objects;
  */
 public class Permission {
 
-    private String permissionName;
-    private NBTCompound data;
+    private final String permissionName;
+    private final NBTCompound data;
 
     /**
      * Creates a new permission object with optional data.
