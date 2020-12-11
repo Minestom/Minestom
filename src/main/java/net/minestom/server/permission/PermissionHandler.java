@@ -38,6 +38,15 @@ public interface PermissionHandler {
     }
 
     /**
+     * Removes a {@link Permission} based on its string identifier.
+     *
+     * @param permissionName the permission name
+     */
+    default void removePermission(@NotNull String permissionName) {
+        getAllPermissions().removeIf(permission -> permission.getPermissionName().equals(permissionName));
+    }
+
+    /**
      * Gets if this handler has the permission {@code permission}.
      * <p>
      * Uses {@link Permission#equals(Object)} internally.
@@ -87,9 +96,7 @@ public interface PermissionHandler {
 
         if (permission != null) {
             // Verify using the permission verifier
-            return permissionVerifier != null ?
-                    permissionVerifier.isValid(permission.getNBTData()) :
-                    true;
+            return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
         }
         return false;
     }

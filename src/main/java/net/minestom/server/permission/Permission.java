@@ -9,6 +9,10 @@ import java.util.Objects;
 
 /**
  * Representation of a permission granted to a {@link CommandSender}.
+ * Each permission has a string representation used as an identifier, and an optional
+ * {@link NBTCompound} used to store additional data.
+ * <p>
+ * The class is immutable.
  */
 public class Permission {
 

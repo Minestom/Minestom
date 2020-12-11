@@ -65,7 +65,12 @@ public class TestPermissions {
         player.addPermission(permission1);
         assertTrue(player.hasPermission("perm.name"));
         assertTrue(player.hasPermission("perm.name",
-                nbtCompound -> nbtCompound != null && nbtCompound.getString("name").equals("Minestom")));
+                nbtCompound -> {
+                    if (nbtCompound != null && nbtCompound.containsKey("name")) {
+                        return nbtCompound.getString("name").equals("Minestom");
+                    }
+                    return false;
+                }));
 
         player.addPermission(permission2);
         assertFalse(player.hasPermission("perm.name2", nbtCompound -> nbtCompound != null));
