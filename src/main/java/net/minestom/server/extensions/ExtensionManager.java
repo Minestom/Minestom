@@ -468,7 +468,11 @@ public class ExtensionManager {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                LOGGER.error("Failed to load code modifier for extension in files: " + extension.files.stream().map(u -> u.toExternalForm()).collect(Collectors.joining(", ")), e);
+                LOGGER.error("Failed to load code modifier for extension in files: " +
+                        extension.files
+                                .stream()
+                                .map(URL::toExternalForm)
+                                .collect(Collectors.joining(", ")), e);
             }
         }
         LOGGER.info("Done loading code modifiers.");
@@ -628,6 +632,6 @@ public class ExtensionManager {
      * Shutdowns all the extensions by unloading them.
      */
     public void shutdown() {
-        this.extensionList.forEach(extension -> unload(extension));
+        this.extensionList.forEach(this::unload);
     }
 }

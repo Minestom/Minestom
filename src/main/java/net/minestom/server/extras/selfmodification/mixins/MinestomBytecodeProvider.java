@@ -18,7 +18,7 @@ public class MinestomBytecodeProvider implements IClassBytecodeProvider {
     }
 
     @Override
-    public ClassNode getClassNode(String name) throws ClassNotFoundException, IOException {
+    public ClassNode getClassNode(String name) throws ClassNotFoundException {
         return getClassNode(name, false);
     }
 

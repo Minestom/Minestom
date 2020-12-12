@@ -111,9 +111,8 @@ public final class Utils {
             }
         }
 
-        final long[] data = blocksId;
-        writeVarIntBuf(buffer, data.length);
-        for (long datum : data) {
+        writeVarIntBuf(buffer, blocksId.length);
+        for (long datum : blocksId) {
             buffer.writeLong(datum);
         }
     }

@@ -127,7 +127,7 @@ public abstract class Data implements PublicCloneable<Data> {
             return (Data) super.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
-            return null;
+            throw new IllegalStateException("Weird thing happened");
         }
     }
 }

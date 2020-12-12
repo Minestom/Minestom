@@ -15,7 +15,7 @@ public class ArgumentDynamicWord extends Argument<String> {
     public static final int SPACE_ERROR = 1;
     public static final int RESTRICTION_ERROR = 2;
 
-    private SuggestionType suggestionType;
+    private final SuggestionType suggestionType;
 
     private StringValidator dynamicRestriction;
 

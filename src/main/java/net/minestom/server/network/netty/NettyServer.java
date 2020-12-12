@@ -58,7 +58,8 @@ public final class NettyServer {
 
     private boolean initialized = false;
 
-    private PacketProcessor packetProcessor;
+    private final PacketProcessor packetProcessor;
+    private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
     private EventLoopGroup boss, worker;
     private ServerBootstrap bootstrap;
@@ -67,8 +68,6 @@ public final class NettyServer {
 
     private String address;
     private int port;
-
-    private GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
     /**
      * Scheduler used by {@code globalTrafficHandler}.

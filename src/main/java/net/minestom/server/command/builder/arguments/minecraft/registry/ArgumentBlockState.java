@@ -11,7 +11,7 @@ public class ArgumentBlockState extends ArgumentRegistry<Block> {
     }
 
     @Override
-    public Block getRegistry(String value) {
+    public Block getRegistry(@NotNull String value) {
         return Registries.getBlock(value);
     }
 }

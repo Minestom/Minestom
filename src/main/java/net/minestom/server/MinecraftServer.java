@@ -119,6 +119,8 @@ public final class MinecraftServer {
 
     private static ExtensionManager extensionManager;
 
+    private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
+
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;
 
@@ -134,7 +136,6 @@ public final class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static GlobalEventHandler globalEventHandler = new GlobalEventHandler();
     private static LootTableManager lootTableManager;
     private static TagManager tagManager;
 
@@ -293,7 +294,7 @@ public final class MinecraftServer {
      */
     @NotNull
     public static GlobalEventHandler getGlobalEventHandler() {
-        return globalEventHandler;
+        return GLOBAL_EVENT_HANDLER;
     }
 
     /**

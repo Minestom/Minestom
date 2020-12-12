@@ -70,7 +70,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected static final byte METADATA_POSE = 18;
 
     protected Instance instance;
-    protected Position position;
+    protected final Position position;
     protected float lastX, lastY, lastZ;
     protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;

@@ -1,12 +1,18 @@
 package net.minestom.server.utils;
 
-import java.util.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class NamespaceIDHashMap<V> extends AbstractMap<NamespaceID, V> {
 
     private final Map<NamespaceID, V> backing = new HashMap<>();
 
+    @NotNull
     @Override
     public Set<Entry<NamespaceID, V>> entrySet() {
         return backing.entrySet();

@@ -69,6 +69,7 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
         return ServerPacketIdentifier.UPDATE_LIGHT;
     }
 
+    @NotNull
     @Override
     public TemporaryPacketCache getCache() {
         return CACHE;

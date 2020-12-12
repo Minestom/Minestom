@@ -38,11 +38,16 @@ public class CommandDispatcher {
     }
 
     public void unregister(@NotNull Command command) {
-        commandMap.remove(command.getName().toLowerCase());
-        for (String alias : command.getAliases()) {
-            this.commandMap.remove(alias.toLowerCase());
+        this.commandMap.remove(command.getName().toLowerCase());
+
+        final String[] aliases = command.getAliases();
+        if (aliases != null) {
+            for (String alias : aliases) {
+                this.commandMap.remove(alias.toLowerCase());
+            }
         }
-        commands.remove(command);
+
+        this.commands.remove(command);
     }
 
     /**

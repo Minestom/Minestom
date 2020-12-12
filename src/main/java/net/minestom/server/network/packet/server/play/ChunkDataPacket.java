@@ -137,6 +137,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         return ServerPacketIdentifier.CHUNK_DATA;
     }
 
+    @NotNull
     @Override
     public TemporaryPacketCache getCache() {
         return CACHE;
