@@ -1,13 +1,18 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+
+import java.util.Objects;
 
 public class CompassMeta extends ItemMeta {
 
     private boolean lodestoneTracked;
     private String lodestoneDimension;
-    private int x, y, z;
+
+    private Position lodestonePosition;
 
     public boolean isLodestoneTracked() {
         return lodestoneTracked;
@@ -17,36 +22,22 @@ public class CompassMeta extends ItemMeta {
         this.lodestoneTracked = lodestoneTracked;
     }
 
+    @Nullable
     public String getLodestoneDimension() {
         return lodestoneDimension;
     }
 
-    public void setLodestoneDimension(String lodestoneDimension) {
+    public void setLodestoneDimension(@Nullable String lodestoneDimension) {
         this.lodestoneDimension = lodestoneDimension;
     }
 
-    public int getX() {
-        return x;
+    @Nullable
+    public Position getLodestonePosition() {
+        return lodestonePosition;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
+    public void setLodestonePosition(@Nullable Position lodestonePosition) {
+        this.lodestonePosition = lodestonePosition;
     }
 
     @Override
@@ -60,24 +51,25 @@ public class CompassMeta extends ItemMeta {
             return false;
         CompassMeta compassMeta = (CompassMeta) itemMeta;
         return (compassMeta.lodestoneTracked == lodestoneTracked) &&
-                (compassMeta.lodestoneDimension.equals(lodestoneDimension)) &&
-                (compassMeta.x == x && compassMeta.y == y && compassMeta.z == z);
+                (Objects.equals(compassMeta.lodestoneDimension, lodestoneDimension)) &&
+                (Objects.equals(compassMeta.lodestonePosition, lodestonePosition));
     }
 
     @Override
     public void read(@NotNull NBTCompound compound) {
         if (compound.containsKey("LodestoneTracked")) {
             this.lodestoneTracked = compound.getByte("LodestoneTracked") == 1;
-            // TODO get boolean
         }
         if (compound.containsKey("LodestoneDimension")) {
             this.lodestoneDimension = compound.getString("LodestoneDimension");
         }
         if (compound.containsKey("LodestonePos")) {
             final NBTCompound posCompound = compound.getCompound("LodestonePos");
-            this.x = posCompound.getInt("X");
-            this.y = posCompound.getInt("Y");
-            this.z = posCompound.getInt("Z");
+            final int x = posCompound.getInt("X");
+            final int y = posCompound.getInt("Y");
+            final int z = posCompound.getInt("Z");
+
+            this.lodestonePosition = new Position(x, y, z);
         }
     }
 
@@ -88,11 +80,11 @@ public class CompassMeta extends ItemMeta {
             compound.setString("LodestoneDimension", lodestoneDimension);
         }
 
-        {
+        if (lodestonePosition != null) {
             NBTCompound posCompound = new NBTCompound();
-            posCompound.setInt("X", x);
-            posCompound.setInt("Y", y);
-            posCompound.setInt("Z", z);
+            posCompound.setInt("X", (int) lodestonePosition.getX());
+            posCompound.setInt("Y", (int) lodestonePosition.getY());
+            posCompound.setInt("Z", (int) lodestonePosition.getZ());
             compound.set("LodestonePos", posCompound);
         }
     }
@@ -103,9 +95,7 @@ public class CompassMeta extends ItemMeta {
         CompassMeta compassMeta = (CompassMeta) super.clone();
         compassMeta.lodestoneTracked = lodestoneTracked;
         compassMeta.lodestoneDimension = lodestoneDimension;
-        compassMeta.x = x;
-        compassMeta.y = y;
-        compassMeta.z = z;
+        compassMeta.lodestonePosition = lodestonePosition != null ? lodestonePosition.clone() : null;
 
         return compassMeta;
     }
