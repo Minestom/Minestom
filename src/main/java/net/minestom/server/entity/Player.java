@@ -919,13 +919,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
-        EntitySoundEffect entitySoundEffect = new EntitySoundEffect();
-        entitySoundEffect.entityId = getEntityId();
-        entitySoundEffect.soundId = sound.getId();
-        entitySoundEffect.soundCategory = soundCategory;
-        entitySoundEffect.volume = volume;
-        entitySoundEffect.pitch = pitch;
-        playerConnection.sendPacket(entitySoundEffect);
+        EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
+        entitySoundEffectPacket.entityId = getEntityId();
+        entitySoundEffectPacket.soundId = sound.getId();
+        entitySoundEffectPacket.soundCategory = soundCategory;
+        entitySoundEffectPacket.volume = volume;
+        entitySoundEffectPacket.pitch = pitch;
+        playerConnection.sendPacket(entitySoundEffectPacket);
     }
 
     /**

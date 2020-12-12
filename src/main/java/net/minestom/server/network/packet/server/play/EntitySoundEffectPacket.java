@@ -6,7 +6,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntitySoundEffect implements ServerPacket {
+public class EntitySoundEffectPacket implements ServerPacket {
 
     public int soundId;
     public SoundCategory soundCategory;
