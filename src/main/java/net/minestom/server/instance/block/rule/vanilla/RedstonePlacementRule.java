@@ -71,7 +71,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
         // TODO power
 
-        final String[] properties = new String[]{
+        final String[] properties = {
                 "east=" + east,
                 "north=" + north,
                 "power=" + power,

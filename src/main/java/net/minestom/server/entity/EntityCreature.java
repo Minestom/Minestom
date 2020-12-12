@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.attribute.Attributes;
+import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
@@ -24,9 +25,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
-public abstract class EntityCreature extends LivingEntity implements NavigableEntity {
+public abstract class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
     private int removalAnimationDelay = 1000;
 
@@ -82,57 +82,13 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     @Override
     public void update(long time) {
-
-        if (getInstance() == null) {
-            return;
-        }
-
-        // Goal selectors
-        {
-            // Supplier used to get the next goal selector which should start
-            // (null if not found)
-            final Supplier<GoalSelector> goalSelectorSupplier = () -> {
-                for (GoalSelector goalSelector : goalSelectors) {
-                    final boolean start = goalSelector.shouldStart();
-                    if (start) {
-                        return goalSelector;
-                    }
-                }
-                return null;
-            };
-
-            // true if the goal selector changed this tick
-            boolean newGoalSelector = false;
-
-            if (currentGoalSelector == null) {
-                // No goal selector, get a new one
-                this.currentGoalSelector = goalSelectorSupplier.get();
-                newGoalSelector = currentGoalSelector != null;
-            } else {
-                final boolean stop = currentGoalSelector.shouldEnd();
-                if (stop) {
-                    // The current goal selector stopped, find a new one
-                    this.currentGoalSelector.end();
-                    this.currentGoalSelector = goalSelectorSupplier.get();
-                    newGoalSelector = currentGoalSelector != null;
-                }
-            }
-
-            // Start the new goal selector
-            if (newGoalSelector) {
-                this.currentGoalSelector.start();
-            }
-
-            // Execute tick for the current goal selector
-            if (currentGoalSelector != null) {
-                currentGoalSelector.tick(time);
-            }
-        }
-
+        // AI
+        aiTick(time);
 
         // Path finding
         pathFindingTick(getAttributeValue(Attributes.MOVEMENT_SPEED));
 
+        // Fire, item pickup, ...
         super.update(time);
     }
 
@@ -242,24 +198,27 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
         this.removalAnimationDelay = removalAnimationDelay;
     }
 
-    /**
-     * Gets the goal selectors of this entity.
-     *
-     * @return a modifiable list containing the entity goal selectors
-     */
     @NotNull
+    @Override
     public List<GoalSelector> getGoalSelectors() {
         return goalSelectors;
     }
 
-    /**
-     * Gets the target selectors of this entity.
-     *
-     * @return a modifiable list containing the entity target selectors
-     */
     @NotNull
+    @Override
     public List<TargetSelector> getTargetSelectors() {
         return targetSelectors;
+    }
+
+    @Nullable
+    @Override
+    public GoalSelector getCurrentGoalSelector() {
+        return currentGoalSelector;
+    }
+
+    @Override
+    public void setCurrentGoalSelector(GoalSelector currentGoalSelector) {
+        this.currentGoalSelector = currentGoalSelector;
     }
 
     /**
