@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 public class AxisPlacementRule extends BlockPlacementRule {
 
@@ -17,17 +18,17 @@ public class AxisPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, BlockPosition blockPosition) {
+    public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
         return true;
     }
 
     @Override
-    public short blockRefresh(Instance instance, BlockPosition blockPosition, short currentId) {
+    public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
         return currentId;
     }
 
     @Override
-    public short blockPlace(Instance instance, Block block, BlockFace blockFace, Player pl) {
+    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
         String axis = "y";
         if (blockFace == BlockFace.WEST || blockFace == BlockFace.EAST) {
             axis = "x";

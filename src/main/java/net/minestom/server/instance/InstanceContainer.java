@@ -331,10 +331,11 @@ public class InstanceContainer extends Instance {
                     final short neighborStateId = chunk.getBlockStateId(neighborX, neighborY, neighborZ);
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborStateId);
                     if (neighborBlockPlacementRule != null) {
+                        final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
                         final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
-                                new BlockPosition(neighborX, neighborY, neighborZ), neighborStateId);
+                                neighborPosition, neighborStateId);
                         if (neighborStateId != newNeighborId) {
-                            refreshBlockStateId(neighborX, neighborY, neighborZ, neighborStateId);
+                            refreshBlockStateId(neighborPosition, newNeighborId);
                         }
                     }
 

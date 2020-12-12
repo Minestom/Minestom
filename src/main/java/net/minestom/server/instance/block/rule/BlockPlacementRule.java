@@ -5,6 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class BlockPlacementRule {
 
@@ -14,7 +15,7 @@ public abstract class BlockPlacementRule {
         this.blockId = blockId;
     }
 
-    public BlockPlacementRule(Block block) {
+    public BlockPlacementRule(@NotNull Block block) {
         this(block.getBlockId());
     }
 
@@ -26,7 +27,7 @@ public abstract class BlockPlacementRule {
      * @param blockPosition the position where the block is trying to get place
      * @return true if the block placement position is valid
      */
-    public abstract boolean canPlace(Instance instance, BlockPosition blockPosition);
+    public abstract boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition);
 
     /**
      * Called when the block state id can be updated (for instance if a neighbour block changed).
@@ -36,7 +37,7 @@ public abstract class BlockPlacementRule {
      * @param currentStateID the current block state id of the block
      * @return the updated block state id
      */
-    public abstract short blockRefresh(Instance instance, BlockPosition blockPosition, short currentStateID);
+    public abstract short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentStateID);
 
     /**
      * Called when the block is placed.
@@ -47,7 +48,9 @@ public abstract class BlockPlacementRule {
      * @param pl        the player who placed the block
      * @return the block state id of the placed block
      */
-    public abstract short blockPlace(Instance instance, Block block, BlockFace blockFace, Player pl);
+    public abstract short blockPlace(@NotNull Instance instance,
+                                     @NotNull Block block, @NotNull BlockFace blockFace,
+                                     @NotNull Player pl);
 
     public short getBlockId() {
         return blockId;
