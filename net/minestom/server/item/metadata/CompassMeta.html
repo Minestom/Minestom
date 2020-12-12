@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -193,72 +193,52 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getX()">getX</a></span>()</code></th>
+<td class="colFirst"><code><a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLodestonePosition()">getLodestonePosition</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getY()">getY</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getZ()">getZ</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isLodestoneTracked()">isLodestoneTracked</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLodestoneDimension(java.lang.String)">setLodestoneDimension</a></span>&#8203;(java.lang.String&nbsp;lodestoneDimension)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLodestonePosition(net.minestom.server.utils.Position)">setLodestonePosition</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;lodestonePosition)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLodestoneTracked(boolean)">setLodestoneTracked</a></span>&#8203;(boolean&nbsp;lodestoneTracked)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setX(int)">setX</a></span>&#8203;(int&nbsp;x)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setY(int)">setY</a></span>&#8203;(int&nbsp;y)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZ(int)">setZ</a></span>&#8203;(int&nbsp;z)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
@@ -332,7 +312,8 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getLodestoneDimension</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getLodestoneDimension()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;java.lang.String&nbsp;getLodestoneDimension()</pre>
 </li>
 </ul>
 <a id="setLodestoneDimension(java.lang.String)">
@@ -341,61 +322,28 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>setLodestoneDimension</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setLodestoneDimension&#8203;(java.lang.String&nbsp;lodestoneDimension)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLodestoneDimension&#8203;(@Nullable
+                                  java.lang.String&nbsp;lodestoneDimension)</pre>
 </li>
 </ul>
-<a id="getX()">
+<a id="getLodestonePosition()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getX</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getX()</pre>
+<h4>getLodestonePosition</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getLodestonePosition()</pre>
 </li>
 </ul>
-<a id="setX(int)">
+<a id="setLodestonePosition(net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setX</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setX&#8203;(int&nbsp;x)</pre>
-</li>
-</ul>
-<a id="getY()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getY</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getY()</pre>
-</li>
-</ul>
-<a id="setY(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setY</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setY&#8203;(int&nbsp;y)</pre>
-</li>
-</ul>
-<a id="getZ()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getZ</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getZ()</pre>
-</li>
-</ul>
-<a id="setZ(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setZ</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setZ&#8203;(int&nbsp;z)</pre>
+<h4>setLodestonePosition</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLodestonePosition&#8203;(@Nullable
+                                 <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;lodestonePosition)</pre>
 </li>
 </ul>
 <a id="hasNbt()">
