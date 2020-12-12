@@ -107,7 +107,7 @@ public class ResourceGatherer {
         try {
             int resultCode = dataGeneratorProcess.waitFor();
             if (resultCode != 0) {
-                throw new IOException("Data generator finished with non-zero return code " + resultCode);
+                throw new IOException("Data generator finished with non-zero return code " + resultCode + " verify that you have 'java' cli");
             }
         } catch (InterruptedException e) {
             throw new IOException("Data generator was interrupted.", e);
