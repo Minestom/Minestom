@@ -239,9 +239,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
 
     /**
-     * Gets all the instance's chunks.
+     * Gets all the instance's loaded chunks.
      *
-     * @return an unmodifiable containing all the loaded chunks of the instance
+     * @return an unmodifiable containing all the instance chunks
      */
     @NotNull
     public abstract Collection<Chunk> getChunks();
