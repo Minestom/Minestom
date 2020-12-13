@@ -48,10 +48,7 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
+import net.minestom.server.utils.*;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -1795,7 +1792,7 @@ public class Player extends LivingEntity implements CommandSender {
     public void setTeam(Team team) {
         super.setTeam(team);
         if (team != null)
-            getPlayerConnection().sendPacket(team.createTeamsCreationPacket());
+            PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), team.createTeamsCreationPacket());
     }
 
     /**
