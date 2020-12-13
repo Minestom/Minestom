@@ -238,7 +238,7 @@ public class ChatColor {
      * @return the special code name
      */
     @Nullable
-    protected String getCodeName() {
+    public String getCodeName() {
         return codeName;
     }
 
