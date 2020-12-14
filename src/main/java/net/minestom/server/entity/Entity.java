@@ -93,6 +93,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private boolean autoViewable;
     private final int id;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -325,7 +326,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+        return unmodifiableViewers;
     }
 
     @Override

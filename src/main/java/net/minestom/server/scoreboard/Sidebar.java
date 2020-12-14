@@ -14,6 +14,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class Sidebar implements Scoreboard {
     private static final int MAX_LINES_COUNT = 15;
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     private final Queue<ScoreboardLine> lines = Queues.newConcurrentLinkedQueue();
     private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
@@ -218,7 +220,7 @@ public class Sidebar implements Scoreboard {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return viewers;
+        return unmodifiableViewers;
     }
 
     @Override

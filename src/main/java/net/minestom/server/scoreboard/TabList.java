@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Represents the {@link Player} tab list as a {@link Scoreboard}
+ * Represents the {@link Player} tab list as a {@link Scoreboard}.
  */
 public class TabList implements Scoreboard {
 
@@ -19,13 +19,13 @@ public class TabList implements Scoreboard {
      */
     private static final String TAB_LIST_PREFIX = "tl-";
 
-    private final Set<Player> viewers;
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final String objectiveName;
 
     private ScoreboardObjectivePacket.Type type;
 
     public TabList(String name, ScoreboardObjectivePacket.Type type) {
-        this.viewers = new CopyOnWriteArraySet<>();
         this.objectiveName = TAB_LIST_PREFIX + name;
 
         this.type = type;
@@ -77,7 +77,7 @@ public class TabList implements Scoreboard {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(this.viewers);
+        return unmodifiableViewers;
     }
 
     @Override

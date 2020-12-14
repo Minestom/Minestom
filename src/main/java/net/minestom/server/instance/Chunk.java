@@ -76,6 +76,7 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     protected volatile boolean loaded = true;
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -489,7 +490,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+        return unmodifiableViewers;
     }
 
     @Nullable

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Represents a scoreboard which rendered a tag below the name
+ * Represents a scoreboard which rendered a tag below the name.
  */
 public class BelowNameTag implements Scoreboard {
 
@@ -20,12 +20,13 @@ public class BelowNameTag implements Scoreboard {
     public static final String BELOW_NAME_TAG_PREFIX = "bnt-";
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private final String objectiveName;
 
     private final ScoreboardObjectivePacket scoreboardObjectivePacket;
 
     /**
-     * Creates a new below name scoreboard
+     * Creates a new below name scoreboard.
      *
      * @param name  The objective name of the scoreboard
      * @param value The value of the scoreboard
@@ -72,6 +73,6 @@ public class BelowNameTag implements Scoreboard {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+        return unmodifiableViewers;
     }
 }

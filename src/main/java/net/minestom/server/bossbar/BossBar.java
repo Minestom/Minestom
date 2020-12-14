@@ -27,6 +27,7 @@ public class BossBar implements Viewable {
 
     private final UUID uuid = UUID.randomUUID();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     private ColoredText title;
     private float progress;
@@ -89,7 +90,7 @@ public class BossBar implements Viewable {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+        return unmodifiableViewers;
     }
 
     /**
