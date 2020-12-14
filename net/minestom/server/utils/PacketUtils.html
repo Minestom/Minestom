@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,10 +186,20 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)">sendGroupedPacket</a></span>&#8203;(java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                  <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
-<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
+<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a>
+ but with the player validator sets to null.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)">sendGroupedPacket</a></span>&#8203;(java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
+                 <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                 <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</code></th>
+<td class="colLast">
+<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buf,
            <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
@@ -197,7 +207,7 @@ extends java.lang.Object</pre>
 <div class="block">Writes a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <code>ByteBuf</code>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static io.netty.buffer.ByteBuf</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
@@ -228,6 +238,29 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendGroupedPacket</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;sendGroupedPacket&#8203;(@NotNull
+                                     java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
+                                     @NotNull
+                                     <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                     @Nullable
+                                     <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</pre>
+<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.
+ <p>
+ Can drastically improve performance since the packet will not have to be processed as much.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>players</code> - the players to send the packet to</dd>
+<dd><code>packet</code> - the packet to send to the players</dd>
+<dd><code>playerValidator</code> - optional callback to check if a specify player of <code>players</code> should receive the packet</dd>
+</dl>
+</li>
+</ul>
 <a id="sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
@@ -238,13 +271,11 @@ extends java.lang.Object</pre>
                                      java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                                      @NotNull
                                      <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
-<div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.
- <p>
- Can drastically improve performance since the packet will not have to be processed as much.</div>
+<div class="block">Same as <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a>
+ but with the player validator sets to null.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>players</code> - the players to send the packet to</dd>
-<dd><code>packet</code> - the packet to send to the players</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)"><code>sendGroupedPacket(Collection, ServerPacket, PlayerValidator)</code></a></dd>
 </dl>
 </li>
 </ul>
