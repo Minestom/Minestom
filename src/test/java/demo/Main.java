@@ -1,7 +1,7 @@
 package demo;
 
 import demo.blocks.BurningTorchBlock;
-import demo.blocks.StoneBlock;
+import demo.blocks.CustomBlockSample;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.minestom.server.MinecraftServer;
@@ -23,7 +23,7 @@ public class Main {
         // MinecraftServer.setShouldProcessNettyErrors(true);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-        blockManager.registerCustomBlock(new StoneBlock());
+        blockManager.registerCustomBlock(new CustomBlockSample());
         blockManager.registerCustomBlock(new UpdatableBlockDemo());
         blockManager.registerCustomBlock(new BurningTorchBlock());
 

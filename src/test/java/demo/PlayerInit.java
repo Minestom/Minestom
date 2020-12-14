@@ -5,8 +5,6 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataImpl;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
@@ -26,6 +24,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.PacketUtils;
@@ -34,6 +33,7 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -74,6 +74,12 @@ public class PlayerInit {
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
+
+            Collection<Player> players = connectionManager.getOnlinePlayers();
+
+            if (players.isEmpty())
+                return;
+
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
@@ -85,7 +91,7 @@ public class PlayerInit {
                 playerListHeaderAndFooterPacket.header = header;
                 playerListHeaderAndFooterPacket.footer = footer;
 
-                PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), playerListHeaderAndFooterPacket);
+                PacketUtils.sendGroupedPacket(players, playerListHeaderAndFooterPacket);
             }
 
         }).repeat(10, TimeUnit.TICK).schedule();
@@ -205,10 +211,7 @@ public class PlayerInit {
             final Player player = event.getPlayer();
             player.setGameMode(GameMode.CREATIVE);
 
-            ItemStack itemStack = new ItemStack(Material.BARRIER, (byte) 64);
-            Data data = new DataImpl();
-            data.set("testc", 2);
-            itemStack.setData(data);
+            ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);
             player.getInventory().addItemStack(itemStack);
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
