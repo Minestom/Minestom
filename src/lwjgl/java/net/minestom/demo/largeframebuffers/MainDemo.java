@@ -35,7 +35,7 @@ public class MainDemo {
             // Set the spawning instance
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
-                player.setRespawnPoint(new Position(0,45,0));
+                player.setRespawnPoint(new Position(0, 45, 0));
             });
 
             // Teleport the player at spawn
@@ -63,7 +63,7 @@ public class MainDemo {
         }
 
         @Override
-        public void fillBiomes(Biome @NotNull [] biomes, int chunkX, int chunkZ) {
+        public void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         }
 
