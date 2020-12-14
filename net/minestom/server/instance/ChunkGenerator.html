@@ -195,7 +195,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>generateChunkData</h4>
-<pre class="methodSignature">void&nbsp;generateChunkData&#8203;(<a href="batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;batch,
+<pre class="methodSignature">void&nbsp;generateChunkData&#8203;(@NotNull
+                       <a href="batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;batch,
                        int&nbsp;chunkX,
                        int&nbsp;chunkZ)</pre>
 <div class="block">Called when the blocks in the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> should be set using <a href="BlockModifier.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)"><code>BlockModifier.setBlock(int, int, int, Block)</code></a>
@@ -216,7 +217,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>fillBiomes</h4>
-<pre class="methodSignature">void&nbsp;fillBiomes&#8203;(<a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
+<pre class="methodSignature">void&nbsp;fillBiomes&#8203;(@NotNull
+                <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
                 int&nbsp;chunkX,
                 int&nbsp;chunkZ)</pre>
 <div class="block">Defines all the <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes"><code>Biome</code></a> in the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>.</div>
@@ -234,11 +236,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getPopulators</h4>
-<pre class="methodSignature">java.util.List&lt;<a href="ChunkPopulator.html" title="interface in net.minestom.server.instance">ChunkPopulator</a>&gt;&nbsp;getPopulators()</pre>
+<pre class="methodSignature">@Nullable
+java.util.List&lt;<a href="ChunkPopulator.html" title="interface in net.minestom.server.instance">ChunkPopulator</a>&gt;&nbsp;getPopulators()</pre>
 <div class="block">Gets all the <a href="ChunkPopulator.html" title="interface in net.minestom.server.instance"><code>ChunkPopulator</code></a> of this generator.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>List</code> of <a href="ChunkPopulator.html" title="interface in net.minestom.server.instance"><code>ChunkPopulator</code></a></dd>
+<dd>a <code>List</code> of <a href="ChunkPopulator.html" title="interface in net.minestom.server.instance"><code>ChunkPopulator</code></a>, can be null or empty</dd>
 </dl>
 </li>
 </ul>
