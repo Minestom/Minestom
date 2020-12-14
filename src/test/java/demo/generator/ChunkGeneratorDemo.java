@@ -25,7 +25,7 @@ public class ChunkGeneratorDemo implements ChunkGenerator {
     }
 
     @Override
-    public void fillBiomes(Biome @NotNull [] biomes, int chunkX, int chunkZ) {
+    public void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ) {
         Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
     }
 

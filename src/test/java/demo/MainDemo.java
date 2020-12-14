@@ -54,7 +54,7 @@ public class MainDemo {
         }
 
         @Override
-        public void fillBiomes(Biome @NotNull [] biomes, int chunkX, int chunkZ) {
+        public void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ) {
             Arrays.fill(biomes, Biome.PLAINS);
         }
 
