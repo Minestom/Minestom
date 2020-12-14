@@ -11,7 +11,9 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.zip.Deflater;
@@ -36,10 +38,12 @@ public final class PacketUtils {
      * <p>
      * Can drastically improve performance since the packet will not have to be processed as much.
      *
-     * @param players the players to send the packet to
-     * @param packet  the packet to send to the players
+     * @param players         the players to send the packet to
+     * @param packet          the packet to send to the players
+     * @param playerValidator optional callback to check if a specify player of {@code players} should receive the packet
      */
-    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
+    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
+                                         @Nullable PlayerValidator playerValidator) {
         if (players.isEmpty())
             return;
 
@@ -50,6 +54,11 @@ public final class PacketUtils {
 
             // Send packet to all players
             for (Player player : players) {
+
+                // Verify if the player should receive the packet
+                if (playerValidator != null && !playerValidator.isValid(player))
+                    continue;
+
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 if (playerConnection instanceof NettyPlayerConnection) {
                     final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
@@ -59,6 +68,16 @@ public final class PacketUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)}
+     * but with the player validator sets to null.
+     *
+     * @see #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)
+     */
+    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
+        sendGroupedPacket(players, packet, null);
     }
 
     /**

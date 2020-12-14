@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -398,7 +399,14 @@ public class InstanceContainer extends Instance {
                 effectPacket.data = blockStateId;
                 effectPacket.disableRelativeVolume = false;
 
-                chunk.sendPacketToViewers(effectPacket);
+                PacketUtils.sendGroupedPacket(chunk.getViewers(), effectPacket,
+                        (viewer) -> {
+                            // Prevent the block breaker to play the particles and sound two times
+                            if (customBlock == null && viewer.equals(player)) {
+                                return false;
+                            }
+                            return true;
+                        });
             }
 
         }

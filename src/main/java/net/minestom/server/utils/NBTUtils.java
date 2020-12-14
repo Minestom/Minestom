@@ -416,6 +416,7 @@ public final class NBTUtils {
      * @return the value representation of a tag
      * @throws UnsupportedOperationException if the tag type is not supported
      */
+    @NotNull
     public static Object fromNBT(@NotNull NBT nbt) {
         if (nbt instanceof NBTNumber) {
             return ((NBTNumber) nbt).getValue();
