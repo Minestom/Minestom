@@ -1,10 +1,10 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.entity.Entity;
+import org.jetbrains.annotations.NotNull;
+
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.entity.EntitySpawnEvent;
 import net.minestom.server.instance.Instance;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a new instance is set for a player.
@@ -13,8 +13,8 @@ public class PlayerSpawnEvent extends EntitySpawnEvent {
 
     private final boolean firstSpawn;
 
-    public PlayerSpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance, boolean firstSpawn) {
-        super(entity, spawnInstance);
+    public PlayerSpawnEvent(@NotNull Player player, @NotNull Instance spawnInstance, boolean firstSpawn) {
+        super(player, spawnInstance);
         this.firstSpawn = firstSpawn;
     }
 
