@@ -12,9 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a color in a text.
+ * Represents a color in a text. You can either use one of the pre-made colors
+ * or make your own using RGB. {@link ChatColor#fromRGB(byte, byte, byte)}.
+ * <p>
+ * Immutable class.
  */
-public class ChatColor {
+public final class ChatColor {
 
     // Special
     public static final ChatColor NO_COLOR = new ChatColor();
@@ -48,7 +51,6 @@ public class ChatColor {
     private static final Char2ObjectMap<ChatColor> legacyColorCodesMap = new Char2ObjectOpenHashMap<>();
 
     static {
-
         idColorMap.put(0, BLACK);
         idColorMap.put(1, DARK_BLUE);
         idColorMap.put(2, DARK_GREEN);
@@ -116,30 +118,34 @@ public class ChatColor {
     }
 
     private boolean empty;
-    private byte red, green, blue;
-    private int id;
+    private final byte red, green, blue;
+    private final int id;
 
-    private String codeName;
+    private final String codeName;
 
-    private boolean special;
+    private final boolean special;
 
-    private ChatColor(byte r, byte g, byte b, int id, String codeName) {
+    private ChatColor(byte r, byte g, byte b, int id, @Nullable String codeName, boolean special) {
         this.empty = false;
         this.red = r;
         this.green = g;
         this.blue = b;
         this.id = id;
         this.codeName = codeName;
+        this.special = special;
+    }
+
+    private ChatColor(byte r, byte g, byte b, int id, @Nullable String codeName) {
+        this(r, g, b, id, codeName, false);
     }
 
     private ChatColor(String codeName) {
-        this.codeName = codeName;
-        this.special = true;
+        this((byte) 0, (byte) 0, (byte) 0, 0, codeName, true);
     }
 
     private ChatColor() {
+        this((byte) 0, (byte) 0, (byte) 0, 0, null, true);
         this.empty = true;
-        this.special = true;
     }
 
     /**
@@ -155,6 +161,7 @@ public class ChatColor {
         return fromRGB(r, g, b, -1, null);
     }
 
+    @NotNull
     private static ChatColor fromRGB(byte r, byte g, byte b, int id, String codeName) {
         return new ChatColor(r, g, b, id, codeName);
     }
@@ -166,7 +173,7 @@ public class ChatColor {
      * @return the color associated with the name, {@link #NO_COLOR} if not found
      */
     @NotNull
-    public static ChatColor fromName(String name) {
+    public static ChatColor fromName(@NotNull String name) {
         return colorCode.getOrDefault(name.toLowerCase(), NO_COLOR);
     }
 
@@ -233,9 +240,9 @@ public class ChatColor {
     }
 
     /**
-     * Gets the code name if the color is "special".
+     * Gets the code name.
      *
-     * @return the special code name
+     * @return the color code name, null if not any
      */
     @Nullable
     public String getCodeName() {

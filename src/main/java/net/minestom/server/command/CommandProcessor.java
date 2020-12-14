@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a simple command which give you the whole string representation
+ * Represents a simple command which give you the whole string representation;
  * <p>
  * {@link #process(CommandSender, String, String[])} is called no matter what if a {@link CommandSender} sends a command which
- * start by {@link #getCommandName()} or any of the aliases in {@link #getAliases()}
+ * start by {@link #getCommandName()} or any of the aliases in {@link #getAliases()};
  * <p>
  * Tab-completion can be activated by overriding {@link #enableWritingTracking()} and return true, you should then listen to
  * {@link #onWrite(String)} and return the possible completions to suggest.
