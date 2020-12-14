@@ -211,7 +211,7 @@ public final class NBTUtils {
             if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {
-                LOGGER.warn("Unknown enchantment type: " + id);
+                LOGGER.warn("Unknown enchantment type: {}", id);
             }
         }
     }

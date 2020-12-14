@@ -14,16 +14,16 @@ public class MixinAuditTrailMinestom implements IMixinAuditTrail {
 
     @Override
     public void onApply(String className, String mixinName) {
-        LOGGER.trace("Applied mixin " + mixinName + " to class " + className);
+        LOGGER.trace("Applied mixin {} to class {}", mixinName, className);
     }
 
     @Override
     public void onPostProcess(String className) {
-        LOGGER.trace("Post processing " + className);
+        LOGGER.trace("Post processing {}", className);
     }
 
     @Override
     public void onGenerate(String className, String generatorName) {
-        LOGGER.trace("Generating class " + className + " via generator " + generatorName);
+        LOGGER.trace("Generating class {} via generator {}", className, generatorName);
     }
 }

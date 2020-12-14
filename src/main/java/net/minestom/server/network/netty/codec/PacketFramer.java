@@ -51,9 +51,10 @@ public class PacketFramer extends ByteToMessageCodec<ByteBuf> {
                     final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
                     if (playerConnection != null) {
                         final String identifier = playerConnection.getIdentifier();
-                        LOGGER.warn("An user (" + identifier + ") sent a packet over the maximum size (" + packetSize + ")");
+                        LOGGER.warn("An user ({}) sent a packet over the maximum size ({})",
+                                identifier, packetSize);
                     } else {
-                        LOGGER.warn("An unregistered user sent a packet over the maximum size (" + packetSize + ")");
+                        LOGGER.warn("An unregistered user sent a packet over the maximum size ({})", packetSize);
                     }
                     ctx.close();
                 }

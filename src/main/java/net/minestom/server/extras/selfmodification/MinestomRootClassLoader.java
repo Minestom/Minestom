@@ -110,12 +110,12 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         try {
             // we do not load system classes by ourselves
             Class<?> systemClass = ClassLoader.getPlatformClassLoader().loadClass(name);
-            LOGGER.trace("System class: " + systemClass);
+            LOGGER.trace("System class: {}", systemClass);
             return systemClass;
         } catch (ClassNotFoundException e) {
             try {
                 if (isProtected(name)) {
-                    LOGGER.trace("Protected: " + name);
+                    LOGGER.trace("Protected: {}", name);
                     return super.loadClass(name, resolve);
                 }
 
@@ -144,7 +144,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         try {
             byte[] bytes = loadBytes(name, true);
             Class<?> defined = defineClass(name, bytes, 0, bytes.length);
-            LOGGER.trace("Loaded with code modifiers: " + name);
+            LOGGER.trace("Loaded with code modifiers: {}", name);
             if (resolve) {
                 resolveClass(defined);
             }
@@ -152,7 +152,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         } catch (ClassNotFoundException e) {
             // could not load inside this classloader, attempt with children
             Class<?> defined = null;
-            for(MinestomExtensionClassLoader subloader : children) {
+            for (MinestomExtensionClassLoader subloader : children) {
                 try {
                     defined = subloader.loadClassAsChild(name, resolve);
                     LOGGER.trace("Loaded from child {}: {}", subloader, name);
@@ -179,11 +179,11 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
         InputStream input = getResourceAsStream(path);
-        if(input == null) {
-            throw new ClassNotFoundException("Could not find resource "+path);
+        if (input == null) {
+            throw new ClassNotFoundException("Could not find resource " + path);
         }
         byte[] originalBytes = input.readAllBytes();
-        if(transform) {
+        if (transform) {
             return transformBytes(originalBytes, name);
         }
         return originalBytes;
@@ -194,11 +194,11 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
         InputStream input = getResourceAsStreamWithChildren(path);
-        if(input == null) {
-            throw new ClassNotFoundException("Could not find resource "+path);
+        if (input == null) {
+            throw new ClassNotFoundException("Could not find resource " + path);
         }
         byte[] originalBytes = input.readAllBytes();
-        if(transform) {
+        if (transform) {
             return transformBytes(originalBytes, name);
         }
         return originalBytes;
@@ -227,7 +227,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                 };
                 node.accept(writer);
                 classBytecode = writer.toByteArray();
-                LOGGER.trace("Modified " + name);
+                LOGGER.trace("Modified {}", name);
             }
         }
         return classBytecode;
@@ -255,7 +255,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             if (CodeModifier.class.isAssignableFrom(modifierClass)) {
                 CodeModifier modifier = (CodeModifier) modifierClass.getDeclaredConstructor().newInstance();
                 synchronized (modifiers) {
-                    LOGGER.warn("Added Code modifier: " + modifier);
+                    LOGGER.warn("Added Code modifier: {}", modifier);
                     addCodeModifier(modifier);
                 }
             }

@@ -161,7 +161,9 @@ public final class PacketProcessor {
         } catch (Exception e) {
             final Player player = connection.getPlayer();
             final String username = player != null ? player.getUsername() : "null";
-            LOGGER.warn("Connection " + connection.getRemoteAddress() + " (" + username + ") sent an unexpected packet.");
+            LOGGER.warn("Connection {} ({}) sent an unexpected packet.",
+                    connection.getRemoteAddress(),
+                    username);
             e.printStackTrace();
         }
     }
