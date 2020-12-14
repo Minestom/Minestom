@@ -402,10 +402,7 @@ public class InstanceContainer extends Instance {
                 PacketUtils.sendGroupedPacket(chunk.getViewers(), effectPacket,
                         (viewer) -> {
                             // Prevent the block breaker to play the particles and sound two times
-                            if (customBlock == null && viewer.equals(player)) {
-                                return false;
-                            }
-                            return true;
+                            return (customBlock != null && customBlock.enableCustomBreakDelay()) || !viewer.equals(player);
                         });
             }
 
