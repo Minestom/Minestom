@@ -130,9 +130,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">ChatColor</span>
+<pre>public final class <span class="typeNameLabel">ChatColor</span>
 extends java.lang.Object</pre>
-<div class="block">Represents a color in a text.</div>
+<div class="block">Represents a color in a text. You can either use one of the pre-made colors
+ or make your own using RGB. <a href="#fromRGB(byte,byte,byte)"><code>fromRGB(byte, byte, byte)</code></a>.
+ <p>
+ Immutable class.</div>
 </li>
 </ul>
 </div>
@@ -327,7 +330,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCodeName()">getCodeName</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the code name if the color is "special".</div>
+<div class="block">Gets the code name.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -637,7 +640,8 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>fromName</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromName&#8203;(java.lang.String&nbsp;name)</pre>
+public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromName&#8203;(@NotNull
+                                 java.lang.String&nbsp;name)</pre>
 <div class="block">Gets a color based on its name (eg: white, black, aqua, etc...).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -754,10 +758,10 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <h4>getCodeName</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;java.lang.String&nbsp;getCodeName()</pre>
-<div class="block">Gets the code name if the color is "special".</div>
+<div class="block">Gets the code name.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the special code name</dd>
+<dd>the color code name, null if not any</dd>
 </dl>
 </li>
 </ul>
