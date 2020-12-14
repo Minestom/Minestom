@@ -39,7 +39,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                 try {
                     final String loginUsername = nettyConnection.getLoginUsername();
                     if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
-                        MinecraftServer.LOGGER.error(loginUsername + " tried to login with an invalid nonce!");
+                        MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
                         return;
                     }
                     if (!loginUsername.isEmpty()) {
@@ -48,7 +48,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
 
                         if (digestedData == null) {
                             // Incorrect key, probably because of the client
-                            MinecraftServer.LOGGER.error("Connection " + nettyConnection.getRemoteAddress() + " failed initializing encryption.");
+                            MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", nettyConnection.getRemoteAddress());
                             connection.disconnect();
                             return;
                         }

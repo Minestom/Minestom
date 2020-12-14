@@ -726,7 +726,7 @@ public final class MinecraftServer {
         extensionManager.getExtensions().forEach(Extension::postInitialize);
 
         final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
-        LOGGER.info("Extensions loaded in " + loadTime + "ms");
+        LOGGER.info("Extensions loaded in {}ms", loadTime);
 
         LOGGER.info("Minestom server started successfully.");
     }

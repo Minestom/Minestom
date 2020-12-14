@@ -321,14 +321,13 @@ public class ExtensionManager {
 
         // Check if there are cyclic extensions.
         if (!dependencyMap.isEmpty()) {
-            LOGGER.error("Minestom found " + dependencyMap.size() + " cyclic extensions.");
+            LOGGER.error("Minestom found {} cyclic extensions.", dependencyMap.size());
             LOGGER.error("Cyclic extensions depend on each other and can therefore not be loaded.");
             for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : dependencyMap.entrySet()) {
                 DiscoveredExtension discoveredExtension = entry.getKey();
-                LOGGER.error(discoveredExtension.getName() + " could not be loaded, as it depends on: "
-                        + entry.getValue().stream().map(DiscoveredExtension::getName).collect(Collectors.joining(", "))
-                        + "."
-                );
+                LOGGER.error("{} could not be loaded, as it depends on: {}.",
+                        discoveredExtension.getName(),
+                        entry.getValue().stream().map(DiscoveredExtension::getName).collect(Collectors.joining(", ")));
             }
 
         }
@@ -451,7 +450,7 @@ public class ExtensionManager {
     private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof MinestomRootClassLoader)) {
-            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but " + cl + ". This disables code modifiers (Mixin support is therefore disabled)");
+            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. This disables code modifiers (Mixin support is therefore disabled)", cl);
             return;
         }
         MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
@@ -464,7 +463,7 @@ public class ExtensionManager {
                 if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
                     Mixins.addConfiguration(mixinConfigFile);
-                    LOGGER.info("Found mixin in extension " + extension.getName() + ": " + mixinConfigFile);
+                    LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
