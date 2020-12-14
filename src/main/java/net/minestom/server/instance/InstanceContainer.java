@@ -16,10 +16,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.network.packet.server.play.ParticlePacket;
+import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -392,17 +390,16 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockStateId(), blockBreakEvent.getResultCustomBlockId());
 
-            ParticlePacket particlePacket = ParticleCreator.createParticlePacket(Particle.BLOCK, false,
-                    x + 0.5f, y, z + 0.5f,
-                    0.4f, 0.5f, 0.4f,
-                    0.3f, 125, writer -> writer.writeVarInt(blockStateId));
+            // Send the block break effect packet
+            {
+                EffectPacket effectPacket = new EffectPacket();
+                effectPacket.effectId = 2001; // Block break + block break sound
+                effectPacket.position = blockPosition;
+                effectPacket.data = blockStateId;
+                effectPacket.disableRelativeVolume = false;
 
-            chunk.getViewers().forEach(p -> {
-                // The player who breaks the block already get particles client-side
-                if (customBlock != null || !(p.equals(player) && !player.isCreative())) {
-                    p.getPlayerConnection().sendPacket(particlePacket);
-                }
-            });
+                chunk.sendPacketToViewers(effectPacket);
+            }
 
         }
 
