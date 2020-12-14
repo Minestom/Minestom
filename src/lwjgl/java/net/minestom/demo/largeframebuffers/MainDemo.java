@@ -10,6 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,7 @@ public class MainDemo {
     private static class GeneratorDemo implements ChunkGenerator {
 
         @Override
-        public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
+        public void generateChunkData(@NotNull ChunkBatch batch, int chunkX, int chunkZ) {
             // Set chunk blocks
             for (byte x = 0; x < Chunk.CHUNK_SIZE_X; x++)
                 for (byte z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -62,7 +63,7 @@ public class MainDemo {
         }
 
         @Override
-        public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+        public void fillBiomes(Biome @NotNull [] biomes, int chunkX, int chunkZ) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         }
 

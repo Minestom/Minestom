@@ -3,6 +3,8 @@ package net.minestom.server.instance;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,7 +25,7 @@ public interface ChunkGenerator {
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      */
-    void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ);
+    void generateChunkData(@NotNull ChunkBatch batch, int chunkX, int chunkZ);
 
     /**
      * Defines all the {@link Biome} in the {@link Chunk}.
@@ -32,13 +34,14 @@ public interface ChunkGenerator {
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      */
-    void fillBiomes(Biome[] biomes, int chunkX, int chunkZ);
+    void fillBiomes(@NotNull Biome[] biomes, int chunkX, int chunkZ);
 
     /**
      * Gets all the {@link ChunkPopulator} of this generator.
      *
-     * @return a {@link List} of {@link ChunkPopulator}
+     * @return a {@link List} of {@link ChunkPopulator}, can be null or empty
      */
+    @Nullable
     List<ChunkPopulator> getPopulators();
 
 }

@@ -10,6 +10,7 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +30,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
     }
 
     @Override
-    public void generateChunkData(ChunkBatch batch, int chunkX, int chunkZ) {
+    public void generateChunkData(@NotNull ChunkBatch batch, int chunkX, int chunkZ) {
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 final int height = getHeight(x + chunkX * 16, z + chunkZ * 16);
@@ -63,7 +64,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
     }
 
     @Override
-    public void fillBiomes(Biome[] biomes, int chunkX, int chunkZ) {
+    public void fillBiomes(Biome @NotNull [] biomes, int chunkX, int chunkZ) {
         Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
     }
 
