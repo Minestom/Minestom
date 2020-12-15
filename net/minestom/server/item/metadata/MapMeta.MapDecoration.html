@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,12 +130,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code>java.lang.Cloneable</code>, <code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a>&gt;</code></dd>
+</dl>
+<dl>
 <dt>Enclosing class:</dt>
 <dd><a href="MapMeta.html" title="class in net.minestom.server.item.metadata">MapMeta</a></dd>
 </dl>
 <hr>
 <pre>public static class <span class="typeNameLabel">MapMeta.MapDecoration</span>
-extends java.lang.Object</pre>
+extends java.lang.Object
+implements <a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -182,34 +187,39 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the arbitrary decoration id.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRotation()">getRotation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the rotation of the symbol (0;360).</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the decoration type.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getX()">getX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the X position of the decoration.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getZ()">getZ</a></span>()</code></th>
 <td class="colLast">
@@ -222,7 +232,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -246,7 +256,8 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MapDecoration</h4>
-<pre>public&nbsp;MapDecoration&#8203;(java.lang.String&nbsp;id,
+<pre>public&nbsp;MapDecoration&#8203;(@NotNull
+                     java.lang.String&nbsp;id,
                      byte&nbsp;type,
                      byte&nbsp;x,
                      byte&nbsp;z,
@@ -324,7 +335,7 @@ extends java.lang.Object</pre>
 <a id="getRotation()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRotation</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getRotation()</pre>
@@ -332,6 +343,22 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the rotation of the symbol</dd>
+</dl>
+</li>
+</ul>
+<a id="clone()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clone</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a>&nbsp;clone()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>
