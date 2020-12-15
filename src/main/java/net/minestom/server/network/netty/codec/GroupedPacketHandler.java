@@ -17,10 +17,11 @@ public class GroupedPacketHandler extends MessageToByteEncoder<FramedPacket> {
 
     @Override
     protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, FramedPacket msg, boolean preferDirect) {
+        final int size = msg.body.writerIndex();
         if (preferDirect) {
-            return ctx.alloc().directBuffer(msg.body.writerIndex());
+            return ctx.alloc().directBuffer(size, size);
         } else {
-            return ctx.alloc().heapBuffer(msg.body.writerIndex());
+            return ctx.alloc().heapBuffer(size, size);
         }
     }
 
