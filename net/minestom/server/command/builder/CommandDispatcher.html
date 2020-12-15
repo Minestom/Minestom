@@ -175,10 +175,12 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
        java.lang.String&nbsp;commandString)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Check if the command exists, and execute it.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
@@ -304,10 +306,18 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>execute</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;execute&#8203;(@NotNull
-                    <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-                    @NotNull
-                    java.lang.String&nbsp;commandString)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;execute&#8203;(@NotNull
+                       <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+                       @NotNull
+                       java.lang.String&nbsp;commandString)</pre>
+<div class="block">Check if the command exists, and execute it.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>source</code> - the command source</dd>
+<dd><code>commandString</code> - the command with the argument(s)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the command executed successfully, false if the command doesn't exist</dd>
+</dl>
 </li>
 </ul>
 <a id="getCommands()">
