@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.bossbar.BossBar;
@@ -183,7 +182,7 @@ public class Player extends LivingEntity implements CommandSender {
     private boolean allowFlying;
     private boolean instantBreak;
     private float flyingSpeed = 0.05f;
-    private float walkingSpeed = 0.1f;
+    private float fieldViewModifier = 0.1f;
 
     // Statistics
     private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
@@ -216,6 +215,7 @@ public class Player extends LivingEntity implements CommandSender {
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelFlat = true;
         refreshPosition(0, 0, 0);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -321,14 +321,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void playerConnectionInit() {
         this.playerConnection.setPlayer(this);
-    }
-
-    @Override
-    public float getAttributeValue(@NotNull Attribute attribute) {
-        if (attribute == Attributes.MOVEMENT_SPEED) {
-            return walkingSpeed;
-        }
-        return super.getAttributeValue(attribute);
     }
 
     @Override
@@ -2139,12 +2131,12 @@ public class Player extends LivingEntity implements CommandSender {
         refreshAbilities();
     }
 
-    public float getWalkingSpeed() {
-        return walkingSpeed;
+    public float getFieldViewModifier() {
+        return fieldViewModifier;
     }
 
-    public void setWalkingSpeed(float walkingSpeed) {
-        this.walkingSpeed = walkingSpeed;
+    public void setFieldViewModifier(float fieldViewModifier) {
+        this.fieldViewModifier = fieldViewModifier;
         refreshAbilities();
     }
 
@@ -2170,8 +2162,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields
-     * (walkingSpeed set to 0.1).
+     * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields.
      */
     protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
@@ -2180,7 +2171,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerAbilitiesPacket.allowFlying = allowFlying;
         playerAbilitiesPacket.instantBreak = instantBreak;
         playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.walkingSpeed = 0.1f;
+        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
 
         playerConnection.sendPacket(playerAbilitiesPacket);
     }
