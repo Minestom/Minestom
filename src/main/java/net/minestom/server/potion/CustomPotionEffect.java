@@ -1,9 +1,16 @@
 package net.minestom.server.potion;
 
+import net.minestom.server.utils.clone.PublicCloneable;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 /**
  * Represents a custom effect in {@link net.minestom.server.item.metadata.PotionMeta}.
+ * <p>
+ * This is an immutable class.
  */
-public class CustomPotionEffect {
+public class CustomPotionEffect implements PublicCloneable<CustomPotionEffect> {
 
     private final byte id;
     private final byte amplifier;
@@ -44,5 +51,29 @@ public class CustomPotionEffect {
 
     public boolean showIcon() {
         return showIcon;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomPotionEffect that = (CustomPotionEffect) o;
+        return id == that.id && amplifier == that.amplifier && duration == that.duration && ambient == that.ambient && showParticles == that.showParticles && showIcon == that.showIcon;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, amplifier, duration, ambient, showParticles, showIcon);
+    }
+
+    @NotNull
+    @Override
+    public CustomPotionEffect clone() {
+        try {
+            return (CustomPotionEffect) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Weird thing happened");
+        }
     }
 }
