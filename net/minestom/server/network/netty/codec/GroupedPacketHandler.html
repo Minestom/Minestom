@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -210,6 +210,13 @@ extends io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/Framed
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected io.netty.buffer.ByteBuf</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#allocateBuffer(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.FramedPacket,boolean)">allocateBuffer</a></span>&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx,
+              <a href="../packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&nbsp;msg,
+              boolean&nbsp;preferDirect)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.FramedPacket,io.netty.buffer.ByteBuf)">encode</a></span>&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx,
       <a href="../packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&nbsp;msg,
@@ -222,7 +229,7 @@ extends io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/Framed
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;io.netty.handler.codec.MessageToByteEncoder</h3>
-<code>acceptOutboundMessage, allocateBuffer, isPreferDirect, write</code></li>
+<code>acceptOutboundMessage, isPreferDirect, write</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.io.netty.channel.ChannelOutboundHandlerAdapter">
@@ -290,7 +297,7 @@ extends io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/Framed
 <a id="encode(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.FramedPacket,io.netty.buffer.ByteBuf)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;encode&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx,
@@ -299,6 +306,21 @@ extends io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/Framed
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>encode</code>&nbsp;in class&nbsp;<code>io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="allocateBuffer(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.FramedPacket,boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>allocateBuffer</h4>
+<pre class="methodSignature">protected&nbsp;io.netty.buffer.ByteBuf&nbsp;allocateBuffer&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx,
+                                                 <a href="../packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&nbsp;msg,
+                                                 boolean&nbsp;preferDirect)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>allocateBuffer</code>&nbsp;in class&nbsp;<code>io.netty.handler.codec.MessageToByteEncoder&lt;<a href="../packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
