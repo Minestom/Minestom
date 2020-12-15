@@ -521,9 +521,9 @@ public class InventoryClickProcessor {
             cursor = inventoryPreClickEvent.getCursorItem();
             clicked = inventoryPreClickEvent.getClickedItem();
 
-            clickResult.setCancel(inventoryPreClickEvent.isCancelled());
             if (inventoryPreClickEvent.isCancelled()) {
                 clickResult.setRefresh(true);
+                clickResult.setCancel(true);
             }
         }
 
@@ -542,9 +542,9 @@ public class InventoryClickProcessor {
                 clickResult.setCursor(cursor);
                 clickResult.setClicked(clicked);
 
-                clickResult.setCancel(result.isCancel());
                 if (result.isCancel()) {
                     clickResult.setRefresh(true);
+                    clickResult.setCancel(true);
                 }
             }
 
