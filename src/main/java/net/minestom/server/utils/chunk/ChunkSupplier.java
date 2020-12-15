@@ -20,5 +20,5 @@ public interface ChunkSupplier {
      * @return a newly {@link Chunk} object, cannot be null
      */
     @NotNull
-    Chunk getChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ);
+    Chunk createChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ);
 }

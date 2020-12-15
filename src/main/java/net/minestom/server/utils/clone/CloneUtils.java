@@ -6,6 +6,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * Convenient interface to deep-copy single object or collections.
+ * <p>
+ * Most of the methods require object to implement the {@link PublicCloneable} interface.
+ */
 public final class CloneUtils {
 
     @Nullable
