@@ -93,34 +93,54 @@ public final class NettyServer {
         Class<? extends ServerChannel> channel;
         final int workerThreadCount = MinecraftServer.getNettyThreadCount();
 
-        if (IOUring.isAvailable()) {
-            boss = new IOUringEventLoopGroup(2);
-            worker = new IOUringEventLoopGroup(workerThreadCount);
+        // Find boss/worker event group
+        {
+            if (IOUring.isAvailable()) {
+                boss = new IOUringEventLoopGroup(2);
+                worker = new IOUringEventLoopGroup(workerThreadCount);
 
-            channel = IOUringServerSocketChannel.class;
+                channel = IOUringServerSocketChannel.class;
 
-            LOGGER.info("Using io_uring");
-        } else if (Epoll.isAvailable()) {
-            boss = new EpollEventLoopGroup(2);
-            worker = new EpollEventLoopGroup(workerThreadCount);
+                LOGGER.info("Using io_uring");
+            } else if (Epoll.isAvailable()) {
+                boss = new EpollEventLoopGroup(2);
+                worker = new EpollEventLoopGroup(workerThreadCount);
 
-            channel = EpollServerSocketChannel.class;
+                channel = EpollServerSocketChannel.class;
 
-            LOGGER.info("Using epoll");
-        } else if (KQueue.isAvailable()) {
-            boss = new KQueueEventLoopGroup(2);
-            worker = new KQueueEventLoopGroup(workerThreadCount);
+                LOGGER.info("Using epoll");
+            } else if (KQueue.isAvailable()) {
+                boss = new KQueueEventLoopGroup(2);
+                worker = new KQueueEventLoopGroup(workerThreadCount);
 
-            channel = KQueueServerSocketChannel.class;
+                channel = KQueueServerSocketChannel.class;
 
-            LOGGER.info("Using kqueue");
-        } else {
-            boss = new NioEventLoopGroup(2);
-            worker = new NioEventLoopGroup(workerThreadCount);
+                LOGGER.info("Using kqueue");
+            } else {
+                boss = new NioEventLoopGroup(2);
+                worker = new NioEventLoopGroup(workerThreadCount);
 
-            channel = NioServerSocketChannel.class;
+                channel = NioServerSocketChannel.class;
 
-            LOGGER.info("Using NIO");
+                LOGGER.info("Using NIO");
+            }
+        }
+
+        // Add default allocator settings
+        {
+            if (System.getProperty("io.netty.allocator.numDirectArenas") == null) {
+                System.setProperty("io.netty.allocator.numDirectArenas", String.valueOf(workerThreadCount));
+            }
+
+            if (System.getProperty("io.netty.allocator.numHeapArenas") == null) {
+                System.setProperty("io.netty.allocator.numHeapArenas", String.valueOf(workerThreadCount));
+            }
+
+            if (System.getProperty("io.netty.allocator.maxOrder") == null) {
+                // The default page size is 8192 bytes, a bit shift of 5 makes it 262KB
+                // largely enough for this kind of server
+                System.setProperty("io.netty.allocator.maxOrder", "5");
+            }
         }
 
         bootstrap = new ServerBootstrap()
