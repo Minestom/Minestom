@@ -69,9 +69,6 @@ public class WritableBookMeta extends ItemMeta {
     @NotNull
     @Override
     public ItemMeta clone() {
-        WritableBookMeta writableBookMeta = (WritableBookMeta) super.clone();
-        writableBookMeta.pages.addAll(pages);
-
-        return writableBookMeta;
+        return super.clone();
     }
 }

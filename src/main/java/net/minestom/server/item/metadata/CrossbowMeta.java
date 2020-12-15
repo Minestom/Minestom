@@ -4,6 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
+import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -183,9 +184,9 @@ public class CrossbowMeta extends ItemMeta {
     public ItemMeta clone() {
         CrossbowMeta crossbowMeta = (CrossbowMeta) super.clone();
         crossbowMeta.triple = triple;
-        crossbowMeta.projectile1 = projectile1 == null ? null : projectile1.clone();
-        crossbowMeta.projectile2 = projectile2 == null ? null : projectile2.clone();
-        crossbowMeta.projectile3 = projectile3 == null ? null : projectile3.clone();
+        crossbowMeta.projectile1 = CloneUtils.optionalClone(projectile1);
+        crossbowMeta.projectile2 = CloneUtils.optionalClone(projectile2);
+        crossbowMeta.projectile3 = CloneUtils.optionalClone(projectile3);
 
         crossbowMeta.charged = charged;
 
