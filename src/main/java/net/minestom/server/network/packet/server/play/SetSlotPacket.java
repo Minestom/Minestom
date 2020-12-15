@@ -23,4 +23,19 @@ public class SetSlotPacket implements ServerPacket {
     public int getId() {
         return ServerPacketIdentifier.SET_SLOT;
     }
+
+    /**
+     * Returns a {@link SetSlotPacket} used to change a player cursor item.
+     *
+     * @param cursorItem the cursor item
+     * @return a set slot packet to change a player cursor item
+     */
+    @NotNull
+    public static SetSlotPacket createCursorPacket(@NotNull ItemStack cursorItem) {
+        SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = -1;
+        setSlotPacket.slot = -1;
+        setSlotPacket.itemStack = cursorItem;
+        return setSlotPacket;
+    }
 }
