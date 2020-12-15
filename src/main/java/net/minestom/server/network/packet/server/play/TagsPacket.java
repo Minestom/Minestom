@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -19,6 +20,12 @@ public class TagsPacket implements ServerPacket {
     public List<Tag> itemTags = new LinkedList<>();
     public List<Tag> fluidTags = new LinkedList<>();
     public List<Tag> entityTags = new LinkedList<>();
+
+    private static final TagsPacket REQUIRED_TAGS_PACKET = new TagsPacket();
+
+    static {
+        MinecraftServer.getTagManager().addRequiredTagsToPacket(REQUIRED_TAGS_PACKET);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -47,5 +54,16 @@ public class TagsPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.TAGS;
+    }
+
+    /**
+     * Gets the {@link TagsPacket} sent to every {@link net.minestom.server.entity.Player}
+     * on login.
+     *
+     * @return the default tags packet
+     */
+    @NotNull
+    public static TagsPacket getRequiredTagsPacket() {
+        return REQUIRED_TAGS_PACKET;
     }
 }

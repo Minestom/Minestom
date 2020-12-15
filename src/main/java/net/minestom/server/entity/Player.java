@@ -23,7 +23,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -299,18 +298,19 @@ public class Player extends LivingEntity implements CommandSender {
         }
         // Recipes end
 
-        // Send server tags
-        TagsPacket tags = new TagsPacket();
-        TagManager tagManager = MinecraftServer.getTagManager();
-        tagManager.addRequiredTagsToPacket(tags);
+        // Tags start
+        {
+            TagsPacket tags = TagsPacket.getRequiredTagsPacket();
 
-        UpdateTagListEvent event = new UpdateTagListEvent(tags);
-        callEvent(UpdateTagListEvent.class, event);
+            UpdateTagListEvent event = new UpdateTagListEvent(tags);
+            callEvent(UpdateTagListEvent.class, event);
 
-        getPlayerConnection().sendPacket(tags);
+            this.playerConnection.sendPacket(tags);
+        }
+        // Tags end
 
         // Some client update
-        playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
         getInventory().update();
