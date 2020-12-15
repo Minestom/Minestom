@@ -75,9 +75,19 @@ public class CommandDispatcher {
         return findCommandResult(command, args);
     }
 
-    public void execute(@NotNull CommandSender source, @NotNull String commandString) {
+    /**
+     * Check if the command exists, and execute it.
+     *
+     * @param source        the command source
+     * @param commandString the command with the argument(s)
+     * @return true if the command executed successfully, false if the command doesn't exist
+     */
+    public boolean execute(@NotNull CommandSender source, @NotNull String commandString) {
         CommandResult result = parse(commandString);
-        result.execute(source, commandString);
+        if (result != null) {
+            result.execute(source, commandString);
+        }
+        return result != null;
     }
 
     @NotNull

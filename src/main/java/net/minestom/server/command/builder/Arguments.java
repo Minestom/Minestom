@@ -148,7 +148,7 @@ public final class Arguments {
     public Object getObject(@NotNull String id) {
         return args.computeIfAbsent(id, s -> {
             throw new NullPointerException(
-                    "The argument with the id " + id + " has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
+                    "The argument with the id '" + id + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
         });
     }
 

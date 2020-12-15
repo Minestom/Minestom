@@ -202,27 +202,29 @@ public final class CommandManager {
         }
 
         // Process the command
-        try {
+
+        {
             // Check for rich-command
-            this.dispatcher.execute(sender, command);
-            return true;
-        } catch (NullPointerException e) {
-            // Check for legacy-command
-            final String[] splitCommand = command.split(" ");
-            final String commandName = splitCommand[0];
-            final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
-            if (commandProcessor == null) {
-                if (unknownCommandCallback != null) {
-                    this.unknownCommandCallback.apply(sender, command);
+            final boolean result = this.dispatcher.execute(sender, command);
+            if (result) {
+                return true;
+            } else {
+                // Check for legacy-command
+                final String[] splitCommand = command.split(" ");
+                final String commandName = splitCommand[0];
+                final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
+                if (commandProcessor == null) {
+                    if (unknownCommandCallback != null) {
+                        this.unknownCommandCallback.apply(sender, command);
+                    }
+                    return false;
                 }
-                return false;
+
+                // Execute the legacy-command
+                final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
+
+                return commandProcessor.process(sender, commandName, args);
             }
-
-            // Execute the legacy-command
-            final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
-
-            return commandProcessor.process(sender, commandName, args);
-
         }
     }
 
