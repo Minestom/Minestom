@@ -4,9 +4,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryClickHandler;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindow;
 import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPacket;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 
 public class WindowListener {
@@ -82,6 +85,11 @@ public class WindowListener {
                 break;
         }
 
+        // Prevent the player from picking a ghost item in cursor
+        if (!successful) {
+            refreshCursorItem(player, inventory);
+        }
+
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
         windowConfirmationPacket.actionNumber = actionNumber;
@@ -104,6 +112,30 @@ public class WindowListener {
 
     public static void windowConfirmationListener(ClientWindowConfirmationPacket packet, Player player) {
         // Empty
+    }
+
+    /**
+     * @param player    the player to refresh the cursor item
+     * @param inventory the player open inventory, null if not any (could be player inventory)
+     */
+    private static void refreshCursorItem(Player player, Inventory inventory) {
+        PlayerInventory playerInventory = player.getInventory();
+
+        ItemStack cursorItem;
+        if (inventory != null) {
+            cursorItem = inventory.getCursorItem(player);
+        } else {
+            cursorItem = playerInventory.getCursorItem();
+        }
+
+        // Error occurred while retrieving the cursor item, stop here
+        if (cursorItem == null) {
+            return;
+        }
+
+        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
+
+        player.getPlayerConnection().sendPacket(setSlotPacket);
     }
 
 }
