@@ -138,7 +138,7 @@ public final class NettyServer {
 
             if (System.getProperty("io.netty.allocator.maxOrder") == null) {
                 // The default page size is 8192 bytes, a bit shift of 5 makes it 262KB
-                // largely enough for this kind of server
+                // largely enough for this type of server
                 System.setProperty("io.netty.allocator.maxOrder", "5");
             }
         }

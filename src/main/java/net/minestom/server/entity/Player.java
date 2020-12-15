@@ -193,7 +193,7 @@ public class Player extends LivingEntity implements CommandSender {
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
-    public Player(UUID uuid, String username, PlayerConnection playerConnection) {
+    public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
         this.uuid = uuid; // Override Entity#uuid defined in the constructor
         this.username = username;
@@ -214,7 +214,6 @@ public class Player extends LivingEntity implements CommandSender {
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelFlat = true;
-        refreshPosition(0, 0, 0);
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
