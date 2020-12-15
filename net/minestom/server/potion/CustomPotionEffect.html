@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,10 +129,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code>java.lang.Cloneable</code>, <code><a href="../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;</code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">CustomPotionEffect</span>
-extends java.lang.Object</pre>
-<div class="block">Represents a custom effect in <a href="../item/metadata/PotionMeta.html" title="class in net.minestom.server.item.metadata"><code>PotionMeta</code></a>.</div>
+extends java.lang.Object
+implements <a href="../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;</pre>
+<div class="block">Represents a custom effect in <a href="../item/metadata/PotionMeta.html" title="class in net.minestom.server.item.metadata"><code>PotionMeta</code></a>.
+ <p>
+ This is an immutable class.</div>
 </li>
 </ul>
 </div>
@@ -180,31 +187,46 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAmplifier()">getAmplifier</a></span>()</code></th>
+<td class="colFirst"><code><a href="CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDuration()">getDuration</a></span>()</code></th>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAmplifier()">getAmplifier</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDuration()">getDuration</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAmbient()">isAmbient</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showIcon()">showIcon</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showParticles()">showParticles</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -215,7 +237,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -305,10 +327,52 @@ extends java.lang.Object</pre>
 <a id="showIcon()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>showIcon</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;showIcon()</pre>
+</li>
+</ul>
+<a id="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="hashCode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="clone()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>clone</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&nbsp;clone()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
 </li>
 </ul>
 </li>

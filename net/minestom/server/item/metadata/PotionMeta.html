@@ -297,7 +297,8 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getPotionType</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;getPotionType()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;getPotionType()</pre>
 <div class="block">Gets the potion type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -311,7 +312,8 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>setPotionType</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPotionType&#8203;(<a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setPotionType&#8203;(@Nullable
+                          <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</pre>
 <div class="block">Changes the potion type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -325,11 +327,12 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getCustomPotionEffects</h4>
-<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;&nbsp;getCustomPotionEffects()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;&nbsp;getCustomPotionEffects()</pre>
 <div class="block">Get a list of <a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion"><code>CustomPotionEffect</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the custom potion effects</dd>
+<dd>the custom potion effect list</dd>
 </dl>
 </li>
 </ul>
