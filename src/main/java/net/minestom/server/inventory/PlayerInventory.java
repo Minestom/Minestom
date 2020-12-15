@@ -301,8 +301,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         // Refresh slot
         update();
-        //problem with ghost item when clicking on a slot which has a different internal id
-        //refreshSlot(slot);
+        // FIXME: replace update() to refreshSlot, currently not possible because our inventory click handling is not exactly the same as what the client expects
+        //refreshSlot((short) slot);
     }
 
     protected void setItemStackInternal(int slot, ItemStack itemStack) {

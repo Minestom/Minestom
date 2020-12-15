@@ -32,6 +32,11 @@ public class WindowListener {
 
         boolean successful = false;
 
+        // prevent click in a non interactive slot (why does it exist?)
+        if (slot == -1) {
+            return;
+        }
+
         switch (mode) {
             case 0:
                 switch (button) {
