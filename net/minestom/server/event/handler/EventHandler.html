@@ -157,12 +157,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>default &lt;E extends <a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a>&gt;<br>void</code></td>
+<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a> &amp; <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a>&gt;<br>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callCancellableEvent(java.lang.Class,E,java.lang.Runnable)">callCancellableEvent</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
                     E&nbsp;event,
                     java.lang.Runnable&nbsp;successCallback)</code></th>
 <td class="colLast">
-<div class="block">Calls a <a href="../CancellableEvent.html" title="class in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.</div>
+<div class="block">Calls a <a href="../CancellableEvent.html" title="interface in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -337,7 +337,7 @@ default&nbsp;java.util.stream.Stream&lt;<a href="../EventCallback.html" title="i
 </dl>
 </li>
 </ul>
-<a id="callCancellableEvent(java.lang.Class,net.minestom.server.event.CancellableEvent,java.lang.Runnable)">
+<a id="callCancellableEvent(java.lang.Class,net.minestom.server.event.Event,java.lang.Runnable)">
 <!--   -->
 </a><a id="callCancellableEvent(java.lang.Class,E,java.lang.Runnable)">
 <!--   -->
@@ -345,13 +345,13 @@ default&nbsp;java.util.stream.Stream&lt;<a href="../EventCallback.html" title="i
 <ul class="blockListLast">
 <li class="blockList">
 <h4>callCancellableEvent</h4>
-<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a>&gt;&nbsp;void&nbsp;callCancellableEvent&#8203;(@NotNull
-                                                               java.lang.Class&lt;E&gt;&nbsp;eventClass,
-                                                               @NotNull
-                                                               E&nbsp;event,
-                                                               @NotNull
-                                                               java.lang.Runnable&nbsp;successCallback)</pre>
-<div class="block">Calls a <a href="../CancellableEvent.html" title="class in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.
+<pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a> &amp; <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a>&gt;&nbsp;void&nbsp;callCancellableEvent&#8203;(@NotNull
+                                                                       java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                                       @NotNull
+                                                                       E&nbsp;event,
+                                                                       @NotNull
+                                                                       java.lang.Runnable&nbsp;successCallback)</pre>
+<div class="block">Calls a <a href="../CancellableEvent.html" title="interface in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.
  <p>
  Does call <a href="#callEvent(java.lang.Class,E)"><code>callEvent(Class, Event)</code></a> internally.</div>
 <dl>

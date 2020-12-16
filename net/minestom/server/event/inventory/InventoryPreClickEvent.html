@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../CancellableEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.CancellableEvent</a></li>
+<li><a href="../InventoryEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.InventoryEvent</a></li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.event.inventory.InventoryPreClickEvent</li>
@@ -139,9 +139,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">InventoryPreClickEvent</span>
-extends <a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a></pre>
+extends <a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a>
+implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
 <div class="block">Called before <a href="InventoryClickEvent.html" title="class in net.minestom.server.event.inventory"><code>InventoryClickEvent</code></a>, used to potentially cancel the click.</div>
 </li>
 </ul>
@@ -149,6 +154,23 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.InventoryEvent">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></h3>
+<code><a href="../InventoryEvent.html#inventory">inventory</a></code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -163,8 +185,8 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">InventoryPreClickEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                      <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">InventoryPreClickEvent</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                      <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                       int&nbsp;slot,
                       <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
                       <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -211,34 +233,41 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInventory()">getInventory</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Can be null if the clicked inventory is the player one.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player who is trying to click on the inventory.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSlot()">getSlot</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the clicked slot number.</div>
 </td>
 </tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+</td>
+</tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
+<td class="colLast">
+<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setClickedItem(net.minestom.server.item.ItemStack)">setClickedItem</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</code></th>
 <td class="colLast">
 <div class="block">Changes the clicked item.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCursorItem(net.minestom.server.item.ItemStack)">setCursorItem</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
 <td class="colLast">
@@ -247,11 +276,11 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.CancellableEvent">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.InventoryEvent">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a></h3>
-<code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a>, <a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code></li>
+<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></h3>
+<code><a href="../InventoryEvent.html#getInventory()">getInventory</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -276,16 +305,16 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="&lt;init&gt;(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InventoryPreClickEvent</h4>
-<pre>public&nbsp;InventoryPreClickEvent&#8203;(@NotNull
-                              <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                              @Nullable
+<pre>public&nbsp;InventoryPreClickEvent&#8203;(@Nullable
                               <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                              @NotNull
+                              <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                               int&nbsp;slot,
                               @NotNull
                               <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
@@ -317,21 +346,6 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the player who clicked</dd>
-</dl>
-</li>
-</ul>
-<a id="getInventory()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getInventory</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;getInventory()</pre>
-<div class="block">Can be null if the clicked inventory is the player one.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the inventory where the click happened, null if this is the player's inventory</dd>
 </dl>
 </li>
 </ul>
@@ -412,7 +426,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <a id="setCursorItem(net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setCursorItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCursorItem&#8203;(@NotNull
@@ -421,6 +435,40 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cursorItem</code> - the cursor item</dd>
+</dl>
+</li>
+</ul>
+<a id="isCancelled()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCancelled</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
+<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the event should be cancelled</dd>
+</dl>
+</li>
+</ul>
+<a id="setCancelled(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setCancelled</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
+<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -476,7 +524,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

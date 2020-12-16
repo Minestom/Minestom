@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -125,7 +125,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../PlayerEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.PlayerEvent</a></li>
+<li>
+<ul class="inheritance">
 <li>net.minestom.server.event.player.PlayerSettingsChangeEvent</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -136,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">PlayerSettingsChangeEvent</span>
-extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a></pre>
+extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></pre>
 <div class="block">Called after the player signals the server that his settings has been modified.</div>
 </li>
 </ul>
@@ -144,6 +149,23 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.PlayerEvent">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></h3>
+<code><a href="../PlayerEvent.html#player">player</a></code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -242,6 +264,8 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
  <p>
  You can retrieve the new player settings with <a href="../../entity/Player.html#getSettings()"><code>Player.getSettings()</code></a>.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in class&nbsp;<code><a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the player</dd>
 </dl>
@@ -299,7 +323,7 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

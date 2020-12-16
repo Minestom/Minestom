@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":6,"i1":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -89,13 +89,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -115,32 +115,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <main role="main">
 <div class="header">
 <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.event</a></div>
-<h2 title="Class CancellableEvent" class="title">Class CancellableEvent</h2>
+<h2 title="Interface CancellableEvent" class="title">Interface CancellableEvent</h2>
 </div>
 <div class="contentContainer">
-<ul class="inheritance">
-<li>java.lang.Object</li>
-<li>
-<ul class="inheritance">
-<li><a href="Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
-<li>
-<ul class="inheritance">
-<li>net.minestom.server.event.CancellableEvent</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
 <dl>
-<dt>Direct Known Subclasses:</dt>
+<dt>All Known Implementing Classes:</dt>
 <dd><code><a href="instance/AddEntityToInstanceEvent.html" title="class in net.minestom.server.event.instance">AddEntityToInstanceEvent</a></code>, <code><a href="entity/EntityDamageEvent.html" title="class in net.minestom.server.event.entity">EntityDamageEvent</a></code>, <code><a href="entity/EntityFireEvent.html" title="class in net.minestom.server.event.entity">EntityFireEvent</a></code>, <code><a href="entity/EntityItemMergeEvent.html" title="class in net.minestom.server.event.entity">EntityItemMergeEvent</a></code>, <code><a href="entity/EntityVelocityEvent.html" title="class in net.minestom.server.event.entity">EntityVelocityEvent</a></code>, <code><a href="inventory/InventoryOpenEvent.html" title="class in net.minestom.server.event.inventory">InventoryOpenEvent</a></code>, <code><a href="inventory/InventoryPreClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryPreClickEvent</a></code>, <code><a href="item/ItemDropEvent.html" title="class in net.minestom.server.event.item">ItemDropEvent</a></code>, <code><a href="item/PickupExperienceEvent.html" title="class in net.minestom.server.event.item">PickupExperienceEvent</a></code>, <code><a href="item/PickupItemEvent.html" title="class in net.minestom.server.event.item">PickupItemEvent</a></code>, <code><a href="player/PlayerAddItemStackEvent.html" title="class in net.minestom.server.event.player">PlayerAddItemStackEvent</a></code>, <code><a href="player/PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player">PlayerBlockBreakEvent</a></code>, <code><a href="player/PlayerBlockInteractEvent.html" title="class in net.minestom.server.event.player">PlayerBlockInteractEvent</a></code>, <code><a href="player/PlayerBlockPlaceEvent.html" title="class in net.minestom.server.event.player">PlayerBlockPlaceEvent</a></code>, <code><a href="player/PlayerChangeHeldSlotEvent.html" title="class in net.minestom.server.event.player">PlayerChangeHeldSlotEvent</a></code>, <code><a href="player/PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a></code>, <code><a href="player/PlayerCommandEvent.html" title="class in net.minestom.server.event.player">PlayerCommandEvent</a></code>, <code><a href="player/PlayerHandAnimationEvent.html" title="class in net.minestom.server.event.player">PlayerHandAnimationEvent</a></code>, <code><a href="player/PlayerItemAnimationEvent.html" title="class in net.minestom.server.event.player">PlayerItemAnimationEvent</a></code>, <code><a href="player/PlayerMoveEvent.html" title="class in net.minestom.server.event.player">PlayerMoveEvent</a></code>, <code><a href="player/PlayerPreEatEvent.html" title="class in net.minestom.server.event.player">PlayerPreEatEvent</a></code>, <code><a href="player/PlayerSetItemStackEvent.html" title="class in net.minestom.server.event.player">PlayerSetItemStackEvent</a></code>, <code><a href="player/PlayerStartDiggingEvent.html" title="class in net.minestom.server.event.player">PlayerStartDiggingEvent</a></code>, <code><a href="player/PlayerSwapItemEvent.html" title="class in net.minestom.server.event.player">PlayerSwapItemEvent</a></code>, <code><a href="player/PlayerUseItemEvent.html" title="class in net.minestom.server.event.player">PlayerUseItemEvent</a></code>, <code><a href="instance/RemoveEntityFromInstanceEvent.html" title="class in net.minestom.server.event.instance">RemoveEntityFromInstanceEvent</a></code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">CancellableEvent</span>
-extends <a href="Event.html" title="class in net.minestom.server.event">Event</a></pre>
+<pre>public interface <span class="typeNameLabel">CancellableEvent</span></pre>
 <div class="block">Represents an <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> which can be cancelled.</div>
 </li>
 </ul>
@@ -148,27 +134,6 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="constructor.summary">
-<!--   -->
-</a>
-<h3>Constructor Summary</h3>
-<table class="memberSummary">
-<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Constructor</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">CancellableEvent</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -177,7 +142,7 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -198,13 +163,6 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
-</ul>
 </li>
 </ul>
 </section>
@@ -214,25 +172,6 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="constructor.detail">
-<!--   -->
-</a>
-<h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>CancellableEvent</h4>
-<pre>public&nbsp;CancellableEvent()</pre>
-</li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
@@ -246,11 +185,11 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 <ul class="blockList">
 <li class="blockList">
 <h4>isCancelled</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
+<pre class="methodSignature">boolean&nbsp;isCancelled()</pre>
 <div class="block">Gets if the <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled</dd>
+<dd>true if the event should be cancelled</dd>
 </dl>
 </li>
 </ul>
@@ -260,11 +199,11 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setCancelled</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
+<pre class="methodSignature">void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
 <div class="block">Marks the <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cancel</code> - true if the <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled, false otherwise</dd>
+<dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -321,13 +260,13 @@ extends <a href="Event.html" title="class in net.minestom.server.event">Event</a
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -125,7 +125,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../InventoryEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.InventoryEvent</a></li>
+<li>
+<ul class="inheritance">
 <li>net.minestom.server.event.inventory.InventoryCloseEvent</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -136,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">InventoryCloseEvent</span>
-extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a></pre>
+extends <a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></pre>
 <div class="block">Called when an <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a> is closed by a player.</div>
 </li>
 </ul>
@@ -144,6 +149,23 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.InventoryEvent">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></h3>
+<code><a href="../InventoryEvent.html#inventory">inventory</a></code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -158,8 +180,8 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory)">InventoryCloseEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                   <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)">InventoryCloseEvent</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                   <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -182,26 +204,19 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInventory()">getInventory</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the closed inventory.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNewInventory()">getNewInventory</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the new inventory to open.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player who closed the inventory.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNewInventory(net.minestom.server.inventory.Inventory)">setNewInventory</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</code></th>
 <td class="colLast">
@@ -209,6 +224,13 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.InventoryEvent">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></h3>
+<code><a href="../InventoryEvent.html#getInventory()">getInventory</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -232,16 +254,16 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory)">
+<a id="&lt;init&gt;(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>InventoryCloseEvent</h4>
-<pre>public&nbsp;InventoryCloseEvent&#8203;(@NotNull
-                           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                           @Nullable
-                           <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</pre>
+<pre>public&nbsp;InventoryCloseEvent&#8203;(@Nullable
+                           <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                           @NotNull
+                           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 </li>
 </ul>
 </li>
@@ -266,21 +288,6 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the player who closed the inventory</dd>
-</dl>
-</li>
-</ul>
-<a id="getInventory()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getInventory</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;getInventory()</pre>
-<div class="block">Gets the closed inventory.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the closed inventory, null if this is the player inventory</dd>
 </dl>
 </li>
 </ul>
@@ -366,7 +373,7 @@ public&nbsp;<a href="../../inventory/Inventory.html" title="class in net.minesto
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

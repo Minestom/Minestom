@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../CancellableEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.CancellableEvent</a></li>
+<li><a href="../EntityEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.EntityEvent</a></li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.event.entity.EntityItemMergeEvent</li>
@@ -139,9 +139,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">EntityItemMergeEvent</span>
-extends <a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a></pre>
+extends <a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a>
+implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
 <div class="block">Called when two <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> are merging their <a href="../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> together to form a sole entity.</div>
 </li>
 </ul>
@@ -149,6 +154,23 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.EntityEvent">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></h3>
+<code><a href="../EntityEvent.html#entity">entity</a></code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -188,26 +210,40 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> who is receiving <a href="#getMerged()"><code>getMerged()</code></a>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMerged()">getMerged</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity who will be merged.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResult()">getResult</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the final item stack on the ground.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSource()">getSource</a></span>()</code></th>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> who is receiving <a href="#getMerged()"><code>getMerged()</code></a>.</div>
+<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
+<td class="colLast">
+<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResult(net.minestom.server.item.ItemStack)">setResult</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
 <td class="colLast">
@@ -215,13 +251,6 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 </td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.CancellableEvent">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="../CancellableEvent.html" title="class in net.minestom.server.event">CancellableEvent</a></h3>
-<code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a>, <a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -269,18 +298,20 @@ extends <a href="../CancellableEvent.html" title="class in net.minestom.server.e
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getSource()">
+<a id="getEntity()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSource</h4>
+<h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getSource()</pre>
+public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getEntity()</pre>
 <div class="block">Gets the <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> who is receiving <a href="#getMerged()"><code>getMerged()</code></a>.
  <p>
  This can be used to get the final ItemEntity position.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../EntityEvent.html#getEntity()">getEntity</a></code>&nbsp;in class&nbsp;<code><a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the source ItemEntity</dd>
 </dl>
@@ -321,7 +352,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <a id="setResult(net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setResult</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setResult&#8203;(@NotNull
@@ -330,6 +361,40 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>result</code> - the new item stack</dd>
+</dl>
+</li>
+</ul>
+<a id="isCancelled()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isCancelled</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
+<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the event should be cancelled</dd>
+</dl>
+</li>
+</ul>
+<a id="setCancelled(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setCancelled</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
+<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
 </li>
 </ul>
@@ -385,7 +450,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
