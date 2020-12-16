@@ -2,32 +2,24 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is trying to swap his main and off hand item.
  */
-public class PlayerSwapItemEvent extends CancellableEvent {
+public class PlayerSwapItemEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private ItemStack mainHandItem;
     private ItemStack offHandItem;
 
+    private boolean cancelled;
+
     public PlayerSwapItemEvent(@NotNull Player player, @NotNull ItemStack mainHandItem, @NotNull ItemStack offHandItem) {
-        this.player = player;
+        super(player);
         this.mainHandItem = mainHandItem;
         this.offHandItem = offHandItem;
-    }
-
-    /**
-     * Gets the player who is trying to swap his hands item.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**
@@ -66,5 +58,15 @@ public class PlayerSwapItemEvent extends CancellableEvent {
      */
     public void setOffHandItem(@NotNull ItemStack offHandItem) {
         this.offHandItem = offHandItem;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

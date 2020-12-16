@@ -100,7 +100,7 @@ public class WindowListener {
 
     public static void closeWindowListener(ClientCloseWindow packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
-        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player, player.getOpenInventory());
+        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
 
         player.closeInventory();

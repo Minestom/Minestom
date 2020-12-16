@@ -1,33 +1,32 @@
 package net.minestom.server.event.player;
 
-import org.jetbrains.annotations.NotNull;
-
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.entity.EntitySpawnEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a new instance is set for a player.
  */
-public class PlayerSpawnEvent extends EntitySpawnEvent {
+public class PlayerSpawnEvent extends PlayerEvent {
 
+    private final Instance spawnInstance;
     private final boolean firstSpawn;
 
     public PlayerSpawnEvent(@NotNull Player player, @NotNull Instance spawnInstance, boolean firstSpawn) {
-        super(player, spawnInstance);
+        super(player);
+        this.spawnInstance = spawnInstance;
         this.firstSpawn = firstSpawn;
     }
 
     /**
-     * Gets the player who spawned.
-     * <p>
-     * Shortcut for casting {@link #getEntity()}.
+     * Gets the entity new instance.
      *
-     * @return
+     * @return the instance
      */
     @NotNull
-    public Player getPlayer() {
-        return (Player) getEntity();
+    public Instance getSpawnInstance() {
+        return spawnInstance;
     }
 
     /**

@@ -2,31 +2,20 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Called at the player connection to initialize his skin.
  */
-public class PlayerSkinInitEvent extends Event {
+public class PlayerSkinInitEvent extends PlayerEvent {
 
-    private final Player player;
     private PlayerSkin skin;
 
     public PlayerSkinInitEvent(@NotNull Player player, @Nullable PlayerSkin currentSkin) {
-        this.player = player;
+        super(player);
         this.skin = currentSkin;
-    }
-
-    /**
-     * Gets the player whose the skin is getting initialized.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**

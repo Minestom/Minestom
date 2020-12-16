@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,26 +10,17 @@ import org.jetbrains.annotations.NotNull;
  * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#setItemStack(int, ItemStack)}
  * and player click in his inventory.
  */
-public class PlayerSetItemStackEvent extends CancellableEvent {
+public class PlayerSetItemStackEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private int slot;
     private ItemStack itemStack;
 
+    private boolean cancelled;
+
     public PlayerSetItemStackEvent(@NotNull Player player, int slot, @NotNull ItemStack itemStack) {
-        this.player = player;
+        super(player);
         this.slot = slot;
         this.itemStack = itemStack;
-    }
-
-    /**
-     * Gets the player who has an item stack set to his inventory.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**
@@ -68,4 +60,13 @@ public class PlayerSetItemStackEvent extends CancellableEvent {
         this.itemStack = itemStack;
     }
 
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+    }
 }

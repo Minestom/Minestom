@@ -21,15 +21,16 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -113,7 +114,7 @@ public class PlayerInit {
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
 
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
-            final Entity source = event.getSource();
+            final Entity source = event.getEntity();
             final Entity entity = event.getTarget();
             if (entity instanceof EntityCreature) {
                 EntityCreature creature = (EntityCreature) entity;
@@ -202,17 +203,27 @@ public class PlayerInit {
             player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                 if (slot == -999)
                     return;
-                ItemStack itemStack = p.getInventory().getItemStack(slot);
-                System.out.println("test " + itemStack.getIdentifier() + " " + itemStack.getData());
+                //ItemStack itemStack = p.getInventory().getItemStack(slot);
+                //System.out.println("test " + itemStack.getIdentifier() + " " + itemStack.getData());
             });
         });
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.setGameMode(GameMode.CREATIVE);
+            player.setGameMode(GameMode.SURVIVAL);
 
+            PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);
-            player.getInventory().addItemStack(itemStack);
+            inventory.addItemStack(itemStack);
+
+            {
+                ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1);
+                inventory.setChestplate(item);
+                item.setDisplayName(ColoredText.of("test"));
+
+                inventory.refreshSlot((short) PlayerInventoryUtils.CHESTPLATE_SLOT);
+
+            }
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
         });

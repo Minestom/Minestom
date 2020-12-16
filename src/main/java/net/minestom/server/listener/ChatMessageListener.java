@@ -70,7 +70,7 @@ public class ChatMessageListener {
     }
 
     private static RichMessage buildDefaultChatMessage(PlayerChatEvent chatEvent) {
-        final String username = chatEvent.getSender().getUsername();
+        final String username = chatEvent.getPlayer().getUsername();
 
         final ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
 

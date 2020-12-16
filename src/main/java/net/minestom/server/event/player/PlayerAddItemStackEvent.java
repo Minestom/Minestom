@@ -2,30 +2,22 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called as a result of {@link net.minestom.server.inventory.PlayerInventory#addItemStack(ItemStack)}.
  */
-public class PlayerAddItemStackEvent extends CancellableEvent {
+public class PlayerAddItemStackEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private ItemStack itemStack;
 
-    public PlayerAddItemStackEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
-        this.player = player;
-        this.itemStack = itemStack;
-    }
+    private boolean cancelled;
 
-    /**
-     * Gets the player who has an item stack added to his inventory.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public PlayerAddItemStackEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
+        super(player);
+        this.itemStack = itemStack;
     }
 
     /**
@@ -44,6 +36,16 @@ public class PlayerAddItemStackEvent extends CancellableEvent {
      * @param itemStack the new item stack
      */
     public void setItemStack(@NotNull ItemStack itemStack) {
-        this.itemStack =itemStack;
+        this.itemStack = itemStack;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

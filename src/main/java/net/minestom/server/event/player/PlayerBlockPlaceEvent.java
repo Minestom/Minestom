@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
@@ -11,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent extends CancellableEvent {
+public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
-    private final Player player;
     private short blockStateId;
     private short customBlockId;
     private final BlockPosition blockPosition;
@@ -23,9 +23,11 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
 
     private boolean consumeBlock;
 
+    private boolean cancelled;
+
     public PlayerBlockPlaceEvent(@NotNull Player player, short blockStateId, short customBlockId,
                                  @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
-        this.player = player;
+        super(player);
         this.blockStateId = blockStateId;
         this.customBlockId = customBlockId;
         this.blockPosition = blockPosition;
@@ -103,16 +105,6 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
     }
 
     /**
-     * Gets the player who is placing the block.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
      * Gets the block position.
      *
      * @return the block position
@@ -148,5 +140,15 @@ public class PlayerBlockPlaceEvent extends CancellableEvent {
      */
     public boolean doesConsumeBlock() {
         return consumeBlock;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

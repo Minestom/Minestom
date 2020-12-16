@@ -122,7 +122,9 @@ public interface EventHandler {
      * @param <E>             the event type
      * @see #callEvent(Class, Event)
      */
-    default <E extends CancellableEvent> void callCancellableEvent(@NotNull Class<E> eventClass, @NotNull E event, @NotNull Runnable successCallback) {
+    default <E extends Event & CancellableEvent> void callCancellableEvent(@NotNull Class<E> eventClass,
+                                                                           @NotNull E event,
+                                                                           @NotNull Runnable successCallback) {
         callEvent(eventClass, event);
         if (!event.isCancelled()) {
             successCallback.run();

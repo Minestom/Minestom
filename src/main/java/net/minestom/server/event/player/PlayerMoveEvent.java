@@ -2,30 +2,22 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is modifying his position.
  */
-public class PlayerMoveEvent extends CancellableEvent {
+public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private Position newPosition;
 
-    public PlayerMoveEvent(@NotNull Player player, @NotNull Position newPosition) {
-        this.player = player;
-        this.newPosition = newPosition;
-    }
+    private boolean cancelled;
 
-    /**
-     * Gets the player who is moving.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public PlayerMoveEvent(@NotNull Player player, @NotNull Position newPosition) {
+        super(player);
+        this.newPosition = newPosition;
     }
 
     /**
@@ -45,5 +37,15 @@ public class PlayerMoveEvent extends CancellableEvent {
      */
     public void setNewPosition(@NotNull Position newPosition) {
         this.newPosition = newPosition;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

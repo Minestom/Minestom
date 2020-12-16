@@ -1852,7 +1852,7 @@ public class Player extends LivingEntity implements CommandSender {
     public boolean openInventory(@NotNull Inventory inventory) {
         Check.notNull(inventory, "Inventory cannot be null, use Player#closeInventory() to close current");
 
-        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(this, inventory);
+        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
 

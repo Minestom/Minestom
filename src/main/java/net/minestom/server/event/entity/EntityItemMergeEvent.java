@@ -2,21 +2,22 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.EntityEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
  */
-public class EntityItemMergeEvent extends CancellableEvent {
+public class EntityItemMergeEvent extends EntityEvent implements CancellableEvent {
 
-    private final ItemEntity source;
     private final ItemEntity merged;
-
     private ItemStack result;
 
+    private boolean cancelled;
+
     public EntityItemMergeEvent(@NotNull ItemEntity source, @NotNull ItemEntity merged, @NotNull ItemStack result) {
-        this.source = source;
+        super(source);
         this.merged = merged;
         this.result = result;
     }
@@ -29,8 +30,9 @@ public class EntityItemMergeEvent extends CancellableEvent {
      * @return the source ItemEntity
      */
     @NotNull
-    public ItemEntity getSource() {
-        return source;
+    @Override
+    public ItemEntity getEntity() {
+        return (ItemEntity) entity;
     }
 
     /**
@@ -62,5 +64,15 @@ public class EntityItemMergeEvent extends CancellableEvent {
      */
     public void setResult(@NotNull ItemStack result) {
         this.result = result;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

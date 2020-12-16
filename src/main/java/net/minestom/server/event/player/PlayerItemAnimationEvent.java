@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,24 +10,15 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ItemAnimationType
  */
-public class PlayerItemAnimationEvent extends CancellableEvent {
+public class PlayerItemAnimationEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private final ItemAnimationType armAnimationType;
 
-    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType armAnimationType) {
-        this.player = player;
-        this.armAnimationType = armAnimationType;
-    }
+    private boolean cancelled;
 
-    /**
-     * Gets the {@link Player} who is responsible for the animation.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+    public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType armAnimationType) {
+        super(player);
+        this.armAnimationType = armAnimationType;
     }
 
     /**
@@ -47,4 +39,13 @@ public class PlayerItemAnimationEvent extends CancellableEvent {
         EAT
     }
 
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
+    }
 }

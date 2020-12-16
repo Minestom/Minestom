@@ -516,7 +516,7 @@ public class InventoryClickProcessor {
 
         // PreClickEvent
         {
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(player, inventory, slot, clickType, clicked, cursor);
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType, clicked, cursor);
             player.callEvent(InventoryPreClickEvent.class, inventoryPreClickEvent);
             cursor = inventoryPreClickEvent.getCursorItem();
             clicked = inventoryPreClickEvent.getClickedItem();
@@ -567,7 +567,7 @@ public class InventoryClickProcessor {
 
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,
                                 @NotNull ClickType clickType, ItemStack clicked, ItemStack cursor) {
-        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(player, inventory, slot, clickType, clicked, cursor);
+        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
     }
 
