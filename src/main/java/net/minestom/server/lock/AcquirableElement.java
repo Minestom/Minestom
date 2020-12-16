@@ -1,6 +1,7 @@
 package net.minestom.server.lock;
 
 import com.google.common.collect.Queues;
+import net.minestom.server.utils.debug.DebugUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
@@ -17,8 +18,15 @@ public interface AcquirableElement<T> {
 
     @NotNull
     default void acquire(Consumer<T> consumer) {
-        getHandler().tryAcquisition(new Object());
-        consumer.accept(unsafeUnwrap());
+        boolean sameThread = getHandler().tryAcquisition(new Object());
+        final T unwrap = unsafeUnwrap();
+        if (sameThread) {
+            consumer.accept(unwrap);
+        } else {
+            synchronized (unwrap) {
+                consumer.accept(unwrap);
+            }
+        }
     }
 
     @NotNull
@@ -28,31 +36,50 @@ public interface AcquirableElement<T> {
 
     class Handler {
 
-        private static final ThreadLocal<UUID> EXECUTION_IDENTIFIER = ThreadLocal.withInitial(() -> UUID.randomUUID());
+        private static final ThreadLocal<Queue<Object>> QUEUE_IDENTIFIER = ThreadLocal.withInitial(Queues::newConcurrentLinkedQueue);
+        private static final ThreadLocal<UUID> EXECUTION_IDENTIFIER = ThreadLocal.withInitial(UUID::randomUUID);
 
-        public static void resetIdentifier() {
-            //EXECUTION_IDENTIFIER.remove();
+        public static void reset() {
+            processQueue();
+            DebugUtils.printStackTrace();
+
+            QUEUE_IDENTIFIER.remove();
+            EXECUTION_IDENTIFIER.remove();
         }
 
-        private final Queue<Object> toNotifyQueue = Queues.newConcurrentLinkedQueue();
+        public static void processQueue() {
+            final Queue<Object> queue = QUEUE_IDENTIFIER.get();
+            System.out.println("PROCESS QUEUE");
+            Object object;
+            while ((object = queue.poll()) != null) {
+                System.out.println("NOTIFY");
+                synchronized (object) {
+                    System.out.println("end modify");
+                    object.notify();
+                }
+            }
+        }
 
         private volatile UUID periodIdentifier = UUID.randomUUID();
 
-        public void tryAcquisition(Object test) {
-            System.out.println("test "+periodIdentifier);
+        public boolean tryAcquisition(Object test) {
+            System.out.println("test " + periodIdentifier);
             if (!periodIdentifier.equals(EXECUTION_IDENTIFIER.get())) {
                 System.out.println("diff " + periodIdentifier + " " + EXECUTION_IDENTIFIER.get());
                 try {
-                    this.toNotifyQueue.add(test);
+                    QUEUE_IDENTIFIER.get().add(test);
                     System.out.println("ADD WAIT " + Thread.currentThread().getName());
                     synchronized (test) {
                         test.wait();
                     }
+                    return false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    return false;
                 }
             } else {
                 System.out.println("GOOD");
+                return true;
             }
         }
 
@@ -61,15 +88,7 @@ public interface AcquirableElement<T> {
         }
 
         public void endTick() {
-            System.out.println("END TICK");
-            Object object;
-            while ((object = toNotifyQueue.poll()) != null) {
-                System.out.println("NOTIFY");
-                synchronized (object) {
-                    System.out.println("end modify");
-                    object.notifyAll();
-                }
-            }
+            processQueue();
         }
 
         public UUID getPeriodIdentifier() {

@@ -107,7 +107,7 @@ public abstract class ThreadProvider {
     public void execute(@NotNull Runnable runnable) {
         this.pool.execute(() -> {
             runnable.run();
-            AcquirableElement.Handler.resetIdentifier();
+            AcquirableElement.Handler.reset();
         });
     }
 
