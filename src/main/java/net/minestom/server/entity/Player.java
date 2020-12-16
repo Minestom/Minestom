@@ -350,12 +350,14 @@ public class Player extends LivingEntity implements LockedElement<Player>, Comma
             //System.out.println("test " + hashCode() + " " + acquirablePlayer.getHandler().getPeriodIdentifier() + " " + Thread.currentThread().getName());
         }
 
-        /*System.out.println("hey ");
+        System.out.println("hey ");
+        long nano = System.nanoTime();
         acquirablePlayer.acquire(player -> {
-            System.out.println("I got the player, this operation can be blocking or not depending on where it is called");
-            System.out.println("Will execute directly if possible, or wait ");
+            //System.out.println("I got the player, this operation can be blocking or not depending on where it is called");
+            //System.out.println("Will execute directly if possible, or wait ");
+            System.out.println("time "+(System.nanoTime()-nano));
         });
-        System.out.println("hey it's sync");*/
+        System.out.println("hey it's sync");
 
         // Network tick
         this.playerConnection.update();

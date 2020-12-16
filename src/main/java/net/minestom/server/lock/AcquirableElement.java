@@ -1,7 +1,6 @@
 package net.minestom.server.lock;
 
 import com.google.common.collect.Queues;
-import net.minestom.server.utils.debug.DebugUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
@@ -20,12 +19,8 @@ public interface AcquirableElement<T> {
     default void acquire(Consumer<T> consumer) {
         boolean sameThread = getHandler().tryAcquisition(new Object());
         final T unwrap = unsafeUnwrap();
-        if (sameThread) {
+        synchronized (unwrap) {
             consumer.accept(unwrap);
-        } else {
-            synchronized (unwrap) {
-                consumer.accept(unwrap);
-            }
         }
     }
 
@@ -41,7 +36,6 @@ public interface AcquirableElement<T> {
 
         public static void reset() {
             processQueue();
-            DebugUtils.printStackTrace();
 
             QUEUE_IDENTIFIER.remove();
             EXECUTION_IDENTIFIER.remove();
@@ -49,7 +43,7 @@ public interface AcquirableElement<T> {
 
         public static void processQueue() {
             final Queue<Object> queue = QUEUE_IDENTIFIER.get();
-            System.out.println("PROCESS QUEUE");
+            //System.out.println("PROCESS QUEUE");
             Object object;
             while ((object = queue.poll()) != null) {
                 System.out.println("NOTIFY");
@@ -58,6 +52,7 @@ public interface AcquirableElement<T> {
                     object.notify();
                 }
             }
+            // TODO wait until all the queue consumers are executed
         }
 
         private volatile UUID periodIdentifier = UUID.randomUUID();
