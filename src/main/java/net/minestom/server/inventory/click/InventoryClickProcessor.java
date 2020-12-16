@@ -491,6 +491,7 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
+    @NotNull
     private InventoryClickResult startCondition(@NotNull InventoryClickResult clickResult, @Nullable Inventory inventory,
                                                 @NotNull Player player, int slot, @NotNull ClickType clickType,
                                                 ItemStack clicked, ItemStack cursor) {
@@ -559,6 +560,7 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
+    @NotNull
     private InventoryClickResult startCondition(@Nullable Inventory inventory, @NotNull Player player, int slot,
                                                 @NotNull ClickType clickType, ItemStack clicked, ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
