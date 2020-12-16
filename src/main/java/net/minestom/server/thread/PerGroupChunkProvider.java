@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Future;
 
 /**
  * Separate chunks into group of linked chunks
@@ -117,20 +116,8 @@ public class PerGroupChunkProvider extends ThreadProvider {
         }
     }
 
-    @NotNull
     @Override
-    public List<Future<?>> update(long time) {
-
-        List<Future<?>> futures;
-        int potentialSize = 0;
-
-        // Compute the potential array size
-        {
-            for (Map<LongSet, Instance> longSetInstanceMap : instanceInstanceMap.values()) {
-                potentialSize += 1 + longSetInstanceMap.size();
-            }
-            futures = new ArrayList<>(potentialSize);
-        }
+    public void update(long time) {
 
         instanceInstanceMap.forEach((instance, instanceMap) -> {
 
@@ -138,13 +125,13 @@ public class PerGroupChunkProvider extends ThreadProvider {
             final CountDownLatch countDownLatch = new CountDownLatch(1);
 
             // instance tick
-            futures.add(pool.submit(() -> {
+            pool.execute(() -> {
                 updateInstance(instance, time);
                 countDownLatch.countDown();
-            }));
+            });
 
             // Update all the chunks
-            instanceMap.keySet().forEach(chunksIndexes -> futures.add(pool.submit(() -> {
+            instanceMap.keySet().forEach(chunksIndexes -> pool.execute(() -> {
                 // Wait for the instance to be updated
                 // Needed because the instance tick is used to unload waiting chunks
                 try {
@@ -155,10 +142,8 @@ public class PerGroupChunkProvider extends ThreadProvider {
 
                 // Tick all this chunk group
                 chunksIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-            })));
+            }));
         });
-
-        return futures;
     }
 
     private Long2ObjectMap<LongSet> getChunksGroupMap(Instance instance) {

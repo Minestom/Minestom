@@ -4,15 +4,13 @@ import com.google.common.collect.Queues;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.thread.PerInstanceThreadProvider;
+import net.minestom.server.thread.PerElementThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
@@ -37,7 +35,8 @@ public final class UpdateManager {
     {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
-        threadProvider = new PerInstanceThreadProvider();
+        //threadProvider = new PerInstanceThreadProvider();
+        threadProvider = new PerElementThreadProvider();
     }
 
     /**
@@ -88,20 +87,10 @@ public final class UpdateManager {
      * @param tickStart the time of the tick in milliseconds
      */
     private void serverTick(long tickStart) {
-        List<Future<?>> futures;
-
         // Server tick (instance/chunk/entity)
         // Synchronize with the update manager instance, like the signal for chunk load/unload
         synchronized (this) {
-            futures = threadProvider.update(tickStart);
-        }
-
-        for (final Future<?> future : futures) {
-            try {
-                future.get();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+            threadProvider.update(tickStart);
         }
     }
 

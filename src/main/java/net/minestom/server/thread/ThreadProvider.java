@@ -7,16 +7,15 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
+import net.minestom.server.lock.AcquirableElement;
 import net.minestom.server.utils.callback.validator.EntityValidator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 /**
@@ -79,10 +78,8 @@ public abstract class ThreadProvider {
      * Performs a server tick for all chunks based on their linked thread.
      *
      * @param time the update time in milliseconds
-     * @return the futures to execute to complete the tick
      */
-    @NotNull
-    public abstract List<Future<?>> update(long time);
+    public abstract void update(long time);
 
     /**
      * Gets the current size of the thread pool.
@@ -101,6 +98,17 @@ public abstract class ThreadProvider {
     public synchronized void setThreadCount(int threadCount) {
         this.threadCount = threadCount;
         refreshPool();
+    }
+
+    public ExecutorService getPool() {
+        return pool;
+    }
+
+    public void execute(@NotNull Runnable runnable) {
+        this.pool.execute(() -> {
+            runnable.run();
+            AcquirableElement.Handler.resetIdentifier();
+        });
     }
 
     private void refreshPool() {
@@ -124,6 +132,10 @@ public abstract class ThreadProvider {
         final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        processChunkTick(instance, chunk, time);
+    }
+
+    protected void processChunkTick(@NotNull Instance instance, @Nullable Chunk chunk, long time) {
         if (!ChunkUtils.isLoaded(chunk))
             return;
 
@@ -168,50 +180,6 @@ public abstract class ThreadProvider {
     }
 
     /**
-     * Executes an entity tick for object entities in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updateObjectEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof ObjectEntity);
-    }
-
-    /**
-     * Executes an entity tick for living entities in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updateLivingEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof LivingEntity);
-    }
-
-    /**
-     * Executes an entity tick for creatures entities in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updateCreatures(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof EntityCreature);
-    }
-
-    /**
-     * Executes an entity tick for players in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updatePlayers(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof Player);
-    }
-
-    /**
      * Executes an entity tick in an instance's chunk if condition is verified.
      *
      * @param instance  the chunk's instance
@@ -224,14 +192,34 @@ public abstract class ThreadProvider {
         final Set<Entity> entities = instance.getChunkEntities(chunk);
 
         if (!entities.isEmpty()) {
+
+            // REFRESH HANDLER
+            // TODO
             for (Entity entity : entities) {
-                if (condition != null && !condition.isValid(entity))
-                    continue;
-                entity.tick(time);
+                if (shouldTick(entity, condition) && entity instanceof Player) {
+                    ((Player) entity).getAcquiredElement().getHandler().startTick();
+                }
+            }
+
+            for (Entity entity : entities) {
+                if (shouldTick(entity, condition))
+                    entity.tick(time);
+            }
+
+            // REFRESH HANDLER
+            // TODO
+            for (Entity entity : entities) {
+                if (shouldTick(entity, condition) && entity instanceof Player) {
+                    ((Player) entity).getAcquiredElement().getHandler().endTick();
+                }
             }
         }
 
         updateSharedInstances(instance, sharedInstance -> conditionalEntityUpdate(sharedInstance, chunk, time, condition));
+    }
+
+    private static boolean shouldTick(@NotNull Entity entity, @Nullable EntityValidator condition) {
+        return condition == null || condition.isValid(entity);
     }
 
     /**

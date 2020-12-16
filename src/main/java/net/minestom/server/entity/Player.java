@@ -30,6 +30,9 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.lock.AcquirableElement;
+import net.minestom.server.lock.LockedElement;
+import net.minestom.server.lock.type.AcquirablePlayer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
@@ -71,7 +74,7 @@ import java.util.function.Consumer;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender {
+public class Player extends LivingEntity implements LockedElement<Player>, CommandSender {
 
     /**
      * @see #getPlayerSynchronizationGroup()
@@ -118,6 +121,8 @@ public class Player extends LivingEntity implements CommandSender {
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
+
+    protected final AcquirablePlayer acquirablePlayer = new AcquirablePlayer(this);
 
     private int latency;
     private ColoredText displayName;
@@ -324,6 +329,27 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void update(long time) {
+
+        {
+
+            //System.out.println("hey " + hashCode()+" "+acquirablePlayer.getHandler().getPeriodIdentifier());
+
+            int i = 0;
+            for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                if (p.equals(this))
+                    continue;
+
+                if (++i == 1) {
+                    //System.out.println("THREAD "+Thread.currentThread().getName());
+                    //System.out.println("test "+p.getAcquiredElement().getHandler().getPeriodIdentifier());
+                    //System.out.println("test2 "+acquirablePlayer.getHandler().getPeriodIdentifier());
+                    p.getAcquiredElement().acquire(player -> System.out.println("get player " + player.getUsername()));
+                }
+            }
+
+            //System.out.println("test " + hashCode() + " " + acquirablePlayer.getHandler().getPeriodIdentifier() + " " + Thread.currentThread().getName());
+        }
+
         // Network tick
         this.playerConnection.update();
 
@@ -493,7 +519,6 @@ public class Player extends LivingEntity implements CommandSender {
                 lastPlayerSyncPitch = position.getPitch();
             }
         }
-
     }
 
     @Override
@@ -643,6 +668,11 @@ public class Player extends LivingEntity implements CommandSender {
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
             viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         return result;
+    }
+
+    @Override
+    public AcquirableElement<Player> getAcquiredElement() {
+        return acquirablePlayer;
     }
 
     /**

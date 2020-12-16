@@ -5,11 +5,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Future;
 
 /**
  * Simple thread provider implementation using a single thread to update all the instances and chunks.
@@ -42,10 +39,9 @@ public class SingleThreadProvider extends ThreadProvider {
 
     }
 
-    @NotNull
     @Override
-    public List<Future<?>> update(long time) {
-        return Collections.singletonList(pool.submit(() -> {
+    public void update(long time) {
+        pool.execute(() -> {
             for (Instance instance : instances) {
                 updateInstance(instance, time);
                 for (Chunk chunk : instance.getChunks()) {
@@ -53,6 +49,6 @@ public class SingleThreadProvider extends ThreadProvider {
                     processChunkTick(instance, index, time);
                 }
             }
-        }));
+        });
     }
 }

@@ -6,11 +6,8 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 /**
  * Separates work between instance (1 instance = 1 thread execution).
@@ -46,18 +43,14 @@ public class PerInstanceThreadProvider extends ThreadProvider {
 
     }
 
-    @NotNull
     @Override
-    public List<Future<?>> update(long time) {
-        List<Future<?>> futures = new ArrayList<>();
-
-        instanceChunkMap.forEach((instance, chunkIndexes) -> futures.add(pool.submit(() -> {
+    public void update(long time) {
+        instanceChunkMap.forEach((instance, chunkIndexes) -> pool.execute(() -> {
             // Tick instance
             updateInstance(instance, time);
             // Tick chunks
             chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
-        })));
-        return futures;
+        }));
     }
 
     private LongSet getChunkCoordinates(Instance instance) {
