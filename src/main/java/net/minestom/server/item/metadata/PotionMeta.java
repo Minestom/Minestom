@@ -4,7 +4,9 @@ import net.minestom.server.chat.ChatColor;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.clone.CloneUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -22,7 +24,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class PotionMeta extends ItemMeta {
 
     private PotionType potionType;
-    private final List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
+
+    // Not final because of #clone()
+    private List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
 
     private boolean hasColor;
     private byte red, green, blue;
@@ -32,6 +36,7 @@ public class PotionMeta extends ItemMeta {
      *
      * @return the potion type
      */
+    @Nullable
     public PotionType getPotionType() {
         return potionType;
     }
@@ -41,15 +46,16 @@ public class PotionMeta extends ItemMeta {
      *
      * @param potionType the new potion type
      */
-    public void setPotionType(PotionType potionType) {
+    public void setPotionType(@Nullable PotionType potionType) {
         this.potionType = potionType;
     }
 
     /**
      * Get a list of {@link CustomPotionEffect}.
      *
-     * @return the custom potion effects
+     * @return the custom potion effect list
      */
+    @NotNull
     public List<CustomPotionEffect> getCustomPotionEffects() {
         return customPotionEffects;
     }
@@ -75,7 +81,8 @@ public class PotionMeta extends ItemMeta {
 
     @Override
     public boolean hasNbt() {
-        return potionType != null;
+        return potionType != null ||
+                !customPotionEffects.isEmpty();
     }
 
     @Override
@@ -155,7 +162,7 @@ public class PotionMeta extends ItemMeta {
     public ItemMeta clone() {
         PotionMeta potionMeta = (PotionMeta) super.clone();
         potionMeta.potionType = potionType;
-        potionMeta.customPotionEffects.addAll(customPotionEffects);
+        potionMeta.customPotionEffects = CloneUtils.cloneCopyOnWriteArrayList(customPotionEffects);
 
         potionMeta.hasColor = hasColor;
         potionMeta.red = red;

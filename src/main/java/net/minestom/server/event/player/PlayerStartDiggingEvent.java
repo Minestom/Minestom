@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,28 +14,19 @@ import org.jetbrains.annotations.NotNull;
  * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
-public class PlayerStartDiggingEvent extends CancellableEvent {
+public class PlayerStartDiggingEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private final BlockPosition blockPosition;
     private final int blockStateId;
     private final int customBlockId;
 
+    private boolean cancelled;
+
     public PlayerStartDiggingEvent(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId, int customBlockId) {
-        this.player = player;
+        super(player);
         this.blockPosition = blockPosition;
         this.blockStateId = blockStateId;
         this.customBlockId = customBlockId;
-    }
-
-    /**
-     * Gets the {@link Player} who started digging the block.
-     *
-     * @return the {@link Player}
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**
@@ -63,5 +55,15 @@ public class PlayerStartDiggingEvent extends CancellableEvent {
      */
     public int getCustomBlockId() {
         return customBlockId;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

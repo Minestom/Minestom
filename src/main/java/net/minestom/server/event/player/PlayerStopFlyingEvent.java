@@ -1,27 +1,15 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player stop flying.
  */
-public class PlayerStopFlyingEvent extends Event {
-
-    private final Player player;
+public class PlayerStopFlyingEvent extends PlayerEvent {
 
     public PlayerStopFlyingEvent(@NotNull Player player) {
-        this.player = player;
-    }
-
-    /**
-     * Gets the player who stopped flying.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
+        super(player);
     }
 }

@@ -32,7 +32,7 @@ public final class ChatColor {
     public static final ChatColor BLACK = fromRGB((byte) 0, (byte) 0, (byte) 0, 0, "black");
     public static final ChatColor DARK_BLUE = fromRGB((byte) 0, (byte) 0, (byte) 170, 1, "dark_blue");
     public static final ChatColor DARK_GREEN = fromRGB((byte) 0, (byte) 170, (byte) 0, 2, "dark_green");
-    public static final ChatColor DARK_CYAN = fromRGB((byte) 0, (byte) 170, (byte) 170, 3, "dark_cyan");
+    public static final ChatColor DARK_CYAN = fromRGB((byte) 0, (byte) 170, (byte) 170, 3, "dark_aqua");
     public static final ChatColor DARK_RED = fromRGB((byte) 170, (byte) 0, (byte) 0, 4, "dark_red");
     public static final ChatColor PURPLE = fromRGB((byte) 170, (byte) 0, (byte) 170, 5, "dark_purple");
     public static final ChatColor GOLD = fromRGB((byte) 255, (byte) 170, (byte) 0, 6, "gold");

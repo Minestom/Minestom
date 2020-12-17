@@ -304,11 +304,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         if (!isViewer(player))
             return;
 
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = -1;
-        setSlotPacket.slot = -1;
-        setSlotPacket.itemStack = cursorItem;
-        player.getPlayerConnection().sendPacket(setSlotPacket);
+        final ItemStack currentCursorItem = cursorPlayersItem.get(player);
+        final boolean similar = currentCursorItem != null && currentCursorItem.isSimilar(cursorItem);
+
+        if (!similar) {
+            final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
+            player.getPlayerConnection().sendPacket(setSlotPacket);
+        }
 
         this.cursorPlayersItem.put(player, cursorItem);
     }

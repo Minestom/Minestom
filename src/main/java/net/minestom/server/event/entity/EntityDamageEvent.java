@@ -3,31 +3,29 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.EntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link LivingEntity#damage(DamageType, float)}.
  */
-public class EntityDamageEvent extends CancellableEvent {
+public class EntityDamageEvent extends EntityEvent implements CancellableEvent {
 
-    private final LivingEntity entity;
     private final DamageType damageType;
     private float damage;
 
+    private boolean cancelled;
+
     public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull DamageType damageType, float damage) {
-        this.entity = entity;
+        super(entity);
         this.damageType = damageType;
         this.damage = damage;
     }
 
-    /**
-     * Gets the damaged entity.
-     *
-     * @return the damaged entity
-     */
     @NotNull
+    @Override
     public LivingEntity getEntity() {
-        return entity;
+        return (LivingEntity) entity;
     }
 
     /**
@@ -56,5 +54,15 @@ public class EntityDamageEvent extends CancellableEvent {
      */
     public void setDamage(float damage) {
         this.damage = damage;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancelled;
     }
 }

@@ -221,7 +221,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param slot the slot to refresh
      */
     public void refreshSlot(short slot) {
-        sendSlotRefresh((short) convertToPacketSlot(slot), getItemStack(slot));
+        final int packetSlot = convertToPacketSlot(slot);
+        sendSlotRefresh((short) packetSlot, getItemStack(slot));
     }
 
     /**
@@ -240,12 +241,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
+        final boolean similar = this.cursorItem.isSimilar(cursorItem);
         this.cursorItem = cursorItem;
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = -1;
-        setSlotPacket.slot = -1;
-        setSlotPacket.itemStack = cursorItem;
-        player.getPlayerConnection().sendPacket(setSlotPacket);
+
+        if (!similar) {
+            final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
+            player.getPlayerConnection().sendPacket(setSlotPacket);
+        }
     }
 
     /**
@@ -299,8 +301,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         // Refresh slot
         update();
-        //problem with ghost item when clicking on a slot which has a different internal id
-        //refreshSlot(slot);
+        // FIXME: replace update() to refreshSlot, currently not possible because our inventory click handling is not exactly the same as what the client expects
+        //refreshSlot((short) slot);
     }
 
     protected void setItemStackInternal(int slot, ItemStack itemStack) {
@@ -340,7 +342,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {
         SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = (byte) (MathUtils.isBetween(slot, 35, INVENTORY_SIZE) ? 0 : -2);
+        setSlotPacket.windowId = 0;
         setSlotPacket.slot = slot;
         setSlotPacket.itemStack = itemStack;
         player.getPlayerConnection().sendPacket(setSlotPacket);

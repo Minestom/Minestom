@@ -35,6 +35,11 @@ public class WindowListener {
 
         boolean successful = false;
 
+        // prevent click in a non interactive slot (why does it exist?)
+        if (slot == -1) {
+            return;
+        }
+
         switch (mode) {
             case 0:
                 switch (button) {
@@ -80,7 +85,10 @@ public class WindowListener {
                 break;
         }
 
-        refreshCursorItem(player, inventory);
+        // Prevent the player from picking a ghost item in cursor
+        if (!successful) {
+            refreshCursorItem(player, inventory);
+        }
 
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
@@ -88,6 +96,22 @@ public class WindowListener {
         windowConfirmationPacket.accepted = successful;
 
         player.getPlayerConnection().sendPacket(windowConfirmationPacket);
+    }
+
+    public static void closeWindowListener(ClientCloseWindow packet, Player player) {
+        // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
+        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
+        player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
+
+        player.closeInventory();
+
+        Inventory newInventory = inventoryCloseEvent.getNewInventory();
+        if (newInventory != null)
+            player.openInventory(newInventory);
+    }
+
+    public static void windowConfirmationListener(ClientWindowConfirmationPacket packet, Player player) {
+        // Empty
     }
 
     /**
@@ -109,28 +133,9 @@ public class WindowListener {
             return;
         }
 
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = -1;
-        setSlotPacket.slot = -1;
-        setSlotPacket.itemStack = cursorItem;
+        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
 
         player.getPlayerConnection().sendPacket(setSlotPacket);
-    }
-
-    public static void closeWindowListener(ClientCloseWindow packet, Player player) {
-        // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
-        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player, player.getOpenInventory());
-        player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
-
-        player.closeInventory();
-
-        Inventory newInventory = inventoryCloseEvent.getNewInventory();
-        if (newInventory != null)
-            player.openInventory(newInventory);
-    }
-
-    public static void windowConfirmationListener(ClientWindowConfirmationPacket packet, Player player) {
-        // Empty
     }
 
 }

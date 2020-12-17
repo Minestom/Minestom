@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.chat.RichMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,15 +15,16 @@ import java.util.function.Function;
  * Called every time a {@link Player} write and send something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
-public class PlayerChatEvent extends CancellableEvent {
+public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player sender;
     private final Collection<Player> recipients;
     private String message;
     private Function<PlayerChatEvent, RichMessage> chatFormat;
 
-    public PlayerChatEvent(@NotNull Player sender, @NotNull Collection<Player> recipients, @NotNull String message) {
-        this.sender = sender;
+    private boolean cancelled;
+
+    public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients, @NotNull String message) {
+        super(player);
         this.recipients = new ArrayList<>(recipients);
         this.message = message;
     }
@@ -34,16 +36,6 @@ public class PlayerChatEvent extends CancellableEvent {
      */
     public void setChatFormat(@Nullable Function<PlayerChatEvent, RichMessage> chatFormat) {
         this.chatFormat = chatFormat;
-    }
-
-    /**
-     * Gets the message sender.
-     *
-     * @return the sender
-     */
-    @NotNull
-    public Player getSender() {
-        return sender;
     }
 
     /**
@@ -87,5 +79,15 @@ public class PlayerChatEvent extends CancellableEvent {
     @Nullable
     public Function<PlayerChatEvent, RichMessage> getChatFormatFunction() {
         return chatFormat;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

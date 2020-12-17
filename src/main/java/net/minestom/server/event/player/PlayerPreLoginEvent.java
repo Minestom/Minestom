@@ -1,7 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,26 +11,15 @@ import java.util.UUID;
  * Called before the player initialization, it can be used to kick the player before any connection
  * or to change his final username/uuid.
  */
-public class PlayerPreLoginEvent extends Event {
+public class PlayerPreLoginEvent extends PlayerEvent {
 
-    private final Player player;
     private String username;
     private UUID playerUuid;
 
     public PlayerPreLoginEvent(@NotNull Player player, @NotNull String username, @NotNull UUID playerUuid) {
-        this.player = player;
+        super(player);
         this.username = username;
         this.playerUuid = playerUuid;
-    }
-
-    /**
-     * Gets the player who is trying to connect.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**

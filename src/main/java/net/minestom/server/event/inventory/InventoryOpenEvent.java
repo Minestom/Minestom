@@ -2,6 +2,7 @@ package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.InventoryEvent;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,14 +12,15 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Executed by {@link Player#openInventory(Inventory)}.
  */
-public class InventoryOpenEvent extends CancellableEvent {
+public class InventoryOpenEvent extends InventoryEvent implements CancellableEvent {
 
     private final Player player;
-    private Inventory inventory;
 
-    public InventoryOpenEvent(@NotNull Player player, @Nullable Inventory inventory) {
+    private boolean cancelled;
+
+    public InventoryOpenEvent(@Nullable Inventory inventory, @NotNull Player player) {
+        super(inventory);
         this.player = player;
-        this.inventory = inventory;
     }
 
     /**
@@ -37,6 +39,7 @@ public class InventoryOpenEvent extends CancellableEvent {
      * @return the inventory to open, null to just close the current inventory if any
      */
     @Nullable
+    @Override
     public Inventory getInventory() {
         return inventory;
     }
@@ -50,5 +53,15 @@ public class InventoryOpenEvent extends CancellableEvent {
      */
     public void setInventory(@Nullable Inventory inventory) {
         this.inventory = inventory;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

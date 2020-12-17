@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
-import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.bossbar.BossBar;
@@ -23,7 +22,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
@@ -184,7 +182,7 @@ public class Player extends LivingEntity implements CommandSender {
     private boolean allowFlying;
     private boolean instantBreak;
     private float flyingSpeed = 0.05f;
-    private float walkingSpeed = 0.1f;
+    private float fieldViewModifier = 0.1f;
 
     // Statistics
     private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
@@ -195,7 +193,7 @@ public class Player extends LivingEntity implements CommandSender {
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
-    public Player(UUID uuid, String username, PlayerConnection playerConnection) {
+    public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
         this.uuid = uuid; // Override Entity#uuid defined in the constructor
         this.username = username;
@@ -216,7 +214,7 @@ public class Player extends LivingEntity implements CommandSender {
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD;
         this.levelFlat = true;
-        refreshPosition(0, 0, 0);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -299,18 +297,19 @@ public class Player extends LivingEntity implements CommandSender {
         }
         // Recipes end
 
-        // Send server tags
-        TagsPacket tags = new TagsPacket();
-        TagManager tagManager = MinecraftServer.getTagManager();
-        tagManager.addRequiredTagsToPacket(tags);
+        // Tags start
+        {
+            TagsPacket tags = TagsPacket.getRequiredTagsPacket();
 
-        UpdateTagListEvent event = new UpdateTagListEvent(tags);
-        callEvent(UpdateTagListEvent.class, event);
+            UpdateTagListEvent event = new UpdateTagListEvent(tags);
+            callEvent(UpdateTagListEvent.class, event);
 
-        getPlayerConnection().sendPacket(tags);
+            this.playerConnection.sendPacket(tags);
+        }
+        // Tags end
 
         // Some client update
-        playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
+        this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
         getInventory().update();
@@ -321,14 +320,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void playerConnectionInit() {
         this.playerConnection.setPlayer(this);
-    }
-
-    @Override
-    public float getAttributeValue(@NotNull Attribute attribute) {
-        if (attribute == Attributes.MOVEMENT_SPEED) {
-            return walkingSpeed;
-        }
-        return super.getAttributeValue(attribute);
     }
 
     @Override
@@ -1861,7 +1852,7 @@ public class Player extends LivingEntity implements CommandSender {
     public boolean openInventory(@NotNull Inventory inventory) {
         Check.notNull(inventory, "Inventory cannot be null, use Player#closeInventory() to close current");
 
-        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(this, inventory);
+        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
 
@@ -2139,12 +2130,12 @@ public class Player extends LivingEntity implements CommandSender {
         refreshAbilities();
     }
 
-    public float getWalkingSpeed() {
-        return walkingSpeed;
+    public float getFieldViewModifier() {
+        return fieldViewModifier;
     }
 
-    public void setWalkingSpeed(float walkingSpeed) {
-        this.walkingSpeed = walkingSpeed;
+    public void setFieldViewModifier(float fieldViewModifier) {
+        this.fieldViewModifier = fieldViewModifier;
         refreshAbilities();
     }
 
@@ -2170,8 +2161,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields
-     * (walkingSpeed set to 0.1).
+     * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields.
      */
     protected void refreshAbilities() {
         PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
@@ -2180,7 +2170,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerAbilitiesPacket.allowFlying = allowFlying;
         playerAbilitiesPacket.instantBreak = instantBreak;
         playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.walkingSpeed = 0.1f;
+        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
 
         playerConnection.sendPacket(playerAbilitiesPacket);
     }

@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -10,9 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent extends CancellableEvent {
+public class PlayerBlockInteractEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Player player;
     private final BlockPosition blockPosition;
     private final Player.Hand hand;
     private final BlockFace blockFace;
@@ -23,22 +23,14 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
      */
     private boolean blocksItemUse;
 
+    private boolean cancelled;
+
     public PlayerBlockInteractEvent(@NotNull Player player,
                                     @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand, @NotNull BlockFace blockFace) {
-        this.player = player;
+        super(player);
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.blockFace = blockFace;
-    }
-
-    /**
-     * Gets the player who interacted with the block.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**
@@ -82,5 +74,15 @@ public class PlayerBlockInteractEvent extends CancellableEvent {
     @NotNull
     public BlockFace getBlockFace() {
         return blockFace;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

@@ -19,6 +19,7 @@ public class WritableBookMeta extends ItemMeta {
      *
      * @return a modifiable {@link ArrayList} containing the book pages
      */
+    @NotNull
     public ArrayList<String> getPages() {
         return pages;
     }
@@ -28,7 +29,7 @@ public class WritableBookMeta extends ItemMeta {
      *
      * @param pages the pages list
      */
-    public void setPages(ArrayList<String> pages) {
+    public void setPages(@NotNull ArrayList<String> pages) {
         this.pages = pages;
     }
 
@@ -70,8 +71,7 @@ public class WritableBookMeta extends ItemMeta {
     @Override
     public ItemMeta clone() {
         WritableBookMeta writableBookMeta = (WritableBookMeta) super.clone();
-        writableBookMeta.pages.addAll(pages);
-
+        writableBookMeta.pages = new ArrayList<>(pages);
         return writableBookMeta;
     }
 }

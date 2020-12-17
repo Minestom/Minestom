@@ -491,6 +491,7 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
+    @NotNull
     private InventoryClickResult startCondition(@NotNull InventoryClickResult clickResult, @Nullable Inventory inventory,
                                                 @NotNull Player player, int slot, @NotNull ClickType clickType,
                                                 ItemStack clicked, ItemStack cursor) {
@@ -516,14 +517,14 @@ public class InventoryClickProcessor {
 
         // PreClickEvent
         {
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(player, inventory, slot, clickType, clicked, cursor);
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType, clicked, cursor);
             player.callEvent(InventoryPreClickEvent.class, inventoryPreClickEvent);
             cursor = inventoryPreClickEvent.getCursorItem();
             clicked = inventoryPreClickEvent.getClickedItem();
 
-            clickResult.setCancel(inventoryPreClickEvent.isCancelled());
             if (inventoryPreClickEvent.isCancelled()) {
                 clickResult.setRefresh(true);
+                clickResult.setCancel(true);
             }
         }
 
@@ -542,9 +543,9 @@ public class InventoryClickProcessor {
                 clickResult.setCursor(cursor);
                 clickResult.setClicked(clicked);
 
-                clickResult.setCancel(result.isCancel());
                 if (result.isCancel()) {
                     clickResult.setRefresh(true);
+                    clickResult.setCancel(true);
                 }
             }
 
@@ -559,6 +560,7 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
+    @NotNull
     private InventoryClickResult startCondition(@Nullable Inventory inventory, @NotNull Player player, int slot,
                                                 @NotNull ClickType clickType, ItemStack clicked, ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
@@ -567,7 +569,7 @@ public class InventoryClickProcessor {
 
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,
                                 @NotNull ClickType clickType, ItemStack clicked, ItemStack cursor) {
-        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(player, inventory, slot, clickType, clicked, cursor);
+        InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
     }
 

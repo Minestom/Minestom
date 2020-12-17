@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.clone.CloneUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -95,7 +96,7 @@ public class CompassMeta extends ItemMeta {
         CompassMeta compassMeta = (CompassMeta) super.clone();
         compassMeta.lodestoneTracked = lodestoneTracked;
         compassMeta.lodestoneDimension = lodestoneDimension;
-        compassMeta.lodestonePosition = lodestonePosition != null ? lodestonePosition.clone() : null;
+        compassMeta.lodestonePosition = CloneUtils.optionalClone(lodestonePosition);
 
         return compassMeta;
     }

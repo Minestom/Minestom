@@ -15,7 +15,7 @@ public class PlayerAbilitiesPacket implements ServerPacket {
 
     // Options
     public float flyingSpeed;
-    public float walkingSpeed;
+    public float fieldViewModifier;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -31,7 +31,7 @@ public class PlayerAbilitiesPacket implements ServerPacket {
 
         writer.writeByte(flags);
         writer.writeFloat(flyingSpeed);
-        writer.writeFloat(walkingSpeed);
+        writer.writeFloat(fieldViewModifier);
     }
 
     @Override

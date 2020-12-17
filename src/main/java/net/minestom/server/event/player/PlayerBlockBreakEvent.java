@@ -2,14 +2,13 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerBlockBreakEvent extends CancellableEvent {
-
-    private final Player player;
+public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEvent {
 
     private final BlockPosition blockPosition;
 
@@ -19,10 +18,12 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
     private short resultBlockStateId;
     private short resultCustomBlockId;
 
+    private boolean cancelled;
+
     public PlayerBlockBreakEvent(@NotNull Player player, @NotNull BlockPosition blockPosition,
                                  short blockStateId, @Nullable CustomBlock customBlock,
                                  short resultBlockStateId, short resultCustomBlockId) {
-        this.player = player;
+        super(player);
 
         this.blockPosition = blockPosition;
 
@@ -31,16 +32,6 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
 
         this.resultBlockStateId = resultBlockStateId;
         this.resultCustomBlockId = resultCustomBlockId;
-    }
-
-    /**
-     * Gets the player who breaks the block.
-     *
-     * @return the player
-     */
-    @NotNull
-    public Player getPlayer() {
-        return player;
     }
 
     /**
@@ -112,5 +103,15 @@ public class PlayerBlockBreakEvent extends CancellableEvent {
      */
     public void setResultCustomBlockId(short resultCustomBlockId) {
         this.resultCustomBlockId = resultCustomBlockId;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

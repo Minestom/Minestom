@@ -2,6 +2,7 @@ package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.InventoryEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
@@ -11,20 +12,22 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
  */
-public class InventoryPreClickEvent extends CancellableEvent {
+public class InventoryPreClickEvent extends InventoryEvent implements CancellableEvent {
 
     private final Player player;
-    private final Inventory inventory;
     private final int slot;
     private final ClickType clickType;
     private ItemStack clickedItem;
     private ItemStack cursorItem;
 
-    public InventoryPreClickEvent(@NotNull Player player, @Nullable Inventory inventory,
+    private boolean cancelled;
+
+    public InventoryPreClickEvent(@Nullable Inventory inventory,
+                                  @NotNull Player player,
                                   int slot, @NotNull ClickType clickType,
                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        super(inventory);
         this.player = player;
-        this.inventory = inventory;
         this.slot = slot;
         this.clickType = clickType;
         this.clickedItem = clicked;
@@ -39,16 +42,6 @@ public class InventoryPreClickEvent extends CancellableEvent {
     @NotNull
     public Player getPlayer() {
         return player;
-    }
-
-    /**
-     * Can be null if the clicked inventory is the player one.
-     *
-     * @return the inventory where the click happened, null if this is the player's inventory
-     */
-    @Nullable
-    public Inventory getInventory() {
-        return inventory;
     }
 
     /**
@@ -106,5 +99,15 @@ public class InventoryPreClickEvent extends CancellableEvent {
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
         this.cursorItem = cursorItem;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

@@ -930,7 +930,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         synchronized (entitiesLock) {
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
-            this.chunkEntities.put(chunkIndex, entities);
 
             this.entities.add(entity);
             if (entity instanceof Player) {
@@ -958,11 +957,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.remove(entity);
-            if (entities.isEmpty()) {
-                this.chunkEntities.remove(chunkIndex);
-            } else {
-                this.chunkEntities.put(chunkIndex, entities);
-            }
 
             this.entities.remove(entity);
             if (entity instanceof Player) {

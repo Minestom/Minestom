@@ -1,19 +1,21 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.utils.clone.CloneUtils;
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MapMeta extends ItemMeta {
 
     private int mapId;
     private int mapScaleDirection = 1;
-    private List<MapDecoration> decorations = new ArrayList<>();
+    private List<MapDecoration> decorations = new CopyOnWriteArrayList<>();
     private ChatColor mapColor = ChatColor.NO_COLOR;
 
     public MapMeta() {
@@ -198,18 +200,18 @@ public class MapMeta extends ItemMeta {
         MapMeta mapMeta = (MapMeta) super.clone();
         mapMeta.setMapId(mapId);
         mapMeta.setMapScaleDirection(mapScaleDirection);
-        mapMeta.decorations.addAll(decorations);
+        mapMeta.decorations = CloneUtils.cloneCopyOnWriteArrayList(decorations);
         mapMeta.setMapColor(mapColor);
         return mapMeta;
     }
 
-    public static class MapDecoration {
+    public static class MapDecoration implements PublicCloneable<MapDecoration> {
         private final String id;
         private final byte type;
         private final byte x, z;
         private final double rotation;
 
-        public MapDecoration(String id, byte type, byte x, byte z, double rotation) {
+        public MapDecoration(@NotNull String id, byte type, byte x, byte z, double rotation) {
             this.id = id;
             this.type = type;
             this.x = x;
@@ -261,6 +263,17 @@ public class MapMeta extends ItemMeta {
          */
         public double getRotation() {
             return rotation;
+        }
+
+        @NotNull
+        @Override
+        public MapDecoration clone() {
+            try {
+                return (MapDecoration) super.clone();
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+                throw new IllegalStateException("Something weird happened");
+            }
         }
     }
 

@@ -539,7 +539,7 @@ public class InstanceContainer extends Instance {
             chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
         }
 
-        final Chunk chunk = chunkSupplier.getChunk(biomes, chunkX, chunkZ);
+        final Chunk chunk = chunkSupplier.createChunk(biomes, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
 
         cacheChunk(chunk);

@@ -515,10 +515,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
             property.instance = instances[i];
             property.attribute = instances[i].getAttribute();
-            if (getEntityType() == EntityType.PLAYER && instances[i].getAttribute().equals(Attributes.MOVEMENT_SPEED))
-                property.value = ((Player) this).getWalkingSpeed();
-            else
-                property.value = value;
+            property.value = value;
 
             properties[i] = property;
         }
