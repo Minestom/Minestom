@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class RedstonePlacementRule extends BlockPlacementRule {
@@ -16,67 +17,81 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
     @Override
     public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-        // TODO check solid block
-        return true;
+        BlockUtils block = new BlockUtils(instance, blockPosition);
+        return block.below().getBlock().isSolid();
     }
 
     @Override
     public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        int x = blockPosition.getX();
-        int y = blockPosition.getY();
-        int z = blockPosition.getZ();
+        BlockUtils block = new BlockUtils(instance, blockPosition);
 
-        if (isAir(instance, x, y - 1, z)) {
-            return Block.AIR.getBlockId();
-        }
-
-
-        String east = "none";
-        String north = "none";
+        String pEast = "none";
+        String pNorth = "none";
         String power = "0";
-        String south = "none";
-        String west = "none";
+        String pSouth = "none";
+        String pWest = "none";
 
-        if (isRedstone(instance, x + 1, y + 1, z)) {
-            east = "up";
-        } else if (isRedstone(instance, x + 1, y, z)) {
-            east = "side";
-        } else if (isRedstone(instance, x + 1, y - 1, z)) {
-            east = "side";
+        int connected = 0;
+
+        BlockUtils north = block.north();
+        BlockUtils south = block.south();
+        BlockUtils east = block.east();
+        BlockUtils west = block.west();
+
+        // TODO: Block should have method isRedstone, as redstone connects to more than itself.
+
+        if (north.equals(Block.REDSTONE_WIRE) || north.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pNorth = "side";
         }
-
-        if (isRedstone(instance, x - 1, y + 1, z)) {
-            west = "up";
-        } else if (isRedstone(instance, x - 1, y, z)) {
-            west = "side";
-        } else if (isRedstone(instance, x - 1, y - 1, z)) {
-            west = "side";
+        if (south.equals(Block.REDSTONE_WIRE) || south.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pSouth = "side";
         }
-
-        if (isRedstone(instance, x, y + 1, z + 1)) {
-            south = "up";
-        } else if (isRedstone(instance, x, y, z + 1)) {
-            south = "side";
-        } else if (isRedstone(instance, x, y - 1, z + 1)) {
-            south = "side";
+        if (east.equals(Block.REDSTONE_WIRE) || east.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pEast = "side";
         }
-
-        if (isRedstone(instance, x, y + 1, z - 1)) {
-            north = "up";
-        } else if (isRedstone(instance, x, y, z - 1)) {
-            north = "side";
-        } else if (isRedstone(instance, x, y - 1, z - 1)) {
-            north = "side";
+        if (west.equals(Block.REDSTONE_WIRE) || west.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pWest = "side";
+        }
+        if (north.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pNorth = "up";
+        }
+        if (east.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pEast = "up";
+        }
+        if (south.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pSouth = "up";
+        }
+        if (west.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            pWest = "up";
+        }
+        if (connected == 0) {
+            pNorth = "side";
+            pEast = "side";
+            pSouth = "side";
+            pWest = "side";
+        } else if (connected == 1) {
+            if (!pNorth.equals("none")) pSouth = "side";
+            if (!pSouth.equals("none")) pNorth = "side";
+            if (!pEast.equals("none")) pWest = "side";
+            if (!pWest.equals("none")) pEast = "side";
         }
 
         // TODO power
 
         final String[] properties = {
-                "east=" + east,
-                "north=" + north,
+                "east=" + pEast,
+                "north=" + pNorth,
                 "power=" + power,
-                "south=" + south,
-                "west=" + west};
+                "south=" + pSouth,
+                "west=" + pWest};
 
         return Block.REDSTONE_WIRE.withProperties(properties);
     }
