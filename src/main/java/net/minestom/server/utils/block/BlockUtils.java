@@ -28,7 +28,7 @@ public class BlockUtils {
     }
 
     public BlockUtils north() {
-        return getRelativeTo(0, 0 , -1);
+        return getRelativeTo(0, 0, -1);
     }
 
     public BlockUtils east() {
@@ -40,7 +40,7 @@ public class BlockUtils {
     }
 
     public BlockUtils west() {
-        return getRelativeTo(-1, 0 , 0);
+        return getRelativeTo(-1, 0, 0);
     }
 
     public Block getBlock() {

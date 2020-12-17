@@ -25,73 +25,80 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
         BlockUtils block = new BlockUtils(instance, blockPosition);
 
-        String pEast = "none";
-        String pNorth = "none";
+        String east = "none";
+        String north = "none";
         String power = "0";
-        String pSouth = "none";
-        String pWest = "none";
+        String south = "none";
+        String west = "none";
 
+        // TODO Block should have method isRedstone, as redstone connects to more than itself.
+
+        final BlockUtils blockNorth = block.north();
+        final BlockUtils blockSouth = block.south();
+        final BlockUtils blockEast = block.east();
+        final BlockUtils blockWest = block.west();
         int connected = 0;
 
-        BlockUtils north = block.north();
-        BlockUtils south = block.south();
-        BlockUtils east = block.east();
-        BlockUtils west = block.west();
-
-        // TODO: Block should have method isRedstone, as redstone connects to more than itself.
-
-        if (north.equals(Block.REDSTONE_WIRE) || north.below().equals(Block.REDSTONE_WIRE)) {
+        if (blockNorth.equals(Block.REDSTONE_WIRE) || blockNorth.below().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pNorth = "side";
+            north = "side";
         }
-        if (south.equals(Block.REDSTONE_WIRE) || south.below().equals(Block.REDSTONE_WIRE)) {
+        if (blockSouth.equals(Block.REDSTONE_WIRE) || blockSouth.below().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pSouth = "side";
+            south = "side";
         }
-        if (east.equals(Block.REDSTONE_WIRE) || east.below().equals(Block.REDSTONE_WIRE)) {
+        if (blockEast.equals(Block.REDSTONE_WIRE) || blockEast.below().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pEast = "side";
+            east = "side";
         }
-        if (west.equals(Block.REDSTONE_WIRE) || west.below().equals(Block.REDSTONE_WIRE)) {
+        if (blockWest.equals(Block.REDSTONE_WIRE) || blockWest.below().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pWest = "side";
+            west = "side";
         }
-        if (north.above().equals(Block.REDSTONE_WIRE)) {
+        if (blockNorth.above().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pNorth = "up";
+            north = "up";
         }
-        if (east.above().equals(Block.REDSTONE_WIRE)) {
+        if (blockSouth.above().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pEast = "up";
+            south = "up";
         }
-        if (south.above().equals(Block.REDSTONE_WIRE)) {
+        if (blockEast.above().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pSouth = "up";
+            east = "up";
         }
-        if (west.above().equals(Block.REDSTONE_WIRE)) {
+        if (blockWest.above().equals(Block.REDSTONE_WIRE)) {
             connected++;
-            pWest = "up";
+            west = "up";
         }
         if (connected == 0) {
-            pNorth = "side";
-            pEast = "side";
-            pSouth = "side";
-            pWest = "side";
+            north = "side";
+            south = "side";
+            east = "side";
+            west = "side";
         } else if (connected == 1) {
-            if (!pNorth.equals("none")) pSouth = "side";
-            if (!pSouth.equals("none")) pNorth = "side";
-            if (!pEast.equals("none")) pWest = "side";
-            if (!pWest.equals("none")) pEast = "side";
+            if (!north.equals("none")) {
+                south = "side";
+            }
+            if (!south.equals("none")) {
+                north = "side";
+            }
+            if (!east.equals("none")) {
+                west = "side";
+            }
+            if (!west.equals("none")) {
+                east = "side";
+            }
         }
 
         // TODO power
 
         final String[] properties = {
-                "east=" + pEast,
-                "north=" + pNorth,
+                "east=" + east,
+                "north=" + north,
                 "power=" + power,
-                "south=" + pSouth,
-                "west=" + pWest};
+                "south=" + south,
+                "west=" + west};
 
         return Block.REDSTONE_WIRE.withProperties(properties);
     }
@@ -99,16 +106,6 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     @Override
     public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
         return getBlockId();
-    }
-
-    private boolean isRedstone(Instance instance, int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId) == Block.REDSTONE_WIRE;
-    }
-
-    private boolean isAir(Instance instance, int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId) == Block.AIR;
     }
 
 }
