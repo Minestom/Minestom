@@ -14,7 +14,7 @@ public class BatchThread extends Thread {
     private final BatchRunnable runnable;
     private final UUID identifier;
 
-    private final Queue<Object> waitingAcquisitionQueue = Queues.newConcurrentLinkedQueue();
+    private final Queue<AcquirableElement.AcquisitionLock> waitingAcquisitionQueue = Queues.newConcurrentLinkedQueue();
 
     private int cost;
 
@@ -41,7 +41,7 @@ public class BatchThread extends Thread {
     }
 
     @NotNull
-    public Queue<Object> getWaitingAcquisitionQueue() {
+    public Queue<AcquirableElement.AcquisitionLock> getWaitingAcquisitionQueue() {
         return waitingAcquisitionQueue;
     }
 

@@ -62,7 +62,7 @@ public class BatchSetupHandler implements BatchHandler {
         // The thread has been decided, all elements need to be have its identifier
         {
             final UUID threadIdentifier = fitThread.getIdentifier();
-            final Queue<Object> acquisitionQueue = fitThread.getWaitingAcquisitionQueue();
+            final Queue<AcquirableElement.AcquisitionLock> acquisitionQueue = fitThread.getWaitingAcquisitionQueue();
             for (AcquirableElement<?> element : elements) {
                 element.getHandler().refreshThread(threadIdentifier, acquisitionQueue);
             }

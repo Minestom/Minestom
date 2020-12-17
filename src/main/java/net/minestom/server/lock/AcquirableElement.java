@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
@@ -17,13 +18,16 @@ public interface AcquirableElement<T> {
 
     @NotNull
     default void acquire(@NotNull Consumer<T> consumer) {
-        boolean sameThread = getHandler().tryAcquisition(new Object());
+        AcquisitionLock acquisitionLock = new AcquisitionLock();
+
+        boolean sameThread = getHandler().tryAcquisition(acquisitionLock);
         final T unwrap = unsafeUnwrap();
         if (sameThread) {
             consumer.accept(unwrap);
         } else {
             synchronized (unwrap) {
                 consumer.accept(unwrap);
+                acquisitionLock.getCountDownLatch().countDown();
             }
         }
     }
@@ -36,23 +40,37 @@ public interface AcquirableElement<T> {
 
     class Handler {
 
-        public static void processQueue(@NotNull Queue<Object> acquisitionQueue) {
+        public static void processQueue(@NotNull Queue<AcquisitionLock> acquisitionQueue) {
             //System.out.println("PROCESS QUEUE " + acquisitionQueue.hashCode());
-            Object object;
-            while ((object = acquisitionQueue.poll()) != null) {
-                //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
-                synchronized (object) {
-                    //System.out.println("end modify");
-                    object.notify();
+            if (!acquisitionQueue.isEmpty()) {
+                AcquisitionLock lock;
+                synchronized (acquisitionQueue) {
+                    CountDownLatch countDownLatch = new CountDownLatch(acquisitionQueue.size());
+                    long nano = System.nanoTime();
+                    while ((lock = acquisitionQueue.poll()) != null) {
+                        //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
+                        synchronized (lock) {
+                            //System.out.println("end modify");
+                            lock.setCountDownLatch(countDownLatch);
+                            lock.notifyAll();
+                        }
+                    }
+
+                    // Wait for the acquisitions to end
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //System.out.println("total time "+(System.nanoTime()-nano));
                 }
             }
-            // TODO wait until all the queue consumers are executed
         }
 
         private volatile UUID periodIdentifier = null;
-        private volatile Queue<Object> acquisitionQueue = null;
+        private volatile Queue<AcquisitionLock> acquisitionQueue = null;
 
-        public boolean tryAcquisition(@NotNull Object test) {
+        public boolean tryAcquisition(@NotNull AcquisitionLock lock) {
             final Thread currentThread = Thread.currentThread();
             final boolean isBatchThread = currentThread instanceof BatchThread;
             final UUID threadIdentifier = isBatchThread ?
@@ -62,21 +80,21 @@ public interface AcquirableElement<T> {
 
             if (differentThread && periodIdentifier != null && acquisitionQueue != null) {
 
-                System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
+                //System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
                 try {
 
                     if (isBatchThread) {
                         processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
                     }
 
-                    synchronized (test) {
+                    synchronized (lock) {
 
-                        acquisitionQueue.add(test);
+                        acquisitionQueue.add(lock);
                         /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
                                 acquisitionQueue.hashCode() + " " + acquisitionQueue.size() + " " +
                                 ((BatchThread) currentThread).getWaitingAcquisitionQueue().hashCode() + " " +
                                 ((BatchThread) currentThread).getWaitingAcquisitionQueue().size());*/
-                        test.wait();
+                        lock.wait();
                     }
                     return false;
                 } catch (InterruptedException e) {
@@ -85,12 +103,12 @@ public interface AcquirableElement<T> {
                 }
 
             } else {
-                System.out.println("GOOD");
+                //System.out.println("GOOD");
                 return true;
             }
         }
 
-        public void refreshThread(@NotNull UUID identifier, @NotNull Queue<Object> acquisitionQueue) {
+        public void refreshThread(@NotNull UUID identifier, @NotNull Queue<AcquisitionLock> acquisitionQueue) {
             this.periodIdentifier = identifier;
             this.acquisitionQueue = acquisitionQueue;
         }
@@ -104,4 +122,18 @@ public interface AcquirableElement<T> {
             return periodIdentifier;
         }
     }
+
+    class AcquisitionLock {
+
+        private volatile CountDownLatch countDownLatch;
+
+        public CountDownLatch getCountDownLatch() {
+            return countDownLatch;
+        }
+
+        public void setCountDownLatch(CountDownLatch countDownLatch) {
+            this.countDownLatch = countDownLatch;
+        }
+    }
+
 }
