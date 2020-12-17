@@ -21,6 +21,9 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.lock.AcquirableElement;
+import net.minestom.server.lock.LockedElement;
+import net.minestom.server.lock.type.AcquirableInstance;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
@@ -54,10 +57,12 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
+public abstract class Instance implements BlockModifier, LockedElement<Instance>, EventHandler, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
+
+    protected final AcquirableInstance acquirableInstance = new AcquirableInstance(this);
 
     private boolean registered;
 
@@ -823,6 +828,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     @Override
     public void setData(@Nullable Data data) {
         this.data = data;
+    }
+
+    @NotNull
+    @Override
+    public AcquirableElement<Instance> getAcquiredElement() {
+        return acquirableInstance;
     }
 
     @NotNull

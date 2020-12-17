@@ -1,6 +1,6 @@
 package net.minestom.server.lock;
 
-import com.google.common.collect.Queues;
+import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
@@ -16,36 +16,30 @@ import java.util.function.Consumer;
 public interface AcquirableElement<T> {
 
     @NotNull
-    default void acquire(Consumer<T> consumer) {
+    default void acquire(@NotNull Consumer<T> consumer) {
         boolean sameThread = getHandler().tryAcquisition(new Object());
         final T unwrap = unsafeUnwrap();
-        synchronized (unwrap) {
+        if (sameThread) {
             consumer.accept(unwrap);
+        } else {
+            synchronized (unwrap) {
+                consumer.accept(unwrap);
+            }
         }
     }
 
     @NotNull
     T unsafeUnwrap();
 
+    @NotNull
     Handler getHandler();
 
     class Handler {
 
-        private static final ThreadLocal<Queue<Object>> QUEUE_IDENTIFIER = ThreadLocal.withInitial(Queues::newConcurrentLinkedQueue);
-        private static final ThreadLocal<UUID> EXECUTION_IDENTIFIER = ThreadLocal.withInitial(UUID::randomUUID);
-
-        public static void reset() {
-            processQueue();
-
-            QUEUE_IDENTIFIER.remove();
-            EXECUTION_IDENTIFIER.remove();
-        }
-
-        public static void processQueue() {
-            final Queue<Object> queue = QUEUE_IDENTIFIER.get();
-            //System.out.println("PROCESS QUEUE");
+        public static void processQueue(@NotNull Queue<Object> acquisitionQueue) {
+            //System.out.println("PROCESS QUEUE " + acquisitionQueue.hashCode());
             Object object;
-            while ((object = queue.poll()) != null) {
+            while ((object = acquisitionQueue.poll()) != null) {
                 System.out.println("NOTIFY");
                 synchronized (object) {
                     System.out.println("end modify");
@@ -55,16 +49,29 @@ public interface AcquirableElement<T> {
             // TODO wait until all the queue consumers are executed
         }
 
-        private volatile UUID periodIdentifier = UUID.randomUUID();
+        private volatile UUID periodIdentifier = null;
+        private volatile Queue<Object> acquisitionQueue = null;
 
-        public boolean tryAcquisition(Object test) {
-            System.out.println("test " + periodIdentifier);
-            if (!periodIdentifier.equals(EXECUTION_IDENTIFIER.get())) {
-                System.out.println("diff " + periodIdentifier + " " + EXECUTION_IDENTIFIER.get());
+        public boolean tryAcquisition(@NotNull Object test) {
+            final Thread currentThread = Thread.currentThread();
+            final UUID threadIdentifier = currentThread instanceof BatchThread ? ((BatchThread) currentThread).getIdentifier() : null;
+            final boolean differentThread = threadIdentifier == null ||
+                    !threadIdentifier.equals(periodIdentifier);
+
+            if (differentThread && periodIdentifier != null && acquisitionQueue != null) {
+
+                {
+                    processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
+                    if (acquisitionQueue != null) {
+                        processQueue(acquisitionQueue);
+                    }
+                }
+
+                System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
                 try {
-                    QUEUE_IDENTIFIER.get().add(test);
-                    System.out.println("ADD WAIT " + Thread.currentThread().getName());
+                    System.out.println("ADD WAIT " + currentThread.getName() + " " + acquisitionQueue.hashCode());
                     synchronized (test) {
+                        acquisitionQueue.add(test);
                         test.wait();
                     }
                     return false;
@@ -72,20 +79,23 @@ public interface AcquirableElement<T> {
                     e.printStackTrace();
                     return false;
                 }
+
             } else {
                 System.out.println("GOOD");
                 return true;
             }
         }
 
-        public void startTick() {
-            this.periodIdentifier = EXECUTION_IDENTIFIER.get();
+        public void refreshThread(@NotNull UUID identifier, @NotNull Queue<Object> acquisitionQueue) {
+            this.periodIdentifier = identifier;
+            this.acquisitionQueue = acquisitionQueue;
         }
 
-        public void endTick() {
-            processQueue();
+        public void acquisitionTick() {
+            processQueue(acquisitionQueue);
         }
 
+        @NotNull
         public UUID getPeriodIdentifier() {
             return periodIdentifier;
         }

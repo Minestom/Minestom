@@ -10,6 +10,10 @@ public class PerElementThreadProvider extends ThreadProvider {
 
     private static final InstanceManager INSTANCE_MANAGER = MinecraftServer.getInstanceManager();
 
+    public PerElementThreadProvider(int threadCount) {
+        super(threadCount);
+    }
+
     @Override
     public void onInstanceCreate(@NotNull Instance instance) {
 
@@ -33,21 +37,18 @@ public class PerElementThreadProvider extends ThreadProvider {
     @Override
     public void update(long time) {
         for (Instance instance : INSTANCE_MANAGER.getInstances()) {
-            execute(() -> {
-                // Tick instance
-                updateInstance(instance, time);
+            // Tick instance
+            createBatch(batchHandler -> {
+                batchHandler.updateInstance(instance, time);
+            }, time);
 
-                for (Chunk chunk : instance.getChunks()) {
-                    // Tick chunks
-                    processChunkTick(instance, chunk, time);
-                }
-            });
-            /*for (Chunk chunk : instance.getChunks()) {
-                execute(() -> {
-                    // Tick chunks
-                    processChunkTick(instance, chunk, time);
-                });
-            }*/
+            for (Chunk chunk : instance.getChunks()) {
+                // Tick chunks
+                createBatch(batchHandler -> {
+                    batchHandler.updateChunk(instance, chunk, time);
+                    batchHandler.updateEntities(instance, chunk, time);
+                }, time);
+            }
         }
     }
 }

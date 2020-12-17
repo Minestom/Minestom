@@ -19,6 +19,9 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.lock.AcquirableElement;
+import net.minestom.server.lock.LockedElement;
+import net.minestom.server.lock.type.AcquirableEntity;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
@@ -50,7 +53,7 @@ import java.util.function.Consumer;
  * <p>
  * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
  */
-public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public abstract class Entity implements Viewable, LockedElement<Entity>, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
@@ -109,6 +112,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // Network synchronization, send the absolute position of the entity each X milliseconds
     private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
     private long lastAbsoluteSynchronizationTime;
+
+    protected final AcquirableEntity acquirableEntity = new AcquirableEntity(this);
 
     // Events
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
@@ -386,6 +391,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             }
         }
 
+        // Acquisition
+        getAcquiredElement().getHandler().acquisitionTick();
+
         // Synchronization with updated fields in #getPosition()
         {
             final boolean positionChange = cacheX != position.getX() ||
@@ -601,6 +609,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (getInstance().isInVoid(this.position)) {
             remove();
         }
+    }
+
+    @NotNull
+    @Override
+    public AcquirableElement<Entity> getAcquiredElement() {
+        return acquirableEntity;
     }
 
     @NotNull

@@ -14,6 +14,9 @@ import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.lock.AcquirableElement;
+import net.minestom.server.lock.LockedElement;
+import net.minestom.server.lock.type.AcquirableChunk;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -50,7 +53,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Viewable, DataContainer {
+public abstract class Chunk implements Viewable, LockedElement<Chunk>, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
@@ -80,6 +83,8 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
+
+    protected final AcquirableChunk acquirableChunk = new AcquirableChunk(this);
 
     // Data
     protected Data data;
@@ -491,6 +496,12 @@ public abstract class Chunk implements Viewable, DataContainer {
     @Override
     public Set<Player> getViewers() {
         return unmodifiableViewers;
+    }
+
+    @NotNull
+    @Override
+    public AcquirableElement<Chunk> getAcquiredElement() {
+        return acquirableChunk;
     }
 
     @Nullable

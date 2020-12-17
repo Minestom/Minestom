@@ -36,7 +36,7 @@ public final class UpdateManager {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
         //threadProvider = new PerInstanceThreadProvider();
-        threadProvider = new PerElementThreadProvider();
+        threadProvider = new PerElementThreadProvider(Runtime.getRuntime().availableProcessors());
     }
 
     /**
@@ -90,7 +90,9 @@ public final class UpdateManager {
         // Server tick (instance/chunk/entity)
         // Synchronize with the update manager instance, like the signal for chunk load/unload
         synchronized (this) {
-            threadProvider.update(tickStart);
+            this.threadProvider.update(tickStart);
+            this.threadProvider.notifyThreads();
+            // TODO wait execution end
         }
     }
 
