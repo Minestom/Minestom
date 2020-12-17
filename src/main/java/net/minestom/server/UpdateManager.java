@@ -36,7 +36,7 @@ public final class UpdateManager {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
         //threadProvider = new PerInstanceThreadProvider();
-        threadProvider = new PerElementThreadProvider(Runtime.getRuntime().availableProcessors());
+        threadProvider = new PerElementThreadProvider(2);
     }
 
     /**

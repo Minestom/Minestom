@@ -83,7 +83,7 @@ public abstract class ThreadProvider {
         for (BatchThread thread : threads) {
             final BatchThread.BatchRunnable runnable = thread.getMainRunnable();
             synchronized (runnable) {
-                runnable.notify();
+                runnable.notifyAll();
             }
         }
     }

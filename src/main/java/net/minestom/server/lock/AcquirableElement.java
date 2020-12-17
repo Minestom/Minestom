@@ -40,9 +40,9 @@ public interface AcquirableElement<T> {
             //System.out.println("PROCESS QUEUE " + acquisitionQueue.hashCode());
             Object object;
             while ((object = acquisitionQueue.poll()) != null) {
-                System.out.println("NOTIFY");
+                //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
                 synchronized (object) {
-                    System.out.println("end modify");
+                    //System.out.println("end modify");
                     object.notify();
                 }
             }
@@ -54,24 +54,28 @@ public interface AcquirableElement<T> {
 
         public boolean tryAcquisition(@NotNull Object test) {
             final Thread currentThread = Thread.currentThread();
-            final UUID threadIdentifier = currentThread instanceof BatchThread ? ((BatchThread) currentThread).getIdentifier() : null;
+            final boolean isBatchThread = currentThread instanceof BatchThread;
+            final UUID threadIdentifier = isBatchThread ?
+                    ((BatchThread) currentThread).getIdentifier() : null;
             final boolean differentThread = threadIdentifier == null ||
                     !threadIdentifier.equals(periodIdentifier);
 
             if (differentThread && periodIdentifier != null && acquisitionQueue != null) {
 
-                {
-                    processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
-                    if (acquisitionQueue != null) {
-                        processQueue(acquisitionQueue);
-                    }
-                }
-
                 System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
                 try {
-                    System.out.println("ADD WAIT " + currentThread.getName() + " " + acquisitionQueue.hashCode());
+
+                    if (isBatchThread) {
+                        processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
+                    }
+
                     synchronized (test) {
+
                         acquisitionQueue.add(test);
+                        /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
+                                acquisitionQueue.hashCode() + " " + acquisitionQueue.size() + " " +
+                                ((BatchThread) currentThread).getWaitingAcquisitionQueue().hashCode() + " " +
+                                ((BatchThread) currentThread).getWaitingAcquisitionQueue().size());*/
                         test.wait();
                     }
                     return false;

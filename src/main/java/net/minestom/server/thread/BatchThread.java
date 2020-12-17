@@ -71,6 +71,8 @@ public class BatchThread extends Thread {
                     runnable.run();
                 }
 
+                batchThread.cost = 0;
+
                 // Execute waiting acquisition
                 AcquirableElement.Handler.processQueue(batchThread.getWaitingAcquisitionQueue());
 

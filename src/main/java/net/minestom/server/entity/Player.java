@@ -332,7 +332,8 @@ public class Player extends LivingEntity implements CommandSender {
                 //System.out.println("THREAD "+Thread.currentThread().getName());
                 //System.out.println("test "+p.getAcquiredElement().getHandler().getPeriodIdentifier());
                 //System.out.println("test2 "+acquirablePlayer.getHandler().getPeriodIdentifier());
-                p.getAcquiredElement().acquire(entity -> System.out.println("get player id " + entity.getEntityId()));
+                //if (p.getEntityId() == 1 && !p.equals(this))
+                    p.getAcquiredElement().acquire(entity -> System.out.println("get player id " + entity.getEntityId()));
             }
 
             //System.out.println("test " + hashCode() + " " + acquirablePlayer.getHandler().getPeriodIdentifier() + " " + Thread.currentThread().getName());
