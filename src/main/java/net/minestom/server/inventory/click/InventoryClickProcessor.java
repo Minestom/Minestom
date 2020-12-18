@@ -425,17 +425,17 @@ public class InventoryClickProcessor {
 
     public InventoryClickResult drop(Inventory inventory, Player player,
                                      int mode, int slot, int button,
-                                     ItemStack clicked, ItemStack cursor) {
+                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.DROP, clicked, cursor);
 
         if (clickResult.isCancel()) {
             return clickResult;
         }
 
-        final StackingRule clickedRule = clicked == null ? null : clicked.getStackingRule();
+        final StackingRule clickedRule = clicked.getStackingRule();
         final StackingRule cursorRule = cursor.getStackingRule();
 
-        ItemStack resultClicked = clicked == null ? null : clicked.clone();
+        ItemStack resultClicked = clicked.clone();
         ItemStack resultCursor = cursor.clone();
 
 
@@ -494,7 +494,7 @@ public class InventoryClickProcessor {
     @NotNull
     private InventoryClickResult startCondition(@NotNull InventoryClickResult clickResult, @Nullable Inventory inventory,
                                                 @NotNull Player player, int slot, @NotNull ClickType clickType,
-                                                ItemStack clicked, ItemStack cursor) {
+                                                @NotNull ItemStack clicked, ItemStack cursor) {
         boolean isPlayerInventory = inventory == null;
         final int inventorySlot = isPlayerInventory ? 0 : inventory.getSize();
         isPlayerInventory = isPlayerInventory ? isPlayerInventory : slot >= inventorySlot;

@@ -414,7 +414,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public boolean drop(@NotNull Player player, int mode, int slot, int button) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
+        final boolean outsideDrop = slot == -999;
+        final ItemStack clicked = outsideDrop ? ItemStack.getAirItem() : getItemStack(slot, OFFSET);
 
         final InventoryClickResult clickResult = clickProcessor.drop(null, player,
                 mode, slot, button, clicked, cursor);
@@ -423,7 +424,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             sendSlotRefresh((short) slot, clicked);
 
         ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null)
+        if (resultClicked != null && !outsideDrop)
             setItemStack(slot, OFFSET, resultClicked);
         setCursorItem(clickResult.getCursor());
 
