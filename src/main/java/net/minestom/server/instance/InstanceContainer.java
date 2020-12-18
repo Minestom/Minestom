@@ -58,7 +58,7 @@ public class InstanceContainer extends Instance {
     private ChunkGenerator chunkGenerator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     private final Long2ObjectMap<Chunk> chunks = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
-    // contains all the chunks to remove during the next instance tick
+    // contains all the chunks to remove during the next instance tick, should be synchronized
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
@@ -804,7 +804,7 @@ public class InstanceContainer extends Instance {
      * Unsafe because it has to be done on the same thread as the instance/chunks tick update.
      */
     protected void UNSAFE_unloadChunks() {
-        synchronized (this.scheduledChunksToRemove) {
+        synchronized (scheduledChunksToRemove) {
             for (Chunk chunk : scheduledChunksToRemove) {
                 final int chunkX = chunk.getChunkX();
                 final int chunkZ = chunk.getChunkZ();

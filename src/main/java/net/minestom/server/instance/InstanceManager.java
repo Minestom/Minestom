@@ -129,8 +129,12 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 InstanceContainer instanceContainer = (InstanceContainer) instance;
-                instanceContainer.scheduledChunksToRemove.addAll(instanceContainer.getChunks());
-                instanceContainer.UNSAFE_unloadChunks();
+
+                Set<Chunk> scheduledChunksToRemove = instanceContainer.scheduledChunksToRemove;
+                synchronized (scheduledChunksToRemove) {
+                    scheduledChunksToRemove.addAll(instanceContainer.getChunks());
+                    instanceContainer.UNSAFE_unloadChunks();
+                }
             }
 
             instance.setRegistered(false);
