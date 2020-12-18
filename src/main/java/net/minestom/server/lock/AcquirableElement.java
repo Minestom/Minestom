@@ -94,6 +94,9 @@ public interface AcquirableElement<T> {
                             currentQueue.hashCode() + " " +
                             currentQueue.size());*/
                     }
+
+                    // FIXME: here can be called processQueue(), notifying the lock before the wait call
+
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
