@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 import java.util.function.Consumer;
 
 /**
@@ -27,7 +27,7 @@ public interface AcquirableElement<T> {
         } else {
             synchronized (unwrap) {
                 consumer.accept(unwrap);
-                acquisitionLock.getCountDownLatch().countDown();
+                acquisitionLock.getPhaser().arriveAndDeregister();
             }
         }
     }
@@ -44,24 +44,21 @@ public interface AcquirableElement<T> {
             //System.out.println("PROCESS QUEUE " + acquisitionQueue.hashCode());
             if (!acquisitionQueue.isEmpty()) {
                 AcquisitionLock lock;
-                synchronized (acquisitionQueue) {
-                    CountDownLatch countDownLatch = new CountDownLatch(acquisitionQueue.size());
+                synchronized (AcquirableElement.class) {
+                    Phaser phaser = new Phaser(1);
                     long nano = System.nanoTime();
                     while ((lock = acquisitionQueue.poll()) != null) {
                         //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
                         synchronized (lock) {
                             //System.out.println("end modify");
-                            lock.setCountDownLatch(countDownLatch);
+                            lock.setPhaser(phaser);
+                            phaser.register();
                             lock.notifyAll();
                         }
                     }
 
                     // Wait for the acquisitions to end
-                    try {
-                        countDownLatch.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    phaser.arriveAndAwaitAdvance();
                     //System.out.println("total time "+(System.nanoTime()-nano));
                 }
             }
@@ -83,17 +80,21 @@ public interface AcquirableElement<T> {
                 //System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
                 try {
 
-                    if (isBatchThread) {
-                        processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
-                    }
-
                     synchronized (lock) {
 
-                        acquisitionQueue.add(lock);
-                        /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
-                                acquisitionQueue.hashCode() + " " + acquisitionQueue.size() + " " +
-                                ((BatchThread) currentThread).getWaitingAcquisitionQueue().hashCode() + " " +
-                                ((BatchThread) currentThread).getWaitingAcquisitionQueue().size());*/
+                        synchronized (AcquirableElement.class) {
+                            if (isBatchThread) {
+                                processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
+                            }
+                            processQueue(acquisitionQueue);
+
+                            acquisitionQueue.add(lock);
+                            /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
+                                    acquisitionQueue.hashCode() + " " + acquisitionQueue.size() + " " +
+                                    ((BatchThread) currentThread).getWaitingAcquisitionQueue().hashCode() + " " +
+                                    ((BatchThread) currentThread).getWaitingAcquisitionQueue().size());*/
+                        }
+
                         lock.wait();
                     }
                     return false;
@@ -125,14 +126,14 @@ public interface AcquirableElement<T> {
 
     class AcquisitionLock {
 
-        private volatile CountDownLatch countDownLatch;
+        private volatile Phaser phaser;
 
-        public CountDownLatch getCountDownLatch() {
-            return countDownLatch;
+        public Phaser getPhaser() {
+            return phaser;
         }
 
-        public void setCountDownLatch(CountDownLatch countDownLatch) {
-            this.countDownLatch = countDownLatch;
+        public void setPhaser(Phaser phaser) {
+            this.phaser = phaser;
         }
     }
 
