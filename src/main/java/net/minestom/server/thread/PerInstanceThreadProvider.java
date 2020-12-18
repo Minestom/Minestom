@@ -6,11 +6,11 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import org.jetbrains.annotations.NotNull;
 
-public class PerElementThreadProvider extends ThreadProvider {
+public class PerInstanceThreadProvider extends ThreadProvider {
 
     private static final InstanceManager INSTANCE_MANAGER = MinecraftServer.getInstanceManager();
 
-    public PerElementThreadProvider(int threadCount) {
+    public PerInstanceThreadProvider(int threadCount) {
         super(threadCount);
     }
 
@@ -37,18 +37,17 @@ public class PerElementThreadProvider extends ThreadProvider {
     @Override
     public void update(long time) {
         for (Instance instance : INSTANCE_MANAGER.getInstances()) {
-            // Tick instance
             createBatch(batchHandler -> {
+                // Tick instance
                 batchHandler.updateInstance(instance, time);
-            }, time);
 
-            for (Chunk chunk : instance.getChunks()) {
-                // Tick chunks
-                createBatch(batchHandler -> {
+                for (Chunk chunk : instance.getChunks()) {
+                    // Tick chunks & entities
                     batchHandler.updateChunk(instance, chunk, time);
                     batchHandler.updateEntities(instance, chunk, time);
-                }, time);
-            }
+                }
+
+            }, time);
         }
     }
 }

@@ -10,7 +10,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class BatchSetupHandler implements BatchHandler {
 
@@ -61,10 +63,8 @@ public class BatchSetupHandler implements BatchHandler {
 
         // The thread has been decided, all elements need to be have its identifier
         {
-            final UUID threadIdentifier = fitThread.getIdentifier();
-            final Queue<AcquirableElement.AcquisitionLock> acquisitionQueue = fitThread.getWaitingAcquisitionQueue();
             for (AcquirableElement<?> element : elements) {
-                element.getHandler().refreshThread(threadIdentifier, acquisitionQueue);
+                element.getHandler().refreshThread(fitThread);
             }
         }
 

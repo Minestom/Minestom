@@ -72,9 +72,9 @@ public final class MinecraftServer {
     public static final int PROTOCOL_VERSION = 754;
 
     // Threads
-    public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
-
     public static final String THREAD_NAME_TICK = "Ms-Tick";
+
+    public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
     public static final int THREAD_COUNT_BLOCK_BATCH = 4;

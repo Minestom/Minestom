@@ -1,27 +1,28 @@
 package net.minestom.server.thread;
 
 import com.google.common.collect.Queues;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.lock.AcquirableElement;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BatchThread extends Thread {
 
     private final BatchRunnable runnable;
-    private final UUID identifier;
 
     private final Queue<AcquirableElement.AcquisitionLock> waitingAcquisitionQueue = Queues.newConcurrentLinkedQueue();
+
+    private final ReentrantLock queueLock = new ReentrantLock();
 
     private int cost;
 
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
-        super(runnable, "tick-thread-" + number);
+        super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
         this.runnable = runnable;
-        this.identifier = UUID.randomUUID();
 
         this.runnable.setLinkedThread(this);
     }
@@ -36,13 +37,13 @@ public class BatchThread extends Thread {
     }
 
     @NotNull
-    public UUID getIdentifier() {
-        return identifier;
+    public Queue<AcquirableElement.AcquisitionLock> getWaitingAcquisitionQueue() {
+        return waitingAcquisitionQueue;
     }
 
     @NotNull
-    public Queue<AcquirableElement.AcquisitionLock> getWaitingAcquisitionQueue() {
-        return waitingAcquisitionQueue;
+    public ReentrantLock getQueueLock() {
+        return queueLock;
     }
 
     public void addRunnable(@NotNull Runnable runnable, int cost) {
@@ -74,7 +75,9 @@ public class BatchThread extends Thread {
                 batchThread.cost = 0;
 
                 // Execute waiting acquisition
-                AcquirableElement.Handler.processQueue(batchThread.getWaitingAcquisitionQueue());
+                {
+                    AcquirableElement.Handler.processQueue(batchThread.waitingAcquisitionQueue);
+                }
 
                 // Wait for the next notify (game tick)
                 try {

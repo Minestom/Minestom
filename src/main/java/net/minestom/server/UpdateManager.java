@@ -4,7 +4,8 @@ import com.google.common.collect.Queues;
 import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.thread.PerElementThreadProvider;
+import net.minestom.server.thread.PerChunkThreadProvider;
+import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,11 @@ public final class UpdateManager {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
         //threadProvider = new PerInstanceThreadProvider();
-        threadProvider = new PerElementThreadProvider(2);
+
+        final int threadCount = 2;
+
+        threadProvider = new PerChunkThreadProvider(threadCount);
+        //threadProvider = new PerInstanceThreadProvider(threadCount);
     }
 
     /**

@@ -2,9 +2,9 @@ package net.minestom.server.lock;
 
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
-import java.util.UUID;
 import java.util.concurrent.Phaser;
 import java.util.function.Consumer;
 
@@ -27,7 +27,11 @@ public interface AcquirableElement<T> {
         } else {
             synchronized (unwrap) {
                 consumer.accept(unwrap);
-                acquisitionLock.getPhaser().arriveAndDeregister();
+                // Notify the end of the task
+                Phaser phaser = acquisitionLock.getPhaser();
+                if (phaser != null) {
+                    phaser.arriveAndDeregister();
+                }
             }
         }
     }
@@ -41,86 +45,87 @@ public interface AcquirableElement<T> {
     class Handler {
 
         public static void processQueue(@NotNull Queue<AcquisitionLock> acquisitionQueue) {
-            //System.out.println("PROCESS QUEUE " + acquisitionQueue.hashCode());
-            if (!acquisitionQueue.isEmpty()) {
+            synchronized (ACQUIRABLE_LOCK) {
                 AcquisitionLock lock;
-                synchronized (AcquirableElement.class) {
-                    Phaser phaser = new Phaser(1);
-                    long nano = System.nanoTime();
-                    while ((lock = acquisitionQueue.poll()) != null) {
-                        //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
-                        synchronized (lock) {
-                            //System.out.println("end modify");
-                            lock.setPhaser(phaser);
-                            phaser.register();
-                            lock.notifyAll();
-                        }
+                Phaser phaser = new Phaser(1);
+                while ((lock = acquisitionQueue.poll()) != null) {
+                    //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
+                    synchronized (lock) {
+                        //System.out.println("end modify");
+                        lock.setPhaser(phaser);
+                        phaser.register();
+                        lock.notifyAll();
                     }
-
-                    // Wait for the acquisitions to end
-                    phaser.arriveAndAwaitAdvance();
-                    //System.out.println("total time "+(System.nanoTime()-nano));
                 }
+
+                // Wait for the acquisitions to end
+                phaser.arriveAndAwaitAdvance();
             }
         }
 
-        private volatile UUID periodIdentifier = null;
-        private volatile Queue<AcquisitionLock> acquisitionQueue = null;
+        private static final Object ACQUIRABLE_LOCK = new Object();
+        private volatile BatchThread batchThread = null;
 
         public boolean tryAcquisition(@NotNull AcquisitionLock lock) {
+            final Queue<AcquisitionLock> periodQueue = getPeriodQueue();
+
             final Thread currentThread = Thread.currentThread();
             final boolean isBatchThread = currentThread instanceof BatchThread;
-            final UUID threadIdentifier = isBatchThread ?
-                    ((BatchThread) currentThread).getIdentifier() : null;
-            final boolean differentThread = threadIdentifier == null ||
-                    !threadIdentifier.equals(periodIdentifier);
 
-            if (differentThread && periodIdentifier != null && acquisitionQueue != null) {
+            final boolean differentThread = !isBatchThread ||
+                    (batchThread != null && System.identityHashCode(batchThread) != System.identityHashCode(currentThread));
 
-                //System.out.println("diff " + periodIdentifier + " " + threadIdentifier);
-                try {
+            if (differentThread) {
 
-                    synchronized (lock) {
+                synchronized (lock) {
+                    synchronized (ACQUIRABLE_LOCK) {
+                        Queue<AcquisitionLock> currentQueue = ((BatchThread) currentThread).getWaitingAcquisitionQueue();
+                        //System.out.println("HERE");
+                        //System.out.println("we got here");
+                        processQueue(currentQueue);
+                        //System.out.println("pre " + currentQueue.size());
 
-                        synchronized (AcquirableElement.class) {
-                            if (isBatchThread) {
-                                processQueue(((BatchThread) currentThread).getWaitingAcquisitionQueue());
-                            }
-                            processQueue(acquisitionQueue);
+                        periodQueue.add(lock);
 
-                            acquisitionQueue.add(lock);
-                            /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
-                                    acquisitionQueue.hashCode() + " " + acquisitionQueue.size() + " " +
-                                    ((BatchThread) currentThread).getWaitingAcquisitionQueue().hashCode() + " " +
-                                    ((BatchThread) currentThread).getWaitingAcquisitionQueue().size());*/
-                        }
+                        //System.out.println("pre2 " + currentQueue.size());
 
-                        lock.wait();
+                    /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
+                            periodQueue.hashCode() + " " + periodQueue.size() + " " +
+                            currentQueue.hashCode() + " " +
+                            currentQueue.size());*/
                     }
-                    return false;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return false;
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
                 }
 
+                //System.out.println("pre2 " + currentQueue.size());
+
+                    /*System.out.println("ADD WAIT " + currentThread.getName() + " " +
+                            periodQueue.hashCode() + " " + periodQueue.size() + " " +
+                            currentQueue.hashCode() + " " +
+                            currentQueue.size());*/
+
+                return false;
             } else {
                 //System.out.println("GOOD");
                 return true;
             }
         }
 
-        public void refreshThread(@NotNull UUID identifier, @NotNull Queue<AcquisitionLock> acquisitionQueue) {
-            this.periodIdentifier = identifier;
-            this.acquisitionQueue = acquisitionQueue;
+        public void refreshThread(@NotNull BatchThread batchThread) {
+            this.batchThread = batchThread;
         }
 
         public void acquisitionTick() {
-            processQueue(acquisitionQueue);
+            processQueue(batchThread.getWaitingAcquisitionQueue());
         }
 
-        @NotNull
-        public UUID getPeriodIdentifier() {
-            return periodIdentifier;
+        public Queue<AcquisitionLock> getPeriodQueue() {
+            return batchThread != null ? batchThread.getWaitingAcquisitionQueue() : null;
         }
     }
 
@@ -128,11 +133,12 @@ public interface AcquirableElement<T> {
 
         private volatile Phaser phaser;
 
+        @Nullable
         public Phaser getPhaser() {
             return phaser;
         }
 
-        public void setPhaser(Phaser phaser) {
+        public void setPhaser(@NotNull Phaser phaser) {
             this.phaser = phaser;
         }
     }
