@@ -534,8 +534,9 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public boolean drop(@NotNull Player player, int mode, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
-        final ItemStack clicked = slot == -999 ?
-                null : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset));
+        final boolean outsideDrop = slot == -999;
+        final ItemStack clicked = outsideDrop ?
+                ItemStack.getAirItem() : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset));
         final ItemStack cursor = getCursorItem(player);
 
         final InventoryClickResult clickResult = clickProcessor.drop(this, player,
@@ -546,7 +547,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         }
 
         ItemStack resultClicked = clickResult.getClicked();
-        if (isInWindow) {
+        if (isInWindow && !outsideDrop) {
             if (resultClicked != null)
                 setItemStack(slot, resultClicked);
         } else {

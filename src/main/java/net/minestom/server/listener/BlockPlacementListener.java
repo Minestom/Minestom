@@ -60,10 +60,17 @@ public class BlockPlacementListener {
             return;
         }
 
-        // Check if item at hand is a block
-        final Material material = usedItem.getMaterial();
-        if (material == Material.AIR) {
-            return;
+        final Material useMaterial = usedItem.getMaterial();
+
+        // Verify if the player can place the block
+        {
+            if (useMaterial == Material.AIR) { // Can't place air
+                return;
+            }
+            if (player.getGameMode().equals(GameMode.ADVENTURE)) { // Can't place in adventure mode
+                return;
+            }
+
         }
 
         // Get the newly placed block position
@@ -79,9 +86,9 @@ public class BlockPlacementListener {
         // This will ensure that the player has the correct version of the chunk
         boolean refreshChunk = false;
 
-        if (material.isBlock()) {
+        if (useMaterial.isBlock()) {
             if (!chunk.isReadOnly()) {
-                final Block block = material.getBlock();
+                final Block block = useMaterial.getBlock();
                 final Set<Entity> entities = instance.getChunkEntities(chunk);
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = false;

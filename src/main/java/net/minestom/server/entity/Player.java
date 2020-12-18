@@ -1728,11 +1728,15 @@ public class Player extends LivingEntity implements CommandSender {
     public void setGameMode(@NotNull GameMode gameMode) {
         Check.notNull(gameMode, "GameMode cannot be null");
         this.gameMode = gameMode;
-        sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
 
-        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
-        sendPacketToViewersAndSelf(infoPacket);
+        // Condition to prevent sending the packets before spawning the player
+        if (isActive()) {
+            sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
+
+            PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+            infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
+            sendPacketToViewersAndSelf(infoPacket);
+        }
     }
 
     /**
