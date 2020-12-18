@@ -55,19 +55,19 @@ public interface AcquirableElement<T> {
          * @param acquisitionQueue the queue to empty containing the locks to notify
          */
         public static void processQueue(@NotNull Queue<AcquisitionLock> acquisitionQueue) {
-            synchronized (ACQUIRABLE_LOCK) {
-                AcquisitionLock lock;
+            AcquisitionLock lock;
+            while ((lock = acquisitionQueue.poll()) != null) {
                 Phaser phaser = new Phaser(1);
-                while ((lock = acquisitionQueue.poll()) != null) {
-                    //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
-                    synchronized (lock) {
+                //System.out.println("NOTIFY " + acquisitionQueue.hashCode());
+                synchronized (lock) {
+                    synchronized (ACQUIRABLE_LOCK) {
                         //System.out.println("end modify");
                         lock.setPhaser(phaser);
                         phaser.register();
                         lock.notifyAll();
                     }
                 }
-
+        
                 // Wait for the acquisitions to end
                 phaser.arriveAndAwaitAdvance();
             }
