@@ -228,7 +228,9 @@ extends <a href="../Player.html" title="class in net.minestom.server.entity">Pla
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="FakePlayerController.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayerController</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getController()">getController</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Retrieves the controller for the fake player.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="FakePlayerOption.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayerOption</a></code></td>
@@ -243,7 +245,7 @@ extends <a href="../Player.html" title="class in net.minestom.server.entity">Pla
           java.lang.String&nbsp;username,
           java.util.function.Consumer&lt;<a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&gt;&nbsp;spawnCallback)</code></th>
 <td class="colLast">
-<div class="block">Inits a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a> without adding it in cache.</div>
+<div class="block">Initializes a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a> without adding it in cache.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -253,7 +255,7 @@ extends <a href="../Player.html" title="class in net.minestom.server.entity">Pla
           <a href="FakePlayerOption.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayerOption</a>&nbsp;option,
           java.util.function.Consumer&lt;<a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&gt;&nbsp;spawnCallback)</code></th>
 <td class="colLast">
-<div class="block">Inits a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
+<div class="block">Initializes a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -358,7 +360,7 @@ extends <a href="../Player.html" title="class in net.minestom.server.entity">Pla
                               <a href="FakePlayerOption.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayerOption</a>&nbsp;option,
                               @Nullable
                               java.util.function.Consumer&lt;<a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&gt;&nbsp;spawnCallback)</pre>
-<div class="block">Inits a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
+<div class="block">Initializes a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>uuid</code> - the FakePlayer uuid</dd>
@@ -379,7 +381,7 @@ extends <a href="../Player.html" title="class in net.minestom.server.entity">Pla
                               java.lang.String&nbsp;username,
                               @Nullable
                               java.util.function.Consumer&lt;<a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&gt;&nbsp;spawnCallback)</pre>
-<div class="block">Inits a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a> without adding it in cache.
+<div class="block">Initializes a new <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a> without adding it in cache.
  <p>
  If you want the fake player to be obtainable with the <a href="../../network/ConnectionManager.html" title="class in net.minestom.server.network"><code>ConnectionManager</code></a>
  you need to specify it in a <a href="FakePlayerOption.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayerOption</code></a> and use <a href="#initPlayer(java.util.UUID,java.lang.String,net.minestom.server.entity.fakeplayer.FakePlayerOption,java.util.function.Consumer)"><code>initPlayer(UUID, String, FakePlayerOption, Consumer)</code></a>.</div>
@@ -414,6 +416,11 @@ public&nbsp;<a href="FakePlayerOption.html" title="class in net.minestom.server.
 <h4>getController</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="FakePlayerController.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayerController</a>&nbsp;getController()</pre>
+<div class="block">Retrieves the controller for the fake player.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The fake player's controller.</dd>
+</dl>
 </li>
 </ul>
 <a id="showPlayer(net.minestom.server.network.player.PlayerConnection)">
@@ -424,7 +431,6 @@ public&nbsp;<a href="FakePlayerController.html" title="class in net.minestom.ser
 <h4>showPlayer</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;showPlayer&#8203;(@NotNull
                           <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Player.html#showPlayer(net.minestom.server.network.player.PlayerConnection)">Player</a></code></span></div>
 <div class="block">Sends all the related packet to have the player sent to another with related data
  (create player, spawn position, velocity, metadata, equipments, passengers, team).
  <p>

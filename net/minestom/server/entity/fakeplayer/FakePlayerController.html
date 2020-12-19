@@ -156,7 +156,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.fakeplayer.FakePlayer)">FakePlayerController</a></span>&#8203;(<a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&nbsp;fakePlayer)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Initializes a new <a href="FakePlayerController.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayerController</code></a> with the given <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -179,7 +181,9 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#attackEntity(net.minestom.server.entity.Entity)">attackEntity</a></span>&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Attacks the given <code>entity</code>.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -188,12 +192,16 @@ extends java.lang.Object</pre>
            byte&nbsp;button,
            short&nbsp;action,
            int&nbsp;mode)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Simulates a click in a window.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#closeWindow()">closeWindow</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Closes the current opened inventory if there is any.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -206,56 +214,79 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#finishDigging(net.minestom.server.utils.BlockPosition)">finishDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#finishDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">finishDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+             <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></th>
+<td class="colLast">
+<div class="block">Finishes the digging process of the fake player.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#respawn()">respawn</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Respawns the player.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(float,float)">rotate</a></span>&#8203;(float&nbsp;yaw,
       float&nbsp;pitch)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Rotates the fake player.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendArmAnimation(net.minestom.server.entity.Player.Hand)">sendArmAnimation</a></span>&#8203;(<a href="../Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sends an animation packet that animates the specified arm.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,byte%5B%5D)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  byte[]&nbsp;message)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sends a plugin message to the player.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,java.lang.String)">sendPluginMessage</a></span>&#8203;(java.lang.String&nbsp;channel,
                  java.lang.String&nbsp;message)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sends a plugin message to the player.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHeldItem(short)">setHeldItem</a></span>&#8203;(short&nbsp;slot)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Changes the current held slot for the player.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startDigging(net.minestom.server.utils.BlockPosition)">startDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">startDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+            <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></th>
+<td class="colLast">
+<div class="block">Starts the digging process of the fake player.</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopDigging(net.minestom.server.utils.BlockPosition)">stopDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">stopDigging</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+           <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></th>
+<td class="colLast">
+<div class="block">Stops the digging process of the fake player.</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#useItem(net.minestom.server.entity.Player.Hand)">useItem</a></span>&#8203;(<a href="../Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Uses the item in the given <code>hand</code>.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -289,6 +320,11 @@ extends java.lang.Object</pre>
 <h4>FakePlayerController</h4>
 <pre>public&nbsp;FakePlayerController&#8203;(@NotNull
                             <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a>&nbsp;fakePlayer)</pre>
+<div class="block">Initializes a new <a href="FakePlayerController.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayerController</code></a> with the given <a href="FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fakePlayer</code> - The fake player that should used the controller.</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -312,6 +348,15 @@ extends java.lang.Object</pre>
                         byte&nbsp;button,
                         short&nbsp;action,
                         int&nbsp;mode)</pre>
+<div class="block">Simulates a click in a window.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>playerInventory</code> - <code>true</code> if the window a <a href="../../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory"><code>PlayerInventory</code></a>, otherwise <code>false</code>.</dd>
+<dd><code>slot</code> - The slot where the fake player should click on.</dd>
+<dd><code>button</code> - The mouse button that the fake player should used.</dd>
+<dd><code>action</code> - The action that the fake player should perform.</dd>
+<dd><code>mode</code> - The inventory operation mode that the fake player should used.</dd>
+</dl>
 </li>
 </ul>
 <a id="closeWindow()">
@@ -321,6 +366,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>closeWindow</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;closeWindow()</pre>
+<div class="block">Closes the current opened inventory if there is any.</div>
 </li>
 </ul>
 <a id="sendPluginMessage(java.lang.String,byte[])">
@@ -331,6 +377,12 @@ extends java.lang.Object</pre>
 <h4>sendPluginMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendPluginMessage&#8203;(java.lang.String&nbsp;channel,
                               byte[]&nbsp;message)</pre>
+<div class="block">Sends a plugin message to the player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>channel</code> - The channel of the message.</dd>
+<dd><code>message</code> - The message data.</dd>
+</dl>
 </li>
 </ul>
 <a id="sendPluginMessage(java.lang.String,java.lang.String)">
@@ -341,6 +393,12 @@ extends java.lang.Object</pre>
 <h4>sendPluginMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendPluginMessage&#8203;(java.lang.String&nbsp;channel,
                               java.lang.String&nbsp;message)</pre>
+<div class="block">Sends a plugin message to the player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>channel</code> - The channel of the message.</dd>
+<dd><code>message</code> - The message data.</dd>
+</dl>
 </li>
 </ul>
 <a id="attackEntity(net.minestom.server.entity.Entity)">
@@ -350,6 +408,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>attackEntity</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;attackEntity&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<div class="block">Attacks the given <code>entity</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entity</code> - The entity that is to be attacked.</dd>
+</dl>
 </li>
 </ul>
 <a id="respawn()">
@@ -359,6 +422,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>respawn</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;respawn()</pre>
+<div class="block">Respawns the player.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../Player.html#respawn()"><code>Player.respawn()</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="setHeldItem(short)">
@@ -368,6 +436,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setHeldItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setHeldItem&#8203;(short&nbsp;slot)</pre>
+<div class="block">Changes the current held slot for the player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>slot</code> - The slot that the player has to held.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code> - If <code>slot</code> is not between <code>0</code> and <code>8</code>.</dd>
+</dl>
 </li>
 </ul>
 <a id="sendArmAnimation(net.minestom.server.entity.Player.Hand)">
@@ -377,6 +452,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>sendArmAnimation</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendArmAnimation&#8203;(<a href="../Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
+<div class="block">Sends an animation packet that animates the specified arm.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>hand</code> - The hand of the arm to be animated.</dd>
+</dl>
 </li>
 </ul>
 <a id="useItem(net.minestom.server.entity.Player.Hand)">
@@ -386,6 +466,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>useItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;useItem&#8203;(<a href="../Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
+<div class="block">Uses the item in the given <code>hand</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>hand</code> - The hand in which an ite mshould be.</dd>
+</dl>
 </li>
 </ul>
 <a id="rotate(float,float)">
@@ -396,33 +481,60 @@ extends java.lang.Object</pre>
 <h4>rotate</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;rotate&#8203;(float&nbsp;yaw,
                    float&nbsp;pitch)</pre>
+<div class="block">Rotates the fake player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>yaw</code> - The new yaw for the fake player.</dd>
+<dd><code>pitch</code> - The new pitch for the fake player.</dd>
+</dl>
 </li>
 </ul>
-<a id="startDigging(net.minestom.server.utils.BlockPosition)">
+<a id="startDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>startDigging</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;startDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;startDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                         <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</pre>
+<div class="block">Starts the digging process of the fake player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>blockPosition</code> - The position of the block to be excavated.</dd>
+<dd><code>blockFace</code> - From where the block is struck.</dd>
+</dl>
 </li>
 </ul>
-<a id="stopDigging(net.minestom.server.utils.BlockPosition)">
+<a id="stopDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>stopDigging</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;stopDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;stopDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                        <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</pre>
+<div class="block">Stops the digging process of the fake player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>blockPosition</code> - The position of the block to be excavated.</dd>
+<dd><code>blockFace</code> - From where the block is struck.</dd>
+</dl>
 </li>
 </ul>
-<a id="finishDigging(net.minestom.server.utils.BlockPosition)">
+<a id="finishDigging(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.BlockFace)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>finishDigging</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;finishDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;finishDigging&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                          <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</pre>
+<div class="block">Finishes the digging process of the fake player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>blockPosition</code> - The position of the block to be excavated.</dd>
+<dd><code>blockFace</code> - From where the block is struck.</dd>
+</dl>
 </li>
 </ul>
 <a id="consumePacket(net.minestom.server.network.packet.server.ServerPacket)">
