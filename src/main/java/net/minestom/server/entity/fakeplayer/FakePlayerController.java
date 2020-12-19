@@ -12,8 +12,11 @@ import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,10 +28,24 @@ public class FakePlayerController {
 
     private final FakePlayer fakePlayer;
 
+    /**
+     * Initializes a new {@link FakePlayerController} with the given {@link FakePlayer}.
+     *
+     * @param fakePlayer The fake player that should used the controller.
+     */
     public FakePlayerController(@NotNull FakePlayer fakePlayer) {
         this.fakePlayer = fakePlayer;
     }
 
+    /**
+     * Simulates a click in a window.
+     *
+     * @param playerInventory {@code true} if the window a {@link PlayerInventory}, otherwise {@code false}.
+     * @param slot            The slot where the fake player should click on.
+     * @param button          The mouse button that the fake player should used.
+     * @param action          The action that the fake player should perform.
+     * @param mode            The inventory operation mode that the fake player should used.
+     */
     public void clickWindow(boolean playerInventory, short slot, byte button, short action, int mode) {
         Inventory inventory = playerInventory ? null : fakePlayer.getOpenInventory();
         InventoryModifier inventoryModifier = inventory == null ? fakePlayer.getInventory() : inventory;
@@ -48,6 +65,9 @@ public class FakePlayerController {
         addToQueue(clickWindowPacket);
     }
 
+    /**
+     * Closes the current opened inventory if there is any.
+     */
     public void closeWindow() {
         Inventory openInventory = fakePlayer.getOpenInventory();
 
@@ -56,6 +76,12 @@ public class FakePlayerController {
         addToQueue(closeWindow);
     }
 
+    /**
+     * Sends a plugin message to the player.
+     *
+     * @param channel The channel of the message.
+     * @param message The message data.
+     */
     public void sendPluginMessage(String channel, byte[] message) {
         ClientPluginMessagePacket pluginMessagePacket = new ClientPluginMessagePacket();
         pluginMessagePacket.channel = channel;
@@ -63,10 +89,21 @@ public class FakePlayerController {
         addToQueue(pluginMessagePacket);
     }
 
+    /**
+     * Sends a plugin message to the player.
+     *
+     * @param channel The channel of the message.
+     * @param message The message data.
+     */
     public void sendPluginMessage(String channel, String message) {
         sendPluginMessage(channel, message.getBytes());
     }
 
+    /**
+     * Attacks the given {@code entity}.
+     *
+     * @param entity The entity that is to be attacked.
+     */
     public void attackEntity(Entity entity) {
         ClientInteractEntityPacket interactEntityPacket = new ClientInteractEntityPacket();
         interactEntityPacket.targetId = entity.getEntityId();
@@ -74,6 +111,11 @@ public class FakePlayerController {
         addToQueue(interactEntityPacket);
     }
 
+    /**
+     * Respawns the player.
+     *
+     * @see Player#respawn()
+     */
     public void respawn() {
         // Sending the respawn packet for some reason
         // Is related to FakePlayer#showPlayer and the tablist option (probably because of the scheduler)
@@ -83,24 +125,48 @@ public class FakePlayerController {
         fakePlayer.respawn();
     }
 
+    /**
+     * Changes the current held slot for the player.
+     *
+     * @param slot The slot that the player has to held.
+     * @throws IllegalArgumentException If {@code slot} is not between {@code 0} and {@code 8}.
+     */
     public void setHeldItem(short slot) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "Slot has to be between 0 and 8!");
+
         ClientHeldItemChangePacket heldItemChangePacket = new ClientHeldItemChangePacket();
         heldItemChangePacket.slot = slot;
         addToQueue(heldItemChangePacket);
     }
 
+    /**
+     * Sends an animation packet that animates the specified arm.
+     *
+     * @param hand The hand of the arm to be animated.
+     */
     public void sendArmAnimation(Player.Hand hand) {
         ClientAnimationPacket animationPacket = new ClientAnimationPacket();
         animationPacket.hand = hand;
         addToQueue(animationPacket);
     }
 
+    /**
+     * Uses the item in the given {@code hand}.
+     *
+     * @param hand The hand in which an ite mshould be.
+     */
     public void useItem(Player.Hand hand) {
         ClientUseItemPacket useItemPacket = new ClientUseItemPacket();
         useItemPacket.hand = hand;
         addToQueue(useItemPacket);
     }
 
+    /**
+     * Rotates the fake player.
+     *
+     * @param yaw   The new yaw for the fake player.
+     * @param pitch The new pitch for the fake player.
+     */
     public void rotate(float yaw, float pitch) {
         ClientPlayerRotationPacket playerRotationPacket = new ClientPlayerRotationPacket();
         playerRotationPacket.yaw = yaw;
@@ -109,34 +175,52 @@ public class FakePlayerController {
         addToQueue(playerRotationPacket);
     }
 
-    public void startDigging(BlockPosition blockPosition) {
+    /**
+     * Starts the digging process of the fake player.
+     *
+     * @param blockPosition The position of the block to be excavated.
+     * @param blockFace     From where the block is struck.
+     */
+    public void startDigging(BlockPosition blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.STARTED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = blockFace;
         addToQueue(playerDiggingPacket);
     }
 
-    public void stopDigging(BlockPosition blockPosition) {
+    /**
+     * Stops the digging process of the fake player.
+     *
+     * @param blockPosition The position of the block to be excavated.
+     * @param blockFace     From where the block is struck.
+     */
+    public void stopDigging(BlockPosition blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = blockFace;
         addToQueue(playerDiggingPacket);
     }
 
-    public void finishDigging(BlockPosition blockPosition) {
+    /**
+     * Finishes the digging process of the fake player.
+     *
+     * @param blockPosition The position of the block to be excavated.
+     * @param blockFace     From where the block is struck.
+     */
+    public void finishDigging(BlockPosition blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.FINISHED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
-        playerDiggingPacket.blockFace = BlockFace.BOTTOM; // TODO not hardcode
+        playerDiggingPacket.blockFace = blockFace;
         addToQueue(playerDiggingPacket);
     }
 
     /**
      * Makes the player receives a packet
      * WARNING: pretty much unsafe, used internally to redirect packets here,
-     * you should instead use {@link net.minestom.server.network.player.PlayerConnection#sendPacket(ServerPacket)}
+     * you should instead use {@link PlayerConnection#sendPacket(ServerPacket)}
      *
      * @param serverPacket the packet to consume
      */
@@ -152,6 +236,12 @@ public class FakePlayerController {
         }
     }
 
+    /**
+     * All packets in the queue are executed in the {@link Player#update(long)} method. It is used internally to add all
+     * received packet from the client. Could be used to "simulate" a received packet, but to use at your own risk!
+     *
+     * @param clientPlayPacket The packet to add in the queue.
+     */
     private void addToQueue(ClientPlayPacket clientPlayPacket) {
         this.fakePlayer.addPacketToQueue(clientPlayPacket);
     }

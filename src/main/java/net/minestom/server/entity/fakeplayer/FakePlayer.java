@@ -25,6 +25,13 @@ public class FakePlayer extends Player {
     private final FakePlayerOption option;
     private final FakePlayerController fakePlayerController;
 
+    /**
+     * Initializes a new {@link FakePlayer} with the given {@code uuid}, {@code username} and {@code option}'s.
+     *
+     * @param uuid     The unique identifier for the fake player.
+     * @param username The username for the fake player.
+     * @param option   Any option for the fake player.
+     */
     private FakePlayer(@NotNull UUID uuid, @NotNull String username, @NotNull FakePlayerOption option) {
         super(uuid, username, new FakePlayerConnection());
 
@@ -38,7 +45,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Inits a new {@link FakePlayer}.
+     * Initializes a new {@link FakePlayer}.
      *
      * @param uuid          the FakePlayer uuid
      * @param username      the FakePlayer username
@@ -59,7 +66,7 @@ public class FakePlayer extends Player {
     }
 
     /**
-     * Inits a new {@link FakePlayer} without adding it in cache.
+     * Initializes a new {@link FakePlayer} without adding it in cache.
      * <p>
      * If you want the fake player to be obtainable with the {@link net.minestom.server.network.ConnectionManager}
      * you need to specify it in a {@link FakePlayerOption} and use {@link #initPlayer(UUID, String, FakePlayerOption, Consumer)}.
@@ -82,11 +89,19 @@ public class FakePlayer extends Player {
         return option;
     }
 
+    /**
+     * Retrieves the controller for the fake player.
+     *
+     * @return The fake player's controller.
+     */
     @NotNull
     public FakePlayerController getController() {
         return fakePlayerController;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void showPlayer(@NotNull PlayerConnection connection) {
         super.showPlayer(connection);

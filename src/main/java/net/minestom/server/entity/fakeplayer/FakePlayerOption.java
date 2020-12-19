@@ -2,6 +2,9 @@ package net.minestom.server.entity.fakeplayer;
 
 import net.minestom.server.network.ConnectionManager;
 
+/**
+ * Represents any options for a {@link FakePlayer}.
+ */
 public class FakePlayerOption {
 
     private boolean registered = false;
