@@ -16,13 +16,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-        BlockUtils block = new BlockUtils(instance, blockPosition);
-        return block.below().getBlock().isSolid();
-    }
-
-    @Override
-    public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
+    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
         BlockUtils block = new BlockUtils(instance, blockPosition);
 
         String east = "none";
@@ -104,7 +98,14 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
+    public short blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Player pl) {
+        final short belowBlockId = instance.getBlockStateId(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
+        if (!Block.fromStateId(belowBlockId).isSolid()) {
+            return CANCEL_CODE;
+        }
+
         return getBlockId();
     }
 

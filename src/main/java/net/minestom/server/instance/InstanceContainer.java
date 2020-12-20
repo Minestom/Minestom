@@ -300,7 +300,7 @@ public class InstanceContainer extends Instance {
     private short executeBlockPlacementRule(short blockStateId, @NotNull BlockPosition blockPosition) {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
         if (blockPlacementRule != null) {
-            return blockPlacementRule.blockRefresh(this, blockPosition, blockStateId);
+            return blockPlacementRule.blockUpdate(this, blockPosition, blockStateId);
         }
         return blockStateId;
     }
@@ -331,7 +331,7 @@ public class InstanceContainer extends Instance {
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborStateId);
                     if (neighborBlockPlacementRule != null) {
                         final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
-                        final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
+                        final short newNeighborId = neighborBlockPlacementRule.blockUpdate(this,
                                 neighborPosition, neighborStateId);
                         if (neighborStateId != newNeighborId) {
                             refreshBlockStateId(neighborPosition, newNeighborId);
