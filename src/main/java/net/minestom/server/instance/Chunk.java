@@ -454,10 +454,10 @@ public abstract class Chunk implements Viewable, DataContainer {
         // Add to the viewable chunks set
         player.getViewableChunks().add(this);
 
-        if (result) {
-            // Send the chunk data & light packets to the player
-            sendChunk(player);
+        // Send the chunk data & light packets to the player
+        sendChunk(player);
 
+        if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
             player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
         }
