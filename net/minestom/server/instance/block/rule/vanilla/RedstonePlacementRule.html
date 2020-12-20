@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -143,6 +143,23 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.instance.block.rule.BlockPlacementRule">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;net.minestom.server.instance.block.rule.<a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></h3>
+<code><a href="../BlockPlacementRule.html#CANCEL_CODE">CANCEL_CODE</a></code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -180,9 +197,10 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.entity.Player)">blockPlace</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">blockPlace</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
           <a href="../../Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
           <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
+          <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
           <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</code></th>
 <td class="colLast">
 <div class="block">Called when the block is placed.</div>
@@ -190,19 +208,11 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockRefresh(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockRefresh</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-            <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-            short&nbsp;currentId)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockUpdate</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+           short&nbsp;currentId)</code></th>
 <td class="colLast">
 <div class="block">Called when the block state id can be updated (for instance if a neighbour block changed).</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">canPlace</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
-<td class="colLast">
-<div class="block">Gets if the block can be placed in <code>blockPosition</code>.</div>
 </td>
 </tr>
 </table>
@@ -255,46 +265,22 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="canPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">
+<a id="blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>canPlace</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;canPlace&#8203;(@NotNull
-                        <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        @NotNull
-                        <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#canPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">BlockPlacementRule</a></code></span></div>
-<div class="block">Gets if the block can be placed in <code>blockPosition</code>.
- Can for example, be used for blocks which have to be placed on a solid block.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../BlockPlacementRule.html#canPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">canPlace</a></code>&nbsp;in class&nbsp;<code><a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>instance</code> - the instance of the block</dd>
-<dd><code>blockPosition</code> - the position where the block is trying to get place</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the block placement position is valid</dd>
-</dl>
-</li>
-</ul>
-<a id="blockRefresh(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>blockRefresh</h4>
-<pre class="methodSignature">public&nbsp;short&nbsp;blockRefresh&#8203;(@NotNull
-                          <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                          @NotNull
-                          <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-                          short&nbsp;currentId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockRefresh(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">BlockPlacementRule</a></code></span></div>
+<h4>blockUpdate</h4>
+<pre class="methodSignature">public&nbsp;short&nbsp;blockUpdate&#8203;(@NotNull
+                         <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                         @NotNull
+                         <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                         short&nbsp;currentId)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">BlockPlacementRule</a></code></span></div>
 <div class="block">Called when the block state id can be updated (for instance if a neighbour block changed).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../BlockPlacementRule.html#blockRefresh(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockRefresh</a></code>&nbsp;in class&nbsp;<code><a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
+<dd><code><a href="../BlockPlacementRule.html#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockUpdate</a></code>&nbsp;in class&nbsp;<code><a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the block</dd>
 <dd><code>blockPosition</code> - the block position</dd>
@@ -304,7 +290,7 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 </dl>
 </li>
 </ul>
-<a id="blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.entity.Player)">
+<a id="blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -317,19 +303,23 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
                         @NotNull
                         <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
                         @NotNull
+                        <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                        @NotNull
                         <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.entity.Player)">BlockPlacementRule</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">BlockPlacementRule</a></code></span></div>
 <div class="block">Called when the block is placed.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../BlockPlacementRule.html#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.entity.Player)">blockPlace</a></code>&nbsp;in class&nbsp;<code><a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
+<dd><code><a href="../BlockPlacementRule.html#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">blockPlace</a></code>&nbsp;in class&nbsp;<code><a href="../BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the block</dd>
 <dd><code>block</code> - the block placed</dd>
 <dd><code>blockFace</code> - the block face</dd>
+<dd><code>blockPosition</code> - the block position</dd>
 <dd><code>pl</code> - the player who placed the block</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the block state id of the placed block</dd>
+<dd>the block state id of the placed block,
+ <a href="../BlockPlacementRule.html#CANCEL_CODE"><code>BlockPlacementRule.CANCEL_CODE</code></a> to prevent the placement</dd>
 </dl>
 </li>
 </ul>
@@ -385,7 +375,7 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
