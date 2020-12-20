@@ -22,10 +22,13 @@ import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacement
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;
 
 public class BlockPlacementListener {
+
+    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerInventory playerInventory = player.getInventory();
@@ -37,6 +40,12 @@ public class BlockPlacementListener {
         final Instance instance = player.getInstance();
         if (instance == null)
             return;
+
+        // Prevent outdated/modified client data
+        if (!ChunkUtils.isLoaded(instance.getChunkAt(blockPosition))) {
+            // Client tried to place a block in an unloaded chunk, ignore the request
+            return;
+        }
 
         final ItemStack usedItem = player.getItemInHand(hand);
 
@@ -83,6 +92,8 @@ public class BlockPlacementListener {
 
         final Chunk chunk = instance.getChunkAt(blockPosition);
 
+        Check.stateCondition(!ChunkUtils.isLoaded(chunk),
+                "A player tried to place a block in the border of a loaded chunk " + blockPosition);
 
         // The concerned chunk will be send to the player if an error occur
         // This will ensure that the player has the correct version of the chunk
@@ -113,8 +124,7 @@ public class BlockPlacementListener {
 
                         // BlockPlacementRule check
                         final Block resultBlock = Block.fromStateId(playerBlockPlaceEvent.getBlockStateId());
-                        final BlockManager blockManager = MinecraftServer.getBlockManager();
-                        final BlockPlacementRule blockPlacementRule = blockManager.getBlockPlacementRule(resultBlock);
+                        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
                         final short blockStateId = blockPlacementRule == null ? resultBlock.getBlockId() :
                                 blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
                         final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
@@ -124,9 +134,9 @@ public class BlockPlacementListener {
                             // Place the block
                             final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                             if (customBlockId != 0) {
-                                instance.setSeparateBlocks(blockPosition, playerBlockPlaceEvent.getBlockStateId(), customBlockId);
+                                instance.setSeparateBlocks(blockPosition, blockStateId, customBlockId);
                             } else {
-                                instance.setBlockStateId(blockPosition, playerBlockPlaceEvent.getBlockStateId());
+                                instance.setBlockStateId(blockPosition, blockStateId);
                             }
 
                             // Block consuming
