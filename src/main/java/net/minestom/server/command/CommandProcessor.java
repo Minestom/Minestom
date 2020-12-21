@@ -36,7 +36,7 @@ public interface CommandProcessor {
     String[] getAliases();
 
     /**
-     * Called when the command is executed by a {@link CommandSender}
+     * Called when the command is executed by a {@link CommandSender}.
      *
      * @param sender  the sender which executed the command
      * @param command the command name used
@@ -48,7 +48,7 @@ public interface CommandProcessor {
     /**
      * Called to know if a player has access to the command.
      * <p>
-     * Right now it is only used to know if the player should see the command in auto-completion
+     * Right now it is only used to know if the player should see the command in auto-completion.
      * Conditions still need to be checked in {@link #process(CommandSender, String, String[])}.
      *
      * @param player the player to check the access
