@@ -135,6 +135,10 @@ public class PlayerInit {
             }
         });
 
+        globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
+            event.setChatMessage(ColoredText.of("custom death message"));
+        });
+
         globalEventHandler.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
             if (event.getHand() != Player.Hand.MAIN)
                 return;

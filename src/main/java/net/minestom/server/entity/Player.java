@@ -500,36 +500,45 @@ public class Player extends LivingEntity implements CommandSender {
     public void kill() {
         if (!isDead()) {
 
-            // send death screen text to the killed player
+            ColoredText deathText;
+            JsonMessage chatMessage;
+
+            // get death screen text to the killed player
             {
-                ColoredText deathText;
                 if (lastDamageSource != null) {
                     deathText = lastDamageSource.buildDeathScreenText(this);
                 } else { // may happen if killed by the server without applying damage
                     deathText = ColoredText.of("Killed by poor programming.");
                 }
-
-                // #buildDeathScreenText can return null, check here
-                if (deathText != null) {
-                    CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathText);
-                    playerConnection.sendPacket(deathPacket);
-                }
             }
 
-            // send death message to chat
+            // get death message to chat
             {
-                JsonMessage chatMessage;
                 if (lastDamageSource != null) {
                     chatMessage = lastDamageSource.buildDeathMessage(this);
                 } else { // may happen if killed by the server without applying damage
                     chatMessage = ColoredText.of(getUsername() + " was killed by poor programming.");
                 }
-
-                // #buildDeathMessage can return null, check here
-                if (chatMessage != null) {
-                    MinecraftServer.getConnectionManager().broadcastMessage(chatMessage);
-                }
             }
+
+            // Call player death event
+            PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
+            callEvent(PlayerDeathEvent.class, playerDeathEvent);
+
+            deathText = playerDeathEvent.getDeathText();
+            chatMessage = playerDeathEvent.getChatMessage();
+
+            // #buildDeathScreenText can return null, check here
+            if (deathText != null) {
+                CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathText);
+                playerConnection.sendPacket(deathPacket);
+            }
+
+            // #buildDeathMessage can return null, check here
+            if (chatMessage != null) {
+                MinecraftServer.getConnectionManager().broadcastMessage(chatMessage);
+            }
+
         }
         super.kill();
     }
