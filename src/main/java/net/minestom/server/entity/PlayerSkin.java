@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Contains all the data required to store a skin.
@@ -24,24 +25,6 @@ public class PlayerSkin {
     public PlayerSkin(String textures, String signature) {
         this.textures = textures;
         this.signature = signature;
-    }
-
-    /**
-     * Gets the skin textures value.
-     *
-     * @return the textures value
-     */
-    public String getTextures() {
-        return textures;
-    }
-
-    /**
-     * Gets the skin signature.
-     *
-     * @return the skin signature
-     */
-    public String getSignature() {
-        return signature;
     }
 
     /**
@@ -96,6 +79,44 @@ public class PlayerSkin {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Gets the skin textures value.
+     *
+     * @return the textures value
+     */
+    public String getTextures() {
+        return textures;
+    }
+
+    /**
+     * Gets the skin signature.
+     *
+     * @return the skin signature
+     */
+    public String getSignature() {
+        return signature;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        PlayerSkin that = (PlayerSkin) object;
+        return Objects.equals(textures, that.textures) &&
+                Objects.equals(signature, that.signature);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(textures, signature);
     }
 
 }
