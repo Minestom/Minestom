@@ -210,7 +210,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/RichMessage.html" title="class in net.minestom.server.chat">RichMessage</a>&gt;</code></td>
+<td class="colFirst"><code>java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatFormatFunction()">getChatFormatFunction</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to retrieve the chat format for this message.</div>
@@ -246,7 +246,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatFormat(java.util.function.Function)">setChatFormat</a></span>&#8203;(java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/RichMessage.html" title="class in net.minestom.server.chat">RichMessage</a>&gt;&nbsp;chatFormat)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatFormat(java.util.function.Function)">setChatFormat</a></span>&#8203;(java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</code></th>
 <td class="colLast">
 <div class="block">Changes the chat format.</div>
 </td>
@@ -320,7 +320,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>setChatFormat</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setChatFormat&#8203;(@Nullable
-                          java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/RichMessage.html" title="class in net.minestom.server.chat">RichMessage</a>&gt;&nbsp;chatFormat)</pre>
+                          java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</pre>
 <div class="block">Changes the chat format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -382,7 +382,7 @@ public&nbsp;java.lang.String&nbsp;getMessage()</pre>
 <li class="blockList">
 <h4>getChatFormatFunction</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/RichMessage.html" title="class in net.minestom.server.chat">RichMessage</a>&gt;&nbsp;getChatFormatFunction()</pre>
+public&nbsp;java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;getChatFormatFunction()</pre>
 <div class="block">Used to retrieve the chat format for this message.
  <p>
  If null, the default format will be used.</div>
