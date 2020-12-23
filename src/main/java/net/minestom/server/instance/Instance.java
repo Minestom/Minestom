@@ -861,7 +861,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             for (long chunkIndex : visibleChunksEntity) {
                 getEntitiesInChunk(chunkIndex).forEach(ent -> {
                     if (isPlayer) {
-                        ent.addViewer((Player) entity);
+                        if (ent.isAutoViewable())
+                            ent.addViewer((Player) entity);
                     }
 
                     if (ent instanceof Player) {
