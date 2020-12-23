@@ -1597,11 +1597,11 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
-            if (isAutoViewable() && !entity.viewers.contains(this)) {
+            if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
                 entity.addViewer(this);
             }
 
-            if (entity instanceof Player && entity.isAutoViewable() && !viewers.contains(entity)) {
+            if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
                 addViewer((Player) entity);
             }
         });
