@@ -30,6 +30,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -849,7 +850,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
             final Position entityPosition = entity.getPosition();
-            final long[] visibleChunksEntity = ChunkUtils.getChunksInRange(entityPosition, MinecraftServer.getEntityViewDistance());
             final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {
@@ -858,19 +858,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             }
 
             // Send all visible entities
-            for (long chunkIndex : visibleChunksEntity) {
-                getEntitiesInChunk(chunkIndex).forEach(ent -> {
-                    if (isPlayer) {
-                        if (ent.isAutoViewable())
-                            ent.addViewer((Player) entity);
-                    }
+            EntityUtils.forEachRange(this, entityPosition, MinecraftServer.getEntityViewDistance(), ent -> {
+                if (isPlayer) {
+                    if (ent.isAutoViewable())
+                        ent.addViewer((Player) entity);
+                }
 
-                    if (ent instanceof Player) {
-                        if (entity.isAutoViewable())
-                            entity.addViewer((Player) ent);
-                    }
-                });
-            }
+                if (ent instanceof Player) {
+                    if (entity.isAutoViewable())
+                        entity.addViewer((Player) ent);
+                }
+            });
 
             final Chunk chunk = getChunkAt(entityPosition);
             Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
