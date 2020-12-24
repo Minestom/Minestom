@@ -51,6 +51,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -1595,24 +1596,15 @@ public class Player extends LivingEntity implements CommandSender {
         });
 
         // Manage entities in unchecked chunks
-        final long[] chunksInRange = ChunkUtils.getChunksInRange(newChunk.toPosition(), entityViewDistance);
+        EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
+            if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
+                entity.addViewer(this);
+            }
 
-        for (long chunkIndex : chunksInRange) {
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk == null)
-                continue;
-            instance.getChunkEntities(chunk).forEach(entity -> {
-                if (isAutoViewable() && !entity.viewers.contains(this)) {
-                    entity.addViewer(this);
-                }
-
-                if (entity instanceof Player && entity.isAutoViewable() && !viewers.contains(entity)) {
-                    addViewer((Player) entity);
-                }
-            });
-        }
+            if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
+                addViewer((Player) entity);
+            }
+        });
 
     }
 
