@@ -18,38 +18,82 @@ public class FireworkMeta extends ItemMeta {
     private List<FireworkEffect> effects = new ArrayList<>();
     private byte flightDuration;
 
+    /**
+     * Adds a firework effect to this firework.
+     *
+     * @param effect The firework effect to be added.
+     */
     public void addFireworkEffect(FireworkEffect effect) {
         this.effects.add(effect);
     }
 
+    /**
+     * Adds an array of firework effects to this firework.
+     *
+     * @param effects An array of firework effects to be added.
+     */
     public void addFireworkEffects(FireworkEffect... effects) {
         this.effects.addAll(Arrays.asList(effects));
     }
 
+    /**
+     * Removes a firework effect from this firework.
+     *
+     * @param index The index of the firework effect to be removed.
+     * @throws IndexOutOfBoundsException If index {@literal < 0 or index >} {@link #getEffectSize()}
+     */
     public void removeFireworkEffect(int index) throws IndexOutOfBoundsException {
         this.effects.remove(index);
     }
 
+    /**
+     * Removes a firework effects from this firework.
+     *
+     * @param effect The effect to be removed.
+     */
     public void removeFireworkEffect(FireworkEffect effect) {
         this.effects.remove(effect);
     }
 
+    /**
+     * Retrieves a collection with all effects in this firework.
+     *
+     * @return A collection with all effects in this firework.
+     */
     public List<FireworkEffect> getEffects() {
         return effects;
     }
 
+    /**
+     * Retrieves the size of effects in this firework.
+     *
+     * @return The size of the effects.
+     */
     public int getEffectSize() {
         return this.effects.size();
     }
 
+    /**
+     * Removes all effects from this firework.
+     */
     public void clearEffects() {
         this.effects.clear();
     }
 
+    /**
+     * Whether this firework has any effects.
+     *
+     * @return {@code true} if this firework has any effects, otherwise {@code false}.
+     */
     public boolean hasEffects() {
         return this.effects.isEmpty();
     }
 
+    /**
+     * Changes the flight duration of this firework.
+     *
+     * @param flightDuration The new flight duration for this firework.
+     */
     public void setFlightDuration(byte flightDuration) {
         this.flightDuration = flightDuration;
     }

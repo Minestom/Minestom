@@ -29,10 +29,21 @@ public enum FireworkEffectType {
         this.type = type;
     }
 
+    /**
+     * Retrieves a {@link FireworkEffectType} by the given {@code id}.
+     *
+     * @param id The identifier of the firework effect type.
+     * @return A firework effect type or {@code null}.
+     */
     public static FireworkEffectType byId(byte id) {
         return BY_ID.get(id);
     }
 
+    /**
+     * Retrieves the type of the firework effect.
+     *
+     * @return The type of the firework effect as a byte.
+     */
     public byte getType() {
         return type;
     }

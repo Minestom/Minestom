@@ -44,6 +44,9 @@ public abstract class ItemMeta implements PublicCloneable<ItemMeta> {
      */
     public abstract void write(@NotNull NBTCompound compound);
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ItemMeta clone() {

@@ -1,8 +1,10 @@
 package net.minestom.server.item.firework;
 
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.item.metadata.FireworkMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+
+import java.util.Objects;
 
 public class FireworkEffect {
 
@@ -18,8 +20,8 @@ public class FireworkEffect {
      * @param flicker   {@code true} if this explosion has the Twinkle effect (glowstone dust), otherwise {@code false}.
      * @param trail     {@code true} if this explosion hsa the Trail effect (diamond), otherwise {@code false}.
      * @param type      The shape of this firework's explosion.
-     * @param color
-     * @param fadeColor
+     * @param color     The primary color of this firework effect.
+     * @param fadeColor The secondary color of this firework effect.
      */
     public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, ChatColor color, ChatColor fadeColor) {
         this.flicker = flicker;
@@ -29,7 +31,13 @@ public class FireworkEffect {
         this.fadeColor = fadeColor;
     }
 
-    public static FireworkEffect fromCompound(NBTCompound compound) {
+    /**
+     * Retrieves a firework effect from the given {@code compound}.
+     *
+     * @param compound The NBT connection, which should be a fireworks effect.
+     * @return A new created firework effect.
+     */
+    public static FireworkEffect fromCompound(@NotNull NBTCompound compound) {
 
         ChatColor primaryColor = null;
         ChatColor secondaryColor = null;
@@ -58,10 +66,20 @@ public class FireworkEffect {
                 secondaryColor);
     }
 
+    /**
+     * Whether the firework has a flicker effect.
+     *
+     * @return {@code 1} if this explosion has the flicker effect, otherwise {@code 0}.
+     */
     public byte getFlicker() {
         return (byte) (this.flicker ? 1 : 0);
     }
 
+    /**
+     * Whether the firework has a trail effect.
+     *
+     * @return {@code 1} if this explosion has the trail effect, otherwise {@code 0};
+     */
     public byte getTrail() {
         return (byte) (this.trail ? 1 : 0);
     }
@@ -123,4 +141,26 @@ public class FireworkEffect {
         return explosionCompound;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FireworkEffect that = (FireworkEffect) o;
+        return flicker == that.flicker &&
+                trail == that.trail &&
+                type == that.type &&
+                Objects.equals(color, that.color) &&
+                Objects.equals(fadeColor, that.fadeColor);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(flicker, trail, type, color, fadeColor);
+    }
 }
