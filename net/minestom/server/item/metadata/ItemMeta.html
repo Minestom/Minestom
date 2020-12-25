@@ -135,7 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="CompassMeta.html" title="class in net.minestom.server.item.metadata">CompassMeta</a></code>, <code><a href="CrossbowMeta.html" title="class in net.minestom.server.item.metadata">CrossbowMeta</a></code>, <code><a href="EnchantedBookMeta.html" title="class in net.minestom.server.item.metadata">EnchantedBookMeta</a></code>, <code><a href="FireworkMeta.html" title="class in net.minestom.server.item.metadata">FireworkMeta</a></code>, <code><a href="LeatherArmorMeta.html" title="class in net.minestom.server.item.metadata">LeatherArmorMeta</a></code>, <code><a href="MapMeta.html" title="class in net.minestom.server.item.metadata">MapMeta</a></code>, <code><a href="PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></code>, <code><a href="PotionMeta.html" title="class in net.minestom.server.item.metadata">PotionMeta</a></code>, <code><a href="SpawnEggMeta.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta</a></code>, <code><a href="WritableBookMeta.html" title="class in net.minestom.server.item.metadata">WritableBookMeta</a></code>, <code><a href="WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a></code></dd>
+<dd><code><a href="CompassMeta.html" title="class in net.minestom.server.item.metadata">CompassMeta</a></code>, <code><a href="CrossbowMeta.html" title="class in net.minestom.server.item.metadata">CrossbowMeta</a></code>, <code><a href="EnchantedBookMeta.html" title="class in net.minestom.server.item.metadata">EnchantedBookMeta</a></code>, <code><a href="FireworkEffectMeta.html" title="class in net.minestom.server.item.metadata">FireworkEffectMeta</a></code>, <code><a href="FireworkMeta.html" title="class in net.minestom.server.item.metadata">FireworkMeta</a></code>, <code><a href="LeatherArmorMeta.html" title="class in net.minestom.server.item.metadata">LeatherArmorMeta</a></code>, <code><a href="MapMeta.html" title="class in net.minestom.server.item.metadata">MapMeta</a></code>, <code><a href="PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></code>, <code><a href="PotionMeta.html" title="class in net.minestom.server.item.metadata">PotionMeta</a></code>, <code><a href="SpawnEggMeta.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta</a></code>, <code><a href="WritableBookMeta.html" title="class in net.minestom.server.item.metadata">WritableBookMeta</a></code>, <code><a href="WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">ItemMeta</span>
@@ -186,7 +186,9 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Creates and returns a copy of this object.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
@@ -333,11 +335,14 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+<div class="block">Creates and returns a copy of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>clone</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A clone of this instance.</dd>
 </dl>
 </li>
 </ul>

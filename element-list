@@ -70,6 +70,7 @@ net.minestom.server.inventory.condition
 net.minestom.server.inventory.type
 net.minestom.server.item
 net.minestom.server.item.attribute
+net.minestom.server.item.firework
 net.minestom.server.item.metadata
 net.minestom.server.item.rule
 net.minestom.server.listener

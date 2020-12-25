@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":10,"i3":10};
+var data = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -179,32 +179,40 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;object)</code></th>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromUsername(java.lang.String)">fromUsername</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Gets a skin from a Minecraft username.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromUuid(java.lang.String)">fromUuid</a></span>&#8203;(java.lang.String&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Gets a skin from a Mojang UUID.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSignature()">getSignature</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the skin signature.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTextures()">getTextures</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the skin textures value.</div>
 </td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 </tr>
 </table>
 <ul class="blockList">
@@ -212,7 +220,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -250,6 +258,42 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="fromUuid(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromUuid</h4>
+<pre class="methodSignature">@Nullable
+public static&nbsp;<a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;fromUuid&#8203;(@NotNull
+                                  java.lang.String&nbsp;uuid)</pre>
+<div class="block">Gets a skin from a Mojang UUID.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>uuid</code> - Mojang UUID</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a player skin based on the UUID, null if not found</dd>
+</dl>
+</li>
+</ul>
+<a id="fromUsername(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromUsername</h4>
+<pre class="methodSignature">@Nullable
+public static&nbsp;<a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;fromUsername&#8203;(@NotNull
+                                      java.lang.String&nbsp;username)</pre>
+<div class="block">Gets a skin from a Minecraft username.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>username</code> - the Minecraft username</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a skin based on a Minecraft username, null if not found</dd>
+</dl>
+</li>
+</ul>
 <a id="getTextures()">
 <!--   -->
 </a>
@@ -278,39 +322,29 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="fromUuid(java.lang.String)">
+<a id="equals(java.lang.Object)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>fromUuid</h4>
-<pre class="methodSignature">@Nullable
-public static&nbsp;<a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;fromUuid&#8203;(@NotNull
-                                  java.lang.String&nbsp;uuid)</pre>
-<div class="block">Gets a skin from a Mojang UUID.</div>
+<h4>equals</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;object)</pre>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>uuid</code> - Mojang UUID</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a player skin based on the UUID, null if not found</dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>
-<a id="fromUsername(java.lang.String)">
+<a id="hashCode()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>fromUsername</h4>
-<pre class="methodSignature">@Nullable
-public static&nbsp;<a href="PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;fromUsername&#8203;(@NotNull
-                                      java.lang.String&nbsp;username)</pre>
-<div class="block">Gets a skin from a Minecraft username.</div>
+<h4>hashCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>username</code> - the Minecraft username</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a skin based on a Minecraft username, null if not found</dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>

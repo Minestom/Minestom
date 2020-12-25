@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -141,35 +141,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">FireworkMeta</span>
 extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></pre>
+<div class="block">Represents a firework rocket meta data and its effects.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="FireworkMeta.FireworkType.html" title="enum in net.minestom.server.item.metadata">FireworkMeta.FireworkType</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -206,32 +184,97 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">addFireworkEffect</a></span>&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;effect)</code></th>
+<td class="colLast">
+<div class="block">Adds a firework effect to this firework.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addFireworkEffects(net.minestom.server.item.firework.FireworkEffect...)">addFireworkEffects</a></span>&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>...&nbsp;effects)</code></th>
+<td class="colLast">
+<div class="block">Adds an array of firework effects to this firework.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearEffects()">clearEffects</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Removes all effects from this firework.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Creates and returns a copy of this object.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>java.util.List&lt;<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEffects()">getEffects</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Retrieves a collection with all effects in this firework.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEffectSize()">getEffectSize</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Retrieves the size of effects in this firework.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasEffects()">hasEffects</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Whether this firework has any effects.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeFireworkEffect(int)">removeFireworkEffect</a></span>&#8203;(int&nbsp;index)</code></th>
+<td class="colLast">
+<div class="block">Removes a firework effect from this firework.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">removeFireworkEffect</a></span>&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;effect)</code></th>
+<td class="colLast">
+<div class="block">Removes a firework effects from this firework.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFlightDuration(byte)">setFlightDuration</a></span>&#8203;(byte&nbsp;flightDuration)</code></th>
+<td class="colLast">
+<div class="block">Changes the flight duration of this firework.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
@@ -281,6 +324,131 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="addFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addFireworkEffect</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addFireworkEffect&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;effect)</pre>
+<div class="block">Adds a firework effect to this firework.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>effect</code> - The firework effect to be added.</dd>
+</dl>
+</li>
+</ul>
+<a id="addFireworkEffects(net.minestom.server.item.firework.FireworkEffect...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addFireworkEffects</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addFireworkEffects&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>...&nbsp;effects)</pre>
+<div class="block">Adds an array of firework effects to this firework.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>effects</code> - An array of firework effects to be added.</dd>
+</dl>
+</li>
+</ul>
+<a id="removeFireworkEffect(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeFireworkEffect</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeFireworkEffect&#8203;(int&nbsp;index)
+                          throws java.lang.IndexOutOfBoundsException</pre>
+<div class="block">Removes a firework effect from this firework.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>index</code> - The index of the firework effect to be removed.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IndexOutOfBoundsException</code> - If index &lt; 0 or index &gt; <a href="#getEffectSize()"><code>getEffectSize()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="removeFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeFireworkEffect</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeFireworkEffect&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;effect)</pre>
+<div class="block">Removes a firework effects from this firework.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>effect</code> - The effect to be removed.</dd>
+</dl>
+</li>
+</ul>
+<a id="getEffects()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEffects</h4>
+<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&gt;&nbsp;getEffects()</pre>
+<div class="block">Retrieves a collection with all effects in this firework.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A collection with all effects in this firework.</dd>
+</dl>
+</li>
+</ul>
+<a id="getEffectSize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEffectSize</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getEffectSize()</pre>
+<div class="block">Retrieves the size of effects in this firework.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The size of the effects.</dd>
+</dl>
+</li>
+</ul>
+<a id="clearEffects()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearEffects</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;clearEffects()</pre>
+<div class="block">Removes all effects from this firework.</div>
+</li>
+</ul>
+<a id="hasEffects()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasEffects</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;hasEffects()</pre>
+<div class="block">Whether this firework has any effects.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if this firework has any effects, otherwise <code>false</code>.</dd>
+</dl>
+</li>
+</ul>
+<a id="setFlightDuration(byte)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFlightDuration</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setFlightDuration&#8203;(byte&nbsp;flightDuration)</pre>
+<div class="block">Changes the flight duration of this firework.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>flightDuration</code> - The new flight duration for this firework.</dd>
+</dl>
+</li>
+</ul>
 <a id="hasNbt()">
 <!--   -->
 </a>
@@ -288,7 +456,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>hasNbt</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasNbt()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#hasNbt()">ItemMeta</a></code></span></div>
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -306,7 +473,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
                          <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
  It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
@@ -328,7 +494,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
  WARNING: it is possible that it contains no useful data,
@@ -349,7 +514,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
                   org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -367,11 +531,14 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+<div class="block">Creates and returns a copy of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="ItemMeta.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A clone of this instance.</dd>
 </dl>
 </li>
 </ul>
@@ -426,7 +593,7 @@ public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.met
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -141,6 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">PlayerHeadMeta</span>
 extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></pre>
+<div class="block">Represents a skull that can have an owner.</div>
 </li>
 </ul>
 </div>
@@ -185,30 +186,67 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Creates and returns a copy of this object.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSkin()">getPlayerSkin</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Retrieves the skin of the head.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.util.UUID</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSkullOwner()">getSkullOwner</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Retrieves the owner of the head.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOwningPlayer(net.minestom.server.entity.Player)">setOwningPlayer</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Sets the owner of the skull.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerSkin(net.minestom.server.entity.PlayerSkin)">setPlayerSkin</a></span>&#8203;(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</code></th>
+<td class="colLast">
+<div class="block">Changes the skin of the head.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSkullOwner(java.util.UUID)">setSkullOwner</a></span>&#8203;(java.util.UUID&nbsp;skullOwner)</code></th>
+<td class="colLast">
+<div class="block">Changes the owner of the head.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
@@ -258,6 +296,83 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="setOwningPlayer(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOwningPlayer</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;setOwningPlayer&#8203;(@NotNull
+                               <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="block">Sets the owner of the skull.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>player</code> - The new owner of the skull.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if the owner was successfully set, otherwise <code>false</code>.</dd>
+</dl>
+</li>
+</ul>
+<a id="getSkullOwner()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSkullOwner</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;java.util.UUID&nbsp;getSkullOwner()</pre>
+<div class="block">Retrieves the owner of the head.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The head's owner.</dd>
+</dl>
+</li>
+</ul>
+<a id="setSkullOwner(java.util.UUID)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSkullOwner</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setSkullOwner&#8203;(@NotNull
+                          java.util.UUID&nbsp;skullOwner)</pre>
+<div class="block">Changes the owner of the head.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>skullOwner</code> - The new head owner.</dd>
+</dl>
+</li>
+</ul>
+<a id="getPlayerSkin()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPlayerSkin</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;getPlayerSkin()</pre>
+<div class="block">Retrieves the skin of the head.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The head's skin.</dd>
+</dl>
+</li>
+</ul>
+<a id="setPlayerSkin(net.minestom.server.entity.PlayerSkin)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPlayerSkin</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setPlayerSkin&#8203;(@NotNull
+                          <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;playerSkin)</pre>
+<div class="block">Changes the skin of the head.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>playerSkin</code> - The new skin for the head.</dd>
+</dl>
+</li>
+</ul>
 <a id="hasNbt()">
 <!--   -->
 </a>
@@ -265,7 +380,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>hasNbt</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasNbt()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#hasNbt()">ItemMeta</a></code></span></div>
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -283,7 +397,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
                          <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
  It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
@@ -305,7 +418,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
  WARNING: it is possible that it contains no useful data,
@@ -326,7 +438,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
                   org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -344,11 +455,14 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+<div class="block">Creates and returns a copy of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="ItemMeta.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A clone of this instance.</dd>
 </dl>
 </li>
 </ul>
