@@ -35,17 +35,6 @@ public class PlayerHeadMeta extends ItemMeta {
         return false;
     }
 
-
-    /**
-     * Retrieves the owner of the skull.
-     *
-     * @return The owner if the skull or {@code null}.
-     */
-    @Nullable
-    public Player getOwningPlayer() {
-        return MinecraftServer.getConnectionManager().getPlayer(this.skullOwner);
-    }
-
     /**
      * Retrieves the owner of the head.
      *

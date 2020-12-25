@@ -6,16 +6,16 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Represents a firework rocket meta data and its effects.
  */
 public class FireworkMeta extends ItemMeta {
 
-    private List<FireworkEffect> effects = new ArrayList<>();
+    private List<FireworkEffect> effects = new CopyOnWriteArrayList<>();
     private byte flightDuration;
 
     /**
