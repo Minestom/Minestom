@@ -690,6 +690,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         if (material == Material.WRITTEN_BOOK)
             return new WrittenBookMeta();
 
+        if(material == Material.FIREWORK_STAR)
+            return new FireworkEffectMeta();
+
         if (material == Material.FIREWORK_ROCKET)
             return new FireworkMeta();
 
