@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -241,12 +241,26 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLoadOnStartup(boolean)">setLoadOnStartup</a></span>&#8203;(boolean&nbsp;loadOnStartup)</code></th>
+<td class="colLast">
+<div class="block">Used to specify if you want extensions to be loaded and initialized during startup.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldLoadOnStartup()">shouldLoadOnStartup</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the extensions should be loaded during startup.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns all the extensions by unloading them.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadExtension(java.lang.String)">unloadExtension</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -313,6 +327,38 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="shouldLoadOnStartup()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shouldLoadOnStartup</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;shouldLoadOnStartup()</pre>
+<div class="block">Gets if the extensions should be loaded during startup.
+ <p>
+ Default value is 'true'.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if extensions are loaded in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int, ResponseDataConsumer)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="setLoadOnStartup(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLoadOnStartup</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLoadOnStartup&#8203;(boolean&nbsp;loadOnStartup)</pre>
+<div class="block">Used to specify if you want extensions to be loaded and initialized during startup.
+ <p>
+ Only useful before the server start.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>loadOnStartup</code> - true to load extensions on startup, false to do nothing</dd>
+</dl>
+</li>
+</ul>
 <a id="loadExtensions()">
 <!--   -->
 </a>
