@@ -1,14 +1,14 @@
 package net.minestom.server.utils.thread;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class MinestomThread extends ThreadPoolExecutor {
 
-    private static final List<MinestomThread> executors = new LinkedList<>();
+    private static final Set<MinestomThread> executors = new CopyOnWriteArraySet<>();
 
     /**
      * Creates a non-local thread pool executor
@@ -33,7 +33,7 @@ public class MinestomThread extends ThreadPoolExecutor {
             return thread;
         });
         if (!local) {
-            executors.add(this);
+            MinestomThread.executors.add(this);
         }
     }
 

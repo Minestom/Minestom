@@ -143,7 +143,6 @@ public final class MinecraftServer {
         if (minecraftServer != null) // don't init twice
             return minecraftServer;
         extensionManager = new ExtensionManager();
-        extensionManager.loadExtensions();
 
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
@@ -675,7 +674,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets if the server should process netty errors and other unnecessary netty events
+     * Gets if the server should process netty errors and other unnecessary netty events.
      *
      * @return should process netty errors
      */
@@ -684,7 +683,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Sets if the server should process netty errors and other unnecessary netty events
+     * Sets if the server should process netty errors and other unnecessary netty events.
      * false is faster
      *
      * @param processNettyErrors should process netty errors
@@ -718,15 +717,21 @@ public final class MinecraftServer {
         nettyServer.init();
         nettyServer.start(address, port);
 
-        final long t1 = -System.nanoTime();
-        // Init extensions
-        // TODO: Extensions should handle depending on each other and have a load-order.
-        extensionManager.getExtensions().forEach(Extension::preInitialize);
-        extensionManager.getExtensions().forEach(Extension::initialize);
-        extensionManager.getExtensions().forEach(Extension::postInitialize);
+        if (extensionManager.shouldLoadOnStartup()) {
+            final long loadStartTime = System.nanoTime();
+            // Load extensions
+            extensionManager.loadExtensions();
+            // Init extensions
+            // TODO: Extensions should handle depending on each other and have a load-order.
+            extensionManager.getExtensions().forEach(Extension::preInitialize);
+            extensionManager.getExtensions().forEach(Extension::initialize);
+            extensionManager.getExtensions().forEach(Extension::postInitialize);
 
-        final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
-        LOGGER.info("Extensions loaded in {}ms", loadTime);
+            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
+            LOGGER.info("Extensions loaded in {}ms", loadTime);
+        } else {
+            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
+        }
 
         LOGGER.info("Minestom server started successfully.");
     }

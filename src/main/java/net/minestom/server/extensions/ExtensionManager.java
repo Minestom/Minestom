@@ -5,6 +5,7 @@ import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +41,32 @@ public class ExtensionManager {
     private final List<Extension> extensionList = new CopyOnWriteArrayList<>();
     private final List<Extension> immutableExtensionListView = Collections.unmodifiableList(extensionList);
 
+    // Option
+    private boolean loadOnStartup = true;
+
     public ExtensionManager() {
+    }
+
+    /**
+     * Gets if the extensions should be loaded during startup.
+     * <p>
+     * Default value is 'true'.
+     *
+     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
+     */
+    public boolean shouldLoadOnStartup() {
+        return loadOnStartup;
+    }
+
+    /**
+     * Used to specify if you want extensions to be loaded and initialized during startup.
+     * <p>
+     * Only useful before the server start.
+     *
+     * @param loadOnStartup true to load extensions on startup, false to do nothing
+     */
+    public void setLoadOnStartup(boolean loadOnStartup) {
+        this.loadOnStartup = loadOnStartup;
     }
 
     public void loadExtensions() {
@@ -94,17 +120,19 @@ public class ExtensionManager {
         }
     }
 
-    private void setupClassLoader(DiscoveredExtension discoveredExtension) {
-        String extensionName = discoveredExtension.getName();
-        MinestomExtensionClassLoader loader;
-        URL[] urls = discoveredExtension.files.toArray(new URL[0]);
-        loader = newClassLoader(discoveredExtension, urls);
+    private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
+        final String extensionName = discoveredExtension.getName();
+
+        final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
+        final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
+
         extensionLoaders.put(extensionName.toLowerCase(), loader);
     }
 
-    private Extension attemptSingleLoad(DiscoveredExtension discoveredExtension) {
+    @Nullable
+    private Extension attemptSingleLoad(@NotNull DiscoveredExtension discoveredExtension) {
         // Create ExtensionDescription (authors, version etc.)
-        String extensionName = discoveredExtension.getName();
+        final String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
         Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
                 extensionName,
@@ -261,7 +289,8 @@ public class ExtensionManager {
         }
     }
 
-    private List<DiscoveredExtension> generateLoadOrder(List<DiscoveredExtension> discoveredExtensions) {
+    @Nullable
+    private List<DiscoveredExtension> generateLoadOrder(@NotNull List<DiscoveredExtension> discoveredExtensions) {
         // Do some mapping so we can map strings to extensions.
         Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
         Map<DiscoveredExtension, List<DiscoveredExtension>> dependencyMap = new HashMap<>();
@@ -335,7 +364,7 @@ public class ExtensionManager {
         return sortedList;
     }
 
-    private boolean areAllDependenciesLoaded(List<DiscoveredExtension> dependencies) {
+    private boolean areAllDependenciesLoaded(@NotNull List<DiscoveredExtension> dependencies) {
         return dependencies.isEmpty() || dependencies.stream().allMatch(ext -> extensions.containsKey(ext.getName().toLowerCase()));
     }
 
