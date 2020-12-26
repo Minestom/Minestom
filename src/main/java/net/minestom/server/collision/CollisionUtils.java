@@ -182,6 +182,7 @@ public class CollisionUtils {
      * @param newPosition     the future target position
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
+    @NotNull
     public static Position applyWorldBorder(@NotNull Instance instance,
                                             @NotNull Position currentPosition, @NotNull Position newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();

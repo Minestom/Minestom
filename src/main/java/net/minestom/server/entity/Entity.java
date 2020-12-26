@@ -478,14 +478,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 // Stop here if the position is the same
                 final boolean updatePosition = !newPosition.isSimilar(position);
 
-                // Check chunk
-                if (!ChunkUtils.isLoaded(instance, newPosition.getX(), newPosition.getZ())) {
+                // World border collision
+                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
+
+                // Entity shouldn't be updated when moving in an unloaded chunk
+                if (!ChunkUtils.isLoaded(finalChunk)) {
                     return;
                 }
 
-                // World border and apply the position
-                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                if (finalVelocityPosition != null && updatePosition) {
+                // Apply the position
+                if (updatePosition) {
                     refreshPosition(finalVelocityPosition);
                 }
 
@@ -498,7 +501,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+                        final CustomBlock customBlock = finalChunk.getCustomBlock(
+                                blockPosition.getX(),
+                                blockPosition.getY(),
+                                blockPosition.getZ());
                         if (customBlock != null) {
                             // Custom drag
                             drag = customBlock.getDrag(instance, blockPosition);
