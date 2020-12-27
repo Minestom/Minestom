@@ -22,8 +22,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
+import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,9 +88,14 @@ public final class NettyServer {
         };
     }
 
+    /**
+     * Inits the server by choosing which transport layer to use, number of threads, pipeline order, etc...
+     * <p>
+     * Called just before {@link #start(String, int)} in {@link MinecraftServer#start(String, int, ResponseDataConsumer)}.
+     */
     public void init() {
         Check.stateCondition(initialized, "Netty server has already been initialized!");
-        initialized = true;
+        this.initialized = true;
 
         Class<? extends ServerChannel> channel;
         final int workerThreadCount = MinecraftServer.getNettyThreadCount();
@@ -166,13 +173,13 @@ public final class NettyServer {
                 // Used to bypass all the previous handlers by directly sending a framed buffer
                 pipeline.addLast(GROUPED_PACKET_HANDLER_NAME, new GroupedPacketHandler());
 
-                // Adds packetLength at start | Reads framed bytebuf
+                // Adds packetLength at start | Reads framed buffer
                 pipeline.addLast(FRAMER_HANDLER_NAME, new PacketFramer(packetProcessor));
 
-                // Reads bytebuf and creating inbound packet
+                // Reads buffer and create inbound packet
                 pipeline.addLast(DECODER_HANDLER_NAME, new PacketDecoder());
 
-                // Writes packet to bytebuf
+                // Writes packet to buffer
                 pipeline.addLast(ENCODER_HANDLER_NAME, new PacketEncoder());
 
                 pipeline.addLast(CLIENT_CHANNEL_NAME, new ClientChannel(packetProcessor));
@@ -187,21 +194,22 @@ public final class NettyServer {
      * @param port    the server port
      */
     public void start(@NotNull String address, int port) {
-
-        {
-            final boolean compression = MinecraftServer.getCompressionThreshold() != 0;
-            if (compression) {
-                globalTrafficHandler.setWriteChannelLimit(DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT);
-                globalTrafficHandler.setReadChannelLimit(DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT);
-            } else {
-                globalTrafficHandler.setWriteChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT);
-                globalTrafficHandler.setReadChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT);
-            }
-        }
-
         this.address = address;
         this.port = port;
 
+        // Setup traffic limiter
+        {
+            final boolean compression = MinecraftServer.getCompressionThreshold() != 0;
+            if (compression) {
+                this.globalTrafficHandler.setWriteChannelLimit(DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT);
+                this.globalTrafficHandler.setReadChannelLimit(DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT);
+            } else {
+                this.globalTrafficHandler.setWriteChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT);
+                this.globalTrafficHandler.setReadChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT);
+            }
+        }
+
+        // Bind address
         try {
             ChannelFuture cf = bootstrap.bind(new InetSocketAddress(address, port)).sync();
 
@@ -209,7 +217,7 @@ public final class NettyServer {
                 throw new IllegalStateException("Unable to bind server at " + address + ":" + port);
             }
 
-            serverChannel = (ServerSocketChannel) cf.channel();
+            this.serverChannel = (ServerSocketChannel) cf.channel();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
@@ -218,8 +226,9 @@ public final class NettyServer {
     /**
      * Gets the address of the server.
      *
-     * @return the server address
+     * @return the server address, null if the address isn't bound yet
      */
+    @Nullable
     public String getAddress() {
         return address;
     }
@@ -227,7 +236,7 @@ public final class NettyServer {
     /**
      * Gets the port used by the server.
      *
-     * @return the server port
+     * @return the server port, 0 if the address isn't bound yet
      */
     public int getPort() {
         return port;
