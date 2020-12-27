@@ -15,12 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletableFuture;
 
 public class EncryptionResponsePacket implements ClientPreplayPacket {
 
-    private final static String THREAD_NAME = "Mojang Auth Thread";
-    private static final AtomicInteger UNIQUE_THREAD_ID = new AtomicInteger(0);
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
@@ -33,38 +31,35 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         }
         final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
 
-        new Thread(THREAD_NAME + " #" + UNIQUE_THREAD_ID.incrementAndGet()) {
+        CompletableFuture.runAsync(() -> {
+            try {
+                final String loginUsername = nettyConnection.getLoginUsername();
+                if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
+                    MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
+                    return;
+                }
+                if (!loginUsername.isEmpty()) {
 
-            public void run() {
-                try {
-                    final String loginUsername = nettyConnection.getLoginUsername();
-                    if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
-                        MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
+                    final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
+
+                    if (digestedData == null) {
+                        // Incorrect key, probably because of the client
+                        MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", nettyConnection.getRemoteAddress());
+                        connection.disconnect();
                         return;
                     }
-                    if (!loginUsername.isEmpty()) {
 
-                        final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
+                    final String string3 = new BigInteger(digestedData).toString(16);
+                    final GameProfile gameProfile = MojangAuth.getSessionService().hasJoinedServer(new GameProfile(null, loginUsername), string3);
+                    nettyConnection.setEncryptionKey(getSecretKey());
 
-                        if (digestedData == null) {
-                            // Incorrect key, probably because of the client
-                            MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", nettyConnection.getRemoteAddress());
-                            connection.disconnect();
-                            return;
-                        }
-
-                        final String string3 = new BigInteger(digestedData).toString(16);
-                        final GameProfile gameProfile = MojangAuth.getSessionService().hasJoinedServer(new GameProfile(null, loginUsername), string3);
-                        nettyConnection.setEncryptionKey(getSecretKey());
-
-                        MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, gameProfile.getId());
-                        CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName());
-                    }
-                } catch (AuthenticationUnavailableException e) {
-                    e.printStackTrace();
+                    MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, gameProfile.getId());
+                    CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName());
                 }
+            } catch (AuthenticationUnavailableException e) {
+                e.printStackTrace();
             }
-        }.start();
+        });
     }
 
     @Override
