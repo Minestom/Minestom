@@ -270,7 +270,9 @@ extends java.lang.Object</pre>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init()">init</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Inits the server by choosing which transport layer to use, number of threads, pipeline order, etc...</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -487,6 +489,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>init</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;init()</pre>
+<div class="block">Inits the server by choosing which transport layer to use, number of threads, pipeline order, etc...
+ <p>
+ Called just before <a href="#start(java.lang.String,int)"><code>start(String, int)</code></a> in <a href="../../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int, ResponseDataConsumer)</code></a>.</div>
 </li>
 </ul>
 <a id="start(java.lang.String,int)">
@@ -512,11 +517,12 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAddress</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getAddress()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;java.lang.String&nbsp;getAddress()</pre>
 <div class="block">Gets the address of the server.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the server address</dd>
+<dd>the server address, null if the address isn't bound yet</dd>
 </dl>
 </li>
 </ul>
@@ -530,7 +536,7 @@ extends java.lang.Object</pre>
 <div class="block">Gets the port used by the server.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the server port</dd>
+<dd>the server port, 0 if the address isn't bound yet</dd>
 </dl>
 </li>
 </ul>
