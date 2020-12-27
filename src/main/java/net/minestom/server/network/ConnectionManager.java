@@ -7,6 +7,7 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
@@ -255,7 +256,7 @@ public final class ConnectionManager {
      * This callback should be exclusively used to add event listeners since it is called directly after a
      * player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
      * You can add your "init" code in {@link net.minestom.server.event.player.PlayerLoginEvent}
-     * or even {@link net.minestom.server.event.player.PlayerPreLoginEvent}.
+     * or even {@link AsyncPlayerPreLoginEvent}.
      *
      * @param playerInitialization the {@link Player} initialization consumer
      */

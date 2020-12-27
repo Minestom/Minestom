@@ -1286,7 +1286,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Changes the internal player name, used for the {@link PlayerPreLoginEvent}
+     * Changes the internal player name, used for the {@link AsyncPlayerPreLoginEvent}
      * mostly unsafe outside of it.
      *
      * @param username the new player name
