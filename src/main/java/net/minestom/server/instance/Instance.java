@@ -42,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 /**
@@ -752,8 +753,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     @Nullable
     public Chunk getChunkAt(float x, float z) {
-        final int chunkX = ChunkUtils.getChunkCoordinate((int) x);
-        final int chunkZ = ChunkUtils.getChunkCoordinate((int) z);
+        final int chunkX = ChunkUtils.getChunkCoordinate((int) Math.floor(x));
+        final int chunkZ = ChunkUtils.getChunkCoordinate((int) Math.floor(z));
         return getChunk(chunkX, chunkZ);
     }
 
@@ -930,7 +931,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
 
-            this.entities.add(entity);
+            boolean added = this.entities.add(entity);
+            System.out.println(added + " " + chunk.toString());
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
