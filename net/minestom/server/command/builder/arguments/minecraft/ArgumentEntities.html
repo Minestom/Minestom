@@ -122,7 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</li>
+<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities</li>
@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentEntities</span>
-extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</pre>
+extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</pre>
 <div class="block">Represents the target selector argument.
  https://minecraft.gamepedia.com/Commands#Target_selectors</div>
 </li>
@@ -222,7 +222,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConditionResult(java.util.ArrayList)">getConditionResult</a></span>&#8203;(java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConditionResult(java.util.List)">getConditionResult</a></span>&#8203;(java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Called after <a href="../Argument.html#parse(java.lang.String)"><code>Argument.parse(String)</code></a> meaning that <code>value</code> should already represent a valid representation of the input.</div>
 </td>
@@ -250,7 +250,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
+<td class="colFirst"><code>java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Called after <a href="../Argument.html#getCorrectionResult(java.lang.String)"><code>Argument.getCorrectionResult(String)</code></a> returned <a href="../Argument.html#SUCCESS"><code>Argument.SUCCESS</code></a>.</div>
@@ -393,7 +393,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
  meaning that you need to be sure to check the inexpensive operations first (eg the number of brackets, the first and last char, etc...).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#getCorrectionResult(java.lang.String)">getCorrectionResult</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
+<dd><code><a href="../Argument.html#getCorrectionResult(java.lang.String)">getCorrectionResult</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - The received argument</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -408,8 +408,8 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;parse&#8203;(@NotNull
-                                         java.lang.String&nbsp;value)</pre>
+public&nbsp;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;parse&#8203;(@NotNull
+                                    java.lang.String&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Called after <a href="../Argument.html#getCorrectionResult(java.lang.String)"><code>Argument.getCorrectionResult(String)</code></a> returned <a href="../Argument.html#SUCCESS"><code>Argument.SUCCESS</code></a>.
  <p>
@@ -417,7 +417,7 @@ public&nbsp;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" titl
  when converting it to the correct type.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
+<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - The correct argument which does not need to be verified again</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -425,14 +425,14 @@ public&nbsp;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" titl
 </dl>
 </li>
 </ul>
-<a id="getConditionResult(java.util.ArrayList)">
+<a id="getConditionResult(java.util.List)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConditionResult</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getConditionResult&#8203;(@NotNull
-                              java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;value)</pre>
+                              java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#getConditionResult(T)">Argument</a></code></span></div>
 <div class="block">Called after <a href="../Argument.html#parse(java.lang.String)"><code>Argument.parse(String)</code></a> meaning that <code>value</code> should already represent a valid representation of the input.
  <p>
@@ -440,7 +440,7 @@ public&nbsp;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" titl
  for an item, etc...).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#getConditionResult(T)">getConditionResult</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.ArrayList&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
+<dd><code><a href="../Argument.html#getConditionResult(T)">getConditionResult</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - The parsed argument</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
