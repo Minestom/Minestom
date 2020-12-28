@@ -86,9 +86,9 @@ public class WindowListener {
         }
 
         // Prevent the player from picking a ghost item in cursor
-        if (!successful) {
-            refreshCursorItem(player, inventory);
-        }
+        //if (!successful) {
+        refreshCursorItem(player, inventory);
+        //}
 
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
