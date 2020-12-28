@@ -1136,9 +1136,33 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param sneaking true to make the entity sneak
      */
     public void setSneaking(boolean sneaking) {
-        this.crouched = sneaking;
-        this.pose = sneaking ? Pose.SNEAKING : Pose.STANDING;
-        sendMetadataIndex(0);
+        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
+        sendMetadataIndex(0); // update the crouched metadata
+    }
+
+    /**
+     * Gets the current entity pose.
+     *
+     * @return the entity pose
+     */
+    @NotNull
+    public Pose getPose() {
+        return pose;
+    }
+
+    /**
+     * Changes the entity pose.
+     * <p>
+     * The internal {@code crouched} and {@code swimming} field will be
+     * updated accordingly.
+     *
+     * @param pose the new entity pose
+     */
+    @NotNull
+    public void setPose(@NotNull Pose pose) {
+        this.crouched = pose == Pose.SNEAKING;
+        this.swimming = pose == Pose.SWIMMING;
+        this.pose = pose;
         sendMetadataIndex(6);
     }
 
@@ -1159,6 +1183,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the current position of the entity
      */
+    @NotNull
     public Position getPosition() {
         return position;
     }

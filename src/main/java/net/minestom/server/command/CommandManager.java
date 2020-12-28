@@ -41,7 +41,7 @@ public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
 
-    private volatile boolean running;
+    private volatile boolean running = true;
 
     private final ConsoleSender consoleSender = new ConsoleSender();
 
@@ -51,7 +51,6 @@ public final class CommandManager {
     private CommandCallback unknownCommandCallback;
 
     public CommandManager() {
-        running = true;
         // Setup console thread
         Thread consoleThread = new Thread(() -> {
             BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
