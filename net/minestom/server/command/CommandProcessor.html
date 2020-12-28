@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":18,"i5":6};
+var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":18,"i5":18,"i6":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -188,6 +188,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>default java.lang.String[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">onWrite</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+       java.lang.String&nbsp;text)</code></th>
+<td class="colLast">
+<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;command,
@@ -309,7 +317,7 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <a id="onWrite(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>onWrite</h4>
 <pre class="methodSignature">@Nullable
@@ -323,6 +331,31 @@ default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
 <dd><code>text</code> - the whole player text</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the array containing all the suggestion for the current arg (split " "), can be null</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="onWrite(net.minestom.server.command.CommandSender,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>onWrite</h4>
+<pre class="methodSignature">@Nullable
+default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
+                                   <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                   java.lang.String&nbsp;text)</pre>
+<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.
+ <p>
+ WARNING: <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> needs to return true, you need to override it by default.
+ This does not work if <a href="#onWrite(java.lang.String)"><code>is overriden</code></a></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sender</code> - the command sender</dd>
+<dd><code>text</code> - the whole player text</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the array containing all the suggestions for the current arg (split " "), can be null</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a></dd>
 </dl>
