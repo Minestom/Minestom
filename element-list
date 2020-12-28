@@ -110,6 +110,7 @@ net.minestom.server.thread
 net.minestom.server.timer
 net.minestom.server.utils
 net.minestom.server.utils.advancement
+net.minestom.server.utils.async
 net.minestom.server.utils.binary
 net.minestom.server.utils.block
 net.minestom.server.utils.cache
