@@ -61,6 +61,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -795,18 +796,15 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Sends a plugin message to the player.
+     * <p>
+     * Message encoded to UTF-8.
      *
      * @param channel the message channel
      * @param message the message
      */
     public void sendPluginMessage(@NotNull String channel, @NotNull String message) {
-        // Write the data
-        BinaryWriter writer = new BinaryWriter();
-        writer.writeSizedString(message);
-        // Retrieve the data
-        final byte[] data = writer.toByteArray();
-
-        sendPluginMessage(channel, data);
+        final byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
+        sendPluginMessage(channel, bytes);
     }
 
     @Override
