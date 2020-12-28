@@ -42,7 +42,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 /**
@@ -931,8 +930,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
 
-            boolean added = this.entities.add(entity);
-            System.out.println(added + " " + chunk.toString());
+            this.entities.add(entity);
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
