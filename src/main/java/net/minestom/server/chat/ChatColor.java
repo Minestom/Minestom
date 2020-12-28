@@ -8,6 +8,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -197,6 +198,15 @@ public final class ChatColor {
     @NotNull
     public static ChatColor fromLegacyColorCodes(char colorCode) {
         return legacyColorCodesMap.getOrDefault(colorCode, NO_COLOR);
+    }
+
+    /**
+     * Gets a collection of all chat colors
+     * @return a collection of all chat colors
+     */
+    @NotNull
+    public static Collection<ChatColor> values() {
+        return colorCode.values();
     }
 
     public boolean isEmpty() {
