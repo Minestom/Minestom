@@ -53,32 +53,36 @@ public final class UpdateManager {
         final EntityManager entityManager = MinecraftServer.getEntityManager();
 
         updateExecutionService.scheduleAtFixedRate(() -> {
-            if (stopRequested) {
-                updateExecutionService.shutdown();
-                return;
+            try {
+                if (stopRequested) {
+                    updateExecutionService.shutdown();
+                    return;
+                }
+
+                long currentTime = System.nanoTime();
+                final long tickStart = System.currentTimeMillis();
+
+                // Tick start callbacks
+                doTickCallback(tickStartCallbacks, tickStart);
+
+                // Waiting players update (newly connected clients waiting to get into the server)
+                entityManager.updateWaitingPlayers();
+
+                // Keep Alive Handling
+                entityManager.handleKeepAlive(tickStart);
+
+                // Server tick (chunks/entities)
+                serverTick(tickStart);
+
+                // the time that the tick took in nanoseconds
+                final long tickTime = System.nanoTime() - currentTime;
+
+                // Tick end callbacks
+                doTickCallback(tickEndCallbacks, tickTime / 1000000L);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            long currentTime = System.nanoTime();
-            final long tickStart = System.currentTimeMillis();
-
-            // Tick start callbacks
-            doTickCallback(tickStartCallbacks, tickStart);
-
-            // Waiting players update (newly connected clients waiting to get into the server)
-            entityManager.updateWaitingPlayers();
-
-            // Keep Alive Handling
-            entityManager.handleKeepAlive(tickStart);
-
-            // Server tick (chunks/entities)
-            serverTick(tickStart);
-
-            // the time that the tick took in nanoseconds
-            final long tickTime = System.nanoTime() - currentTime;
-
-            // Tick end callbacks
-            doTickCallback(tickEndCallbacks, tickTime / 1000000L);
-
         }, 0, MinecraftServer.TICK_MS, TimeUnit.MILLISECONDS);
     }
 

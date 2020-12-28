@@ -10,12 +10,12 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public final class EntityManager {
@@ -90,7 +90,7 @@ public final class EntityManager {
             playerInitialization.accept(player);
         }
 
-        CompletableFuture.runAsync(() -> {
+        AsyncUtils.runAsync(() -> {
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, player.getUsername(), player.getUuid());
             player.callEvent(AsyncPlayerPreLoginEvent.class, asyncPlayerPreLoginEvent);

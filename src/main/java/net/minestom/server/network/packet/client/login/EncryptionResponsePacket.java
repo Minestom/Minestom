@@ -9,13 +9,13 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
 
 public class EncryptionResponsePacket implements ClientPreplayPacket {
 
@@ -31,7 +31,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         }
         final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
 
-        CompletableFuture.runAsync(() -> {
+        AsyncUtils.runAsync(() -> {
             try {
                 final String loginUsername = nettyConnection.getLoginUsername();
                 if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
