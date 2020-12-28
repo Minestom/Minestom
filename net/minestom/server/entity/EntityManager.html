@@ -273,10 +273,11 @@ extends java.lang.Object</pre>
  If the <a href="Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> hasn't been kicked, add him to the waiting list.
  <p>
  Can be considered as a pre-init thing,
- currently executed in <a href="Player.html#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)"><code>Player(UUID, String, PlayerConnection)</code></a>.</div>
+ currently executed in <a href="../network/ConnectionManager.html#createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)"><code>ConnectionManager.createPlayer(UUID, String, PlayerConnection)</code></a>
+ and <a href="fakeplayer/FakePlayer.html#initPlayer(java.util.UUID,java.lang.String,net.minestom.server.entity.fakeplayer.FakePlayerOption,java.util.function.Consumer)"><code>FakePlayer.initPlayer(UUID, String, FakePlayerOption, Consumer)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>player</code> - the <a href="Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> to add</dd>
+<dd><code>player</code> - the <a href="Player.html" title="class in net.minestom.server.entity"><code>player</code></a> to add to the waiting list</dd>
 </dl>
 </li>
 </ul>
