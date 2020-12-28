@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.fakeplayer.FakePlayerOption;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
@@ -79,9 +80,10 @@ public final class EntityManager {
      * If the {@link Player} hasn't been kicked, add him to the waiting list.
      * <p>
      * Can be considered as a pre-init thing,
-     * currently executed in {@link Player#Player(UUID, String, PlayerConnection)}.
+     * currently executed in {@link ConnectionManager#createPlayer(UUID, String, PlayerConnection)}
+     * and {@link net.minestom.server.entity.fakeplayer.FakePlayer#initPlayer(UUID, String, FakePlayerOption, Consumer)}.
      *
-     * @param player the {@link Player} to add
+     * @param player the {@link Player player} to add to the waiting list
      */
     public void addWaitingPlayer(@NotNull Player player) {
 

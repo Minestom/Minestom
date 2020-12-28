@@ -220,8 +220,6 @@ public class Player extends LivingEntity implements CommandSender {
 
         // FakePlayer init its connection there
         playerConnectionInit();
-
-        MinecraftServer.getEntityManager().addWaitingPlayer(this);
     }
 
     /**

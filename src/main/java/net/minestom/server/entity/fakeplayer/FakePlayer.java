@@ -63,6 +63,8 @@ public class FakePlayer extends Player {
                         }
                     });
         }
+
+        MinecraftServer.getEntityManager().addWaitingPlayer(fakePlayer);
     }
 
     /**

@@ -334,6 +334,7 @@ public final class ConnectionManager {
     public Player createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         createPlayer(player);
+        MinecraftServer.getEntityManager().addWaitingPlayer(player);
         return player;
     }
 
