@@ -54,7 +54,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
     private ColoredText displayName;
     private boolean unbreakable;
-    private ArrayList<ColoredText> lore;
+    private List<ColoredText> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
     private List<ItemAttribute> attributes;
@@ -288,7 +288,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @return a modifiable list containing the item lore, can be null if not present
      */
     @Nullable
-    public ArrayList<ColoredText> getLore() {
+    public List<ColoredText> getLore() {
         return lore;
     }
 
@@ -297,7 +297,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @param lore the item lore, can be null to remove
      */
-    public void setLore(@Nullable ArrayList<ColoredText> lore) {
+    public void setLore(@Nullable List<ColoredText> lore) {
         this.lore = lore;
     }
 
