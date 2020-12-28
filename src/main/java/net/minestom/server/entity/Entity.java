@@ -1421,7 +1421,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.lastAbsoluteSynchronizationTime = 0;
     }
 
-    private enum Pose {
+    public enum Pose {
         STANDING,
         FALL_FLYING,
         SLEEPING,
