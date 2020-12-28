@@ -136,7 +136,7 @@ public final class NBTUtils {
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
-                ArrayList<ColoredText> lore = new ArrayList<>();
+                List<ColoredText> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
                     lore.add(ChatParser.toColoredText(s.getValue()));
                 }
@@ -266,7 +266,7 @@ public final class NBTUtils {
             }
 
             if (hasLore) {
-                final ArrayList<ColoredText> lore = itemStack.getLore();
+                final List<ColoredText> lore = itemStack.getLore();
 
                 final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
                 for (ColoredText line : lore) {

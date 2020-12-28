@@ -5,6 +5,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.utils.math.IntRange;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // TODO
 
@@ -52,7 +53,7 @@ public class EntityFinder {
      *
      * @return all entities validating the conditions
      */
-    public ArrayList<Entity> find() {
+    public List<Entity> find() {
         return new ArrayList<>();
     }
 
