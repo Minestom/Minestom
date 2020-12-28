@@ -81,4 +81,20 @@ public interface CommandProcessor {
     default String[] onWrite(@NotNull String text) {
         return null;
     }
+
+    /**
+     * Allows for tab auto completion, this is called everytime the player press a key in the chat.
+     * <p>
+     * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
+     * This does not work if {@link #onWrite(String) is overriden}
+     *
+     * @param sender the command sender
+     * @param text the whole player text
+     * @return the array containing all the suggestions for the current arg (split " "), can be null
+     * @see #enableWritingTracking()
+     */
+    @Nullable
+    default String[] onWrite(@NotNull CommandSender sender, String text) {
+        return null;
+    }
 }
