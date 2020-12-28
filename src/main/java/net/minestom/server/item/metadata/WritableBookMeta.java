@@ -7,10 +7,11 @@ import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WritableBookMeta extends ItemMeta {
 
-    private ArrayList<String> pages = new ArrayList<>();
+    private List<String> pages = new ArrayList<>();
 
     /**
      * Gets an array list containing the book pages.
@@ -20,7 +21,7 @@ public class WritableBookMeta extends ItemMeta {
      * @return a modifiable {@link ArrayList} containing the book pages
      */
     @NotNull
-    public ArrayList<String> getPages() {
+    public List<String> getPages() {
         return pages;
     }
 
@@ -29,7 +30,7 @@ public class WritableBookMeta extends ItemMeta {
      *
      * @param pages the pages list
      */
-    public void setPages(@NotNull ArrayList<String> pages) {
+    public void setPages(@NotNull List<String> pages) {
         this.pages = pages;
     }
 

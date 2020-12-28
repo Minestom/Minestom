@@ -16,7 +16,7 @@ import java.util.List;
  * Represents the target selector argument.
  * https://minecraft.gamepedia.com/Commands#Target_selectors
  */
-public class ArgumentEntities extends Argument<ArrayList<Entity>> {
+public class ArgumentEntities extends Argument<List<Entity>> {
 
     public static final int INVALID_SYNTAX = -2;
     public static final int ONLY_SINGLE_ENTITY_ERROR = -3;
@@ -115,12 +115,12 @@ public class ArgumentEntities extends Argument<ArrayList<Entity>> {
 
     @NotNull
     @Override
-    public ArrayList<Entity> parse(@NotNull String value) {
+    public List<Entity> parse(@NotNull String value) {
         return null;
     }
 
     @Override
-    public int getConditionResult(@NotNull ArrayList<Entity> value) {
+    public int getConditionResult(@NotNull List<Entity> value) {
         return SUCCESS;
     }
 

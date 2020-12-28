@@ -8,12 +8,13 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class PlayerInfoPacket implements ServerPacket {
 
     public Action action;
-    public ArrayList<PlayerInfo> playerInfos;
+    public List<PlayerInfo> playerInfos;
 
     public PlayerInfoPacket(Action action) {
         this.action = action;
@@ -71,7 +72,7 @@ public class PlayerInfoPacket implements ServerPacket {
     public static class AddPlayer extends PlayerInfo {
 
         public String name;
-        public ArrayList<Property> properties;
+        public List<Property> properties;
         public GameMode gameMode;
         public int ping;
         public JsonMessage displayName; // Only text

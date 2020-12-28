@@ -10,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WrittenBookMeta extends ItemMeta {
 
@@ -17,7 +18,7 @@ public class WrittenBookMeta extends ItemMeta {
     private WrittenBookGeneration generation;
     private String author;
     private String title;
-    private ArrayList<JsonMessage> pages = new ArrayList<>();
+    private List<JsonMessage> pages = new ArrayList<>();
 
     /**
      * Gets if the book is resolved.
@@ -99,7 +100,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
-    public ArrayList<JsonMessage> getPages() {
+    public List<JsonMessage> getPages() {
         return pages;
     }
 
@@ -108,7 +109,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @param pages the array list containing the book pages
      */
-    public void setPages(ArrayList<JsonMessage> pages) {
+    public void setPages(List<JsonMessage> pages) {
         this.pages = pages;
     }
 
