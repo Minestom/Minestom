@@ -18,6 +18,7 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +66,30 @@ public final class ConnectionManager {
     @NotNull
     public Collection<Player> getOnlinePlayers() {
         return Collections.unmodifiableCollection(players);
+    }
+
+    /**
+     * Finds the closest player matching a given username.
+     * <p>
+     *
+     * @param username the player username (can be partial)
+     * @return the closest match, null if no players are online
+     */
+    @Nullable
+    public Player findPlayer(@NotNull String username) {
+        Player exact = getPlayer(username);
+        if (exact != null) return exact;
+
+        String lowercase = username.toLowerCase();
+        double currentDistance = 0;
+        for (Player player : getOnlinePlayers()) {
+            double distance = StringUtils.getJaroWinklerDistance(lowercase, player.getUsername().toLowerCase());
+            if (distance > currentDistance) {
+                currentDistance = distance;
+                exact = player;
+            }
+        }
+        return exact;
     }
 
     /**
