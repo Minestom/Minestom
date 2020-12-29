@@ -12,6 +12,6 @@ public class ClientSpectatePacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        // TODO reader uuid
+        this.targetUuid = reader.readUuid();
     }
 }

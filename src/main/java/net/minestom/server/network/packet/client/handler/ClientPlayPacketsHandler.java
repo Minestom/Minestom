@@ -35,11 +35,8 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x1D, ClientSteerVehiclePacket::new);
 
 
-
         register(0x1E, ClientRecipeBookData::new);
         register(0x1F, ClientRecipeBookData::new);
-
-
 
 
         register(0x20, ClientNameItemPacket::new);
@@ -56,7 +53,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         //Update Structure Block??
         register(0x2B, ClientUpdateSignPacket::new);
         register(0x2C, ClientAnimationPacket::new);
-        //Spectate??
+        register(0x2D, ClientSpectatePacket::new);
         register(0x2E, ClientPlayerBlockPlacementPacket::new);
         register(0x2F, ClientUseItemPacket::new);
     }
