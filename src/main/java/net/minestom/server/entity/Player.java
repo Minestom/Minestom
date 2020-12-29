@@ -202,6 +202,7 @@ public class Player extends LivingEntity implements CommandSender {
         this.playerConnection = playerConnection;
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
+        setEyeHeight(1.62f);
 
         setRespawnPoint(new Position(0, 0, 0));
 
