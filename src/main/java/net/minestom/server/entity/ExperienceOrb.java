@@ -54,7 +54,8 @@ public class ExperienceOrb extends Entity {
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
-        playerConnection.sendPacket(getSpawnPacket());
+        ServerPacket spawnPacket = getSpawnPacket();
+        if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
         playerConnection.sendPacket(getVelocityPacket());
 
         return true;

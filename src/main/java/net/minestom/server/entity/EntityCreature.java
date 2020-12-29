@@ -138,8 +138,9 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
             EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
             entityMovementPacket.entityId = getEntityId();
 
+            ServerPacket spawnPacket = getSpawnPacket();
+            if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
             playerConnection.sendPacket(entityMovementPacket);
-            playerConnection.sendPacket(getSpawnPacket());
             playerConnection.sendPacket(getVelocityPacket());
             playerConnection.sendPacket(getMetadataPacket());
 

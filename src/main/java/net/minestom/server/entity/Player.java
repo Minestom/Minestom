@@ -2428,7 +2428,10 @@ public class Player extends LivingEntity implements CommandSender {
 
         connection.sendPacket(getAddPlayerToList());
 
-        connection.sendPacket(getSpawnPacket());
+
+        ServerPacket spawnPacket = getSpawnPacket();
+        if (spawnPacket != null) connection.sendPacket(spawnPacket);
+
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
 

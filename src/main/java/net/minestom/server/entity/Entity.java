@@ -202,7 +202,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public abstract void spawn();
 
     /**
-     * Packet to be sent when entity is spawned, null if non.
+     * Packet to be sent when entity is spawned, null if none.
      */
     public abstract ServerPacket getSpawnPacket();
 
