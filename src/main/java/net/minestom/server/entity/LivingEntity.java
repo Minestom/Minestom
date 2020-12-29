@@ -10,6 +10,7 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
@@ -19,8 +20,10 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -28,6 +31,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -597,4 +603,36 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public Team getTeam() {
         return team;
     }
+
+    /**
+     * Gets the line of sight in {@link BlockPosition} of the entity.
+     *
+     * @param maxDistance The max distance to scan
+     * @return A list of {@link BlockPosition} in this entities line of sight
+     */
+    public List<BlockPosition> getLineOfSight(int maxDistance) {
+        List<BlockPosition> blocks = new ArrayList<>();
+        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+        while(it.hasNext()) {
+            BlockPosition position = it.next();
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
+        }
+        return blocks;
+    }
+
+    /**
+     * Gets the target (not-air) {@link BlockPosition} of the entity.
+     *
+     * @param maxDistance The max distance to scan before returning null
+     * @return The {@link BlockPosition} targeted by this entity, null if non are found
+     */
+    public BlockPosition getTargetBlockPosition(int maxDistance) {
+        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+        while(it.hasNext()) {
+            BlockPosition position = it.next();
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+        }
+        return null;
+    }
+
 }
