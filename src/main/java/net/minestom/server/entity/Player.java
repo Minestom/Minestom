@@ -137,7 +137,7 @@ public class Player extends LivingEntity implements CommandSender {
     private float exp;
     private int level;
 
-    private final PlayerInventory inventory;
+    protected PlayerInventory inventory;
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
