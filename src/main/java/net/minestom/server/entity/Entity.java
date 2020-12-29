@@ -53,6 +53,7 @@ import java.util.function.Consumer;
 public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
@@ -137,10 +138,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+    public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
         this.position = spawnPosition.clone();
 
         setBoundingBox(0, 0, 0);
@@ -148,6 +149,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         setAutoViewable(true);
 
         entityById.put(id, this);
+        entityByUuid.put(uuid, this);
+    }
+
+    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -176,6 +182,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public static Entity getEntity(int id) {
         return entityById.getOrDefault(id, null);
     }
+
+    /**
+     * Gets an entity based on its UUID (from {@link #getUuid()}).
+     *
+     * @param uuid the entity UUID
+     * @return the entity having the specified uuid, null if not found
+     */
+    @Nullable
+    public static Entity getEntity(@NotNull UUID uuid) {
+        return entityByUuid.getOrDefault(uuid, null);
+    }
+
 
     /**
      * Generate and return a new unique entity id.
