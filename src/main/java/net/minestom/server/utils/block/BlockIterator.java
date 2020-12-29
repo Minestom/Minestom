@@ -3,7 +3,6 @@ package net.minestom.server.utils.block;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import javafx.geometry.Pos;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
