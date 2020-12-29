@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":9};
+var data = {"i0":10,"i1":10,"i2":9,"i3":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -203,18 +203,23 @@ extends java.lang.Enum&lt;<a href="BlockFace.html" title="enum in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOppositeFace()">getOppositeFace</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toDirection()">toDirection</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
@@ -362,10 +367,20 @@ not permitted.)</div>
 <a id="toDirection()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toDirection</h4>
 <pre class="methodSignature">public&nbsp;<a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;toDirection()</pre>
+</li>
+</ul>
+<a id="getOppositeFace()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getOppositeFace</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;getOppositeFace()</pre>
 </li>
 </ul>
 </li>
