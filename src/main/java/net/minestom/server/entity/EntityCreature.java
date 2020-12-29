@@ -12,6 +12,7 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.EntityMovementPacket;
 import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
@@ -117,6 +118,17 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     }
 
     @Override
+    public ServerPacket getSpawnPacket() {
+        SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
+        spawnLivingEntityPacket.entityId = getEntityId();
+        spawnLivingEntityPacket.entityUuid = getUuid();
+        spawnLivingEntityPacket.entityType = getEntityType().getId();
+        spawnLivingEntityPacket.position = getPosition();
+        spawnLivingEntityPacket.headPitch = 0;
+        return spawnLivingEntityPacket;
+    }
+
+    @Override
     public boolean addViewer(@NotNull Player player) {
         synchronized (entityTypeLock) {
             final boolean result = super.addViewer(player);
@@ -126,15 +138,8 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
             EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
             entityMovementPacket.entityId = getEntityId();
 
-            SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
-            spawnLivingEntityPacket.entityId = getEntityId();
-            spawnLivingEntityPacket.entityUuid = getUuid();
-            spawnLivingEntityPacket.entityType = getEntityType().getId();
-            spawnLivingEntityPacket.position = getPosition();
-            spawnLivingEntityPacket.headPitch = 0;
-
             playerConnection.sendPacket(entityMovementPacket);
-            playerConnection.sendPacket(spawnLivingEntityPacket);
+            playerConnection.sendPacket(getSpawnPacket());
             playerConnection.sendPacket(getVelocityPacket());
             playerConnection.sendPacket(getMetadataPacket());
 

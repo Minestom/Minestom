@@ -626,6 +626,15 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
+    public ServerPacket getSpawnPacket() {
+        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
+        spawnPlayerPacket.entityId = getEntityId();
+        spawnPlayerPacket.playerUuid = getUuid();
+        spawnPlayerPacket.position = getPosition();
+        return spawnPlayerPacket;
+    }
+
+    @Override
     public boolean addViewer(@NotNull Player player) {
         if (player == this)
             return false;
@@ -2416,14 +2425,10 @@ public class Player extends LivingEntity implements CommandSender {
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
 
         connection.sendPacket(getAddPlayerToList());
 
-        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getSpawnPacket());
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
 

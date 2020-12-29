@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
@@ -37,6 +38,15 @@ public class ExperienceOrb extends Entity {
     }
 
     @Override
+    public ServerPacket getSpawnPacket() {
+        SpawnExperienceOrbPacket experienceOrbPacket = new SpawnExperienceOrbPacket();
+        experienceOrbPacket.entityId = getEntityId();
+        experienceOrbPacket.position = getPosition();
+        experienceOrbPacket.expCount = experienceCount;
+        return experienceOrbPacket;
+    }
+
+    @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = super.addViewer(player); // Add player to viewers list
         if (!result)
@@ -44,12 +54,7 @@ public class ExperienceOrb extends Entity {
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
-        SpawnExperienceOrbPacket experienceOrbPacket = new SpawnExperienceOrbPacket();
-        experienceOrbPacket.entityId = getEntityId();
-        experienceOrbPacket.position = getPosition();
-        experienceOrbPacket.expCount = experienceCount;
-
-        playerConnection.sendPacket(experienceOrbPacket);
+        playerConnection.sendPacket(getSpawnPacket());
         playerConnection.sendPacket(getVelocityPacket());
 
         return true;

@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
@@ -31,6 +32,17 @@ public abstract class ObjectEntity extends Entity {
     }
 
     @Override
+    public ServerPacket getSpawnPacket() {
+        SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
+        spawnEntityPacket.entityId = getEntityId();
+        spawnEntityPacket.uuid = getUuid();
+        spawnEntityPacket.type = getEntityType().getId();
+        spawnEntityPacket.position = getPosition();
+        spawnEntityPacket.data = getObjectData();
+        return spawnEntityPacket;
+    }
+
+    @Override
     public boolean addViewer(@NotNull Player player) {
         final boolean result = super.addViewer(player);
         if (!result)
@@ -38,13 +50,7 @@ public abstract class ObjectEntity extends Entity {
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
 
-        SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
-        spawnEntityPacket.entityId = getEntityId();
-        spawnEntityPacket.uuid = getUuid();
-        spawnEntityPacket.type = getEntityType().getId();
-        spawnEntityPacket.position = getPosition();
-        spawnEntityPacket.data = getObjectData();
-        playerConnection.sendPacket(spawnEntityPacket);
+        playerConnection.sendPacket(getSpawnPacket());
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
 

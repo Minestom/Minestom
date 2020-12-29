@@ -19,6 +19,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
@@ -199,6 +200,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Called when a new instance is set.
      */
     public abstract void spawn();
+
+    /**
+     * Packet to be sent when entity is spawned, null if non.
+     */
+    public abstract ServerPacket getSpawnPacket();
 
     public boolean isOnGround() {
         return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
