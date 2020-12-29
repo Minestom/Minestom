@@ -213,7 +213,7 @@ public class ChunkBatch implements InstanceBatch {
     private void apply(@NotNull Chunk chunk, long value) {
         final short customBlockId = (short) (value & 0xFFFF);
         final short blockId = (short) ((value >> 16) & 0xFFFF);
-        final int index = (int) ((value >> 32) & 0xFFFFFFFFFFL);
+        final int index = (int) ((value >> 32) & 0xFFFFFFFFL);
 
         Data data = null;
         if (!blockDataMap.isEmpty()) {
