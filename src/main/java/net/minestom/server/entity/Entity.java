@@ -90,7 +90,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected float gravityAcceleration;
     protected float gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
-    protected float eyeHeight;
 
     private boolean autoViewable;
     private final int id;
@@ -1208,20 +1207,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     /**
      * Gets the entity eye height.
+     * <p>
+     * Default to {@link BoundingBox#getHeight()}x0.85
      *
      * @return the entity eye height
      */
     public float getEyeHeight() {
-        return eyeHeight;
-    }
-
-    /**
-     * Changes the entity eye height.
-     *
-     * @param eyeHeight the entity eye height
-     */
-    public void setEyeHeight(float eyeHeight) {
-        this.eyeHeight = eyeHeight;
+        return boundingBox.getHeight() * 0.85f;
     }
 
     /**

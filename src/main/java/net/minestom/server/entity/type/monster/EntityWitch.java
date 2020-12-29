@@ -16,7 +16,6 @@ public class EntityWitch extends EntityCreature implements Monster {
     public EntityWitch(Position spawnPosition) {
         super(EntityType.WITCH, spawnPosition);
         setBoundingBox(0.6f, 1.95f, 0.6f);
-        setEyeHeight(1.62f);
     }
 
     @NotNull
