@@ -19,8 +19,10 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.thread.ThreadProvider;
@@ -314,6 +316,26 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (!result)
             return false;
         player.viewableEntities.add(this);
+
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+
+        if (this instanceof Player) {
+            playerConnection.sendPacket(((Player) this).getAddPlayerToList());
+        }
+
+        ServerPacket spawnPacket = getSpawnPacket();
+        if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
+
+        playerConnection.sendPacket(getVelocityPacket());
+        playerConnection.sendPacket(getMetadataPacket());
+
+        if (this instanceof EquipmentHandler) {
+            ((EquipmentHandler) this).syncEquipments();
+        }
+
+        if (hasPassenger()) {
+            playerConnection.sendPacket(getPassengersPacket());
+        }
         return true;
     }
 

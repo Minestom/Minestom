@@ -42,24 +42,4 @@ public abstract class ObjectEntity extends Entity {
         return spawnEntityPacket;
     }
 
-    @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        ServerPacket spawnPacket = getSpawnPacket();
-        if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
-        playerConnection.sendPacket(getVelocityPacket());
-        playerConnection.sendPacket(getMetadataPacket());
-
-        if (hasPassenger()) {
-            playerConnection.sendPacket(getPassengersPacket());
-        }
-
-        return true;
-    }
-
 }

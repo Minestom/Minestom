@@ -131,27 +131,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     @Override
     public boolean addViewer(@NotNull Player player) {
         synchronized (entityTypeLock) {
-            final boolean result = super.addViewer(player);
-
-            final PlayerConnection playerConnection = player.getPlayerConnection();
-
-            EntityMovementPacket entityMovementPacket = new EntityMovementPacket();
-            entityMovementPacket.entityId = getEntityId();
-
-            ServerPacket spawnPacket = getSpawnPacket();
-            if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
-            playerConnection.sendPacket(entityMovementPacket);
-            playerConnection.sendPacket(getVelocityPacket());
-            playerConnection.sendPacket(getMetadataPacket());
-
-            // Equipments synchronization
-            syncEquipments(playerConnection);
-
-            if (hasPassenger()) {
-                playerConnection.sendPacket(getPassengersPacket());
-            }
-
-            return result;
+            return super.addViewer(player);
         }
     }
 

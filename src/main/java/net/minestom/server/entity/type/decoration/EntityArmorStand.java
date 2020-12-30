@@ -61,13 +61,6 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
-        syncEquipments(player.getPlayerConnection());
-        return result;
-    }
-
-    @Override
     public int getObjectData() {
         return 0;
     }

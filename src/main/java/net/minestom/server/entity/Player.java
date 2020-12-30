@@ -640,12 +640,15 @@ public class Player extends LivingEntity implements CommandSender {
             return false;
 
         final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
 
-        PlayerConnection viewerConnection = player.getPlayerConnection();
-        showPlayer(viewerConnection);
-        return true;
+        if (result) {
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            player.getPlayerConnection().sendPacket(entityHeadLookPacket);
+        }
+
+        return result;
     }
 
     @Override
@@ -2427,7 +2430,6 @@ public class Player extends LivingEntity implements CommandSender {
     protected void showPlayer(@NotNull PlayerConnection connection) {
 
         connection.sendPacket(getAddPlayerToList());
-
 
         ServerPacket spawnPacket = getSpawnPacket();
         if (spawnPacket != null) connection.sendPacket(spawnPacket);

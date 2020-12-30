@@ -46,21 +46,6 @@ public class ExperienceOrb extends Entity {
         return experienceOrbPacket;
     }
 
-    @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player); // Add player to viewers list
-        if (!result)
-            return false;
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        ServerPacket spawnPacket = getSpawnPacket();
-        if (spawnPacket != null) playerConnection.sendPacket(spawnPacket);
-        playerConnection.sendPacket(getVelocityPacket());
-
-        return true;
-    }
-
     /**
      * Gets the experience count.
      *
