@@ -147,8 +147,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         setAutoViewable(true);
 
-        entityById.put(id, this);
-        entityByUuid.put(uuid, this);
+        Entity.entityById.put(id, this);
+        Entity.entityByUuid.put(uuid, this);
     }
 
     public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
@@ -179,7 +179,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @Nullable
     public static Entity getEntity(int id) {
-        return entityById.getOrDefault(id, null);
+        return Entity.entityById.getOrDefault(id, null);
     }
 
     /**
@@ -190,7 +190,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @Nullable
     public static Entity getEntity(@NotNull UUID uuid) {
-        return entityByUuid.getOrDefault(uuid, null);
+        return Entity.entityByUuid.getOrDefault(uuid, null);
     }
 
 
