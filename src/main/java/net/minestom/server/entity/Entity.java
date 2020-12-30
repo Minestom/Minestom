@@ -1219,12 +1219,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Removes the entity from the server immediately.
      * <p>
-     * WARNING: this do not trigger the {@link EntityDeathEvent} event.
+     * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
         this.removed = true;
         this.shouldRemove = true;
-        entityById.remove(id);
+        Entity.entityById.remove(id);
+        Entity.entityByUuid.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }
