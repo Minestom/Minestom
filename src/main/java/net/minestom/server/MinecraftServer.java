@@ -33,6 +33,7 @@ import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionEffectManager;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
@@ -116,6 +117,7 @@ public final class MinecraftServer {
     private static DimensionTypeManager dimensionTypeManager;
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
+    private static PotionEffectManager potionEffectManager;
 
     private static ExtensionManager extensionManager;
 
@@ -177,6 +179,7 @@ public final class MinecraftServer {
         dimensionTypeManager = new DimensionTypeManager();
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
+        potionEffectManager = new PotionEffectManager();
 
         updateManager = new UpdateManager();
 
@@ -619,6 +622,16 @@ public final class MinecraftServer {
     public static AdvancementManager getAdvancementManager() {
         checkInitStatus(advancementManager);
         return advancementManager;
+    }
+
+    /**
+     * Gets the manager handling potions.
+     *
+     * @return the potion effect manager
+     */
+    public static PotionEffectManager getPotionEffectManager() {
+        checkInitStatus(potionEffectManager);
+        return potionEffectManager;
     }
 
     /**
