@@ -39,6 +39,7 @@ public class Main {
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
         commandManager.register(new PlayersCommand());
+        commandManager.register(new PotionCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 

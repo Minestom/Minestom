@@ -14,6 +14,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
+import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.BlockPosition;
 
@@ -189,10 +190,14 @@ public class PlayerDiggingListener {
 
         EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
         entityEffectPacket.entityId = player.getEntityId();
-        entityEffectPacket.effect = PotionEffect.MINING_FATIGUE;
-        entityEffectPacket.amplifier = -1;
-        entityEffectPacket.duration = 0;
-        entityEffectPacket.flags = 0;
+        entityEffectPacket.potion = new Potion(
+                PotionEffect.MINING_FATIGUE,
+                (byte) -1,
+                0,
+                false,
+                false,
+                false
+        );
         player.getPlayerConnection().sendPacket(entityEffectPacket);
     }
 

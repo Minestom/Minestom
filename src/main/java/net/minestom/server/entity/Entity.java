@@ -22,6 +22,9 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -41,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -129,6 +133,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
+
+    private CopyOnWriteArrayList<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -394,6 +400,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
+        }
+
+        // remove expired effects
+        {
+            effects.removeIf(timedPotion -> time
+                    >=
+                    (timedPotion.getStartingTime() + timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS));
         }
 
         // scheduled tasks
@@ -1440,6 +1453,36 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         SPIN_ATTACK,
         SNEAKING,
         DYING
+    }
+
+    public List<TimedPotion> getActiveEffects() {
+        return effects;
+    }
+
+    /**
+     * Removes effect from entity, if it has it.
+     *
+     * @param effect The effect to remove
+     */
+    public void removeEffect(@NotNull PotionEffect effect) {
+        effects.removeIf(timedPotion -> {
+            if (timedPotion.getPotion().getEffect() == effect) {
+                timedPotion.getPotion().sendRemovePacket(this);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Adds an effect to an entity.
+     *
+     * @param potion The potion to add
+     */
+    public void addEffect(@NotNull Potion potion) {
+        removeEffect(potion.getEffect());
+        effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        potion.sendAddPacket(this);
     }
 
     protected boolean shouldRemove() {
