@@ -22,6 +22,8 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -129,6 +131,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
+
+    private ArrayList<Potion> effects = new ArrayList<>();
+    private ArrayList<Long> effectTimes = new ArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -394,6 +399,29 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
+        }
+
+        // remove expired effects
+        {
+            if (effects.size() > 0) {
+                boolean foundToRemove = true;
+                while (foundToRemove) {
+                    foundToRemove = false;
+                    int i = 0;
+                    while (i < effects.size()) {
+                        if (effects.get(i).duration * 50 +
+                                effectTimes.get(i) <= System.nanoTime() / 1000000) {
+                            foundToRemove = true;
+                            break;
+                        }
+                        i++;
+                    }
+                    if (foundToRemove) {
+                        effects.remove(i);
+                        effectTimes.remove(i);
+                    }
+                }
+            }
         }
 
         // scheduled tasks
@@ -1440,6 +1468,45 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         SPIN_ATTACK,
         SNEAKING,
         DYING
+    }
+
+    public List<Potion> getActiveEffects() {
+        return effects;
+    }
+
+    /**
+     * Removes effect from entity, if it has it.
+     *
+     * @param effect The effect to remove
+     */
+    public void removeEffect(@NotNull PotionEffect effect) {
+        if (effects.size() == 0) return;
+        int i = 0;
+        boolean found = false;
+        while (i < effects.size()) {
+            if (effects.get(i).effect == effect) {
+                found = true;
+                break;
+            }
+            i++;
+        }
+        if (found) {
+            effects.get(i).sendRemovePacket(this);
+            effects.remove(i);
+            effectTimes.remove(i);
+        }
+    }
+
+    /**
+     * Adds an effect to an entity
+     *
+     * @param potion The potion to add
+     */
+    public void addEffect(@NotNull Potion potion) {
+        removeEffect(potion.effect);
+        effects.add(potion);
+        effectTimes.add(System.nanoTime() / 1000000);
+        potion.sendAddPacket(this);
     }
 
     protected boolean shouldRemove() {

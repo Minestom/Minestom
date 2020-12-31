@@ -9,9 +9,6 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.potion.PotionTask;
-
-import java.util.List;
 
 public class PotionCommand extends Command {
 
@@ -43,10 +40,12 @@ public class PotionCommand extends Command {
         final PotionEffect potion = args.getPotionEffect("potion");
         final int duration = args.getInteger("duration");
 
-        MinecraftServer.getPotionEffectManager().addPotion(player, new Potion(
+        player.sendMessage(player.getActiveEffects().toString());
+
+        player.addEffect(new Potion(
                 potion,
-                (byte) 1,
-                duration * 20
+                (byte) 0,
+                duration
         ));
     }
 

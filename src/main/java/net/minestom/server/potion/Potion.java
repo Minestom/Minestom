@@ -1,5 +1,6 @@
 package net.minestom.server.potion;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
@@ -42,17 +43,17 @@ public class Potion {
         return computed;
     }
 
-    public void sendAddPacket(@NotNull Player player) {
+    public void sendAddPacket(@NotNull Entity entity) {
         EntityEffectPacket eep = new EntityEffectPacket();
-        eep.entityId = player.getEntityId();
+        eep.entityId = entity.getEntityId();
         eep.potion = this;
-        player.sendPacketToViewersAndSelf(eep);
+        entity.sendPacketToViewersAndSelf(eep);
     }
 
-    public void sendRemovePacket(@NotNull Player player) {
+    public void sendRemovePacket(@NotNull Entity entity) {
         RemoveEntityEffectPacket reep = new RemoveEntityEffectPacket();
-        reep.entityId = player.getEntityId();
+        reep.entityId = entity.getEntityId();
         reep.effect = effect;
-        player.sendPacketToViewersAndSelf(reep);
+        entity.sendPacketToViewersAndSelf(reep);
     }
 }
