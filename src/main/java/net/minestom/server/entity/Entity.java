@@ -135,7 +135,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected Pose pose = Pose.STANDING;
 
     private CopyOnWriteArrayList<TimedPotion> effects = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<Potion> scheduledPotions = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -406,16 +405,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         // remove expired effects
         {
             effects.removeIf(timedPotion -> time >=
-                    (timedPotion.startingTime + timedPotion.potion.duration * 50));
-        }
-
-        // add queued effects
-        {
-            for (Potion potion : scheduledPotions) {
-                effects.add(new TimedPotion(potion, time));
-                potion.sendAddPacket(this);
-            }
-            scheduledPotions.clear();
+                    (timedPotion.getStartingTime() + timedPotion.getPotion().duration * MinecraftServer.TICK_MS));
         }
 
         // scheduled tasks
@@ -1474,7 +1464,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param effect The effect to remove
      */
     public void removeEffect(@NotNull PotionEffect effect) {
-        effects.removeIf(timedPotion -> timedPotion.potion.effect == effect);
+        effects.removeIf(timedPotion -> timedPotion.getPotion().effect == effect);
     }
 
     /**
@@ -1484,7 +1474,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void addEffect(@NotNull Potion potion) {
         removeEffect(potion.effect);
-        scheduledPotions.add(potion);
+        effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        potion.sendAddPacket(this);
     }
 
     protected boolean shouldRemove() {
