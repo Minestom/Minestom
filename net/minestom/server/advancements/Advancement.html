@@ -182,8 +182,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
-           <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+           <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
            <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
            <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
            float&nbsp;x,
@@ -191,8 +191,8 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
-           <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+           <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
            <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
            <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
            float&nbsp;x,
@@ -218,7 +218,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDescription()">getDescription</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the description of the advancement.</div>
@@ -261,7 +261,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitle()">getTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the title of the advancement.</div>
@@ -323,7 +323,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.minestom.server.chat.ColoredText)">setDescription</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.minestom.server.chat.JsonMessage)">setDescription</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description)</code></th>
 <td class="colLast">
 <div class="block">Changes the description title.</div>
 </td>
@@ -366,7 +366,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.minestom.server.chat.ColoredText)">setTitle</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.minestom.server.chat.JsonMessage)">setTitle</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Changes the advancement title.</div>
 </td>
@@ -464,15 +464,15 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">
+<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Advancement</h4>
 <pre>public&nbsp;Advancement&#8203;(@NotNull
-                   <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
-                   <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                    @NotNull
                    <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
                    @NotNull
@@ -481,16 +481,16 @@ extends java.lang.Object</pre>
                    float&nbsp;y)</pre>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">
+<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Advancement</h4>
 <pre>public&nbsp;Advancement&#8203;(@NotNull
-                   <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
+                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                    @NotNull
-                   <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                    @NotNull
                    <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
                    @NotNull
@@ -571,7 +571,7 @@ public&nbsp;<a href="AdvancementTab.html" title="class in net.minestom.server.ad
 <li class="blockList">
 <h4>getTitle</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;getTitle()</pre>
+public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitle()</pre>
 <div class="block">Gets the title of the advancement.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -579,14 +579,14 @@ public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.serv
 </dl>
 </li>
 </ul>
-<a id="setTitle(net.minestom.server.chat.ColoredText)">
+<a id="setTitle(net.minestom.server.chat.JsonMessage)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTitle</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
-                     <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title)</pre>
+                     <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</pre>
 <div class="block">Changes the advancement title.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -601,7 +601,7 @@ public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getDescription</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;getDescription()</pre>
+public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDescription()</pre>
 <div class="block">Gets the description of the advancement.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -609,14 +609,14 @@ public&nbsp;<a href="../chat/ColoredText.html" title="class in net.minestom.serv
 </dl>
 </li>
 </ul>
-<a id="setDescription(net.minestom.server.chat.ColoredText)">
+<a id="setDescription(net.minestom.server.chat.JsonMessage)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDescription</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(@NotNull
-                           <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description)</pre>
+                           <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description)</pre>
 <div class="block">Changes the description title.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

@@ -144,7 +144,7 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
  and remove him later with <a href="#removeViewer(net.minestom.server.entity.Player)"><code>removeViewer(Player)</code></a>.
  <p>
  Lines can be modified using their respective identifier using
- <a href="#updateLineContent(java.lang.String,net.minestom.server.chat.ColoredText)"><code>updateLineContent(String, ColoredText)</code></a> and <a href="#updateLineScore(java.lang.String,int)"><code>updateLineScore(String, int)</code></a>.</div>
+ <a href="#updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)"><code>updateLineContent(String, JsonMessage)</code></a> and <a href="#updateLineScore(java.lang.String,int)"><code>updateLineScore(String, int)</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -271,8 +271,8 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineContent(java.lang.String,net.minestom.server.chat.ColoredText)">updateLineContent</a></span>&#8203;(java.lang.String&nbsp;id,
-                 <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;content)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)">updateLineContent</a></span>&#8203;(java.lang.String&nbsp;id,
+                 <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content)</code></th>
 <td class="colLast">
 <div class="block">Updates a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> content through the given identifier.</div>
 </td>
@@ -382,7 +382,7 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 </dl>
 </li>
 </ul>
-<a id="updateLineContent(java.lang.String,net.minestom.server.chat.ColoredText)">
+<a id="updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -391,7 +391,7 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <pre class="methodSignature">public&nbsp;void&nbsp;updateLineContent&#8203;(@NotNull
                               java.lang.String&nbsp;id,
                               @NotNull
-                              <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;content)</pre>
+                              <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content)</pre>
 <div class="block">Updates a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> content through the given identifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10,"i2":10};
+var data = {"i0":6,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,13 +215,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRawMessage()">getRawMessage</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the content of the message without any formatting or effects.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshUpdate()">refreshUpdate</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Signals that the final json string changed and that it will need to be updated.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">
@@ -298,6 +305,20 @@ public abstract&nbsp;com.google.gson.JsonObject&nbsp;getJsonObject()</pre>
 <h4>refreshUpdate</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;refreshUpdate()</pre>
 <div class="block">Signals that the final json string changed and that it will need to be updated.</div>
+</li>
+</ul>
+<a id="getRawMessage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRawMessage</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getRawMessage()</pre>
+<div class="block">Gets the content of the message without any formatting or effects.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The message without formatting or effects</dd>
+</dl>
 </li>
 </ul>
 <a id="toString()">

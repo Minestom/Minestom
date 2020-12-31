@@ -180,8 +180,8 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.chat.ColoredText,net.minestom.server.chat.JsonMessage)">PlayerDeathEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                <a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;deathText,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage)">PlayerDeathEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText,
                 <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -211,7 +211,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeathText()">getDeathText</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the text displayed in the death screen.</div>
@@ -226,7 +226,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDeathText(net.minestom.server.chat.ColoredText)">setDeathText</a></span>&#8203;(<a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;deathText)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDeathText(net.minestom.server.chat.JsonMessage)">setDeathText</a></span>&#8203;(<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText)</code></th>
 <td class="colLast">
 <div class="block">Changes the text displayed in the death screen.</div>
 </td>
@@ -262,7 +262,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.chat.ColoredText,net.minestom.server.chat.JsonMessage)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -270,7 +270,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <h4>PlayerDeathEvent</h4>
 <pre>public&nbsp;PlayerDeathEvent&#8203;(@NotNull
                         <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                        <a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;deathText,
+                        <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText,
                         <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</pre>
 </li>
 </ul>
@@ -291,7 +291,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getDeathText</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;getDeathText()</pre>
+public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDeathText()</pre>
 <div class="block">Gets the text displayed in the death screen.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -299,14 +299,14 @@ public&nbsp;<a href="../../chat/ColoredText.html" title="class in net.minestom.s
 </dl>
 </li>
 </ul>
-<a id="setDeathText(net.minestom.server.chat.ColoredText)">
+<a id="setDeathText(net.minestom.server.chat.JsonMessage)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDeathText</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDeathText&#8203;(@Nullable
-                         <a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;deathText)</pre>
+                         <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText)</pre>
 <div class="block">Changes the text displayed in the death screen.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

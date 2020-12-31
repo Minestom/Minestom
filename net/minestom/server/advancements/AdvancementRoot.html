@@ -172,8 +172,8 @@ extends <a href="Advancement.html" title="class in net.minestom.server.advanceme
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">AdvancementRoot</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
-               <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">AdvancementRoot</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+               <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
                <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
                float&nbsp;x,
@@ -182,8 +182,8 @@ extends <a href="Advancement.html" title="class in net.minestom.server.advanceme
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">AdvancementRoot</a></span>&#8203;(<a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
-               <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">AdvancementRoot</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+               <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
                <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
                float&nbsp;x,
@@ -207,7 +207,7 @@ extends <a href="Advancement.html" title="class in net.minestom.server.advanceme
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.advancements.<a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></h3>
-<code><a href="Advancement.html#getDescription()">getDescription</a>, <a href="Advancement.html#getFrameType()">getFrameType</a>, <a href="Advancement.html#getIcon()">getIcon</a>, <a href="Advancement.html#getIdentifier()">getIdentifier</a>, <a href="Advancement.html#getParent()">getParent</a>, <a href="Advancement.html#getTab()">getTab</a>, <a href="Advancement.html#getTitle()">getTitle</a>, <a href="Advancement.html#getUpdatePacket()">getUpdatePacket</a>, <a href="Advancement.html#getX()">getX</a>, <a href="Advancement.html#getY()">getY</a>, <a href="Advancement.html#hasToast()">hasToast</a>, <a href="Advancement.html#isAchieved()">isAchieved</a>, <a href="Advancement.html#isHidden()">isHidden</a>, <a href="Advancement.html#setAchieved(boolean)">setAchieved</a>, <a href="Advancement.html#setBackground(java.lang.String)">setBackground</a>, <a href="Advancement.html#setDescription(net.minestom.server.chat.ColoredText)">setDescription</a>, <a href="Advancement.html#setFrameType(net.minestom.server.advancements.FrameType)">setFrameType</a>, <a href="Advancement.html#setHidden(boolean)">setHidden</a>, <a href="Advancement.html#setIcon(net.minestom.server.item.ItemStack)">setIcon</a>, <a href="Advancement.html#setIdentifier(java.lang.String)">setIdentifier</a>, <a href="Advancement.html#setParent(net.minestom.server.advancements.Advancement)">setParent</a>, <a href="Advancement.html#setTab(net.minestom.server.advancements.AdvancementTab)">setTab</a>, <a href="Advancement.html#setTitle(net.minestom.server.chat.ColoredText)">setTitle</a>, <a href="Advancement.html#setX(float)">setX</a>, <a href="Advancement.html#setY(float)">setY</a>, <a href="Advancement.html#showToast(boolean)">showToast</a>, <a href="Advancement.html#toDisplayData()">toDisplayData</a>, <a href="Advancement.html#toMapping()">toMapping</a>, <a href="Advancement.html#toProgressMapping()">toProgressMapping</a>, <a href="Advancement.html#update()">update</a>, <a href="Advancement.html#updateCriteria()">updateCriteria</a></code></li>
+<code><a href="Advancement.html#getDescription()">getDescription</a>, <a href="Advancement.html#getFrameType()">getFrameType</a>, <a href="Advancement.html#getIcon()">getIcon</a>, <a href="Advancement.html#getIdentifier()">getIdentifier</a>, <a href="Advancement.html#getParent()">getParent</a>, <a href="Advancement.html#getTab()">getTab</a>, <a href="Advancement.html#getTitle()">getTitle</a>, <a href="Advancement.html#getUpdatePacket()">getUpdatePacket</a>, <a href="Advancement.html#getX()">getX</a>, <a href="Advancement.html#getY()">getY</a>, <a href="Advancement.html#hasToast()">hasToast</a>, <a href="Advancement.html#isAchieved()">isAchieved</a>, <a href="Advancement.html#isHidden()">isHidden</a>, <a href="Advancement.html#setAchieved(boolean)">setAchieved</a>, <a href="Advancement.html#setBackground(java.lang.String)">setBackground</a>, <a href="Advancement.html#setDescription(net.minestom.server.chat.JsonMessage)">setDescription</a>, <a href="Advancement.html#setFrameType(net.minestom.server.advancements.FrameType)">setFrameType</a>, <a href="Advancement.html#setHidden(boolean)">setHidden</a>, <a href="Advancement.html#setIcon(net.minestom.server.item.ItemStack)">setIcon</a>, <a href="Advancement.html#setIdentifier(java.lang.String)">setIdentifier</a>, <a href="Advancement.html#setParent(net.minestom.server.advancements.Advancement)">setParent</a>, <a href="Advancement.html#setTab(net.minestom.server.advancements.AdvancementTab)">setTab</a>, <a href="Advancement.html#setTitle(net.minestom.server.chat.JsonMessage)">setTitle</a>, <a href="Advancement.html#setX(float)">setX</a>, <a href="Advancement.html#setY(float)">setY</a>, <a href="Advancement.html#showToast(boolean)">showToast</a>, <a href="Advancement.html#toDisplayData()">toDisplayData</a>, <a href="Advancement.html#toMapping()">toMapping</a>, <a href="Advancement.html#toProgressMapping()">toProgressMapping</a>, <a href="Advancement.html#update()">update</a>, <a href="Advancement.html#updateCriteria()">updateCriteria</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -232,16 +232,16 @@ extends <a href="Advancement.html" title="class in net.minestom.server.advanceme
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">
+<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AdvancementRoot</h4>
 <pre>public&nbsp;AdvancementRoot&#8203;(@NotNull
-                       <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
+                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                        @NotNull
-                       <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                        @NotNull
                        <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
                        @NotNull
@@ -252,16 +252,16 @@ extends <a href="Advancement.html" title="class in net.minestom.server.advanceme
                        java.lang.String&nbsp;background)</pre>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.chat.ColoredText,net.minestom.server.chat.ColoredText,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">
+<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AdvancementRoot</h4>
 <pre>public&nbsp;AdvancementRoot&#8203;(@NotNull
-                       <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;title,
+                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                        @NotNull
-                       <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;description,
+                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
                        @NotNull
                        <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
                        <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
