@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
@@ -128,7 +128,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean glowing;
     protected boolean usingElytra;
     protected int air = 300;
-    protected ColoredText customName;
+    protected JsonMessage customName;
     protected boolean customNameVisible;
     protected boolean silent;
     protected boolean noGravity;
@@ -1019,7 +1019,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the custom name of the entity, null if there is not
      */
-    public ColoredText getCustomName() {
+    public JsonMessage getCustomName() {
         return customName;
     }
 
@@ -1028,7 +1028,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param customName the custom name of the entity, null to remove it
      */
-    public void setCustomName(ColoredText customName) {
+    public void setCustomName(JsonMessage customName) {
         this.customName = customName;
         sendMetadataIndex(2);
     }

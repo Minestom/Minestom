@@ -1,13 +1,14 @@
 package net.minestom.server.item;
 
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 
 public class ItemDisplay {
 
-    private ColoredText displayName;
-    private ColoredText[] lore;
+    private JsonMessage displayName;
+    private JsonMessage[] lore;
 
-    public ItemDisplay(ColoredText displayName, ColoredText[] lore) {
+    public ItemDisplay(JsonMessage displayName, JsonMessage[] lore) {
         this.displayName = displayName;
         this.lore = lore;
     }
@@ -17,7 +18,7 @@ public class ItemDisplay {
      *
      * @return the item display name
      */
-    public ColoredText getDisplayName() {
+    public JsonMessage getDisplayName() {
         return displayName;
     }
 
@@ -26,7 +27,7 @@ public class ItemDisplay {
      *
      * @return the item lore
      */
-    public ColoredText[] getLore() {
+    public JsonMessage[] getLore() {
         return lore;
     }
 }

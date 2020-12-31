@@ -3,6 +3,7 @@ package net.minestom.server.scoreboard;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
@@ -34,7 +35,7 @@ public class Team {
     /**
      * The display name of the team
      */
-    private ColoredText teamDisplayName;
+    private JsonMessage teamDisplayName;
     /**
      * A BitMask
      */
@@ -57,11 +58,11 @@ public class Team {
     /**
      * Shown before the names of the players who belong to this team
      */
-    private ColoredText prefix;
+    private JsonMessage prefix;
     /**
      * Shown after the names of the player who belong to this team
      */
-    private ColoredText suffix;
+    private JsonMessage suffix;
 
     /**
      * Identifiers for the entities in this team
@@ -147,7 +148,7 @@ public class Team {
      *
      * @param teamDisplayName The new display name
      */
-    public void setTeamDisplayName(ColoredText teamDisplayName) {
+    public void setTeamDisplayName(JsonMessage teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
     }
 
@@ -156,7 +157,7 @@ public class Team {
      *
      * @param teamDisplayName The new display name
      */
-    public void updateTeamDisplayName(ColoredText teamDisplayName) {
+    public void updateTeamDisplayName(JsonMessage teamDisplayName) {
         this.setTeamDisplayName(teamDisplayName);
         sendUpdatePacket();
     }
@@ -231,7 +232,7 @@ public class Team {
      *
      * @param prefix The new prefix
      */
-    public void setPrefix(ColoredText prefix) {
+    public void setPrefix(JsonMessage prefix) {
         this.prefix = prefix;
     }
 
@@ -240,7 +241,7 @@ public class Team {
      *
      * @param prefix The new prefix
      */
-    public void updatePrefix(ColoredText prefix) {
+    public void updatePrefix(JsonMessage prefix) {
         this.setPrefix(prefix);
         sendUpdatePacket();
     }
@@ -252,7 +253,7 @@ public class Team {
      *
      * @param suffix The new suffix
      */
-    public void setSuffix(ColoredText suffix) {
+    public void setSuffix(JsonMessage suffix) {
         this.suffix = suffix;
     }
 
@@ -261,7 +262,7 @@ public class Team {
      *
      * @param suffix The new suffix
      */
-    public void updateSuffix(ColoredText suffix) {
+    public void updateSuffix(JsonMessage suffix) {
         this.setSuffix(suffix);
         sendUpdatePacket();
     }
@@ -343,7 +344,7 @@ public class Team {
      *
      * @return the display name
      */
-    public ColoredText getTeamDisplayName() {
+    public JsonMessage getTeamDisplayName() {
         return teamDisplayName;
     }
 
@@ -388,7 +389,7 @@ public class Team {
      *
      * @return the team prefix
      */
-    public ColoredText getPrefix() {
+    public JsonMessage getPrefix() {
         return prefix;
     }
 
@@ -397,7 +398,7 @@ public class Team {
      *
      * @return the suffix team
      */
-    public ColoredText getSuffix() {
+    public JsonMessage getSuffix() {
         return suffix;
     }
 

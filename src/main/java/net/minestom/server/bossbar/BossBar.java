@@ -1,7 +1,7 @@
 package net.minestom.server.bossbar;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.MathUtils;
@@ -29,7 +29,7 @@ public class BossBar implements Viewable {
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
-    private ColoredText title;
+    private JsonMessage title;
     private float progress;
     private BarColor color;
     private BarDivision division;
@@ -42,7 +42,7 @@ public class BossBar implements Viewable {
      * @param color    the boss bar color
      * @param division the boss bar division
      */
-    public BossBar(@NotNull ColoredText title, @NotNull BarColor color, @NotNull BarDivision division) {
+    public BossBar(@NotNull JsonMessage title, @NotNull BarColor color, @NotNull BarDivision division) {
         this.title = title;
         this.color = color;
         this.division = division;
@@ -99,7 +99,7 @@ public class BossBar implements Viewable {
      * @return the current title of the bossbar
      */
     @NotNull
-    public ColoredText getTitle() {
+    public JsonMessage getTitle() {
         return title;
     }
 
@@ -108,7 +108,7 @@ public class BossBar implements Viewable {
      *
      * @param title the new title of the bossbar
      */
-    public void setTitle(@NotNull ColoredText title) {
+    public void setTitle(@NotNull JsonMessage title) {
         this.title = title;
         updateTitle();
     }

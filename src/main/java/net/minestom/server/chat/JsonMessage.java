@@ -1,5 +1,6 @@
 package net.minestom.server.chat;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +37,15 @@ public abstract class JsonMessage {
     }
 
     /**
+     * Gets the content of the message without any formatting or effects.
+     *
+     * @return The message without formatting or effects
+     */
+    public String getRawMessage() {
+        return getTextMessage(getJsonObject()).toString();
+    }
+
+    /**
      * Gets the Json representation.
      * <p>
      * Will check of the current cached compiled json is up-to-date in order to prevent
@@ -54,6 +64,24 @@ public abstract class JsonMessage {
         }
 
         return compiledJson;
+    }
+
+    /**
+     * Recursively collects the 'text' field from the provided object and it's 'extra's.
+     *
+     * @param obj The object to parse
+     * @return The text content of the object and its 'extra's
+     */
+    private StringBuilder getTextMessage(JsonObject obj) {
+        StringBuilder message = new StringBuilder(obj.get("text").getAsString());
+        JsonElement extra = obj.get("extra");
+        if (extra != null && extra.isJsonArray()) {
+            for (JsonElement child : extra.getAsJsonArray()) {
+                if (!child.isJsonObject()) continue;
+                message.append(getTextMessage(child.getAsJsonObject()));
+            }
+        }
+        return message;
     }
 
     public static class RawJsonMessage extends JsonMessage {

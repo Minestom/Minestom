@@ -1,6 +1,6 @@
 package net.minestom.server.advancements;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -23,8 +23,8 @@ public class Advancement {
 
     private boolean achieved;
 
-    private ColoredText title;
-    private ColoredText description;
+    private JsonMessage title;
+    private JsonMessage description;
 
     private ItemStack icon;
 
@@ -42,7 +42,7 @@ public class Advancement {
     // Packet
     private AdvancementsPacket.Criteria criteria;
 
-    public Advancement(@NotNull ColoredText title, ColoredText description,
+    public Advancement(@NotNull JsonMessage title, JsonMessage description,
                        @NotNull ItemStack icon, @NotNull FrameType frameType,
                        float x, float y) {
         this.title = title;
@@ -53,7 +53,7 @@ public class Advancement {
         this.y = y;
     }
 
-    public Advancement(@NotNull ColoredText title, @NotNull ColoredText description,
+    public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
                        @NotNull Material icon, @NotNull FrameType frameType,
                        float x, float y) {
         this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
@@ -100,7 +100,7 @@ public class Advancement {
      * @return the advancement title
      */
     @NotNull
-    public ColoredText getTitle() {
+    public JsonMessage getTitle() {
         return title;
     }
 
@@ -109,7 +109,7 @@ public class Advancement {
      *
      * @param title the new title
      */
-    public void setTitle(@NotNull ColoredText title) {
+    public void setTitle(@NotNull JsonMessage title) {
         this.title = title;
         update();
     }
@@ -120,7 +120,7 @@ public class Advancement {
      * @return the description title
      */
     @NotNull
-    public ColoredText getDescription() {
+    public JsonMessage getDescription() {
         return description;
     }
 
@@ -129,7 +129,7 @@ public class Advancement {
      *
      * @param description the new description
      */
-    public void setDescription(@NotNull ColoredText description) {
+    public void setDescription(@NotNull JsonMessage description) {
         this.description = description;
         update();
     }

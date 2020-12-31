@@ -3,6 +3,7 @@ package net.minestom.server.scoreboard;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
@@ -98,7 +99,7 @@ public final class TeamManager {
      * @param suffix    The team suffix
      * @return the created {@link Team} with a prefix, teamColor and suffix
      */
-    public Team createTeam(String name, ColoredText prefix, ChatColor teamColor, ColoredText suffix) {
+    public Team createTeam(String name, JsonMessage prefix, ChatColor teamColor, JsonMessage suffix) {
         return this.createBuilder(name).prefix(prefix).teamColor(teamColor).suffix(suffix).updateTeamPacket().build();
     }
 
@@ -112,7 +113,7 @@ public final class TeamManager {
      * @param suffix      The team suffix
      * @return the created {@link Team} with a prefix, teamColor, suffix and the display name
      */
-    public Team createTeam(String name, ColoredText displayName, ColoredText prefix, ChatColor teamColor, ColoredText suffix) {
+    public Team createTeam(String name, JsonMessage displayName, JsonMessage prefix, ChatColor teamColor, JsonMessage suffix) {
         return this.createBuilder(name).teamDisplayName(displayName).prefix(prefix).teamColor(teamColor).suffix(suffix).updateTeamPacket().build();
     }
 

@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlayerDeathEvent extends PlayerEvent {
 
-    private ColoredText deathText;
+    private JsonMessage deathText;
     private JsonMessage chatMessage;
 
-    public PlayerDeathEvent(@NotNull Player player, ColoredText deathText, JsonMessage chatMessage) {
+    public PlayerDeathEvent(@NotNull Player player, JsonMessage deathText, JsonMessage chatMessage) {
         super(player);
         this.deathText = deathText;
         this.chatMessage = chatMessage;
@@ -27,7 +27,7 @@ public class PlayerDeathEvent extends PlayerEvent {
      * @return the death text, can be null
      */
     @Nullable
-    public ColoredText getDeathText() {
+    public JsonMessage getDeathText() {
         return deathText;
     }
 
@@ -36,7 +36,7 @@ public class PlayerDeathEvent extends PlayerEvent {
      *
      * @param deathText the death text to display, null to remove
      */
-    public void setDeathText(@Nullable ColoredText deathText) {
+    public void setDeathText(@Nullable JsonMessage deathText) {
         this.deathText = deathText;
     }
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -29,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * and remove him later with {@link #removeViewer(Player)}.
  * <p>
  * Lines can be modified using their respective identifier using
- * {@link #updateLineContent(String, ColoredText)} and {@link #updateLineScore(String, int)}.
+ * {@link #updateLineContent(String, JsonMessage)} and {@link #updateLineScore(String, int)}.
  */
 public class Sidebar implements Scoreboard {
 
@@ -126,7 +127,7 @@ public class Sidebar implements Scoreboard {
      * @param id      The identifier of the {@link ScoreboardLine}
      * @param content The new content for the {@link ScoreboardLine}
      */
-    public void updateLineContent(@NotNull String id, @NotNull ColoredText content) {
+    public void updateLineContent(@NotNull String id, @NotNull JsonMessage content) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
@@ -240,7 +241,7 @@ public class Sidebar implements Scoreboard {
         /**
          * The content for the line
          */
-        private final ColoredText content;
+        private final JsonMessage content;
         /**
          * The score of the line
          */
@@ -257,7 +258,7 @@ public class Sidebar implements Scoreboard {
          */
         private SidebarTeam sidebarTeam;
 
-        public ScoreboardLine(String id, ColoredText content, int line) {
+        public ScoreboardLine(String id, JsonMessage content, int line) {
             this.id = id;
             this.content = content;
             this.line = line;
@@ -279,7 +280,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return The line content
          */
-        public ColoredText getContent() {
+        public JsonMessage getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
@@ -360,7 +361,7 @@ public class Sidebar implements Scoreboard {
          *
          * @param content The new content
          */
-        private void refreshContent(ColoredText content) {
+        private void refreshContent(JsonMessage content) {
             this.sidebarTeam.refreshPrefix(content);
         }
 
@@ -372,10 +373,10 @@ public class Sidebar implements Scoreboard {
     private static class SidebarTeam {
 
         private final String teamName;
-        private ColoredText prefix, suffix;
+        private JsonMessage prefix, suffix;
         private final String entityName;
 
-        private final ColoredText teamDisplayName = ColoredText.of("displaynametest");
+        private final JsonMessage teamDisplayName = ColoredText.of("displaynametest");
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
@@ -390,7 +391,7 @@ public class Sidebar implements Scoreboard {
          * @param suffix     The team suffix
          * @param entityName The team entity name
          */
-        private SidebarTeam(String teamName, ColoredText prefix, ColoredText suffix, String entityName) {
+        private SidebarTeam(String teamName, JsonMessage prefix, JsonMessage suffix, String entityName) {
             this.teamName = teamName;
             this.prefix = prefix;
             this.suffix = suffix;
@@ -435,7 +436,7 @@ public class Sidebar implements Scoreboard {
          * @param prefix The new prefix
          * @return a {@link TeamsPacket} with the updated prefix
          */
-        private TeamsPacket updatePrefix(ColoredText prefix) {
+        private TeamsPacket updatePrefix(JsonMessage prefix) {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
@@ -463,7 +464,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return the prefix
          */
-        private ColoredText getPrefix() {
+        private JsonMessage getPrefix() {
             return prefix;
         }
 
@@ -472,7 +473,7 @@ public class Sidebar implements Scoreboard {
          *
          * @param prefix The refreshed prefix
          */
-        private void refreshPrefix(ColoredText prefix) {
+        private void refreshPrefix(JsonMessage prefix) {
             this.prefix = prefix;
         }
     }
