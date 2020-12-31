@@ -406,7 +406,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         {
             this.effects.removeIf(timedPotion -> {
                 final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
-                return timedPotion.getStartingTime() + potionTime <= time;
+                // Remove if the potion should be expired
+                return timedPotion.getStartingTime() + potionTime >= time;
             });
         }
 
