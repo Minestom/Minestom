@@ -14,9 +14,9 @@ public class EntityEffectPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeByte((byte) potion.effect.getId());
-        writer.writeByte(potion.amplifier);
-        writer.writeVarInt(potion.duration);
+        writer.writeByte((byte) potion.getEffect().getId());
+        writer.writeByte(potion.getAmplifier());
+        writer.writeVarInt(potion.getDuration());
         writer.writeByte(potion.getFlags());
     }
 

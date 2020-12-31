@@ -7,12 +7,10 @@ import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class Potion {
-    public PotionEffect effect;
-    public byte amplifier;
-    public int duration;
-    public boolean ambient;
-    public boolean particles;
-    public boolean icon;
+    private final PotionEffect effect;
+    private final byte amplifier;
+    private final int duration;
+    private final byte flags;
 
     public Potion(PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, true, true, false);
@@ -30,17 +28,27 @@ public class Potion {
         this.effect = effect;
         this.amplifier = amplifier;
         this.duration = duration;
-        this.particles = particles;
-        this.icon = icon;
-        this.ambient = ambient;
+        byte flags = 0;
+        if (ambient) flags = (byte)(flags | 0x01);
+        if (particles) flags = (byte)(flags | 0x02);
+        if (icon) flags = (byte)(flags | 0x04);
+        this.flags = flags;
+    }
+
+    public PotionEffect getEffect() {
+        return effect;
+    }
+
+    public byte getAmplifier() {
+        return amplifier;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public byte getFlags() {
-        byte computed = 0x00;
-        if (ambient) computed = (byte)(computed | 0x01);
-        if (particles) computed = (byte)(computed | 0x02);
-        if (icon) computed = (byte)(computed | 0x04);
-        return computed;
+        return flags;
     }
 
     public void sendAddPacket(@NotNull Entity entity) {

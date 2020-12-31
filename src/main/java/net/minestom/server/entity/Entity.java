@@ -405,7 +405,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         // remove expired effects
         {
             effects.removeIf(timedPotion -> time >=
-                    (timedPotion.getStartingTime() + timedPotion.getPotion().duration * MinecraftServer.TICK_MS));
+                    (timedPotion.getStartingTime() + timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS));
         }
 
         // scheduled tasks
@@ -1464,7 +1464,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param effect The effect to remove
      */
     public void removeEffect(@NotNull PotionEffect effect) {
-        effects.removeIf(timedPotion -> timedPotion.getPotion().effect == effect);
+        effects.removeIf(timedPotion -> {
+            if (timedPotion.getPotion().getEffect() == effect) {
+                timedPotion.getPotion().sendRemovePacket(this);
+                return true;
+            }
+            return false;
+        });
     }
 
     /**
@@ -1473,7 +1479,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.effect);
+        removeEffect(potion.getEffect());
         effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
     }
