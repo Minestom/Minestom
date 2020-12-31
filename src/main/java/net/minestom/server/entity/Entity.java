@@ -134,7 +134,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
-    private CopyOnWriteArrayList<TimedPotion> effects = new CopyOnWriteArrayList<>();
+    private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -404,9 +404,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         // remove expired effects
         {
-            effects.removeIf(timedPotion -> time
-                    >=
-                    (timedPotion.getStartingTime() + timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS));
+            this.effects.removeIf(timedPotion -> {
+                final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+                return timedPotion.getStartingTime() + potionTime <= time;
+            });
         }
 
         // scheduled tasks
@@ -1455,8 +1456,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         DYING
     }
 
+    /**
+     * Gets all the potion effect of this entity.
+     *
+     * @return an unmodifiable list of all this entity effects
+     */
+    @NotNull
     public List<TimedPotion> getActiveEffects() {
-        return effects;
+        return Collections.unmodifiableList(effects);
     }
 
     /**
@@ -1465,7 +1472,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param effect The effect to remove
      */
     public void removeEffect(@NotNull PotionEffect effect) {
-        effects.removeIf(timedPotion -> {
+        this.effects.removeIf(timedPotion -> {
             if (timedPotion.getPotion().getEffect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
                 return true;
@@ -1481,7 +1488,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void addEffect(@NotNull Potion potion) {
         removeEffect(potion.getEffect());
-        effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
     }
 

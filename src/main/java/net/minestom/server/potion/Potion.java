@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class Potion {
+
     private final PotionEffect effect;
     private final byte amplifier;
     private final int duration;
@@ -14,50 +15,50 @@ public class Potion {
     /**
      * Creates a new potion.
      *
-     * @param effect The type of potion.
+     * @param effect    The type of potion.
      * @param amplifier The strength of the potion.
-     * @param duration The length of the potion in ticks.
+     * @param duration  The length of the potion in ticks.
      */
-    public Potion(PotionEffect effect, byte amplifier, int duration) {
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, true, true, false);
     }
 
     /**
      * Creates a new potion.
      *
-     * @param effect The type of potion.
+     * @param effect    The type of potion.
      * @param amplifier The strength of the potion.
-     * @param duration The length of the potion in ticks.
+     * @param duration  The length of the potion in ticks.
      * @param particles If the potion has particles.
      */
-    public Potion(PotionEffect effect, byte amplifier, int duration, boolean particles) {
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, boolean particles) {
         this(effect, amplifier, duration, particles, true, false);
     }
 
     /**
      * Creates a new potion.
      *
-     * @param effect The type of potion.
+     * @param effect    The type of potion.
      * @param amplifier The strength of the potion.
-     * @param duration The length of the potion in ticks.
+     * @param duration  The length of the potion in ticks.
      * @param particles If the potion has particles.
-     * @param icon If the potion has an icon.
+     * @param icon      If the potion has an icon.
      */
-    public Potion(PotionEffect effect, byte amplifier, int duration, boolean particles, boolean icon) {
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, boolean particles, boolean icon) {
         this(effect, amplifier, duration, particles, icon, false);
     }
 
     /**
      * Creates a new potion.
      *
-     * @param effect The type of potion.
+     * @param effect    The type of potion.
      * @param amplifier The strength of the potion.
-     * @param duration The length of the potion in ticks.
+     * @param duration  The length of the potion in ticks.
      * @param particles If the potion has particles.
-     * @param icon If the potion has an icon.
-     * @param ambient If the potion came from a beacon.
+     * @param icon      If the potion has an icon.
+     * @param ambient   If the potion came from a beacon.
      */
-    public Potion(PotionEffect effect, byte amplifier, int duration, boolean particles, boolean icon, boolean ambient) {
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, boolean particles, boolean icon, boolean ambient) {
         this.effect = effect;
         this.amplifier = amplifier;
         this.duration = duration;
@@ -74,6 +75,7 @@ public class Potion {
         this.flags = flags;
     }
 
+    @NotNull
     public PotionEffect getEffect() {
         return effect;
     }
@@ -94,25 +96,27 @@ public class Potion {
      * Sends a packet that a potion effect has been applied to the entity.
      * <p>
      * Used internally by {@link net.minestom.server.entity.Player#addEffect(Potion)}
-     * @param entity
+     *
+     * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        EntityEffectPacket eep = new EntityEffectPacket();
-        eep.entityId = entity.getEntityId();
-        eep.potion = this;
-        entity.sendPacketToViewersAndSelf(eep);
+        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
+        entityEffectPacket.entityId = entity.getEntityId();
+        entityEffectPacket.potion = this;
+        entity.sendPacketToViewersAndSelf(entityEffectPacket);
     }
 
     /**
      * Sends a packet that a potion effect has been removed from the entity.
      * <p>
      * Used internally by {@link net.minestom.server.entity.Player#removeEffect(PotionEffect)}
-     * @param entity
+     *
+     * @param entity the entity to remove the effect from
      */
     public void sendRemovePacket(@NotNull Entity entity) {
-        RemoveEntityEffectPacket reep = new RemoveEntityEffectPacket();
-        reep.entityId = entity.getEntityId();
-        reep.effect = effect;
-        entity.sendPacketToViewersAndSelf(reep);
+        RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
+        removeEntityEffectPacket.entityId = entity.getEntityId();
+        removeEntityEffectPacket.effect = effect;
+        entity.sendPacketToViewersAndSelf(removeEntityEffectPacket);
     }
 }
