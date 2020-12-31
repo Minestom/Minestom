@@ -24,6 +24,7 @@ import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -43,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -132,8 +134,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
 
-    private ArrayList<Potion> effects = new ArrayList<>();
-    private ArrayList<Long> effectTimes = new ArrayList<>();
+    private CopyOnWriteArrayList<TimedPotion> effects = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<Potion> scheduledPotions = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -403,25 +405,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         // remove expired effects
         {
-            if (effects.size() > 0) {
-                boolean foundToRemove = true;
-                while (foundToRemove) {
-                    foundToRemove = false;
-                    int i = 0;
-                    while (i < effects.size()) {
-                        if (effects.get(i).duration * 50 +
-                                effectTimes.get(i) <= System.nanoTime() / 1000000) {
-                            foundToRemove = true;
-                            break;
-                        }
-                        i++;
-                    }
-                    if (foundToRemove) {
-                        effects.remove(i);
-                        effectTimes.remove(i);
-                    }
-                }
+            effects.removeIf(timedPotion -> time >=
+                    (timedPotion.startingTime + timedPotion.potion.duration * 50));
+        }
+
+        // add queued effects
+        {
+            for (Potion potion : scheduledPotions) {
+                effects.add(new TimedPotion(potion, time));
+                potion.sendAddPacket(this);
             }
+            scheduledPotions.clear();
         }
 
         // scheduled tasks
@@ -1470,7 +1464,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         DYING
     }
 
-    public List<Potion> getActiveEffects() {
+    public List<TimedPotion> getActiveEffects() {
         return effects;
     }
 
@@ -1480,21 +1474,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param effect The effect to remove
      */
     public void removeEffect(@NotNull PotionEffect effect) {
-        if (effects.size() == 0) return;
-        int i = 0;
-        boolean found = false;
-        while (i < effects.size()) {
-            if (effects.get(i).effect == effect) {
-                found = true;
-                break;
-            }
-            i++;
-        }
-        if (found) {
-            effects.get(i).sendRemovePacket(this);
-            effects.remove(i);
-            effectTimes.remove(i);
-        }
+        effects.removeIf(timedPotion -> timedPotion.potion.effect == effect);
     }
 
     /**
@@ -1504,9 +1484,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void addEffect(@NotNull Potion potion) {
         removeEffect(potion.effect);
-        effects.add(potion);
-        effectTimes.add(System.nanoTime() / 1000000);
-        potion.sendAddPacket(this);
+        scheduledPotions.add(potion);
     }
 
     protected boolean shouldRemove() {
