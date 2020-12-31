@@ -533,7 +533,9 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../potion/TimedPotion.html" title="class in net.minestom.server.potion">TimedPotion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getActiveEffects()">getActiveEffects</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets all the potion effect of this entity.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>long</code></td>
@@ -3017,7 +3019,13 @@ public&nbsp;java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter
 <ul class="blockList">
 <li class="blockList">
 <h4>getActiveEffects</h4>
-<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../potion/TimedPotion.html" title="class in net.minestom.server.potion">TimedPotion</a>&gt;&nbsp;getActiveEffects()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.List&lt;<a href="../potion/TimedPotion.html" title="class in net.minestom.server.potion">TimedPotion</a>&gt;&nbsp;getActiveEffects()</pre>
+<div class="block">Gets all the potion effect of this entity.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an unmodifiable list of all this entity effects</dd>
+</dl>
 </li>
 </ul>
 <a id="removeEffect(net.minestom.server.potion.PotionEffect)">
