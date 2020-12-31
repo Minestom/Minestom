@@ -40,12 +40,10 @@ public class PotionCommand extends Command {
         final PotionEffect potion = args.getPotionEffect("potion");
         final int duration = args.getInteger("duration");
 
-        player.sendMessage(player.getActiveEffects().toString());
-
         player.addEffect(new Potion(
                 potion,
                 (byte) 0,
-                duration
+                duration * 20
         ));
     }
 
