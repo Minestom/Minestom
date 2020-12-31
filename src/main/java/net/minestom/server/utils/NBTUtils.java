@@ -5,6 +5,7 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
 import net.minestom.server.inventory.Inventory;
@@ -136,7 +137,7 @@ public final class NBTUtils {
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
-                List<ColoredText> lore = new ArrayList<>();
+                List<JsonMessage> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
                     lore.add(ChatParser.toColoredText(s.getValue()));
                 }
@@ -266,10 +267,10 @@ public final class NBTUtils {
             }
 
             if (hasLore) {
-                final List<ColoredText> lore = itemStack.getLore();
+                final List<JsonMessage> lore = itemStack.getLore();
 
                 final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                for (ColoredText line : lore) {
+                for (JsonMessage line : lore) {
                     loreNBT.add(new NBTString(line.toString()));
                 }
                 displayNBT.set("Lore", loreNBT);

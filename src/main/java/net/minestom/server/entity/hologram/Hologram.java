@@ -2,6 +2,7 @@ package net.minestom.server.entity.hologram;
 
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.instance.Instance;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 /**
- * Represents an invisible armor stand showing a {@link ColoredText}.
+ * Represents an invisible armor stand showing a {@link JsonMessage}.
  */
 public class Hologram implements Viewable {
 
@@ -21,11 +22,11 @@ public class Hologram implements Viewable {
     private final HologramEntity entity;
 
     private Position position;
-    private ColoredText text;
+    private JsonMessage text;
 
     private boolean removed;
 
-    public Hologram(Instance instance, Position spawnPosition, ColoredText text, boolean autoViewable) {
+    public Hologram(Instance instance, Position spawnPosition, JsonMessage text, boolean autoViewable) {
         this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
         this.entity.setInstance(instance);
         this.entity.setAutoViewable(autoViewable);
@@ -34,7 +35,7 @@ public class Hologram implements Viewable {
         setText(text);
     }
 
-    public Hologram(Instance instance, Position spawnPosition, ColoredText text) {
+    public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
         this(instance, spawnPosition, text, true);
     }
 
@@ -64,7 +65,7 @@ public class Hologram implements Viewable {
      *
      * @return the hologram text
      */
-    public ColoredText getText() {
+    public JsonMessage getText() {
         return text;
     }
 
@@ -73,7 +74,7 @@ public class Hologram implements Viewable {
      *
      * @param text the new hologram text
      */
-    public void setText(ColoredText text) {
+    public void setText(JsonMessage text) {
         checkRemoved();
         this.text = text;
         this.entity.setCustomName(text);

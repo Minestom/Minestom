@@ -1,6 +1,6 @@
 package net.minestom.server.item;
 
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.ItemEntity;
@@ -52,9 +52,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     private byte amount;
     private int damage;
 
-    private ColoredText displayName;
+    private JsonMessage displayName;
     private boolean unbreakable;
-    private List<ColoredText> lore;
+    private List<JsonMessage> lore;
 
     private Map<Enchantment, Short> enchantmentMap;
     private List<ItemAttribute> attributes;
@@ -165,7 +165,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                 return true;
             }
 
-            final ColoredText itemDisplayName = itemStack.getDisplayName();
+            final JsonMessage itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
                     (displayName != null && displayName.equals(itemDisplayName));
 
@@ -260,7 +260,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @return the item display name, can be null if not present
      */
     @Nullable
-    public ColoredText getDisplayName() {
+    public JsonMessage getDisplayName() {
         return displayName;
     }
 
@@ -269,7 +269,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @param displayName the item display name
      */
-    public void setDisplayName(@Nullable ColoredText displayName) {
+    public void setDisplayName(@Nullable JsonMessage displayName) {
         this.displayName = displayName;
     }
 
@@ -288,7 +288,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @return a modifiable list containing the item lore, can be null if not present
      */
     @Nullable
-    public List<ColoredText> getLore() {
+    public List<JsonMessage> getLore() {
         return lore;
     }
 
@@ -297,7 +297,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @param lore the item lore, can be null to remove
      */
-    public void setLore(@Nullable List<ColoredText> lore) {
+    public void setLore(@Nullable List<JsonMessage> lore) {
         this.lore = lore;
     }
 

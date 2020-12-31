@@ -46,7 +46,7 @@ public final class ConnectionManager {
     // The consumers to call once a player connect, mostly used to init events
     private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
-    private ColoredText shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
+    private JsonMessage shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -295,7 +295,7 @@ public final class ConnectionManager {
      * @return the kick reason in case on a shutdown
      */
     @NotNull
-    public ColoredText getShutdownText() {
+    public JsonMessage getShutdownText() {
         return shutdownText;
     }
 
@@ -305,7 +305,7 @@ public final class ConnectionManager {
      * @param shutdownText the new shutdown kick reason
      * @see #getShutdownText()
      */
-    public void setShutdownText(@NotNull ColoredText shutdownText) {
+    public void setShutdownText(@NotNull JsonMessage shutdownText) {
         this.shutdownText = shutdownText;
     }
 

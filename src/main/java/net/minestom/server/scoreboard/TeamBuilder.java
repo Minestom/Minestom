@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
@@ -61,7 +62,7 @@ public class TeamBuilder {
      * @param prefix The new prefix
      * @return this builder, for chaining
      */
-    public TeamBuilder updatePrefix(ColoredText prefix) {
+    public TeamBuilder updatePrefix(JsonMessage prefix) {
         this.team.updatePrefix(prefix);
         return this;
     }
@@ -93,7 +94,7 @@ public class TeamBuilder {
      * @param suffix The new suffix
      * @return this builder, for chaining
      */
-    public TeamBuilder updateSuffix(ColoredText suffix) {
+    public TeamBuilder updateSuffix(JsonMessage suffix) {
         this.team.updateSuffix(suffix);
         return this;
     }
@@ -114,7 +115,7 @@ public class TeamBuilder {
      * @param displayName The new display name
      * @return this builder, for chaining
      */
-    public TeamBuilder updateTeamDisplayName(ColoredText displayName) {
+    public TeamBuilder updateTeamDisplayName(JsonMessage displayName) {
         this.team.updateTeamDisplayName(displayName);
         return this;
     }
@@ -190,7 +191,7 @@ public class TeamBuilder {
      * @param prefix The new prefix
      * @return this builder, for chaining
      */
-    public TeamBuilder prefix(ColoredText prefix) {
+    public TeamBuilder prefix(JsonMessage prefix) {
         this.team.setPrefix(prefix);
         return this;
     }
@@ -216,7 +217,7 @@ public class TeamBuilder {
      * @param suffix The new suffix
      * @return this builder, for chaining
      */
-    public TeamBuilder suffix(ColoredText suffix) {
+    public TeamBuilder suffix(JsonMessage suffix) {
         this.team.setSuffix(suffix);
         return this;
     }
@@ -254,7 +255,7 @@ public class TeamBuilder {
      * @param displayName The new display name
      * @return this builder, for chaining
      */
-    public TeamBuilder teamDisplayName(ColoredText displayName) {
+    public TeamBuilder teamDisplayName(JsonMessage displayName) {
         this.team.setTeamDisplayName(displayName);
         return this;
     }

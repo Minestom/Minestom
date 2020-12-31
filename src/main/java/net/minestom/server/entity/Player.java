@@ -122,7 +122,7 @@ public class Player extends LivingEntity implements CommandSender {
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
     private int latency;
-    private ColoredText displayName;
+    private JsonMessage displayName;
     private PlayerSkin skin;
 
     private DimensionType dimensionType;
@@ -500,7 +500,7 @@ public class Player extends LivingEntity implements CommandSender {
     public void kill() {
         if (!isDead()) {
 
-            ColoredText deathText;
+            JsonMessage deathText;
             JsonMessage chatMessage;
 
             // get death screen text to the killed player
@@ -956,7 +956,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param header the header text, null to set empty
      * @param footer the footer text, null to set empty
      */
-    public void sendHeaderFooter(@Nullable ColoredText header, @Nullable ColoredText footer) {
+    public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.emptyHeader = header == null;
         playerListHeaderAndFooterPacket.emptyFooter = footer == null;
@@ -973,7 +973,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param action the action of the title (where to show it)
      * @see #sendTitleTime(int, int, int) to specify the display time
      */
-    private void sendTitle(@NotNull ColoredText text, @NotNull TitlePacket.Action action) {
+    private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = action;
 
@@ -1001,7 +1001,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
      */
-    public void sendTitleSubtitleMessage(@NotNull ColoredText title, @NotNull ColoredText subtitle) {
+    public void sendTitleSubtitleMessage(@NotNull JsonMessage title, @NotNull JsonMessage subtitle) {
         sendTitle(title, TitlePacket.Action.SET_TITLE);
         sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
     }
@@ -1012,7 +1012,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
      */
-    public void sendTitleMessage(@NotNull ColoredText title) {
+    public void sendTitleMessage(@NotNull JsonMessage title) {
         sendTitle(title, TitlePacket.Action.SET_TITLE);
     }
 
@@ -1022,7 +1022,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
      */
-    public void sendSubtitleMessage(@NotNull ColoredText subtitle) {
+    public void sendSubtitleMessage(@NotNull JsonMessage subtitle) {
         sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
     }
 
@@ -1032,7 +1032,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
      */
-    public void sendActionBarMessage(@NotNull ColoredText actionBar) {
+    public void sendActionBarMessage(@NotNull JsonMessage actionBar) {
         sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
     }
 
@@ -1179,7 +1179,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @return the player display name, null means that {@link #getUsername()} is displayed
      */
     @Nullable
-    public ColoredText getDisplayName() {
+    public JsonMessage getDisplayName() {
         return displayName;
     }
 
@@ -1190,7 +1190,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param displayName the display name, null to display the username
      */
-    public void setDisplayName(@Nullable ColoredText displayName) {
+    public void setDisplayName(@Nullable JsonMessage displayName) {
         this.displayName = displayName;
 
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
@@ -1740,7 +1740,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param text the kick reason
      */
-    public void kick(@NotNull ColoredText text) {
+    public void kick(@NotNull JsonMessage text) {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = text;
         playerConnection.sendPacket(disconnectPacket);

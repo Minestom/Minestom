@@ -1,6 +1,7 @@
 package net.minestom.server.advancements;
 
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AdvancementRoot extends Advancement {
 
-    public AdvancementRoot(@NotNull ColoredText title, @NotNull ColoredText description,
+    public AdvancementRoot(@NotNull JsonMessage title, @NotNull JsonMessage description,
                            @NotNull ItemStack icon, @NotNull FrameType frameType,
                            float x, float y,
                            @Nullable String background) {
@@ -22,7 +23,7 @@ public class AdvancementRoot extends Advancement {
         setBackground(background);
     }
 
-    public AdvancementRoot(@NotNull ColoredText title, @NotNull ColoredText description,
+    public AdvancementRoot(@NotNull JsonMessage title, @NotNull JsonMessage description,
                            @NotNull Material icon, FrameType frameType,
                            float x, float y,
                            @Nullable String background) {
