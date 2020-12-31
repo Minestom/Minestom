@@ -43,7 +43,7 @@ public class PotionCommand extends Command {
         player.addEffect(new Potion(
                 potion,
                 (byte) 0,
-                duration * 20
+                duration * MinecraftServer.TICK_PER_SECOND
         ));
     }
 
