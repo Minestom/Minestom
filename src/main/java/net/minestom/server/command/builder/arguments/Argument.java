@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +29,8 @@ public abstract class Argument<T> {
     private final boolean useRemaining;
 
     private ArgumentCallback callback;
+
+    private T defaultValue;
 
     /**
      * Creates a new argument.
@@ -144,6 +147,23 @@ public abstract class Argument<T> {
      */
     public void setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;
+    }
+
+    public boolean isOptional() {
+        return defaultValue != null;
+    }
+
+    @Nullable
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    @NotNull
+    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+        Check.argCondition(defaultValue != null && getConditionResult(defaultValue) != SUCCESS,
+                "The default value needs to validate the argument condition!");
+        this.defaultValue = defaultValue;
+        return this;
     }
 
     /**

@@ -144,8 +144,8 @@ public class CommandDispatcher {
 
             boolean useRemaining = false;
             // Check the validity of the arguments...
-            for (int argCount = 0; argCount < syntax.getArguments().length; argCount++) {
-                final Argument<?> argument = syntax.getArguments()[argCount];
+            for (int argCount = 0; argCount < arguments.length; argCount++) {
+                final Argument<?> argument = arguments[argCount];
                 useRemaining = argument.useRemaining();
 
                 // the correction result of the argument
@@ -399,6 +399,7 @@ public class CommandDispatcher {
                     // The executor is from a syntax
                     final CommandCondition commandCondition = syntax.getCommandCondition();
                     if (commandCondition == null || commandCondition.canUse(source, commandString)) {
+                        arguments.retrieveDefaultValues(syntax.getDefaultValuesMap());
                         executor.apply(source, arguments);
                     }
                 } else {

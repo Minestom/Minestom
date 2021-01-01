@@ -14,6 +14,7 @@ import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -164,4 +165,15 @@ public final class Arguments {
         this.args.clear();
     }
 
+    protected void retrieveDefaultValues(@Nullable Map<String, Object> defaultValuesMap) {
+        if (defaultValuesMap == null)
+            return;
+
+        for (Map.Entry<String, Object> entry : defaultValuesMap.entrySet()) {
+            final String key = entry.getKey();
+            if (!args.containsKey(key))
+                this.args.put(key, entry.getValue());
+        }
+
+    }
 }
