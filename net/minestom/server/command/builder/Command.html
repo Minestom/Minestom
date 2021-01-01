@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -156,6 +156,29 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static org.slf4j.Logger</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LOGGER">LOGGER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -201,15 +224,15 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a></code></td>
+<td class="colFirst"><code>java.util.Collection&lt;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addSyntax(net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)">addSyntax</a></span>&#8203;(<a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
          <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</code></th>
 <td class="colLast">
-<div class="block">Adds a new syntax in the command without any condition.</div>
+<div class="block">Adds a new syntax without condition.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a></code></td>
+<td class="colFirst"><code>java.util.Collection&lt;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addSyntax(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)">addSyntax</a></span>&#8203;(<a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
          <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
          <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</code></th>
@@ -310,6 +333,25 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="LOGGER">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>LOGGER</h4>
+<pre>public static final&nbsp;org.slf4j.Logger LOGGER</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -427,12 +469,13 @@ public&nbsp;<a href="condition/CommandCondition.html" title="interface in net.mi
 <ul class="blockList">
 <li class="blockList">
 <h4>addSyntax</h4>
-<pre class="methodSignature">public&nbsp;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;addSyntax&#8203;(@Nullable
-                               <a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
-                               @NotNull
-                               <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
-                               @NotNull
-                               <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Collection&lt;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;addSyntax&#8203;(@Nullable
+                                                     <a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
+                                                     @NotNull
+                                                     <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
+                                                     @NotNull
+                                                     <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</pre>
 <div class="block">Adds a new syntax in the command.
  <p>
  A syntax is simply a list of arguments and an executor called when successfully parsed.</div>
@@ -442,7 +485,8 @@ public&nbsp;<a href="condition/CommandCondition.html" title="interface in net.mi
 <dd><code>executor</code> - the executor to call when the syntax is successfully received</dd>
 <dd><code>args</code> - all the arguments of the syntax, the length needs to be higher than 0</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="CommandSyntax.html" title="class in net.minestom.server.command.builder"><code>CommandSyntax</code></a></dd>
+<dd>the created <a href="CommandSyntax.html" title="class in net.minestom.server.command.builder"><code>syntaxes</code></a>,
+ there can be multiple of them when optional arguments are used</dd>
 </dl>
 </li>
 </ul>
@@ -452,17 +496,13 @@ public&nbsp;<a href="condition/CommandCondition.html" title="interface in net.mi
 <ul class="blockList">
 <li class="blockList">
 <h4>addSyntax</h4>
-<pre class="methodSignature">public&nbsp;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;addSyntax&#8203;(@NotNull
-                               <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
-                               @NotNull
-                               <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</pre>
-<div class="block">Adds a new syntax in the command without any condition.</div>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Collection&lt;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;addSyntax&#8203;(@NotNull
+                                                     <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
+                                                     @NotNull
+                                                     <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</pre>
+<div class="block">Adds a new syntax without condition.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>executor</code> - the executor to call when the syntax is successfully received</dd>
-<dd><code>args</code> - all the arguments of the syntax, the length needs to be higher than 0</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="CommandSyntax.html" title="class in net.minestom.server.command.builder"><code>CommandSyntax</code></a></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#addSyntax(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)"><code>addSyntax(CommandCondition, CommandExecutor, Argument[])</code></a></dd>
 </dl>
@@ -648,13 +688,13 @@ public&nbsp;java.lang.String[]&nbsp;onDynamicWrite&#8203;(@NotNull
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

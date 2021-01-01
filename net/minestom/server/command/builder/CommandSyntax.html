@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -156,6 +156,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,java.util.Map,net.minestom.server.command.builder.arguments.Argument...)">CommandSyntax</a></span>&#8203;(<a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
+             <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;commandExecutor,
+             java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;defaultValuesMap,
+             <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected </code></td>
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)">CommandSyntax</a></span>&#8203;(<a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
              <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;commandExecutor,
              <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</code></th>
@@ -194,20 +202,25 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>protected java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultValuesMap()">getDefaultValuesMap</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExecutor()">getExecutor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder"><code>CommandExecutor</code></a> of this syntax, executed once the syntax is properly written.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCommandCondition(net.minestom.server.command.builder.condition.CommandCondition)">setCommandCondition</a></span>&#8203;(<a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition)</code></th>
 <td class="colLast">
 <div class="block">Changes the command condition of this syntax.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setExecutor(net.minestom.server.command.builder.CommandExecutor)">setExecutor</a></span>&#8203;(<a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor)</code></th>
 <td class="colLast">
@@ -238,6 +251,22 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,java.util.Map,net.minestom.server.command.builder.arguments.Argument...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CommandSyntax</h4>
+<pre>protected&nbsp;CommandSyntax&#8203;(@Nullable
+                        <a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition,
+                        @NotNull
+                        <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;commandExecutor,
+                        @Nullable
+                        java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;defaultValuesMap,
+                        @NotNull
+                        <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;...&nbsp;args)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;(net.minestom.server.command.builder.condition.CommandCondition,net.minestom.server.command.builder.CommandExecutor,net.minestom.server.command.builder.arguments.Argument...)">
 <!--   -->
 </a>
@@ -324,6 +353,16 @@ public&nbsp;<a href="CommandExecutor.html" title="interface in net.minestom.serv
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>executor</code> - the new executor</dd>
 </dl>
+</li>
+</ul>
+<a id="getDefaultValuesMap()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultValuesMap</h4>
+<pre class="methodSignature">@Nullable
+protected&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;getDefaultValuesMap()</pre>
 </li>
 </ul>
 <a id="getArguments()">
