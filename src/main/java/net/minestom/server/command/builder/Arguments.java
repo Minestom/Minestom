@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public final class Arguments {
 
-    private Map<String, Object> args = new HashMap<>();
+    protected Map<String, Object> args = new HashMap<>();
 
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
