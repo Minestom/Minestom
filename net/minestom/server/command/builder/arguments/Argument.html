@@ -265,7 +265,9 @@ extends java.lang.Object</pre>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Argument.html" title="type parameter in Argument">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultValue()">getDefaultValue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the default value of this argument.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
@@ -285,7 +287,9 @@ extends java.lang.Object</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOptional()">isOptional</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets if this argument is 'optional'.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></td>
@@ -304,7 +308,9 @@ extends java.lang.Object</pre>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultValue(T)">setDefaultValue</a></span>&#8203;(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the default value of the argument.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -581,6 +587,14 @@ public&nbsp;<a href="../ArgumentCallback.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>isOptional</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isOptional()</pre>
+<div class="block">Gets if this argument is 'optional'.
+ <p>
+ Optional means that this argument can be put at the end of a syntax
+ and obtains a default value (<a href="#getDefaultValue()"><code>getDefaultValue()</code></a>).</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if this argument is considered optional</dd>
+</dl>
 </li>
 </ul>
 <a id="getDefaultValue()">
@@ -591,6 +605,11 @@ public&nbsp;<a href="../ArgumentCallback.html" title="interface in net.minestom.
 <h4>getDefaultValue</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;getDefaultValue()</pre>
+<div class="block">Gets the default value of this argument.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the argument default value, null if the argument is not optional</dd>
+</dl>
 </li>
 </ul>
 <a id="setDefaultValue(java.lang.Object)">
@@ -604,6 +623,18 @@ public&nbsp;<a href="Argument.html" title="type parameter in Argument">T</a>&nbs
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setDefaultValue&#8203;(@Nullable
                                    <a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</pre>
+<div class="block">Sets the default value of the argument.
+ <p>
+ A non-null value means that the argument can be put at the end of a syntax
+ to act as an optional one.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>defaultValue</code> - the default argument value, null to make the argument non-optional</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>'this' for chaining</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code> - if <code>defaultValue</code> does not validate <a href="#getConditionResult(T)"><code>getConditionResult(Object)</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="hasErrorCallback()">
