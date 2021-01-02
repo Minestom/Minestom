@@ -612,7 +612,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE - 9, 1,
                         PlayerInventoryUtils::convertToPacketSlot,
                         index -> playerInventory.getItemStack(index, PlayerInventoryUtils.OFFSET),
-                        (index, itemStack) -> playerInventory.setItemStack(index, 9, itemStack)));
+                        (index, itemStack) -> playerInventory.setItemStack(index, PlayerInventoryUtils.OFFSET, itemStack)));
 
         if (clickResult == null)
             return false;
