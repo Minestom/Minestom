@@ -12,6 +12,8 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntitySpawnEvent;
+import net.minestom.server.event.entity.EntityPotionAddEvent;
+import net.minestom.server.event.entity.EntityPotionRemoveEvent;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.entity.EntityVelocityEvent;
 import net.minestom.server.event.handler.EventHandler;
@@ -407,7 +409,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             this.effects.removeIf(timedPotion -> {
                 final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
                 // Remove if the potion should be expired
-                return timedPotion.getStartingTime() + potionTime >= time;
+                if (time >= timedPotion.getStartingTime() + potionTime) {
+                    // Send the packet that the potion should no longer be applied
+                    timedPotion.getPotion().sendRemovePacket(this);
+                    callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                            this,
+                            timedPotion.getPotion()
+                    ));
+                    return true;
+                }
+                return false;
             });
         }
 
@@ -1476,6 +1487,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.effects.removeIf(timedPotion -> {
             if (timedPotion.getPotion().getEffect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
+                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                        this,
+                        timedPotion.getPotion()
+                ));
                 return true;
             }
             return false;
@@ -1491,6 +1506,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         removeEffect(potion.getEffect());
         this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
+        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(
+                this,
+                potion
+        ));
     }
 
     protected boolean shouldRemove() {

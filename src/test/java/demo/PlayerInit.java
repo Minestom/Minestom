@@ -9,9 +9,10 @@ import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
 import net.minestom.server.entity.type.other.EntityEndCrystal;
-import net.minestom.server.event.EntityEvent;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityPotionAddEvent;
+import net.minestom.server.event.entity.EntityPotionRemoveEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
@@ -29,7 +30,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.timer.TaskBuilder;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -269,6 +269,18 @@ public class PlayerInit {
             // Unload the chunk (save memory) if it has no remaining viewer
             if (chunk.getViewers().isEmpty()) {
                 //player.getInstance().unloadChunk(chunk);
+            }
+        });
+
+        globalEventHandler.addEventCallback(EntityPotionAddEvent.class, event -> {
+            if (event.getEntity() instanceof Player) {
+                ((Player) event.getEntity()).sendMessage("Potion added: " + event.getPotion().getEffect());
+            }
+        });
+
+        globalEventHandler.addEventCallback(EntityPotionRemoveEvent.class, event -> {
+            if (event.getEntity() instanceof Player) {
+                ((Player) event.getEntity()).sendMessage("Potion removed: " + event.getPotion().getEffect());
             }
         });
     }
