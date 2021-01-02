@@ -49,7 +49,6 @@ public final class PlayerInventoryUtils {
             case 8:
                 return BOOTS_SLOT;
         }
-        //System.out.println("ENTRY: " + slot + " | " + offset);
         final int rowSize = 9;
         slot -= offset;
         if (slot >= rowSize * 3 && slot < rowSize * 4) {
@@ -57,7 +56,6 @@ public final class PlayerInventoryUtils {
         } else {
             slot = slot + rowSize;
         }
-        //System.out.println("CONVERT: " + slot);
         return slot;
     }
 
@@ -68,7 +66,7 @@ public final class PlayerInventoryUtils {
      * @return a slot id which can be used for packets
      */
     public static int convertToPacketSlot(int slot) {
-        if (slot > -1 && slot < 9) { // Held bar 0-9
+        if (slot > -1 && slot < 9) { // Held bar 0-8
             slot = slot + 36;
         } else if (slot > 8 && slot < 36) { // Inventory 9-35
             slot = slot;

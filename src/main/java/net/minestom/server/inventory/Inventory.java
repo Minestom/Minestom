@@ -564,7 +564,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public boolean dragging(@NotNull Player player, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
-        final ItemStack clicked = slot != 999 ?
+        final ItemStack clicked = slot != -999 ?
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(slot, offset)) :
                 ItemStack.getAirItem();
         final ItemStack cursor = getCursorItem(player);
@@ -611,13 +611,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 // Looping through player inventory
                 new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE - 9, 1,
                         PlayerInventoryUtils::convertToPacketSlot,
-                        index -> playerInventory.getItemStack(index, offset),
-                        (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)),
-                // Player hot bar
-                new InventoryClickLoopHandler(0, 9, 1,
-                        PlayerInventoryUtils::convertToPacketSlot,
-                        index -> playerInventory.getItemStack(index, offset),
-                        (index, itemStack) -> playerInventory.setItemStack(index, offset, itemStack)));
+                        index -> playerInventory.getItemStack(index, PlayerInventoryUtils.OFFSET),
+                        (index, itemStack) -> playerInventory.setItemStack(index, 9, itemStack)));
 
         if (clickResult == null)
             return false;
