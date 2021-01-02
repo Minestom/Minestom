@@ -269,7 +269,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
                     8191, 16383, 32767};
 
     private static void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
-        if (!MathUtils.isBetween(y, 0, Chunk.CHUNK_SIZE_Y)) {
+        if (!MathUtils.isBetween(y, 0, Chunk.CHUNK_SIZE_Y - 1)) {
             return;
         }
 
