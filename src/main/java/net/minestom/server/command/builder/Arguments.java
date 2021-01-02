@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
@@ -33,7 +34,12 @@ import java.util.Map;
  */
 public final class Arguments {
 
-    protected Map<String, Object> args = new HashMap<>();
+    private Map<String, Object> args = new HashMap<>();
+
+    @NotNull
+    public <T> T get(@NotNull Argument<T> argument) {
+        return (T) getObject(argument.getId());
+    }
 
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
