@@ -149,15 +149,38 @@ public abstract class Argument<T> {
         this.callback = callback;
     }
 
+    /**
+     * Gets if this argument is 'optional'.
+     * <p>
+     * Optional means that this argument can be put at the end of a syntax
+     * and obtains a default value ({@link #getDefaultValue()}).
+     *
+     * @return true if this argument is considered optional
+     */
     public boolean isOptional() {
         return defaultValue != null;
     }
 
+    /**
+     * Gets the default value of this argument.
+     *
+     * @return the argument default value, null if the argument is not optional
+     */
     @Nullable
     public T getDefaultValue() {
         return defaultValue;
     }
 
+    /**
+     * Sets the default value of the argument.
+     * <p>
+     * A non-null value means that the argument can be put at the end of a syntax
+     * to act as an optional one.
+     *
+     * @param defaultValue the default argument value, null to make the argument non-optional
+     * @return 'this' for chaining
+     * @throws IllegalArgumentException if {@code defaultValue} does not validate {@link #getConditionResult(Object)}
+     */
     @NotNull
     public Argument<T> setDefaultValue(@Nullable T defaultValue) {
         Check.argCondition(defaultValue != null && getConditionResult(defaultValue) != SUCCESS,

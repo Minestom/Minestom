@@ -551,7 +551,8 @@ public final class MinecraftServer {
      * This feature allows some packets (implementing the {@link net.minestom.server.utils.cache.CacheablePacket} to be cached
      * in order to do not have to be written and compressed over and over again), this is especially useful for chunk and light packets.
      * <p>
-     * It is enabled by default and it is our recommendation, you should only disable it if you want to focus on low memory usage
+     * It is enabled by default and it is our recommendation,
+     * you should only disable it if you want to focus on low memory usage
      * at the cost of many packet writing and compression.
      *
      * @return true if the packet caching feature is enabled, false otherwise
